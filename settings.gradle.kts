@@ -14,6 +14,7 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        jcenter()
     }
 }
 dependencyResolutionManagement {
@@ -33,8 +34,10 @@ dependencyResolutionManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        jcenter()
     }
 }
 
 rootProject.name = "AndroidBusinessBaseLibs"
 include(":app")
+include(":core")
