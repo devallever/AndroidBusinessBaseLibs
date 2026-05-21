@@ -1,23 +1,19 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id("kotlin-kapt")
 }
 
 android {
-    namespace = "com.allever.business.lib.project"
+    namespace = "app.allever.android.lib.mvvm"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.allever.business.lib.project"
         minSdk = 24
-        targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -36,6 +32,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         viewBinding = true
         buildConfig = true
@@ -43,9 +40,5 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation(project(":lib-mvvm"))
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    api(project(":core"))
 }

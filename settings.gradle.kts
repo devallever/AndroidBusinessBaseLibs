@@ -41,3 +41,4 @@ dependencyResolutionManagement {
 rootProject.name = "AndroidBusinessBaseLibs"
 include(":app")
 include(":core")
+include(":lib-mvvm")
