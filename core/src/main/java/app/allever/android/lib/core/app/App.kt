@@ -35,6 +35,10 @@ abstract class App : Application() {
         lateinit var context: Context
         lateinit var mainHandler: Handler
 
+        val DEBUG by lazy {
+            BuildConfig.DEBUG
+        }
+
         fun init(context: Context) {
             Companion.context = context.applicationContext
             mainHandler = Handler(Looper.getMainLooper())

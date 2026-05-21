@@ -18,6 +18,13 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+        buildConfigField("boolean", "AROUTER_DEBUG", "true")
+        kapt {
+            arguments {
+                arg("AROUTER_MODULE_NAME", project.name)
+            }
+        }
     }
 
     buildTypes {
@@ -45,6 +52,9 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":lib-mvvm"))
+    implementation(project(":sample-common"))
+    implementation(libs.arouter.api)
+    kapt(libs.arouter.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,22 +1,26 @@
 package com.allever.business.lib.project
 
-import android.app.Activity
-import android.os.Bundle
-import app.allever.android.lib.core.base.BaseSimpleActivity
-import app.allever.android.lib.core.helper.ActivityHelper
-import app.allever.android.lib.mvvm.demo.MvvmActivity
+import androidx.activity.enableEdgeToEdge
+import app.allever.android.lib.common.BaseActivity
+import app.allever.android.lib.core.helper.FragmentHelper
+import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.allever.business.lib.project.databinding.ActivityMainBinding
 
-class MainActivity: BaseSimpleActivity<ActivityMainBinding>() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun inflate() = ActivityMainBinding.inflate(layoutInflater)
+class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     override fun init() {
-        mBinding.btnMvvm.setOnClickListener {
-            ActivityHelper.startActivity(MvvmActivity::class.java)
-        }
+        initTopBar(getString(R.string.app_name), showBackIcon = false)
+        FragmentHelper.addToContainer(
+            supportFragmentManager,
+            MainListFragment(),
+            R.id.fragmentContainer
+        )
+    }
+
+    override fun inflateChildBinding() = ActivityMainBinding.inflate(layoutInflater)
+}
+
+class MainViewModel : BaseViewModel() {
+    override fun init() {
     }
 }
