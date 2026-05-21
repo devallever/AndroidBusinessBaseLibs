@@ -42,3 +42,4 @@ rootProject.name = "AndroidBusinessBaseLibs"
 include(":app")
 include(":core")
 include(":lib-mvvm")
+include(":sample-common")
