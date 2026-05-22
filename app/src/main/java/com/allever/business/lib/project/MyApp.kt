@@ -3,10 +3,14 @@ package com.allever.business.lib.project
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
+import app.allever.android.sample.appsflyer.AFHelper
 import com.alibaba.android.arouter.launcher.ARouter
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.appsflyer.attribution.AppsFlyerRequestListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MyApp: App() {
     override fun init() {
@@ -20,21 +24,9 @@ class MyApp: App() {
     }
 
     private fun initAppsflyer() {
-        val listener = object : AppsFlyerConversionListener {
-            override fun onConversionDataSuccess(p0: Map<String?, Any?>?) {
-
-            }
-
-            override fun onConversionDataFail(p0: String?) {
-            }
-
-            override fun onAppOpenAttribution(p0: Map<String?, String?>?) {
-            }
-
-            override fun onAttributionFailure(p0: String?) {
-            }
+        GlobalScope.launch(Dispatchers.IO) {
+            AFHelper.init("JJYLVQRfKZm7qgoUCYAr9V")
 
         }
-        AppsFlyerLib.getInstance().init("JJYLVQRfKZm7qgoUCYAr9V", listener, context)
     }
 }
