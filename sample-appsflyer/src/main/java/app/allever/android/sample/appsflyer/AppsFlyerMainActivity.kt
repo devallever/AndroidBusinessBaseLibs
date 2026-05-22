@@ -6,9 +6,8 @@ import app.allever.android.sample.appsflyer.databinding.ActivityAppsFlyerMainBin
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.appsflyer.AFInAppEventParameterName
 import com.appsflyer.AFInAppEventType
-import com.appsflyer.AppsFlyerAdNetworkEventType
 
-@Route(path = "/sample/appsflyer/main")
+@Route(path = "/appsflyer/main")
 class AppsFlyerMainActivity: BaseActivity<ActivityAppsFlyerMainBinding, BaseViewModel>() {
     override fun inflateChildBinding() = ActivityAppsFlyerMainBinding.inflate(layoutInflater)
 

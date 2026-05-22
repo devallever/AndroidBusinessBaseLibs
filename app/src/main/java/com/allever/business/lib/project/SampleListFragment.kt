@@ -17,5 +17,8 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextClickItem("AppsFlyer") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APPS_FLYER).navigation()
         },
+        TextClickItem("Adjust") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_ADJUST).navigation()
+        },
     )
 }

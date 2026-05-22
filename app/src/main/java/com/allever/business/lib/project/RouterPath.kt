@@ -4,8 +4,10 @@ class RouterPath {
     companion object {
         const val PATH_MAIN = "/app/main"
 
-        const val PATH_LIB_MVVM = "/lib/mvvm/main"
+        const val PATH_LIB_MVVM = "/mvvm/main"
 
-        const val PATH_SAMPLE_APPS_FLYER = "/sample/appsflyer/main"
+        const val PATH_SAMPLE_APPS_FLYER = "/appsflyer/main"
+        //adjust
+        const val PATH_SAMPLE_ADJUST = "/adjust/main"
     }
 }

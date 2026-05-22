@@ -45,6 +45,7 @@ flycotablayout = "2.0.6"
 refreshLayoutKernel = "2.0.5"
 refreshHeaderClassics = "2.0.5"
 afAndroidSdk = "6.18.0"
+adjustAndroid = "5.7.0"
 
 [libraries]
 # android & kotlin & google
@@ -106,6 +107,7 @@ flycotablayout = { group = "com.github.li-xiaojun", name = "FlycoTabLayout", ver
 refresh-layout-kernel = { group = "io.github.scwang90", name = "refresh-layout-kernel", version.ref = "refreshLayoutKernel" }
 refresh-header-classics = { group = "io.github.scwang90", name = "refresh-header-classics", version.ref = "refreshHeaderClassics" }
 af-android-sdk = { module = "com.appsflyer:af-android-sdk", version.ref = "afAndroidSdk" }
+adjust-android = { module = "com.adjust.sdk:adjust-android", version.ref = "adjustAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
