@@ -4,8 +4,9 @@ import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import app.allever.android.lib.core.R
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
@@ -19,8 +20,8 @@ import app.allever.android.lib.core.helper.ViewHelper
 import app.allever.android.lib.core.util.StatusBarCompat
 import app.allever.android.lib.core.widget.swipebacklayout.BGAKeyboardUtil
 import app.allever.android.lib.core.widget.swipebacklayout.BGASwipeBackHelper
-import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
+
 
 abstract class AbstractActivity : AppCompatActivity(), BGASwipeBackHelper.Delegate {
 
@@ -50,6 +51,15 @@ abstract class AbstractActivity : AppCompatActivity(), BGASwipeBackHelper.Delega
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
             StatusBarCompat.translucentStatusBar(this, true)
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val controller = window.insetsController
+            if (controller != null) {
+                controller.hide(WindowInsets.Type.navigationBars()) // 隐藏导航栏
+                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE // 允许通过滑动显示导航栏
+            }
+        }
+
 
         //状态栏颜色
         if (isDarkMode()) {
