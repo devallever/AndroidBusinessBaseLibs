@@ -41,14 +41,14 @@ android {
 
 dependencies {
     api(project(":lib-mvvm"))
-    //baseRecyclerViewAdapterHelper
-    api("com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7")
-    //flycoTabLayout
-    api("com.github.li-xiaojun:FlycoTabLayout:2.0.6")
-    //上拉加载/下拉刷新,核心必须依赖
-    //refreshLayoutKernel
-    api("io.github.scwang90:refresh-layout-kernel:2.0.5")
-    //refreshHeaderClassics
-    api("io.github.scwang90:refresh-header-classics:2.0.5")
 
+    // BaseRecyclerViewAdapterHelper
+    api(libs.baserecyclerviewadapterhelper)
+
+    // FlycoTabLayout
+    api(libs.flycotablayout)
+
+    // refresh layout
+    api(libs.refresh.layout.kernel)
+    api(libs.refresh.header.classics)
 }
