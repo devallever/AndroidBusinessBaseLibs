@@ -52,13 +52,15 @@ abstract class AbstractActivity : AppCompatActivity(), BGASwipeBackHelper.Delega
             StatusBarCompat.translucentStatusBar(this, true)
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val controller = window.insetsController
-            if (controller != null) {
-                controller.hide(WindowInsets.Type.navigationBars()) // 隐藏导航栏
-                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE // 允许通过滑动显示导航栏
-            }
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            val controller = window.insetsController
+//            if (controller != null) {
+//                controller.hide(WindowInsets.Type.navigationBars()) // 隐藏导航栏
+//                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE // 允许通过滑动显示导航栏
+//            }
+//        }
+
+        //
 
 
         //状态栏颜色

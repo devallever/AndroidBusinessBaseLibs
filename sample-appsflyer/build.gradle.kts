@@ -1,23 +1,19 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
 }
 
 android {
-    namespace = "com.allever.business.lib.project"
+    namespace = "app.allever.android.sample.appsflyer"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.allever.business.lib.project"
         minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        
-        buildConfigField("boolean", "AROUTER_DEBUG", "true")
+        consumerProguardFiles("consumer-rules.pro")
+
         kapt {
             arguments {
                 arg("AROUTER_MODULE_NAME", project.name)
@@ -41,6 +37,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         viewBinding = true
         buildConfig = true
@@ -48,13 +45,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation(project(":lib-mvvm"))
-    implementation(project(":sample-common"))
-    api(project(":sample-appsflyer"))
+    api(project(":sample-common"))
     implementation(libs.arouter.api)
     kapt(libs.arouter.compiler)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    api(libs.af.android.sdk)
 }
