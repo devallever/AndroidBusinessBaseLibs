@@ -4,46 +4,13 @@ plugins {
     id("kotlin-kapt")
 }
 
+val modelPkg = "com.allever.business.lib.project"
+group = modelPkg
+
 android {
-    namespace = "com.allever.business.lib.project"
-    compileSdk = libs.versions.compileSdk.get().toInt()
-
+    namespace = modelPkg
     defaultConfig {
-        applicationId = "com.allever.business.lib.project"
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        
-        buildConfigField("boolean", "AROUTER_DEBUG", "true")
-        kapt {
-            arguments {
-                arg("AROUTER_MODULE_NAME", project.name)
-            }
-        }
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-    buildFeatures {
-        viewBinding = true
-        buildConfig = true
+        applicationId = modelPkg
     }
 }
 
@@ -54,8 +21,6 @@ dependencies {
     api(project(":sample-appsflyer"))
     api(project(":sample-adjust"))
     api(project(":sample-mvvm"))
-    implementation(libs.arouter.api)
-    kapt(libs.arouter.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
