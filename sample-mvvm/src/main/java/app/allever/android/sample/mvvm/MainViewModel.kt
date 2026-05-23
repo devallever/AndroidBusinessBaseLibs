@@ -1,4 +1,4 @@
-package app.allever.android.lib.mvvm.demo
+package app.allever.android.sample.mvvm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope

@@ -7,7 +7,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/mvvmFragment"
-        android:name="app.allever.android.lib.mvvm.demo.MvvmFragment"
+        android:name="app.allever.android.sample.mvvm.MvvmFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

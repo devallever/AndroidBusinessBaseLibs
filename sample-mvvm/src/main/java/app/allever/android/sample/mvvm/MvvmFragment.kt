@@ -1,7 +1,7 @@
-package app.allever.android.lib.mvvm.demo
+package app.allever.android.sample.mvvm
 
 import app.allever.android.lib.mvvm.base.BaseMvvmFragment
-import app.allever.android.lib.mvvm.databinding.FragmentMvvmBinding
+import app.allever.android.sample.mvvm.databinding.FragmentMvvmBinding
 
 class MvvmFragment : BaseMvvmFragment<FragmentMvvmBinding, MainFragmentViewModel>() {
 

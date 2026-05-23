@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id("kotlin-kapt")
 }
 
 android {
@@ -13,12 +12,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        kapt {
-            arguments {
-                arg("AROUTER_MODULE_NAME", project.name)
-            }
-        }
     }
 
     buildTypes {
@@ -46,6 +39,4 @@ android {
 
 dependencies {
     api(project(":core"))
-    implementation(libs.arouter.api)
-    kapt(libs.arouter.compiler)
 }

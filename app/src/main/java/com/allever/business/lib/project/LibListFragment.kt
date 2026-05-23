@@ -13,7 +13,7 @@ class LibListFragment : ListFragment<FragmentListBinding, ListViewModel, TextCli
 
     override fun getList() = mutableListOf(
         TextClickItem("MVVM") {
-            ARouter.getInstance().build(RouterPath.PATH_LIB_MVVM).navigation()
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_MVVM).navigation()
         },
     )
 }
