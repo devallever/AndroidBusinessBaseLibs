@@ -15,36 +15,36 @@ class AdAdMobMainActivity : BaseActivity<ActivityAdAdmobMainBinding, BaseViewMod
     override fun init() {
         initTopBar("AdMob")
 
-        AdManager.init(TestAdConfig(), App.app) {
-            AdManager.loadBanner(binding.bannerContainer)
-            AdManager.loadNativeAd(binding.nativeContainer, "native", R.layout.ad_native_small);
-            AdManager.justLoadInter()
-            AdManager.justLoadReward()
+        AdMobManager.init(TestAdConfig(), App.app) {
+            AdMobManager.loadBanner(binding.bannerContainer)
+            AdMobManager.loadNativeAd(binding.nativeContainer, "native", R.layout.ad_native_small);
+            AdMobManager.justLoadInter()
+            AdMobManager.justLoadReward()
         }
 
         binding.btnLoadInter.setOnClickListener {
-            AdManager.showInter(this)
+            AdMobManager.showInter(this)
         }
         binding.btnLoadReward.setOnClickListener {
-            AdManager.showReward(this)
+            AdMobManager.showReward(this)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        AdManager.resumeBanner(binding.bannerContainer)
-        AdManager.resumeNativeBanner("native")
+        AdMobManager.resumeBanner(binding.bannerContainer)
+        AdMobManager.resumeNativeBanner("native")
     }
 
     override fun onPause() {
         super.onPause()
-        AdManager.pauseBanner(binding.bannerContainer)
-        AdManager.destroyNativeAd("native")
+        AdMobManager.pauseBanner(binding.bannerContainer)
+        AdMobManager.destroyNativeAd("native")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        AdManager.destroyBanner(binding.bannerContainer)
-        AdManager.destroyNativeAd("native")
+        AdMobManager.destroyBanner(binding.bannerContainer)
+        AdMobManager.destroyNativeAd("native")
     }
 }
