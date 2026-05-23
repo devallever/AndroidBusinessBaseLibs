@@ -21,6 +21,7 @@ dependencies {
     api(project(":sample-appsflyer"))
     api(project(":sample-adjust"))
     api(project(":sample-mvvm"))
+    api(project(":sample-ad-admob"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
