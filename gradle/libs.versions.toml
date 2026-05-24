@@ -48,7 +48,7 @@ refreshLayoutKernel = "2.0.5"
 refreshHeaderClassics = "2.0.5"
 afAndroidSdk = "6.18.0"
 adjustAndroid = "5.7.0"
-glide = "4.13.0 "
+glideVersion = "5.0.5"
 
 
 [libraries]
@@ -113,7 +113,8 @@ refresh-layout-kernel = { group = "io.github.scwang90", name = "refresh-layout-k
 refresh-header-classics = { group = "io.github.scwang90", name = "refresh-header-classics", version.ref = "refreshHeaderClassics" }
 af-android-sdk = { module = "com.appsflyer:af-android-sdk", version.ref = "afAndroidSdk" }
 adjust-android = { module = "com.adjust.sdk:adjust-android", version.ref = "adjustAndroid" }
-glide = { module = " com.github.bumptech.glide:glide", version.ref = "glide" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glideVersion" }
+
 
 
 [plugins]

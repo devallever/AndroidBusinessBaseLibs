@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import app.allever.android.lib.core.app.App
+import com.bumptech.glide.Glide
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -30,10 +31,6 @@ object AdMobManager {
     private var mInterAdCacheTime = 0L
     private var mRewardAdCacheTime = 0L
     private const val CACHE_TIME_OUT =  45 * 60 * 1000L
-
-    fun init(context: Application) {
-        mContext = context
-    }
 
     fun init(adConfig: IAdConfig, context: Application, block: (() -> Unit)? = null) {
         mAdConfig = adConfig
@@ -175,7 +172,7 @@ object AdMobManager {
 
             override fun onAdFailedToShowFullScreenContent(p0: AdError) {
                 log("RewardAd: 显示失败")
-                mInterAdCache = null
+                mRewardAdCache = null
                 adCallback?.onAdFailLoad()
                 justLoadReward(adCallback)
             }
@@ -333,7 +330,7 @@ object AdMobManager {
         if (activity?.isFinishing == true || activity?.isDestroyed == true) {
             return
         }
-//        Glide.with(adIcon!!).load(nativeAd.icon?.drawable)
+        Glide.with(adIcon!!).load(nativeAd.icon?.drawable).into(adIcon)
 //            .transform(CenterInside(), RoundedCorners(8)).into(adIcon)
         adIcon.setImageDrawable(nativeAd.icon?.drawable)
         adCta?.text = nativeAd.callToAction

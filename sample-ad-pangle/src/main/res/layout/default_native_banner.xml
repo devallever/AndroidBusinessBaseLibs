@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/ad_bg_color">
+
+    <TextView
+        android:id="@+id/ad_tag"
+        android:layout_width="32dp"
+        android:layout_height="20dp"
+        android:background="#FCB41C"
+        android:gravity="center"
+        android:text="Ad"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/ad_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="4dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLength="25"
+        android:textColor="@color/ad_title_color"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/ad_desc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ad_icon"
+        app:layout_constraintTop_toBottomOf="@id/ad_tag"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Test Ad:Google Ads " />
+
+    <TextView
+        android:id="@+id/ad_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="4dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLength="90"
+        android:textColor="@color/ad_desc_color"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/ad_media"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ad_icon"
+        app:layout_constraintTop_toBottomOf="@id/ad_title"
+        tools:text="Stay up to date with your Ads Check how your ads are performing" />
+
+
+    <ImageView
+        android:id="@+id/ad_icon"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="Ad"
+        android:scaleType="centerInside"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ad_tag" />
+
+    <FrameLayout
+        android:id="@+id/ad_media"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@id/creative_btn"
+        app:layout_constraintTop_toBottomOf="@id/ad_desc">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ad_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+        <FrameLayout
+            android:id="@+id/ad_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+    </FrameLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ad_store"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="5dp"
+        android:paddingLeft="5dp"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/creative_btn"
+        app:layout_constraintEnd_toStartOf="@id/creative_btn"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/creative_btn"
+        tools:text="Pangle" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/creative_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/ad_btn_color"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="10dp"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ad_media"
+        tools:text="View Now" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

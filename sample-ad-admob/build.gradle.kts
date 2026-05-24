@@ -14,7 +14,6 @@ android {
 
 dependencies {
     api(project(":sample-common"))
-    api(libs.play.services.ads)
-    //glide
-//    api(libs.glide)
+    implementation(libs.play.services.ads)
+    implementation(libs.glide)
 }

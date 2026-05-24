@@ -23,6 +23,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         },
         TextClickItem("AdMob") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AD_ADMOB).navigation()
+        },
+        TextClickItem("Pangle") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AD_PANGLE).navigation()
         }
     )
 }

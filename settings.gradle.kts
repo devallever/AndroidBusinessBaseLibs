@@ -15,6 +15,7 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
         jcenter()
+        maven (url = "https://artifact.bytedance.com/repository/pangle")
     }
 }
 dependencyResolutionManagement {
@@ -35,6 +36,7 @@ dependencyResolutionManagement {
         mavenCentral()
         gradlePluginPortal()
         jcenter()
+        maven (url = "https://artifact.bytedance.com/repository/pangle")
     }
 }
 
@@ -47,3 +49,4 @@ include(":sample-appsflyer")
 include(":sample-adjust")
 include(":sample-mvvm")
 include(":sample-ad-admob")
+include(":sample-ad-pangle")
