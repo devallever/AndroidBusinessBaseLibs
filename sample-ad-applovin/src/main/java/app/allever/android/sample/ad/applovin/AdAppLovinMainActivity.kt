@@ -14,6 +14,16 @@ class AdAppLovinMainActivity: BaseActivity<ActivityAdApplovinMainBinding, BaseVi
         initTopBar("AppLovin")
         AppLovinManager.init(TestAdConfig()) {
             log("AppLovinManager init success")
+            AppLovinManager.justLoadInter()
+            AppLovinManager.justLoadReward()
+        }
+
+        binding.btnLoadInter.setOnClickListener {
+            AppLovinManager.showInter(this, null)
+        }
+
+        binding.btnLoadReward.setOnClickListener {
+            AppLovinManager.showReward(this, null)
         }
     }
 }

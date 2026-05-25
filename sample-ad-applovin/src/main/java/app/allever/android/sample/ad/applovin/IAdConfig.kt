@@ -28,10 +28,10 @@ interface IAdConfig {
     fun getAdId(type: Int): String {
         return if (App.DEBUG) {
             when (type) {
-                BANNER_AD -> ""
-                INTER_AD -> ""
-                NATIVE_AD -> ""
-                REWARD_AD -> ""
+                BANNER_AD -> "deb0327b3f01cdb9"
+                INTER_AD -> "619f75501965fcec"
+                NATIVE_AD -> "deb0327b3f01cdb9"
+                REWARD_AD -> "b7a278733c8ae6c6"
                 else -> ""
             }
         } else {
