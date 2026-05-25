@@ -7,6 +7,10 @@ import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.appsflyer.attribution.AppsFlyerRequestListener
 
+/**
+ *
+ * https://dev.appsflyer.com/hc/docs/android-sdk
+ */
 object AFHelper {
     fun init(key: String) {
         val listener = object : AppsFlyerConversionListener {

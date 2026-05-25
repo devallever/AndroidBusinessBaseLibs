@@ -36,6 +36,11 @@ import sg.bigo.ads.api.RewardVideoAdLoader
 import sg.bigo.ads.api.RewardVideoAdRequest
 
 
+/**
+ *@Description: https://www.bigossp.com/guide/sdk/android/document
+ *@Author: allever
+ *@CreateTime: 2026/5/26 16:09
+ */
 object BigoManager {
     private val APP_ID = "10182906"
     private var isInit = false

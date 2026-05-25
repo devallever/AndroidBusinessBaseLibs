@@ -26,6 +26,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
+/**
+ * https://support.axon.ai/zh/max/android/overview/integration
+ */
 object AppLovinManager {
 
     private var isInit = false

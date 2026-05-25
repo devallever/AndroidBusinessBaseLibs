@@ -15,6 +15,9 @@ import com.adjust.sdk.OnEventTrackingSucceededListener
 import com.adjust.sdk.OnSessionTrackingFailedListener
 import com.adjust.sdk.OnSessionTrackingSucceededListener
 
+/**
+ * https://dev.adjust.com/zh/sdk/android
+ */
 object AdJustHelper {
     fun init(appToken: String) {
         val environment = if (App.DEBUG) {

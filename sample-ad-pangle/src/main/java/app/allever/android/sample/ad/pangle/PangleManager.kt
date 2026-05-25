@@ -38,6 +38,10 @@ import com.bytedance.sdk.openadsdk.api.reward.PAGRewardedAdInteractionCallback
 import com.bytedance.sdk.openadsdk.api.reward.PAGRewardedAdLoadListener
 import com.bytedance.sdk.openadsdk.api.reward.PAGRewardedRequest
 
+/**
+ * https://www.pangleglobal.com/zh/integration/integrate-pangle-sdk-for-android
+ * https://www.pangleglobal.com/publisher/application
+ */
 object PangleManager {
     private val APP_ID = if (App.DEBUG) "8025677" else ""
 
