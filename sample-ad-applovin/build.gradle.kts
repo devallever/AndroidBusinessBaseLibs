@@ -4,7 +4,7 @@ plugins {
     id("kotlin-kapt")
 }
 
-val modelPkg = "app.allever.android.sample.adjust"
+val modelPkg = "app.allever.android.sample.ad.applovin"
 
 group = modelPkg
 
@@ -14,8 +14,7 @@ android {
 
 dependencies {
     api(project(":sample-common"))
-    api(libs.adjust.android)
-    //Install Referrer 是一种唯一标识符，可用来将安装归因至来源。
-    implementation("com.android.installreferrer:installreferrer:2.2")
+    implementation(libs.applovin.sdk)
     implementation(libs.play.services.ads.identifier)
+    implementation(libs.adjust.android)
 }

@@ -2,7 +2,15 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
+//    id("applovin-quality-service")//编译时检查key安全
 }
+
+//applovin {
+//    //书歌测试key
+//    //qWSEfQRhBblNPZKpX0Ikm5pk8K3XiUFmAdTwLLitAgT-nZdIMIqoN2-RpCdO0qTocL5Nd3KL04gddZQnszhiH-
+//    apiKey = "wQSEfQRhBblNPZKpX0Ikm5pk8K3XiUFmAdTwLLitAgT-nZdIMIqoN2-RpCdO0qTocL5Nd3KL04gddZQnszhiH-"
+//。  //Your SafeDK API key is invalid
+//}
 
 val modelPkg = "com.allever.business.lib.project"
 group = modelPkg
@@ -24,6 +32,7 @@ dependencies {
     implementation(project(":sample-ad-admob"))
     implementation(project(":sample-ad-pangle"))
     implementation(project(":sample-ad-bigo"))
+    implementation(project(":sample-ad-applovin"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

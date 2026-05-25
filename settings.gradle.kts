@@ -16,6 +16,7 @@ pluginManagement {
         gradlePluginPortal()
         jcenter()
         maven (url = "https://artifact.bytedance.com/repository/pangle")
+        maven(url = "https://artifacts.applovin.com/android")
     }
 }
 dependencyResolutionManagement {
@@ -37,6 +38,7 @@ dependencyResolutionManagement {
         gradlePluginPortal()
         jcenter()
         maven (url = "https://artifact.bytedance.com/repository/pangle")
+        maven(url = "https://artifacts.applovin.com/android")
     }
 }
 
@@ -51,3 +53,4 @@ include(":sample-mvvm")
 include(":sample-ad-admob")
 include(":sample-ad-pangle")
 include(":sample-ad-bigo")
+include(":sample-ad-applovin")

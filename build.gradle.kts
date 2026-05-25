@@ -7,6 +7,12 @@ plugins {
     alias(libs.plugins.android.library) apply false
 }
 
+buildscript {
+    dependencies {
+        classpath (libs.applovinqualityservicegradleplugin)
+    }
+}
+
 subprojects {
     afterEvaluate {
         plugins.withId("com.android.library") {

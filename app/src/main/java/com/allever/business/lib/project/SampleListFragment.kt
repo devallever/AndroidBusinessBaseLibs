@@ -29,6 +29,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         },
         TextClickItem("Bigo") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AD_BIGO).navigation()
+        },
+        TextClickItem("AppLovin") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AD_APPLOVIN).navigation()
         }
     )
 }
