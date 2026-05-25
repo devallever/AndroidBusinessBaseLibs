@@ -12,5 +12,7 @@ class RouterPath {
 
         const val PATH_SAMPLE_AD_ADMOB = "/admob/main"
         const val PATH_SAMPLE_AD_PANGLE = "/pangle/main"
+
+        const val PATH_SAMPLE_AD_BIGO = "/bigo/main"
     }
 }

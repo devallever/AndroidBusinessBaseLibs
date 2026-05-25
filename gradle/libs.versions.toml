@@ -49,6 +49,8 @@ refreshHeaderClassics = "2.0.5"
 afAndroidSdk = "6.18.0"
 adjustAndroid = "5.7.0"
 glideVersion = "5.0.5"
+bigoAds = "5.9.0"
+
 
 
 [libraries]
@@ -114,6 +116,7 @@ refresh-header-classics = { group = "io.github.scwang90", name = "refresh-header
 af-android-sdk = { module = "com.appsflyer:af-android-sdk", version.ref = "afAndroidSdk" }
 adjust-android = { module = "com.adjust.sdk:adjust-android", version.ref = "adjustAndroid" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glideVersion" }
+bigo-ads = { module = "com.bigossp:bigo-ads", version.ref = "bigoAds" }
 
 
 

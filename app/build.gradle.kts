@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":sample-mvvm"))
     implementation(project(":sample-ad-admob"))
     implementation(project(":sample-ad-pangle"))
+    implementation(project(":sample-ad-bigo"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

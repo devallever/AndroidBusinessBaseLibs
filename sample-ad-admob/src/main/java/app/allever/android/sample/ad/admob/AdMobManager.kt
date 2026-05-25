@@ -156,11 +156,11 @@ object AdMobManager {
             return
         }
 
-        log("使用InterAdCache")
+        log("使用RewardAdCache")
         mRewardAdCache?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
                 log("RewardAd: 关闭")
-                mInterAdCache = null
+                mRewardAdCache = null
                 adCallback?.onAdDismiss()
                 justLoadReward(adCallback)
             }
