@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -18,77 +19,49 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="📦 Multi-Provider Management Demo"
+                android:text="💧 Waterfall Loading Demo"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:paddingBottom="16dp" />
 
-            <!-- Initialization Section -->
+            <!-- Provider Registration -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Initialization"
+                android:text="Step 1: Register Providers (with Waterfall config)"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:paddingTop="8dp"
                 android:paddingBottom="4dp" />
 
             <Button
-                android:id="@+id/btnInitAll"
+                android:id="@+id/btnRegisterProviders"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="🚀 Initialize All Providers" />
+                android:text="📝 Register 3 Providers" />
 
-            <!-- Provider Switching Section -->
+            <!-- Initialization -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Provider Switching (Instant)"
+                android:text="Step 2: Initialize All Providers"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:paddingTop="16dp"
                 android:paddingBottom="4dp" />
 
-            <LinearLayout
+            <Button
+                android:id="@+id/btnInitAll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:text="🚀 Initialize All (Join Pool)" />
 
-                <Button
-                    android:id="@+id/btnSwitchAdMob"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="4dp"
-                    android:text="AdMob"
-                    android:textSize="12sp" />
-
-                <Button
-                    android:id="@+id/btnSwitchPangle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="4dp"
-                    android:text="Pangle"
-                    android:textSize="12sp" />
-
-                <Button
-                    android:id="@+id/btnSwitchBigo"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="4dp"
-                    android:text="Bigo"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <!-- Load Mode Section -->
+            <!-- Load Mode Selection -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Load Mode (Global)"
+                android:text="Step 3: Select Load Mode"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:paddingTop="16dp"
@@ -124,25 +97,26 @@
                 android:id="@+id/tvCurrentMode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Mode: NOT SET"
-                android:textSize="12sp"
+                android:text="Current Mode: NOT SET"
+                android:textSize="13sp"
                 android:gravity="center"
-                android:paddingTop="4dp"
-                android:textStyle="bold|italic" />
+                android:paddingTop="8dp"
+                android:textStyle="bold" />
 
+            <!-- Waterfall Info -->
             <Button
                 android:id="@+id/btnShowWaterfallInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:text="ℹ️ Show Waterfall Providers Info"
                 android:textSize="12sp" />
 
-            <!-- Ad Operations Section -->
+            <!-- Ad Operations -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ad Operations"
+                android:text="Step 4: Load Ads (Mode-dependent)"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:paddingTop="16dp"
@@ -172,47 +146,36 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
-            <!-- Lifecycle Management Section -->
-            <TextView
-                android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnShowInter"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Lifecycle Management"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:paddingTop="16dp"
-                android:paddingBottom="4dp" />
+                android:text="📺 Show Interstitial Ad"
+                android:textSize="12sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/btnShowReward"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:text="📺 Show Reward Ad"
+                android:textSize="12sp" />
+        </LinearLayout>
 
-                <Button
-                    android:id="@+id/btnDestroyActive"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="4dp"
-                    android:text="💥 Destroy Active"
-                    android:textColor="#FF5722"
-                    android:textSize="11sp" />
 
-                <Button
-                    android:id="@+id/btnReinitActive"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="4dp"
-                    android:text="🔄 Re-init Active"
-                    android:textColor="#2196F3"
-                    android:textSize="11sp" />
-            </LinearLayout>
 
             <!-- Status Display -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Status"
+                android:text="Status &amp; Logs"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:paddingTop="16dp"
@@ -224,19 +187,11 @@
                 android:layout_height="wrap_content"
                 android:background="#F5F5F5"
                 android:padding="12dp"
-                android:text="Ready to initialize..."
-                android:textSize="13sp"
-                android:minHeight="80dp"
-                android:gravity="top" />
-
-            <!-- Banner Container (Optional) -->
-            <FrameLayout
-                android:id="@+id/bannerContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:minHeight="50dp"
-                android:visibility="gone" />
+                android:text="Ready to start waterfall demo..."
+                android:textSize="12sp"
+                android:minHeight="150dp"
+                android:gravity="top"
+                android:fontFamily="monospace" />
 
         </LinearLayout>
     </ScrollView>

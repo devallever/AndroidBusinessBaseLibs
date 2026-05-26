@@ -8,7 +8,8 @@ data class AdProviderConfig(
     val interstitialAdId: String = "",
     val rewardVideoAdId: String = "",
     val bannerAdId: String = "",
-    val nativeAdId: String = ""
+    val nativeAdId: String = "",
+    val supportWaterfall: Boolean = false
 ) {
     fun isNotEmpty(): Boolean = appId.isNotEmpty()
 

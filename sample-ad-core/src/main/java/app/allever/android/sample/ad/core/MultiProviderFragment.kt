@@ -3,6 +3,7 @@ package app.allever.android.sample.ad.core
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import app.allever.android.lib.ad.core.AdManager
+import app.allever.android.lib.ad.core.AdManager.LoadMode
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
@@ -31,6 +32,10 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
         mBinding.btnSwitchPangle.setOnClickListener { switchToProvider(PangleAdProvider.PROVIDER_NAME) }
         mBinding.btnSwitchBigo.setOnClickListener { switchToProvider(BigoAdProvider.PROVIDER_NAME) }
         
+        mBinding.btnModeSingle.setOnClickListener { setLoadMode(LoadMode.SINGLE) }
+        mBinding.btnModeWaterfall.setOnClickListener { setLoadMode(LoadMode.WATERFALL) }
+        mBinding.btnShowWaterfallInfo.setOnClickListener { showWaterfallInfo() }
+        
         mBinding.btnLoadInter.setOnClickListener { loadInterstitial() }
         mBinding.btnLoadReward.setOnClickListener { loadRewardVideo() }
         
@@ -45,7 +50,8 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
             config = AdProviderConfig(
                 appId = "ca-app-pub-3940256099942544~3347511713",
                 interstitialAdId = "ca-app-pub-3940256099942544/1033173712",
-                rewardVideoAdId = "ca-app-pub-3940256099942544/5224354917"
+                rewardVideoAdId = "ca-app-pub-3940256099942544/5224354917",
+                supportWaterfall = true
             )
         )
 
@@ -55,7 +61,8 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
             config = AdProviderConfig(
                 appId = "8025677",
                 interstitialAdId = "980088188",
-                rewardVideoAdId = "980088192"
+                rewardVideoAdId = "980088192",
+                supportWaterfall = true
             )
         )
 
@@ -65,11 +72,12 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
             config = AdProviderConfig(
                 appId = "10182906",
                 interstitialAdId = "10182906-10158798",
-                rewardVideoAdId = "10182906-10001431"
+                rewardVideoAdId = "10182906-10001431",
+                supportWaterfall = false
             )
         )
 
-        updateStatus("✓ All 3 providers registered")
+        updateStatus("✓ All 3 providers registered (ADMOB✓PANGLE✓BIGO○ waterfall)")
         Log.d("MultiProvider", "Registered: ${AdManager.getRegisteredProvidersInfo()}")
     }
 
@@ -211,8 +219,26 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
         val sb = StringBuilder()
         sb.appendLine("=== Provider Status ===")
         sb.appendLine("Active: ${AdManager.getActiveProviderType()}")
+        sb.appendLine("Mode: ${AdManager.loadMode}")
         sb.appendLine("Initialized: ${AdManager.getInitializedProviders()}")
         
         Log.d("MultiProvider", sb.toString())
+    }
+
+    private fun setLoadMode(mode: LoadMode) {
+        AdManager.setLoadMode(mode)
+        
+        val modeText = when (mode) {
+            LoadMode.SINGLE -> "🎯 SINGLE"
+            LoadMode.WATERFALL -> "💧 WATERFALL"
+        }
+        
+        mBinding.tvCurrentMode.text = "Mode: $modeText"
+        updateStatus("Load mode changed to: $modeText")
+    }
+
+    private fun showWaterfallInfo() {
+        val info = AdManager.getWaterfallProvidersInfo()
+        updateStatus(info)
     }
 }
