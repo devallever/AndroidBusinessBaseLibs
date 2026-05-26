@@ -1,10 +1,12 @@
 package com.allever.business.lib.project
 
+import app.allever.android.lib.ad.core.AdProviderExampleActivity
 import app.allever.android.lib.common.ListFragment
 import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
+import app.allever.android.lib.core.helper.ActivityHelper
 import com.alibaba.android.arouter.launcher.ARouter
 
 class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, TextClickItem>() {
@@ -34,7 +36,8 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AD_APPLOVIN).navigation()
         },
         TextClickItem("AdCore") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AD_CORE).navigation()
+            ActivityHelper.startActivity<AdProviderExampleActivity> {  }
+//            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AD_CORE).navigation()
         }
     )
 }

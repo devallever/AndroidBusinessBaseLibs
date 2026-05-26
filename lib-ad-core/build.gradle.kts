@@ -13,4 +13,13 @@ android {
 
 dependencies {
     api(project(":core"))
+
+    // AdMob (Google Mobile Ads)
+    api(libs.play.services.ads)
+
+    // Pangle (穿山甲/字节跳动)
+    api(libs.pangle.sdk)
+
+    // Bigo Ads
+    api(libs.bigo.ads)
 }
