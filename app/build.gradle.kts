@@ -25,6 +25,7 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":lib-mvvm"))
+    implementation(project(":lib-ad-core"))
     implementation(project(":sample-common"))
     implementation(project(":sample-appsflyer"))
     implementation(project(":sample-adjust"))
@@ -32,7 +33,8 @@ dependencies {
     implementation(project(":sample-ad-admob"))
     implementation(project(":sample-ad-pangle"))
     implementation(project(":sample-ad-bigo"))
-    implementation(project(":sample-ad-applovin"))
+    implementation(project(":sample-ad-core"))
+//    implementation(project(":sample-ad-applovin"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

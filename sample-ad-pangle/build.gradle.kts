@@ -15,7 +15,7 @@ android {
 dependencies {
     api(project(":sample-common"))
     implementation(libs.play.services.ads.identifier)
-    implementation("com.pangle.global:pag-sdk:8.0.0.4") {
+    implementation(libs.pangle.sdk) {
         exclude(module = "tiktok-business-android-sdk-comp")
     }
     implementation(libs.glide)

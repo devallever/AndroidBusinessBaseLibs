@@ -16,5 +16,7 @@ class RouterPath {
         const val PATH_SAMPLE_AD_BIGO = "/bigo/main"
 
         const val PATH_SAMPLE_AD_APPLOVIN = "/applovin/main"
+
+        const val PATH_SAMPLE_AD_CORE = "/adCore/main"
     }
 }
