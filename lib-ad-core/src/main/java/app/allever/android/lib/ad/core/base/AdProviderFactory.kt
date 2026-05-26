@@ -40,7 +40,14 @@ object AdProviderFactory {
 
     fun getRegisteredProviders(): Set<String> = providers.keys.toSet()
 
+    fun getRegisteredProvidersInfo(): String {
+        return providers.keys.joinToString(", ") { "$it(${providers[it]?.config?.appId})" }
+    }
+
     fun isProviderRegistered(providerType: String): Boolean = providers.containsKey(providerType)
     
     fun getConfig(providerType: String): AdProviderConfig? = providers[providerType]?.config
+    
+    fun getAllConfigs(): Map<String, AdProviderConfig> = 
+        providers.mapValues { it.value.config }
 }
