@@ -75,7 +75,7 @@ class PangleAdProvider : BaseAdProvider() {
     }
 
     override fun doLoadAd(
-        activity: Activity,
+        activity: Context,
         adType: AdType,
         adId: String,
         callback: IAdCallback?
@@ -83,7 +83,7 @@ class PangleAdProvider : BaseAdProvider() {
         when (adType) {
             AdType.INTERSTITIAL -> loadInterstitialAd(adId, callback)
             AdType.REWARD_VIDEO -> loadRewardedAd(adId, callback)
-            AdType.BANNER -> loadBannerAd(activity, adId, callback)
+            AdType.BANNER -> loadBannerAd(adId, callback)
             else -> {
                 Log.w(TAG, "${adType.name} not supported yet for Pangle")
                 callback?.onAdFail(-1, "${adType.name} not supported yet")
@@ -146,6 +146,8 @@ class PangleAdProvider : BaseAdProvider() {
                         interstitialAd = null
                         removeCachedAd(AdType.INTERSTITIAL)
                         callback?.onAdDismiss()
+                        
+                        preloadAdOnDismiss(AdType.INTERSTITIAL)
                     }
 
                     override fun onAdShowFailed(errorModel: PAGErrorModel) {
@@ -198,6 +200,8 @@ class PangleAdProvider : BaseAdProvider() {
                         rewardedAd = null
                         removeCachedAd(AdType.REWARD_VIDEO)
                         callback?.onAdDismiss()
+                        
+                        preloadAdOnDismiss(AdType.REWARD_VIDEO)
                     }
 
                     override fun onUserEarnedReward(pagRewardItem: PAGRewardItem?) {
@@ -219,7 +223,7 @@ class PangleAdProvider : BaseAdProvider() {
         }
     }
 
-    private fun loadBannerAd(activity: Activity, adId: String, callback: IAdCallback?) {
+    private fun loadBannerAd(adId: String, callback: IAdCallback?) {
         Log.d(TAG, "Loading banner ad: $adId")
 
         try {

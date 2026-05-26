@@ -66,7 +66,7 @@ class BigoAdProvider : BaseAdProvider() {
     }
 
     override fun doLoadAd(
-        activity: Activity,
+        activity: Context,
         adType: AdType,
         adId: String,
         callback: IAdCallback?
@@ -74,7 +74,7 @@ class BigoAdProvider : BaseAdProvider() {
         when (adType) {
             AdType.INTERSTITIAL -> loadInterstitialAd(adId, callback)
             AdType.REWARD_VIDEO -> loadRewardedAd(adId, callback)
-            AdType.BANNER -> loadBannerAd(activity, adId, callback)
+            AdType.BANNER -> loadBannerAd( adId, callback)
             else -> {
                 Log.w(TAG, "${adType.name} not supported yet for Bigo")
                 callback?.onAdFail(-1, "${adType.name} not supported yet")
@@ -152,6 +152,8 @@ class BigoAdProvider : BaseAdProvider() {
                             interstitialAd = null
                             removeCachedAd(AdType.INTERSTITIAL)
                             callback?.onAdDismiss()
+                            
+                            preloadAdOnDismiss(AdType.INTERSTITIAL)
                         }
                     })
                 }
@@ -215,6 +217,8 @@ class BigoAdProvider : BaseAdProvider() {
                             rewardedAd = null
                             removeCachedAd(AdType.REWARD_VIDEO)
                             callback?.onAdDismiss()
+                            
+                            preloadAdOnDismiss(AdType.REWARD_VIDEO)
                         }
 
                         override fun onAdRewarded() {
@@ -237,7 +241,7 @@ class BigoAdProvider : BaseAdProvider() {
         }
     }
 
-    private fun loadBannerAd(activity: Activity, adId: String, callback: IAdCallback?) {
+    private fun loadBannerAd(adId: String, callback: IAdCallback?) {
         Log.d(TAG, "Loading banner ad: $adId")
 
         try {

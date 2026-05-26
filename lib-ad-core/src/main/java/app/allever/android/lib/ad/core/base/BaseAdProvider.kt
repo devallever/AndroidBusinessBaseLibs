@@ -1,10 +1,12 @@
 package app.allever.android.lib.ad.core.base
 
 import android.app.Activity
+import android.content.Context
 import android.util.Log
 import android.view.ViewGroup
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.type.AdType
+import app.allever.android.lib.core.app.App
 
 abstract class BaseAdProvider : IAdProvider {
 
@@ -15,6 +17,10 @@ abstract class BaseAdProvider : IAdProvider {
     protected var isInitialized = false
 
     protected val adCache = mutableMapOf<AdType, Any>()
+
+    private val adIdCache = mutableMapOf<AdType, String>()
+
+    var autoPreloadEnabled = true
 
     override fun isInit(): Boolean = isInitialized
 
@@ -33,6 +39,8 @@ abstract class BaseAdProvider : IAdProvider {
             callback?.onAdFail(-1, "Ad provider not initialized")
             return
         }
+        
+        adIdCache[adType] = adId
         doLoadAd(activity, adType, adId, callback)
     }
 
@@ -51,11 +59,12 @@ abstract class BaseAdProvider : IAdProvider {
 
     override fun destroy() {
         adCache.clear()
+        adIdCache.clear()
         onDestroy()
     }
 
     protected abstract fun doLoadAd(
-        activity: Activity,
+        context: Context,
         adType: AdType,
         adId: String,
         callback: IAdCallback?
@@ -80,5 +89,38 @@ abstract class BaseAdProvider : IAdProvider {
 
     protected fun removeCachedAd(adType: AdType) {
         adCache.remove(adType)
+    }
+
+    protected fun getAdId(adType: AdType): String? {
+        return adIdCache[adType]
+    }
+
+    protected fun shouldAutoPreload(adType: AdType): Boolean {
+        return autoPreloadEnabled && (adType == AdType.INTERSTITIAL || adType == AdType.REWARD_VIDEO)
+    }
+
+    protected fun preloadAdOnDismiss(adType: AdType) {
+        if (!shouldAutoPreload(adType)) {
+            Log.d(TAG, "Auto preload disabled for ${adType.name}")
+            return
+        }
+
+        val adId = getAdId(adType) ?: run {
+            Log.w(TAG, "No cached adId for ${adType.name}, cannot preload")
+            return
+        }
+
+        Log.d(TAG, "Starting auto preload for ${adType.name} with id: $adId")
+        
+        doLoadAd(App.context, adType, adId, object : IAdCallback {
+            override fun onAdLoaded() {
+                Log.d(TAG, "${adType.name} preloaded successfully and cached")
+            }
+
+            override fun onAdFail(errorCode: Int, errorMessage: String) {
+                Log.w(TAG, "${adType.name} preload failed: $errorMessage")
+                removeCachedAd(adType)
+            }
+        })
     }
 }

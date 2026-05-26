@@ -51,7 +51,7 @@ class AdMobAdProvider : BaseAdProvider() {
 
 
     override fun doLoadAd(
-        activity: Activity,
+        activity: Context,
         adType: AdType,
         adId: String,
         callback: IAdCallback?
@@ -90,7 +90,7 @@ class AdMobAdProvider : BaseAdProvider() {
     }
 
     private fun loadInterstitialAd(
-        activity: Activity,
+        activity: Context,
         adId: String,
         callback: IAdCallback?
     ) {
@@ -116,6 +116,8 @@ class AdMobAdProvider : BaseAdProvider() {
                         interstitialAd = null
                         removeCachedAd(AdType.INTERSTITIAL)
                         callback?.onAdDismiss()
+                        
+                        preloadAdOnDismiss(AdType.INTERSTITIAL)
                     }
 
                     override fun onAdShowedFullScreenContent() {
@@ -140,7 +142,7 @@ class AdMobAdProvider : BaseAdProvider() {
     }
 
     private fun loadRewardedAd(
-        activity: Activity,
+        activity: Context,
         adId: String,
         callback: IAdCallback?
     ) {
@@ -166,6 +168,8 @@ class AdMobAdProvider : BaseAdProvider() {
                         rewardedAd = null
                         removeCachedAd(AdType.REWARD_VIDEO)
                         callback?.onAdDismiss()
+                        
+                        preloadAdOnDismiss(AdType.REWARD_VIDEO)
                     }
 
                     override fun onAdShowedFullScreenContent() {
@@ -193,7 +197,7 @@ class AdMobAdProvider : BaseAdProvider() {
     }
 
     private fun loadBannerAd(
-        activity: Activity,
+        activity: Context,
         adId: String,
         callback: IAdCallback?
     ) {

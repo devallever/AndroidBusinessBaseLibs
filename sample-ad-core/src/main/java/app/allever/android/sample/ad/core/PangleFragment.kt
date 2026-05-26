@@ -51,6 +51,9 @@ class PangleFragment: BaseFragment<FragmentPangleBinding, BaseViewModel>() {
         AdManager.init(requireContext(), config) {
             runOnUiThread {
                 updateStatus("✓ Pangle Initialized")
+                AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL)
+                AdManager.loadAd(requireActivity(), AdType.REWARD_VIDEO)
+                AdManager.loadAd(requireActivity(), AdType.BANNER)
             }
         }
     }
@@ -68,7 +71,7 @@ class PangleFragment: BaseFragment<FragmentPangleBinding, BaseViewModel>() {
 
         updateStatus("Loading Interstitial Ad...")
 
-        AdManager.loadAndShow(
+        AdManager.showAd(
             activity = requireActivity(),
             adType = AdType.INTERSTITIAL,
             callback = object : IAdCallback {
@@ -105,7 +108,7 @@ class PangleFragment: BaseFragment<FragmentPangleBinding, BaseViewModel>() {
 
         updateStatus("Loading Reward Video...")
 
-        AdManager.loadAndShow(
+        AdManager.showAd(
             activity = requireActivity(),
             adType = AdType.REWARD_VIDEO,
             callback = object : IAdCallback {
@@ -144,7 +147,7 @@ class PangleFragment: BaseFragment<FragmentPangleBinding, BaseViewModel>() {
 
         updateStatus("Loading Banner Ad...")
 
-        AdManager.loadAndShow(
+        AdManager.showAd(
             activity = requireActivity(),
             adType = AdType.BANNER,
             container = mBinding.bannerContainer,

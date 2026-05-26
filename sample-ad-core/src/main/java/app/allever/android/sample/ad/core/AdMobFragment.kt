@@ -52,6 +52,9 @@ class AdMobFragment: BaseFragment<FragmentAdmobBinding, BaseViewModel>() {
 
             runOnUiThread {
                 updateStatus("✓ AdMob Initialized (Test IDs)")
+                AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL)
+                AdManager.loadAd(requireActivity(), AdType.REWARD_VIDEO)
+                AdManager.loadAd(requireActivity(), AdType.BANNER)
             }
         }
     }
@@ -69,7 +72,7 @@ class AdMobFragment: BaseFragment<FragmentAdmobBinding, BaseViewModel>() {
 
         updateStatus("Loading Interstitial Ad...")
 
-        AdManager.loadAndShow(
+        AdManager.showAd(
             activity = requireActivity(),
             adType = AdType.INTERSTITIAL,
             callback = object : IAdCallback {
@@ -106,7 +109,7 @@ class AdMobFragment: BaseFragment<FragmentAdmobBinding, BaseViewModel>() {
 
         updateStatus("Loading Reward Video...")
 
-        AdManager.loadAndShow(
+        AdManager.showAd(
             activity = requireActivity(),
             adType = AdType.REWARD_VIDEO,
             callback = object : IAdCallback {
@@ -145,7 +148,7 @@ class AdMobFragment: BaseFragment<FragmentAdmobBinding, BaseViewModel>() {
 
         updateStatus("Loading Banner Ad...")
 
-        AdManager.loadAndShow(
+        AdManager.showAd(
             activity = requireActivity(),
             adType = AdType.BANNER,
             container = mBinding.bannerContainer,

@@ -1,6 +1,7 @@
 package app.allever.android.lib.ad.core.provider
 
 import android.app.Activity
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -36,7 +37,7 @@ class MockAdProvider : BaseAdProvider() {
     }
 
     override fun doLoadAd(
-        activity: Activity,
+        activity: Context,
         adType: AdType,
         adId: String,
         callback: IAdCallback?
