@@ -13,6 +13,7 @@ import app.allever.android.lib.ad.provider.pangle.PangleAdProvider
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.util.UIKit.runOnUiThread
 import app.allever.android.lib.mvvm.base.BaseViewModel
+import app.allever.android.sample.ad.core.config.AdIdConstants
 import app.allever.android.sample.ad.core.databinding.FragmentMultiProviderBinding
 import kotlinx.coroutines.launch
 
@@ -48,9 +49,9 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
             providerType = AdMobAdProvider.PROVIDER_NAME,
             providerClass = AdMobAdProvider::class.java,
             config = AdProviderConfig(
-                appId = "ca-app-pub-3940256099942544~3347511713",
-                interstitialAdId = "ca-app-pub-3940256099942544/1033173712",
-                rewardVideoAdId = "ca-app-pub-3940256099942544/5224354917",
+                appId = AdIdConstants.AdMob.APP_ID,
+                interstitialAdId = AdIdConstants.AdMob.INTERSTITIAL_AD_ID,
+                rewardVideoAdId = AdIdConstants.AdMob.REWARD_VIDEO_AD_ID,
                 supportWaterfall = true
             )
         )
@@ -59,9 +60,9 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
             providerType = PangleAdProvider.PROVIDER_NAME,
             providerClass = PangleAdProvider::class.java,
             config = AdProviderConfig(
-                appId = "8025677",
-                interstitialAdId = "980088188",
-                rewardVideoAdId = "980088192",
+                appId = AdIdConstants.Pangle.APP_ID,
+                interstitialAdId = AdIdConstants.Pangle.INTERSTITIAL_AD_ID,
+                rewardVideoAdId = AdIdConstants.Pangle.REWARD_VIDEO_AD_ID,
                 supportWaterfall = true
             )
         )
@@ -70,9 +71,9 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
             providerType = BigoAdProvider.PROVIDER_NAME,
             providerClass = BigoAdProvider::class.java,
             config = AdProviderConfig(
-                appId = "10182906",
-                interstitialAdId = "10182906-10158798",
-                rewardVideoAdId = "10182906-10001431",
+                appId = AdIdConstants.Bigo.APP_ID,
+                interstitialAdId = AdIdConstants.Bigo.INTERSTITIAL_AD_ID,
+                rewardVideoAdId = AdIdConstants.Bigo.REWARD_VIDEO_AD_ID,
                 supportWaterfall = false
             )
         )

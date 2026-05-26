@@ -9,6 +9,7 @@ import app.allever.android.lib.ad.provider.admob.AdMobAdProvider
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.util.UIKit.runOnUiThread
 import app.allever.android.lib.mvvm.base.BaseViewModel
+import app.allever.android.sample.ad.core.config.AdIdConstants
 import app.allever.android.sample.ad.core.databinding.FragmentAdmobBinding
 
 class AdMobFragment: BaseFragment<FragmentAdmobBinding, BaseViewModel>() {
@@ -16,10 +17,10 @@ class AdMobFragment: BaseFragment<FragmentAdmobBinding, BaseViewModel>() {
 
     override fun init() {
         val config = AdProviderConfig(
-            appId = "ca-app-pub-3940256099942544~3347511713",
-            interstitialAdId = "ca-app-pub-3940256099942544/1033173712",
-            rewardVideoAdId = "ca-app-pub-3940256099942544/5224354917",
-            bannerAdId = "ca-app-pub-3940256099942544/6300978111"
+            appId = AdIdConstants.AdMob.APP_ID,
+            interstitialAdId = AdIdConstants.AdMob.INTERSTITIAL_AD_ID,
+            rewardVideoAdId = AdIdConstants.AdMob.REWARD_VIDEO_AD_ID,
+            bannerAdId = AdIdConstants.AdMob.BANNER_AD_ID
         )
 
         AdManager.registerProvider(

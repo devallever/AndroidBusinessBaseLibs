@@ -9,6 +9,7 @@ import app.allever.android.lib.ad.provider.pangle.PangleAdProvider
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.util.UIKit.runOnUiThread
 import app.allever.android.lib.mvvm.base.BaseViewModel
+import app.allever.android.sample.ad.core.config.AdIdConstants
 import app.allever.android.sample.ad.core.databinding.FragmentPangleBinding
 
 class PangleFragment: BaseFragment<FragmentPangleBinding, BaseViewModel>() {
@@ -16,10 +17,10 @@ class PangleFragment: BaseFragment<FragmentPangleBinding, BaseViewModel>() {
 
     override fun init() {
         val config = AdProviderConfig(
-            appId = "8025677",
-            interstitialAdId = "980088188",
-            rewardVideoAdId = "980088192",
-            bannerAdId = "980088196"
+            appId = AdIdConstants.Pangle.APP_ID,
+            interstitialAdId = AdIdConstants.Pangle.INTERSTITIAL_AD_ID,
+            rewardVideoAdId = AdIdConstants.Pangle.REWARD_VIDEO_AD_ID,
+            bannerAdId = AdIdConstants.Pangle.BANNER_AD_ID
         )
 
         AdManager.registerProvider(
