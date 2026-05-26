@@ -45,7 +45,7 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
             config = AdProviderConfig(
                 appId = "ca-app-pub-3940256099942544~3347511713",
                 interstitialAdId = "ca-app-pub-3940256099942544/1033173712",
-                rewardVideoAdId = "ca-app-pub-3940256099942542544/5224354917"
+                rewardVideoAdId = "ca-app-pub-3940256099942544/5224354917"
             )
         )
 
@@ -77,7 +77,6 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
         updateStatus("Initializing all providers...")
         
         val context = requireContext()
-        
         AdManager.init(context, AdMobAdProvider.PROVIDER_NAME) {
             runOnUiThread { 
                 updateStatus("✓ AdMob initialized")
