@@ -123,7 +123,10 @@ class PangleAdProvider : BaseAdProvider() {
                 log("$TAG: Interstitial ad loaded successfully")
                 interstitialAd = ad
                 cacheAd(AdType.INTERSTITIAL, ad)
-                callback?.onAdLoaded()
+                
+                val simulatedECPM = generateSimulatedPrice()
+                log("$TAG: Interstitial ad (simulated eCPM: $$simulatedECPM)")
+                callback?.onAdLoadedWithPrice(simulatedECPM)
 
                 ad.setAdInteractionCallback(object : PAGInterstitialAdInteractionCallback() {
                     override fun onAdShowed() {
@@ -177,7 +180,10 @@ class PangleAdProvider : BaseAdProvider() {
                 log("$TAG: Rewarded ad loaded successfully")
                 rewardedAd = ad
                 cacheAd(AdType.REWARD_VIDEO, ad)
-                callback?.onAdLoaded()
+                
+                val simulatedECPM = generateSimulatedPrice()
+                log("$TAG: Rewarded ad (simulated eCPM: $$simulatedECPM)")
+                callback?.onAdLoadedWithPrice(simulatedECPM)
 
                 ad.setAdInteractionCallback(object : PAGRewardedAdInteractionCallback() {
                     override fun onAdShowed() {
@@ -236,7 +242,10 @@ class PangleAdProvider : BaseAdProvider() {
                     log("$TAG: Banner ad loaded successfully")
                     bannerAd = ad
                     cacheAd(AdType.BANNER, ad)
-                    callback?.onAdLoaded()
+                    
+                    val simulatedECPM = generateSimulatedPrice()
+                    log("$TAG: Banner ad (simulated eCPM: $$simulatedECPM)")
+                    callback?.onAdLoadedWithPrice(simulatedECPM)
 
                     ad.setAdInteractionCallback(object : PAGBannerAdInteractionCallback() {
                         override fun onAdShowed() {
@@ -275,5 +284,11 @@ class PangleAdProvider : BaseAdProvider() {
             logE("$TAG: Error showing banner ad", e.message)
             callback?.onAdFail(-1, e.message ?: "Unknown error")
         }
+    }
+
+    private fun generateSimulatedPrice(): Double {
+        val minPrice = 1.0
+        val maxPrice = 5.0
+        return minPrice + (Math.random() * (maxPrice - minPrice))
     }
 }

@@ -232,6 +232,7 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
         val modeText = when (mode) {
             LoadMode.SINGLE -> "🎯 SINGLE"
             LoadMode.WATERFALL -> "💧 WATERFALL"
+            LoadMode.BIDDING -> "⚡ BIDDING"
         }
         
         mBinding.tvCurrentMode.text = "Mode: $modeText"

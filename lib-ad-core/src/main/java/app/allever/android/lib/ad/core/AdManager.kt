@@ -2,12 +2,15 @@ package app.allever.android.lib.ad.core
 
 import android.app.Activity
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.ViewGroup
 import app.allever.android.lib.ad.core.base.AdProviderFactory
 import app.allever.android.lib.ad.core.base.IAdProvider
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
+import app.allever.android.lib.ad.core.type.BiddingResult
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import java.util.concurrent.ConcurrentHashMap
@@ -19,7 +22,8 @@ object AdManager {
 
     enum class LoadMode {
         SINGLE,
-        WATERFALL
+        WATERFALL,
+        BIDDING
     }
 
     private var currentProvider: IAdProvider? = null
@@ -123,6 +127,9 @@ object AdManager {
             }
             LoadMode.WATERFALL -> {
                 loadAdWithWaterfall(activity, adType, adId, callback)
+            }
+            LoadMode.BIDDING -> {
+                loadAdWithBidding(activity, adType, adId, callback)
             }
         }
     }
@@ -347,6 +354,22 @@ object AdManager {
         }.trimEnd()
     }
 
+    fun getBiddingProvidersInfo(): String {
+        val biddingProviders = getBiddingProviders()
+        if (biddingProviders.isEmpty()) {
+            return "No bidding providers configured"
+        }
+        
+        return buildString {
+            appendLine("Bidding Providers (${biddingProviders.size}):")
+            biddingProviders.forEachIndexed { index, (type, config) ->
+                val status = if (providerPool.containsKey(type)) "✓ Ready" else "○ Not Initialized"
+                val timeout = config.biddingTimeout
+                appendLine("  [$index] $type - $status | Timeout: ${timeout}ms")
+            }
+        }.trimEnd()
+    }
+
     fun getVersion(): String = VERSION
 
     fun getCurrentProvider(): IAdProvider? = currentProvider
@@ -363,7 +386,8 @@ object AdManager {
         AdProviderFactory.registerProvider(providerType, providerClass, config)
         log("$TAG: Registered provider: $providerType" +
                 " | AppID: ${config.appId}" +
-                " | Waterfall: ${if (config.supportWaterfall) "ON" else "OFF"}")
+                " | Waterfall: ${if (config.supportWaterfall) "ON" else "OFF"}" +
+                " | Bidding: ${if (config.supportBidding) "ON" else "OFF"}")
     }
 
     fun getRegisteredProviders(): Set<String> = AdProviderFactory.getRegisteredProviders()
@@ -380,5 +404,283 @@ object AdManager {
 
     private fun getAdIdByType(adType: AdType): String? {
         return currentConfig?.getAdIdByType(adType)
+    }
+
+    private fun loadAdWithBidding(
+        activity: Activity,
+        adType: AdType,
+        adId: String? = null,
+        callback: IAdCallback? = null
+    ) {
+        log("$TAG: [BIDDING] Starting bidding for ${adType.name}")
+        
+        log("$TAG: [BIDDING] === BIDDING SIMULATION MODE ===")
+        log("$TAG: [BIDDING] 1. All providers with supportBidding=true participate")
+        log("$TAG: [BIDDING] 2. Each provider generates SIMULATED random price")
+        log("$TAG: [BIDDING] 3. Price ranges vary by provider (for testing)")
+        log("$TAG: [BIDDING] 4. Winner: provider with HIGHEST simulated eCPM wins")
+        log("$TAG: [BIDDING] ===================================")
+        
+        val biddingProviders = getBiddingProviders()
+        
+        if (biddingProviders.isEmpty()) {
+            logE("$TAG: [BIDDING] No providers with bidding support available")
+            
+            val activeProvider = getActiveProvider()
+            if (activeProvider != null) {
+                log("$TAG: [BIDDING] Falling back to single provider mode")
+                loadAdSingle(activity, adType, adId, callback)
+            } else {
+                callback?.onAdFail(-1, "No available providers for bidding")
+            }
+            return
+        }
+        
+        log("$TAG: [BIDDING] Parallel loading ${biddingProviders.size} providers...")
+        
+        val biddingState = BiddingState(
+            totalProviders = biddingProviders.size,
+            startTime = System.currentTimeMillis(),
+            timeout = getBiddingTimeout(biddingProviders),
+            results = ConcurrentHashMap(),
+            callback = callback,
+            adType = adType
+        )
+        
+        biddingProviders.forEachIndexed { index, (providerType, config) ->
+            
+            val provider = providerPool[providerType]
+            if (provider == null) {
+                log("$TAG: [BIDDING] [$index] $providerType not initialized, skip")
+                biddingState.markFailed(providerType, -1, "Not initialized")
+                return@forEachIndexed
+            }
+            
+            launchBiddingRequest(
+                state = biddingState,
+                index = index,
+                providerType = providerType,
+                provider = provider,
+                config = config,
+                activity = activity,
+                adType = adType,
+                customAdId = adId
+            )
+        }
+        
+        startBiddingTimeoutMonitor(biddingState)
+    }
+
+    private fun getBiddingProviders(): List<Pair<String, AdProviderConfig>> {
+        return AdProviderFactory.getAllConfigs()
+            .filter { (_, config) -> config.supportBidding }
+            .filter { (type, _) -> providerPool.containsKey(type) }
+            .toList()
+    }
+
+    private fun getBiddingTimeout(providers: List<Pair<String, AdProviderConfig>>): Long {
+        if (providers.isEmpty()) return 5000L
+        
+        return providers.maxOf { (_, config) ->
+            config.biddingTimeout.coerceAtLeast(1000L)
+        }
+    }
+
+    private data class BiddingState(
+        val totalProviders: Int,
+        val startTime: Long,
+        val timeout: Long,
+        val results: ConcurrentHashMap<String, BiddingEntry>,
+        val callback: IAdCallback?,
+        val adType: AdType,
+        var completedCount: Int = 0,
+        var isFinished: Boolean = false
+    )
+
+    private data class BiddingEntry(
+        val success: Boolean,
+        val eCPM: Double = 0.0,
+        val errorCode: Int = -1,
+        val errorMessage: String = ""
+    )
+
+    private fun launchBiddingRequest(
+        state: BiddingState,
+        index: Int,
+        providerType: String,
+        provider: IAdProvider,
+        config: AdProviderConfig,
+        activity: Activity,
+        adType: AdType,
+        customAdId: String?
+    ) {
+        val actualAdId = customAdId ?: config.getAdIdByType(adType) ?: run {
+            state.markFailed(providerType, -1, "No ad ID")
+            return
+        }
+        
+        log("$TAG: [BIDDING] [$index/${state.totalProviders}] Requesting: $providerType")
+        
+        provider.loadAd(activity, adType, actualAdId, object : IAdCallback {
+            
+            override fun onAdLoaded() {
+                handleBiddingResponse(state, providerType, true, 0.0)
+            }
+            
+            override fun onAdLoadedWithPrice(eCPM: Double) {
+                handleBiddingResponse(state, providerType, true, eCPM)
+            }
+            
+            override fun onAdFail(errorCode: Int, errorMessage: String) {
+                handleBiddingResponse(state, providerType, false, 0.0, errorCode, errorMessage)
+            }
+            
+            override fun onAdShow() {}
+            override fun onAdClick() {}
+            override fun onAdDismiss() {}
+            override fun onAdRewarded(amount: Int, name: String) {}
+        })
+    }
+
+    private fun BiddingState.markFailed(
+        providerType: String,
+        errorCode: Int,
+        errorMessage: String
+    ) {
+        results[providerType] = BiddingEntry(
+            success = false,
+            errorCode = errorCode,
+            errorMessage = errorMessage
+        )
+        completedCount++
+        
+        synchronized(this) {
+            if (!isFinished && completedCount >= totalProviders) {
+                checkBiddingCompletion(this)
+            }
+        }
+    }
+
+    private fun handleBiddingResponse(
+        state: BiddingState,
+        providerType: String,
+        success: Boolean,
+        eCPM: Double = 0.0,
+        errorCode: Int = -1,
+        errorMessage: String = ""
+    ) {
+        synchronized(state) {
+            if (state.isFinished) return
+            
+            state.results[providerType] = BiddingEntry(
+                success = success,
+                eCPM = eCPM,
+                errorCode = errorCode,
+                errorMessage = errorMessage
+            )
+            
+            state.completedCount++
+            
+            val priceInfo = if (success && eCPM > 0) {
+                " | eCPM=\$${"%.2f".format(eCPM)} (SIMULATED)"
+            } else if (success && eCPM == 0.0) {
+                " | eCPM=\$0.00 (No simulation - fallback)"
+            } else {
+                ""
+            }
+            
+            log("$TAG: [BIDDING] Response received: $providerType" +
+                    " | Success=$success" +
+                    priceInfo +
+                    " | Progress=${state.completedCount}/${state.totalProviders}")
+            
+            checkBiddingCompletion(state)
+        }
+    }
+
+    private fun checkBiddingCompletion(state: BiddingState) {
+        val allResponded = state.completedCount >= state.totalProviders
+        val elapsed = System.currentTimeMillis() - state.startTime
+        
+        if (!allResponded && elapsed < state.timeout) {
+            return
+        }
+        
+        state.isFinished = true
+        
+        val elapsedTime = System.currentTimeMillis() - state.startTime
+        
+        log("$TAG: [BIDDING] === BIDDING COMPLETED ===")
+        log("$TAG: [BIDDING] Time elapsed: ${elapsedTime}ms")
+        log("$TAG: [BIDDING] Total responses: ${state.completedCount}/${state.totalProviders}")
+        
+        val winner = state.results.entries
+            .filter { it.value.success }
+            .maxByOrNull { it.value.eCPM }
+        
+        if (winner != null) {
+            val result = BiddingResult(
+                providerType = winner.key,
+                eCPM = winner.value.eCPM,
+                adType = state.adType,
+                loadTime = elapsedTime,
+                timestamp = System.currentTimeMillis()
+            )
+            
+            val priceSource = if (result.eCPM > 0) {
+                "Simulated random price (for testing)"
+            } else {
+                "No price available"
+            }
+            
+            log("$TAG: [BIDDING] 🏆 WINNER: ${result.providerType}" +
+                    " | Price: \$${result.formattedPrice}" +
+                    " | Source: $priceSource" +
+                    " | Time: ${result.loadTime}ms")
+            
+            switchToProvider(winner.key)
+            state.callback?.onAdLoadedWithPrice(result.eCPM)
+            
+        } else {
+            logE("$TAG: [BIDDING] ❌ ALL PROVIDERS FAILED")
+            state.callback?.onAdFail(-1, "All bidding providers failed")
+        }
+        
+        logBiddingDetails(state)
+    }
+
+    private fun startBiddingTimeoutMonitor(state: BiddingState) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            synchronized(state) {
+                if (!state.isFinished) {
+                    logW("$TAG: [BIDDING] ⏰ TIMEOUT! (${state.timeout}ms)")
+                    logW("$TAG: [BIDDING] Completed: ${state.completedCount}/${state.totalProviders}")
+                    
+                    checkBiddingCompletion(state)
+                }
+            }
+        }, state.timeout)
+    }
+
+    private fun logBiddingDetails(state: BiddingState) {
+        val sb = StringBuilder()
+        sb.appendLine("┌─────────────────────────────────────┐")
+        sb.appendLine("│       BIDDING RESULTS DETAIL       │")
+        sb.appendLine("├──────────┬────────┬────────┬────────┤")
+        sb.appendLine("│ Provider │ Status │  eCPM  │  Time  │")
+        sb.appendLine("├──────────┼────────┼────────┼────────┤")
+        
+        state.results.forEach { (type, entry) ->
+            val status = if (entry.success) "✓ WIN" else "✗ FAIL"
+            val price = if (entry.success) "$${"%.2f".format(entry.eCPM)}" else "-"
+            sb.appendLine("│ $type │ $status │ $price │    -   │")
+        }
+        
+        sb.appendLine("└──────────┴────────┴────────┴────────┘")
+        log(sb.toString())
+    }
+
+    private fun logW(message: String) {
+        log(message)
     }
 }

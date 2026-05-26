@@ -118,7 +118,10 @@ class BigoAdProvider : BaseAdProvider() {
                     log("$TAG: Interstitial ad loaded successfully")
                     interstitialAd = ad
                     cacheAd(AdType.INTERSTITIAL, ad)
-                    callback?.onAdLoaded()
+                    
+                    val simulatedECPM = generateSimulatedPrice()
+                    log("$TAG: Interstitial ad (simulated eCPM: $$simulatedECPM)")
+                    callback?.onAdLoadedWithPrice(simulatedECPM)
 
                     ad.setAdInteractionListener(object : AdInteractionListener {
                         override fun onAdError(adError: AdError) {
@@ -313,5 +316,11 @@ class BigoAdProvider : BaseAdProvider() {
             logE("$TAG: Error showing banner ad", e.message)
             callback?.onAdFail(-1, e.message ?: "Unknown error")
         }
+    }
+
+    private fun generateSimulatedPrice(): Double {
+        val minPrice = 1.0
+        val maxPrice = 5.0
+        return minPrice + (Math.random() * (maxPrice - minPrice))
     }
 }

@@ -104,7 +104,10 @@ class AdMobAdProvider : BaseAdProvider() {
                 log("$TAG: Interstitial ad loaded successfully")
                 interstitialAd = ad
                 cacheAd(AdType.INTERSTITIAL, ad)
-                callback?.onAdLoaded()
+                
+                val simulatedECPM = generateSimulatedPrice()
+                log("$TAG: Interstitial ad (simulated eCPM: $$simulatedECPM)")
+                callback?.onAdLoadedWithPrice(simulatedECPM)
 
                 ad.fullScreenContentCallback = object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
@@ -156,7 +159,10 @@ class AdMobAdProvider : BaseAdProvider() {
                 log("$TAG: Rewarded ad loaded successfully")
                 rewardedAd = ad
                 cacheAd(AdType.REWARD_VIDEO, ad)
-                callback?.onAdLoaded()
+                
+                val simulatedECPM = generateSimulatedPrice()
+                log("$TAG: Rewarded ad (simulated eCPM: $$simulatedECPM)")
+                callback?.onAdLoadedWithPrice(simulatedECPM)
 
                 ad.fullScreenContentCallback = object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
@@ -217,7 +223,10 @@ class AdMobAdProvider : BaseAdProvider() {
                 override fun onAdLoaded() {
                     log("$TAG: Banner ad loaded successfully")
                     cacheAd(AdType.BANNER, adView)
-                    callback?.onAdLoaded()
+                    
+                    val simulatedECPM = generateSimulatedPrice()
+                    log("$TAG: Banner ad (simulated eCPM: $$simulatedECPM)")
+                    callback?.onAdLoadedWithPrice(simulatedECPM)
                 }
 
                 override fun onAdFailedToLoad(adError: LoadAdError) {
@@ -264,5 +273,11 @@ class AdMobAdProvider : BaseAdProvider() {
         display?.getMetrics(outMetrics)
         val density = outMetrics.density
         return (outMetrics.widthPixels / density).toInt()
+    }
+
+    private fun generateSimulatedPrice(): Double {
+        val minPrice = 1.0
+        val maxPrice = 5.0
+        return minPrice + (Math.random() * (maxPrice - minPrice))
     }
 }

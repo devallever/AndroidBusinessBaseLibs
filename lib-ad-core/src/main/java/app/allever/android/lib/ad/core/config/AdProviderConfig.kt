@@ -9,7 +9,9 @@ data class AdProviderConfig(
     val rewardVideoAdId: String = "",
     val bannerAdId: String = "",
     val nativeAdId: String = "",
-    val supportWaterfall: Boolean = false
+    val supportWaterfall: Boolean = false,
+    val supportBidding: Boolean = false,
+    val biddingTimeout: Long = 5000L
 ) {
     fun isNotEmpty(): Boolean = appId.isNotEmpty()
 
