@@ -3,12 +3,13 @@ package app.allever.android.lib.ad.provider.admob
 import android.app.Activity
 import android.content.Context
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.ViewGroup
 import android.view.WindowManager
 import app.allever.android.lib.ad.core.base.BaseAdProvider
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.type.AdType
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.logE
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -28,22 +29,22 @@ class AdMobAdProvider : BaseAdProvider() {
     override fun getProviderType(): String = PROVIDER_NAME
 
     override fun init(config: Map<String, Any>, callback: (() -> Unit)?) {
-        Log.d(TAG, "Initializing AdMob with config: $config")
-        
+        log("$TAG: Initializing AdMob with config: $config")
+
         val context = config["context"] as? Context ?: run {
-            Log.e(TAG, "Context not found in config")
+            logE("$TAG: Context not found in config")
             return
         }
 
         if (isInit()) {
-            Log.w(TAG, "AdMob already initialized")
+            log("$TAG: AdMob already initialized")
             callback?.invoke()
             return
         }
 
         MobileAds.initialize(context) {
             isInitialized = true
-            Log.d(TAG, "AdMob initialized successfully")
+            log("$TAG: AdMob initialized successfully")
             callback?.invoke()
         }
     }
@@ -60,7 +61,7 @@ class AdMobAdProvider : BaseAdProvider() {
             AdType.REWARD_VIDEO -> loadRewardedAd(context, adId, callback)
             AdType.BANNER -> loadBannerAd(context, adId, callback)
             else -> {
-                Log.w(TAG, "${adType.name} not supported yet for AdMob")
+                log("$TAG: ${adType.name} not supported yet for AdMob")
                 callback?.onAdFail(-1, "${adType.name} not supported yet")
             }
         }
@@ -77,7 +78,7 @@ class AdMobAdProvider : BaseAdProvider() {
             AdType.REWARD_VIDEO -> showRewardedAd(activity, callback)
             AdType.BANNER -> showBannerAd(container, callback)
             else -> {
-                Log.w(TAG, "${adType.name} show not implemented for AdMob")
+                log("$TAG: ${adType.name} show not implemented for AdMob")
             }
         }
     }
@@ -93,39 +94,39 @@ class AdMobAdProvider : BaseAdProvider() {
         adId: String,
         callback: IAdCallback?
     ) {
-        Log.d(TAG, "Loading interstitial ad: $adId")
-        
+        log("$TAG: Loading interstitial ad: $adId")
+
         val adRequest = AdRequest.Builder().build()
 
         InterstitialAd.load(activity, adId, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
-                Log.w(TAG, "Interstitial ad failed to load: ${adError.message}")
+                log("$TAG: Interstitial ad failed to load: ${adError.message}")
                 callback?.onAdFail(adError.code, adError.message)
             }
 
             override fun onAdLoaded(ad: InterstitialAd) {
-                Log.d(TAG, "Interstitial ad loaded successfully")
+                log("$TAG: Interstitial ad loaded successfully")
                 interstitialAd = ad
                 cacheAd(AdType.INTERSTITIAL, ad)
                 callback?.onAdLoaded()
-                
+
                 ad.fullScreenContentCallback = object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
-                        Log.d(TAG, "Interstitial ad dismissed")
+                        log("$TAG: Interstitial ad dismissed")
                         interstitialAd = null
                         removeCachedAd(AdType.INTERSTITIAL)
                         callback?.onAdDismiss()
-                        
+
                         preloadAdOnDismiss(AdType.INTERSTITIAL)
                     }
 
                     override fun onAdShowedFullScreenContent() {
-                        Log.d(TAG, "Interstitial ad showed")
+                        log("$TAG: Interstitial ad showed")
                         callback?.onAdShow()
                     }
 
                     override fun onAdClicked() {
-                        Log.d(TAG, "Interstitial ad clicked")
+                        log("$TAG: Interstitial ad clicked")
                         callback?.onAdClick()
                     }
                 }
@@ -135,7 +136,7 @@ class AdMobAdProvider : BaseAdProvider() {
 
     private fun showInterstitialAd(activity: Activity, callback: IAdCallback?) {
         interstitialAd?.show(activity) ?: run {
-            Log.w(TAG, "Interstitial ad not ready")
+            log("$TAG: Interstitial ad not ready")
             callback?.onAdFail(-1, "Interstitial ad not loaded")
         }
     }
@@ -145,39 +146,39 @@ class AdMobAdProvider : BaseAdProvider() {
         adId: String,
         callback: IAdCallback?
     ) {
-        Log.d(TAG, "Loading rewarded ad: $adId")
+        log("$TAG: Loading rewarded ad: $adId")
 
         val adRequest = AdRequest.Builder().build()
 
         RewardedAd.load(activity, adId, adRequest, object : RewardedAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
-                Log.w(TAG, "Rewarded ad failed to load: ${adError.message}")
+                log("$TAG: Rewarded ad failed to load: ${adError.message}")
                 callback?.onAdFail(adError.code, adError.message)
             }
 
             override fun onAdLoaded(ad: RewardedAd) {
-                Log.d(TAG, "Rewarded ad loaded successfully")
+                log("$TAG: Rewarded ad loaded successfully")
                 rewardedAd = ad
                 cacheAd(AdType.REWARD_VIDEO, ad)
                 callback?.onAdLoaded()
 
                 ad.fullScreenContentCallback = object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
-                        Log.d(TAG, "Rewarded ad dismissed")
+                        log("$TAG: Rewarded ad dismissed")
                         rewardedAd = null
                         removeCachedAd(AdType.REWARD_VIDEO)
                         callback?.onAdDismiss()
-                        
+
                         preloadAdOnDismiss(AdType.REWARD_VIDEO)
                     }
 
                     override fun onAdShowedFullScreenContent() {
-                        Log.d(TAG, "Rewarded ad showed")
+                        log("$TAG: Rewarded ad showed")
                         callback?.onAdShow()
                     }
 
                     override fun onAdClicked() {
-                        Log.d(TAG, "Rewarded ad clicked")
+                        log("$TAG: Rewarded ad clicked")
                         callback?.onAdClick()
                     }
                 }
@@ -187,10 +188,10 @@ class AdMobAdProvider : BaseAdProvider() {
 
     private fun showRewardedAd(activity: Activity, callback: IAdCallback?) {
         rewardedAd?.show(activity) { rewardItem ->
-            Log.d(TAG, "User earned reward: ${rewardItem.amount} ${rewardItem.type}")
+            log("$TAG: User earned reward: ${rewardItem.amount} ${rewardItem.type}")
             callback?.onAdRewarded(rewardItem.amount, rewardItem.type)
         } ?: run {
-            Log.w(TAG, "Rewarded ad not ready")
+            log("$TAG: Rewarded ad not ready")
             callback?.onAdFail(-1, "Rewarded ad not loaded")
         }
     }
@@ -200,12 +201,12 @@ class AdMobAdProvider : BaseAdProvider() {
         adId: String,
         callback: IAdCallback?
     ) {
-        Log.d(TAG, "Loading banner ad: $adId")
+        log("$TAG: Loading banner ad: $adId")
 
         try {
             val adView = AdView(activity)
             adView.adUnitId = adId
-            
+
             val displayMetrics = activity.resources.displayMetrics
             val adWidth = displayMetrics.widthPixels
             val autoAdWidth = getScreenWidth(activity)
@@ -218,13 +219,13 @@ class AdMobAdProvider : BaseAdProvider() {
 
             adView.adListener = object : AdListener() {
                 override fun onAdLoaded() {
-                    Log.d(TAG, "Banner ad loaded successfully")
+                    log("$TAG: Banner ad loaded successfully")
                     cacheAd(AdType.BANNER, adView)
                     callback?.onAdLoaded()
                 }
 
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    Log.w(TAG, "Banner ad failed to load: ${adError.message}")
+                    log("$TAG: Banner ad failed to load: ${adError.message}")
                     callback?.onAdFail(adError.code, adError.message)
                 }
 
@@ -235,16 +236,16 @@ class AdMobAdProvider : BaseAdProvider() {
 
             adView.loadAd(AdRequest.Builder().build())
         } catch (e: Exception) {
-            Log.e(TAG, "Error loading banner ad", e)
+            logE("$TAG: Error loading banner ad", e.message)
             callback?.onAdFail(-1, e.message ?: "Unknown error")
         }
     }
 
     private fun showBannerAd(container: ViewGroup?, callback: IAdCallback?) {
         val adView = getCachedAd(AdType.BANNER) as? AdView
-        
+
         if (adView == null || container == null) {
-            Log.w(TAG, "Banner ad or container not ready")
+            log("$TAG: Banner ad or container not ready")
             callback?.onAdFail(-1, "Banner ad not ready")
             return
         }
@@ -252,10 +253,10 @@ class AdMobAdProvider : BaseAdProvider() {
         try {
             container.removeAllViews()
             container.addView(adView)
-            Log.d(TAG, "Banner ad showed")
+            log("$TAG: Banner ad showed")
             callback?.onAdShow()
         } catch (e: Exception) {
-            Log.e(TAG, "Error showing banner ad", e)
+            logE("$TAG: Error showing banner ad", e.message)
             callback?.onAdFail(-1, e.message ?: "Unknown error")
         }
     }

@@ -2,11 +2,12 @@ package app.allever.android.lib.ad.provider.pangle
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import android.view.ViewGroup
 import app.allever.android.lib.ad.core.base.BaseAdProvider
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.type.AdType
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.logE
 import com.bytedance.sdk.openadsdk.api.banner.PAGBannerAd
 import com.bytedance.sdk.openadsdk.api.banner.PAGBannerAdInteractionCallback
 import com.bytedance.sdk.openadsdk.api.banner.PAGBannerAdLoadListener
@@ -39,21 +40,21 @@ class PangleAdProvider : BaseAdProvider() {
     override fun getProviderType(): String = PROVIDER_NAME
 
     override fun init(config: Map<String, Any>, callback: (() -> Unit)?) {
-        Log.d(TAG, "Initializing Pangle with config: $config")
+        log("$TAG: Initializing Pangle with config: $config")
 
         val context = config["context"] as? Context ?: run {
-            Log.e(TAG, "Context not found in config")
+            logE("$TAG: Context not found in config")
             return
         }
 
         if (isInit()) {
-            Log.d(TAG, "Pangle already initialized")
+            log("$TAG: Pangle already initialized")
             callback?.invoke()
             return
         }
 
         val appId = config["appId"] as? String ?: ""
-        
+
         val pagConfig = PAGConfig.Builder()
             .appId(appId)
             .debugLog(true)
@@ -63,12 +64,12 @@ class PangleAdProvider : BaseAdProvider() {
         PAGSdk.init(context, pagConfig, object : PAGSdk.PAGInitCallback {
             override fun success() {
                 isInitialized = true
-                Log.d(TAG, "Pangle initialized successfully")
+                log("$TAG: Pangle initialized successfully")
                 callback?.invoke()
             }
 
             override fun fail(code: Int, message: String?) {
-                Log.e(TAG, "Pangle initialization failed: $code - $message")
+                logE("$TAG: Pangle initialization failed: $code - $message")
                 callback?.invoke()
             }
         })
@@ -85,7 +86,7 @@ class PangleAdProvider : BaseAdProvider() {
             AdType.REWARD_VIDEO -> loadRewardedAd(adId, callback)
             AdType.BANNER -> loadBannerAd(adId, callback)
             else -> {
-                Log.w(TAG, "${adType.name} not supported yet for Pangle")
+                log("$TAG: ${adType.name} not supported yet for Pangle")
                 callback?.onAdFail(-1, "${adType.name} not supported yet")
             }
         }
@@ -102,7 +103,7 @@ class PangleAdProvider : BaseAdProvider() {
             AdType.REWARD_VIDEO -> showRewardedAd(activity, callback)
             AdType.BANNER -> showBannerAd(container, callback)
             else -> {
-                Log.w(TAG, "${adType.name} show not implemented for Pangle")
+                log("$TAG: ${adType.name} show not implemented for Pangle")
             }
         }
     }
@@ -115,43 +116,43 @@ class PangleAdProvider : BaseAdProvider() {
     }
 
     private fun loadInterstitialAd(adId: String, callback: IAdCallback?) {
-        Log.d(TAG, "Loading interstitial ad: $adId")
+        log("$TAG: Loading interstitial ad: $adId")
 
         val request = PAGInterstitialRequest()
         PAGInterstitialAd.loadAd(adId, request, object : PAGInterstitialAdLoadListener {
             override fun onError(code: Int, message: String) {
-                Log.w(TAG, "Interstitial ad failed to load: $code - $message")
+                log("$TAG: Interstitial ad failed to load: $code - $message")
                 callback?.onAdFail(code, message)
             }
 
             override fun onAdLoaded(ad: PAGInterstitialAd) {
-                Log.d(TAG, "Interstitial ad loaded successfully")
+                log("$TAG: Interstitial ad loaded successfully")
                 interstitialAd = ad
                 cacheAd(AdType.INTERSTITIAL, ad)
                 callback?.onAdLoaded()
 
                 ad.setAdInteractionCallback(object : PAGInterstitialAdInteractionCallback() {
                     override fun onAdShowed() {
-                        Log.d(TAG, "Interstitial ad showed")
+                        log("$TAG: Interstitial ad showed")
                         callback?.onAdShow()
                     }
 
                     override fun onAdClicked() {
-                        Log.d(TAG, "Interstitial ad clicked")
+                        log("$TAG: Interstitial ad clicked")
                         callback?.onAdClick()
                     }
 
                     override fun onAdDismissed() {
-                        Log.d(TAG, "Interstitial ad dismissed")
+                        log("$TAG: Interstitial ad dismissed")
                         interstitialAd = null
                         removeCachedAd(AdType.INTERSTITIAL)
                         callback?.onAdDismiss()
-                        
+
                         preloadAdOnDismiss(AdType.INTERSTITIAL)
                     }
 
                     override fun onAdShowFailed(errorModel: PAGErrorModel) {
-                        Log.w(TAG, "Interstitial ad show failed: ${errorModel.errorCode}")
+                        log("$TAG: Interstitial ad show failed: ${errorModel.errorCode}")
                         interstitialAd = null
                         removeCachedAd(AdType.INTERSTITIAL)
                         callback?.onAdFail(errorModel.errorCode, errorModel.errorMessage ?: "Show failed")
@@ -163,49 +164,49 @@ class PangleAdProvider : BaseAdProvider() {
 
     private fun showInterstitialAd(activity: Activity, callback: IAdCallback?) {
         interstitialAd?.show(activity) ?: run {
-            Log.w(TAG, "Interstitial ad not ready")
+            log("$TAG: Interstitial ad not ready")
             callback?.onAdFail(-1, "Interstitial ad not loaded")
         }
     }
 
     private fun loadRewardedAd(adId: String, callback: IAdCallback?) {
-        Log.d(TAG, "Loading rewarded ad: $adId")
+        log("$TAG: Loading rewarded ad: $adId")
 
         val request = PAGRewardedRequest()
         PAGRewardedAd.loadAd(adId, request, object : PAGRewardedAdLoadListener {
             override fun onError(code: Int, message: String) {
-                Log.w(TAG, "Rewarded ad failed to load: $code - $message")
+                log("$TAG: Rewarded ad failed to load: $code - $message")
                 callback?.onAdFail(code, message)
             }
 
             override fun onAdLoaded(ad: PAGRewardedAd) {
-                Log.d(TAG, "Rewarded ad loaded successfully")
+                log("$TAG: Rewarded ad loaded successfully")
                 rewardedAd = ad
                 cacheAd(AdType.REWARD_VIDEO, ad)
                 callback?.onAdLoaded()
 
                 ad.setAdInteractionCallback(object : PAGRewardedAdInteractionCallback() {
                     override fun onAdShowed() {
-                        Log.d(TAG, "Rewarded ad showed")
+                        log("$TAG: Rewarded ad showed")
                         callback?.onAdShow()
                     }
 
                     override fun onAdClicked() {
-                        Log.d(TAG, "Rewarded ad clicked")
+                        log("$TAG: Rewarded ad clicked")
                         callback?.onAdClick()
                     }
 
                     override fun onAdDismissed() {
-                        Log.d(TAG, "Rewarded ad dismissed")
+                        log("$TAG: Rewarded ad dismissed")
                         rewardedAd = null
                         removeCachedAd(AdType.REWARD_VIDEO)
                         callback?.onAdDismiss()
-                        
+
                         preloadAdOnDismiss(AdType.REWARD_VIDEO)
                     }
 
                     override fun onUserEarnedReward(pagRewardItem: PAGRewardItem?) {
-                        Log.d(TAG, "User earned reward: ${pagRewardItem?.rewardName} - ${pagRewardItem?.rewardAmount}")
+                        log("$TAG: User earned reward: ${pagRewardItem?.rewardName} - ${pagRewardItem?.rewardAmount}")
                         callback?.onAdRewarded(
                             pagRewardItem?.rewardAmount?.toInt() ?: 0,
                             pagRewardItem?.rewardName ?: "coins"
@@ -218,13 +219,13 @@ class PangleAdProvider : BaseAdProvider() {
 
     private fun showRewardedAd(activity: Activity, callback: IAdCallback?) {
         rewardedAd?.show(activity) ?: run {
-            Log.w(TAG, "Rewarded ad not ready")
+            log("$TAG: Rewarded ad not ready")
             callback?.onAdFail(-1, "Rewarded ad not loaded")
         }
     }
 
     private fun loadBannerAd(adId: String, callback: IAdCallback?) {
-        Log.d(TAG, "Loading banner ad: $adId")
+        log("$TAG: Loading banner ad: $adId")
 
         try {
             val bannerSize = PAGBannerSize.BANNER_W_320_H_50
@@ -233,40 +234,40 @@ class PangleAdProvider : BaseAdProvider() {
 
             PAGBannerAd.loadAd(adId, request, object : PAGBannerAdLoadListener {
                 override fun onError(code: Int, message: String) {
-                    Log.w(TAG, "Banner ad failed to load: $code - $message")
+                    log("$TAG: Banner ad failed to load: $code - $message")
                     callback?.onAdFail(code, message)
                 }
 
                 override fun onAdLoaded(ad: PAGBannerAd) {
-                    Log.d(TAG, "Banner ad loaded successfully")
+                    log("$TAG: Banner ad loaded successfully")
                     bannerAd = ad
                     cacheAd(AdType.BANNER, ad)
                     callback?.onAdLoaded()
 
                     ad.setAdInteractionCallback(object : PAGBannerAdInteractionCallback() {
                         override fun onAdShowed() {
-                            Log.d(TAG, "Banner ad showed")
+                            log("$TAG: Banner ad showed")
                             callback?.onAdShow()
                         }
 
                         override fun onAdClicked() {
-                            Log.d(TAG, "Banner ad clicked")
+                            log("$TAG: Banner ad clicked")
                             callback?.onAdClick()
                         }
                     })
                 }
             })
         } catch (e: Exception) {
-            Log.e(TAG, "Error loading banner ad", e)
+            logE("$TAG: Error loading banner ad", e.message)
             callback?.onAdFail(-1, e.message ?: "Unknown error")
         }
     }
 
     private fun showBannerAd(container: ViewGroup?, callback: IAdCallback?) {
         val ad = bannerAd
-        
+
         if (ad == null || container == null) {
-            Log.w(TAG, "Banner ad or container not ready")
+            log("$TAG: Banner ad or container not ready")
             callback?.onAdFail(-1, "Banner ad not ready")
             return
         }
@@ -274,10 +275,10 @@ class PangleAdProvider : BaseAdProvider() {
         try {
             container.removeAllViews()
             container.addView(ad.bannerView)
-            Log.d(TAG, "Banner ad showed")
+            log("$TAG: Banner ad showed")
             callback?.onAdShow()
         } catch (e: Exception) {
-            Log.e(TAG, "Error showing banner ad", e)
+            logE("$TAG: Error showing banner ad", e.message)
             callback?.onAdFail(-1, e.message ?: "Unknown error")
         }
     }

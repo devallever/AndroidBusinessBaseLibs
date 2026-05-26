@@ -4,11 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.ViewGroup
 import app.allever.android.lib.ad.core.base.BaseAdProvider
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.type.AdType
+import app.allever.android.lib.core.ext.log
 import kotlin.random.Random
 
 class MockAdProvider : BaseAdProvider() {
@@ -23,15 +23,15 @@ class MockAdProvider : BaseAdProvider() {
     override fun getProviderType(): String = PROVIDER_NAME
 
     override fun init(config: Map<String, Any>, callback: (() -> Unit)?) {
-        Log.d(TAG, "Initializing MockAdProvider with config: $config")
+        log("$TAG: Initializing MockAdProvider with config: $config")
         if (isInit()) {
-            Log.d(TAG, "MockAdProvider already initialized")
+            log("$TAG: MockAdProvider already initialized")
             callback?.invoke()
             return
         }
         mainHandler.postDelayed({
             isInitialized = true
-            Log.d(TAG, "MockAdProvider initialized successfully")
+            log("$TAG: MockAdProvider initialized successfully")
             callback?.invoke()
         }, 500)
     }
@@ -42,15 +42,15 @@ class MockAdProvider : BaseAdProvider() {
         adId: String,
         callback: IAdCallback?
     ) {
-        Log.d(TAG, "Loading ${adType.name} ad with id: $adId")
+        log("$TAG: Loading ${adType.name} ad with id: $adId")
 
         mainHandler.postDelayed({
             if (Random.nextBoolean()) {
-                Log.d(TAG, "${adType.name} ad loaded successfully")
+                log("$TAG: ${adType.name} ad loaded successfully")
                 cacheAd(adType, MockAdWrapper(adType, adId))
                 callback?.onAdLoaded()
             } else {
-                Log.d(TAG, "${adType.name} ad load failed (simulated)")
+                log("$TAG: ${adType.name} ad load failed (simulated)")
                 callback?.onAdFail(-1, "Simulated load failure for ${adType.name}")
             }
         }, 1000)
@@ -62,7 +62,7 @@ class MockAdProvider : BaseAdProvider() {
         container: ViewGroup?,
         callback: IAdCallback?
     ) {
-        Log.d(TAG, "Showing ${adType.name} ad")
+        log("$TAG: Showing ${adType.name} ad")
 
         when (adType) {
             AdType.SPLASH -> handleSplashShow(activity, container, callback)
@@ -77,7 +77,7 @@ class MockAdProvider : BaseAdProvider() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(TAG, "MockAdProvider destroyed")
+        log("$TAG: MockAdProvider destroyed")
     }
 
     private fun handleSplashShow(
@@ -85,7 +85,7 @@ class MockAdProvider : BaseAdProvider() {
         container: ViewGroup?,
         callback: IAdCallback?
     ) {
-        Log.d(TAG, "Showing splash ad in container")
+        log("$TAG: Showing splash ad in container")
         mainHandler.postDelayed({
             callback?.onAdShow()
             mainHandler.postDelayed({
@@ -98,7 +98,7 @@ class MockAdProvider : BaseAdProvider() {
         activity: Activity,
         callback: IAdCallback?
     ) {
-        Log.d(TAG, "Showing interstitial ad")
+        log("$TAG: Showing interstitial ad")
         mainHandler.postDelayed({
             callback?.onAdShow()
             mainHandler.postDelayed({
@@ -111,7 +111,7 @@ class MockAdProvider : BaseAdProvider() {
         activity: Activity,
         callback: IAdCallback?
     ) {
-        Log.d(TAG, "Showing reward video ad")
+        log("$TAG: Showing reward video ad")
         mainHandler.postDelayed({
             callback?.onAdShow()
             mainHandler.postDelayed({
@@ -125,7 +125,7 @@ class MockAdProvider : BaseAdProvider() {
         container: ViewGroup?,
         callback: IAdCallback?
     ) {
-        Log.d(TAG, "Showing banner ad in container")
+        log("$TAG: Showing banner ad in container")
         mainHandler.postDelayed({
             callback?.onAdShow()
         }, 300)
@@ -135,7 +135,7 @@ class MockAdProvider : BaseAdProvider() {
         container: ViewGroup?,
         callback: IAdCallback?
     ) {
-        Log.d(TAG, "Showing native ad in container")
+        log("$TAG: Showing native ad in container")
         mainHandler.postDelayed({
             callback?.onAdShow()
         }, 300)

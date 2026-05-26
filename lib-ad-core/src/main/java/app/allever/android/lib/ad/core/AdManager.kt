@@ -2,7 +2,6 @@ package app.allever.android.lib.ad.core
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import android.view.ViewGroup
 import app.allever.android.lib.ad.core.base.AdProviderFactory
 import app.allever.android.lib.ad.core.base.BaseAdProvider
@@ -12,6 +11,8 @@ import app.allever.android.lib.ad.core.config.AdConfig
 import app.allever.android.lib.ad.core.config.AdProviderType
 import app.allever.android.lib.ad.core.provider.MockAdProvider
 import app.allever.android.lib.ad.core.type.AdType
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.logE
 import java.util.concurrent.ConcurrentHashMap
 
 object AdManager {
@@ -25,7 +26,7 @@ object AdManager {
 
     fun init(context: Context, adConfig: AdConfig, callback: (() -> Unit)? = null) {
         if (isInitialized) {
-            Log.w(TAG, "AdManager already initialized")
+            log("$TAG: AdManager already initialized")
             callback?.invoke()
             return
         }
@@ -34,7 +35,7 @@ object AdManager {
         isInitialized = true
 
         if (adConfig.adProviderType == AdProviderType.NONE) {
-            Log.w(TAG, "Ad provider type is NONE, skip initialization")
+            log("$TAG: Ad provider type is NONE, skip initialization")
             return
         }
 
@@ -42,7 +43,7 @@ object AdManager {
 
         val provider = AdProviderFactory.createProvider(adConfig.adProviderType.name)
         if (provider == null) {
-            Log.e(TAG, "Failed to create ad provider for type: ${adConfig.adProviderType}")
+            logE("$TAG: Failed to create ad provider for type: ${adConfig.adProviderType}")
             return
         }
 
@@ -59,7 +60,7 @@ object AdManager {
         )
 
         provider.init(configMap) {
-            Log.d(TAG, "Ad SDK initialized with provider: ${provider.getProviderType()}")
+            log("$TAG: Ad SDK initialized with provider: ${provider.getProviderType()}")
             callback?.invoke()
         }
     }
@@ -72,7 +73,7 @@ object AdManager {
     ) {
         val provider = getProviderOrWarn() ?: return
         val actualAdId = adId ?: getAdIdByType(adType) ?: run {
-            Log.w(TAG, "No ad ID provided for ${adType.name}")
+            log("$TAG: No ad ID provided for ${adType.name}")
             callback?.onAdFail(-1, "No ad ID provided")
             return
         }
@@ -118,7 +119,7 @@ object AdManager {
         currentProvider = null
         currentConfig = null
         isInitialized = false
-        Log.d(TAG, "AdManager destroyed")
+        log("$TAG: AdManager destroyed")
     }
 
     fun isInitialized(): Boolean = isInitialized
@@ -127,7 +128,7 @@ object AdManager {
 
     fun registerProvider(providerType: String, providerClass: Class<out IAdProvider>) {
         AdProviderFactory.registerProvider(providerType, providerClass)
-        Log.d(TAG, "Registered custom provider: $providerType")
+        log("$TAG: Registered custom provider: $providerType")
     }
 
     private fun registerDefaultProviders() {
@@ -137,7 +138,7 @@ object AdManager {
     private fun getProviderOrWarn(): IAdProvider? {
         val provider = currentProvider
         if (provider == null) {
-            Log.w(TAG, "Ad not initialized, please call init() first")
+            log("$TAG: Ad not initialized, please call init() first")
         }
         return provider
     }
