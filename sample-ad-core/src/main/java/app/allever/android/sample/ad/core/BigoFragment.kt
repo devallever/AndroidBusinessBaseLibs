@@ -15,7 +15,19 @@ class BigoFragment : BaseFragment<FragmentBigoBinding, BaseViewModel>() {
     override fun inflate() = FragmentBigoBinding.inflate(layoutInflater)
 
     override fun init() {
-        AdManager.registerProvider(BigoAdProvider.PROVIDER_NAME, BigoAdProvider::class.java)
+        val config = AdProviderConfig(
+            appId = "10182906",
+            interstitialAdId = "10182906-10158798",
+            rewardVideoAdId = "10182906-10001431",
+            bannerAdId = "10182906-10156618"
+        )
+
+        AdManager.registerProvider(
+            providerType = BigoAdProvider.PROVIDER_NAME,
+            providerClass = BigoAdProvider::class.java,
+            config = config
+        )
+
         mBinding.btnInit.setOnClickListener {
             AdManager.destroy()
             initBigo()
@@ -38,15 +50,7 @@ class BigoFragment : BaseFragment<FragmentBigoBinding, BaseViewModel>() {
     private fun initBigo() {
         updateStatus("Initializing Bigo...")
 
-        val config = AdProviderConfig(
-            adProviderType = BigoAdProvider.PROVIDER_NAME,
-            appId = "10182906",
-            interstitialAdId = "10182906-10158798",
-            rewardVideoAdId = "10182906-10001431",
-            bannerAdId = "10182906-10156618"
-        )
-
-        AdManager.init(requireContext(), config) {
+        AdManager.init(requireContext(), BigoAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 updateStatus("✓ Bigo Initialized")
                 AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL)

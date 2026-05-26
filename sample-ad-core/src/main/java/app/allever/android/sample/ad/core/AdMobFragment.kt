@@ -15,7 +15,18 @@ class AdMobFragment: BaseFragment<FragmentAdmobBinding, BaseViewModel>() {
     override fun inflate() = FragmentAdmobBinding.inflate(layoutInflater)
 
     override fun init() {
-        AdManager.registerProvider(AdMobAdProvider.PROVIDER_NAME, AdMobAdProvider::class.java)
+        val config = AdProviderConfig(
+            appId = "ca-app-pub-3940256099942544~3347511713",
+            interstitialAdId = "ca-app-pub-3940256099942544/1033173712",
+            rewardVideoAdId = "ca-app-pub-3940256099942544/5224354917",
+            bannerAdId = "ca-app-pub-3940256099942544/6300978111"
+        )
+
+        AdManager.registerProvider(
+            providerType = AdMobAdProvider.PROVIDER_NAME,
+            providerClass = AdMobAdProvider::class.java,
+            config = config
+        )
 
         mBinding.btnInit.setOnClickListener {
             AdManager.destroy()
@@ -39,15 +50,7 @@ class AdMobFragment: BaseFragment<FragmentAdmobBinding, BaseViewModel>() {
     private fun initAdMob() {
         updateStatus("Initializing AdMob...")
 
-        val config = AdProviderConfig(
-            adProviderType = AdMobAdProvider.PROVIDER_NAME,
-            appId = "ca-app-pub-3940256099942544~3347511713",
-            interstitialAdId = "ca-app-pub-3940256099942544/1033173712",
-            rewardVideoAdId = "ca-app-pub-3940256099942544/5224354917",
-            bannerAdId = "ca-app-pub-3940256099942544/6300978111"
-        )
-
-        AdManager.init(requireContext(), config) {
+        AdManager.init(requireContext(), AdMobAdProvider.PROVIDER_NAME) {
 
             runOnUiThread {
                 updateStatus("✓ AdMob Initialized (Test IDs)")

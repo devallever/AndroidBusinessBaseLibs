@@ -1,36 +1,46 @@
 package app.allever.android.lib.ad.core.base
 
 import android.util.Log
+import app.allever.android.lib.ad.core.config.AdProviderConfig
 import java.util.concurrent.ConcurrentHashMap
 
 object AdProviderFactory {
 
     private const val TAG = "AdProviderFactory"
 
-    private val providers = ConcurrentHashMap<String, Class<out IAdProvider>>()
+    data class ProviderEntry(
+        val providerClass: Class<out IAdProvider>,
+        val config: AdProviderConfig
+    )
 
-    fun registerProvider(providerType: String, providerClass: Class<out IAdProvider>) {
-        providers[providerType] = providerClass
+    private val providers = ConcurrentHashMap<String, ProviderEntry>()
+
+    fun registerProvider(providerType: String, providerClass: Class<out IAdProvider>, config: AdProviderConfig) {
+        providers[providerType] = ProviderEntry(providerClass, config)
         Log.d(TAG, "Registered ad provider: $providerType -> ${providerClass.simpleName}")
     }
 
-    fun createProvider(providerType: String): IAdProvider? {
-        val providerClass = providers[providerType] ?: run {
+    fun createProvider(providerType: String): Pair<IAdProvider?, AdProviderConfig?> {
+        val entry = providers[providerType] ?: run {
             Log.e(TAG, "No provider registered for type: $providerType")
-            return null
+            return null to null
         }
 
-        return try {
-            val instance = providerClass.getDeclaredConstructor().newInstance()
+        val provider = try {
+            val instance = entry.providerClass.getDeclaredConstructor().newInstance()
             Log.d(TAG, "Created ad provider: ${instance.getProviderType()}")
             instance
         } catch (e: Exception) {
             Log.e(TAG, "Failed to create provider $providerType", e)
-            null
+            return null to null
         }
+
+        return provider to entry.config
     }
 
     fun getRegisteredProviders(): Set<String> = providers.keys.toSet()
 
     fun isProviderRegistered(providerType: String): Boolean = providers.containsKey(providerType)
+    
+    fun getConfig(providerType: String): AdProviderConfig? = providers[providerType]?.config
 }

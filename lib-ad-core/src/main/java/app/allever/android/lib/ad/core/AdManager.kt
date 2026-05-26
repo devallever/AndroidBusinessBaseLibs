@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.view.ViewGroup
 import app.allever.android.lib.ad.core.base.AdProviderFactory
-import app.allever.android.lib.ad.core.base.BaseAdProvider
 import app.allever.android.lib.ad.core.base.IAdProvider
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.config.AdProviderConfig
@@ -22,32 +21,25 @@ object AdManager {
     private var currentConfig: AdProviderConfig? = null
     private var isInitialized = false
 
-    fun init(context: Context, adConfig: AdProviderConfig, callback: (() -> Unit)? = null) {
+    fun init(context: Context, providerType: String, callback: (() -> Unit)? = null) {
         if (isInitialized) {
             log("$TAG: AdManager already initialized")
             callback?.invoke()
             return
         }
 
-        registerDefaultProviders()
         isInitialized = true
 
-        if (adConfig.adProviderType.isEmpty()) {
-            log("$TAG: Ad provider type is empty, skip initialization")
+        val (provider, config) = AdProviderFactory.createProvider(providerType)
+        if (provider == null || config == null) {
+            logE("$TAG: Failed to create ad provider for type: $providerType. Make sure to register it first.")
             return
         }
 
-        currentConfig = adConfig
-
-        val provider = AdProviderFactory.createProvider(adConfig.adProviderType)
-        if (provider == null) {
-            logE("$TAG: Failed to create ad provider for type: ${adConfig.adProviderType}")
-            return
-        }
-
+        currentConfig = config
         currentProvider = provider
 
-        provider.init(context, adConfig) {
+        provider.init(context, config) {
             log("$TAG: Ad SDK initialized with provider: ${provider.getProviderType()}")
             callback?.invoke()
         }
@@ -114,13 +106,17 @@ object AdManager {
 
     fun getVersion(): String = VERSION
 
-    fun registerProvider(providerType: String, providerClass: Class<out IAdProvider>) {
-        AdProviderFactory.registerProvider(providerType, providerClass)
-        log("$TAG: Registered custom provider: $providerType")
-    }
+    fun getCurrentProvider(): IAdProvider? = currentProvider
 
-    private fun registerDefaultProviders() {
-        AdProviderFactory.registerProvider(MockAdProvider.PROVIDER_NAME, MockAdProvider::class.java)
+    fun getCurrentConfig(): AdProviderConfig? = currentConfig
+
+    fun registerProvider(
+        providerType: String,
+        providerClass: Class<out IAdProvider>,
+        config: AdProviderConfig
+    ) {
+        AdProviderFactory.registerProvider(providerType, providerClass, config)
+        log("$TAG: Registered provider: $providerType with appId: ${config.appId}")
     }
 
     private fun getProviderOrWarn(): IAdProvider? {
@@ -132,12 +128,6 @@ object AdManager {
     }
 
     private fun getAdIdByType(adType: AdType): String? {
-        return when (adType) {
-            AdType.SPLASH -> currentConfig?.splashAdId
-            AdType.INTERSTITIAL -> currentConfig?.interstitialAdId
-            AdType.REWARD_VIDEO -> currentConfig?.rewardVideoAdId
-            AdType.BANNER -> currentConfig?.bannerAdId
-            AdType.NATIVE -> currentConfig?.nativeAdId
-        }
+        return currentConfig?.getAdIdByType(adType)
     }
 }

@@ -15,7 +15,18 @@ class PangleFragment: BaseFragment<FragmentPangleBinding, BaseViewModel>() {
     override fun inflate() = FragmentPangleBinding.inflate(layoutInflater)
 
     override fun init() {
-        AdManager.registerProvider(PangleAdProvider.PROVIDER_NAME, PangleAdProvider::class.java)
+        val config = AdProviderConfig(
+            appId = "8025677",
+            interstitialAdId = "980088188",
+            rewardVideoAdId = "980088192",
+            bannerAdId = "980088196"
+        )
+
+        AdManager.registerProvider(
+            providerType = PangleAdProvider.PROVIDER_NAME,
+            providerClass = PangleAdProvider::class.java,
+            config = config
+        )
 
         mBinding.btnInit.setOnClickListener {
             AdManager.destroy()
@@ -39,15 +50,7 @@ class PangleFragment: BaseFragment<FragmentPangleBinding, BaseViewModel>() {
     private fun initPangle() {
         updateStatus("Initializing Pangle...")
 
-        val config = AdProviderConfig(
-            adProviderType = PangleAdProvider.PROVIDER_NAME,
-            appId = "8025677",
-            interstitialAdId = "980088188",
-            rewardVideoAdId = "980088192",
-            bannerAdId = "980088196"
-        )
-
-        AdManager.init(requireContext(), config) {
+        AdManager.init(requireContext(), PangleAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 updateStatus("✓ Pangle Initialized")
                 AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL)

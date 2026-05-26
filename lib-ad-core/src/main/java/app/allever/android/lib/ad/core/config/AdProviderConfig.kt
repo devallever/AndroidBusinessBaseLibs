@@ -3,7 +3,6 @@ package app.allever.android.lib.ad.core.config
 import app.allever.android.lib.ad.core.type.AdType
 
 data class AdProviderConfig(
-    val adProviderType: String = "",
     val appId: String = "",
     val splashAdId: String = "",
     val interstitialAdId: String = "",
@@ -11,7 +10,7 @@ data class AdProviderConfig(
     val bannerAdId: String = "",
     val nativeAdId: String = ""
 ) {
-    fun isNotEmpty(): Boolean = adProviderType.isNotEmpty()
+    fun isNotEmpty(): Boolean = appId.isNotEmpty()
 
     fun getAdIdByType(adType: AdType): String? {
         return when (adType) {
