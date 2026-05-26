@@ -4,7 +4,6 @@ import android.util.Log
 import app.allever.android.lib.ad.core.AdManager
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.config.AdConfig
-import app.allever.android.lib.ad.core.config.AdProviderType
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.provider.admob.AdMobAdProvider
 import app.allever.android.lib.common.BaseFragment
@@ -41,7 +40,7 @@ class AdMobFragment: BaseFragment<FragmentAdmobBinding, BaseViewModel>() {
         updateStatus("Initializing AdMob...")
 
         val config = AdConfig(
-            adProviderType = AdProviderType.ADMOB,
+            adProviderType = AdMobAdProvider.PROVIDER_NAME,
             appId = "ca-app-pub-3940256099942544~3347511713",
             interstitialAdId = "ca-app-pub-3940256099942544/1033173712",
             rewardVideoAdId = "ca-app-pub-3940256099942544/5224354917",

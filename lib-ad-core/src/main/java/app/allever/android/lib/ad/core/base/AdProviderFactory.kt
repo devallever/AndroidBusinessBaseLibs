@@ -1,7 +1,6 @@
 package app.allever.android.lib.ad.core.base
 
 import android.util.Log
-import app.allever.android.lib.ad.core.config.AdProviderType
 import java.util.concurrent.ConcurrentHashMap
 
 object AdProviderFactory {

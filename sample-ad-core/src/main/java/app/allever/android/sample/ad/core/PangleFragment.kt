@@ -4,7 +4,6 @@ import android.util.Log
 import app.allever.android.lib.ad.core.AdManager
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.config.AdConfig
-import app.allever.android.lib.ad.core.config.AdProviderType
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.provider.pangle.PangleAdProvider
 import app.allever.android.lib.common.BaseFragment
@@ -41,7 +40,7 @@ class PangleFragment: BaseFragment<FragmentPangleBinding, BaseViewModel>() {
         updateStatus("Initializing Pangle...")
 
         val config = AdConfig(
-            adProviderType = AdProviderType.PANGLE,
+            adProviderType = PangleAdProvider.PROVIDER_NAME,
             appId = "8025677",
             interstitialAdId = "980088188",
             rewardVideoAdId = "980088192",

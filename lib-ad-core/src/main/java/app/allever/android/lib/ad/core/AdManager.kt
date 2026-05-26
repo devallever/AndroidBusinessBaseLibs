@@ -8,12 +8,10 @@ import app.allever.android.lib.ad.core.base.BaseAdProvider
 import app.allever.android.lib.ad.core.base.IAdProvider
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.config.AdConfig
-import app.allever.android.lib.ad.core.config.AdProviderType
 import app.allever.android.lib.ad.core.provider.MockAdProvider
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
-import java.util.concurrent.ConcurrentHashMap
 
 object AdManager {
 
@@ -34,14 +32,14 @@ object AdManager {
         registerDefaultProviders()
         isInitialized = true
 
-        if (adConfig.adProviderType == AdProviderType.NONE) {
-            log("$TAG: Ad provider type is NONE, skip initialization")
+        if (adConfig.adProviderType.isEmpty()) {
+            log("$TAG: Ad provider type is empty, skip initialization")
             return
         }
 
         currentConfig = adConfig
 
-        val provider = AdProviderFactory.createProvider(adConfig.adProviderType.name)
+        val provider = AdProviderFactory.createProvider(adConfig.adProviderType)
         if (provider == null) {
             logE("$TAG: Failed to create ad provider for type: ${adConfig.adProviderType}")
             return
