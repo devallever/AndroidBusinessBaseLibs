@@ -82,23 +82,23 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
             runOnUiThread { 
                 updateStatus("✓ AdMob initialized")
                 logProviderStatus()
-                
-                AdManager.init(context, PangleAdProvider.PROVIDER_NAME) {
-                    runOnUiThread {
-                        updateStatus("✓ Pangle initialized")
-                        logProviderStatus()
-                        
-                        AdManager.init(context, BigoAdProvider.PROVIDER_NAME) {
-                            runOnUiThread {
-                                updateStatus("✓ All providers initialized!")
-                                logProviderStatus()
-                                
-                                AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL)
-                                AdManager.loadAd(requireActivity(), AdType.REWARD_VIDEO)
-                            }
-                        }
-                    }
-                }
+            }
+        }
+
+        AdManager.init(context, PangleAdProvider.PROVIDER_NAME) {
+            runOnUiThread {
+                updateStatus("✓ Pangle initialized")
+                logProviderStatus()
+            }
+        }
+
+        AdManager.init(context, BigoAdProvider.PROVIDER_NAME) {
+            runOnUiThread {
+                updateStatus("✓ Bigo initialized!")
+                logProviderStatus()
+
+                AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL)
+                AdManager.loadAd(requireActivity(), AdType.REWARD_VIDEO)
             }
         }
     }
