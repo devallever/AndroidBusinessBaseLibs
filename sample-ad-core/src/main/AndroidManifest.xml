@@ -3,5 +3,6 @@
 
     <application>
         <activity android:name="app.allever.android.sample.ad.core.AdCoreMainActivity" />
+        <activity android:name="app.allever.android.sample.ad.core.ProviderTabActivity" />
     </application>
 </manifest>

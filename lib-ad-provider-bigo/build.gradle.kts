@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
-val modelPkg = "app.allever.android.lib.ad.core"
+val modelPkg = "app.allever.android.lib.ad.provider.bigo"
 
 group = modelPkg
 
@@ -12,5 +12,8 @@ android {
 }
 
 dependencies {
-    api(project(":core"))
+    implementation(project(":lib-ad-core"))
+
+    // Bigo Ads
+    api(libs.bigo.ads)
 }

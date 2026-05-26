@@ -1,4 +1,4 @@
-package app.allever.android.lib.ad.core.provider
+package app.allever.android.lib.ad.provider.bigo
 
 import android.app.Activity
 import android.content.Context
@@ -42,6 +42,12 @@ class BigoAdProvider : BaseAdProvider() {
 
         val context = config["context"] as? Context ?: run {
             Log.e(TAG, "Context not found in config")
+            return
+        }
+
+        if (isInit()) {
+            Log.w(TAG, "Bigo already initialized")
+            callback?.invoke()
             return
         }
 

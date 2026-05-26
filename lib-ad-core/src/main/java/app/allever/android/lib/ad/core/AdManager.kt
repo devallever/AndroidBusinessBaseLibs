@@ -5,15 +5,14 @@ import android.content.Context
 import android.util.Log
 import android.view.ViewGroup
 import app.allever.android.lib.ad.core.base.AdProviderFactory
+import app.allever.android.lib.ad.core.base.BaseAdProvider
 import app.allever.android.lib.ad.core.base.IAdProvider
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.config.AdConfig
 import app.allever.android.lib.ad.core.config.AdProviderType
-import app.allever.android.lib.ad.core.provider.AdMobAdProvider
-import app.allever.android.lib.ad.core.provider.BigoAdProvider
 import app.allever.android.lib.ad.core.provider.MockAdProvider
-import app.allever.android.lib.ad.core.provider.PangleAdProvider
 import app.allever.android.lib.ad.core.type.AdType
+import java.util.concurrent.ConcurrentHashMap
 
 object AdManager {
 
@@ -133,10 +132,6 @@ object AdManager {
 
     private fun registerDefaultProviders() {
         AdProviderFactory.registerProvider(MockAdProvider.PROVIDER_NAME, MockAdProvider::class.java)
-        AdProviderFactory.registerProvider(AdMobAdProvider.PROVIDER_NAME, AdMobAdProvider::class.java)
-        AdProviderFactory.registerProvider(PangleAdProvider.PROVIDER_NAME, PangleAdProvider::class.java)
-        AdProviderFactory.registerProvider(BigoAdProvider.PROVIDER_NAME, BigoAdProvider::class.java)
-        Log.d(TAG, "Default ad providers registered: Mock, AdMob, Pangle, Bigo")
     }
 
     private fun getProviderOrWarn(): IAdProvider? {

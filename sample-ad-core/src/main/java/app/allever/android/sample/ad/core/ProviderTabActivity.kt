@@ -3,18 +3,16 @@ package app.allever.android.sample.ad.core
 import app.allever.android.lib.common.BaseActivity
 import app.allever.android.lib.core.helper.FragmentHelper
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import app.allever.android.sample.ad.core.databinding.ActivityAdCoreMainBinding
-import com.alibaba.android.arouter.facade.annotation.Route
+import app.allever.android.sample.ad.core.databinding.ActivityProviderTabBinding
 
-@Route(path = "/adCore/main")
-class AdCoreMainActivity: BaseActivity<ActivityAdCoreMainBinding, BaseViewModel>() {
-    override fun inflateChildBinding() = ActivityAdCoreMainBinding.inflate(layoutInflater)
+class ProviderTabActivity: BaseActivity<ActivityProviderTabBinding, BaseViewModel>() {
+    override fun inflateChildBinding() = ActivityProviderTabBinding.inflate(layoutInflater)
 
     override fun init() {
         initTopBar("AdCoreSample")
         FragmentHelper.addToContainer(
             supportFragmentManager,
-            AdCoreMainFragment(),
+            ProviderTabFragment(),
             R.id.fragmentContainer
         )
     }

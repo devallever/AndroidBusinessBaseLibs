@@ -1,6 +1,5 @@
 package com.allever.business.lib.project
 
-import app.allever.android.lib.ad.core.AdProviderExampleActivity
 import app.allever.android.lib.common.ListFragment
 import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextClickAdapter
@@ -36,8 +35,8 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AD_APPLOVIN).navigation()
         },
         TextClickItem("AdCore") {
-            ActivityHelper.startActivity<AdProviderExampleActivity> {  }
-//            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AD_CORE).navigation()
+//            ActivityHelper.startActivity<AdProviderExampleActivity> {  }
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AD_CORE).navigation()
         }
     )
 }

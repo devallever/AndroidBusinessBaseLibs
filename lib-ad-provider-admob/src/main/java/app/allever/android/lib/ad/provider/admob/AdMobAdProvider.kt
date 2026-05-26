@@ -1,4 +1,4 @@
-package app.allever.android.lib.ad.core.provider
+package app.allever.android.lib.ad.provider.admob
 
 import android.app.Activity
 import android.content.Context
@@ -36,12 +36,19 @@ class AdMobAdProvider : BaseAdProvider() {
             return
         }
 
+        if (isInit()) {
+            Log.w(TAG, "AdMob already initialized")
+            callback?.invoke()
+            return
+        }
+
         MobileAds.initialize(context) {
             isInitialized = true
             Log.d(TAG, "AdMob initialized successfully")
             callback?.invoke()
         }
     }
+
 
     override fun doLoadAd(
         activity: Activity,
@@ -176,13 +183,10 @@ class AdMobAdProvider : BaseAdProvider() {
     }
 
     private fun showRewardedAd(activity: Activity, callback: IAdCallback?) {
-        rewardedAd?.show(activity, object : OnUserEarnedRewardListener{
-            override fun onUserEarnedReward(rewardItem: RewardItem) {
-                Log.d(TAG, "User earned reward: ${rewardItem.amount} ${rewardItem.type}")
-                callback?.onAdRewarded(rewardItem.amount, rewardItem.type)
-            }
-
-        }) ?: run {
+        rewardedAd?.show(activity) { rewardItem ->
+            Log.d(TAG, "User earned reward: ${rewardItem.amount} ${rewardItem.type}")
+            callback?.onAdRewarded(rewardItem.amount, rewardItem.type)
+        } ?: run {
             Log.w(TAG, "Rewarded ad not ready")
             callback?.onAdFail(-1, "Rewarded ad not loaded")
         }

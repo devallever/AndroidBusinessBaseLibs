@@ -23,6 +23,11 @@ class MockAdProvider : BaseAdProvider() {
 
     override fun init(config: Map<String, Any>, callback: (() -> Unit)?) {
         Log.d(TAG, "Initializing MockAdProvider with config: $config")
+        if (isInit()) {
+            Log.d(TAG, "MockAdProvider already initialized")
+            callback?.invoke()
+            return
+        }
         mainHandler.postDelayed({
             isInitialized = true
             Log.d(TAG, "MockAdProvider initialized successfully")
