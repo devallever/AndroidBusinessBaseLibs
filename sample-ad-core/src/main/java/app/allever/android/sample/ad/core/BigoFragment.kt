@@ -3,7 +3,7 @@ package app.allever.android.sample.ad.core
 import android.util.Log
 import app.allever.android.lib.ad.core.AdManager
 import app.allever.android.lib.ad.core.callback.IAdCallback
-import app.allever.android.lib.ad.core.config.AdConfig
+import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.provider.bigo.BigoAdProvider
 import app.allever.android.lib.common.BaseFragment
@@ -38,7 +38,7 @@ class BigoFragment : BaseFragment<FragmentBigoBinding, BaseViewModel>() {
     private fun initBigo() {
         updateStatus("Initializing Bigo...")
 
-        val config = AdConfig(
+        val config = AdProviderConfig(
             adProviderType = BigoAdProvider.PROVIDER_NAME,
             appId = "10182906",
             interstitialAdId = "10182906-10158798",

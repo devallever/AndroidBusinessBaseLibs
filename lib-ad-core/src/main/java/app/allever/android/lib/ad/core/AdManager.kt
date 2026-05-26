@@ -7,7 +7,7 @@ import app.allever.android.lib.ad.core.base.AdProviderFactory
 import app.allever.android.lib.ad.core.base.BaseAdProvider
 import app.allever.android.lib.ad.core.base.IAdProvider
 import app.allever.android.lib.ad.core.callback.IAdCallback
-import app.allever.android.lib.ad.core.config.AdConfig
+import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.provider.MockAdProvider
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.core.ext.log
@@ -19,10 +19,10 @@ object AdManager {
     const val VERSION = "1.0.0"
 
     private var currentProvider: IAdProvider? = null
-    private var currentConfig: AdConfig? = null
+    private var currentConfig: AdProviderConfig? = null
     private var isInitialized = false
 
-    fun init(context: Context, adConfig: AdConfig, callback: (() -> Unit)? = null) {
+    fun init(context: Context, adConfig: AdProviderConfig, callback: (() -> Unit)? = null) {
         if (isInitialized) {
             log("$TAG: AdManager already initialized")
             callback?.invoke()
@@ -47,17 +47,7 @@ object AdManager {
 
         currentProvider = provider
 
-        val configMap = mutableMapOf<String, Any>(
-            "context" to context,
-            "appId" to adConfig.appId,
-            "splashAdId" to adConfig.splashAdId,
-            "interstitialAdId" to adConfig.interstitialAdId,
-            "rewardVideoAdId" to adConfig.rewardVideoAdId,
-            "bannerAdId" to adConfig.bannerAdId,
-            "nativeAdId" to adConfig.nativeAdId
-        )
-
-        provider.init(configMap) {
+        provider.init(context, adConfig) {
             log("$TAG: Ad SDK initialized with provider: ${provider.getProviderType()}")
             callback?.invoke()
         }

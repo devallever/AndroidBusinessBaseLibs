@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.ViewGroup
 import app.allever.android.lib.ad.core.base.BaseAdProvider
 import app.allever.android.lib.ad.core.callback.IAdCallback
+import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
@@ -39,13 +40,8 @@ class PangleAdProvider : BaseAdProvider() {
 
     override fun getProviderType(): String = PROVIDER_NAME
 
-    override fun init(config: Map<String, Any>, callback: (() -> Unit)?) {
-        log("$TAG: Initializing Pangle with config: $config")
-
-        val context = config["context"] as? Context ?: run {
-            logE("$TAG: Context not found in config")
-            return
-        }
+    override fun init(context: Context, config: AdProviderConfig, callback: (() -> Unit)?) {
+        log("$TAG: Initializing Pangle with appId: ${config.appId}")
 
         if (isInit()) {
             log("$TAG: Pangle already initialized")
@@ -53,10 +49,8 @@ class PangleAdProvider : BaseAdProvider() {
             return
         }
 
-        val appId = config["appId"] as? String ?: ""
-
         val pagConfig = PAGConfig.Builder()
-            .appId(appId)
+            .appId(config.appId)
             .debugLog(true)
             .supportMultiProcess(false)
             .build()

@@ -1,15 +1,17 @@
 package app.allever.android.lib.ad.core.base
 
 import android.app.Activity
+import android.content.Context
 import android.view.ViewGroup
 import app.allever.android.lib.ad.core.callback.IAdCallback
+import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
 
 interface IAdProvider {
 
     fun getProviderType(): String
 
-    fun init(config: Map<String, Any>, callback: (() -> Unit)? = null)
+    fun init(context: Context, config: AdProviderConfig, callback: (() -> Unit)? = null)
 
     fun isInit(): Boolean
 

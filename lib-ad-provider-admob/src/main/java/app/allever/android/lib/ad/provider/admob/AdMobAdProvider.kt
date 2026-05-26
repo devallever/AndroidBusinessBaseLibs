@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import app.allever.android.lib.ad.core.base.BaseAdProvider
 import app.allever.android.lib.ad.core.callback.IAdCallback
+import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
@@ -28,13 +29,8 @@ class AdMobAdProvider : BaseAdProvider() {
 
     override fun getProviderType(): String = PROVIDER_NAME
 
-    override fun init(config: Map<String, Any>, callback: (() -> Unit)?) {
-        log("$TAG: Initializing AdMob with config: $config")
-
-        val context = config["context"] as? Context ?: run {
-            logE("$TAG: Context not found in config")
-            return
-        }
+    override fun init(context: Context, config: AdProviderConfig, callback: (() -> Unit)?) {
+        log("$TAG: Initializing AdMob with appId: ${config.appId}")
 
         if (isInit()) {
             log("$TAG: AdMob already initialized")
