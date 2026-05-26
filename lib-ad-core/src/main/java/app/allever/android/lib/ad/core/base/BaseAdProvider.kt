@@ -52,6 +52,7 @@ abstract class BaseAdProvider : IAdProvider {
     ) {
         if (!isReady(adType)) {
             Log.w(TAG, "${adType.name} not ready, please load first")
+            doLoadAd(activity, adType, adIdCache[adType] ?: return, callback)
             return
         }
         doShowAd(activity, adType, container, callback)

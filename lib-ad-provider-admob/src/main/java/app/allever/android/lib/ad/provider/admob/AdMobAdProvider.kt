@@ -12,7 +12,6 @@ import app.allever.android.lib.ad.core.type.AdType
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 
@@ -51,15 +50,15 @@ class AdMobAdProvider : BaseAdProvider() {
 
 
     override fun doLoadAd(
-        activity: Context,
+        context: Context,
         adType: AdType,
         adId: String,
         callback: IAdCallback?
     ) {
         when (adType) {
-            AdType.INTERSTITIAL -> loadInterstitialAd(activity, adId, callback)
-            AdType.REWARD_VIDEO -> loadRewardedAd(activity, adId, callback)
-            AdType.BANNER -> loadBannerAd(activity, adId, callback)
+            AdType.INTERSTITIAL -> loadInterstitialAd(context, adId, callback)
+            AdType.REWARD_VIDEO -> loadRewardedAd(context, adId, callback)
+            AdType.BANNER -> loadBannerAd(context, adId, callback)
             else -> {
                 Log.w(TAG, "${adType.name} not supported yet for AdMob")
                 callback?.onAdFail(-1, "${adType.name} not supported yet")

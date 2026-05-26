@@ -75,7 +75,7 @@ class PangleAdProvider : BaseAdProvider() {
     }
 
     override fun doLoadAd(
-        activity: Context,
+        context: Context,
         adType: AdType,
         adId: String,
         callback: IAdCallback?
