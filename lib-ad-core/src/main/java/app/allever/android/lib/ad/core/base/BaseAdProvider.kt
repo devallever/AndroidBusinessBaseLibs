@@ -20,12 +20,19 @@ abstract class BaseAdProvider : IAdProvider {
 
     private val adIdCache = mutableMapOf<AdType, String>()
 
+    private val adCacheTimeMap = mutableMapOf<AdType, Long>()
+
     var autoPreloadEnabled = true
+
+    private var cacheExpireTimeMs: Long = 60 * 60 * 1000L
 
     override fun isInit(): Boolean = isInitialized
 
     override fun isReady(adType: AdType): Boolean {
-        return adCache.containsKey(adType)
+        if (!adCache.containsKey(adType)) {
+            return false
+        }
+        return !isCacheExpired(adType)
     }
 
     override fun loadAd(
@@ -39,7 +46,7 @@ abstract class BaseAdProvider : IAdProvider {
             callback?.onAdFail(-1, "Ad provider not initialized")
             return
         }
-        
+
         adIdCache[adType] = adId
         doLoadAd(activity, adType, adId, callback)
     }
@@ -50,17 +57,44 @@ abstract class BaseAdProvider : IAdProvider {
         container: ViewGroup?,
         callback: IAdCallback?
     ) {
-        if (!isReady(adType)) {
-            Log.w(TAG, "${adType.name} not ready, please load first")
-            doLoadAd(activity, adType, adIdCache[adType] ?: return, callback)
-            return
+        when {
+            !adCache.containsKey(adType) -> {
+                Log.d(TAG, "${adType.name} not cached, loading...")
+                doLoadAd(activity, adType, adIdCache[adIdCache.keys.firstOrNull()] ?: return, callback)
+            }
+            
+            isCacheExpired(adType) -> {
+                Log.w(TAG, "${adType.name} cache expired (${getCacheAge(adType)}ms old), clearing and reloading")
+                removeCachedAd(adType)
+                callback?.onAdFail(-2, "Cache expired for ${adType.name}")
+                
+                val adId = getAdId(adType)
+                if (adId != null) {
+                    Log.d(TAG, "Reloading ${adType.name} with id: $adId")
+                    doLoadAd(activity, adType, adId, object : IAdCallback {
+                        override fun onAdLoaded() {
+                            Log.d(TAG, "${adType.name} reloaded successfully after expiration")
+                        }
+
+                        override fun onAdFail(errorCode: Int, errorMessage: String) {
+                            Log.w(TAG, "${adType.name} reload failed after expiration: $errorMessage")
+                        }
+                    })
+                } else {
+                    Log.w(TAG, "No adId found for ${adType.name}, cannot reload")
+                }
+            }
+            
+            else -> {
+                doShowAd(activity, adType, container, callback)
+            }
         }
-        doShowAd(activity, adType, container, callback)
     }
 
     override fun destroy() {
         adCache.clear()
         adIdCache.clear()
+        adCacheTimeMap.clear()
         onDestroy()
     }
 
@@ -82,14 +116,23 @@ abstract class BaseAdProvider : IAdProvider {
 
     protected fun cacheAd(adType: AdType, ad: Any) {
         adCache[adType] = ad
+        adCacheTimeMap[adType] = System.currentTimeMillis()
+        Log.d(TAG, "${adType.name} cached at ${adCacheTimeMap[adType]}")
     }
 
     protected fun getCachedAd(adType: AdType): Any? {
-        return adCache[adType]
+        return if (isCacheExpired(adType)) {
+            Log.w(TAG, "${adType.name} cache expired on access, removing")
+            removeCachedAd(adType)
+            null
+        } else {
+            adCache[adType]
+        }
     }
 
     protected fun removeCachedAd(adType: AdType) {
         adCache.remove(adType)
+        adCacheTimeMap.remove(adType)
     }
 
     protected fun getAdId(adType: AdType): String? {
@@ -112,7 +155,7 @@ abstract class BaseAdProvider : IAdProvider {
         }
 
         Log.d(TAG, "Starting auto preload for ${adType.name} with id: $adId")
-        
+
         doLoadAd(App.context, adType, adId, object : IAdCallback {
             override fun onAdLoaded() {
                 Log.d(TAG, "${adType.name} preloaded successfully and cached")
@@ -123,5 +166,22 @@ abstract class BaseAdProvider : IAdProvider {
                 removeCachedAd(adType)
             }
         })
+    }
+
+    private fun isCacheExpired(adType: AdType): Boolean {
+        val cacheTime = adCacheTimeMap[adType] ?: return true
+        val age = System.currentTimeMillis() - cacheTime
+        val expired = age > cacheExpireTimeMs
+        
+        if (expired) {
+            Log.w(TAG, "${adType.name} cache age: ${age}ms > expire time: ${cacheExpireTimeMs}ms")
+        }
+        
+        return expired
+    }
+
+    private fun getCacheAge(adType: AdType): Long {
+        val cacheTime = adCacheTimeMap[adType] ?: return -1
+        return System.currentTimeMillis() - cacheTime
     }
 }
