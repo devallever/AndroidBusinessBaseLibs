@@ -3,31 +3,23 @@ package app.allever.android.sample.ad.core
 import android.util.Log
 import app.allever.android.lib.ad.core.AdManager
 import app.allever.android.lib.ad.core.callback.IAdCallback
-import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.provider.bigo.BigoAdProvider
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.util.UIKit.runOnUiThread
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import app.allever.android.sample.ad.core.config.AdIdConstants
+import app.allever.android.sample.ad.core.config.ProviderConfigConstants
 import app.allever.android.sample.ad.core.databinding.FragmentBigoBinding
 
 class BigoFragment : BaseFragment<FragmentBigoBinding, BaseViewModel>() {
     override fun inflate() = FragmentBigoBinding.inflate(layoutInflater)
 
     override fun init() {
-        val config = AdProviderConfig(
-            appId = AdIdConstants.Bigo.APP_ID,
-            splashAdId = AdIdConstants.Bigo.SPLASH_AD_ID,
-            interstitialAdId = AdIdConstants.Bigo.INTERSTITIAL_AD_ID,
-            rewardVideoAdId = AdIdConstants.Bigo.REWARD_VIDEO_AD_ID,
-            bannerAdId = AdIdConstants.Bigo.BANNER_AD_ID
-        )
 
         AdManager.registerProvider(
             providerType = BigoAdProvider.PROVIDER_NAME,
             providerClass = BigoAdProvider::class.java,
-            config = config
+            config = ProviderConfigConstants.BIGO
         )
 
         mBinding.btnInit.setOnClickListener {

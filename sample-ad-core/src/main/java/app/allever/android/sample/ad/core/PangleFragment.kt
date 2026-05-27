@@ -10,24 +10,17 @@ import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.util.UIKit.runOnUiThread
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.ad.core.config.AdIdConstants
+import app.allever.android.sample.ad.core.config.ProviderConfigConstants
 import app.allever.android.sample.ad.core.databinding.FragmentPangleBinding
 
 class PangleFragment: BaseFragment<FragmentPangleBinding, BaseViewModel>() {
     override fun inflate() = FragmentPangleBinding.inflate(layoutInflater)
 
     override fun init() {
-        val config = AdProviderConfig(
-            appId = AdIdConstants.Pangle.APP_ID,
-            splashAdId = AdIdConstants.Pangle.SPLASH_AD_ID,
-            interstitialAdId = AdIdConstants.Pangle.INTERSTITIAL_AD_ID,
-            rewardVideoAdId = AdIdConstants.Pangle.REWARD_VIDEO_AD_ID,
-            bannerAdId = AdIdConstants.Pangle.BANNER_AD_ID
-        )
-
         AdManager.registerProvider(
             providerType = PangleAdProvider.PROVIDER_NAME,
             providerClass = PangleAdProvider::class.java,
-            config = config
+            config = ProviderConfigConstants.PANGLE
         )
 
         mBinding.btnInit.setOnClickListener {

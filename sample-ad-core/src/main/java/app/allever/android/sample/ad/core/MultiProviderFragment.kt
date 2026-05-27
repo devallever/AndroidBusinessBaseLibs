@@ -14,6 +14,7 @@ import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.util.UIKit.runOnUiThread
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.ad.core.config.AdIdConstants
+import app.allever.android.sample.ad.core.config.ProviderConfigConstants
 import app.allever.android.sample.ad.core.databinding.FragmentMultiProviderBinding
 import kotlinx.coroutines.launch
 
@@ -48,40 +49,19 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
         AdManager.registerProvider(
             providerType = AdMobAdProvider.PROVIDER_NAME,
             providerClass = AdMobAdProvider::class.java,
-            config = AdProviderConfig(
-                appId = AdIdConstants.AdMob.APP_ID,
-                splashAdId = AdIdConstants.AdMob.SPLASH_AD_ID,
-                interstitialAdId = AdIdConstants.AdMob.INTERSTITIAL_AD_ID,
-                rewardVideoAdId = AdIdConstants.AdMob.REWARD_VIDEO_AD_ID,
-                bannerAdId = AdIdConstants.AdMob.BANNER_AD_ID,
-                supportWaterfall = true
-            )
+            config = ProviderConfigConstants.ADMOB
         )
 
         AdManager.registerProvider(
             providerType = PangleAdProvider.PROVIDER_NAME,
             providerClass = PangleAdProvider::class.java,
-            config = AdProviderConfig(
-                appId = AdIdConstants.Pangle.APP_ID,
-                splashAdId = AdIdConstants.Pangle.SPLASH_AD_ID,
-                interstitialAdId = AdIdConstants.Pangle.INTERSTITIAL_AD_ID,
-                rewardVideoAdId = AdIdConstants.Pangle.REWARD_VIDEO_AD_ID,
-                bannerAdId = AdIdConstants.Pangle.BANNER_AD_ID,
-                supportWaterfall = true
-            )
+            config = ProviderConfigConstants.PANGLE
         )
 
         AdManager.registerProvider(
             providerType = BigoAdProvider.PROVIDER_NAME,
             providerClass = BigoAdProvider::class.java,
-            config = AdProviderConfig(
-                appId = AdIdConstants.Bigo.APP_ID,
-                splashAdId = AdIdConstants.Bigo.SPLASH_AD_ID,
-                interstitialAdId = AdIdConstants.Bigo.INTERSTITIAL_AD_ID,
-                rewardVideoAdId = AdIdConstants.Bigo.REWARD_VIDEO_AD_ID,
-                bannerAdId = AdIdConstants.Bigo.BANNER_AD_ID,
-                supportWaterfall = false
-            )
+            config = ProviderConfigConstants.BIGO
         )
 
         updateStatus("✓ All 3 providers registered (ADMOB✓PANGLE✓BIGO○ waterfall)")

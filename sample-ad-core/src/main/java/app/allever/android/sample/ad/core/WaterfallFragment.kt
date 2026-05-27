@@ -5,7 +5,6 @@ import android.widget.TextView
 import app.allever.android.lib.ad.core.AdManager
 import app.allever.android.lib.ad.core.AdManager.LoadMode
 import app.allever.android.lib.ad.core.callback.IAdCallback
-import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.provider.admob.AdMobAdProvider
 import app.allever.android.lib.ad.provider.bigo.BigoAdProvider
@@ -13,7 +12,7 @@ import app.allever.android.lib.ad.provider.pangle.PangleAdProvider
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.util.UIKit.runOnUiThread
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import app.allever.android.sample.ad.core.config.AdIdConstants
+import app.allever.android.sample.ad.core.config.ProviderConfigConstants
 import app.allever.android.sample.ad.core.databinding.FragmentWaterfallBinding
 
 class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>() {
@@ -48,37 +47,19 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
         AdManager.registerProvider(
             providerType = AdMobAdProvider.PROVIDER_NAME,
             providerClass = AdMobAdProvider::class.java,
-            config = AdProviderConfig(
-                appId = AdIdConstants.AdMob.APP_ID,
-                splashAdId = AdIdConstants.AdMob.SPLASH_AD_ID,
-                interstitialAdId = AdIdConstants.AdMob.INTERSTITIAL_AD_ID,
-                rewardVideoAdId = AdIdConstants.AdMob.REWARD_VIDEO_AD_ID,
-                supportWaterfall = false
-            )
+            config = ProviderConfigConstants.ADMOB
         )
 
         AdManager.registerProvider(
             providerType = PangleAdProvider.PROVIDER_NAME,
             providerClass = PangleAdProvider::class.java,
-            config = AdProviderConfig(
-                appId = AdIdConstants.Pangle.APP_ID,
-                splashAdId = AdIdConstants.Pangle.SPLASH_AD_ID,
-                interstitialAdId = AdIdConstants.Pangle.INTERSTITIAL_AD_ID,
-                rewardVideoAdId = AdIdConstants.Pangle.REWARD_VIDEO_AD_ID,
-                supportWaterfall = true
-            )
+            config = ProviderConfigConstants.PANGLE
         )
 
         AdManager.registerProvider(
             providerType = BigoAdProvider.PROVIDER_NAME,
             providerClass = BigoAdProvider::class.java,
-            config = AdProviderConfig(
-                appId = AdIdConstants.Bigo.APP_ID,
-                splashAdId = AdIdConstants.Bigo.SPLASH_AD_ID,
-                interstitialAdId = AdIdConstants.Bigo.INTERSTITIAL_AD_ID,
-                rewardVideoAdId = AdIdConstants.Bigo.REWARD_VIDEO_AD_ID,
-                supportWaterfall = true
-            )
+            config = ProviderConfigConstants.BIGO
         )
 
         appendStatus("✓ Registered 3 providers:")

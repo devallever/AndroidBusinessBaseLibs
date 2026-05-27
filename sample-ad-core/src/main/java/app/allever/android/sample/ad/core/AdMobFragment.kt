@@ -3,31 +3,22 @@ package app.allever.android.sample.ad.core
 import android.util.Log
 import app.allever.android.lib.ad.core.AdManager
 import app.allever.android.lib.ad.core.callback.IAdCallback
-import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.provider.admob.AdMobAdProvider
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.util.UIKit.runOnUiThread
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import app.allever.android.sample.ad.core.config.AdIdConstants
+import app.allever.android.sample.ad.core.config.ProviderConfigConstants
 import app.allever.android.sample.ad.core.databinding.FragmentAdmobBinding
 
 class AdMobFragment: BaseFragment<FragmentAdmobBinding, BaseViewModel>() {
     override fun inflate() = FragmentAdmobBinding.inflate(layoutInflater)
 
     override fun init() {
-        val config = AdProviderConfig(
-            appId = AdIdConstants.AdMob.APP_ID,
-            splashAdId = AdIdConstants.AdMob.SPLASH_AD_ID,
-            interstitialAdId = AdIdConstants.AdMob.INTERSTITIAL_AD_ID,
-            rewardVideoAdId = AdIdConstants.AdMob.REWARD_VIDEO_AD_ID,
-            bannerAdId = AdIdConstants.AdMob.BANNER_AD_ID
-        )
-
         AdManager.registerProvider(
             providerType = AdMobAdProvider.PROVIDER_NAME,
             providerClass = AdMobAdProvider::class.java,
-            config = config
+            config = ProviderConfigConstants.ADMOB,
         )
 
         mBinding.btnInit.setOnClickListener {
