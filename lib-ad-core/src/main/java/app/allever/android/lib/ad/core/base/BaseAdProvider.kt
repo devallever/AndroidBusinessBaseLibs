@@ -62,7 +62,7 @@ abstract class BaseAdProvider : IAdProvider {
         when {
             !adCache.containsKey(adType) -> {
                 log("$TAG: ${adType.name} not cached, loading...")
-                doLoadAd(activity, adType, adIdCache[adIdCache.keys.firstOrNull()] ?: return, callback)
+                doLoadAd(activity, adType, adIdCache[adType] ?: return, callback)
             }
 
             isCacheExpired(adType) -> {
@@ -163,7 +163,7 @@ abstract class BaseAdProvider : IAdProvider {
             }
 
             else -> {
-                val adId = getAdId(adIdCache.keys.firstOrNull() ?: return) ?: run {
+                val adId = getAdId(adType) ?: run {
                     log("$TAG: No cached adId for ${adType.name}, cannot preload")
                     return
                 }
