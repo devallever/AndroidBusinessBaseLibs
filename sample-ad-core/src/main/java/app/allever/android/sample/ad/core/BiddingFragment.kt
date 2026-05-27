@@ -60,6 +60,17 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         appendStatus("  ✅ New winner selected and cached for next show")
         appendStatus("  ✅ Every ad view may have DIFFERENT winner!")
         appendStatus("")
+        appendStatus("⚡ CACHE-FIRST STRATEGY (NEW!):")
+        appendStatus("  ✅ Check cache BEFORE network request")
+        appendStatus("  ✅ If valid cache exists → INSTANT response (0ms!)")
+        appendStatus("  ✅ If cache expired/missing → Normal loading process")
+        appendStatus("  📌 Try: Load → Show → Close → Load again (should be instant)")
+        appendStatus("")
+        appendStatus("🔄 SMART PRELOAD STRATEGY:")
+        appendStatus("  ✅ Preload happens ONLY after ad is CLOSED by user")
+        appendStatus("  ✅ No wasted requests - we preload only when needed")
+        appendStatus("  ✅ Flow: Show Ad → User Close → Auto Preload Next → Cache Ready")
+        appendStatus("")
         appendStatus("")
         
         AdManager.registerProvider(
@@ -210,11 +221,18 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         appendStatus("-".repeat(60))
         appendStatus("Loading INTERSTITIAL ad...")
         appendStatus("Mode: $mode")
+        appendStatus("Cache-First: ${if (AdManager.cacheFirstEnabled) "✅ ON" else "❌ OFF"}")
         
         if (mode == LoadMode.BIDDING) {
-            appendStatus("[BIDDING] Starting parallel requests to ALL 3 providers...")
-            appendStatus("[BIDDING] Each provider will generate RANDOM simulated price")
-            appendStatus("[BIDDING] Waiting for responses or timeout...")
+            if (AdManager.cacheFirstEnabled) {
+                appendStatus("[BIDDING] Will check cache FIRST before bidding...")
+                appendStatus("[BIDDING] If cache HIT → instant response!")
+                appendStatus("[BIDDING] If cache MISS → start parallel requests to ALL 3 providers")
+            } else {
+                appendStatus("[BIDDING] Starting parallel requests to ALL 3 providers...")
+                appendStatus("[BIDDING] Each provider will generate RANDOM simulated price")
+                appendStatus("[BIDDING] Waiting for responses or timeout...")
+            }
         }
 
         AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL, null, object : IAdCallback {
@@ -228,9 +246,17 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             }
 
             override fun onAdLoaded() {
-                appendStatus("✓ Interstitial LOADED successfully!")
-                appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
-                appendStatus("  (No bidding - loaded in single/waterfall mode)")
+                appendStatus("✅ Interstitial LOADED successfully!")
+                
+                if (AdManager.cacheFirstEnabled) {
+                    appendStatus("  ⚡ CACHE HIT! Served from cache (instant!)")
+                    appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
+                    appendStatus("  [No network request needed - using cached ad]")
+                } else {
+                    appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
+                    appendStatus("  (Normal load - no caching)")
+                }
+                
                 appendStatus("-".repeat(60))
             }
 

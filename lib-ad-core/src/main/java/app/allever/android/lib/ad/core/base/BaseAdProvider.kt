@@ -151,7 +151,9 @@ abstract class BaseAdProvider : IAdProvider {
             return
         }
 
-        log("$TAG: Starting auto preload for ${adType.name}")
+        log("$TAG: [PRELOAD] Starting preload for ${adType.name} (triggered by ad dismiss)")
+        log("$TAG: [PRELOAD] 📌 This is the ONLY time we preload - after user closes the ad")
+        log("$TAG: [PRELOAD] Strategy: Use → Close → Preload next → Ready for next show")
 
         when (AdManager.loadMode) {
             AdManager.LoadMode.BIDDING -> {

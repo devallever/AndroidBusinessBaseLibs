@@ -186,7 +186,9 @@ class BigoAdProvider : BaseAdProvider() {
                     log("$TAG: Rewarded ad loaded successfully")
                     rewardedAd = ad
                     cacheAd(AdType.REWARD_VIDEO, ad)
-                    callback?.onAdLoaded()
+                    val simulatedECPM = generateSimulatedPrice()
+                    log("${TAG}: Rewarded ad (simulated eCPM: $$simulatedECPM)")
+                    callback?.onAdLoadedWithPrice(simulatedECPM)
 
                     ad.setAdInteractionListener(object : RewardAdInteractionListener {
                         override fun onAdError(adError: AdError) {

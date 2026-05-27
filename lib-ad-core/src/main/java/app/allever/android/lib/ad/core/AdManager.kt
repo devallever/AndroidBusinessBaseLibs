@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap
 object AdManager {
 
     private const val TAG = "AdManager"
-    const val VERSION = "1.1.0"
+    const val VERSION = "1.2.0"
 
     enum class LoadMode {
         SINGLE,
@@ -35,6 +35,13 @@ object AdManager {
     @Volatile
     var loadMode: LoadMode = LoadMode.SINGLE
         private set
+
+    @Volatile
+    var cacheFirstEnabled: Boolean = true
+        set(value) {
+            field = value
+            log("$TAG: Cache-first mode: ${if (value) "ENABLED" else "DISABLED"}")
+        }
 
     fun init(context: Context, providerType: String, forceReinit: Boolean = false, callback: (() -> Unit)? = null) {
         log("$TAG: Initializing provider: $providerType (forceReinit=$forceReinit)")
@@ -121,6 +128,24 @@ object AdManager {
         adId: String? = null,
         callback: IAdCallback? = null
     ) {
+        if (cacheFirstEnabled) {
+            log("$TAG: [CACHE] Checking cache before loading ${adType.name}...")
+            
+            val cacheResult = checkAndUseCache(adType, callback)
+            
+            if (cacheResult) {
+                log("$TAG: [CACHE] ✅ Cache HIT! Using cached ad for ${adType.name}")
+                log("$TAG: [CACHE] ⚡ Instant response - no network request needed")
+                log("$TAG: [CACHE] 📌 Note: Next ad will be preloaded after this one is dismissed")
+                return
+            }
+            
+            log("$TAG: [CACHE] ❌ Cache MISS or expired for ${adType.name}")
+            log("$TAG: [CACHE] Proceeding with normal loading process...")
+        } else {
+            log("$TAG: [CACHE] Cache-first mode DISABLED, skipping cache check")
+        }
+        
         when (loadMode) {
             LoadMode.SINGLE -> {
                 loadAdSingle(activity, adType, adId, callback)
@@ -132,6 +157,67 @@ object AdManager {
                 loadAdWithBidding(activity, adType, adId, callback)
             }
         }
+    }
+
+    private fun checkAndUseCache(adType: AdType, callback: IAdCallback?): Boolean {
+        return when (loadMode) {
+            LoadMode.SINGLE -> checkSingleCache(adType, callback)
+            LoadMode.WATERFALL -> checkWaterfallCache(adType, callback)
+            LoadMode.BIDDING -> checkBiddingCache(adType, callback)
+        }
+    }
+
+    private fun checkSingleCache(adType: AdType, callback: IAdCallback?): Boolean {
+        val provider = getActiveProvider() ?: return false
+        
+        if (provider.isReady(adType)) {
+            log("$TAG: [CACHE-SINGLE] Provider ${provider.getProviderType()} has valid cache")
+            
+            switchToProvider(provider.getProviderType())
+            callback?.onAdLoaded()
+            
+            return true
+        }
+        
+        log("$TAG: [CACHE-SINGLE] No valid cache in current provider")
+        return false
+    }
+
+    private fun checkWaterfallCache(adType: AdType, callback: IAdCallback?): Boolean {
+        val waterfallProviders = getWaterfallProviders()
+        
+        for ((providerType, _) in waterfallProviders) {
+            val provider = providerPool[providerType] ?: continue
+            
+            if (provider.isReady(adType)) {
+                log("$TAG: [CACHE-WATERFALL] ✅ Found cache in: $providerType (priority order)")
+                
+                switchToProvider(providerType)
+                callback?.onAdLoaded()
+                
+                return true
+            }
+        }
+        
+        log("$TAG: [CACHE-WATERFALL] No valid cache in any waterfall provider")
+        return false
+    }
+
+    private fun checkBiddingCache(adType: AdType, callback: IAdCallback?): Boolean {
+        val activeProvider = getActiveProvider() ?: return false
+        
+        if (activeProvider.isReady(adType)) {
+            val providerType = activeProvider.getProviderType()
+            log("$TAG: [CACHE-BIDDING] ✅ Using last bidding winner cache: $providerType")
+            log("$TAG: [CACHE-BIDDING] Note: This was the winner from previous bidding round")
+            
+            callback?.onAdLoaded()
+            
+            return true
+        }
+        
+        log("$TAG: [CACHE-BIDDING] No valid cache from previous bidding winner")
+        return false
     }
 
     private fun loadAdSingle(
@@ -469,6 +555,41 @@ object AdManager {
         }
         
         startBiddingTimeoutMonitor(biddingState)
+    }
+
+    fun preloadForWaterfall(context: Context, adType: AdType) {
+        log("$TAG: [PRELOAD-WATERFALL] Starting pre-waterfall for ${adType.name}")
+        
+        if (loadMode != LoadMode.WATERFALL) {
+            logE("$TAG: [PRELOAD-WATERFALL] ERROR: Current mode is not WATERFALL")
+            return
+        }
+
+        val waterfallProviders = getWaterfallProviders()
+        
+        if (waterfallProviders.isEmpty()) {
+            logE("$TAG: [PRELOAD-WATERFALL] No waterfall providers available")
+            return
+        }
+        
+        log("$TAG: [PRELOAD-WATERFALL] Trying to preload from ${waterfallProviders.size} providers...")
+        
+        tryLoadFromWaterfall(
+            providers = waterfallProviders,
+            currentIndex = 0,
+            activity = context as Activity,
+            adType = adType,
+            customAdId = null,
+            callback = object : IAdCallback {
+                override fun onAdLoaded() {
+                    log("$TAG: [PRELOAD-WATERFALL] ✅ Preload successful!")
+                }
+                
+                override fun onAdFail(errorCode: Int, errorMessage: String) {
+                    log("$TAG: [PRELOAD-WATERFALL] ❌ All providers failed")
+                }
+            }
+        )
     }
 
     fun preloadForBidding(context: Context, adType: AdType) {
