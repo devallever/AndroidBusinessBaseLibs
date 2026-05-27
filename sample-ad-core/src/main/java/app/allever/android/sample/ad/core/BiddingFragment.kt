@@ -55,6 +55,12 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         appendStatus("     • BIGO:    $3.00 - $7.00")
         appendStatus("  4. Winner: HIGHEST random price wins!")
         appendStatus("")
+        appendStatus("🔄 AUTO RE-BIDDING:")
+        appendStatus("  ✅ When ad is CLOSED → Auto re-bids ALL providers")
+        appendStatus("  ✅ New winner selected and cached for next show")
+        appendStatus("  ✅ Every ad view may have DIFFERENT winner!")
+        appendStatus("")
+        appendStatus("")
         
         AdManager.registerProvider(
             providerType = AdMobAdProvider.PROVIDER_NAME,

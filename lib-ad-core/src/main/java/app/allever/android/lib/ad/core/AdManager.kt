@@ -462,13 +462,66 @@ object AdManager {
                 providerType = providerType,
                 provider = provider,
                 config = config,
-                activity = activity,
+                context = activity,
                 adType = adType,
                 customAdId = adId
             )
         }
         
         startBiddingTimeoutMonitor(biddingState)
+    }
+
+    fun preloadForBidding(context: Context, adType: AdType) {
+        log("$TAG: [PRELOAD-BIDDING] Starting pre-bidding for ${adType.name}")
+        log("$TAG: [PRELOAD-BIDDING] Purpose: Re-bid after ad dismiss to find new winner")
+        log("$TAG: [PRELOAD-BIDDING] Mode: ${loadMode.name} (must be BIDDING)")
+
+        if (loadMode != LoadMode.BIDDING) {
+            logE("$TAG: [PRELOAD-BIDDING] ERROR: Current mode is ${loadMode.name}, not BIDDING")
+            return
+        }
+
+        val biddingProviders = getBiddingProviders()
+
+        if (biddingProviders.isEmpty()) {
+            logE("$TAG: [PRELOAD-BIDDING] No bidding providers available")
+            return
+        }
+
+        log("$TAG: [PRELOAD-BIDDING] Parallel requesting ${biddingProviders.size} providers...")
+
+        val preloadState = BiddingState(
+            totalProviders = biddingProviders.size,
+            startTime = System.currentTimeMillis(),
+            timeout = getBiddingTimeout(biddingProviders),
+            results = ConcurrentHashMap(),
+            callback = null,
+            adType = adType,
+            isPreload = true
+        )
+
+        biddingProviders.forEachIndexed { index, (providerType, config) ->
+
+            val provider = providerPool[providerType]
+            if (provider == null) {
+                log("$TAG: [PRELOAD-BIDDING] [$index] $providerType not initialized, skip")
+                preloadState.markFailed(providerType, -1, "Not initialized")
+                return@forEachIndexed
+            }
+
+            launchBiddingRequest(
+                state = preloadState,
+                index = index,
+                providerType = providerType,
+                provider = provider,
+                config = config,
+                context = context,
+                adType = adType,
+                customAdId = null
+            )
+        }
+
+        startBiddingTimeoutMonitor(preloadState)
     }
 
     private fun getBiddingProviders(): List<Pair<String, AdProviderConfig>> {
@@ -494,7 +547,8 @@ object AdManager {
         val callback: IAdCallback?,
         val adType: AdType,
         var completedCount: Int = 0,
-        var isFinished: Boolean = false
+        var isFinished: Boolean = false,
+        var isPreload: Boolean = false
     )
 
     private data class BiddingEntry(
@@ -510,7 +564,7 @@ object AdManager {
         providerType: String,
         provider: IAdProvider,
         config: AdProviderConfig,
-        activity: Activity,
+        context: Context,
         adType: AdType,
         customAdId: String?
     ) {
@@ -519,9 +573,11 @@ object AdManager {
             return
         }
         
-        log("$TAG: [BIDDING] [$index/${state.totalProviders}] Requesting: $providerType")
+        val modeTag = if (state.isPreload) "[PRELOAD-BIDDING]" else "[BIDDING]"
         
-        provider.loadAd(activity, adType, actualAdId, object : IAdCallback {
+        log("$TAG: $modeTag [$index/${state.totalProviders}] Requesting: $providerType")
+        
+        provider.loadAd(context, adType, actualAdId, object : IAdCallback {
             
             override fun onAdLoaded() {
                 handleBiddingResponse(state, providerType, true, 0.0)
@@ -581,6 +637,8 @@ object AdManager {
             
             state.completedCount++
             
+            val modeTag = if (state.isPreload) "[PRELOAD-BIDDING]" else "[BIDDING]"
+            
             val priceInfo = if (success && eCPM > 0) {
                 " | eCPM=\$${"%.2f".format(eCPM)} (SIMULATED)"
             } else if (success && eCPM == 0.0) {
@@ -589,7 +647,7 @@ object AdManager {
                 ""
             }
             
-            log("$TAG: [BIDDING] Response received: $providerType" +
+            log("$TAG: $modeTag Response received: $providerType" +
                     " | Success=$success" +
                     priceInfo +
                     " | Progress=${state.completedCount}/${state.totalProviders}")
@@ -609,10 +667,11 @@ object AdManager {
         state.isFinished = true
         
         val elapsedTime = System.currentTimeMillis() - state.startTime
+        val modeTag = if (state.isPreload) "[PRELOAD-BIDDING]" else "[BIDDING]"
         
-        log("$TAG: [BIDDING] === BIDDING COMPLETED ===")
-        log("$TAG: [BIDDING] Time elapsed: ${elapsedTime}ms")
-        log("$TAG: [BIDDING] Total responses: ${state.completedCount}/${state.totalProviders}")
+        log("$TAG: $modeTag === ${if (state.isPreload) "PRE-LOAD" else "BIDDING"} COMPLETED ===")
+        log("$TAG: $modeTag Time elapsed: ${elapsedTime}ms")
+        log("$TAG: $modeTag Total responses: ${state.completedCount}/${state.totalProviders}")
         
         val winner = state.results.entries
             .filter { it.value.success }
@@ -633,28 +692,43 @@ object AdManager {
                 "No price available"
             }
             
-            log("$TAG: [BIDDING] 🏆 WINNER: ${result.providerType}" +
+            val actionLabel = if (state.isPreload) "PRE-LOADED" else "WINNER"
+            
+            log("$TAG: $modeTag 🏆 $actionLabel: ${result.providerType}" +
                     " | Price: \$${result.formattedPrice}" +
                     " | Source: $priceSource" +
                     " | Time: ${result.loadTime}ms")
             
             switchToProvider(winner.key)
-            state.callback?.onAdLoadedWithPrice(result.eCPM)
+            
+            if (state.isPreload) {
+                log("$TAG: $modeTag ✅ Preload successful! Next ad will use: ${winner.key}")
+                log("$TAG: $modeTag 📦 Ad cached and ready for next show()")
+            } else {
+                state.callback?.onAdLoadedWithPrice(result.eCPM)
+            }
             
         } else {
-            logE("$TAG: [BIDDING] ❌ ALL PROVIDERS FAILED")
-            state.callback?.onAdFail(-1, "All bidding providers failed")
+            logE("$TAG: $modeTag ❌ ALL PROVIDERS FAILED")
+            if (!state.isPreload) {
+                state.callback?.onAdFail(-1, "All bidding providers failed")
+            } else {
+                logE("$TAG: $modeTag ⚠️  Preload failed - no ad available for next request")
+            }
         }
         
-        logBiddingDetails(state)
+        if (!state.isPreload) {
+            logBiddingDetails(state)
+        }
     }
 
     private fun startBiddingTimeoutMonitor(state: BiddingState) {
         Handler(Looper.getMainLooper()).postDelayed({
             synchronized(state) {
                 if (!state.isFinished) {
-                    logW("$TAG: [BIDDING] ⏰ TIMEOUT! (${state.timeout}ms)")
-                    logW("$TAG: [BIDDING] Completed: ${state.completedCount}/${state.totalProviders}")
+                    val modeTag = if (state.isPreload) "[PRELOAD-BIDDING]" else "[BIDDING]"
+                    logW("$TAG: $modeTag ⏰ TIMEOUT! (${state.timeout}ms)")
+                    logW("$TAG: $modeTag Completed: ${state.completedCount}/${state.totalProviders}")
                     
                     checkBiddingCompletion(state)
                 }

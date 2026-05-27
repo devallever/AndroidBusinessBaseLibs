@@ -18,7 +18,7 @@ interface IAdProvider {
     fun isReady(adType: AdType): Boolean
 
     fun loadAd(
-        activity: Activity,
+        context: Context,
         adType: AdType,
         adId: String,
         callback: IAdCallback? = null
