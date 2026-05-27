@@ -4,196 +4,217 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
-        android:id="@+id/scrollView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/scrollViewAction"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="💧 Waterfall Loading Demo"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:paddingBottom="16dp" />
-
-            <!-- Provider Registration -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Step 1: Register Providers (with Waterfall config)"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:paddingTop="8dp"
-                android:paddingBottom="4dp" />
-
-            <Button
-                android:id="@+id/btnRegisterProviders"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="📝 Register 3 Providers" />
-
-            <!-- Initialization -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Step 2: Initialize All Providers"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:paddingTop="16dp"
-                android:paddingBottom="4dp" />
-
-            <Button
-                android:id="@+id/btnInitAll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="🚀 Initialize All (Join Pool)" />
-
-            <!-- Load Mode Selection -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Step 3: Select Load Mode"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:paddingTop="16dp"
-                android:paddingBottom="4dp" />
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="16dp"
+                    android:text="💧 Waterfall Loading Demo"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Provider Registration -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="4dp"
+                    android:text="Step 1: Register Providers (with Waterfall config)"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/btnModeSingle"
-                    android:layout_width="0dp"
+                    android:id="@+id/btnRegisterProviders"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="4dp"
-                    android:text="🎯 SINGLE Mode"
-                    android:textColor="#2196F3"
-                    android:textSize="11sp" />
+                    android:text="📝 Register 3 Providers" />
+
+                <!-- Initialization -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="4dp"
+                    android:text="Step 2: Initialize All Providers"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/btnModeWaterfall"
-                    android:layout_width="0dp"
+                    android:id="@+id/btnInitAll"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="4dp"
-                    android:text="💧 WATERFALL Mode"
-                    android:textColor="#4CAF50"
-                    android:textSize="11sp" />
+                    android:text="🚀 Initialize All (Join Pool)" />
+
+                <!-- Load Mode Selection -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="4dp"
+                    android:text="Step 3: Select Load Mode"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnModeSingle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:text="🎯 SINGLE Mode"
+                        android:textColor="#2196F3"
+                        android:textSize="11sp" />
+
+                    <Button
+                        android:id="@+id/btnModeWaterfall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_weight="1"
+                        android:text="💧 WATERFALL Mode"
+                        android:textColor="#4CAF50"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvCurrentMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="8dp"
+                    android:text="Current Mode: NOT SET"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <!-- Waterfall Info -->
+                <Button
+                    android:id="@+id/btnShowWaterfallInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="ℹ️ Show Waterfall Providers Info"
+                    android:textSize="12sp" />
+
+                <!-- Ad Operations -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="4dp"
+                    android:text="Step 4: Load Ads (Mode-dependent)"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnLoadInter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:text="Interstitial"
+                        android:textSize="12sp" />
+
+                    <Button
+                        android:id="@+id/btnLoadReward"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_weight="1"
+                        android:text="Reward Video"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnShowInter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="📺 Show Interstitial Ad"
+                        android:textSize="12sp" />
+
+                    <Button
+                        android:id="@+id/btnShowReward"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="📺 Show Reward Ad"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvCurrentMode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Current Mode: NOT SET"
-                android:textSize="13sp"
-                android:gravity="center"
-                android:paddingTop="8dp"
-                android:textStyle="bold" />
+        </ScrollView>
 
-            <!-- Waterfall Info -->
-            <Button
-                android:id="@+id/btnShowWaterfallInfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="ℹ️ Show Waterfall Providers Info"
-                android:textSize="12sp" />
-
-            <!-- Ad Operations -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Step 4: Load Ads (Mode-dependent)"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:paddingTop="16dp"
-                android:paddingBottom="4dp" />
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#F5F5F5"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btnLoadInter"
-                    android:layout_width="0dp"
+                <!-- Status Display -->
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="4dp"
-                    android:text="Interstitial"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="4dp"
+                    android:text="Status &amp; Logs"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:gravity="top"
+                    android:minHeight="150dp"
+                    android:padding="12dp"
+                    android:text="Ready to start waterfall demo..."
                     android:textSize="12sp" />
 
-                <Button
-                    android:id="@+id/btnLoadReward"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="4dp"
-                    android:text="Reward Video"
-                    android:textSize="12sp" />
             </LinearLayout>
 
-        <LinearLayout
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        </ScrollView>
 
-            <Button
-                android:id="@+id/btnShowInter"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="📺 Show Interstitial Ad"
-                android:textSize="12sp" />
-
-            <Button
-                android:id="@+id/btnShowReward"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="📺 Show Reward Ad"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-
-
-            <!-- Status Display -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Status &amp; Logs"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:paddingTop="16dp"
-                android:paddingBottom="4dp" />
-
-            <TextView
-                android:id="@+id/tvStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#F5F5F5"
-                android:padding="12dp"
-                android:text="Ready to start waterfall demo..."
-                android:textSize="12sp"
-                android:minHeight="150dp"
-                android:gravity="top"
-                android:fontFamily="monospace" />
-
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
