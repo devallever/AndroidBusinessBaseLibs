@@ -35,8 +35,10 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         
         mBinding.btnLoadInter.setOnClickListener { loadInterstitial() }
         mBinding.btnLoadReward.setOnClickListener { loadRewardVideo() }
+        mBinding.btnLoadSplash.setOnClickListener { loadSplashAd() }
         mBinding.btnShowInter.setOnClickListener { showInterstitial() }
         mBinding.btnShowReward.setOnClickListener { showReward() }
+        mBinding.btnShowSplash.setOnClickListener { showSplash() }
     }
 
     private fun registerProviders() {
@@ -78,6 +80,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             providerClass = AdMobAdProvider::class.java,
             config = AdProviderConfig(
                 appId = AdIdConstants.AdMob.APP_ID,
+                splashAdId = AdIdConstants.AdMob.SPLASH_AD_ID,
                 interstitialAdId = AdIdConstants.AdMob.INTERSTITIAL_AD_ID,
                 rewardVideoAdId = AdIdConstants.AdMob.REWARD_VIDEO_AD_ID,
                 supportWaterfall = false,
@@ -93,6 +96,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             providerClass = PangleAdProvider::class.java,
             config = AdProviderConfig(
                 appId = AdIdConstants.Pangle.APP_ID,
+                splashAdId = AdIdConstants.Pangle.SPLASH_AD_ID,
                 interstitialAdId = AdIdConstants.Pangle.INTERSTITIAL_AD_ID,
                 rewardVideoAdId = AdIdConstants.Pangle.REWARD_VIDEO_AD_ID,
                 supportWaterfall = false,
@@ -108,6 +112,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             providerClass = BigoAdProvider::class.java,
             config = AdProviderConfig(
                 appId = AdIdConstants.Bigo.APP_ID,
+                splashAdId = AdIdConstants.Bigo.SPLASH_AD_ID,
                 interstitialAdId = AdIdConstants.Bigo.INTERSTITIAL_AD_ID,
                 rewardVideoAdId = AdIdConstants.Bigo.REWARD_VIDEO_AD_ID,
                 supportWaterfall = false,
@@ -402,6 +407,113 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
                 override fun onAdRewarded(rewardAmount: Int, rewardName: String) {
                     appendStatus("🎁 REWARDED: $rewardAmount x $rewardName")
                 }
+            }
+        )
+    }
+
+    private fun loadSplashAd() {
+        if (!AdManager.isInitialized()) {
+            appendStatus("⚠️ No active provider! Initialize first.")
+            return
+        }
+
+        val mode = AdManager.loadMode
+
+        appendStatus("")
+        appendStatus("-".repeat(60))
+        appendStatus("Loading SPLASH ad...")
+        appendStatus("Mode: $mode")
+        appendStatus("Cache-First: ${if (AdManager.cacheFirstEnabled) "✅ ON" else "❌ OFF"}")
+
+        if (mode == LoadMode.BIDDING) {
+            if (AdManager.cacheFirstEnabled) {
+                appendStatus("[BIDDING] Will check cache FIRST before bidding...")
+                appendStatus("[BIDDING] If cache HIT → instant response!")
+                appendStatus("[BIDDING] If cache MISS → start parallel requests to ALL 3 providers")
+            } else {
+                appendStatus("[BIDDING] Starting parallel requests to ALL 3 providers...")
+                appendStatus("[BIDDING] Each provider will generate RANDOM simulated price")
+                appendStatus("[BIDDING] Waiting for responses or timeout...")
+            }
+        }
+
+        AdManager.loadAd(requireActivity(), AdType.SPLASH, null, object : IAdCallback {
+
+            override fun onAdLoadedWithPrice(eCPM: Double) {
+                appendStatus("✅ Splash LOADED via BIDDING SIMULATION!")
+                appendStatus("  🏆 WINNER: ${AdManager.getActiveProviderType()}")
+                appendStatus("  💰 Winning Price: $$${String.format("%.2f", eCPM)} eCPM (SIMULATED)")
+                appendStatus("  [Random price generated for testing]")
+                appendStatus("-".repeat(60))
+            }
+
+            override fun onAdLoaded() {
+                appendStatus("✅ Splash LOADED successfully!")
+
+                if (AdManager.cacheFirstEnabled) {
+                    appendStatus("  ⚡ CACHE HIT! Served from cache (instant!)")
+                    appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
+                    appendStatus("  [No network request needed - using cached ad]")
+                } else {
+                    appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
+                    appendStatus("  (Normal load - no caching)")
+                }
+
+                appendStatus("-".repeat(60))
+            }
+
+            override fun onAdFail(errorCode: Int, errorMessage: String) {
+                appendStatus("✗ Splash FAILED: $errorMessage")
+                if (mode == LoadMode.BIDDING) {
+                    appendStatus("  [All bidding providers failed or timed out]")
+                    appendStatus("  [Or no bidding-enabled providers available]")
+                } else {
+                    appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
+                }
+                appendStatus("-".repeat(60))
+            }
+
+            override fun onAdShow() {
+                appendStatus("📺 Splash SHOWING from: ${AdManager.getActiveProviderType()}")
+            }
+
+            override fun onAdClick() {
+                appendStatus("👆 Splash CLICKED")
+            }
+
+            override fun onAdDismiss() {
+                appendStatus("❌ Splash DISMISSED")
+                appendStatus("  [Preloading next splash ad...]")
+            }
+
+            override fun onAdRewarded(rewardAmount: Int, rewardName: String) {}
+        })
+    }
+
+    private fun showSplash() {
+        if (!AdManager.isInitialized()) {
+            appendStatus("⚠️ No active provider! Initialize first.")
+            return
+        }
+
+        appendStatus("Showing cached splash ad...")
+
+        AdManager.showAd(
+            activity = requireActivity(),
+            adType = AdType.SPLASH,
+            callback = object : IAdCallback {
+                override fun onAdLoaded() {}
+                override fun onAdFail(errorCode: Int, errorMessage: String) {
+                    appendStatus("✗ Show failed: $errorMessage")
+                }
+                override fun onAdShow() {
+                    appendStatus("📺 Showing splash ad...")
+                }
+                override fun onAdClick() { }
+                override fun onAdDismiss() {
+                    appendStatus("❌ Splash dismissed")
+                }
+                override fun onAdRewarded(rewardAmount: Int, rewardName: String) {}
             }
         )
     }

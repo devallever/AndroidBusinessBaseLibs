@@ -228,7 +228,7 @@ object AdManager {
     ) {
         val provider = getActiveProvider() ?: return
         
-        val actualAdId = adId ?: getAdIdByType(adType) ?: run {
+        val actualAdId = getAdIdByType(adType) ?: run {
             log("$TAG: No ad ID provided for ${adType.name}")
             callback?.onAdFail(-1, "No ad ID provided")
             return

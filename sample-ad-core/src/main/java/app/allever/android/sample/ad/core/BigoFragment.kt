@@ -18,6 +18,7 @@ class BigoFragment : BaseFragment<FragmentBigoBinding, BaseViewModel>() {
     override fun init() {
         val config = AdProviderConfig(
             appId = AdIdConstants.Bigo.APP_ID,
+            splashAdId = AdIdConstants.Bigo.SPLASH_AD_ID,
             interstitialAdId = AdIdConstants.Bigo.INTERSTITIAL_AD_ID,
             rewardVideoAdId = AdIdConstants.Bigo.REWARD_VIDEO_AD_ID,
             bannerAdId = AdIdConstants.Bigo.BANNER_AD_ID
@@ -32,6 +33,10 @@ class BigoFragment : BaseFragment<FragmentBigoBinding, BaseViewModel>() {
         mBinding.btnInit.setOnClickListener {
             AdManager.destroy()
             initBigo()
+        }
+
+        mBinding.btnLoadSplash.setOnClickListener {
+            showSplash()
         }
 
         mBinding.btnLoadInter.setOnClickListener {
@@ -54,6 +59,7 @@ class BigoFragment : BaseFragment<FragmentBigoBinding, BaseViewModel>() {
         AdManager.init(requireContext(), BigoAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 updateStatus("✓ Bigo Initialized")
+                AdManager.loadAd(requireActivity(), AdType.SPLASH)
                 AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL)
                 AdManager.loadAd(requireActivity(), AdType.REWARD_VIDEO)
                 AdManager.loadAd(requireActivity(), AdType.BANNER)
@@ -64,6 +70,43 @@ class BigoFragment : BaseFragment<FragmentBigoBinding, BaseViewModel>() {
     private fun updateStatus(message: String) {
         mBinding.tvStatus.text = message
         Log.d("AdProviderExample", message)
+    }
+
+    private fun showSplash() {
+        if (!AdManager.isInitialized()) {
+            updateStatus("⚠️ Please initialize an ad provider first")
+            return
+        }
+
+        updateStatus("Loading Splash Ad...")
+
+        AdManager.showAd(
+            activity = requireActivity(),
+            adType = AdType.SPLASH,
+            callback = object : IAdCallback {
+                override fun onAdLoaded() {
+                    updateStatus("✓ Splash loaded")
+                }
+
+                override fun onAdFail(errorCode: Int, errorMessage: String) {
+                    updateStatus("✗ Splash failed: $errorMessage")
+                }
+
+                override fun onAdShow() {
+                    updateStatus("✓ Splash showing")
+                }
+
+                override fun onAdClick() {
+                    updateStatus("! Splash clicked")
+                }
+
+                override fun onAdDismiss() {
+                    updateStatus("✓ Splash dismissed")
+                }
+
+                override fun onAdRewarded(rewardAmount: Int, rewardName: String) {}
+            }
+        )
     }
 
     private fun showInterstitial() {

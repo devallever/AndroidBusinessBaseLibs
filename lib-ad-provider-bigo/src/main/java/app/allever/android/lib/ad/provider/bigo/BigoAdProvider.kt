@@ -25,6 +25,10 @@ import sg.bigo.ads.api.RewardAdInteractionListener
 import sg.bigo.ads.api.RewardVideoAd
 import sg.bigo.ads.api.RewardVideoAdLoader
 import sg.bigo.ads.api.RewardVideoAdRequest
+import sg.bigo.ads.api.SplashAd
+import sg.bigo.ads.api.SplashAdInteractionListener
+import sg.bigo.ads.api.SplashAdLoader
+import sg.bigo.ads.api.SplashAdRequest
 
 class BigoAdProvider : BaseAdProvider() {
 
@@ -36,6 +40,7 @@ class BigoAdProvider : BaseAdProvider() {
     private var interstitialAd: InterstitialAd? = null
     private var rewardedAd: RewardVideoAd? = null
     private var bannerAd: BannerAd? = null
+    private var splashAd: SplashAd? = null
 
     override fun getProviderType(): String = PROVIDER_NAME
 
@@ -67,6 +72,7 @@ class BigoAdProvider : BaseAdProvider() {
         callback: IAdCallback?
     ) {
         when (adType) {
+            AdType.SPLASH -> loadSplashAd(adId, callback)
             AdType.INTERSTITIAL -> loadInterstitialAd(adId, callback)
             AdType.REWARD_VIDEO -> loadRewardedAd(adId, callback)
             AdType.BANNER -> loadBannerAd(adId, callback)
@@ -84,6 +90,7 @@ class BigoAdProvider : BaseAdProvider() {
         callback: IAdCallback?
     ) {
         when (adType) {
+            AdType.SPLASH -> showSplashAd(activity, callback)
             AdType.INTERSTITIAL -> showInterstitialAd(activity, callback)
             AdType.REWARD_VIDEO -> showRewardedAd(activity, callback)
             AdType.BANNER -> showBannerAd(container, callback)
@@ -98,6 +105,92 @@ class BigoAdProvider : BaseAdProvider() {
         interstitialAd = null
         rewardedAd = null
         bannerAd = null
+        splashAd = null
+    }
+
+    private fun loadSplashAd(adId: String, callback: IAdCallback?) {
+        log("$TAG: Loading splash ad: $adId")
+
+        val request = SplashAdRequest.Builder()
+            .withSlotId(adId)
+            .build()
+
+        val loader = SplashAdLoader.Builder()
+            .withAdLoadListener(object : AdLoadListener<SplashAd> {
+                override fun onError(adError: AdError) {
+                    log("$TAG: Splash ad failed to load: ${adError.code}")
+                    callback?.onAdFail(adError.code, adError.message ?: "Load failed")
+                }
+
+                override fun onAdLoaded(ad: SplashAd) {
+                    log("$TAG: Splash ad loaded successfully")
+                    splashAd = ad
+                    cacheAd(AdType.SPLASH, ad)
+
+                    val simulatedECPM = generateSimulatedPrice()
+                    log("$TAG: Splash ad (simulated eCPM: $$simulatedECPM)")
+                    callback?.onAdLoadedWithPrice(simulatedECPM)
+
+                    ad.setAdInteractionListener(object : SplashAdInteractionListener {
+                        override fun onAdError(adError: AdError) {
+                            log("$TAG: Splash ad error: ${adError.code}")
+                            splashAd = null
+                            removeCachedAd(AdType.SPLASH)
+                            callback?.onAdFail(adError.code, adError.message ?: "Ad error")
+                        }
+
+                        override fun onAdImpression() {
+                            log("$TAG: Splash ad showed")
+                            callback?.onAdShow()
+                        }
+
+                        override fun onAdClicked() {
+                            log("$TAG: Splash ad clicked")
+                            callback?.onAdClick()
+                        }
+
+                        override fun onAdOpened() {
+                            log("$TAG: Splash ad opened")
+                        }
+
+                        override fun onAdClosed() {
+
+                        }
+
+                        override fun onAdSkipped() {
+                            log("$TAG: Splash ad skipped")
+                            splashAd = null
+                            removeCachedAd(AdType.SPLASH)
+                            callback?.onAdDismiss()
+
+                            preloadAdOnDismiss(AdType.SPLASH)
+                        }
+
+                        override fun onAdFinished() {
+                            log("$TAG: Splash ad finish")
+
+                        }
+                    })
+                }
+            })
+            .build()
+
+        loader.loadAd(request)
+    }
+
+    private fun showSplashAd(activity: Activity, callback: IAdCallback?) {
+        splashAd?.let { ad ->
+            try {
+                ad.show(activity)
+                callback?.onAdShow()
+            } catch (e: Exception) {
+                logE("$TAG: Error showing splash ad", e.message)
+                callback?.onAdFail(-1, e.message ?: "Unknown error")
+            }
+        } ?: run {
+            log("$TAG: Splash ad not ready")
+            callback?.onAdFail(-1, "Splash ad not loaded")
+        }
     }
 
     private fun loadInterstitialAd(adId: String, callback: IAdCallback?) {

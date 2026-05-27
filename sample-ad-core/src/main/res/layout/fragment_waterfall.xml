@@ -148,12 +148,21 @@
                         android:layout_weight="1"
                         android:text="Reward Video"
                         android:textSize="12sp" />
+
+                    <Button
+                        android:id="@+id/btnLoadSplash"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_weight="1"
+                        android:text="Splash Ad"
+                        android:textColor="#9C27B0"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:orientation="horizontal">
 
                     <Button
@@ -171,6 +180,15 @@
                         android:layout_weight="1"
                         android:text="📺 Show Reward Ad"
                         android:textSize="12sp" />
+
+                    <Button
+                        android:id="@+id/btnShowSplash"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="📺 Show Splash Ad"
+                        android:textColor="#9C27B0"
+                        android:textSize="11sp" />
                 </LinearLayout>
 
             </LinearLayout>

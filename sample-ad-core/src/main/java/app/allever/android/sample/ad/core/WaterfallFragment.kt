@@ -36,8 +36,10 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
         
         mBinding.btnLoadInter.setOnClickListener { loadInterstitial() }
         mBinding.btnLoadReward.setOnClickListener { loadRewardVideo() }
+        mBinding.btnLoadSplash.setOnClickListener { loadSplashAd() }
         mBinding.btnShowInter.setOnClickListener { showInterstitial() }
         mBinding.btnShowReward.setOnClickListener { showReward() }
+        mBinding.btnShowSplash.setOnClickListener { showSplash() }
     }
 
     private fun registerProviders() {
@@ -48,6 +50,7 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
             providerClass = AdMobAdProvider::class.java,
             config = AdProviderConfig(
                 appId = AdIdConstants.AdMob.APP_ID,
+                splashAdId = AdIdConstants.AdMob.SPLASH_AD_ID,
                 interstitialAdId = AdIdConstants.AdMob.INTERSTITIAL_AD_ID,
                 rewardVideoAdId = AdIdConstants.AdMob.REWARD_VIDEO_AD_ID,
                 supportWaterfall = false
@@ -59,6 +62,7 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
             providerClass = PangleAdProvider::class.java,
             config = AdProviderConfig(
                 appId = AdIdConstants.Pangle.APP_ID,
+                splashAdId = AdIdConstants.Pangle.SPLASH_AD_ID,
                 interstitialAdId = AdIdConstants.Pangle.INTERSTITIAL_AD_ID,
                 rewardVideoAdId = AdIdConstants.Pangle.REWARD_VIDEO_AD_ID,
                 supportWaterfall = true
@@ -70,6 +74,7 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
             providerClass = BigoAdProvider::class.java,
             config = AdProviderConfig(
                 appId = AdIdConstants.Bigo.APP_ID,
+                splashAdId = AdIdConstants.Bigo.SPLASH_AD_ID,
                 interstitialAdId = AdIdConstants.Bigo.INTERSTITIAL_AD_ID,
                 rewardVideoAdId = AdIdConstants.Bigo.REWARD_VIDEO_AD_ID,
                 supportWaterfall = true
@@ -313,6 +318,87 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
                 override fun onAdRewarded(rewardAmount: Int, rewardName: String) {
                     appendStatus("🎁 REWARDED: $rewardAmount x $rewardName")
                 }
+            }
+        )
+    }
+
+    private fun loadSplashAd() {
+        if (!AdManager.isInitialized()) {
+            appendStatus("⚠️ No active provider! Initialize first.")
+            return
+        }
+
+        val mode = AdManager.loadMode
+        val activeType = AdManager.getActiveProviderType()
+
+        appendStatus("")
+        appendStatus("-".repeat(60))
+        appendStatus("Loading SPLASH ad...")
+        appendStatus("Mode: $mode | Active: $activeType")
+
+        if (mode == LoadMode.WATERFALL) {
+            appendStatus("[WATERFALL] Will try providers in order until success...")
+        }
+
+        AdManager.loadAd(requireActivity(), AdType.SPLASH, null, object : IAdCallback {
+            override fun onAdLoaded() {
+                appendStatus("✓ Splash LOADED successfully!")
+                appendStatus("  Winner: ${AdManager.getActiveProviderType()}")
+                if (mode == LoadMode.WATERFALL) {
+                    appendStatus("  [Waterfall stopped at winner]")
+                }
+            }
+
+            override fun onAdFail(errorCode: Int, errorMessage: String) {
+                appendStatus("✗ Splash FAILED: $errorMessage")
+                if (mode == LoadMode.WATERFALL) {
+                    appendStatus("  [All waterfall providers exhausted]")
+                } else {
+                    appendStatus("  Provider: $activeType")
+                }
+            }
+
+            override fun onAdShow() {
+                appendStatus("📺 Splash SHOWING from: ${AdManager.getActiveProviderType()}")
+            }
+
+            override fun onAdClick() {
+                appendStatus("👆 Splash CLICKED")
+            }
+
+            override fun onAdDismiss() {
+                appendStatus("❌ Splash DISMISSED")
+                appendStatus("  [Preloading next splash ad...]")
+            }
+
+            override fun onAdRewarded(rewardAmount: Int, rewardName: String) {}
+        })
+    }
+
+    private fun showSplash() {
+        if (!AdManager.isInitialized()) {
+            appendStatus("⚠️ No active provider! Initialize first.")
+            return
+        }
+
+        appendStatus("Showing cached splash ad...")
+
+        AdManager.showAd(
+            activity = requireActivity(),
+            adType = AdType.SPLASH,
+            callback = object : IAdCallback {
+                override fun onAdLoaded() {}
+                override fun onAdFail(errorCode: Int, errorMessage: String) {
+                    appendStatus("✗ Show failed: $errorMessage")
+                }
+                override fun onAdShow() {
+                    appendStatus("📺 Showing splash ad...")
+                }
+                override fun onAdClick() { }
+                override fun onAdDismiss() {
+                    appendStatus("❌ Splash dismissed")
+                }
+                override fun onAdRewarded(rewardAmount: Int, rewardName: String) {}
             }
         )
     }

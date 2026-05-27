@@ -49,7 +49,9 @@ abstract class BaseAdProvider : IAdProvider {
             return
         }
 
-        adIdCache[adType] = adId
+        if (adId.isNotEmpty()) {
+            adIdCache[adType] = adId
+        }
         doLoadAd(context, adType, adId, callback)
     }
 
@@ -142,7 +144,11 @@ abstract class BaseAdProvider : IAdProvider {
     }
 
     protected fun shouldAutoPreload(adType: AdType): Boolean {
-        return autoPreloadEnabled && (adType == AdType.INTERSTITIAL || adType == AdType.REWARD_VIDEO)
+        return autoPreloadEnabled && (
+            adType == AdType.INTERSTITIAL ||
+            adType == AdType.REWARD_VIDEO ||
+            adType == AdType.SPLASH
+        )
     }
 
     protected fun preloadAdOnDismiss(adType: AdType) {

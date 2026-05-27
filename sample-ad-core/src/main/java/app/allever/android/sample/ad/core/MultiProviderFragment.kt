@@ -50,8 +50,10 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
             providerClass = AdMobAdProvider::class.java,
             config = AdProviderConfig(
                 appId = AdIdConstants.AdMob.APP_ID,
+                splashAdId = AdIdConstants.AdMob.SPLASH_AD_ID,
                 interstitialAdId = AdIdConstants.AdMob.INTERSTITIAL_AD_ID,
                 rewardVideoAdId = AdIdConstants.AdMob.REWARD_VIDEO_AD_ID,
+                bannerAdId = AdIdConstants.AdMob.BANNER_AD_ID,
                 supportWaterfall = true
             )
         )
@@ -61,8 +63,10 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
             providerClass = PangleAdProvider::class.java,
             config = AdProviderConfig(
                 appId = AdIdConstants.Pangle.APP_ID,
+                splashAdId = AdIdConstants.Pangle.SPLASH_AD_ID,
                 interstitialAdId = AdIdConstants.Pangle.INTERSTITIAL_AD_ID,
                 rewardVideoAdId = AdIdConstants.Pangle.REWARD_VIDEO_AD_ID,
+                bannerAdId = AdIdConstants.Pangle.BANNER_AD_ID,
                 supportWaterfall = true
             )
         )
@@ -72,8 +76,10 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
             providerClass = BigoAdProvider::class.java,
             config = AdProviderConfig(
                 appId = AdIdConstants.Bigo.APP_ID,
+                splashAdId = AdIdConstants.Bigo.SPLASH_AD_ID,
                 interstitialAdId = AdIdConstants.Bigo.INTERSTITIAL_AD_ID,
                 rewardVideoAdId = AdIdConstants.Bigo.REWARD_VIDEO_AD_ID,
+                bannerAdId = AdIdConstants.Bigo.BANNER_AD_ID,
                 supportWaterfall = false
             )
         )

@@ -21,6 +21,10 @@ import com.bytedance.sdk.openadsdk.api.interstitial.PAGInterstitialAdInteraction
 import com.bytedance.sdk.openadsdk.api.interstitial.PAGInterstitialAdLoadListener
 import com.bytedance.sdk.openadsdk.api.interstitial.PAGInterstitialRequest
 import com.bytedance.sdk.openadsdk.api.model.PAGErrorModel
+import com.bytedance.sdk.openadsdk.api.open.PAGAppOpenAd
+import com.bytedance.sdk.openadsdk.api.open.PAGAppOpenAdInteractionCallback
+import com.bytedance.sdk.openadsdk.api.open.PAGAppOpenAdLoadListener
+import com.bytedance.sdk.openadsdk.api.open.PAGAppOpenRequest
 import com.bytedance.sdk.openadsdk.api.reward.PAGRewardItem
 import com.bytedance.sdk.openadsdk.api.reward.PAGRewardedAd
 import com.bytedance.sdk.openadsdk.api.reward.PAGRewardedAdInteractionCallback
@@ -37,6 +41,7 @@ class PangleAdProvider : BaseAdProvider() {
     private var interstitialAd: PAGInterstitialAd? = null
     private var rewardedAd: PAGRewardedAd? = null
     private var bannerAd: PAGBannerAd? = null
+    private var splashAd: PAGAppOpenAd? = null
 
     override fun getProviderType(): String = PROVIDER_NAME
 
@@ -76,6 +81,7 @@ class PangleAdProvider : BaseAdProvider() {
         callback: IAdCallback?
     ) {
         when (adType) {
+            AdType.SPLASH -> loadSplashAd(adId, callback)
             AdType.INTERSTITIAL -> loadInterstitialAd(adId, callback)
             AdType.REWARD_VIDEO -> loadRewardedAd(adId, callback)
             AdType.BANNER -> loadBannerAd(adId, callback)
@@ -93,6 +99,7 @@ class PangleAdProvider : BaseAdProvider() {
         callback: IAdCallback?
     ) {
         when (adType) {
+            AdType.SPLASH -> showSplashAd(activity, callback)
             AdType.INTERSTITIAL -> showInterstitialAd(activity, callback)
             AdType.REWARD_VIDEO -> showRewardedAd(activity, callback)
             AdType.BANNER -> showBannerAd(container, callback)
@@ -107,6 +114,65 @@ class PangleAdProvider : BaseAdProvider() {
         interstitialAd = null
         rewardedAd = null
         bannerAd = null
+        splashAd = null
+    }
+
+    private fun loadSplashAd(adId: String, callback: IAdCallback?) {
+        log("$TAG: Loading splash ad: $adId")
+
+        val request = PAGAppOpenRequest()
+        PAGAppOpenAd.loadAd( adId, request, object : PAGAppOpenAdLoadListener {
+            override fun onError(code: Int, message: String) {
+                log("$TAG: Splash ad failed to load: $code - $message")
+                callback?.onAdFail(code, message)
+            }
+
+            override fun onAdLoaded(ad: PAGAppOpenAd) {
+                log("$TAG: Splash ad loaded successfully")
+                splashAd = ad
+                cacheAd(AdType.SPLASH, ad)
+
+                val simulatedECPM = generateSimulatedPrice()
+                log("$TAG: Splash ad (simulated eCPM: $$simulatedECPM)")
+                callback?.onAdLoadedWithPrice(simulatedECPM)
+
+                ad.setAdInteractionCallback(object : PAGAppOpenAdInteractionCallback() {
+                    override fun onAdShowed() {
+                        log("$TAG: Splash ad showed")
+                        callback?.onAdShow()
+                    }
+
+                    override fun onAdClicked() {
+                        log("$TAG: Splash ad clicked")
+                        callback?.onAdClick()
+                    }
+
+                    override fun onAdDismissed() {
+                        log("$TAG: Splash ad dismissed")
+                        splashAd = null
+                        removeCachedAd(AdType.SPLASH)
+                        callback?.onAdDismiss()
+
+                        preloadAdOnDismiss(AdType.SPLASH)
+                    }
+                })
+            }
+        })
+    }
+
+    private fun showSplashAd(activity: Activity, callback: IAdCallback?) {
+        splashAd?.let { ad ->
+            try {
+                splashAd?.show(activity)
+                callback?.onAdShow()
+            } catch (e: Exception) {
+                logE("$TAG: Error showing splash ad", e.message)
+                callback?.onAdFail(-1, e.message ?: "Unknown error")
+            }
+        } ?: run {
+            log("$TAG: Splash ad not ready")
+            callback?.onAdFail(-1, "Splash ad not loaded")
+        }
     }
 
     private fun loadInterstitialAd(adId: String, callback: IAdCallback?) {
