@@ -40,49 +40,13 @@ class AdMobAdProvider : BaseAdProvider() {
         },callback)
     }
 
-    override fun doLoadAd(
-        context: Context,
-        adType: AdType,
-        adId: String,
-        callback: IAdCallback?
-    ) {
-        when (adType) {
-            AdType.SPLASH -> loadSplashAd(context, adId, callback)
-            AdType.INTERSTITIAL -> loadInterstitialAd(context, adId, callback)
-            AdType.REWARD_VIDEO -> loadRewardedAd(context, adId, callback)
-            AdType.BANNER -> loadBannerAd(context, adId, callback)
-            else -> {
-                log("$TAG: ${adType.name} not supported yet for AdMob")
-                callback?.onAdFail(-1, "${adType.name} not supported yet")
-            }
-        }
-    }
-
-    override fun doShowAd(
-        activity: Activity,
-        adType: AdType,
-        container: ViewGroup?,
-        callback: IAdCallback?
-    ) {
-        when (adType) {
-            AdType.SPLASH -> showSplashAd(activity, callback)
-            AdType.INTERSTITIAL -> showInterstitialAd(activity, callback)
-            AdType.REWARD_VIDEO -> showRewardedAd(activity, callback)
-            AdType.BANNER -> showBannerAd(container, callback)
-            else -> {
-                log("$TAG: ${adType.name} show not implemented for AdMob")
-            }
-        }
-    }
-
     override fun onDestroy() {
-        super.onDestroy()
         interstitialAd = null
         rewardedAd = null
         splashAd = null
     }
 
-    private fun loadSplashAd(
+    override fun loadSplashAd(
         context: Context,
         adId: String,
         callback: IAdCallback?
@@ -122,14 +86,14 @@ class AdMobAdProvider : BaseAdProvider() {
         )
     }
 
-    private fun showSplashAd(activity: Activity, callback: IAdCallback?) {
+    override fun showSplashAd(activity: Activity, callback: IAdCallback?) {
         showSplashAdInternal(splashAd, callback) {
             splashAd?.show( activity)
         }
     }
 
-    private fun loadInterstitialAd(
-        activity: Context,
+    override fun loadInterstitialAd(
+        context: Context,
         adId: String,
         callback: IAdCallback?
     ) {
@@ -137,7 +101,7 @@ class AdMobAdProvider : BaseAdProvider() {
 
         val adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(activity, adId, adRequest, object : InterstitialAdLoadCallback() {
+        InterstitialAd.load(context, adId, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 handleOnAdLoadFail(AdType.INTERSTITIAL, adError.code, adError.message, callback)
             }
@@ -164,14 +128,14 @@ class AdMobAdProvider : BaseAdProvider() {
         })
     }
 
-    private fun showInterstitialAd(activity: Activity, callback: IAdCallback?) {
+    override fun showInterstitialAd(activity: Activity, callback: IAdCallback?) {
         showInterstitialAdInternal(interstitialAd, callback) {
             interstitialAd?.show(activity)
         }
     }
 
-    private fun loadRewardedAd(
-        activity: Context,
+    override fun loadRewardedAd(
+        context: Context,
         adId: String,
         callback: IAdCallback?
     ) {
@@ -179,7 +143,7 @@ class AdMobAdProvider : BaseAdProvider() {
 
         val adRequest = AdRequest.Builder().build()
 
-        RewardedAd.load(activity, adId, adRequest, object : RewardedAdLoadCallback() {
+        RewardedAd.load(context, adId, adRequest, object : RewardedAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 handleOnAdLoadFail(AdType.REWARD_VIDEO, adError.code, adError.message, callback)
             }
@@ -206,7 +170,7 @@ class AdMobAdProvider : BaseAdProvider() {
         })
     }
 
-    private fun showRewardedAd(activity: Activity, callback: IAdCallback?) {
+    override fun showRewardedAd(activity: Activity, callback: IAdCallback?) {
         showRewardedAdInternal(rewardedAd, callback) {
             rewardedAd?.show(activity) {rewardItem ->
                 handleOnAdRewarded(AdType.REWARD_VIDEO, rewardItem.amount, rewardItem.type, callback)
@@ -214,21 +178,21 @@ class AdMobAdProvider : BaseAdProvider() {
         }
     }
 
-    private fun loadBannerAd(
-        activity: Context,
+    override fun loadBannerAd(
+        context: Context,
         adId: String,
         callback: IAdCallback?
     ) {
         log("$TAG: Loading banner ad: $adId")
 
         try {
-            val adView = AdView(activity)
+            val adView = AdView(context)
             adView.adUnitId = adId
 
-            val autoAdWidth = getScreenWidth(activity)
+            val autoAdWidth = getScreenWidth(context)
             adView.setAdSize(
                 AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-                    activity,
+                    context,
                     autoAdWidth
                 )
             )
@@ -253,7 +217,7 @@ class AdMobAdProvider : BaseAdProvider() {
         }
     }
 
-    private fun showBannerAd(container: ViewGroup?, callback: IAdCallback?) {
+    override fun showBannerAd(container: ViewGroup?, callback: IAdCallback?) {
         val adView = getCachedAd(AdType.BANNER) as? View
         showBannerInternal(adView, container,  callback)
     }

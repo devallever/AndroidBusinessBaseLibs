@@ -56,50 +56,14 @@ class BigoAdProvider : BaseAdProvider() {
         }, callback)
     }
 
-    override fun doLoadAd(
-        context: Context,
-        adType: AdType,
-        adId: String,
-        callback: IAdCallback?
-    ) {
-        when (adType) {
-            AdType.SPLASH -> loadSplashAd(adId, callback)
-            AdType.INTERSTITIAL -> loadInterstitialAd(adId, callback)
-            AdType.REWARD_VIDEO -> loadRewardedAd(adId, callback)
-            AdType.BANNER -> loadBannerAd(adId, callback)
-            else -> {
-                log("$TAG: ${adType.name} not supported yet for Bigo")
-                callback?.onAdFail(-1, "${adType.name} not supported yet")
-            }
-        }
-    }
-
-    override fun doShowAd(
-        activity: Activity,
-        adType: AdType,
-        container: ViewGroup?,
-        callback: IAdCallback?
-    ) {
-        when (adType) {
-            AdType.SPLASH -> showSplashAd(activity, callback)
-            AdType.INTERSTITIAL -> showInterstitialAd(activity, callback)
-            AdType.REWARD_VIDEO -> showRewardedAd(activity, callback)
-            AdType.BANNER -> showBannerAd(container, callback)
-            else -> {
-                log("$TAG: ${adType.name} show not implemented for Bigo")
-            }
-        }
-    }
-
     override fun onDestroy() {
-        super.onDestroy()
         interstitialAd = null
         rewardedAd = null
         bannerAd = null
         splashAd = null
     }
 
-    private fun loadSplashAd(adId: String, callback: IAdCallback?) {
+    override fun loadSplashAd(context: Context, adId: String, callback: IAdCallback?) {
         log("$TAG: Loading splash ad: $adId")
 
         val request = SplashAdRequest.Builder()
@@ -155,13 +119,13 @@ class BigoAdProvider : BaseAdProvider() {
         loader.loadAd(request)
     }
 
-    private fun showSplashAd(activity: Activity, callback: IAdCallback?) {
+    override fun showSplashAd(activity: Activity, callback: IAdCallback?) {
         showSplashAdInternal(splashAd, callback) {
             splashAd?.show( activity)
         }
     }
 
-    private fun loadInterstitialAd(adId: String, callback: IAdCallback?) {
+    override fun loadInterstitialAd(context: Context, adId: String, callback: IAdCallback?) {
         log("$TAG: Loading interstitial ad: $adId")
 
         val request = InterstitialAdRequest.Builder()
@@ -207,13 +171,13 @@ class BigoAdProvider : BaseAdProvider() {
         loader.loadAd(request)
     }
 
-    private fun showInterstitialAd(activity: Activity, callback: IAdCallback?) {
+    override fun showInterstitialAd(activity: Activity, callback: IAdCallback?) {
         showInterstitialAdInternal(interstitialAd, callback) {
             interstitialAd?.show(activity)
         }
     }
 
-    private fun loadRewardedAd(adId: String, callback: IAdCallback?) {
+    override fun loadRewardedAd(context: Context, adId: String, callback: IAdCallback?) {
         log("$TAG: Loading rewarded ad: $adId")
 
         val request = RewardVideoAdRequest.Builder()
@@ -264,13 +228,13 @@ class BigoAdProvider : BaseAdProvider() {
         loader.loadAd(request)
     }
 
-    private fun showRewardedAd(activity: Activity, callback: IAdCallback?) {
+    override fun showRewardedAd(activity: Activity, callback: IAdCallback?) {
         showRewardedAdInternal(rewardedAd, callback) {
             rewardedAd?.show(activity)
         }
     }
 
-    private fun loadBannerAd(adId: String, callback: IAdCallback?) {
+    override fun loadBannerAd(context: Context, adId: String, callback: IAdCallback?) {
         log("$TAG: Loading banner ad: $adId")
 
         try {
@@ -320,7 +284,7 @@ class BigoAdProvider : BaseAdProvider() {
         }
     }
 
-    private fun showBannerAd(container: ViewGroup?, callback: IAdCallback?) {
+    override fun showBannerAd(container: ViewGroup?, callback: IAdCallback?) {
         val ad = bannerAd
         showBannerInternal(ad?.adView(), container, callback)
     }

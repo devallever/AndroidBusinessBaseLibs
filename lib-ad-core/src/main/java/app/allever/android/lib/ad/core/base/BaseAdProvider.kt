@@ -13,6 +13,18 @@ import app.allever.android.lib.core.ext.logE
 
 abstract class BaseAdProvider : IAdProvider {
 
+    protected open fun loadSplashAd(context: Context, adId: String, callback: IAdCallback?) {}
+    protected open fun loadInterstitialAd(context: Context, adId: String, callback: IAdCallback?) {}
+    protected open fun loadRewardedAd(context: Context, adId: String, callback: IAdCallback?) {}
+    protected open fun loadBannerAd(context: Context, adId: String, callback: IAdCallback?) {}
+
+    protected open fun showSplashAd(activity: Activity, callback: IAdCallback?) {}
+    protected open fun showInterstitialAd(activity: Activity, callback: IAdCallback?) {}
+    protected open fun showRewardedAd(activity: Activity, callback: IAdCallback?) {}
+    protected open fun showBannerAd(container: ViewGroup?, callback: IAdCallback?) {}
+
+    protected abstract fun onDestroy()
+
     companion object {
         private const val TAG = "BaseAdProvider"
     }
@@ -224,21 +236,39 @@ abstract class BaseAdProvider : IAdProvider {
         }
     }
 
-    protected abstract fun doLoadAd(
+    protected open fun doLoadAd(
         context: Context,
         adType: AdType,
         adId: String,
         callback: IAdCallback?
-    )
+    ) {
+        when (adType) {
+            AdType.SPLASH -> loadSplashAd(context, adId, callback)
+            AdType.INTERSTITIAL -> loadInterstitialAd(context, adId, callback)
+            AdType.REWARD_VIDEO -> loadRewardedAd(context, adId, callback)
+            AdType.BANNER -> loadBannerAd(context, adId, callback)
+            else -> {
+                handleOnAdLoadFail(adType, -1, "${adType.name} not supported yet", callback)
+            }
+        }
+    }
 
-    protected abstract fun doShowAd(
+    protected open fun doShowAd(
         activity: Activity,
         adType: AdType,
         container: ViewGroup?,
         callback: IAdCallback?
-    )
-
-    protected open fun onDestroy() {}
+    ) {
+        when (adType) {
+            AdType.SPLASH -> showSplashAd(activity, callback)
+            AdType.INTERSTITIAL -> showInterstitialAd(activity, callback)
+            AdType.REWARD_VIDEO -> showRewardedAd(activity, callback)
+            AdType.BANNER -> showBannerAd(container, callback)
+            else -> {
+                log("${getProviderType()}: ${adType.name} show not implemented")
+            }
+        }
+    }
 
     protected fun cacheAd(adType: AdType, ad: Any) {
         adCache[adType] = ad
