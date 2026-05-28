@@ -215,7 +215,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             }
         }
 
-        AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL, null, object : IAdCallback {
+        AdManager.loadAd(requireContext(), AdType.INTERSTITIAL, object : IAdCallback {
             
             override fun onAdLoadedWithPrice(eCPM: Double) {
                 appendStatus("✅ Interstitial LOADED via BIDDING SIMULATION!")
@@ -285,7 +285,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             appendStatus("[BIDDING] Each provider will generate RANDOM simulated price")
         }
 
-        AdManager.loadAd(requireActivity(), AdType.REWARD_VIDEO, null, object : IAdCallback {
+        AdManager.loadAd(requireActivity(), AdType.REWARD_VIDEO, object : IAdCallback {
             
             override fun onAdLoadedWithPrice(eCPM: Double) {
                 appendStatus("✅ Reward Video LOADED via BIDDING SIMULATION!")
@@ -412,7 +412,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             }
         }
 
-        AdManager.loadAd(requireActivity(), AdType.SPLASH, null, object : IAdCallback {
+        AdManager.loadAd(requireActivity(), AdType.SPLASH,  object : IAdCallback {
 
             override fun onAdLoadedWithPrice(eCPM: Double) {
                 appendStatus("✅ Splash LOADED via BIDDING SIMULATION!")

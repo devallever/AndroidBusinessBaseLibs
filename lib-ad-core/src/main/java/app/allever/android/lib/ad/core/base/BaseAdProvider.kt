@@ -167,36 +167,27 @@ abstract class BaseAdProvider : IAdProvider {
                 log("$TAG: [BIDDING] Will request ALL bidding providers and select winner")
                 AdManager.preloadForBidding(App.context, adType)
             }
-
-            else -> {
-                val adId = getAdId(adType) ?: run {
-                    log("$TAG: No cached adId for ${adType.name}, cannot preload")
-                    return
-                }
-
-                log("$TAG: Preloading ${adType.name} from current provider (mode: ${AdManager.loadMode.name})")
-
-                doLoadAd(App.context, adType, adId, object : IAdCallback {
-                    override fun onAdLoaded() {
-                        log("$TAG: ${adType.name} preloaded successfully and cached")
-                    }
-
-                    override fun onAdFail(errorCode: Int, errorMessage: String) {
-                        log("$TAG: ${adType.name} preload failed: $errorMessage")
-                        removeCachedAd(adType)
-                    }
-                })
+            AdManager.LoadMode.WATERFALL -> {
+                log("$TAG: [WATERFALL MODE] Preloading ${adType.name} after dismiss")
+                AdManager.preloadForWaterfall(App.context, adType)
+            }
+            AdManager.LoadMode.SINGLE -> {
+                //log
+                log("$TAG: [SINGLE MODE] Preloading ${adType.name} after dismiss")
+                AdManager.preloadForSingle(App.context, adType)
             }
         }
     }
 
+    /**
+     * 检查缓存是否过期
+     */
     private fun isCacheExpired(adType: AdType): Boolean {
-        val cacheTime = adCacheTimeMap[adType] ?: return true
-        val age = System.currentTimeMillis() - cacheTime
+        val age = getCacheAge(adType)
         val expired = age > cacheExpireTimeMs
 
         if (expired) {
-            log("$TAG: ${adType.name} cache age: ${age}ms > expire time: ${cacheExpireTimeMs}ms")
+            logE("$TAG: ${adType.name} cache age: ${age}ms > expire time: ${cacheExpireTimeMs}ms")
         }
 
         return expired

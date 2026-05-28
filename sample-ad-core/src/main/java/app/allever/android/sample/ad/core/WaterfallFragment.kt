@@ -171,7 +171,7 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
             appendStatus("[WATERFALL] Will try providers in order until success...")
         }
 
-        AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL, null, object : IAdCallback {
+        AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL,  object : IAdCallback {
             override fun onAdLoaded() {
                 appendStatus("✓ Interstitial LOADED successfully!")
                 appendStatus("  Winner: ${AdManager.getActiveProviderType()}")
@@ -217,7 +217,7 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
         appendStatus("Loading REWARD VIDEO ad...")
         appendStatus("Mode: $mode")
 
-        AdManager.loadAd(requireActivity(), AdType.REWARD_VIDEO, null,object : IAdCallback {
+        AdManager.loadAd(requireActivity(), AdType.REWARD_VIDEO, object : IAdCallback {
             override fun onAdLoaded() {
                 appendStatus("✓ Reward Video LOADED!")
                 appendStatus("  Winner: ${AdManager.getActiveProviderType()}")
@@ -321,7 +321,7 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
             appendStatus("[WATERFALL] Will try providers in order until success...")
         }
 
-        AdManager.loadAd(requireActivity(), AdType.SPLASH, null, object : IAdCallback {
+        AdManager.loadAd(requireActivity(), AdType.SPLASH, object : IAdCallback {
             override fun onAdLoaded() {
                 appendStatus("✓ Splash LOADED successfully!")
                 appendStatus("  Winner: ${AdManager.getActiveProviderType()}")

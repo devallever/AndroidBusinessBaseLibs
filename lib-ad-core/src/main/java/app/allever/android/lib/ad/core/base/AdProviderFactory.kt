@@ -13,13 +13,28 @@ object AdProviderFactory {
         val config: AdProviderConfig
     )
 
+    /**
+     * 注册
+     * @param <providerType, Entity>
+     */
     private val providers = ConcurrentHashMap<String, ProviderEntry>()
 
+    /**
+     * 注册
+     * @param providerType
+     * @param providerClass
+     * @param config
+     */
     fun registerProvider(providerType: String, providerClass: Class<out IAdProvider>, config: AdProviderConfig) {
         providers[providerType] = ProviderEntry(providerClass, config)
         Log.d(TAG, "Registered ad provider: $providerType -> ${providerClass.simpleName}")
     }
 
+    /**
+     * 创建
+     * @param providerType
+     * @return
+     */
     fun createProvider(providerType: String): Pair<IAdProvider?, AdProviderConfig?> {
         val entry = providers[providerType] ?: run {
             Log.e(TAG, "No provider registered for type: $providerType")

@@ -91,21 +91,21 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
                 updateStatus("✓ Bigo initialized!")
                 logProviderStatus()
 
-                AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL)
-                AdManager.loadAd(requireActivity(), AdType.REWARD_VIDEO)
+                AdManager.loadAd(requireContext(), AdType.INTERSTITIAL)
+                AdManager.loadAd(requireContext(), AdType.REWARD_VIDEO)
             }
         }
     }
 
     private fun switchToProvider(providerType: String) {
-        val success = AdManager.switchProvider(providerType)
+        val success = AdManager.switchToProvider(providerType)
         
         if (success) {
             updateStatus("✓ Switched to: $providerType")
             
             runOnUiThread {
-                AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL)
-                AdManager.loadAd(requireActivity(), AdType.REWARD_VIDEO)
+                AdManager.loadAd(requireContext(), AdType.INTERSTITIAL)
+                AdManager.loadAd(requireContext(), AdType.REWARD_VIDEO)
             }
         } else {
             if (!AdManager.isProviderInitialized(providerType)) {

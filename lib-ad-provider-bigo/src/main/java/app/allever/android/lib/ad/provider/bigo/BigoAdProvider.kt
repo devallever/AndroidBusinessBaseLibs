@@ -273,6 +273,7 @@ class BigoAdProvider : BaseAdProvider() {
                 override fun onError(adError: AdError) {
                     log("$TAG: Rewarded ad failed to load: ${adError.code}")
                     callback?.onAdFail(adError.code, adError.message ?: "Load failed")
+                    removeCachedAd(AdType.REWARD_VIDEO)
                 }
 
                 override fun onAdLoaded(ad: RewardVideoAd) {
