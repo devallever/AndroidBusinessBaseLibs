@@ -313,22 +313,7 @@ abstract class BaseAdProvider : IAdProvider {
         log("$TAG: [PRELOAD] 📌 This is the ONLY time we preload - after user closes the ad")
         log("$TAG: [PRELOAD] Strategy: Use → Close → Preload next → Ready for next show")
 
-        when (AdManager.loadMode) {
-            AdManager.LoadMode.BIDDING -> {
-                log("$TAG: [BIDDING MODE] Re-bidding for ${adType.name} after dismiss")
-                log("$TAG: [BIDDING] Will request ALL bidding providers and select winner")
-                AdManager.preloadForBidding(App.context, adType)
-            }
-            AdManager.LoadMode.WATERFALL -> {
-                log("$TAG: [WATERFALL MODE] Preloading ${adType.name} after dismiss")
-                AdManager.preloadForWaterfall(App.context, adType)
-            }
-            AdManager.LoadMode.SINGLE -> {
-                //log
-                log("$TAG: [SINGLE MODE] Preloading ${adType.name} after dismiss")
-                AdManager.preloadForSingle(App.context, adType)
-            }
-        }
+        AdManager.currentStrategy.preload(App.context, adType)
     }
 
     /**
