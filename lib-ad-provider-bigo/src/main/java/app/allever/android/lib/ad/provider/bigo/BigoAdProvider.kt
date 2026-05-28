@@ -8,7 +8,6 @@ import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.core.ext.log
-import app.allever.android.lib.core.ext.logE
 import sg.bigo.ads.BigoAdSdk
 import sg.bigo.ads.api.AdConfig
 import sg.bigo.ads.api.AdError
@@ -45,24 +44,16 @@ class BigoAdProvider : BaseAdProvider() {
     override fun getProviderType(): String = PROVIDER_NAME
 
     override fun init(context: Context, config: AdProviderConfig, callback: (() -> Unit)?) {
-        log("$TAG: Initializing Bigo with appId: ${config.appId}")
+        initInternal(realInit = {
+            val bigoConfig = AdConfig.Builder()
+                .setAppId(config.appId)
+                .setDebug(true)
+                .build()
 
-        if (isInit()) {
-            log("$TAG: Bigo already initialized")
-            callback?.invoke()
-            return
-        }
-
-        val bigoConfig = AdConfig.Builder()  // ✅ 现在 Bigo 的 AdConfig 不会冲突了！
-            .setAppId(config.appId)
-            .setDebug(true)
-            .build()
-
-        BigoAdSdk.initialize(context, bigoConfig) {
-            isInitialized = true
-            log("$TAG: Bigo initialized successfully")
-            callback?.invoke()
-        }
+            BigoAdSdk.initialize(context, bigoConfig) {
+                finishInit(callback)
+            }
+        }, callback)
     }
 
     override fun doLoadAd(
@@ -118,35 +109,25 @@ class BigoAdProvider : BaseAdProvider() {
         val loader = SplashAdLoader.Builder()
             .withAdLoadListener(object : AdLoadListener<SplashAd> {
                 override fun onError(adError: AdError) {
-                    log("$TAG: Splash ad failed to load: ${adError.code}")
-                    callback?.onAdFail(adError.code, adError.message ?: "Load failed")
+                    handleOnAdLoadFail(AdType.SPLASH, adError.code, adError.message, callback)
                 }
 
                 override fun onAdLoaded(ad: SplashAd) {
-                    log("$TAG: Splash ad loaded successfully")
                     splashAd = ad
-                    cacheAd(AdType.SPLASH, ad)
-
-                    val simulatedECPM = generateSimulatedPrice()
-                    log("$TAG: Splash ad (simulated eCPM: $$simulatedECPM)")
-                    callback?.onAdLoadedWithPrice(simulatedECPM)
+                    handleOnAdLoaded(AdType.SPLASH, ad,  callback)
 
                     ad.setAdInteractionListener(object : SplashAdInteractionListener {
                         override fun onAdError(adError: AdError) {
-                            log("$TAG: Splash ad error: ${adError.code}")
                             splashAd = null
-                            removeCachedAd(AdType.SPLASH)
-                            callback?.onAdFail(adError.code, adError.message ?: "Ad error")
+                            handleOnAdLoadFail(AdType.SPLASH, adError.code, adError.message, callback)
                         }
 
                         override fun onAdImpression() {
-                            log("$TAG: Splash ad showed")
-                            callback?.onAdShow()
+                            handleOnAdShow(AdType.SPLASH,  callback)
                         }
 
                         override fun onAdClicked() {
-                            log("$TAG: Splash ad clicked")
-                            callback?.onAdClick()
+                            handleOnAdClick(AdType.SPLASH,  callback)
                         }
 
                         override fun onAdOpened() {
@@ -158,12 +139,8 @@ class BigoAdProvider : BaseAdProvider() {
                         }
 
                         override fun onAdSkipped() {
-                            log("$TAG: Splash ad skipped")
                             splashAd = null
-                            removeCachedAd(AdType.SPLASH)
-                            callback?.onAdDismiss()
-
-                            preloadAdOnDismiss(AdType.SPLASH)
+                            handleAdDismissed(AdType.SPLASH,  callback)
                         }
 
                         override fun onAdFinished() {
@@ -179,17 +156,8 @@ class BigoAdProvider : BaseAdProvider() {
     }
 
     private fun showSplashAd(activity: Activity, callback: IAdCallback?) {
-        splashAd?.let { ad ->
-            try {
-                ad.show(activity)
-                callback?.onAdShow()
-            } catch (e: Exception) {
-                logE("$TAG: Error showing splash ad", e.message)
-                callback?.onAdFail(-1, e.message ?: "Unknown error")
-            }
-        } ?: run {
-            log("$TAG: Splash ad not ready")
-            callback?.onAdFail(-1, "Splash ad not loaded")
+        showSplashAdInternal(splashAd, callback) {
+            splashAd?.show( activity)
         }
     }
 
@@ -203,48 +171,33 @@ class BigoAdProvider : BaseAdProvider() {
         val loader = InterstitialAdLoader.Builder()
             .withAdLoadListener(object : AdLoadListener<InterstitialAd> {
                 override fun onError(adError: AdError) {
-                    log("$TAG: Interstitial ad failed to load: ${adError.code}")
-                    callback?.onAdFail(adError.code, adError.message ?: "Load failed")
+                    handleOnAdLoadFail(AdType.INTERSTITIAL, adError.code, adError.message, callback)
                 }
 
                 override fun onAdLoaded(ad: InterstitialAd) {
-                    log("$TAG: Interstitial ad loaded successfully")
                     interstitialAd = ad
-                    cacheAd(AdType.INTERSTITIAL, ad)
-                    
-                    val simulatedECPM = generateSimulatedPrice()
-                    log("$TAG: Interstitial ad (simulated eCPM: $$simulatedECPM)")
-                    callback?.onAdLoadedWithPrice(simulatedECPM)
+                    handleOnAdLoaded(AdType.INTERSTITIAL, ad, callback)
 
                     ad.setAdInteractionListener(object : AdInteractionListener {
                         override fun onAdError(adError: AdError) {
-                            log("$TAG: Interstitial ad error: ${adError.code}")
                             interstitialAd = null
-                            removeCachedAd(AdType.INTERSTITIAL)
-                            callback?.onAdFail(adError.code, adError.message ?: "Ad error")
+                            handleOnAdShowFail(AdType.INTERSTITIAL, adError.code, adError.message, callback)
                         }
 
                         override fun onAdImpression() {
-                            log("$TAG: Interstitial ad showed")
-                            callback?.onAdShow()
+                            handleOnAdShow(AdType.INTERSTITIAL, callback)
                         }
 
                         override fun onAdClicked() {
-                            log("$TAG: Interstitial ad clicked")
-                            callback?.onAdClick()
+                            handleOnAdClick(AdType.INTERSTITIAL, callback)
                         }
 
                         override fun onAdOpened() {
-                            log("$TAG: Interstitial ad opened")
                         }
 
                         override fun onAdClosed() {
-                            log("$TAG: Interstitial ad dismissed")
                             interstitialAd = null
-                            removeCachedAd(AdType.INTERSTITIAL)
-                            callback?.onAdDismiss()
-
-                            preloadAdOnDismiss(AdType.INTERSTITIAL)
+                            handleAdDismissed(AdType.INTERSTITIAL, callback)
                         }
                     })
                 }
@@ -255,9 +208,8 @@ class BigoAdProvider : BaseAdProvider() {
     }
 
     private fun showInterstitialAd(activity: Activity, callback: IAdCallback?) {
-        interstitialAd?.show(activity) ?: run {
-            log("$TAG: Interstitial ad not ready")
-            callback?.onAdFail(-1, "Interstitial ad not loaded")
+        showInterstitialAdInternal(interstitialAd, callback) {
+            interstitialAd?.show(activity)
         }
     }
 
@@ -271,53 +223,37 @@ class BigoAdProvider : BaseAdProvider() {
         val loader = RewardVideoAdLoader.Builder()
             .withAdLoadListener(object : AdLoadListener<RewardVideoAd> {
                 override fun onError(adError: AdError) {
-                    log("$TAG: Rewarded ad failed to load: ${adError.code}")
-                    callback?.onAdFail(adError.code, adError.message ?: "Load failed")
-                    removeCachedAd(AdType.REWARD_VIDEO)
+                    handleOnAdLoadFail(AdType.REWARD_VIDEO, adError.code, adError.message, callback)
                 }
 
                 override fun onAdLoaded(ad: RewardVideoAd) {
-                    log("$TAG: Rewarded ad loaded successfully")
                     rewardedAd = ad
-                    cacheAd(AdType.REWARD_VIDEO, ad)
-                    val simulatedECPM = generateSimulatedPrice()
-                    log("${TAG}: Rewarded ad (simulated eCPM: $$simulatedECPM)")
-                    callback?.onAdLoadedWithPrice(simulatedECPM)
+                    handleOnAdLoaded(AdType.REWARD_VIDEO, ad, callback)
 
                     ad.setAdInteractionListener(object : RewardAdInteractionListener {
                         override fun onAdError(adError: AdError) {
-                            log("$TAG: Rewarded ad error: ${adError.code}")
                             rewardedAd = null
-                            removeCachedAd(AdType.REWARD_VIDEO)
-                            callback?.onAdFail(adError.code, adError.message ?: "Ad error")
+                            handleOnAdShowFail(AdType.REWARD_VIDEO, adError.code, adError.message, callback)
                         }
 
                         override fun onAdImpression() {
-                            log("$TAG: Rewarded ad showed")
-                            callback?.onAdShow()
+                            handleOnAdShow(AdType.REWARD_VIDEO, callback)
                         }
 
                         override fun onAdClicked() {
-                            log("$TAG: Rewarded ad clicked")
-                            callback?.onAdClick()
+                            handleOnAdClick(AdType.REWARD_VIDEO, callback)
                         }
 
                         override fun onAdOpened() {
-                            log("$TAG: Rewarded ad opened")
                         }
 
                         override fun onAdClosed() {
-                            log("$TAG: Rewarded ad dismissed")
                             rewardedAd = null
-                            removeCachedAd(AdType.REWARD_VIDEO)
-                            callback?.onAdDismiss()
-
-                            preloadAdOnDismiss(AdType.REWARD_VIDEO)
+                            handleAdDismissed(AdType.REWARD_VIDEO, callback)
                         }
 
                         override fun onAdRewarded() {
-                            log("$TAG: User earned reward from Bigo")
-                            callback?.onAdRewarded(1, "coins")
+                            handleOnAdRewarded(AdType.REWARD_VIDEO, 1, "conins", callback)
                         }
 
                     })
@@ -329,9 +265,8 @@ class BigoAdProvider : BaseAdProvider() {
     }
 
     private fun showRewardedAd(activity: Activity, callback: IAdCallback?) {
-        rewardedAd?.show(activity) ?: run {
-            log("$TAG: Rewarded ad not ready")
-            callback?.onAdFail(-1, "Rewarded ad not loaded")
+        showRewardedAdInternal(rewardedAd, callback) {
+            rewardedAd?.show(activity)
         }
     }
 
@@ -347,40 +282,32 @@ class BigoAdProvider : BaseAdProvider() {
             val loader = BannerAdLoader.Builder()
                 .withAdLoadListener(object : AdLoadListener<BannerAd> {
                     override fun onError(adError: AdError) {
-                        log("$TAG: Banner ad failed to load: ${adError.code}")
-                        callback?.onAdFail(adError.code, adError.message ?: "Load failed")
+                        handleOnAdLoadFail(AdType.BANNER, adError.code, adError.message, callback)
                     }
 
                     override fun onAdLoaded(ad: BannerAd) {
-                        log("$TAG: Banner ad loaded successfully")
                         bannerAd = ad
-                        cacheAd(AdType.BANNER, ad)
-                        callback?.onAdLoaded()
+                        handleOnAdLoaded(AdType.BANNER, ad, callback)
 
                         ad.setAdInteractionListener(object : AdInteractionListener {
                             override fun onAdError(adError: AdError) {
-                                log("$TAG: Banner ad error: ${adError.code}")
                                 bannerAd = null
-                                removeCachedAd(AdType.BANNER)
-                                callback?.onAdFail(adError.code, adError.message ?: "Ad error")
+                                handleOnAdShowFail(AdType.BANNER, adError.code, adError.message, callback)
                             }
 
                             override fun onAdImpression() {
-                                log("$TAG: Banner ad showed")
-                                callback?.onAdShow()
+                                handleOnAdShow(AdType.BANNER, callback)
                             }
 
                             override fun onAdClicked() {
-                                log("$TAG: Banner ad clicked")
-                                callback?.onAdClick()
+                                handleOnAdClick(AdType.BANNER, callback)
                             }
 
                             override fun onAdOpened() {
-                                log("$TAG: Banner ad opened")
                             }
 
                             override fun onAdClosed() {
-                                log("$TAG: Banner ad closed")
+                                handleAdDismissed(AdType.BANNER, callback)
                             }
                         })
                     }
@@ -389,34 +316,12 @@ class BigoAdProvider : BaseAdProvider() {
 
             loader.loadAd(request)
         } catch (e: Exception) {
-            logE("$TAG: Error loading banner ad", e.message)
-            callback?.onAdFail(-1, e.message ?: "Unknown error")
+            handleOnAdShowFail(AdType.BANNER, -1, e.message ?: "Unknown error", callback)
         }
     }
 
     private fun showBannerAd(container: ViewGroup?, callback: IAdCallback?) {
         val ad = bannerAd
-
-        if (ad == null || container == null) {
-            log("$TAG: Banner ad or container not ready")
-            callback?.onAdFail(-1, "Banner ad not ready")
-            return
-        }
-
-        try {
-            container.removeAllViews()
-            container.addView(ad.adView())
-            log("$TAG: Banner ad showed in container")
-            callback?.onAdShow()
-        } catch (e: Exception) {
-            logE("$TAG: Error showing banner ad", e.message)
-            callback?.onAdFail(-1, e.message ?: "Unknown error")
-        }
-    }
-
-    private fun generateSimulatedPrice(): Double {
-        val minPrice = 1.0
-        val maxPrice = 5.0
-        return minPrice + (Math.random() * (maxPrice - minPrice))
+        showBannerInternal(ad?.adView(), container, callback)
     }
 }

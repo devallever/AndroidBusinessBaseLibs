@@ -2,6 +2,7 @@ package app.allever.android.lib.ad.core.base
 
 import android.app.Activity
 import android.content.Context
+import android.view.View
 import android.view.ViewGroup
 import app.allever.android.lib.ad.core.AdManager
 import app.allever.android.lib.ad.core.callback.IAdCallback
@@ -102,6 +103,127 @@ abstract class BaseAdProvider : IAdProvider {
         onDestroy()
     }
 
+    protected fun initInternal(
+        realInit: () -> Unit,
+        callback: (() -> Unit)?
+    ) {
+        val providerType = getProviderType()
+        log("${TAG}: $providerType Initializing...")
+
+        if (isInit()) {
+            log("${TAG}: $providerType already initialized")
+            callback?.invoke()
+            return
+        }
+
+        realInit.invoke()
+    }
+
+    protected fun finishInit(callback: (() -> Unit)?) {
+        isInitialized = true
+        val providerType = getProviderType()
+        log("${TAG}: $providerType initialized successfully")
+        callback?.invoke()
+    }
+
+    protected fun handleOnAdLoaded(adType: AdType, ad: Any, callback: IAdCallback?) {
+        val providerType = getProviderType()
+        log("${TAG}: $providerType ${adType.name} ad loaded successfully")
+        cacheAd(adType, ad)
+        val simulatedECPM = generateSimulatedPrice()
+        log("${TAG}: $providerType ${adType.name} ad (simulated eCPM: $$simulatedECPM)")
+        callback?.onAdLoadedWithPrice(simulatedECPM)
+    }
+
+    protected fun handleOnAdLoadFail(adType: AdType, errorCode: Int, errorMessage: String, callback: IAdCallback?) {
+        val providerType = getProviderType()
+        log("${TAG}: $providerType ${adType.name} ad failed to load: $errorMessage")
+        callback?.onAdFail(errorCode,errorMessage)
+    }
+
+    protected fun handleOnAdShow(adType: AdType, callback: IAdCallback?) {
+        val providerType = getProviderType()
+        log("${TAG}: $providerType ${adType.name} ad showed")
+        callback?.onAdShow()
+    }
+
+    protected fun handleOnAdShowFail(adType: AdType, errorCode: Int, errorMessage: String, callback: IAdCallback?) {
+        val providerType = getProviderType()
+        log("${TAG}: $providerType ${adType.name} ad failed to show: $errorMessage")
+        callback?.onAdFail(errorCode,errorMessage)
+    }
+
+    //click
+    protected fun handleOnAdClick(adType: AdType, callback: IAdCallback?) {
+        val providerType = getProviderType()
+        log("${TAG}: $providerType ${adType.name} ad clicked")
+        callback?.onAdClick()
+    }
+
+    protected fun handleAdDismissed(adType: AdType, callback: IAdCallback?) {
+        val providerType = getProviderType()
+        log("${TAG}: $providerType ${adType.name} ad dismissed")
+        removeCachedAd(adType)
+        callback?.onAdDismiss()
+        preloadAdOnDismiss(adType)
+    }
+
+    protected fun handleOnAdRewarded(adType: AdType, rewardAmount: Int, rewardName: String, callback: IAdCallback?) {
+        val providerType = getProviderType()
+        log("${TAG}:${adType.name}: User earned reward from $providerType ")
+        callback?.onAdRewarded(rewardAmount, rewardName)
+    }
+
+    protected fun showBannerInternal(bannerView: View?, container: ViewGroup?, callback: IAdCallback?) {
+        if (bannerView == null || container == null) {
+            handleOnAdShowFail(AdType.BANNER, -1, "Banner ad not ready", callback)
+            return
+        }
+
+        try {
+            container.removeAllViews()
+            container.addView(bannerView)
+            handleOnAdShow(AdType.BANNER, callback)
+        } catch (e: Exception) {
+            handleOnAdShowFail(AdType.BANNER, -1, e.message ?: "Unknown error", callback)
+        }
+    }
+
+    protected fun showSplashAdInternal( splashAd: Any?, callback: IAdCallback?, realShow:() -> Unit) {
+        splashAd?.let { ad ->
+            try {
+                realShow.invoke()
+                callback?.onAdShow()
+            } catch (e: Exception) {
+                handleOnAdShowFail(AdType.SPLASH, -1, e.message ?: "Unknown error", callback)
+            }
+        } ?: run {
+            handleOnAdShowFail(AdType.SPLASH, -1, "Splash ad not ready",  callback)
+        }
+    }
+
+    protected fun showInterstitialAdInternal(interstitialAd: Any?, callback: IAdCallback?, realShow:() -> Unit) {
+        interstitialAd?.let { ad ->
+            try {
+                realShow.invoke()
+                callback?.onAdShow()
+            } catch (e: Exception) {
+                handleOnAdShowFail(AdType.INTERSTITIAL, -1, e.message ?: "Unknown error", callback)
+            }
+        }
+    }
+
+    protected fun showRewardedAdInternal(rewardedAd: Any?, callback: IAdCallback?, realShow:() -> Unit) {
+        rewardedAd?.let { ad ->
+            try {
+                realShow.invoke()
+                callback?.onAdShow()
+            } catch (e: Exception) {
+                handleOnAdShowFail(AdType.REWARD_VIDEO, -1, e.message ?: "Unknown error", callback)
+            }
+        }
+    }
+
     protected abstract fun doLoadAd(
         context: Context,
         adType: AdType,
@@ -196,5 +318,11 @@ abstract class BaseAdProvider : IAdProvider {
     private fun getCacheAge(adType: AdType): Long {
         val cacheTime = adCacheTimeMap[adType] ?: return -1
         return System.currentTimeMillis() - cacheTime
+    }
+
+    protected fun generateSimulatedPrice(): Double {
+        val minPrice = 1.0
+        val maxPrice = 5.0
+        return minPrice + (Math.random() * (maxPrice - minPrice))
     }
 }
