@@ -32,56 +32,34 @@ class BiddingModeStrategy : BaseModeStrategy() {
         val errorMessage: String = ""
     )
 
+
     override fun loadAd(
         context: Context,
         adType: AdType,
         callback: IAdCallback?
     ) {
-        log("$TAG: [BIDDING] Starting bidding for ${adType.name}")
-        log("$TAG: [BIDDING] === BIDDING WITH COROUTINES ===")
-        log("$TAG: [BIDDING] Using coroutineScope + async for parallel requests")
+        executeBidding(
+            context = context,
+            adType = adType,
+            callback = callback,
+            isPreload = false,
+            logPrefix = "[BIDDING]",
+            checkMode = false
+        )
+    }
 
-        val biddingProviders = getProviders()
-
-        if (biddingProviders.isEmpty()) {
-            logE("$TAG: [BIDDING] No providers with bidding support available")
-            val activeProvider = getActiveProvider()
-            if (activeProvider != null) {
-                log("$TAG: [BIDDING] Falling back to single provider mode")
-                strategyPool[LoadMode.SINGLE]?.loadAd(context, adType, callback)
-            } else {
-                callback?.onAdFail(-1, "No available providers for bidding")
-            }
-            return
-        }
-
-        log("$TAG: [BIDDING] Parallel loading ${biddingProviders.size} providers with coroutines...")
-
-        CoroutineScope(Dispatchers.Main).launch {
-            var results: Map<String, BiddingEntry> = emptyMap()
-
-            try {
-                val timeout = getBiddingTimeout(biddingProviders)
-
-                results = withTimeout(timeout) {
-                    parallelBiddingRequest(biddingProviders, context, adType)
-                }
-
-                handleBiddingResults(results, adType, callback, isPreload = false)
-
-            } catch (e: TimeoutCancellationException) {
-                logE("$TAG: [BIDDING] ⏰ TIMEOUT! (${getBiddingTimeout(biddingProviders)}ms)")
-                if (results.isEmpty()) {
-                    callback?.onAdFail(-1, "Bidding timeout")
-                } else {
-                    handleBiddingResults(results, adType, callback, isPreload = false)
-                }
-
-            } catch (e: Exception) {
-                logE("$TAG: [BIDDING] ❌ Error: ${e.message}")
-                callback?.onAdFail(-1, e.message ?: "Unknown error")
-            }
-        }
+    override fun preload(
+        context: Context,
+        adType: AdType
+    ) {
+        executeBidding(
+            context = context,
+            adType = adType,
+            callback = null,
+            isPreload = true,
+            logPrefix = "[PRELOAD-BIDDING]",
+            checkMode = true
+        )
     }
 
     override fun checkCache(
@@ -101,26 +79,54 @@ class BiddingModeStrategy : BaseModeStrategy() {
         return false
     }
 
-    override fun preload(
-        context: Context,
-        adType: AdType
-    ) {
-        log("${TAG}: [PRELOAD-BIDDING] Starting pre-bidding for ${adType.name}")
-        log("${TAG}: [PRELOAD-BIDDING] Purpose: Re-bid after ad dismiss to find new winner")
 
-        if (loadMode != LoadMode.BIDDING) {
-            logE("${TAG}: [PRELOAD-BIDDING] ERROR: Current mode is ${loadMode.name}, not BIDDING")
+    override fun getProviders(): List<Pair<String, AdProviderConfig>> {
+        return AdProviderFactory.getAllConfigs()
+            .filter { (_, config) -> config.supportBidding }
+            .filter { (type, _) -> providerPool.containsKey(type) }
+            .toList()
+    }
+
+    private fun executeBidding(
+        context: Context,
+        adType: AdType,
+        callback: IAdCallback?,
+        isPreload: Boolean,
+        logPrefix: String,
+        checkMode: Boolean = false
+    ) {
+        log("$TAG: $logPrefix Starting ${if (isPreload) "pre-" else ""}bidding for ${adType.name}")
+
+        if (!isPreload) {
+            log("$TAG: $logPrefix === BIDDING WITH COROUTINES ===")
+            log("$TAG: $logPrefix Using coroutineScope + async for parallel requests")
+        } else {
+            log("$TAG: $logPrefix Purpose: Re-bid after ad dismiss to find new winner")
+        }
+
+        if (checkMode && loadMode != LoadMode.BIDDING) {
+            logE("$TAG: $logPrefix ERROR: Current mode is ${loadMode.name}, not BIDDING")
             return
         }
 
         val biddingProviders = getProviders()
 
         if (biddingProviders.isEmpty()) {
-            logE("${TAG}: [PRELOAD-BIDDING] No bidding providers available")
+            logE("$TAG: $logPrefix No providers with bidding support available")
+
+            if (!isPreload && callback != null) {
+                val activeProvider = getActiveProvider()
+                if (activeProvider != null) {
+                    log("$TAG: $logPrefix Falling back to single provider mode")
+                    strategyPool[LoadMode.SINGLE]?.loadAd(context, adType, callback)
+                } else {
+                    callback.onAdFail(-1, "No available providers for bidding")
+                }
+            }
             return
         }
 
-        log("${TAG}: [PRELOAD-BIDDING] Parallel requesting ${biddingProviders.size} providers with coroutines...")
+        log("$TAG: $logPrefix Parallel ${if (isPreload) "requesting" else "loading"} ${biddingProviders.size} providers with coroutines...")
 
         CoroutineScope(Dispatchers.Main).launch {
             var results: Map<String, BiddingEntry> = emptyMap()
@@ -132,22 +138,27 @@ class BiddingModeStrategy : BaseModeStrategy() {
                     parallelBiddingRequest(biddingProviders, context, adType)
                 }
 
-                handleBiddingResults(results, adType, null, isPreload = true)
+                handleBiddingResults(results, adType, callback, isPreload, logPrefix)
 
             } catch (e: TimeoutCancellationException) {
-                logE("$TAG: [PRELOAD-BIDDING] ⏰ TIMEOUT!")
+                logE("$TAG: $logPrefix ⏰ TIMEOUT! (${getBiddingTimeout(biddingProviders)}ms)")
+
+                if (!isPreload) {
+                    if (results.isEmpty()) {
+                        callback?.onAdFail(-1, "Bidding timeout")
+                    } else {
+                        handleBiddingResults(results, adType, callback, isPreload, logPrefix)
+                    }
+                }
 
             } catch (e: Exception) {
-                logE("$TAG: [PRELOAD-BIDDING] ❌ Error: ${e.message}")
+                logE("$TAG: $logPrefix ❌ Error: ${e.message}")
+
+                if (!isPreload) {
+                    callback?.onAdFail(-1, e.message ?: "Unknown error")
+                }
             }
         }
-    }
-
-    override fun getProviders(): List<Pair<String, AdProviderConfig>> {
-        return AdProviderFactory.getAllConfigs()
-            .filter { (_, config) -> config.supportBidding }
-            .filter { (type, _) -> providerPool.containsKey(type) }
-            .toList()
     }
 
     private suspend fun parallelBiddingRequest(
@@ -236,12 +247,11 @@ class BiddingModeStrategy : BaseModeStrategy() {
         results: Map<String, BiddingEntry>,
         adType: AdType,
         callback: IAdCallback?,
-        isPreload: Boolean
+        isPreload: Boolean,
+        logPrefix: String
     ) {
-        val modeTag = if (isPreload) "[PRELOAD-BIDDING]" else "[BIDDING]"
-
-        log("$TAG: $modeTag === ${if (isPreload) "PRE-LOAD" else "BIDDING"} COMPLETED ===")
-        log("$TAG: $modeTag Total responses: ${results.size}")
+        log("$TAG: $logPrefix === ${if (isPreload) "PRE-LOAD" else "BIDDING"} COMPLETED ===")
+        log("$TAG: $logPrefix Total responses: ${results.size}")
 
         val winner = results.entries
             .filter { it.value.success }
@@ -264,25 +274,25 @@ class BiddingModeStrategy : BaseModeStrategy() {
 
             val actionLabel = if (isPreload) "PRE-LOADED" else "WINNER"
 
-            log("$TAG: $modeTag 🏆 $actionLabel: ${result.providerType}" +
+            log("$TAG: $logPrefix 🏆 $actionLabel: ${result.providerType}" +
                     " | Price: $${result.formattedPrice}" +
                     " | Source: $priceSource")
 
             switchToProvider(winner.key)
 
             if (isPreload) {
-                log("$TAG: $modeTag ✅ Preload successful! Next ad will use: ${winner.key}")
-                log("$TAG: $modeTag 📦 Ad cached and ready for next show()")
+                log("$TAG: $logPrefix ✅ Preload successful! Next ad will use: ${winner.key}")
+                log("$TAG: $logPrefix 📦 Ad cached and ready for next show()")
             } else {
                 callback?.onAdLoadedWithPrice(result.eCPM)
             }
 
         } else {
-            logE("$TAG: $modeTag ❌ ALL PROVIDERS FAILED")
+            logE("$TAG: $logPrefix ❌ ALL PROVIDERS FAILED")
             if (!isPreload) {
                 callback?.onAdFail(-1, "All bidding providers failed")
             } else {
-                logE("$TAG: $modeTag ⚠️  Preload failed - no ad available for next request")
+                logE("$TAG: $logPrefix ⚠️  Preload failed - no ad available for next request")
             }
         }
 

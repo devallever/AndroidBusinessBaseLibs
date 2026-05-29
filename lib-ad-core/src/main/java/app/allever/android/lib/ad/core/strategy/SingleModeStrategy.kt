@@ -36,29 +36,6 @@ class SingleModeStrategy: BaseModeStrategy() {
         provider.loadAd(context, adType, actualAdId, callback)
     }
 
-    override fun checkCache(
-        adType: AdType,
-        callback: IAdCallback?
-    ): Boolean {
-        val provider = getActiveProvider() ?: run {
-            logE("${TAG}: [CACHE-SINGLE] No active provider, cannot check cache")
-            return false
-        }
-
-        if (provider.isReady(adType)) {
-            log("${TAG}: [CACHE-SINGLE] Provider ${provider.getProviderType()} has valid cache")
-
-            //TODO CHECK 没必要切换了吧
-            switchToProvider(provider.getProviderType())
-            callback?.onAdLoaded()
-
-            return true
-        }
-
-        log("${TAG}: [CACHE-SINGLE] No valid cache in current provider")
-        return false
-    }
-
     override fun preload(
         context: Context,
         adType: AdType
@@ -84,6 +61,29 @@ class SingleModeStrategy: BaseModeStrategy() {
 //                (provider as? BaseAdProvider)?.removeCachedAd(adType)
             }
         })
+    }
+
+    override fun checkCache(
+        adType: AdType,
+        callback: IAdCallback?
+    ): Boolean {
+        val provider = getActiveProvider() ?: run {
+            logE("${TAG}: [CACHE-SINGLE] No active provider, cannot check cache")
+            return false
+        }
+
+        if (provider.isReady(adType)) {
+            log("${TAG}: [CACHE-SINGLE] Provider ${provider.getProviderType()} has valid cache")
+
+            //TODO CHECK 没必要切换了吧
+            switchToProvider(provider.getProviderType())
+            callback?.onAdLoaded()
+
+            return true
+        }
+
+        log("${TAG}: [CACHE-SINGLE] No valid cache in current provider")
+        return false
     }
 
     override fun getProviders(): List<Pair<String, AdProviderConfig>> {

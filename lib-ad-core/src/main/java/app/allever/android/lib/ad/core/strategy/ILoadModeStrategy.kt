@@ -8,9 +8,9 @@ import app.allever.android.lib.ad.core.type.AdType
 interface ILoadModeStrategy {
     fun loadAd(context: Context, adType: AdType, callback: IAdCallback?)
 
-    fun checkCache(adType: AdType, callback: IAdCallback?): Boolean
-
     fun preload(context: Context, adType: AdType)
+
+    fun checkCache(adType: AdType, callback: IAdCallback?): Boolean
 
     fun getProviders(): List<Pair<String, AdProviderConfig>>
 }
