@@ -17,6 +17,8 @@ package app.allever.android.lib.core.util;
  */
 
 
+import java.nio.charset.StandardCharsets;
+
 public class Base64 {
 
     /**
@@ -263,7 +265,7 @@ public class Base64 {
             }
         } // end finally
 
-        return new String(baos.toByteArray());
+        return baos.toString();
     } // end encode
 
 
@@ -341,7 +343,7 @@ public class Base64 {
             e += 4;
         }   // end if: some padding needed
 
-        return new String(outBuff, 0, e, "iso-8859-1");
+        return new String(outBuff, 0, e, StandardCharsets.ISO_8859_1);
     }   // end encodeBytes
 
 
@@ -480,7 +482,7 @@ public class Base64 {
      * @since 1.4
      */
     public static byte[] decode(String s) throws Exception {
-        byte[] bytes = s.getBytes("iso-8859-1");
+        byte[] bytes = s.getBytes(StandardCharsets.ISO_8859_1);
         return decode(bytes, 0, bytes.length);
     }   // end decode
 
@@ -608,7 +610,6 @@ public class Base64 {
             str = str.replaceAll("=", ":")
                     .replaceAll("/", "_")
                     .replaceAll("\\+", "-");
-            ;
         }
         return str;
     }
@@ -630,7 +631,6 @@ public class Base64 {
             str = str.replaceAll(":", "=")
                     .replaceAll("_", "/")
                     .replaceAll("-", "+");
-            ;
         }
         return str;
     }
@@ -645,13 +645,13 @@ public class Base64 {
      * @since 1.3
      */
     public static class InputStream extends java.io.FilterInputStream {
-        private boolean encode;         // Encoding or decoding
+        private final boolean encode;         // Encoding or decoding
         private int position;       // Current position in the buffer
-        private byte[] buffer;         // Small buffer holding converted data
-        private int bufferLength;   // Length of buffer (3 or 4)
+        private final byte[] buffer;         // Small buffer holding converted data
+        private final int bufferLength;   // Length of buffer (3 or 4)
         private int numSigBytes;    // Number of meaningful bytes in the buffer
         private int lineLength;
-        private boolean breakLines;     // Break lines at less than 80 characters
+        private final boolean breakLines;     // Break lines at less than 80 characters
 
 
         /**
@@ -852,12 +852,12 @@ public class Base64 {
      * @since 1.3
      */
     public static class OutputStream extends java.io.FilterOutputStream {
-        private boolean encode;
+        private final boolean encode;
         private int position;
         private byte[] buffer;
-        private int bufferLength;
+        private final int bufferLength;
         private int lineLength;
-        private boolean breakLines;
+        private final boolean breakLines;
 
 
         /**

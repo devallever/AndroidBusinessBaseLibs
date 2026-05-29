@@ -1,6 +1,5 @@
 package app.allever.android.sample.adjust
 
-import androidx.annotation.StringRes
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE

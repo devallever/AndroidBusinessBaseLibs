@@ -1,4 +1,3 @@
 package app.allever.android.lib.mvvm
 
-class MVVM {
-}
+class MVVM

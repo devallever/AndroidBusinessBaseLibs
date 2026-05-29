@@ -5,7 +5,7 @@ import app.allever.android.lib.core.helper.FragmentHelper
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.ad.core.databinding.ActivityProviderTabBinding
 
-class SingleProviderTabActivity: BaseActivity<ActivityProviderTabBinding, BaseViewModel>() {
+class SingleProviderTabActivity : BaseActivity<ActivityProviderTabBinding, BaseViewModel>() {
     override fun inflateChildBinding() = ActivityProviderTabBinding.inflate(layoutInflater)
 
     override fun init() {

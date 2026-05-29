@@ -5,7 +5,12 @@ import android.content.Context
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import app.allever.android.lib.core.function.crash.compat.*
+import app.allever.android.lib.core.function.crash.compat.ActivityKillerV15_V20
+import app.allever.android.lib.core.function.crash.compat.ActivityKillerV21_V23
+import app.allever.android.lib.core.function.crash.compat.ActivityKillerV24_V25
+import app.allever.android.lib.core.function.crash.compat.ActivityKillerV26
+import app.allever.android.lib.core.function.crash.compat.ActivityKillerV28
+import app.allever.android.lib.core.function.crash.compat.IActivityKiller
 
 /**
  * Created by wanjian on 2017/2/14.
@@ -77,8 +82,6 @@ object Cockroach {
         val STOP_ACTIVITY_HIDE = 104
         val RESUME_ACTIVITY = 107
         val DESTROY_ACTIVITY = 109
-        val NEW_INTENT = 112
-        val RELAUNCH_ACTIVITY = 126
         val activityThreadClass = Class.forName("android.app.ActivityThread")
         val activityThread =
             activityThreadClass.getDeclaredMethod("currentActivityThread").invoke(null)
@@ -111,6 +114,7 @@ object Cockroach {
                     }
                     return@Callback true
                 }
+
                 RESUME_ACTIVITY -> {
                     try {
                         mhHandler.handleMessage(msg)
@@ -120,6 +124,7 @@ object Cockroach {
                     }
                     return@Callback true
                 }
+
                 PAUSE_ACTIVITY_FINISHING -> {
                     try {
                         mhHandler.handleMessage(msg)
@@ -129,6 +134,7 @@ object Cockroach {
                     }
                     return@Callback true
                 }
+
                 PAUSE_ACTIVITY -> {
                     try {
                         mhHandler.handleMessage(msg)
@@ -138,6 +144,7 @@ object Cockroach {
                     }
                     return@Callback true
                 }
+
                 STOP_ACTIVITY_HIDE -> {
                     try {
                         mhHandler.handleMessage(msg)
@@ -147,6 +154,7 @@ object Cockroach {
                     }
                     return@Callback true
                 }
+
                 DESTROY_ACTIVITY -> {
                     try {
                         mhHandler.handleMessage(msg)

@@ -26,7 +26,7 @@ import app.allever.android.lib.core.R;
 class BGASwipeBackShadowView extends FrameLayout {
     private static final String TAG = BGASwipeBackShadowView.class.getSimpleName();
     private static final float WE_CHAT_STYLE_MAX_OFFSET = 0.75f;
-    private Activity mActivity;
+    private final Activity mActivity;
     private WeakReference<Activity> mPreActivity;
     private ViewGroup mPreDecorView;
     private View mPreContentView;
@@ -50,7 +50,7 @@ class BGASwipeBackShadowView extends FrameLayout {
      */
     private boolean mIsWeChatStyle = true;
 
-    private boolean mIsCurrentActivityTranslucent;
+    private final boolean mIsCurrentActivityTranslucent;
 
     BGASwipeBackShadowView(Activity activity) {
         super(activity);

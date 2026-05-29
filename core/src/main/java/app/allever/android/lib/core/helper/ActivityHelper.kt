@@ -20,7 +20,7 @@ import android.app.Activity
 import android.content.Intent
 import app.allever.android.lib.core.ext.log
 import java.lang.ref.WeakReference
-import java.util.*
+import java.util.LinkedList
 
 /**
  * 应用中所有Activity的管理器，可用于一键杀死所有Activity。

@@ -27,9 +27,11 @@ object DefaultPermissionEngine : BasePermissionEngine() {
                 is Activity -> {
                     context
                 }
+
                 is Fragment -> {
                     context.requireActivity()
                 }
+
                 else -> {
                     ActivityHelper.getTopActivity()
                 }
@@ -44,6 +46,7 @@ object DefaultPermissionEngine : BasePermissionEngine() {
             }
         }
     }
+
     override fun requestPermission(
         context: Context,
         listener: PermissionListener,
@@ -60,9 +63,11 @@ object DefaultPermissionEngine : BasePermissionEngine() {
                 is Activity -> {
                     context
                 }
+
                 is Fragment -> {
                     context.requireActivity()
                 }
+
                 else -> {
                     ActivityHelper.getTopActivity()
                 }

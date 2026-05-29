@@ -1,7 +1,5 @@
 package app.allever.android.lib.core.function.crash
 
-import java.lang.Thread
-
 /**
  * Created by wanjian on 2018/5/29.
  */

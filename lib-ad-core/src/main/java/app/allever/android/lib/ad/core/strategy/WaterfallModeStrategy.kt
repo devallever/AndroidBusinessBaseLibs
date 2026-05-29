@@ -12,8 +12,6 @@ import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
-import kotlin.collections.component1
-import kotlin.collections.component2
 
 class WaterfallModeStrategy : BaseModeStrategy() {
 
@@ -143,7 +141,7 @@ class WaterfallModeStrategy : BaseModeStrategy() {
 
         if (currentIndex >= providers.size) {
             logE("$TAG: $logPrefix All ${providers.size} providers failed for ${adType.name}")
-            
+
             if (!isPreload) {
                 callback?.onAdFail(-1, "All waterfall providers failed")
             } else {
@@ -158,14 +156,30 @@ class WaterfallModeStrategy : BaseModeStrategy() {
 
         if (provider == null) {
             log("$TAG: $logPrefix [$currentIndex] Provider $providerType not in pool, skipping...")
-            tryLoadFromWaterfall(providers, currentIndex + 1, context, adType, callback, isPreload, logPrefix)
+            tryLoadFromWaterfall(
+                providers,
+                currentIndex + 1,
+                context,
+                adType,
+                callback,
+                isPreload,
+                logPrefix
+            )
             return
         }
 
 
         if (adId.isNullOrEmpty()) {
             log("$TAG: $logPrefix [$currentIndex] No ad ID for $providerType/${adType.name}, skipping...")
-            tryLoadFromWaterfall(providers, currentIndex + 1, context, adType, callback, isPreload, logPrefix)
+            tryLoadFromWaterfall(
+                providers,
+                currentIndex + 1,
+                context,
+                adType,
+                callback,
+                isPreload,
+                logPrefix
+            )
             return
         }
 

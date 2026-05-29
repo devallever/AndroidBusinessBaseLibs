@@ -28,6 +28,7 @@ object AdManager {
 
     @Volatile
     private var currentProvider: IAdProvider? = null
+
     @Volatile
     private var currentConfig: AdProviderConfig? = null
     private var activeProviderType: String? = null
@@ -63,16 +64,23 @@ object AdManager {
         config: AdProviderConfig
     ) {
         AdProviderFactory.registerProvider(providerType, providerClass, config)
-        log("$TAG: Registered provider: $providerType" +
-                " | AppID: ${config.appId}" +
-                " | Waterfall: ${if (config.supportWaterfall) "ON" else "OFF"}" +
-                " | Bidding: ${if (config.supportBidding) "ON" else "OFF"}")
+        log(
+            "$TAG: Registered provider: $providerType" +
+                    " | AppID: ${config.appId}" +
+                    " | Waterfall: ${if (config.supportWaterfall) "ON" else "OFF"}" +
+                    " | Bidding: ${if (config.supportBidding) "ON" else "OFF"}"
+        )
     }
 
     /**
      * 初始化AdProvider
      */
-    fun init(context: Context, providerType: String, forceReinit: Boolean = false, callback: (() -> Unit)? = null) {
+    fun init(
+        context: Context,
+        providerType: String,
+        forceReinit: Boolean = false,
+        callback: (() -> Unit)? = null
+    ) {
         log("$TAG: Initializing provider: $providerType (forceReinit=$forceReinit)")
 
         //没有注册provider是不可以初始化的
@@ -276,7 +284,7 @@ object AdManager {
     }
 
     fun getBiddingProvidersInfo(): String {
-        val biddingProviders = strategyPool[LoadMode.BIDDING]?.getProviders()?:return ""
+        val biddingProviders = strategyPool[LoadMode.BIDDING]?.getProviders() ?: return ""
         if (biddingProviders.isEmpty()) {
             return "No bidding providers configured"
         }

@@ -76,7 +76,7 @@ class PangleAdProvider : BaseAdProvider() {
         log("$TAG: Loading splash ad: $adId")
 
         val request = PAGAppOpenRequest()
-        PAGAppOpenAd.loadAd( adId, request, object : PAGAppOpenAdLoadListener {
+        PAGAppOpenAd.loadAd(adId, request, object : PAGAppOpenAdLoadListener {
             override fun onError(code: Int, message: String) {
                 handleOnAdLoadFail(AdType.SPLASH, code, message, callback)
             }
@@ -87,7 +87,7 @@ class PangleAdProvider : BaseAdProvider() {
 
                 ad.setAdInteractionCallback(object : PAGAppOpenAdInteractionCallback() {
                     override fun onAdShowed() {
-                        handleOnAdShow(AdType.SPLASH,  callback)
+                        handleOnAdShow(AdType.SPLASH, callback)
                     }
 
                     override fun onAdClicked() {
@@ -105,7 +105,7 @@ class PangleAdProvider : BaseAdProvider() {
 
     override fun showSplashAd(activity: Activity, callback: IAdCallback?) {
         showSplashAdInternal(splashAd, callback) {
-            splashAd?.show( activity)
+            splashAd?.show(activity)
         }
     }
 
@@ -138,7 +138,12 @@ class PangleAdProvider : BaseAdProvider() {
 
                     override fun onAdShowFailed(errorModel: PAGErrorModel) {
                         interstitialAd = null
-                        handleOnAdShowFail(AdType.INTERSTITIAL, errorModel.errorCode, errorModel.errorMessage, callback)
+                        handleOnAdShowFail(
+                            AdType.INTERSTITIAL,
+                            errorModel.errorCode,
+                            errorModel.errorMessage,
+                            callback
+                        )
                     }
                 })
             }
@@ -179,7 +184,10 @@ class PangleAdProvider : BaseAdProvider() {
                     }
 
                     override fun onUserEarnedReward(pagRewardItem: PAGRewardItem?) {
-                        callback?.onAdRewarded(pagRewardItem?.rewardAmount ?: 0, pagRewardItem?.rewardName ?: "")
+                        callback?.onAdRewarded(
+                            pagRewardItem?.rewardAmount ?: 0,
+                            pagRewardItem?.rewardName ?: ""
+                        )
                     }
                 })
             }
@@ -192,7 +200,7 @@ class PangleAdProvider : BaseAdProvider() {
         }
     }
 
-    override fun loadBannerAd( context: Context, adId: String, callback: IAdCallback?) {
+    override fun loadBannerAd(context: Context, adId: String, callback: IAdCallback?) {
         log("$TAG: Loading banner ad: $adId")
 
         try {

@@ -311,51 +311,52 @@ object BigoManager {
         destroyNativeAd(page)
         mNativeBannerGroup[page] = viewGroup
 
-        val request = NativeAdRequest.Builder().withSlotId(mAdConfig.getAdId(IAdConfig.Companion.NATIVE_AD))
-            .build()
+        val request =
+            NativeAdRequest.Builder().withSlotId(mAdConfig.getAdId(IAdConfig.Companion.NATIVE_AD))
+                .build()
 
         val nativeAdLoader =
             NativeAdLoader.Builder().withAdLoadListener(object : AdLoadListener<NativeAd> {
-                    override fun onError(error: AdError) {
-                        logE("nativeBanner加载失败${error.code} -> ${error.message}")
-                    }
+                override fun onError(error: AdError) {
+                    logE("nativeBanner加载失败${error.code} -> ${error.message}")
+                }
 
-                    override fun onAdLoaded(nativeAd: NativeAd) {
-                        log("nativeBanner加载成功")
-                        log("forNativeAd")
-                        mNativeBannerCache[page] = nativeAd
+                override fun onAdLoaded(nativeAd: NativeAd) {
+                    log("nativeBanner加载成功")
+                    log("forNativeAd")
+                    mNativeBannerCache[page] = nativeAd
 
-                        nativeAd.setAdInteractionListener(object : AdInteractionListener {
-                            override fun onAdError(p0: AdError) {
-                                logE("nativeBanner加载失败${p0.code} -> ${p0.message}")
-                            }
+                    nativeAd.setAdInteractionListener(object : AdInteractionListener {
+                        override fun onAdError(p0: AdError) {
+                            logE("nativeBanner加载失败${p0.code} -> ${p0.message}")
+                        }
 
-                            override fun onAdImpression() {
-                                log("nativeBanner展示")
-                            }
+                        override fun onAdImpression() {
+                            log("nativeBanner展示")
+                        }
 
-                            override fun onAdClicked() {
-                                log("nativeBanner点击")
-                            }
+                        override fun onAdClicked() {
+                            log("nativeBanner点击")
+                        }
 
-                            override fun onAdOpened() {
-                                log("nativeBanner打开")
-                            }
+                        override fun onAdOpened() {
+                            log("nativeBanner打开")
+                        }
 
-                            override fun onAdClosed() {
-                                log("nativeBanner关闭")
-                            }
+                        override fun onAdClosed() {
+                            log("nativeBanner关闭")
+                        }
 
-                        })
+                    })
 
-                        handleNativeAd(nativeAd, adLayoutId, viewGroup)
-                    }
-                }).build()
+                    handleNativeAd(nativeAd, adLayoutId, viewGroup)
+                }
+            }).build()
         nativeAdLoader.loadAd(request)
 
     }
 
-    fun handleNativeAd(ad: NativeAd, layoutId: Int,  adContainer: ViewGroup) {
+    fun handleNativeAd(ad: NativeAd, layoutId: Int, adContainer: ViewGroup) {
         val nativeView = LayoutInflater.from(adContainer.context).inflate(
             layoutId, null
         ) as ViewGroup
@@ -419,7 +420,6 @@ object BigoManager {
         mNativeBannerCache.remove(page)?.destroy()
         mNativeBannerGroup[page]?.removeAllViews()
     }
-
 
 
     private fun log(msg: String) {

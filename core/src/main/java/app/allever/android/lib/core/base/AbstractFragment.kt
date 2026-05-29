@@ -16,10 +16,6 @@ abstract class AbstractFragment : Fragment() {
         HandlerHelper.mainHandler
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         log(this::class.java.simpleName)
@@ -32,30 +28,6 @@ abstract class AbstractFragment : Fragment() {
     ): View? {
         log(this.javaClass.simpleName)
         return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
     }
 
     protected fun setVisibility(view: View, show: Boolean) {

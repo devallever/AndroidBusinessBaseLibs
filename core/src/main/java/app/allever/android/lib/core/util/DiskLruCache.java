@@ -36,6 +36,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Array;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -108,7 +109,7 @@ public final class DiskLruCache implements Closeable {
     private static final String REMOVE = "REMOVE";
     private static final String READ = "READ";
 
-    private static final Charset UTF_8 = Charset.forName("UTF-8");
+    private static final Charset UTF_8 = StandardCharsets.UTF_8;
     private static final int IO_BUFFER_SIZE = 8 * 1024;
 
     /*
@@ -167,7 +168,12 @@ public final class DiskLruCache implements Closeable {
     private long size = 0;
     private Writer journalWriter;
     private int redundantOpCount;
-    private final Callable<Void> cleanupCallable = new Callable<Void>() {
+    /**
+     * To differentiate between old and current snapshots, each entry is given
+     * a sequence number each time an edit is committed. A snapshot is stale if
+     * its sequence number is not equal to its entry's sequence number.
+     */
+    private long nextSequenceNumber = 0;    private final Callable<Void> cleanupCallable = new Callable<Void>() {
         @Override
         public Void call() throws Exception {
             synchronized (DiskLruCache.this) {
@@ -183,13 +189,6 @@ public final class DiskLruCache implements Closeable {
             return null;
         }
     };
-    /**
-     * To differentiate between old and current snapshots, each entry is given
-     * a sequence number each time an edit is committed. A snapshot is stale if
-     * its sequence number is not equal to its entry's sequence number.
-     */
-    private long nextSequenceNumber = 0;
-
     private DiskLruCache(File directory, int appVersion, int valueCount, long maxSize) {
         this.directory = directory;
         this.appVersion = appVersion;
@@ -970,4 +969,6 @@ public final class DiskLruCache implements Closeable {
             return new File(directory, key + "." + i + ".tmp");
         }
     }
+
+
 }

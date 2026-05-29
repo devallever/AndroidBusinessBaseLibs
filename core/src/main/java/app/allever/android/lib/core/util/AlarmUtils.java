@@ -16,7 +16,7 @@ import app.allever.android.lib.core.ext.LoggerKt;
  */
 public class AlarmUtils {
 
-    private static Calendar sCalendar = Calendar.getInstance();
+    private static final Calendar sCalendar = Calendar.getInstance();
 
     /**
      * 设置重复闹钟

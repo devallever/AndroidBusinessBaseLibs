@@ -2,14 +2,12 @@ package app.allever.android.sample.ad.applovin
 
 import android.app.Activity
 import android.app.Application
-import android.net.Uri
 import android.os.Bundle
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import com.adjust.sdk.Adjust
 import com.adjust.sdk.AdjustConfig
-import com.applovin.adview.AppLovinInterstitialAd
 import com.applovin.mediation.MaxAd
 import com.applovin.mediation.MaxAdListener
 import com.applovin.mediation.MaxError
@@ -38,14 +36,15 @@ object AppLovinManager {
     //书歌Test: tRLgvBNKtFZuwWs2XqXJt_3X9yyl7oCA-1N-LBASDS9GDGrDaMunCbzHMWK63bVl_NmwB5g0k5sCUD6BAEgmda
 //    private const val SDK_KEY = "tRLgvBNKtFZuwWs2XqXJt_3X9yyl7oCA-1N-LBASDS9GDGrDaMunCbzHMWK63bVl_NmwB5g0k5sCUD6BAEgmda"
     //AppLovin Test
-    private const val SDK_KEY = "05TMDQ5tZabpXQ45_UTbmEGNUtVAzSTzT6KmWQc5_CuWdzccS4DCITZoL3yIWUG3bbq60QC_d4WF28tUC4gVTF"
+    private const val SDK_KEY =
+        "05TMDQ5tZabpXQ45_UTbmEGNUtVAzSTzT6KmWQc5_CuWdzccS4DCITZoL3yIWUG3bbq60QC_d4WF28tUC4gVTF"
 
     private lateinit var mContext: Application
     private var mInterAdCache: MaxInterstitialAd? = null
     private var mRewardAdCache: MaxRewardedAd? = null
     private var mInterAdCacheTime = 0L
     private var mRewardAdCacheTime = 0L
-    private const val CACHE_TIME_OUT =  45 * 60 * 1000L
+    private const val CACHE_TIME_OUT = 45 * 60 * 1000L
 
     private class AdjustLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
         override fun onActivityCreated(activity: Activity, bundle: Bundle?) {}
@@ -70,7 +69,7 @@ object AppLovinManager {
     fun init(iAdConfig: IAdConfig, block: () -> Unit) {
         mIAdConfig = iAdConfig
         mContext = App.app
-        if (isInit)  {
+        if (isInit) {
             log("AppLovin SDK already initialized")
             block()
             return
@@ -82,8 +81,8 @@ object AppLovinManager {
                 .setMediationProvider(AppLovinMediationProvider.MAX)
                 .setSegmentCollection(
                     MaxSegmentCollection.builder()
-                    .addSegment(MaxSegment(849, listOf(1, 3)))
-                    .build()
+                        .addSegment(MaxSegment(849, listOf(1, 3)))
+                        .build()
                 )
                 .build()
 
@@ -106,7 +105,8 @@ object AppLovinManager {
                 log("AppLovin SDK initialized")
 
                 // Initialize Adjust SDK
-                val config = AdjustConfig(App.context, "{YourAppToken}", AdjustConfig.ENVIRONMENT_SANDBOX)
+                val config =
+                    AdjustConfig(App.context, "{YourAppToken}", AdjustConfig.ENVIRONMENT_SANDBOX)
                 Adjust.initSdk(config)
 
                 App.app.registerActivityLifecycleCallbacks(AdjustLifecycleCallbacks())
@@ -128,8 +128,9 @@ object AppLovinManager {
 
         mInterAdCache = null
 
-        val interstitialAd = MaxInterstitialAd( mIAdConfig.getAdId(IAdConfig.Companion.INTER_AD), mContext )
-        interstitialAd.setListener( object : MaxAdListener {
+        val interstitialAd =
+            MaxInterstitialAd(mIAdConfig.getAdId(IAdConfig.Companion.INTER_AD), mContext)
+        interstitialAd.setListener(object : MaxAdListener {
             override fun onAdLoaded(p0: MaxAd) {
                 log("interAd: 加载成功")
                 mInterAdCache = interstitialAd
@@ -185,7 +186,7 @@ object AppLovinManager {
         mRewardAdCache = null
 
         val rewardedAd = MaxRewardedAd.getInstance(mIAdConfig.getAdId(IAdConfig.REWARD_AD))
-        rewardedAd.setListener( object : MaxRewardedAdListener {
+        rewardedAd.setListener(object : MaxRewardedAdListener {
             override fun onUserRewarded(
                 p0: MaxAd,
                 p1: MaxReward
@@ -232,9 +233,9 @@ object AppLovinManager {
                 justLoadReward(adCallback)
             }
 
-        });
+        })
 
-        rewardedAd.loadAd();
+        rewardedAd.loadAd()
 
     }
 
@@ -275,6 +276,6 @@ object AppLovinManager {
         }
 
         log("使用RewardAdCache")
-        mRewardAdCache?.showAd( activity)
+        mRewardAdCache?.showAd(activity)
     }
 }

@@ -81,14 +81,16 @@ object PermissionHelper : IPermissionEngine {
         ActivityCompat.requestPermissions(activity ?: return, permissions, requestCode)
     }
 
-    fun requestPermissionOrigin(obj: Any, requestCode: Int,  permissions: MutableList<String>) {
+    fun requestPermissionOrigin(obj: Any, requestCode: Int, permissions: MutableList<String>) {
         val activity = when (obj) {
             is Activity -> obj
             is Fragment -> obj.activity
             else -> ActivityHelper.getTopActivity()
         }
-        ActivityCompat.requestPermissions(activity ?: return,
-            permissions.toTypedArray(), requestCode)
+        ActivityCompat.requestPermissions(
+            activity ?: return,
+            permissions.toTypedArray(), requestCode
+        )
     }
 
     fun gotoSettingOrigin(context: Context? = null) {
@@ -111,9 +113,11 @@ object PermissionHelper : IPermissionEngine {
             is Activity -> {
                 context
             }
+
             is Fragment -> {
                 context.activity
             }
+
             else -> {
                 null
             }

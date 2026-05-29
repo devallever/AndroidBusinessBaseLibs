@@ -6,7 +6,7 @@ import app.allever.android.sample.adjust.databinding.ActivityAdjustMainBinding
 import com.alibaba.android.arouter.facade.annotation.Route
 
 @Route(path = "/adjust/main")
-class AdJustMainActivity: BaseActivity<ActivityAdjustMainBinding, BaseViewModel>() {
+class AdJustMainActivity : BaseActivity<ActivityAdjustMainBinding, BaseViewModel>() {
     override fun inflateChildBinding() = ActivityAdjustMainBinding.inflate(layoutInflater)
 
     override fun init() {

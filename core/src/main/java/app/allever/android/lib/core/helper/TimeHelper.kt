@@ -17,11 +17,13 @@ object TimeHelper {
             minute < 60 -> {
                 minute.toString() + "分钟"
             }
+
             minute < 1440 -> {
                 val value = minute % 60
                 (((minute - value) / 60).toString() + "小时"
                         + value.toString() + "分钟")
             }
+
             else -> {
                 val minuteValue = minute % 60
                 val value = (minute - minuteValue) / 60

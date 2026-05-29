@@ -13,7 +13,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import app.allever.android.lib.core.app.App
 import com.bumptech.glide.Glide
-import com.google.android.gms.ads.*
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.nativead.MediaView
@@ -30,7 +38,7 @@ object AdMobManager {
     private var mRewardAdCache: RewardedAd? = null
     private var mInterAdCacheTime = 0L
     private var mRewardAdCacheTime = 0L
-    private const val CACHE_TIME_OUT =  45 * 60 * 1000L
+    private const val CACHE_TIME_OUT = 45 * 60 * 1000L
 
     fun init(adConfig: IAdConfig, context: Application, block: (() -> Unit)? = null) {
         mAdConfig = adConfig
@@ -83,20 +91,24 @@ object AdMobManager {
 
         val adRequest = AdRequest.Builder().build()
 
-        RewardedAd.load(mContext, mAdConfig.getAdId(IAdConfig.Companion.REWARD_AD), adRequest, object : RewardedAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                logE("rewardAd: 加载失败 -> ${adError.code}: ${adError.message}")
-                adCallback?.onAdFailLoad()
-            }
+        RewardedAd.load(
+            mContext,
+            mAdConfig.getAdId(IAdConfig.Companion.REWARD_AD),
+            adRequest,
+            object : RewardedAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    logE("rewardAd: 加载失败 -> ${adError.code}: ${adError.message}")
+                    adCallback?.onAdFailLoad()
+                }
 
-            override fun onAdLoaded(rewardedAd: RewardedAd) {
-                log("rewardAd: 加载成功")
-                mRewardAdCache = rewardedAd
-                mRewardAdCacheTime = System.currentTimeMillis()
-                log("rewardAd: 缓存成功")
-                adCallback?.onAdLoaded()
-            }
-        })
+                override fun onAdLoaded(rewardedAd: RewardedAd) {
+                    log("rewardAd: 加载成功")
+                    mRewardAdCache = rewardedAd
+                    mRewardAdCacheTime = System.currentTimeMillis()
+                    log("rewardAd: 缓存成功")
+                    adCallback?.onAdLoaded()
+                }
+            })
 
     }
 
@@ -211,7 +223,7 @@ object AdMobManager {
     }
 
     fun resumeBanner(viewGroup: ViewGroup) {
-        for (i in 0 until  viewGroup.childCount) {
+        for (i in 0 until viewGroup.childCount) {
             val child = viewGroup.getChildAt(i)
             if (child is AdView) {
                 child.resume()
@@ -220,7 +232,7 @@ object AdMobManager {
     }
 
     fun pauseBanner(viewGroup: ViewGroup) {
-        for (i in 0 until  viewGroup.childCount) {
+        for (i in 0 until viewGroup.childCount) {
             val child = viewGroup.getChildAt(i)
             if (child is AdView) {
                 child.pause()
@@ -229,7 +241,7 @@ object AdMobManager {
     }
 
     fun destroyBanner(viewGroup: ViewGroup) {
-        for (i in 0 until  viewGroup.childCount) {
+        for (i in 0 until viewGroup.childCount) {
             val child = viewGroup.getChildAt(i)
             if (child is AdView) {
                 child.destroy()
@@ -274,26 +286,27 @@ object AdMobManager {
     ) {
         destroyNativeAd(page)
         mNativeBannerGroup[page] = viewGroup
-        val adLoader = AdLoader.Builder(viewGroup.context, mAdConfig.getAdId(IAdConfig.Companion.NATIVE_AD))
-            .forNativeAd {
-                log("forNativeAd")
-                mNativeBannerCache[page] = it
-                val adView = LayoutInflater.from(viewGroup.context)
-                    .inflate(adLayoutId, null) as NativeAdView
-                viewGroup.removeAllViews()
-                setNativeAdViewContent(it, adView)
-                viewGroup.addView(adView)
-            }
-            .withAdListener(object : AdListener() {
-                override fun onAdLoaded() {
-                    log("nativeBanner加载成功")
+        val adLoader =
+            AdLoader.Builder(viewGroup.context, mAdConfig.getAdId(IAdConfig.Companion.NATIVE_AD))
+                .forNativeAd {
+                    log("forNativeAd")
+                    mNativeBannerCache[page] = it
+                    val adView = LayoutInflater.from(viewGroup.context)
+                        .inflate(adLayoutId, null) as NativeAdView
+                    viewGroup.removeAllViews()
+                    setNativeAdViewContent(it, adView)
+                    viewGroup.addView(adView)
                 }
+                .withAdListener(object : AdListener() {
+                    override fun onAdLoaded() {
+                        log("nativeBanner加载成功")
+                    }
 
-                override fun onAdFailedToLoad(error: LoadAdError) {
-                    logE("nativeBanner加载失败${error.code} -> ${error.message}")
-                }
-            })
-            .build()
+                    override fun onAdFailedToLoad(error: LoadAdError) {
+                        logE("nativeBanner加载失败${error.code} -> ${error.message}")
+                    }
+                })
+                .build()
         adLoader.loadAd(AdRequest.Builder().build())
 
     }
@@ -335,7 +348,7 @@ object AdMobManager {
         adIcon.setImageDrawable(nativeAd.icon?.drawable)
         adCta?.text = nativeAd.callToAction
         nativeAd.mediaContent?.let {
-            adMedia?.setMediaContent(it)
+            adMedia?.mediaContent = it
         }
         adStore?.text = nativeAd.store
         adPrice?.text = nativeAd.price
@@ -347,6 +360,7 @@ object AdMobManager {
             Log.d("ILogger", msg)
         }
     }
+
     private fun logE(msg: String) {
         if (App.DEBUG) {
             Log.e("ILogger", msg)

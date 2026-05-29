@@ -12,7 +12,7 @@ import android.os.CountDownTimer;
 public class TimerUtils {
 
     public static CountDownTimer createMinutesAndSecondsTimer(int minutes, OnTimerListener onTimerListener) {
-        return new CountDownTimer(minutes * 60 * 1000
+        return new CountDownTimer((long) minutes * 60 * 1000
                 , 1000) {
             @Override
             public void onTick(long millisUntilFinished) {

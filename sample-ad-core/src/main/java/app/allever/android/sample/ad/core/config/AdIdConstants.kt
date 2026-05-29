@@ -1,7 +1,7 @@
 package app.allever.android.sample.ad.core.config
 
 object AdIdConstants {
-    
+
     object AdMob {
         const val APP_ID = "ca-app-pub-3940256099942544~3347511713"
         const val SPLASH_AD_ID = "ca-app-pub-3940256099942544/9257395921"

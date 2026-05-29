@@ -1,11 +1,8 @@
 package app.allever.android.lib.core.function.crash.compat
 
-import app.allever.android.lib.core.function.crash.compat.IActivityKiller
-import android.os.IBinder
-import java.lang.Exception
-import kotlin.Throws
-import android.content.Intent
 import android.app.Activity
+import android.content.Intent
+import android.os.IBinder
 import android.os.Message
 
 /**

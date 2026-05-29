@@ -1,5 +1,7 @@
 package app.allever.android.lib.core.util;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * 加解密工具类
  */
@@ -31,7 +33,7 @@ public class CryptUtils {
 
     public static String encrypt(String src, String key) {
         try {
-            byte[] b = xor(src.getBytes("utf-8"), key.getBytes("utf-8"));
+            byte[] b = xor(src.getBytes(StandardCharsets.UTF_8), key.getBytes(StandardCharsets.UTF_8));
             return Base64.encodeBytes(b);
         } catch (Exception e) {
             // TODO: handle exception
@@ -48,8 +50,8 @@ public class CryptUtils {
      */
     public static String decrypt(String src, String key) {
         try {
-            byte[] b = xor(Base64.decode(src), key.getBytes("utf-8"));
-            return new String(b, "utf-8");
+            byte[] b = xor(Base64.decode(src), key.getBytes(StandardCharsets.UTF_8));
+            return new String(b, StandardCharsets.UTF_8);
         } catch (Exception e) {
             // TODO: handle exception
             return null;
@@ -66,7 +68,7 @@ public class CryptUtils {
 
     public static byte[] encrypt(byte[] src, String key) {
         try {
-            byte[] b = xor(src, key.getBytes("utf-8"));
+            byte[] b = xor(src, key.getBytes(StandardCharsets.UTF_8));
             return b;
         } catch (Exception e) {
             // TODO: handle exception
@@ -83,7 +85,7 @@ public class CryptUtils {
      */
     public static byte[] decrypt(byte[] src, String key) {
         try {
-            byte[] b = xor(src, key.getBytes("utf-8"));
+            byte[] b = xor(src, key.getBytes(StandardCharsets.UTF_8));
             return b;
         } catch (Exception e) {
             // TODO: handle exception

@@ -22,7 +22,7 @@ object ViVoNotch {
             val ftFeature = classLoader.loadClass("android.util.FtFeature")
             val method =
                 ftFeature.getMethod("isFeatureSupport", Int::class.javaPrimitiveType)
-            result = method.invoke(ftFeature, ViVoNotch.VIVO_NOTCH) as Boolean
+            result = method.invoke(ftFeature, VIVO_NOTCH) as Boolean
         } catch (e: Exception) {
             log("hasNotchAtVivo Exception")
         }

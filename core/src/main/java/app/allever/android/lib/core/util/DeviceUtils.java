@@ -77,23 +77,21 @@ public class DeviceUtils {
 
     public String getDeviceId() {
         Activity current = ActivityHelper.INSTANCE.getTopActivity();
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(android.os.Build.MODEL);
-        buffer.append("_");
-        buffer.append(android.os.Build.DEVICE);
-        buffer.append("_");
-        buffer.append(getMacAddress(current).replaceAll(":", ""));
-        return buffer.toString();
+        String buffer = Build.MODEL +
+                "_" +
+                Build.DEVICE +
+                "_" +
+                getMacAddress(current).replaceAll(":", "");
+        return buffer;
     }
 
     public String getPhoneInfo() {
-        StringBuilder buffer = new StringBuilder();
-        buffer.append(android.os.Build.MODEL);
-        buffer.append("_");
-        buffer.append(android.os.Build.DEVICE);
-        buffer.append("_");
-        buffer.append(Build.BRAND);
-        return buffer.toString();
+        String buffer = Build.MODEL +
+                "_" +
+                Build.DEVICE +
+                "_" +
+                Build.BRAND;
+        return buffer;
     }
 
     /**

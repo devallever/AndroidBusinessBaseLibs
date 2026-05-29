@@ -1,6 +1,10 @@
 package app.allever.android.lib.core.helper
 
-import android.content.*
+import android.content.ContentResolver
+import android.content.ContentUris
+import android.content.ContentValues
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -12,9 +16,8 @@ import java.io.FileNotFoundException
 import java.io.InputStream
 import java.io.OutputStream
 
-object MediaHelper {
-    
-}
+object MediaHelper
+
 private val ALBUM_DIR = Environment.DIRECTORY_PICTURES
 
 
@@ -149,6 +152,7 @@ private fun String.getBitmapFormat(): Bitmap.CompressFormat {
         fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") -> Bitmap.CompressFormat.JPEG
         fileName.endsWith(".webp") -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
             Bitmap.CompressFormat.WEBP_LOSSLESS else Bitmap.CompressFormat.WEBP
+
         else -> Bitmap.CompressFormat.PNG
     }
 }

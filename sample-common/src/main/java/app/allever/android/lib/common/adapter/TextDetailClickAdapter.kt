@@ -1,6 +1,5 @@
 package app.allever.android.lib.common.adapter
 
-import android.graphics.Canvas
 import android.view.ViewGroup
 import app.allever.android.lib.common.R
 import app.allever.android.lib.common.adapter.bean.TextClickItem

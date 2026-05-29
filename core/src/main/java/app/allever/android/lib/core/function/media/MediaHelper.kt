@@ -32,7 +32,7 @@ object MediaHelper {
     const val TYPE_ALL = ""
 
     @StringDef(value = [TYPE_IMAGE, TYPE_VIDEO, TYPE_AUDIO, TYPE_ALL])
-    @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
+    @Retention(AnnotationRetention.SOURCE)
     annotation class Type
 
     private const val COLUMN_BUCKET_ID = "bucket_id"
@@ -175,7 +175,7 @@ object MediaHelper {
         context: Context,
         @Type type: String = TYPE_ALL,
         includeGif: Boolean = false,
-        progress:((folderBean: FolderBean) -> Unit)? = null
+        progress: ((folderBean: FolderBean) -> Unit)? = null
     ) = withContext(Dispatchers.IO) {
 
         val imageFolderList = mutableListOf<FolderBean>()
@@ -282,10 +282,13 @@ object MediaHelper {
                             when {
                                 MediaFile.isGifFileType(bean.path) -> bean.type =
                                     MediaType.TYPE_GIF
+
                                 MediaFile.isJPGFileType(bean.path) -> bean.type =
                                     MediaType.TYPE_JPG
+
                                 MediaFile.isPNGFileType(bean.path) -> bean.type =
                                     MediaType.TYPE_PNG
+
                                 else -> bean.type = MediaType.TYPE_OTHER_IMAGE
                             }
 
@@ -357,7 +360,12 @@ object MediaHelper {
         return@withContext bitmap
     }
 
-    suspend fun getImageMedia(context: Context, path: String, includeGif: Boolean = true, progress: ((folderBean: MediaBean) -> Unit)? = null) =
+    suspend fun getImageMedia(
+        context: Context,
+        path: String,
+        includeGif: Boolean = true,
+        progress: ((folderBean: MediaBean) -> Unit)? = null
+    ) =
         withContext(Dispatchers.IO) {
             val result: MutableList<MediaBean> = mutableListOf()
             val cursor: Cursor? = if (TextUtils.isEmpty(path)) {
@@ -558,7 +566,11 @@ object MediaHelper {
         )
     }
 
-    private suspend fun generateImageResult(cursor: Cursor?, includeGif: Boolean, progress: ((folderBean: MediaBean) -> Unit)? = null) =
+    private suspend fun generateImageResult(
+        cursor: Cursor?,
+        includeGif: Boolean,
+        progress: ((folderBean: MediaBean) -> Unit)? = null
+    ) =
         withContext(Dispatchers.IO) {
             val result: MutableList<MediaBean> = mutableListOf()
             if (cursor == null) {
@@ -597,12 +609,15 @@ object MediaHelper {
                                     continue
                                 }
                             }
+
                             MediaFile.isJPGFileType(mediaBean.path) -> {
                                 mediaBean.type = (MediaType.TYPE_JPG)
                             }
+
                             MediaFile.isPNGFileType(mediaBean.path) -> {
                                 mediaBean.type = (MediaType.TYPE_PNG)
                             }
+
                             else -> {
                                 mediaBean.type = (MediaType.TYPE_OTHER_IMAGE)
                             }
@@ -624,7 +639,11 @@ object MediaHelper {
             result
         }
 
-    private suspend fun generateVideoResult(cursor: Cursor?, maxDuration: Long = 0L, progress: ((folderBean: MediaBean) -> Unit)? = null) =
+    private suspend fun generateVideoResult(
+        cursor: Cursor?,
+        maxDuration: Long = 0L,
+        progress: ((folderBean: MediaBean) -> Unit)? = null
+    ) =
         withContext(Dispatchers.IO) {
             val result: MutableList<MediaBean> = mutableListOf()
             try {
@@ -688,7 +707,11 @@ object MediaHelper {
             result
         }
 
-    private suspend fun generateAudioResult(cursor: Cursor?, maxDuration: Long = 0L, progress: ((folderBean: MediaBean) -> Unit)? = null) =
+    private suspend fun generateAudioResult(
+        cursor: Cursor?,
+        maxDuration: Long = 0L,
+        progress: ((folderBean: MediaBean) -> Unit)? = null
+    ) =
         withContext(Dispatchers.IO) {
             val result: MutableList<MediaBean> = mutableListOf()
             try {

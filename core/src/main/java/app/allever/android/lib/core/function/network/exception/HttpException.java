@@ -22,13 +22,10 @@ import java.util.Objects;
 import app.allever.android.lib.core.function.network.response.NetResponse;
 
 
-/** Exception for an unexpected, non-2xx HTTP response. */
+/**
+ * Exception for an unexpected, non-2xx HTTP response.
+ */
 public class HttpException extends RuntimeException {
-    private static String getMessage(NetResponse<?> response) {
-        Objects.requireNonNull(response, "response == null");
-        return "HTTP " + response.getCode() + " " + response.getMsg();
-    }
-
     private final transient NetResponse<?> response;
 
     public HttpException(NetResponse<?> response) {
@@ -36,17 +33,28 @@ public class HttpException extends RuntimeException {
         this.response = response;
     }
 
-    /** HTTP status code. */
+    private static String getMessage(NetResponse<?> response) {
+        Objects.requireNonNull(response, "response == null");
+        return "HTTP " + response.getCode() + " " + response.getMsg();
+    }
+
+    /**
+     * HTTP status code.
+     */
     public int code() {
         return response.getCode();
     }
 
-    /** HTTP status message. */
+    /**
+     * HTTP status message.
+     */
     public String message() {
         return response.getMsg();
     }
 
-    /** The full HTTP response. This may be null if the exception was serialized. */
+    /**
+     * The full HTTP response. This may be null if the exception was serialized.
+     */
     public @Nullable
     NetResponse<?> response() {
         return response;

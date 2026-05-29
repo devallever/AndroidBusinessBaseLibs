@@ -1,5 +1,6 @@
 package app.allever.android.lib.core.util;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -13,7 +14,7 @@ public class MD5 {
 
             messageDigest.reset();
 
-            messageDigest.update(str.getBytes("UTF-8"));
+            messageDigest.update(str.getBytes(StandardCharsets.UTF_8));
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (Exception e) {

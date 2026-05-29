@@ -21,7 +21,11 @@ import android.graphics.Bitmap
 import android.graphics.ImageFormat
 import android.graphics.Rect
 import android.media.Image
-import android.renderscript.*
+import android.renderscript.Allocation
+import android.renderscript.Element
+import android.renderscript.RenderScript
+import android.renderscript.ScriptIntrinsicYuvToRGB
+import android.renderscript.Type
 
 /**
  * Helper class used to efficiently convert a [Media.Image] object from
@@ -117,16 +121,19 @@ class YuvToRgbConverter(context: Context) {
                     outputStride = 1
                     outputOffset = 0
                 }
+
                 1 -> {
                     outputStride = 2
                     // For NV21 format, U is in odd-numbered indices
                     outputOffset = pixelCount + 1
                 }
+
                 2 -> {
                     outputStride = 2
                     // For NV21 format, V is in even-numbered indices
                     outputOffset = pixelCount
                 }
+
                 else -> {
                     // Image contains more than 3 planes, something strange is going on
                     return@forEachIndexed
@@ -173,7 +180,8 @@ class YuvToRgbConverter(context: Context) {
             for (row in 0 until planeHeight) {
                 // Move buffer position to the beginning of this row
                 planeBuffer.position(
-                    (row + planeCrop.top) * rowStride + planeCrop.left * pixelStride)
+                    (row + planeCrop.top) * rowStride + planeCrop.left * pixelStride
+                )
 
                 if (pixelStride == 1 && outputStride == 1) {
                     // When there is a single stride value for pixel and output, we can just copy

@@ -75,7 +75,7 @@ public class StatusBarUtil {
      */
     public static void setColorForSwipeBack(AppCompatActivity AppCompatActivity, @ColorInt int color, int statusBarAlpha) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            ViewGroup contentView = ((ViewGroup) AppCompatActivity.findViewById(android.R.id.content));
+            ViewGroup contentView = AppCompatActivity.findViewById(android.R.id.content);
             contentView.setPadding(0, getStatusBarHeight(AppCompatActivity), 0, 0);
             contentView.setBackgroundColor(calculateStatusColor(color, statusBarAlpha));
             setTransparentForWindow(AppCompatActivity);
@@ -104,7 +104,7 @@ public class StatusBarUtil {
             return;
         }
         transparentStatusBar(AppCompatActivity);
-        ViewGroup contentView = (ViewGroup) AppCompatActivity.findViewById(android.R.id.content);
+        ViewGroup contentView = AppCompatActivity.findViewById(android.R.id.content);
         // 移除半透明矩形,以免叠加
         if (contentView.getChildCount() > 1) {
             contentView.getChildAt(1).setBackgroundColor(color);
@@ -439,7 +439,7 @@ public class StatusBarUtil {
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////////////
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private static void clearPreviousSetting(AppCompatActivity AppCompatActivity) {
@@ -459,7 +459,7 @@ public class StatusBarUtil {
      * @param statusBarAlpha    透明值
      */
     private static void addTranslucentView(AppCompatActivity AppCompatActivity, int statusBarAlpha) {
-        ViewGroup contentView = (ViewGroup) AppCompatActivity.findViewById(android.R.id.content);
+        ViewGroup contentView = AppCompatActivity.findViewById(android.R.id.content);
         if (contentView.getChildCount() > 1) {
             contentView.getChildAt(1).setBackgroundColor(Color.argb(statusBarAlpha, 0, 0, 0));
         } else {
@@ -506,7 +506,7 @@ public class StatusBarUtil {
      * 设置根布局参数
      */
     private static void setRootView(AppCompatActivity AppCompatActivity) {
-        ViewGroup parent = (ViewGroup) AppCompatActivity.findViewById(android.R.id.content);
+        ViewGroup parent = AppCompatActivity.findViewById(android.R.id.content);
         for (int i = 0, count = parent.getChildCount(); i < count; i++) {
             View childView = parent.getChildAt(i);
             if (childView instanceof ViewGroup) {

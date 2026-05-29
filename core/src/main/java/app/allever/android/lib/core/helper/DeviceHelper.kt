@@ -88,7 +88,7 @@ object DeviceHelper {
         return result
     }
 
-    fun getCpuTemInfo() : Float{
+    fun getCpuTemInfo(): Float {
         try {
             //cpu温度
             val tempInfoPath = "/sys/class/thermal/thermal_zone9/subsystem/thermal_zone9/temp"
@@ -111,7 +111,6 @@ object DeviceHelper {
         }
 
 
-
     }
 
     fun getThermalInfo(): List<String>? {
@@ -121,9 +120,7 @@ object DeviceHelper {
             val dir = File("/sys/class/thermal/")
             val files: Array<File> = dir.listFiles(object : FileFilter {
                 override fun accept(file: File): Boolean {
-                    return if (Pattern.matches("thermal_zone[0-9]+", file.getName())) {
-                        true
-                    } else false
+                    return Pattern.matches("thermal_zone[0-9]+", file.getName())
                 }
             })
             val SIZE = files.size
@@ -143,7 +140,7 @@ object DeviceHelper {
                     temp = if (temperature < 0) {
                         "0 °C"
                     } else {
-                        (temperature / 1000.0).toString()+"°C"
+                        (temperature / 1000.0).toString() + "°C"
                     }
                 }
                 result.add("$type : $temp")

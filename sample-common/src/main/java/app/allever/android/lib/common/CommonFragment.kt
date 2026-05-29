@@ -21,9 +21,11 @@ class CommonFragment : ListFragment<FragmentListBinding, ListViewModel, String>(
             0 -> {
                 ActivityHelper.startActivity<FullScreenActivity> { }
             }
+
             1 -> {
                 ActivityHelper.startActivity<TitleActivity> { }
             }
+
             2 -> {
                 ActivityHelper.startActivity<FullScreenDarkActivity> { }
             }
@@ -31,11 +33,17 @@ class CommonFragment : ListFragment<FragmentListBinding, ListViewModel, String>(
             3 -> {
                 FragmentActivity.start<EmptyPageFragment>(item, false)
             }
+
             4 -> {
                 FragmentActivity.start<EmptyPageFragment>(item)
             }
+
             5 -> {
-                FragmentActivity.start<EmptyPageDarkFragment>(item, showTopBar = false, darkMode = true)
+                FragmentActivity.start<EmptyPageDarkFragment>(
+                    item,
+                    showTopBar = false,
+                    darkMode = true
+                )
             }
         }
     }

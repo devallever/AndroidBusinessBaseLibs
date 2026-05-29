@@ -4,8 +4,6 @@ import android.app.Service
 import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import app.allever.android.lib.core.helper.SoftKeyboardHelper
-import kotlin.jvm.JvmOverloads
 import app.allever.android.lib.core.app.App
 
 /**

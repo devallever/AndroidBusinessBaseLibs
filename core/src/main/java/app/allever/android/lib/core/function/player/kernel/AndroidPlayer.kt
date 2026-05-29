@@ -210,7 +210,7 @@ class AndroidPlayer : AbsPlayer() {
 
     override fun setSpeed(speed: Float) {
         // only support above Android M
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 mMediaPlayer?.playbackParams =
                     mMediaPlayer?.playbackParams?.setSpeed(speed) ?: return

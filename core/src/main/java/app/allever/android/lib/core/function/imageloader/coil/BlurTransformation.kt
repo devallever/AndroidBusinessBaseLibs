@@ -1,7 +1,5 @@
 package app.allever.android.lib.core.function.imageloader.coil
 
-import coil.transform.Transformation
-
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Paint
@@ -13,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import coil.size.Size
+import coil.transform.Transformation
 
 /**
  * A [Transformation] that applies a Gaussian blur to an image.

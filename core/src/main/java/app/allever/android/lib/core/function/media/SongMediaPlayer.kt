@@ -8,7 +8,7 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import app.allever.android.lib.core.function.work.PollingTask2
-import java.util.*
+import java.util.Collections
 
 class SongMediaPlayer(onPlayerListener: OnPlayerListener? = null) {
     interface OnPlayerListener {
@@ -158,7 +158,7 @@ class SongMediaPlayer(onPlayerListener: OnPlayerListener? = null) {
 
     fun play() {
         try {
-            PollingTask2(null,200, condition = { isPrepared }, execute = {
+            PollingTask2(null, 200, condition = { isPrepared }, execute = {
                 mediaPlayer.start()
                 notifyMsgProgress()
             }).start()

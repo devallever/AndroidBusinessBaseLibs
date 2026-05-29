@@ -3,10 +3,9 @@ package app.allever.android.lib.core.function.crash
 import android.content.Context
 import android.os.Build.VERSION
 import android.util.Base64
-import app.allever.android.lib.core.function.crash.BootstrapClass
+import dalvik.system.DexFile
 import java.io.File
 import java.io.FileOutputStream
-import dalvik.system.DexFile
 
 /**
  * @author weishu

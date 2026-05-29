@@ -4,7 +4,7 @@ import android.content.Context
 import app.allever.android.lib.ad.core.base.BaseAdProvider
 import app.allever.android.lib.ad.core.config.AdProviderConfig
 
-class DefaultAdProvider: BaseAdProvider() {
+class DefaultAdProvider : BaseAdProvider() {
     override fun onDestroy() {
 
     }
@@ -12,6 +12,7 @@ class DefaultAdProvider: BaseAdProvider() {
     companion object {
         const val PROVIDER_NAME = "DEFAULT"
     }
+
     override fun getProviderType() = PROVIDER_NAME
 
     override fun init(

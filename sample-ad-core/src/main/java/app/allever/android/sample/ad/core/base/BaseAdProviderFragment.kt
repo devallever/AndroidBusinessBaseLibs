@@ -1,19 +1,18 @@
 package app.allever.android.sample.ad.core.base
 
 import android.util.Log
-import android.view.ViewGroup
 import app.allever.android.lib.ad.core.AdManager
+import app.allever.android.lib.ad.core.base.IAdProvider
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.util.UIKit.runOnUiThread
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import androidx.viewbinding.ViewBinding
-import app.allever.android.lib.ad.core.base.IAdProvider
 import app.allever.android.sample.ad.core.databinding.FragmentBaseAdProviderBinding
 
-abstract class BaseAdProviderFragment<DB, VM> : BaseFragment<FragmentBaseAdProviderBinding, BaseViewModel>() {
+abstract class BaseAdProviderFragment<DB, VM> :
+    BaseFragment<FragmentBaseAdProviderBinding, BaseViewModel>() {
 
     abstract val providerName: String
     abstract val providerConfig: AdProviderConfig
@@ -109,13 +108,26 @@ abstract class BaseAdProviderFragment<DB, VM> : BaseFragment<FragmentBaseAdProvi
             activity = requireActivity(),
             adType = AdType.REWARD_VIDEO,
             callback = object : IAdCallback {
-                override fun onAdLoaded() { updateStatus("✓ Reward video loaded") }
+                override fun onAdLoaded() {
+                    updateStatus("✓ Reward video loaded")
+                }
+
                 override fun onAdFail(errorCode: Int, errorMessage: String) {
                     updateStatus("✗ Reward video failed: $errorMessage")
                 }
-                override fun onAdShow() { updateStatus("✓ Reward video showing") }
-                override fun onAdClick() { updateStatus("! Reward video clicked") }
-                override fun onAdDismiss() { updateStatus("✓ Reward video dismissed") }
+
+                override fun onAdShow() {
+                    updateStatus("✓ Reward video showing")
+                }
+
+                override fun onAdClick() {
+                    updateStatus("! Reward video clicked")
+                }
+
+                override fun onAdDismiss() {
+                    updateStatus("✓ Reward video dismissed")
+                }
+
                 override fun onAdRewarded(rewardAmount: Int, rewardName: String) {
                     updateStatus("🎁 Rewarded: $rewardAmount $rewardName")
                 }
@@ -136,25 +148,47 @@ abstract class BaseAdProviderFragment<DB, VM> : BaseFragment<FragmentBaseAdProvi
             adType = AdType.BANNER,
             container = mBinding.bannerContainer,
             callback = object : IAdCallback {
-                override fun onAdLoaded() { updateStatus("✓ Banner loaded") }
+                override fun onAdLoaded() {
+                    updateStatus("✓ Banner loaded")
+                }
+
                 override fun onAdFail(errorCode: Int, errorMessage: String) {
                     updateStatus("✗ Banner failed: $errorMessage")
                 }
-                override fun onAdShow() { updateStatus("✓ Banner showing in container") }
-                override fun onAdClick() { updateStatus("! Banner clicked") }
+
+                override fun onAdShow() {
+                    updateStatus("✓ Banner showing in container")
+                }
+
+                override fun onAdClick() {
+                    updateStatus("! Banner clicked")
+                }
             }
         )
     }
 
     private fun createAdCallback(adTypeName: String): IAdCallback {
         return object : IAdCallback {
-            override fun onAdLoaded() { updateStatus("✓ $adTypeName loaded") }
+            override fun onAdLoaded() {
+                updateStatus("✓ $adTypeName loaded")
+            }
+
             override fun onAdFail(errorCode: Int, errorMessage: String) {
                 updateStatus("✗ $adTypeName failed: $errorMessage")
             }
-            override fun onAdShow() { updateStatus("✓ $adTypeName showing") }
-            override fun onAdClick() { updateStatus("! $adTypeName clicked") }
-            override fun onAdDismiss() { updateStatus("✓ $adTypeName dismissed") }
+
+            override fun onAdShow() {
+                updateStatus("✓ $adTypeName showing")
+            }
+
+            override fun onAdClick() {
+                updateStatus("! $adTypeName clicked")
+            }
+
+            override fun onAdDismiss() {
+                updateStatus("✓ $adTypeName dismissed")
+            }
+
             override fun onAdRewarded(rewardAmount: Int, rewardName: String) {}
         }
     }

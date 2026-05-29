@@ -3,7 +3,14 @@ package app.allever.android.lib.core.function.datastore
 import android.content.Context
 import android.os.Parcelable
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.doublePreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.floatPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import app.allever.android.lib.core.app.App
 import kotlinx.coroutines.flow.first
@@ -12,7 +19,7 @@ import kotlinx.coroutines.runBlocking
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "config")
 
-object PreferenceStore: IDataStore {
+object PreferenceStore : IDataStore {
     private val mDatsStore = App.context.dataStore
 
     override suspend fun putInt(key: String, value: Int) {
@@ -87,21 +94,27 @@ object PreferenceStore: IDataStore {
             is Int -> {
                 return intPreferencesKey(key)
             }
+
             is Float -> {
                 return floatPreferencesKey(key)
             }
+
             is Double -> {
                 return doublePreferencesKey(key)
             }
+
             is Long -> {
                 return longPreferencesKey(key)
             }
+
             is Boolean -> {
                 return booleanPreferencesKey(key)
             }
+
             is String -> {
                 return stringPreferencesKey(key)
             }
+
             else -> {
                 return null
             }

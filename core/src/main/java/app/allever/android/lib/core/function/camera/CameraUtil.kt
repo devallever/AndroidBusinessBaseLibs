@@ -15,6 +15,7 @@ import android.view.WindowManager
 @Deprecated("")
 object CameraUtil {
     private const val TAG = "CameraUtil"
+
     /**
      * 打印支持的pictureSizes
      *
@@ -70,7 +71,10 @@ object CameraUtil {
         var i = 0
         while (i < pictureSizes.size) {
             val size = pictureSizes[i]
-            Log.d(TAG, "getPropPictureSize: width = " + size.width + " height = " + size.height + " maxHeight = " + maxHeight)
+            Log.d(
+                TAG,
+                "getPropPictureSize: width = " + size.width + " height = " + size.height + " maxHeight = " + maxHeight
+            )
             if (size.height <= maxHeight) {
                 break
             }

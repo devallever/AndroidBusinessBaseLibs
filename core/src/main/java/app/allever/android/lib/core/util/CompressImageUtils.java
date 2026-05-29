@@ -24,7 +24,7 @@ public class CompressImageUtils {
     private int quality = 100;
     private int width = 0;
     private int height = 0;
-    private String TAG = CompressImageUtils.class.getSimpleName();
+    private final String TAG = CompressImageUtils.class.getSimpleName();
 
     private CompressImageUtils() {
     }

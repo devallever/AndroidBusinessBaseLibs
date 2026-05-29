@@ -53,7 +53,7 @@ public class FileUtils {
     public static final String GOSHARE_MEDIA_FILE_SAVE_DIR = Environment.getExternalStorageDirectory() + "/ZEROSMS/.goshare/";
     private static final String LOG_TAG = "FileUtil";
 
-//    public static String getFilterCachePath(String fileName) {
+    //    public static String getFilterCachePath(String fileName) {
 //        return FILTER_CACHE_PATH + File.separator + fileName;
 //    }
     private static final String SCHEME_FILE = "file";
@@ -205,7 +205,7 @@ public class FileUtils {
         try {
             File folder = new File(folderPath);
             if (!folder.exists()) {
-                if (folder.mkdirs() == false) {
+                if (!folder.mkdirs()) {
                     Log.i(LOG_TAG, "The folder is already exist: " + folderPath);
                     return true;
                 } else {
@@ -356,11 +356,7 @@ public class FileUtils {
      */
     public static boolean isSDCardMounted() {
         String status = Environment.getExternalStorageState();
-        if (status.equals(Environment.MEDIA_MOUNTED)) {
-            return true;
-        } else {
-            return false;
-        }
+        return status.equals(Environment.MEDIA_MOUNTED);
     }
 
     /**
@@ -620,9 +616,7 @@ public class FileUtils {
     public static void takePersistableUriPermission(Context context, Uri uri, int takeFlags) {
         try {
             Method takePersistableUriPermissionMethod = ContentResolver.class.getMethod(
-                    "takePersistableUriPermission", new Class<?>[]{
-                            Uri.class, int.class
-                    });
+                    "takePersistableUriPermission", Uri.class, int.class);
             takePersistableUriPermissionMethod.invoke(context.getContentResolver(), uri, takeFlags);
         } catch (Throwable tr) {
             Log.e("", "", tr);
@@ -826,8 +820,7 @@ public class FileUtils {
                     out.write(buf, 0, len);
                 }
 
-                byte[] data = out.toByteArray();
-                String var7 = new String(data, TextUtils.isEmpty(charset) ? "UTF-8" : charset);
+                String var7 = out.toString(TextUtils.isEmpty(charset) ? "UTF-8" : charset);
                 return var7;
             } catch (Exception var11) {
                 var11.printStackTrace();
@@ -1407,7 +1400,7 @@ public class FileUtils {
         if (!srcDir.exists() || !srcDir.isDirectory()) return false;
         if (!createOrExistsDir(destDir)) return false;
         File[] files = srcDir.listFiles();
-        if (files != null && files.length > 0) {
+        if (files != null) {
             for (File file : files) {
                 File oneDestFile = new File(destPath + file.getName());
                 if (file.isFile()) {
@@ -1485,7 +1478,7 @@ public class FileUtils {
         // dir isn't a directory then return false
         if (!dir.isDirectory()) return false;
         File[] files = dir.listFiles();
-        if (files != null && files.length > 0) {
+        if (files != null) {
             for (File file : files) {
                 if (file.isFile()) {
                     if (!file.delete()) return false;
@@ -1583,7 +1576,7 @@ public class FileUtils {
         // dir isn't a directory then return false
         if (!dir.isDirectory()) return false;
         File[] files = dir.listFiles();
-        if (files != null && files.length != 0) {
+        if (files != null) {
             for (File file : files) {
                 if (filter.accept(file)) {
                     if (file.isFile()) {
@@ -1824,7 +1817,7 @@ public class FileUtils {
         List<File> list = new ArrayList<>();
         if (!isDir(dir)) return list;
         File[] files = dir.listFiles();
-        if (files != null && files.length > 0) {
+        if (files != null) {
             for (File file : files) {
                 if (filter.accept(file)) {
                     list.add(file);
@@ -2147,7 +2140,7 @@ public class FileUtils {
         if (!isDir(dir)) return -1;
         long len = 0;
         File[] files = dir.listFiles();
-        if (files != null && files.length > 0) {
+        if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
                     len += getDirLength(file);
@@ -2444,7 +2437,8 @@ public class FileUtils {
 
     ///////////////////////////////////////////////////////////////////////////
     // interface
-    ///////////////////////////////////////////////////////////////////////////
+
+    /// ////////////////////////////////////////////////////////////////////////
 
     public interface OnReplaceListener {
         boolean onReplace(File srcFile, File destFile);

@@ -1,11 +1,9 @@
 package app.allever.android.sample.ad.core
 
 import android.util.Log
-import androidx.lifecycle.lifecycleScope
 import app.allever.android.lib.ad.core.AdManager
 import app.allever.android.lib.ad.core.AdManager.LoadMode
 import app.allever.android.lib.ad.core.callback.IAdCallback
-import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.provider.admob.AdMobAdProvider
 import app.allever.android.lib.ad.provider.bigo.BigoAdProvider
@@ -13,13 +11,11 @@ import app.allever.android.lib.ad.provider.pangle.PangleAdProvider
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.util.UIKit.runOnUiThread
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import app.allever.android.sample.ad.core.config.AdIdConstants
 import app.allever.android.sample.ad.core.config.ProviderConfigConstants
 import app.allever.android.sample.ad.core.databinding.FragmentMultiProviderBinding
-import kotlinx.coroutines.launch
 
 class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseViewModel>() {
-    
+
     override fun inflate() = FragmentMultiProviderBinding.inflate(layoutInflater)
 
     override fun init() {
@@ -29,18 +25,18 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
 
     private fun setupUI() {
         mBinding.btnInitAll.setOnClickListener { initAllProviders() }
-        
+
         mBinding.btnSwitchAdMob.setOnClickListener { switchToProvider(AdMobAdProvider.PROVIDER_NAME) }
         mBinding.btnSwitchPangle.setOnClickListener { switchToProvider(PangleAdProvider.PROVIDER_NAME) }
         mBinding.btnSwitchBigo.setOnClickListener { switchToProvider(BigoAdProvider.PROVIDER_NAME) }
-        
+
         mBinding.btnModeSingle.setOnClickListener { setLoadMode(LoadMode.SINGLE) }
         mBinding.btnModeWaterfall.setOnClickListener { setLoadMode(LoadMode.WATERFALL) }
         mBinding.btnShowWaterfallInfo.setOnClickListener { showWaterfallInfo() }
-        
+
         mBinding.btnLoadInter.setOnClickListener { loadInterstitial() }
         mBinding.btnLoadReward.setOnClickListener { loadRewardVideo() }
-        
+
         mBinding.btnDestroyActive.setOnClickListener { destroyActiveProvider() }
         mBinding.btnReinitActive.setOnClickListener { reinitActiveProvider() }
     }
@@ -70,10 +66,10 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
 
     private fun initAllProviders() {
         updateStatus("Initializing all providers...")
-        
+
         val context = requireContext()
         AdManager.init(context, AdMobAdProvider.PROVIDER_NAME) {
-            runOnUiThread { 
+            runOnUiThread {
                 updateStatus("✓ AdMob initialized")
                 logProviderStatus()
             }
@@ -99,10 +95,10 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
 
     private fun switchToProvider(providerType: String) {
         val success = AdManager.switchToProvider(providerType)
-        
+
         if (success) {
             updateStatus("✓ Switched to: $providerType")
-            
+
             runOnUiThread {
                 AdManager.loadAd(requireContext(), AdType.INTERSTITIAL)
                 AdManager.loadAd(requireContext(), AdType.REWARD_VIDEO)
@@ -114,7 +110,7 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
                 updateStatus("✗ Failed to switch to: $providerType")
             }
         }
-        
+
         logProviderStatus()
     }
 
@@ -130,13 +126,26 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
             activity = requireActivity(),
             adType = AdType.INTERSTITIAL,
             callback = object : IAdCallback {
-                override fun onAdLoaded() { updateStatus("✓ Interstitial loaded") }
-                override fun onAdFail(errorCode: Int, errorMessage: String) { 
-                    updateStatus("✗ Interstitial failed: $errorMessage") 
+                override fun onAdLoaded() {
+                    updateStatus("✓ Interstitial loaded")
                 }
-                override fun onAdShow() { updateStatus("✓ Interstitial showing") }
-                override fun onAdClick() { updateStatus("! Interstitial clicked") }
-                override fun onAdDismiss() { updateStatus("✓ Interstitial dismissed") }
+
+                override fun onAdFail(errorCode: Int, errorMessage: String) {
+                    updateStatus("✗ Interstitial failed: $errorMessage")
+                }
+
+                override fun onAdShow() {
+                    updateStatus("✓ Interstitial showing")
+                }
+
+                override fun onAdClick() {
+                    updateStatus("! Interstitial clicked")
+                }
+
+                override fun onAdDismiss() {
+                    updateStatus("✓ Interstitial dismissed")
+                }
+
                 override fun onAdRewarded(rewardAmount: Int, rewardName: String) {}
             }
         )
@@ -154,15 +163,28 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
             activity = requireActivity(),
             adType = AdType.REWARD_VIDEO,
             callback = object : IAdCallback {
-                override fun onAdLoaded() { updateStatus("✓ Reward loaded") }
-                override fun onAdFail(errorCode: Int, errorMessage: String) { 
-                    updateStatus("✗ Reward failed: $errorMessage") 
+                override fun onAdLoaded() {
+                    updateStatus("✓ Reward loaded")
                 }
-                override fun onAdShow() { updateStatus("✓ Reward showing") }
-                override fun onAdClick() { updateStatus("! Reward clicked") }
-                override fun onAdDismiss() { updateStatus("✓ Reward dismissed") }
-                override fun onAdRewarded(rewardAmount: Int, rewardName: String) { 
-                    updateStatus("🎁 Rewarded: $rewardAmount $rewardName") 
+
+                override fun onAdFail(errorCode: Int, errorMessage: String) {
+                    updateStatus("✗ Reward failed: $errorMessage")
+                }
+
+                override fun onAdShow() {
+                    updateStatus("✓ Reward showing")
+                }
+
+                override fun onAdClick() {
+                    updateStatus("! Reward clicked")
+                }
+
+                override fun onAdDismiss() {
+                    updateStatus("✓ Reward dismissed")
+                }
+
+                override fun onAdRewarded(rewardAmount: Int, rewardName: String) {
+                    updateStatus("🎁 Rewarded: $rewardAmount $rewardName")
                 }
             }
         )
@@ -188,7 +210,7 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
         }
 
         updateStatus("Re-initializing: $activeType...")
-        
+
         AdManager.init(requireContext(), activeType, forceReinit = true) {
             runOnUiThread {
                 updateStatus("✓ Re-initialized: $activeType")
@@ -208,19 +230,19 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
         sb.appendLine("Active: ${AdManager.getActiveProviderType()}")
         sb.appendLine("Mode: ${AdManager.loadMode}")
         sb.appendLine("Initialized: ${AdManager.getInitializedProviders()}")
-        
+
         Log.d("MultiProvider", sb.toString())
     }
 
     private fun setLoadMode(mode: LoadMode) {
         AdManager.setLoadMode(mode)
-        
+
         val modeText = when (mode) {
             LoadMode.SINGLE -> "🎯 SINGLE"
             LoadMode.WATERFALL -> "💧 WATERFALL"
             LoadMode.BIDDING -> "⚡ BIDDING"
         }
-        
+
         mBinding.tvCurrentMode.text = "Mode: $modeText"
         updateStatus("Load mode changed to: $modeText")
     }

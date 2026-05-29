@@ -108,7 +108,7 @@ public class IntentUtils {
         Intent intent = new Intent();
         intent.setClass(ctx, target);
         intent.putExtras(bundle);
-        if (flags != null && flags.length > 0) {
+        if (flags != null) {
             for (int flag : flags) {
                 intent.addFlags(flag);
             }

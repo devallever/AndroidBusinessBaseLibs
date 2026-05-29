@@ -21,7 +21,7 @@ object ViewHelper {
      */
     fun setVisible(view: View, show: Boolean) {
         if (show) {
-            view.animate().setListener(object: Animator.AnimatorListener {
+            view.animate().setListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(animation: Animator) {
                     view.visibility = View.VISIBLE
                 }
@@ -132,7 +132,7 @@ object ViewHelper {
         }
     }
 
-    fun setViewWidthHeight(view: View, width: Int,height: Int) {
+    fun setViewWidthHeight(view: View, width: Int, height: Int) {
         if (view.layoutParams == null) return
         val lp = view.layoutParams as ViewGroup.LayoutParams
         view.layoutParams.width = width
@@ -140,7 +140,7 @@ object ViewHelper {
         view.layoutParams = lp
     }
 
-    fun setViewHorizontalMargin(view: View,leftMargin:Int,rightMargin:Int){
+    fun setViewHorizontalMargin(view: View, leftMargin: Int, rightMargin: Int) {
         if (view.layoutParams == null) return
         val lp = view.layoutParams as ViewGroup.MarginLayoutParams
         lp.leftMargin = leftMargin

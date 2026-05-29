@@ -16,7 +16,7 @@ import app.allever.android.sample.ad.core.config.ProviderConfigConstants
 import app.allever.android.sample.ad.core.databinding.FragmentWaterfallBinding
 
 class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>() {
-    
+
     override fun inflate() = FragmentWaterfallBinding.inflate(layoutInflater)
 
     override fun init() {
@@ -25,14 +25,14 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
 
     private fun setupUI() {
         mBinding.btnRegisterProviders.setOnClickListener { registerProviders() }
-        
+
         mBinding.btnInitAll.setOnClickListener { initAllProviders() }
-        
+
         mBinding.btnModeSingle.setOnClickListener { setMode(LoadMode.SINGLE) }
         mBinding.btnModeWaterfall.setOnClickListener { setMode(LoadMode.WATERFALL) }
-        
+
         mBinding.btnShowWaterfallInfo.setOnClickListener { showWaterfallInfo() }
-        
+
         mBinding.btnLoadInter.setOnClickListener { loadInterstitial() }
         mBinding.btnLoadReward.setOnClickListener { loadRewardVideo() }
         mBinding.btnLoadSplash.setOnClickListener { loadSplashAd() }
@@ -43,7 +43,7 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
 
     private fun registerProviders() {
         appendStatus("Registering providers with waterfall config...")
-        
+
         AdManager.registerProvider(
             providerType = AdMobAdProvider.PROVIDER_NAME,
             providerClass = AdMobAdProvider::class.java,
@@ -71,9 +71,9 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
 
     private fun initAllProviders() {
         appendStatus("Initializing all providers (joining pool)...")
-        
+
         val context = requireContext()
-        
+
         AdManager.init(context, AdMobAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 appendStatus("✓ ADMOB initialized & in pool")
@@ -98,22 +98,23 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
 
     private fun setMode(mode: LoadMode) {
         AdManager.setLoadMode(mode)
-        
+
         val modeName = when (mode) {
             LoadMode.SINGLE -> "🎯 SINGLE"
             LoadMode.WATERFALL -> "💧 WATERFALL"
             LoadMode.BIDDING -> "⚡️ BIDDING"
         }
-        
+
         appendStatus("")
-        appendStatus("=" .repeat(50))
+        appendStatus("=".repeat(50))
         appendStatus("Load Mode Changed: $modeName")
-        
+
         when (mode) {
             LoadMode.SINGLE -> {
                 appendStatus("→ Will use ACTIVE provider only")
                 appendStatus("→ Switch with switchProvider()")
             }
+
             LoadMode.WATERFALL -> {
                 appendStatus("→ Will try waterfall providers in order")
                 appendStatus("→ First success wins!")
@@ -124,9 +125,9 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
                 appendStatus("→ max success wins!")
             }
         }
-        appendStatus("=" .repeat(50))
+        appendStatus("=".repeat(50))
         appendStatus("")
-        
+
         updateCurrentModeDisplay()
     }
 
@@ -137,13 +138,13 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
             LoadMode.WATERFALL -> "💧 WATERFALL (Auto Try All)"
             LoadMode.BIDDING -> "⚡️ BIDDING (Max Success)"
         }
-        
+
         mBinding.tvCurrentMode.text = "Current Mode: $modeText"
     }
 
     private fun showWaterfallInfo() {
         val info = AdManager.getWaterfallProvidersInfo()
-        
+
         appendStatus("")
         appendStatus("─".repeat(50))
         appendStatus(info)
@@ -162,16 +163,16 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
 
         val mode = AdManager.loadMode
         val activeType = AdManager.getActiveProviderType()
-        
+
         appendStatus("")
         appendStatus("Loading INTERSTITIAL ad...")
         appendStatus("Mode: $mode | Active: $activeType")
-        
+
         if (mode == LoadMode.WATERFALL) {
             appendStatus("[WATERFALL] Will try providers in order until success...")
         }
 
-        AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL,  object : IAdCallback {
+        AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL, object : IAdCallback {
             override fun onAdLoaded() {
                 appendStatus("✓ Interstitial LOADED successfully!")
                 appendStatus("  Winner: ${AdManager.getActiveProviderType()}")
@@ -189,18 +190,18 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
                 }
             }
 
-            override fun onAdShow() { 
-                appendStatus("📺 Interstitial SHOWING from: ${AdManager.getActiveProviderType()}") 
+            override fun onAdShow() {
+                appendStatus("📺 Interstitial SHOWING from: ${AdManager.getActiveProviderType()}")
             }
-            
-            override fun onAdClick() { 
-                appendStatus("👆 Interstitial CLICKED") 
+
+            override fun onAdClick() {
+                appendStatus("👆 Interstitial CLICKED")
             }
-            
-            override fun onAdDismiss() { 
-                appendStatus("❌ Interstitial DISMISSED") 
+
+            override fun onAdDismiss() {
+                appendStatus("❌ Interstitial DISMISSED")
             }
-            
+
             override fun onAdRewarded(rewardAmount: Int, rewardName: String) {}
         })
     }
@@ -212,7 +213,7 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
         }
 
         val mode = AdManager.loadMode
-        
+
         appendStatus("")
         appendStatus("Loading REWARD VIDEO ad...")
         appendStatus("Mode: $mode")
@@ -227,20 +228,20 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
                 appendStatus("✗ Reward Video FAILED: $errorMessage")
             }
 
-            override fun onAdShow() { 
-                appendStatus("📺 Reward Video SHOWING") 
+            override fun onAdShow() {
+                appendStatus("📺 Reward Video SHOWING")
             }
-            
-            override fun onAdClick() { 
-                appendStatus("👆 Reward Video CLICKED") 
+
+            override fun onAdClick() {
+                appendStatus("👆 Reward Video CLICKED")
             }
-            
-            override fun onAdDismiss() { 
-                appendStatus("❌ Reward Video DISMISSED") 
+
+            override fun onAdDismiss() {
+                appendStatus("❌ Reward Video DISMISSED")
             }
-            
-            override fun onAdRewarded(rewardAmount: Int, rewardName: String) { 
-                appendStatus("🎁 REWARDED: $rewardAmount x $rewardName") 
+
+            override fun onAdRewarded(rewardAmount: Int, rewardName: String) {
+                appendStatus("🎁 REWARDED: $rewardAmount x $rewardName")
             }
         })
     }
@@ -252,22 +253,25 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
         }
 
         appendStatus("Showing cached interstitial...")
-        
+
         AdManager.showAd(
             activity = requireActivity(),
             adType = AdType.INTERSTITIAL,
             callback = object : IAdCallback {
                 override fun onAdLoaded() {}
-                override fun onAdFail(errorCode: Int, errorMessage: String) { 
-                    appendStatus("✗ Show failed: $errorMessage") 
+                override fun onAdFail(errorCode: Int, errorMessage: String) {
+                    appendStatus("✗ Show failed: $errorMessage")
                 }
-                override fun onAdShow() { 
-                    appendStatus("📺 Showing interstitial...") 
+
+                override fun onAdShow() {
+                    appendStatus("📺 Showing interstitial...")
                 }
-                override fun onAdClick() { }
-                override fun onAdDismiss() { 
-                    appendStatus("❌ Interstitial dismissed") 
+
+                override fun onAdClick() {}
+                override fun onAdDismiss() {
+                    appendStatus("❌ Interstitial dismissed")
                 }
+
                 override fun onAdRewarded(rewardAmount: Int, rewardName: String) {}
             }
         )
@@ -289,13 +293,16 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
                 override fun onAdFail(errorCode: Int, errorMessage: String) {
                     appendStatus("✗ Show failed: $errorMessage")
                 }
+
                 override fun onAdShow() {
                     appendStatus("📺 Showing interstitial...")
                 }
-                override fun onAdClick() { }
+
+                override fun onAdClick() {}
                 override fun onAdDismiss() {
                     appendStatus("❌ Interstitial dismissed")
                 }
+
                 override fun onAdRewarded(rewardAmount: Int, rewardName: String) {
                     appendStatus("🎁 REWARDED: $rewardAmount x $rewardName")
                 }
@@ -372,13 +379,16 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
                 override fun onAdFail(errorCode: Int, errorMessage: String) {
                     appendStatus("✗ Show failed: $errorMessage")
                 }
+
                 override fun onAdShow() {
                     appendStatus("📺 Showing splash ad...")
                 }
-                override fun onAdClick() { }
+
+                override fun onAdClick() {}
                 override fun onAdDismiss() {
                     appendStatus("❌ Splash dismissed")
                 }
+
                 override fun onAdRewarded(rewardAmount: Int, rewardName: String) {}
             }
         )
@@ -386,15 +396,16 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
 
     private fun appendStatus(message: String) {
         val currentText = mBinding.tvStatus.text.toString()
-        val newText = if (currentText.isEmpty() || currentText == "Ready to start waterfall demo...") {
-            message
-        } else {
-            "$currentText\n$message"
-        }
-        
+        val newText =
+            if (currentText.isEmpty() || currentText == "Ready to start waterfall demo...") {
+                message
+            } else {
+                "$currentText\n$message"
+            }
+
         mBinding.tvStatus.text = newText
         Log.d("WaterfallDemo", message)
-        
+
         mBinding.tvStatus.post {
             mBinding.scrollView.fullScroll(TextView.FOCUS_DOWN)
         }

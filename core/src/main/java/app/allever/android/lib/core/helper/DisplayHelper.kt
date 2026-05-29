@@ -9,6 +9,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.helper.DisplayHelper.context
 
 /**
  * Created by allever on 17-8-5.

@@ -11,7 +11,13 @@ import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.core.ext.log
-import com.google.android.gms.ads.*
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -37,7 +43,7 @@ class AdMobAdProvider : BaseAdProvider() {
             MobileAds.initialize(context) {
                 finishInit(callback)
             }
-        },callback)
+        }, callback)
     }
 
     override fun onDestroy() {
@@ -61,7 +67,7 @@ class AdMobAdProvider : BaseAdProvider() {
             object : AppOpenAd.AppOpenAdLoadCallback() {
                 override fun onAdLoaded(ad: AppOpenAd) {
                     splashAd = ad
-                    handleOnAdLoaded(AdType.SPLASH, ad,  callback)
+                    handleOnAdLoaded(AdType.SPLASH, ad, callback)
 
                     ad.fullScreenContentCallback = object : FullScreenContentCallback() {
                         override fun onAdDismissedFullScreenContent() {
@@ -88,7 +94,7 @@ class AdMobAdProvider : BaseAdProvider() {
 
     override fun showSplashAd(activity: Activity, callback: IAdCallback?) {
         showSplashAdInternal(splashAd, callback) {
-            splashAd?.show( activity)
+            splashAd?.show(activity)
         }
     }
 
@@ -172,8 +178,13 @@ class AdMobAdProvider : BaseAdProvider() {
 
     override fun showRewardedAd(activity: Activity, callback: IAdCallback?) {
         showRewardedAdInternal(rewardedAd, callback) {
-            rewardedAd?.show(activity) {rewardItem ->
-                handleOnAdRewarded(AdType.REWARD_VIDEO, rewardItem.amount, rewardItem.type, callback)
+            rewardedAd?.show(activity) { rewardItem ->
+                handleOnAdRewarded(
+                    AdType.REWARD_VIDEO,
+                    rewardItem.amount,
+                    rewardItem.type,
+                    callback
+                )
             }
         }
     }
@@ -213,13 +224,13 @@ class AdMobAdProvider : BaseAdProvider() {
 
             adView.loadAd(AdRequest.Builder().build())
         } catch (e: Exception) {
-            handleOnAdLoadFail(AdType.BANNER, -1, e.message?: "Unknown error", callback)
+            handleOnAdLoadFail(AdType.BANNER, -1, e.message ?: "Unknown error", callback)
         }
     }
 
     override fun showBannerAd(container: ViewGroup?, callback: IAdCallback?) {
         val adView = getCachedAd(AdType.BANNER) as? View
-        showBannerInternal(adView, container,  callback)
+        showBannerInternal(adView, container, callback)
     }
 
     private fun getScreenWidth(context: Context): Int {

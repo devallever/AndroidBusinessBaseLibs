@@ -12,12 +12,13 @@ import org.json.JSONObject;
  */
 public class ResultUtils {
 
-    @SuppressLint("StaticFieldLeak")
-    private static Context sContext;
     private static final int RESULT_SUCCESS_CODE = 0;
     private static final int RESULT_FAILURE_CODE = 1;
+    @SuppressLint("StaticFieldLeak")
+    private static Context sContext;
 
-    private ResultUtils() {}
+    private ResultUtils() {
+    }
 
     public static void init(Context context) {
         if (sContext == null) {

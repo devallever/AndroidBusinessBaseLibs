@@ -22,9 +22,8 @@ public class UIKit {
     public final static String KEY_BASE = "key_basis";
     public final static String KEY_BASE1 = "key_basis1";
     public final static String KEY_OBJ = "key_obj";
-
-    private static Application mBaseContext;
     private final static Handler mainHand = new Handler(Looper.getMainLooper());
+    private static Application mBaseContext;
 
     public static Context getContext() {
         if (null == mBaseContext) {
@@ -58,11 +57,11 @@ public class UIKit {
     }
 
     public static <T extends View> T getView(Activity activity, int viewId) {
-        return (T) activity.findViewById(viewId);
+        return activity.findViewById(viewId);
     }
 
     public static <T extends View> T getView(View parent, int viewId) {
-        return (T) parent.findViewById(viewId);
+        return parent.findViewById(viewId);
     }
 
     public static <T extends View> void setVisiable(T t, boolean visiable) {

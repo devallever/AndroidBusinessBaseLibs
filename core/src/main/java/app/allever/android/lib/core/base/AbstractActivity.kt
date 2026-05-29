@@ -4,8 +4,6 @@ import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.WindowInsets
-import android.view.WindowInsetsController
 import androidx.appcompat.app.AppCompatActivity
 import app.allever.android.lib.core.R
 import app.allever.android.lib.core.app.App
@@ -42,7 +40,7 @@ abstract class AbstractActivity : AppCompatActivity(), BGASwipeBackHelper.Delega
     override fun onCreate(savedInstanceState: Bundle?) {
         // 「必须在 Application 的 onCreate 方法中执行 BGASwipeBackHelper.init 来初始化滑动返回」
         // 在 super.onCreate(savedInstanceState) 之前调用该方法
-        if (enableEnterAnim()){
+        if (enableEnterAnim()) {
             initSwipeBackFinish()
         }
 

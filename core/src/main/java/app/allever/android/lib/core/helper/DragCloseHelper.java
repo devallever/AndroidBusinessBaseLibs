@@ -4,9 +4,6 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
-
-import androidx.annotation.FloatRange;
-
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -17,6 +14,8 @@ import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 
+import androidx.annotation.FloatRange;
+
 import java.lang.reflect.Method;
 
 import app.allever.android.lib.core.R;
@@ -25,8 +24,6 @@ import app.allever.android.lib.core.R;
  * @author bauer on 2019/4/17.
  */
 public class DragCloseHelper {
-    private ViewConfiguration viewConfiguration;
-
     /**
      * 动画执行时间
      */
@@ -35,11 +32,12 @@ public class DragCloseHelper {
      * 滑动边界距离
      */
     private final static int MAX_EXIT_Y = 500;
-    private int maxExitY = MAX_EXIT_Y;
     /**
      * 最小的缩放尺寸
      */
     private static final float MIN_SCALE = 0.4F;
+    private final ViewConfiguration viewConfiguration;
+    private int maxExitY = MAX_EXIT_Y;
     private float minScale = MIN_SCALE;
     /**
      * 是否在滑动关闭中，手指还在触摸中
@@ -73,18 +71,18 @@ public class DragCloseHelper {
     /**
      * 状态栏高度
      */
-    private int statusBarHeight;
+    private final int statusBarHeight;
 
     /**
      * 屏幕高度
      */
-    private int screenDpi;
+    private final int screenDpi;
 
     private View parentV, childV;
 
     private DragCloseListener dragCloseListener;
     private ClickListener clickListener;
-    private Context mContext;
+    private final Context mContext;
 
     private boolean isDebug = false;
 
@@ -492,60 +490,6 @@ public class DragCloseHelper {
     }
 
     /**
-     * 处理长按事件
-     */
-    private final class LongClickRunnable implements Runnable {
-
-        @Override
-        public void run() {
-            if (isPress && clickListener != null) {
-                clickListener.onClick(childV, true);
-                longClickPerform = true;
-            }
-        }
-    }
-
-    public interface DragCloseListener {
-        /**
-         * 是否有拦截
-         *
-         * @return
-         */
-        boolean intercept();
-
-        /**
-         * 开始拖拽
-         */
-        void dragStart();
-
-        /**
-         * 拖拽中
-         *
-         * @param percent
-         */
-        void dragging(float percent);
-
-        /**
-         * 取消拖拽
-         */
-        void dragCancel();
-
-        /**
-         * 拖拽结束并且关闭
-         *
-         * @param isShareElementMode
-         */
-        void dragClose(boolean isShareElementMode);
-    }
-
-    public interface ClickListener {
-        /**
-         * 点击事件
-         */
-        void onClick(View view, boolean isLongClick);
-    }
-
-    /**
      * 是否有效点击，如果点击到了状态栏区域 或者 虚拟导航栏区域，则无效
      *
      * @return
@@ -590,5 +534,59 @@ public class DragCloseHelper {
             e.printStackTrace();
         }
         return dpi;
+    }
+
+    public interface DragCloseListener {
+        /**
+         * 是否有拦截
+         *
+         * @return
+         */
+        boolean intercept();
+
+        /**
+         * 开始拖拽
+         */
+        void dragStart();
+
+        /**
+         * 拖拽中
+         *
+         * @param percent
+         */
+        void dragging(float percent);
+
+        /**
+         * 取消拖拽
+         */
+        void dragCancel();
+
+        /**
+         * 拖拽结束并且关闭
+         *
+         * @param isShareElementMode
+         */
+        void dragClose(boolean isShareElementMode);
+    }
+
+    public interface ClickListener {
+        /**
+         * 点击事件
+         */
+        void onClick(View view, boolean isLongClick);
+    }
+
+    /**
+     * 处理长按事件
+     */
+    private final class LongClickRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            if (isPress && clickListener != null) {
+                clickListener.onClick(childV, true);
+                longClickPerform = true;
+            }
+        }
     }
 }

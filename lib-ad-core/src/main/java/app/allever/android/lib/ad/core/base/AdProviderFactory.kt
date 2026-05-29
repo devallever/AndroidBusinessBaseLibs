@@ -25,7 +25,11 @@ object AdProviderFactory {
      * @param providerClass
      * @param config
      */
-    fun registerProvider(providerType: String, providerClass: Class<out IAdProvider>, config: AdProviderConfig) {
+    fun registerProvider(
+        providerType: String,
+        providerClass: Class<out IAdProvider>,
+        config: AdProviderConfig
+    ) {
         providers[providerType] = ProviderEntry(providerClass, config)
         Log.d(TAG, "Registered ad provider: $providerType -> ${providerClass.simpleName}")
     }
@@ -60,9 +64,9 @@ object AdProviderFactory {
     }
 
     fun isProviderRegistered(providerType: String): Boolean = providers.containsKey(providerType)
-    
+
     fun getConfig(providerType: String): AdProviderConfig? = providers[providerType]?.config
-    
-    fun getAllConfigs(): Map<String, AdProviderConfig> = 
+
+    fun getAllConfigs(): Map<String, AdProviderConfig> =
         providers.mapValues { it.value.config }
 }

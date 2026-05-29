@@ -32,6 +32,7 @@ class InterceptChain(
                 index++
                 interceptor.intercept(this@InterceptChain)
             }
+
             interceptors.size -> {
                 clearAll()
             }

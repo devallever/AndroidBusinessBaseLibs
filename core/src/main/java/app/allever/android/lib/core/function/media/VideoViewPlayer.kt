@@ -82,7 +82,7 @@ class VideoViewPlayer @JvmOverloads constructor(
         }
 
         binding.controlView.setOnClickListener {
-            val visible = binding.controlContainer.visibility == View.VISIBLE
+            val visible = binding.controlContainer.visibility == VISIBLE
             ViewHelper.setVisible(binding.controlContainer, !visible)
             if (!mShowTitleBar) {
                 ViewHelper.setVisible(binding.topBarContainer, false)
@@ -93,9 +93,9 @@ class VideoViewPlayer @JvmOverloads constructor(
 
         val screenWidth = DisplayHelper.getScreenWidth()
         val screenHeight = DisplayHelper.getScreenHeight()
-        val leftSide = screenWidth / 8
-        val rightSide = screenWidth / 8 * 7
-        val bottomSide = screenHeight / 3 * 2
+        screenWidth / 8
+        screenWidth / 8 * 7
+        screenHeight / 3 * 2
         var moved = false
         var downX = 0f
         var downY = 0f
@@ -113,6 +113,7 @@ class VideoViewPlayer @JvmOverloads constructor(
                     lastRealDownX = downX
                     moved = false
                 }
+
                 MotionEvent.ACTION_UP -> {
                     if (!moved) {
 //                        toast("没移动")
@@ -123,6 +124,7 @@ class VideoViewPlayer @JvmOverloads constructor(
                     }
                     moved = false
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     val rawX = motionEvent.rawX
                     val rawY = motionEvent.rawY
@@ -139,9 +141,11 @@ class VideoViewPlayer @JvmOverloads constructor(
                         rawX < leftSide -> {
                             log("左边滑动")
                         }
+
                         rawX > rightSide -> {
                             log("右边滑动")
                         }
+
                         rawY > bottomSide -> {
                             log("下边滑动")
 
@@ -155,12 +159,14 @@ class VideoViewPlayer @JvmOverloads constructor(
                                 log(" progress = $progress")
                             }
                         }
+
                         else -> {
                         }
                     }
                     lastRealDownX = rawX
 
                 }
+
                 MotionEvent.ACTION_CANCEL -> {
                     moved = false
                 }
@@ -231,13 +237,13 @@ class VideoViewPlayer @JvmOverloads constructor(
 
             if (isWidthMode) {
                 val lp = binding.videoView.layoutParams
-                lp.width = ViewGroup.LayoutParams.WRAP_CONTENT
-                lp.height = ViewGroup.LayoutParams.MATCH_PARENT
+                lp.width = LayoutParams.WRAP_CONTENT
+                lp.height = LayoutParams.MATCH_PARENT
                 binding.videoView.layoutParams = lp
             } else {
                 val lp = binding.videoView.layoutParams
-                lp.width = ViewGroup.LayoutParams.MATCH_PARENT
-                lp.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                lp.width = LayoutParams.MATCH_PARENT
+                lp.height = LayoutParams.WRAP_CONTENT
                 binding.videoView.layoutParams = lp
             }
         }
@@ -258,7 +264,7 @@ class VideoViewHandler : MediaPlayer.OnCompletionListener, MediaPlayer.OnPrepare
     private lateinit var mMediaBean: MediaBean
     private var mStatusListener: StatusListener? = null
 
-    private val timerTask = TimerTask2(null,  1000L, true) {
+    private val timerTask = TimerTask2(null, 1000L, true) {
         mStatusListener?.onVideoPlaying(mMediaPlayer?.currentPosition ?: 0)
     }
 

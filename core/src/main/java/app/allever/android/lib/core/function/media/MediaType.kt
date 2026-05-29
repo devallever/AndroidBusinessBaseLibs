@@ -49,7 +49,7 @@ object MediaType {
     const val TYPE_STICKER = 7
 
     @IntDef(value = [TYPE_OTHER_IMAGE, TYPE_JPG, TYPE_PNG, TYPE_GIF, TYPE_VIDEO, TYPE_TEXT, TYPE_AUDIO, TYPE_STICKER])
-    @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
+    @Retention(AnnotationRetention.SOURCE)
     annotation class Type
 
     fun isGif(type: Int): Boolean {

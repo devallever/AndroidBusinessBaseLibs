@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -66,7 +67,7 @@ public class ZipUtils {
      * @param folderPath 解压缩的目标目录
      * @throws IOException 当解压缩过程出错时抛出
      */
-    public static void upZipFile(File zipFile, String folderPath) throws ZipException, IOException {
+    public static void upZipFile(File zipFile, String folderPath) throws IOException {
         File desDir = new File(folderPath);
         if (!desDir.exists()) {
             desDir.mkdirs();
@@ -76,7 +77,7 @@ public class ZipUtils {
             ZipEntry entry = ((ZipEntry) entries.nextElement());
             InputStream in = zf.getInputStream(entry);
             String str = folderPath + File.separator + entry.getName();
-            str = new String(str.getBytes("8859_1"), "GB2312");
+            str = new String(str.getBytes(StandardCharsets.ISO_8859_1), "GB2312");
             File desFile = new File(str);
             if (!desFile.exists()) {
                 File fileParentDir = desFile.getParentFile();
@@ -86,7 +87,7 @@ public class ZipUtils {
                 desFile.createNewFile();
             }
             OutputStream out = new FileOutputStream(desFile);
-            byte buffer[] = new byte[BUFF_SIZE];
+            byte[] buffer = new byte[BUFF_SIZE];
             int realLength;
             while ((realLength = in.read(buffer)) > 0) {
                 out.write(buffer, 0, realLength);
@@ -120,7 +121,7 @@ public class ZipUtils {
             if (entry.getName().contains(nameContains)) {
                 InputStream in = zf.getInputStream(entry);
                 String str = folderPath + File.separator + entry.getName();
-                str = new String(str.getBytes("8859_1"), "GB2312");
+                str = new String(str.getBytes(StandardCharsets.ISO_8859_1), "GB2312");
                 // str.getBytes("GB2312"),"8859_1" 输出
                 // str.getBytes("8859_1"),"GB2312" 输入
                 File desFile = new File(str);
@@ -132,7 +133,7 @@ public class ZipUtils {
                     desFile.createNewFile();
                 }
                 OutputStream out = new FileOutputStream(desFile);
-                byte buffer[] = new byte[BUFF_SIZE];
+                byte[] buffer = new byte[BUFF_SIZE];
                 int realLength;
                 while ((realLength = in.read(buffer)) > 0) {
                     out.write(buffer, 0, realLength);
@@ -158,7 +159,7 @@ public class ZipUtils {
         Enumeration<?> entries = getEntriesEnumeration(zipFile);
         while (entries.hasMoreElements()) {
             ZipEntry entry = ((ZipEntry) entries.nextElement());
-            entryNames.add(new String(getEntryName(entry).getBytes("GB2312"), "8859_1"));
+            entryNames.add(new String(getEntryName(entry).getBytes("GB2312"), StandardCharsets.ISO_8859_1));
         }
         return entryNames;
     }
@@ -186,7 +187,7 @@ public class ZipUtils {
      * @throws UnsupportedEncodingException
      */
     public static String getEntryComment(ZipEntry entry) throws UnsupportedEncodingException {
-        return new String(entry.getComment().getBytes("GB2312"), "8859_1");
+        return new String(entry.getComment().getBytes("GB2312"), StandardCharsets.ISO_8859_1);
     }
 
     /**
@@ -197,7 +198,7 @@ public class ZipUtils {
      * @throws UnsupportedEncodingException
      */
     public static String getEntryName(ZipEntry entry) throws UnsupportedEncodingException {
-        return new String(entry.getName().getBytes("GB2312"), "8859_1");
+        return new String(entry.getName().getBytes("GB2312"), StandardCharsets.ISO_8859_1);
     }
 
     /**
@@ -213,14 +214,14 @@ public class ZipUtils {
             throws FileNotFoundException, IOException {
         rootpath = rootpath + (rootpath.trim().length() == 0 ? "" : File.separator)
                 + resFile.getName();
-        rootpath = new String(rootpath.getBytes("8859_1"), "GB2312");
+        rootpath = new String(rootpath.getBytes(StandardCharsets.ISO_8859_1), "GB2312");
         if (resFile.isDirectory()) {
             File[] fileList = resFile.listFiles();
             for (File file : fileList) {
                 zipFile(file, zipout, rootpath);
             }
         } else {
-            byte buffer[] = new byte[BUFF_SIZE];
+            byte[] buffer = new byte[BUFF_SIZE];
             BufferedInputStream in = new BufferedInputStream(new FileInputStream(resFile),
                     BUFF_SIZE);
             zipout.putNextEntry(new ZipEntry(rootpath));

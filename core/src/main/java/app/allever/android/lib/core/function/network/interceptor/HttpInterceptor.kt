@@ -39,7 +39,7 @@ class HttpInterceptor : Interceptor {
             }
             logE(tag, "请求体\t = " + getRequestInfo(request))
             iLargeChar(tag, "请求结果 = $responseBodyString")
-            logE(tag,"Http ==> End")
+            logE(tag, "Http ==> End")
         }
         val body = responseBodyString.toByteArray()
             .toResponseBody(if (responseBody == null) "application/json".toMediaTypeOrNull() else responseBody.contentType())

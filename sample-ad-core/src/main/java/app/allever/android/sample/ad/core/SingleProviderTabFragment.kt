@@ -6,8 +6,9 @@ import app.allever.android.lib.common.TabViewModel
 import app.allever.android.lib.common.databinding.FragmentTabBinding
 
 class SingleProviderTabFragment : TabFragment<FragmentTabBinding, TabViewModel>() {
-    override fun getTabTitles(): MutableList<String> = mutableListOf("AdMob", "Pangle", "Bigo", "MultiProvider")
+    override fun getTabTitles(): MutableList<String> =
+        mutableListOf("AdMob", "Pangle", "Bigo", "MultiProvider")
 
     override fun getFragments(): MutableList<Fragment> =
-        mutableListOf(AdMobFragment(), PangleFragment(), BigoFragment(), MultiProviderFragment(),)
+        mutableListOf(AdMobFragment(), PangleFragment(), BigoFragment(), MultiProviderFragment())
 }

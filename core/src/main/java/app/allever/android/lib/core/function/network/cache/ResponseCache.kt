@@ -2,7 +2,6 @@ package app.allever.android.lib.core.function.network.cache
 
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
-import app.allever.android.lib.core.helper.NetworkHelper
 import app.allever.android.lib.core.function.network.cache.HttpCacheManager.getCacheTime
 import app.allever.android.lib.core.function.network.cache.HttpCacheManager.getStringCache
 import app.allever.android.lib.core.function.network.cache.HttpCacheManager.putCache
@@ -10,6 +9,7 @@ import app.allever.android.lib.core.function.network.cache.HttpCacheManager.putC
 import app.allever.android.lib.core.function.network.cache.HttpCacheManager.putStringCache
 import app.allever.android.lib.core.function.network.response.NetResponse
 import app.allever.android.lib.core.helper.GsonHelper.toJson
+import app.allever.android.lib.core.helper.NetworkHelper
 import app.allever.android.lib.core.helper.ReflectionHelper
 import com.google.gson.Gson
 

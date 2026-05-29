@@ -1,5 +1,5 @@
 package app.allever.android.lib.core.function.businessinterceptor
 
 interface Interceptor {
-     fun intercept(chain: InterceptChain)
+    fun intercept(chain: InterceptChain)
 }

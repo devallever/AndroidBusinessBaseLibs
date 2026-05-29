@@ -22,7 +22,8 @@ import java.io.InputStream;
  * @author allever
  */
 public class Utils {
-    private Utils() {}
+    private Utils() {
+    }
 
 
     /**
@@ -78,7 +79,7 @@ public class Utils {
     /**
      * Return the bytes in file by stream.
      *
-     * @param file     The file.
+     * @param file The file.
      * @return the bytes in file
      */
     public static byte[] readFile2BytesByStream(Context context, final File file) {

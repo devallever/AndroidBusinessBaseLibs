@@ -138,14 +138,14 @@ public class RippleLayout extends FrameLayout {
     private boolean prepressed;
     private int positionInAdapter;
 
-    private GestureDetector gestureDetector;
+    private final GestureDetector gestureDetector;
     private PerformClickEvent pendingClickEvent;
     private PressedEvent pendingPressEvent;
     private boolean hasPerformedLongPress;
     /*
      * Animations
      */
-    private Property<RippleLayout, Float> radiusProperty
+    private final Property<RippleLayout, Float> radiusProperty
             = new Property<RippleLayout, Float>(Float.class, "radius") {
         @Override
         public Float get(RippleLayout object) {
@@ -157,7 +157,7 @@ public class RippleLayout extends FrameLayout {
             object.setRadius(value);
         }
     };
-    private Property<RippleLayout, Integer> circleAlphaProperty
+    private final Property<RippleLayout, Integer> circleAlphaProperty
             = new Property<RippleLayout, Integer>(Integer.class, "rippleAlpha") {
         @Override
         public Integer get(RippleLayout object) {
@@ -169,7 +169,7 @@ public class RippleLayout extends FrameLayout {
             object.setRippleAlpha(value);
         }
     };
-    private SimpleOnGestureListener longClickListener = new SimpleOnGestureListener() {
+    private final SimpleOnGestureListener longClickListener = new SimpleOnGestureListener() {
         @Override
         public void onLongPress(MotionEvent e) {
             hasPerformedLongPress = childView.performLongClick();

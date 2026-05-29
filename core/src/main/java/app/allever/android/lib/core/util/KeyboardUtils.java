@@ -229,8 +229,8 @@ public class KeyboardUtils {
 
     static class HideRunnable implements Runnable {
 
-        private WeakReference<EditText> mEditTextWeakRef;
-        private InputMethodManager mInputMethodManager;
+        private final WeakReference<EditText> mEditTextWeakRef;
+        private final InputMethodManager mInputMethodManager;
 
         public HideRunnable(InputMethodManager inputMethodManager, EditText editTextWeakRef) {
             mInputMethodManager = inputMethodManager;
@@ -248,8 +248,8 @@ public class KeyboardUtils {
 
     static class ShowRunnable implements Runnable {
 
-        private WeakReference<EditText> mEditTextWeakRef;
-        private InputMethodManager mInputMethodManager;
+        private final WeakReference<EditText> mEditTextWeakRef;
+        private final InputMethodManager mInputMethodManager;
 
         public ShowRunnable(InputMethodManager inputMethodManager, EditText editTextWeakRef) {
             mInputMethodManager = inputMethodManager;
@@ -415,7 +415,6 @@ public class KeyboardUtils {
                             mOnSoftKeyboardChangeListener.hide(visibleHeight - mRootViewVisibleHeight);
                         }
                         mRootViewVisibleHeight = visibleHeight;
-                        return;
                     }
 
                 }

@@ -1,7 +1,5 @@
 package app.allever.android.lib.core.function.network.exception
 
-import java.lang.Exception
-
 /**
  * @ClassName RsThrowable
  * @Description TODO

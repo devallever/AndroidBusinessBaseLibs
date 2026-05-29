@@ -26,7 +26,6 @@ object DataStore : IDataStore {
     override suspend fun getLong(key: String) = mDataStore.getLong(key)
 
 
-
     override suspend fun putFloat(key: String, value: Float) {
         mDataStore.putFloat(key, value)
     }
@@ -51,7 +50,8 @@ object DataStore : IDataStore {
 
     override suspend fun getBoolean(key: String) = mDataStore.getBoolean(key)
 
-    override suspend fun getBoolean(key: String, default: Boolean) = mDataStore.getBoolean(key, default)
+    override suspend fun getBoolean(key: String, default: Boolean) =
+        mDataStore.getBoolean(key, default)
 
     override suspend fun putParcelable(key: String, value: Parcelable) {
         mDataStore.putParcelable(key, value)

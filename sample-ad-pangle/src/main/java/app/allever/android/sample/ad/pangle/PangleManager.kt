@@ -6,7 +6,6 @@ import android.content.Context
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
@@ -246,6 +245,7 @@ object PangleManager {
                         override fun onAdClicked() {
                             log("BannerAd: 点击")
                         }
+
                         override fun onAdDismissed() {
                             log("BannerAd: 关闭")
                         }
@@ -253,6 +253,7 @@ object PangleManager {
                         override fun onAdShowFailed(pagErrorModel: PAGErrorModel) {
                             log("BannerAd: 显示失败")
                         }
+
                         override fun onAdShowed() {
                             log("BannerAd: 显示")
                         }
@@ -360,7 +361,12 @@ object PangleManager {
 
     }
 
-    private fun showNative(adView: ViewGroup, nativeAd: PAGNativeAd,  adViewContainer: ViewGroup, adCallback: AdCallback?) {
+    private fun showNative(
+        adView: ViewGroup,
+        nativeAd: PAGNativeAd,
+        adViewContainer: ViewGroup,
+        adCallback: AdCallback?
+    ) {
         val adData = nativeAd.nativeAdData
 
         val tvTitle = adView.findViewById<TextView>(R.id.ad_headline)
@@ -383,8 +389,8 @@ object PangleManager {
         log("mediaType = ${mediaType.name}")
         val isImage =
             mediaType == PAGNativeAdData.PAGNativeMediaType.PAGNativeMediaTypeImage
-                image.isVisible = isImage
-                videoContainer.isVisible = !isImage
+        image.isVisible = isImage
+        videoContainer.isVisible = !isImage
         if (isImage) {
             log("mediaType = Image")
         } else {

@@ -12,9 +12,6 @@ import java.util.HashMap;
  * {@hide}
  */
 public class MediaFile {
-    // comma separated list of all file extensions supported by the media scanner
-    public static String sFileExtensions;
-
     // Audio file types
     public static final int FILE_TYPE_MP3 = 1;
     public static final int FILE_TYPE_M4A = 2;
@@ -23,25 +20,16 @@ public class MediaFile {
     public static final int FILE_TYPE_AWB = 5;
     public static final int FILE_TYPE_WMA = 6;
     public static final int FILE_TYPE_OGG = 7;
-    private static final int FIRST_AUDIO_FILE_TYPE = FILE_TYPE_MP3;
-    private static final int LAST_AUDIO_FILE_TYPE = FILE_TYPE_OGG;
-
     // MIDI file types
     public static final int FILE_TYPE_MID = 11;
     public static final int FILE_TYPE_SMF = 12;
     public static final int FILE_TYPE_IMY = 13;
-    private static final int FIRST_MIDI_FILE_TYPE = FILE_TYPE_MID;
-    private static final int LAST_MIDI_FILE_TYPE = FILE_TYPE_IMY;
-
     // Video file types
     public static final int FILE_TYPE_MP4 = 21;
     public static final int FILE_TYPE_M4V = 22;
     public static final int FILE_TYPE_3GPP = 23;
     public static final int FILE_TYPE_3GPP2 = 24;
     public static final int FILE_TYPE_WMV = 25;
-    private static final int FIRST_VIDEO_FILE_TYPE = FILE_TYPE_MP4;
-    private static final int LAST_VIDEO_FILE_TYPE = FILE_TYPE_WMV;
-
     // Image file types
     public static final int FILE_TYPE_JPEG = 31;
     public static final int FILE_TYPE_GIF = 32;
@@ -49,45 +37,32 @@ public class MediaFile {
     public static final int FILE_TYPE_BMP = 34;
     public static final int FILE_TYPE_WBMP = 35;
     public static final int FILE_TYPE_WEBP = 36;
-    private static final int FIRST_IMAGE_FILE_TYPE = FILE_TYPE_JPEG;
-    private static final int LAST_IMAGE_FILE_TYPE = FILE_TYPE_WEBP;
-
     // Playlist file types
     public static final int FILE_TYPE_M3U = 41;
     public static final int FILE_TYPE_PLS = 42;
     public static final int FILE_TYPE_WPL = 43;
-    private static final int FIRST_PLAYLIST_FILE_TYPE = FILE_TYPE_M3U;
-    private static final int LAST_PLAYLIST_FILE_TYPE = FILE_TYPE_WPL;
-
-
     public static final int FILE_TYPE_ENCRYPT = 50;
-
     public static final int FILE_TYPE_ENCRYPT_V = 51;
-
     public static final String MIME_TYPE_VIDEO_MP4 = "video/mp4";
     public static final String MIME_TYPE_VIDEO_3GPP = "video/3gpp";
     public static final String MIME_TYPE_VIDEO_3GPP2 = "video/3gpp2";
-
-    public static class MediaFileType {
-
-        public int fileType;
-        public String mimeType;
-
-        MediaFileType(int fileType, String mimeType) {
-            this.fileType = fileType;
-            this.mimeType = mimeType;
-        }
-    }
-
+    public static final String UNKNOWN_STRING = "<unknown>";
+    private static final int FIRST_AUDIO_FILE_TYPE = FILE_TYPE_MP3;
+    private static final int LAST_AUDIO_FILE_TYPE = FILE_TYPE_OGG;
+    private static final int FIRST_MIDI_FILE_TYPE = FILE_TYPE_MID;
+    private static final int LAST_MIDI_FILE_TYPE = FILE_TYPE_IMY;
+    private static final int FIRST_VIDEO_FILE_TYPE = FILE_TYPE_MP4;
+    private static final int LAST_VIDEO_FILE_TYPE = FILE_TYPE_WMV;
+    private static final int FIRST_IMAGE_FILE_TYPE = FILE_TYPE_JPEG;
+    private static final int LAST_IMAGE_FILE_TYPE = FILE_TYPE_WEBP;
+    private static final int FIRST_PLAYLIST_FILE_TYPE = FILE_TYPE_M3U;
+    private static final int LAST_PLAYLIST_FILE_TYPE = FILE_TYPE_WPL;
     private static final HashMap<String, MediaFileType> sFileTypeMap
             = new HashMap<String, MediaFileType>();
     private static final HashMap<String, Integer> sMimeTypeMap
             = new HashMap<String, Integer>();
-
-    static void addFileType(String extension, int fileType, String mimeType) {
-        sFileTypeMap.put(extension, new MediaFileType(fileType, mimeType));
-        sMimeTypeMap.put(mimeType, fileType);
-    }
+    // comma separated list of all file extensions supported by the media scanner
+    public static String sFileExtensions;
 
     static {
         addFileType("MP3", FILE_TYPE_MP3, "audio/mpeg");
@@ -143,7 +118,10 @@ public class MediaFile {
         sFileExtensions = builder.toString();
     }
 
-    public static final String UNKNOWN_STRING = "<unknown>";
+    static void addFileType(String extension, int fileType, String mimeType) {
+        sFileTypeMap.put(extension, new MediaFileType(fileType, mimeType));
+        sMimeTypeMap.put(mimeType, fileType);
+    }
 
     public static boolean isAudioFileType(int fileType) {
         return ((fileType >= FIRST_AUDIO_FILE_TYPE &&
@@ -181,7 +159,6 @@ public class MediaFile {
     public static boolean isEncryptVideoType(int fileType) {
         return (fileType == FILE_TYPE_ENCRYPT_V);
     }
-
 
     /**
      * 是加密的Image/Video类型
@@ -303,6 +280,17 @@ public class MediaFile {
         return MIME_TYPE_VIDEO_MP4.equalsIgnoreCase(type)
                 || MIME_TYPE_VIDEO_3GPP.equalsIgnoreCase(type)
                 || MIME_TYPE_VIDEO_3GPP2.equalsIgnoreCase(type);
+    }
+
+    public static class MediaFileType {
+
+        public int fileType;
+        public String mimeType;
+
+        MediaFileType(int fileType, String mimeType) {
+            this.fileType = fileType;
+            this.mimeType = mimeType;
+        }
     }
 
 

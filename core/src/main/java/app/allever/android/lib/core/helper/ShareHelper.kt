@@ -31,15 +31,19 @@ object ShareHelper {
                 is Fragment -> {
                     obj.startActivity(intent)
                 }
+
                 is android.app.Fragment -> {
                     obj.startActivity(intent)
                 }
+
                 is Activity -> {
                     obj.startActivity(intent)
                 }
+
                 is Service -> {
                     obj.startActivity(intent)
                 }
+
                 else -> {
                     toast("没有找到可分享的应用")
                 }

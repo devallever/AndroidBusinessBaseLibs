@@ -1,6 +1,10 @@
 package app.allever.android.lib.core.function.imageloader.coil
 
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import coil.size.Size

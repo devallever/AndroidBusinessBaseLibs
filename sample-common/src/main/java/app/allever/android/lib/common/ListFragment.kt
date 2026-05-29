@@ -1,7 +1,6 @@
 package app.allever.android.lib.common
 
 import android.text.TextUtils
-import android.view.KeyEvent
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
@@ -55,11 +54,11 @@ abstract class ListFragment<DB : ViewBinding, VM : BaseViewModel, T> :
 
     abstract fun getAdapter(): BaseQuickAdapter<T, *>
     abstract fun getList(): MutableList<T>
-    open protected fun onItemClick(position: Int, item: T) {
+    protected open fun onItemClick(position: Int, item: T) {
 
     }
 
-    open protected fun layoutManager(): RecyclerView.LayoutManager {
+    protected open fun layoutManager(): RecyclerView.LayoutManager {
         return LinearLayoutManager(requireContext())
     }
 
@@ -72,6 +71,4 @@ abstract class ListFragment<DB : ViewBinding, VM : BaseViewModel, T> :
     }
 }
 
-class ListViewModel : BaseViewModel() {
-
-}
+class ListViewModel : BaseViewModel()

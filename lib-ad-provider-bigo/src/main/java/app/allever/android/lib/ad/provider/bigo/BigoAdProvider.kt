@@ -78,20 +78,25 @@ class BigoAdProvider : BaseAdProvider() {
 
                 override fun onAdLoaded(ad: SplashAd) {
                     splashAd = ad
-                    handleOnAdLoaded(AdType.SPLASH, ad,  callback)
+                    handleOnAdLoaded(AdType.SPLASH, ad, callback)
 
                     ad.setAdInteractionListener(object : SplashAdInteractionListener {
                         override fun onAdError(adError: AdError) {
                             splashAd = null
-                            handleOnAdLoadFail(AdType.SPLASH, adError.code, adError.message, callback)
+                            handleOnAdLoadFail(
+                                AdType.SPLASH,
+                                adError.code,
+                                adError.message,
+                                callback
+                            )
                         }
 
                         override fun onAdImpression() {
-                            handleOnAdShow(AdType.SPLASH,  callback)
+                            handleOnAdShow(AdType.SPLASH, callback)
                         }
 
                         override fun onAdClicked() {
-                            handleOnAdClick(AdType.SPLASH,  callback)
+                            handleOnAdClick(AdType.SPLASH, callback)
                         }
 
                         override fun onAdOpened() {
@@ -104,7 +109,7 @@ class BigoAdProvider : BaseAdProvider() {
 
                         override fun onAdSkipped() {
                             splashAd = null
-                            handleAdDismissed(AdType.SPLASH,  callback)
+                            handleAdDismissed(AdType.SPLASH, callback)
                         }
 
                         override fun onAdFinished() {
@@ -121,7 +126,7 @@ class BigoAdProvider : BaseAdProvider() {
 
     override fun showSplashAd(activity: Activity, callback: IAdCallback?) {
         showSplashAdInternal(splashAd, callback) {
-            splashAd?.show( activity)
+            splashAd?.show(activity)
         }
     }
 
@@ -145,7 +150,12 @@ class BigoAdProvider : BaseAdProvider() {
                     ad.setAdInteractionListener(object : AdInteractionListener {
                         override fun onAdError(adError: AdError) {
                             interstitialAd = null
-                            handleOnAdShowFail(AdType.INTERSTITIAL, adError.code, adError.message, callback)
+                            handleOnAdShowFail(
+                                AdType.INTERSTITIAL,
+                                adError.code,
+                                adError.message,
+                                callback
+                            )
                         }
 
                         override fun onAdImpression() {
@@ -197,7 +207,12 @@ class BigoAdProvider : BaseAdProvider() {
                     ad.setAdInteractionListener(object : RewardAdInteractionListener {
                         override fun onAdError(adError: AdError) {
                             rewardedAd = null
-                            handleOnAdShowFail(AdType.REWARD_VIDEO, adError.code, adError.message, callback)
+                            handleOnAdShowFail(
+                                AdType.REWARD_VIDEO,
+                                adError.code,
+                                adError.message,
+                                callback
+                            )
                         }
 
                         override fun onAdImpression() {
@@ -256,7 +271,12 @@ class BigoAdProvider : BaseAdProvider() {
                         ad.setAdInteractionListener(object : AdInteractionListener {
                             override fun onAdError(adError: AdError) {
                                 bannerAd = null
-                                handleOnAdShowFail(AdType.BANNER, adError.code, adError.message, callback)
+                                handleOnAdShowFail(
+                                    AdType.BANNER,
+                                    adError.code,
+                                    adError.message,
+                                    callback
+                                )
                             }
 
                             override fun onAdImpression() {

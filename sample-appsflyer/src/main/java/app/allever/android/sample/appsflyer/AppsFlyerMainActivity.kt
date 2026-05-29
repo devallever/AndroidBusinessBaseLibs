@@ -8,7 +8,7 @@ import com.appsflyer.AFInAppEventParameterName
 import com.appsflyer.AFInAppEventType
 
 @Route(path = "/appsflyer/main")
-class AppsFlyerMainActivity: BaseActivity<ActivityAppsFlyerMainBinding, BaseViewModel>() {
+class AppsFlyerMainActivity : BaseActivity<ActivityAppsFlyerMainBinding, BaseViewModel>() {
     override fun inflateChildBinding() = ActivityAppsFlyerMainBinding.inflate(layoutInflater)
 
     override fun init() {

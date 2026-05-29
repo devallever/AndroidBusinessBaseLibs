@@ -7,7 +7,7 @@ import app.allever.android.sample.ad.applovin.databinding.ActivityAdApplovinMain
 import com.alibaba.android.arouter.facade.annotation.Route
 
 @Route(path = "/applovin/main")
-class AdAppLovinMainActivity: BaseActivity<ActivityAdApplovinMainBinding, BaseViewModel>() {
+class AdAppLovinMainActivity : BaseActivity<ActivityAdApplovinMainBinding, BaseViewModel>() {
     override fun inflateChildBinding() = ActivityAdApplovinMainBinding.inflate(layoutInflater)
 
     override fun init() {

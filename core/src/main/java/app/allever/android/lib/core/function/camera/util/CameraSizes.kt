@@ -47,11 +47,11 @@ fun getDisplaySmartSize(display: Display): SmartSize {
  * https://d.android.com/reference/android/hardware/camera2/CameraDevice and
  * https://developer.android.com/reference/android/hardware/camera2/params/StreamConfigurationMap
  */
-fun <T>getPreviewOutputSize(
-        display: Display,
-        characteristics: CameraCharacteristics,
-        targetClass: Class<T>,
-        format: Int? = null
+fun <T> getPreviewOutputSize(
+    display: Display,
+    characteristics: CameraCharacteristics,
+    targetClass: Class<T>,
+    format: Int? = null
 ): Size {
 
     // Find which is smaller: screen or 1080p
@@ -70,8 +70,8 @@ fun <T>getPreviewOutputSize(
 
     // Get available sizes and sort them by area from largest to smallest
     val validSizes = allSizes
-            .sortedWith(compareBy { it.height * it.width })
-            .map { SmartSize(it.width, it.height) }.reversed()
+        .sortedWith(compareBy { it.height * it.width })
+        .map { SmartSize(it.width, it.height) }.reversed()
 
     // Then, get the largest output size that is smaller or equal than our max size
     return validSizes.first { it.long <= maxSize.long && it.short <= maxSize.short }.size

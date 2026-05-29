@@ -17,7 +17,11 @@ import app.allever.android.lib.core.helper.GsonHelper
 import app.allever.android.lib.core.helper.NetworkHelper
 import app.allever.android.lib.core.util.FileUtils
 import kotlinx.coroutines.launch
-import okhttp3.*
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -87,7 +91,7 @@ object HttpHelper {
      * @param responseCache 缓存类，null表示不使用缓存
      * @param block 高阶函数，执行相应都网络请求
      */
-    inline suspend fun <T : NetResponse<*>> requestLiveData(
+    suspend inline fun <T : NetResponse<*>> requestLiveData(
         responseCache: ResponseCache<*>? = null,
         block: () -> T
     ): LiveData<T> {

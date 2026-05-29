@@ -60,9 +60,9 @@ public class MediaFile {
     private static final int LAST_PLAYLIST_FILE_TYPE = FILE_TYPE_WPL;
     // comma separated list of all file extensions supported by the media scanner
     public static String sFileExtensions;
-    private static HashMap<String, MediaFileType> sFileTypeMap
+    private static final HashMap<String, MediaFileType> sFileTypeMap
             = new HashMap<String, MediaFileType>();
-    private static HashMap<String, Integer> sMimeTypeMap
+    private static final HashMap<String, Integer> sMimeTypeMap
             = new HashMap<String, Integer>();
 
     static {
@@ -122,7 +122,7 @@ public class MediaFile {
 
     static void addFileType(String extension, int fileType, String mimeType) {
         sFileTypeMap.put(extension, new MediaFileType(fileType, mimeType));
-        sMimeTypeMap.put(mimeType, new Integer(fileType));
+        sMimeTypeMap.put(mimeType, Integer.valueOf(fileType));
     }
 
     public static boolean isAudioFileType(int fileType) {
@@ -272,22 +272,16 @@ public class MediaFile {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, options);
-        if (options.outWidth == -1) {
-            return false;
-        }
-        return true;
+        return options.outWidth != -1;
     }
 
     public static boolean isVideoFile(String path) {
         FileNameMap fileNameMap = URLConnection.getFileNameMap();
         String type = fileNameMap.getContentTypeFor(path);
 
-        if (MIME_TYPE_VIDEO_MP4.equalsIgnoreCase(type)
+        return MIME_TYPE_VIDEO_MP4.equalsIgnoreCase(type)
                 || MIME_TYPE_VIDEO_3GPP.equalsIgnoreCase(type)
-                || MIME_TYPE_VIDEO_3GPP2.equalsIgnoreCase(type)) {
-            return true;
-        }
-        return false;
+                || MIME_TYPE_VIDEO_3GPP2.equalsIgnoreCase(type);
     }
 
     public static class MediaFileType {

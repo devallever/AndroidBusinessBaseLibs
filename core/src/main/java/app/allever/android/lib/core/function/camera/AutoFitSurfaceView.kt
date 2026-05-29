@@ -29,9 +29,9 @@ import kotlin.math.roundToInt
  * performs center-crop transformation of input frames.
  */
 class AutoFitSurfaceView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyle: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
 ) : SurfaceView(context, attrs, defStyle), SurfaceHolder.Callback {
 
     private var mSurfaceHolder: SurfaceHolder = holder

@@ -55,6 +55,7 @@ class ActivityKillerV28 : IActivityKiller {
     override fun finishResumeActivity(message: Message) {}
     override fun finishPauseActivity(message: Message) {}
     override fun finishStopActivity(message: Message) {}
+
     @Throws(Exception::class)
     private fun finish(binder: IBinder?) {
         val getServiceMethod = ActivityManager::class.java.getDeclaredMethod("getService")

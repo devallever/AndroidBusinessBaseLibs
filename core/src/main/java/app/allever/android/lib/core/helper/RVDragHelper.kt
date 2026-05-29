@@ -4,7 +4,7 @@ import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import java.util.*
+import java.util.Collections
 
 object RVDragHelper {
     fun <T> bind(
@@ -32,7 +32,7 @@ object RVDragHelper {
     class ItemHelperCallback/*<T>*/(/*val datas: MutableList<T>, */val dragStateCallback: DragStateCallback? = null) :
         ItemTouchHelper.Callback() {
         companion object {
-            private val TAG = RVDragHelper.ItemHelperCallback::class.java.simpleName
+            private val TAG = ItemHelperCallback::class.java.simpleName
             private const val ANIM_DURATION = 100L
         }
 
@@ -50,7 +50,7 @@ object RVDragHelper {
             val swipeFlags = if (dragStateCallback?.allowSwipe(recyclerView, viewHolder) == false) {
                 0
             } else 0
-            return ItemTouchHelper.Callback.makeMovementFlags(dragFlags, swipeFlags)
+            return makeMovementFlags(dragFlags, swipeFlags)
         }
 
         override fun onMove(

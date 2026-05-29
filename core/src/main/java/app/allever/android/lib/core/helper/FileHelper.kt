@@ -12,7 +12,12 @@ import android.provider.MediaStore
 import android.text.TextUtils
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
-import java.io.*
+import java.io.BufferedInputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
+import java.io.InputStream
 
 object FileHelper {
 

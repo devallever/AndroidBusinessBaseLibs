@@ -72,7 +72,7 @@ public class MathUtils {
      * @return
      */
     public static int round(float value) {
-        return (int) Math.round(value);
+        return Math.round(value);
     }
 
     public static int round(double value) {
@@ -80,6 +80,6 @@ public class MathUtils {
     }
 
     public static int round(int value) {
-        return (int) Math.round(value);
+        return Math.round(value);
     }
 }

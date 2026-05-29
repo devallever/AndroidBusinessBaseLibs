@@ -16,7 +16,7 @@ import app.allever.android.sample.ad.core.config.ProviderConfigConstants
 import app.allever.android.sample.ad.core.databinding.FragmentBiddingBinding
 
 class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
-    
+
     override fun inflate() = FragmentBiddingBinding.inflate(layoutInflater)
 
     override fun init() {
@@ -25,13 +25,13 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
 
     private fun setupUI() {
         mBinding.btnRegisterProviders.setOnClickListener { registerProviders() }
-        
+
         mBinding.btnInitAll.setOnClickListener { initAllProviders() }
-        
+
         mBinding.btnModeBidding.setOnClickListener { setMode(LoadMode.BIDDING) }
-        
+
         mBinding.btnShowBiddingInfo.setOnClickListener { showBiddingInfo() }
-        
+
         mBinding.btnLoadInter.setOnClickListener { loadInterstitial() }
         mBinding.btnLoadReward.setOnClickListener { loadRewardVideo() }
         mBinding.btnLoadSplash.setOnClickListener { loadSplashAd() }
@@ -43,9 +43,9 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
     private fun registerProviders() {
         appendStatus("Registering providers with bidding config...")
         appendStatus("")
-        appendStatus("=" .repeat(60))
+        appendStatus("=".repeat(60))
         appendStatus("🎲 BIDDING SIMULATION MODE")
-        appendStatus("=" .repeat(60))
+        appendStatus("=".repeat(60))
         appendStatus("")
         appendStatus("📌 Simulation Rules:")
         appendStatus("  1. ALL providers have supportBidding=true (for testing)")
@@ -73,7 +73,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         appendStatus("  ✅ Flow: Show Ad → User Close → Auto Preload Next → Cache Ready")
         appendStatus("")
         appendStatus("")
-        
+
         AdManager.registerProvider(
             providerType = AdMobAdProvider.PROVIDER_NAME,
             providerClass = AdMobAdProvider::class.java,
@@ -98,15 +98,15 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         appendStatus("✓ [2] BIGO - Bidding: ✅ ON")
         appendStatus("    Simulated price range: $3.00 - $7.00")
         appendStatus("")
-        appendStatus("=" .repeat(60))
+        appendStatus("=".repeat(60))
         appendStatus("")
     }
 
     private fun initAllProviders() {
         appendStatus("Initializing all providers for bidding...")
-        
+
         val context = requireContext()
-        
+
         AdManager.init(context, AdMobAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 appendStatus("✓ ADMOB initialized & in pool")
@@ -131,24 +131,26 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
 
     private fun setMode(mode: LoadMode) {
         AdManager.setLoadMode(mode)
-        
+
         val modeName = when (mode) {
             LoadMode.SINGLE -> "🎯 SINGLE"
             LoadMode.WATERFALL -> "💧 WATERFALL"
             LoadMode.BIDDING -> "💰 BIDDING (Price-Based)"
         }
-        
+
         appendStatus("")
         appendStatus("=".repeat(60))
         appendStatus("Load Mode Changed: $modeName")
-        
+
         when (mode) {
             LoadMode.SINGLE -> {
                 appendStatus("→ Will use ACTIVE provider only")
             }
+
             LoadMode.WATERFALL -> {
                 appendStatus("→ Will try waterfall providers in order")
             }
+
             LoadMode.BIDDING -> {
                 appendStatus("→ Will PARALLEL load ALL providers (3 providers)")
                 appendStatus("→ Each generates RANDOM price for simulation")
@@ -161,7 +163,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         }
         appendStatus("=".repeat(60))
         appendStatus("")
-        
+
         updateCurrentModeDisplay()
     }
 
@@ -172,13 +174,13 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             LoadMode.WATERFALL -> "💧 WATERFALL (Auto Try All)"
             LoadMode.BIDDING -> "💰 BIDDING (Parallel + Best Price)"
         }
-        
+
         mBinding.tvCurrentMode.text = "Current Mode: $modeText"
     }
 
     private fun showBiddingInfo() {
         val info = AdManager.getBiddingProvidersInfo()
-        
+
         appendStatus("")
         appendStatus("-".repeat(50))
         appendStatus(info)
@@ -196,13 +198,13 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         }
 
         val mode = AdManager.loadMode
-        
+
         appendStatus("")
         appendStatus("-".repeat(60))
         appendStatus("Loading INTERSTITIAL ad...")
         appendStatus("Mode: $mode")
         appendStatus("Cache-First: ${if (AdManager.cacheFirstEnabled) "✅ ON" else "❌ OFF"}")
-        
+
         if (mode == LoadMode.BIDDING) {
             if (AdManager.cacheFirstEnabled) {
                 appendStatus("[BIDDING] Will check cache FIRST before bidding...")
@@ -216,7 +218,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         }
 
         AdManager.loadAd(requireContext(), AdType.INTERSTITIAL, object : IAdCallback {
-            
+
             override fun onAdLoadedWithPrice(eCPM: Double) {
                 appendStatus("✅ Interstitial LOADED via BIDDING SIMULATION!")
                 appendStatus("  🏆 WINNER: ${AdManager.getActiveProviderType()}")
@@ -227,7 +229,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
 
             override fun onAdLoaded() {
                 appendStatus("✅ Interstitial LOADED successfully!")
-                
+
                 if (AdManager.cacheFirstEnabled) {
                     appendStatus("  ⚡ CACHE HIT! Served from cache (instant!)")
                     appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
@@ -236,7 +238,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
                     appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
                     appendStatus("  (Normal load - no caching)")
                 }
-                
+
                 appendStatus("-".repeat(60))
             }
 
@@ -251,18 +253,18 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
                 appendStatus("-".repeat(60))
             }
 
-            override fun onAdShow() { 
-                appendStatus("📺 Interstitial SHOWING from: ${AdManager.getActiveProviderType()}") 
+            override fun onAdShow() {
+                appendStatus("📺 Interstitial SHOWING from: ${AdManager.getActiveProviderType()}")
             }
-            
-            override fun onAdClick() { 
-                appendStatus("👆 Interstitial CLICKED") 
+
+            override fun onAdClick() {
+                appendStatus("👆 Interstitial CLICKED")
             }
-            
-            override fun onAdDismiss() { 
-                appendStatus("❌ Interstitial DISMISSED") 
+
+            override fun onAdDismiss() {
+                appendStatus("❌ Interstitial DISMISSED")
             }
-            
+
             override fun onAdRewarded(rewardAmount: Int, rewardName: String) {}
         })
     }
@@ -274,7 +276,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         }
 
         val mode = AdManager.loadMode
-        
+
         appendStatus("")
         appendStatus("-".repeat(60))
         appendStatus("Loading REWARD VIDEO ad...")
@@ -286,7 +288,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         }
 
         AdManager.loadAd(requireActivity(), AdType.REWARD_VIDEO, object : IAdCallback {
-            
+
             override fun onAdLoadedWithPrice(eCPM: Double) {
                 appendStatus("✅ Reward Video LOADED via BIDDING SIMULATION!")
                 appendStatus("  🏆 WINNER: ${AdManager.getActiveProviderType()}")
@@ -310,20 +312,20 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
                 appendStatus("-".repeat(60))
             }
 
-            override fun onAdShow() { 
-                appendStatus("📺 Reward Video SHOWING") 
+            override fun onAdShow() {
+                appendStatus("📺 Reward Video SHOWING")
             }
-            
-            override fun onAdClick() { 
-                appendStatus("👆 Reward Video CLICKED") 
+
+            override fun onAdClick() {
+                appendStatus("👆 Reward Video CLICKED")
             }
-            
-            override fun onAdDismiss() { 
-                appendStatus("❌ Reward Video DISMISSED") 
+
+            override fun onAdDismiss() {
+                appendStatus("❌ Reward Video DISMISSED")
             }
-            
-            override fun onAdRewarded(rewardAmount: Int, rewardName: String) { 
-                appendStatus("🎁 REWARDED: $rewardAmount x $rewardName") 
+
+            override fun onAdRewarded(rewardAmount: Int, rewardName: String) {
+                appendStatus("🎁 REWARDED: $rewardAmount x $rewardName")
             }
         })
     }
@@ -335,22 +337,25 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         }
 
         appendStatus("Showing cached interstitial...")
-        
+
         AdManager.showAd(
             activity = requireActivity(),
             adType = AdType.INTERSTITIAL,
             callback = object : IAdCallback {
                 override fun onAdLoaded() {}
-                override fun onAdFail(errorCode: Int, errorMessage: String) { 
-                    appendStatus("✗ Show failed: $errorMessage") 
+                override fun onAdFail(errorCode: Int, errorMessage: String) {
+                    appendStatus("✗ Show failed: $errorMessage")
                 }
-                override fun onAdShow() { 
-                    appendStatus("📺 Showing interstitial...") 
+
+                override fun onAdShow() {
+                    appendStatus("📺 Showing interstitial...")
                 }
-                override fun onAdClick() { }
-                override fun onAdDismiss() { 
-                    appendStatus("❌ Interstitial dismissed") 
+
+                override fun onAdClick() {}
+                override fun onAdDismiss() {
+                    appendStatus("❌ Interstitial dismissed")
                 }
+
                 override fun onAdRewarded(rewardAmount: Int, rewardName: String) {}
             }
         )
@@ -372,13 +377,16 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
                 override fun onAdFail(errorCode: Int, errorMessage: String) {
                     appendStatus("✗ Show failed: $errorMessage")
                 }
+
                 override fun onAdShow() {
                     appendStatus("📺 Showing reward video...")
                 }
-                override fun onAdClick() { }
+
+                override fun onAdClick() {}
                 override fun onAdDismiss() {
                     appendStatus("❌ Reward video dismissed")
                 }
+
                 override fun onAdRewarded(rewardAmount: Int, rewardName: String) {
                     appendStatus("🎁 REWARDED: $rewardAmount x $rewardName")
                 }
@@ -412,7 +420,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             }
         }
 
-        AdManager.loadAd(requireActivity(), AdType.SPLASH,  object : IAdCallback {
+        AdManager.loadAd(requireActivity(), AdType.SPLASH, object : IAdCallback {
 
             override fun onAdLoadedWithPrice(eCPM: Double) {
                 appendStatus("✅ Splash LOADED via BIDDING SIMULATION!")
@@ -481,13 +489,16 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
                 override fun onAdFail(errorCode: Int, errorMessage: String) {
                     appendStatus("✗ Show failed: $errorMessage")
                 }
+
                 override fun onAdShow() {
                     appendStatus("📺 Showing splash ad...")
                 }
-                override fun onAdClick() { }
+
+                override fun onAdClick() {}
                 override fun onAdDismiss() {
                     appendStatus("❌ Splash dismissed")
                 }
+
                 override fun onAdRewarded(rewardAmount: Int, rewardName: String) {}
             }
         )
@@ -495,15 +506,16 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
 
     private fun appendStatus(message: String) {
         val currentText = mBinding.tvStatus.text.toString()
-        val newText = if (currentText.isEmpty() || currentText == "Ready to start bidding demo...") {
-            message
-        } else {
-            "$currentText\n$message"
-        }
-        
+        val newText =
+            if (currentText.isEmpty() || currentText == "Ready to start bidding demo...") {
+                message
+            } else {
+                "$currentText\n$message"
+            }
+
         mBinding.tvStatus.text = newText
         Log.d("BiddingDemo", message)
-        
+
         mBinding.tvStatus.post {
             mBinding.scrollView.fullScroll(TextView.FOCUS_DOWN)
         }

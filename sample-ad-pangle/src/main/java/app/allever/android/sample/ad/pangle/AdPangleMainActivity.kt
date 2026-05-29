@@ -16,7 +16,11 @@ class AdPangleMainActivity : BaseActivity<ActivityAdPangleMainBinding, BaseViewM
 
         PangleManager.init(TestAdConfig()) {
             PangleManager.loadBanner(binding.bannerContainer)
-            PangleManager.loadNativeAd(binding.nativeContainer, "native", R.layout.default_ad_native_fragment_pangle);
+            PangleManager.loadNativeAd(
+                binding.nativeContainer,
+                "native",
+                R.layout.default_ad_native_fragment_pangle
+            );
             PangleManager.justLoadInter()
             PangleManager.justLoadReward()
         }

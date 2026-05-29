@@ -5,7 +5,7 @@ package app.allever.android.sample.ad.bigo
  *@author: zq
  *@date: 2023/10/30
  */
-class TestAdConfig: IAdConfig {
+class TestAdConfig : IAdConfig {
     override fun bannerAdId() = ""
 
     override fun interAdId() = ""

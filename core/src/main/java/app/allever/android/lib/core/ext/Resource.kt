@@ -5,9 +5,7 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import app.allever.android.lib.core.app.App
 
-object Resource {
-
-}
+object Resource
 
 fun getString(@StringRes resId: Int): String {
     return App.context.resources.getString(resId)

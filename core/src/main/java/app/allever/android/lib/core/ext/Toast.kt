@@ -26,9 +26,11 @@ private fun toast(obj: Any?, isLong: Boolean = false) {
         is String -> {
             obj
         }
+
         is Int -> {
             App.context.getString(obj)
         }
+
         else -> {
             obj.toString()
         }

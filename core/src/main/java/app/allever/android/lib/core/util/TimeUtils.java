@@ -76,7 +76,7 @@ public class TimeUtils {
     //时间转换
     private static String format(Date date) {
         long delta = System.currentTimeMillis() - date.getTime();
-        if (delta < 1L * ONE_MINUTE) {
+        if (delta < ONE_MINUTE) {
             long seconds = toSeconds(delta);
             return (seconds <= 0 ? 1 : seconds) + ONE_SECOND_AGO;
         }
@@ -236,7 +236,7 @@ public class TimeUtils {
             return "5分钟前";
         }
         //30分钟-1小时前发布的显示：30分钟前；
-        if (delta < 1L * ONE_HOUR) {
+        if (delta < ONE_HOUR) {
             return "30分钟前";
         }
         //1~2小时内发布的显示：1小时前；
@@ -257,7 +257,7 @@ public class TimeUtils {
             return TimeUtils.formatTime(date.getTime(), TimeUtils.FORMAT_MM_dd);
         }
         //1天，显示：1天前；
-        if (delta < 1L * ONE_DAY) {
+        if (delta < ONE_DAY) {
             return "1天前";
         }
         //2天前 ~ 7天内 发的，显示：7天前；

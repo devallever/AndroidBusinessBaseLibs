@@ -22,7 +22,7 @@ public class BlurBgUtils {
 
     private static BlurBgUtils utils;
     private View mRoot;
-    private MutableLiveData<Bitmap> mBitMapData = new MutableLiveData<>();
+    private final MutableLiveData<Bitmap> mBitMapData = new MutableLiveData<>();
 
     public static BlurBgUtils getUtils() {
         if (null == utils) {

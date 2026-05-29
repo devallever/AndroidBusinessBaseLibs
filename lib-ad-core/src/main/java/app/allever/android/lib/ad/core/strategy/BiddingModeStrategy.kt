@@ -14,9 +14,15 @@ import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.core.type.BiddingResult
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
-import kotlinx.coroutines.*
-import kotlin.collections.component1
-import kotlin.collections.component2
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeout
 import kotlin.coroutines.resume
 
 class BiddingModeStrategy : BaseModeStrategy() {
@@ -34,9 +40,7 @@ class BiddingModeStrategy : BaseModeStrategy() {
 
 
     override fun loadAd(
-        context: Context,
-        adType: AdType,
-        callback: IAdCallback?
+        context: Context, adType: AdType, callback: IAdCallback?
     ) {
         executeBidding(
             context = context,
@@ -49,8 +53,7 @@ class BiddingModeStrategy : BaseModeStrategy() {
     }
 
     override fun preload(
-        context: Context,
-        adType: AdType
+        context: Context, adType: AdType
     ) {
         executeBidding(
             context = context,
@@ -63,8 +66,7 @@ class BiddingModeStrategy : BaseModeStrategy() {
     }
 
     override fun checkCache(
-        adType: AdType,
-        callback: IAdCallback?
+        adType: AdType, callback: IAdCallback?
     ): Boolean {
         val activeProvider = getActiveProvider() ?: return false
 
@@ -81,10 +83,8 @@ class BiddingModeStrategy : BaseModeStrategy() {
 
 
     override fun getProviders(): List<Pair<String, AdProviderConfig>> {
-        return AdProviderFactory.getAllConfigs()
-            .filter { (_, config) -> config.supportBidding }
-            .filter { (type, _) -> providerPool.containsKey(type) }
-            .toList()
+        return AdProviderFactory.getAllConfigs().filter { (_, config) -> config.supportBidding }
+            .filter { (type, _) -> providerPool.containsKey(type) }.toList()
     }
 
     private fun executeBidding(
@@ -162,15 +162,20 @@ class BiddingModeStrategy : BaseModeStrategy() {
     }
 
     private suspend fun parallelBiddingRequest(
-        providers: List<Pair<String, AdProviderConfig>>,
-        context: Context,
-        adType: AdType
+        providers: List<Pair<String, AdProviderConfig>>, context: Context, adType: AdType
     ): Map<String, BiddingEntry> {
 
         return coroutineScope {
             providers.mapIndexed { index, (providerType, config) ->
                 async {
-                    tryLoadFromSingleProvider(index, providers.size, providerType, config, context, adType)
+                    tryLoadFromSingleProvider(
+                        index,
+                        providers.size,
+                        providerType,
+                        config,
+                        context,
+                        adType
+                    )
                 }
             }.awaitAll().toMap()
         }
@@ -188,12 +193,18 @@ class BiddingModeStrategy : BaseModeStrategy() {
         val provider = providerPool[providerType]
         if (provider == null) {
             log("$TAG: [BIDDING] [$index/$totalSize] $providerType not initialized, skip")
-            return Pair(providerType, BiddingEntry(success = false, errorCode = -1, errorMessage = "Not initialized"))
+            return Pair(
+                providerType,
+                BiddingEntry(success = false, errorCode = -1, errorMessage = "Not initialized")
+            )
         }
 
         val adId = config.getAdIdByType(adType) ?: run {
             logE("$TAG: [BIDDING] [$index/$totalSize] ERROR: No ad ID for $providerType")
-            return Pair(providerType, BiddingEntry(success = false, errorCode = -1, errorMessage = "No ad ID"))
+            return Pair(
+                providerType,
+                BiddingEntry(success = false, errorCode = -1, errorMessage = "No ad ID")
+            )
         }
 
         log("$TAG: [BIDDING] [$index/$totalSize] Requesting: $providerType")
@@ -203,14 +214,20 @@ class BiddingModeStrategy : BaseModeStrategy() {
                 override fun onAdLoaded() {
                     log("$TAG: [BIDDING] [$index/$totalSize] ✅ Loaded: $providerType | Price: \$0.00")
                     if (continuation.isActive) {
-                        continuation.resume(Pair(providerType, BiddingEntry(success = true, eCPM = 0.0)))
+                        continuation.resume(
+                            Pair(
+                                providerType,
+                                BiddingEntry(success = true, eCPM = 0.0)
+                            )
+                        )
                     }
                 }
 
                 override fun onAdLoadedWithPrice(price: Double) {
                     log("$TAG: [BIDDING] [$index/$totalSize] ✅ Loaded: $providerType | Price: $$price")
                     if (continuation.isActive) {
-                        continuation.resume(Pair(providerType, BiddingEntry(success = true, eCPM = price))
+                        continuation.resume(
+                            Pair(providerType, BiddingEntry(success = true, eCPM = price))
                         )
                     }
                 }
@@ -220,8 +237,7 @@ class BiddingModeStrategy : BaseModeStrategy() {
                     if (continuation.isActive) {
                         continuation.resume(
                             Pair(
-                                providerType,
-                                BiddingEntry(
+                                providerType, BiddingEntry(
                                     success = false,
                                     errorCode = errorCode,
                                     errorMessage = errorMessage
@@ -253,9 +269,7 @@ class BiddingModeStrategy : BaseModeStrategy() {
         log("$TAG: $logPrefix === ${if (isPreload) "PRE-LOAD" else "BIDDING"} COMPLETED ===")
         log("$TAG: $logPrefix Total responses: ${results.size}")
 
-        val winner = results.entries
-            .filter { it.value.success }
-            .maxByOrNull { it.value.eCPM }
+        val winner = results.entries.filter { it.value.success }.maxByOrNull { it.value.eCPM }
 
         if (winner != null) {
             val result = BiddingResult(
@@ -274,9 +288,9 @@ class BiddingModeStrategy : BaseModeStrategy() {
 
             val actionLabel = if (isPreload) "PRE-LOADED" else "WINNER"
 
-            log("$TAG: $logPrefix 🏆 $actionLabel: ${result.providerType}" +
-                    " | Price: $${result.formattedPrice}" +
-                    " | Source: $priceSource")
+            log(
+                "$TAG: $logPrefix 🏆 $actionLabel: ${result.providerType}" + " | Price: $${result.formattedPrice}" + " | Source: $priceSource"
+            )
 
             switchToProvider(winner.key)
 

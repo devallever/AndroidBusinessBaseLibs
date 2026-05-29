@@ -1,11 +1,11 @@
 package app.allever.android.lib.common.function.network
 
 import app.allever.android.lib.common.function.network.reponse.BannerData
+import app.allever.android.lib.core.function.network.ApiService
 import app.allever.android.lib.core.function.network.HttpHelper
 import app.allever.android.lib.core.function.network.ResponseCallback
-import app.allever.android.lib.core.function.network.cache.ResponseCache
-import app.allever.android.lib.core.function.network.ApiService
 import app.allever.android.lib.core.function.network.RetrofitCallback
+import app.allever.android.lib.core.function.network.cache.ResponseCache
 import kotlinx.coroutines.delay
 
 object AppRepository {

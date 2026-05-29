@@ -147,10 +147,15 @@ abstract class BaseAdProvider : IAdProvider {
         callback?.onAdLoadedWithPrice(simulatedECPM)
     }
 
-    protected fun handleOnAdLoadFail(adType: AdType, errorCode: Int, errorMessage: String, callback: IAdCallback?) {
+    protected fun handleOnAdLoadFail(
+        adType: AdType,
+        errorCode: Int,
+        errorMessage: String,
+        callback: IAdCallback?
+    ) {
         val providerType = getProviderType()
         log("${TAG}: $providerType ${adType.name} ad failed to load: $errorMessage")
-        callback?.onAdFail(errorCode,errorMessage)
+        callback?.onAdFail(errorCode, errorMessage)
     }
 
     protected fun handleOnAdShow(adType: AdType, callback: IAdCallback?) {
@@ -159,10 +164,15 @@ abstract class BaseAdProvider : IAdProvider {
         callback?.onAdShow()
     }
 
-    protected fun handleOnAdShowFail(adType: AdType, errorCode: Int, errorMessage: String, callback: IAdCallback?) {
+    protected fun handleOnAdShowFail(
+        adType: AdType,
+        errorCode: Int,
+        errorMessage: String,
+        callback: IAdCallback?
+    ) {
         val providerType = getProviderType()
         log("${TAG}: $providerType ${adType.name} ad failed to show: $errorMessage")
-        callback?.onAdFail(errorCode,errorMessage)
+        callback?.onAdFail(errorCode, errorMessage)
     }
 
     //click
@@ -180,13 +190,22 @@ abstract class BaseAdProvider : IAdProvider {
         preloadAdOnDismiss(adType)
     }
 
-    protected fun handleOnAdRewarded(adType: AdType, rewardAmount: Int, rewardName: String, callback: IAdCallback?) {
+    protected fun handleOnAdRewarded(
+        adType: AdType,
+        rewardAmount: Int,
+        rewardName: String,
+        callback: IAdCallback?
+    ) {
         val providerType = getProviderType()
         log("${TAG}:${adType.name}: User earned reward from $providerType ")
         callback?.onAdRewarded(rewardAmount, rewardName)
     }
 
-    protected fun showBannerInternal(bannerView: View?, container: ViewGroup?, callback: IAdCallback?) {
+    protected fun showBannerInternal(
+        bannerView: View?,
+        container: ViewGroup?,
+        callback: IAdCallback?
+    ) {
         if (bannerView == null || container == null) {
             handleOnAdShowFail(AdType.BANNER, -1, "Banner ad not ready", callback)
             return
@@ -201,7 +220,11 @@ abstract class BaseAdProvider : IAdProvider {
         }
     }
 
-    protected fun showSplashAdInternal( splashAd: Any?, callback: IAdCallback?, realShow:() -> Unit) {
+    protected fun showSplashAdInternal(
+        splashAd: Any?,
+        callback: IAdCallback?,
+        realShow: () -> Unit
+    ) {
         splashAd?.let { ad ->
             try {
                 realShow.invoke()
@@ -210,11 +233,15 @@ abstract class BaseAdProvider : IAdProvider {
                 handleOnAdShowFail(AdType.SPLASH, -1, e.message ?: "Unknown error", callback)
             }
         } ?: run {
-            handleOnAdShowFail(AdType.SPLASH, -1, "Splash ad not ready",  callback)
+            handleOnAdShowFail(AdType.SPLASH, -1, "Splash ad not ready", callback)
         }
     }
 
-    protected fun showInterstitialAdInternal(interstitialAd: Any?, callback: IAdCallback?, realShow:() -> Unit) {
+    protected fun showInterstitialAdInternal(
+        interstitialAd: Any?,
+        callback: IAdCallback?,
+        realShow: () -> Unit
+    ) {
         interstitialAd?.let { ad ->
             try {
                 realShow.invoke()
@@ -225,7 +252,11 @@ abstract class BaseAdProvider : IAdProvider {
         }
     }
 
-    protected fun showRewardedAdInternal(rewardedAd: Any?, callback: IAdCallback?, realShow:() -> Unit) {
+    protected fun showRewardedAdInternal(
+        rewardedAd: Any?,
+        callback: IAdCallback?,
+        realShow: () -> Unit
+    ) {
         rewardedAd?.let { ad ->
             try {
                 realShow.invoke()
@@ -297,10 +328,10 @@ abstract class BaseAdProvider : IAdProvider {
 
     protected fun shouldAutoPreload(adType: AdType): Boolean {
         return autoPreloadEnabled && (
-            adType == AdType.INTERSTITIAL ||
-            adType == AdType.REWARD_VIDEO ||
-            adType == AdType.SPLASH
-        )
+                adType == AdType.INTERSTITIAL ||
+                        adType == AdType.REWARD_VIDEO ||
+                        adType == AdType.SPLASH
+                )
     }
 
     protected fun preloadAdOnDismiss(adType: AdType) {

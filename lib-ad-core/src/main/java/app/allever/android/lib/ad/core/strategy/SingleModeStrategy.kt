@@ -4,7 +4,6 @@ import android.content.Context
 import app.allever.android.lib.ad.core.AdManager
 import app.allever.android.lib.ad.core.AdManager.getActiveProvider
 import app.allever.android.lib.ad.core.AdManager.getAdIdByType
-import app.allever.android.lib.ad.core.AdManager.providerPool
 import app.allever.android.lib.ad.core.AdManager.switchToProvider
 import app.allever.android.lib.ad.core.base.AdProviderFactory
 import app.allever.android.lib.ad.core.callback.IAdCallback
@@ -12,14 +11,13 @@ import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
-import kotlin.collections.component1
-import kotlin.collections.component2
 
-class SingleModeStrategy: BaseModeStrategy() {
-    
+class SingleModeStrategy : BaseModeStrategy() {
+
     companion object {
         private const val TAG = "SingleModeStrategy"
     }
+
     override fun loadAd(
         context: Context,
         adType: AdType,
@@ -47,7 +45,7 @@ class SingleModeStrategy: BaseModeStrategy() {
 
         log("${TAG}: Preloading ${adType.name} from current provider (mode: ${AdManager.loadMode.name})")
 
-        val provider = getActiveProvider()?: run {
+        val provider = getActiveProvider() ?: run {
             logE("${TAG}: No active provider, cannot preload")
             return
         }
