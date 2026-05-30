@@ -25,9 +25,8 @@ abstract class BaseAdProvider : IAdProvider {
 
     protected abstract fun onDestroy()
 
-    companion object {
-        private const val TAG = "BaseAdProvider"
-    }
+    protected val TAG: String
+        get() = this::class.simpleName ?: "BaseAdProvider"
 
     protected var isInitialized = false
 

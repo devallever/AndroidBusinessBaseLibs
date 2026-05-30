@@ -3,7 +3,6 @@ package app.allever.android.lib.ad.core.strategy
 import android.content.Context
 import app.allever.android.lib.ad.core.AdManager.LoadMode
 import app.allever.android.lib.ad.core.AdManager.getActiveProvider
-import app.allever.android.lib.ad.core.AdManager.loadMode
 import app.allever.android.lib.ad.core.AdManager.providerPool
 import app.allever.android.lib.ad.core.AdManager.switchToProvider
 import app.allever.android.lib.ad.core.base.AdProviderFactory
@@ -11,13 +10,10 @@ import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.core.ext.log
-import app.allever.android.lib.core.ext.logE
+import kotlin.collections.component1
+import kotlin.collections.component2
 
 class WaterfallModeStrategy : BaseModeStrategy() {
-
-    companion object {
-        private const val TAG = "WaterfallModeStrategy"
-    }
 
     override fun loadAd(
         context: Context,
@@ -29,22 +25,8 @@ class WaterfallModeStrategy : BaseModeStrategy() {
             adType = adType,
             callback = callback,
             isPreload = false,
-            logPrefix = "[WATERFALL]",
+            logPrefix = AdLog.PREFIX_WATERFALL,
             checkMode = false
-        )
-    }
-
-    override fun preload(
-        context: Context,
-        adType: AdType
-    ) {
-        executeWaterfall(
-            context = context,
-            adType = adType,
-            callback = null,
-            isPreload = true,
-            logPrefix = "[PRELOAD-WATERFALL]",
-            checkMode = true
         )
     }
 
@@ -58,17 +40,29 @@ class WaterfallModeStrategy : BaseModeStrategy() {
             val provider = providerPool[providerType] ?: continue
 
             if (provider.isReady(adType)) {
-                log("${TAG}: [CACHE-WATERFALL] ✅ Found cache in: $providerType (priority order)")
-
+                logAction(AdLog.PREFIX_CACHE, "Found cache in", providerType)
                 switchToProvider(providerType)
                 callback?.onAdLoaded()
-
                 return true
             }
         }
 
-        log("${TAG}: [CACHE-WATERFALL] No valid cache in any waterfall provider")
+        log(AdLog.format(TAG, AdLog.PREFIX_CACHE, "No valid cache in any waterfall provider"))
         return false
+    }
+
+    override fun preload(
+        context: Context,
+        adType: AdType
+    ) {
+        executeWaterfall(
+            context = context,
+            adType = adType,
+            callback = null,
+            isPreload = true,
+            logPrefix = AdLog.PREFIX_WATERFALL,
+            checkMode = true
+        )
     }
 
     override fun getProviders(): List<Pair<String, AdProviderConfig>> {
@@ -86,36 +80,29 @@ class WaterfallModeStrategy : BaseModeStrategy() {
         logPrefix: String,
         checkMode: Boolean = false
     ) {
-        log("$TAG: $logPrefix Starting ${if (isPreload) "pre-" else ""}waterfall for ${adType.name}")
+        logAction(logPrefix, "Starting ${if (isPreload) "pre-" else ""}waterfall", adType.name, isPreload)
 
-        if (checkMode && loadMode != LoadMode.WATERFALL) {
-            logE("$TAG: $logPrefix ERROR: Current mode is ${loadMode.name}, not WATERFALL")
+        if (checkMode && !checkLoadMode(LoadMode.WATERFALL, logPrefix, isPreload)) {
             return
         }
 
         val waterfallProviders = getProviders()
 
         if (waterfallProviders.isEmpty()) {
-            logE("$TAG: $logPrefix No providers with waterfall support available")
+            logError(logPrefix, "No providers with waterfall support available", isPreload)
 
-            if (!isPreload && callback != null) {
-                val activeProvider = getActiveProvider()
-                if (activeProvider != null) {
-                    log("$TAG: $logPrefix Falling back to single provider mode")
-                    adManager.strategyPool[LoadMode.SINGLE]?.loadAd(context, adType, callback)
-                } else {
-                    callback.onAdFail(-1, "No available providers for waterfall")
-                }
+            if (!isPreload) {
+                fallbackToSingle(context, adType, callback, logPrefix, isPreload)
             }
             return
         }
 
         val actionWord = if (isPreload) "preload from" else ""
-        log("$TAG: $logPrefix Trying to $actionWord ${waterfallProviders.size} providers...")
+        logAction(logPrefix, "Trying to $actionWord", "${waterfallProviders.size} providers", isPreload)
 
         if (!isPreload) {
             val waterfallOrder = waterfallProviders.joinToString(" → ") { it.first }
-            log("$TAG: $logPrefix Order: $waterfallOrder (${waterfallProviders.size} providers)")
+            log(AdLog.format(TAG, logPrefix, "Order: $waterfallOrder (${waterfallProviders.size} providers)"))
         }
 
         tryLoadFromWaterfall(
@@ -136,16 +123,16 @@ class WaterfallModeStrategy : BaseModeStrategy() {
         adType: AdType,
         callback: IAdCallback?,
         isPreload: Boolean = false,
-        logPrefix: String = "[WATERFALL]"
+        logPrefix: String = AdLog.PREFIX_WATERFALL
     ) {
 
         if (currentIndex >= providers.size) {
-            logE("$TAG: $logPrefix All ${providers.size} providers failed for ${adType.name}")
+            logError(logPrefix, "All ${providers.size} providers failed for ${adType.name}", isPreload)
 
             if (!isPreload) {
                 callback?.onAdFail(-1, "All waterfall providers failed")
             } else {
-                logE("$TAG: $logPrefix ❌ All providers failed")
+                logError(logPrefix, "All providers failed", isPreload)
             }
             return
         }
@@ -155,52 +142,36 @@ class WaterfallModeStrategy : BaseModeStrategy() {
         val adId = config.getAdIdByType(adType)
 
         if (provider == null) {
-            log("$TAG: $logPrefix [$currentIndex] Provider $providerType not in pool, skipping...")
-            tryLoadFromWaterfall(
-                providers,
-                currentIndex + 1,
-                context,
-                adType,
-                callback,
-                isPreload,
-                logPrefix
-            )
+            log(AdLog.format(TAG, logPrefix, "[$currentIndex] Provider $providerType not in pool, skipping..."))
+            tryLoadFromWaterfall(providers, currentIndex + 1, context, adType, callback, isPreload, logPrefix)
             return
         }
 
 
         if (adId.isNullOrEmpty()) {
-            log("$TAG: $logPrefix [$currentIndex] No ad ID for $providerType/${adType.name}, skipping...")
-            tryLoadFromWaterfall(
-                providers,
-                currentIndex + 1,
-                context,
-                adType,
-                callback,
-                isPreload,
-                logPrefix
-            )
+            log(AdLog.format(TAG, logPrefix, "[$currentIndex] No ad ID for $providerType/${adType.name}, skipping..."))
+            tryLoadFromWaterfall(providers, currentIndex + 1, context, adType, callback, isPreload, logPrefix)
             return
         }
 
-        log("$TAG: $logPrefix [$currentIndex/$providers.size] Trying: $providerType (ID: $adId)")
+        log(AdLog.format(TAG, logPrefix, "[$currentIndex/$providers.size] Trying: $providerType (ID: $adId)"))
 
         provider.loadAd(context, adType, adId, object : IAdCallback {
 
             override fun onAdLoaded() {
-                log("$TAG: $logPrefix ✓ SUCCESS at [$currentIndex]: $providerType")
+                log(AdLog.formatSuccess(TAG, logPrefix, "SUCCESS at [$currentIndex]: $providerType"))
 
                 switchToProvider(providerType)
 
                 if (isPreload) {
-                    log("$TAG: $logPrefix ✅ Preload successful!")
+                    logSuccess(logPrefix, "Preload successful!", isPreload)
                 } else {
                     callback?.onAdLoaded()
                 }
             }
 
             override fun onAdFail(errorCode: Int, errorMessage: String) {
-                log("$TAG: $logPrefix ✗ FAILED at [$currentIndex]: $providerType - Error($errorCode): $errorMessage")
+                log(AdLog.formatError(TAG, logPrefix, "FAILED at [$currentIndex]: $providerType - Error($errorCode): $errorMessage"))
 
                 tryLoadFromWaterfall(
                     providers,
@@ -214,22 +185,22 @@ class WaterfallModeStrategy : BaseModeStrategy() {
             }
 
             override fun onAdShow() {
-                log("$TAG: $logPrefix Ad shown from: $providerType")
+                log(AdLog.format(TAG, logPrefix, "Ad shown from: $providerType"))
                 callback?.onAdShow()
             }
 
             override fun onAdClick() {
-                log("$TAG: $logPrefix Ad clicked from: $providerType")
+                log(AdLog.format(TAG, logPrefix, "Ad clicked from: $providerType"))
                 callback?.onAdClick()
             }
 
             override fun onAdDismiss() {
-                log("$TAG: $logPrefix Ad dismissed from: $providerType")
+                log(AdLog.format(TAG, logPrefix, "Ad dismissed from: $providerType"))
                 callback?.onAdDismiss()
             }
 
             override fun onAdRewarded(rewardAmount: Int, rewardName: String) {
-                log("$TAG: $logPrefix Rewarded from: $providerType - Amount: $rewardAmount, Name: $rewardName")
+                log(AdLog.format(TAG, logPrefix, "Rewarded from: $providerType - Amount: $rewardAmount, Name: $rewardName"))
                 callback?.onAdRewarded(rewardAmount, rewardName)
             }
         })
