@@ -42,7 +42,6 @@ class WaterfallModeStrategy : BaseModeStrategy() {
             if (provider.isReady(adType)) {
                 logAction(AdLog.PREFIX_CACHE, "Found cache in", providerType)
                 switchToProvider(providerType)
-                callback?.onAdLoaded()
                 return true
             }
         }

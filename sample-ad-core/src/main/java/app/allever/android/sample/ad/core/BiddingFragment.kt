@@ -231,6 +231,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
                 appendStatus("✅ Interstitial LOADED successfully!")
 
                 if (AdManager.cacheFirstEnabled) {
+                    //
                     appendStatus("  ⚡ CACHE HIT! Served from cache (instant!)")
                     appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
                     appendStatus("  [No network request needed - using cached ad]")

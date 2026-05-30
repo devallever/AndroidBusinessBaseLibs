@@ -82,7 +82,6 @@ class SingleModeStrategy : BaseModeStrategy() {
             logAction(AdLog.PREFIX_CACHE, "Provider ${provider.getProviderType()} has valid cache")
 
             switchToProvider(provider.getProviderType())
-            callback?.onAdLoaded()
 
             return true
         }

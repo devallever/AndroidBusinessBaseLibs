@@ -64,7 +64,6 @@ class BiddingModeStrategy : BaseModeStrategy() {
         if (activeProvider.isReady(adType)) {
             val providerType = activeProvider.getProviderType()
             logAction(AdLog.PREFIX_CACHE, "Using last bidding winner cache", providerType)
-            callback?.onAdLoaded()
             return true
         }
 
