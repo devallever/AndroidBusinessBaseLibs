@@ -4,8 +4,8 @@ import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 
-object AdLog {
-    private val logBuilder = StringBuilder()
+internal object AdLog {
+    private val threadLocalBuilder = ThreadLocal.withInitial { StringBuilder() }
 
     fun logMessage(
         message: String,
@@ -16,23 +16,26 @@ object AdLog {
         isPreload: Boolean = false,
         success: Boolean? = null,
     ) {
-        //all !null
-        logBuilder.clear()
+        val builder = threadLocalBuilder.get()
+        builder?: return
+        builder.clear()
+        
         if (providerType.isNotEmpty()) {
-            logBuilder.append("[$providerType] ")
+            builder.append("[$providerType] ")
         }
         if (adType != null) {
-            logBuilder.append("[${adType.name}] ")
+            builder.append("[${adType.name}] ")
         }
         if (strategyName != null) {
-            logBuilder.append("[$strategyName] ")
+            builder.append("[$strategyName] ")
         }
         if (isPreload) {
-            logBuilder.append("[PRELOAD] ")
+            builder.append("[PRELOAD] ")
         }
         if (action != null) {
-            logBuilder.append("[$action] ")
+            builder.append("[$action] ")
         }
+        
         val realMessage = if (success == null) {
             message
         } else {
@@ -43,12 +46,12 @@ object AdLog {
             }
         }
 
-        logBuilder.append(realMessage)
+        builder.append(realMessage)
 
         if (success == false) {
-            logE(logBuilder.toString())
+            logE(builder.toString())
         } else {
-            log(logBuilder.toString())
+            log(builder.toString())
         }
     }
 
