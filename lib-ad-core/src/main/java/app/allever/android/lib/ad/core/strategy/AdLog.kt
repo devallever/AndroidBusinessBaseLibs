@@ -1,48 +1,55 @@
 package app.allever.android.lib.ad.core.strategy
 
+import app.allever.android.lib.ad.core.type.AdType
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.logE
+
 object AdLog {
+    private val logBuilder = StringBuilder()
 
-    const val PREFIX_LOAD = "[LOAD]"
-    const val PREFIX_PRELOAD = "[PRELOAD]"
-    const val PREFIX_CACHE = "[CACHE]"
-    const val PREFIX_BIDDING = "[BIDDING]"
-    const val PREFIX_WATERFALL = "[WATERFALL]"
-    const val PREFIX_SINGLE = "[SINGLE]"
-
-    fun format(
-        tag: String,
-        prefix: String,
+    fun logMessage(
         message: String,
-        isPreload: Boolean = false
-    ): String {
-        val actualPrefix = if (isPreload) "$PREFIX_PRELOAD-$prefix" else prefix
-        return "$tag: $actualPrefix $message"
+        providerType: String = "",
+        adType: AdType? = null,
+        strategyName: String? = null,
+        action: String? = null,
+        isPreload: Boolean = false,
+        success: Boolean? = null,
+    ) {
+        //all !null
+        logBuilder.clear()
+        if (providerType.isNotEmpty()) {
+            logBuilder.append("[$providerType] ")
+        }
+        if (adType != null) {
+            logBuilder.append("[${adType.name}] ")
+        }
+        if (strategyName != null) {
+            logBuilder.append("[$strategyName] ")
+        }
+        if (isPreload) {
+            logBuilder.append("[PRELOAD] ")
+        }
+        if (action != null) {
+            logBuilder.append("[$action] ")
+        }
+        val realMessage = if (success == null) {
+            message
+        } else {
+            if (success) {
+                "✅ $message"
+            } else {
+                "❌ ERROR: $message"
+            }
+        }
+
+        logBuilder.append(realMessage)
+
+        if (success == false) {
+            logE(logBuilder.toString())
+        } else {
+            log(logBuilder.toString())
+        }
     }
 
-    fun formatError(
-        tag: String,
-        prefix: String,
-        message: String,
-        isPreload: Boolean = false
-    ): String {
-        return format(tag, prefix, "❌ ERROR: $message", isPreload)
-    }
-
-    fun formatSuccess(
-        tag: String,
-        prefix: String,
-        message: String,
-        isPreload: Boolean = false
-    ): String {
-        return format(tag, prefix, "✅ $message", isPreload)
-    }
-
-    fun formatTimeout(
-        tag: String,
-        prefix: String,
-        timeoutMs: Long,
-        isPreload: Boolean = false
-    ): String {
-        return formatError(tag, prefix, "⏰ TIMEOUT! (${timeoutMs}ms)", isPreload)
-    }
 }

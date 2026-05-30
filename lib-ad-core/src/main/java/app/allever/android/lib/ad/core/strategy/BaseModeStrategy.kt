@@ -33,10 +33,9 @@ abstract class BaseModeStrategy : ILoadModeStrategy {
         provider: IAdProvider?,
         callback: IAdCallback?,
         isPreload: Boolean,
-        prefix: String = ""
     ): Boolean {
         if (provider == null) {
-            logError(prefix, "No active provider available", isPreload)
+            AdLog.logMessage("No active provider available", strategyName = TAG, isPreload = isPreload, success = false)
             if (!isPreload) {
                 callback?.onAdFail(-1, "No active provider")
             }
@@ -50,10 +49,9 @@ abstract class BaseModeStrategy : ILoadModeStrategy {
         adType: AdType,
         callback: IAdCallback?,
         isPreload: Boolean,
-        prefix: String = ""
     ): Boolean {
         if (adId.isNullOrEmpty()) {
-            logError(prefix, "No ad ID for ${adType.name}", isPreload)
+            AdLog.logMessage("No ad ID for ${adType.name}", strategyName = TAG, isPreload = isPreload, success = false, adType = adType)
             if (!isPreload) {
                 callback?.onAdFail(-1, "No ad ID for ${adType.name}")
             }
@@ -62,41 +60,14 @@ abstract class BaseModeStrategy : ILoadModeStrategy {
         return true
     }
 
-    protected fun logAction(
-        prefix: String,
-        action: String,
-        detail: String = "",
-        isPreload: Boolean = false
-    ) {
-        val message = if (detail.isNotEmpty()) "$action: $detail" else action
-        log(AdLog.format(TAG, prefix, message, isPreload))
-    }
-
-    protected fun logError(
-        prefix: String,
-        message: String,
-        isPreload: Boolean = false
-    ) {
-        logE(AdLog.formatError(TAG, prefix, message, isPreload))
-    }
-
-    protected fun logSuccess(
-        prefix: String,
-        message: String,
-        isPreload: Boolean = false
-    ) {
-        log(AdLog.formatSuccess(TAG, prefix, message, isPreload))
-    }
-
     protected fun fallbackToSingle(
         context: Context,
         adType: AdType,
         callback: IAdCallback?,
-        prefix: String = "",
         isPreload: Boolean = false
     ) {
-        logAction(prefix, "Falling back to SINGLE mode", isPreload = isPreload)
-        
+        AdLog.logMessage("Falling back to SINGLE mode", isPreload = isPreload)
+
         if (!isPreload) {
             adManager.strategyPool[LoadMode.SINGLE]?.loadAd(context, adType, callback)
         } else {
@@ -106,15 +77,10 @@ abstract class BaseModeStrategy : ILoadModeStrategy {
 
     protected fun checkLoadMode(
         expectedMode: LoadMode,
-        prefix: String,
         isPreload: Boolean = false
     ): Boolean {
         if (adManager.loadMode != expectedMode) {
-            logError(
-                prefix,
-                "Current mode is ${adManager.loadMode.name}, not ${expectedMode.name}",
-                isPreload
-            )
+            AdLog.logMessage("Current mode is ${adManager.loadMode.name}, not ${expectedMode.name}", strategyName =  TAG, isPreload = isPreload, success = false)
             return false
         }
         return true

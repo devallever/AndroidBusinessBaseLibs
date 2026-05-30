@@ -22,17 +22,17 @@ class SingleModeStrategy : BaseModeStrategy() {
     ) {
         val provider = getActiveProvider()
         
-        if (!requireProvider(provider, callback, isPreload = false, prefix = AdLog.PREFIX_SINGLE)) {
+        if (!requireProvider(provider, callback, isPreload = false)) {
             return
         }
 
         val actualAdId = getAdIdByType(adType)
         
-        if (!requireAdId(actualAdId, adType, callback, isPreload = false, prefix = AdLog.PREFIX_SINGLE)) {
+        if (!requireAdId(actualAdId, adType, callback, isPreload = false)) {
             return
         }
 
-        logAction(AdLog.PREFIX_SINGLE, "Loading", "${adType.name} from current provider")
+        AdLog.logMessage("${adType.name} from current provider", adType = adType, strategyName = TAG,  action = "Loading")
 
         provider?.loadAd(context, adType, actualAdId!!, callback)
     }
@@ -41,29 +41,29 @@ class SingleModeStrategy : BaseModeStrategy() {
         context: Context,
         adType: AdType
     ) {
-        logAction(AdLog.PREFIX_PRELOAD, "Starting", "pre-${adType.name}", isPreload = true)
+        AdLog.logMessage("", strategyName = TAG, adType = adType, providerType = adManager.loadMode.name, action = "Preloading")
 
         val adId = getAdIdByType(adType)
 
-        if (!requireAdId(adId, adType, null, isPreload = true, prefix = AdLog.PREFIX_SINGLE)) {
+        if (!requireAdId(adId, adType, null, isPreload = true)) {
             return
         }
 
         val provider = getActiveProvider()
 
-        if (!requireProvider(provider, null, isPreload = true, prefix = AdLog.PREFIX_SINGLE)) {
+        if (!requireProvider(provider, null, isPreload = true)) {
             return
         }
 
-        logAction(AdLog.PREFIX_SINGLE, "Preloading", "${adType.name} from current provider (mode: ${adManager.loadMode.name})", isPreload = true)
+        AdLog.logMessage("Starting preload for ${adType.name}", adType = adType, strategyName = TAG, isPreload = true, providerType = adManager.loadMode.name, action = "Preloading")
 
         provider?.loadAd(context, adType, adId!!, object : IAdCallback {
             override fun onAdLoaded() {
-                logSuccess(AdLog.PREFIX_SINGLE, "${adType.name} preloaded successfully and cached", isPreload = true)
+                AdLog.logMessage("${adType.name} preloaded successfully and cached", adType = adType, strategyName = TAG, isPreload = true, success = true)
             }
 
             override fun onAdFail(errorCode: Int, errorMessage: String) {
-                logError(AdLog.PREFIX_SINGLE, "${adType.name} preload failed: $errorMessage", isPreload = true)
+                AdLog.logMessage("${adType.name} preload failed", adType = adType, strategyName = TAG, isPreload = true, success = false)
             }
         })
     }
@@ -74,19 +74,19 @@ class SingleModeStrategy : BaseModeStrategy() {
     ): Boolean {
         val provider = getActiveProvider()
 
-        if (!requireProvider(provider, callback, isPreload = false, prefix = AdLog.PREFIX_CACHE)) {
+        if (!requireProvider(provider, callback, isPreload = false)) {
             return false
         }
 
         if (provider!!.isReady(adType)) {
-            logAction(AdLog.PREFIX_CACHE, "Provider ${provider.getProviderType()} has valid cache")
+            AdLog.logMessage("Provider ${provider.getProviderType()} has valid cache", strategyName = TAG, adType = adType, providerType = provider.getProviderType(), action = "cache")
 
             switchToProvider(provider.getProviderType())
 
             return true
         }
 
-        log(AdLog.format(TAG, AdLog.PREFIX_CACHE, "No valid cache in current provider"))
+        AdLog.logMessage("No valid cache in current provider", strategyName = TAG, adType = adType, providerType = provider.getProviderType(), action = "cache")
         return false
     }
 
