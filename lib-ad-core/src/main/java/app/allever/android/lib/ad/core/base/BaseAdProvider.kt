@@ -6,13 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import app.allever.android.lib.ad.core.AdManager
 import app.allever.android.lib.ad.core.callback.IAdCallback
+import app.allever.android.lib.ad.core.strategy.AdLog
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.core.app.App
-import app.allever.android.lib.core.ext.log
-import app.allever.android.lib.core.ext.logE
 
 abstract class BaseAdProvider : IAdProvider {
-
     protected open fun loadSplashAd(context: Context, adId: String, callback: IAdCallback?) {}
     protected open fun loadInterstitialAd(context: Context, adId: String, callback: IAdCallback?) {}
     protected open fun loadRewardedAd(context: Context, adId: String, callback: IAdCallback?) {}
@@ -55,8 +53,15 @@ abstract class BaseAdProvider : IAdProvider {
         adId: String,
         callback: IAdCallback?
     ) {
+        val providerType = getProviderType()
+
         if (!isInitialized) {
-            logE("$TAG: Ad provider not initialized, please call init() first")
+            AdLog.logMessage(
+                message = "Ad provider not initialized, please call init() first",
+                providerType = providerType,
+                adType = adType,
+                success = false
+            )
             callback?.onAdFail(-1, "Ad provider not initialized")
             return
         }
@@ -64,6 +69,13 @@ abstract class BaseAdProvider : IAdProvider {
         if (adId.isNotEmpty()) {
             adIdCache[adType] = adId
         }
+
+        AdLog.logMessage(
+            message = "Starting to load | ID: $adId",
+            providerType = providerType,
+            adType = adType,
+        )
+
         doLoadAd(context, adType, adId, callback)
     }
 
@@ -73,31 +85,61 @@ abstract class BaseAdProvider : IAdProvider {
         container: ViewGroup?,
         callback: IAdCallback?
     ) {
+        val providerType = getProviderType()
+
         when {
             !adCache.containsKey(adType) -> {
-                log("$TAG: ${adType.name} not cached, loading...")
+                AdLog.logMessage(
+                    message = "${adType.name} not cached, loading...",
+                    providerType = providerType,
+                    adType = adType,
+                )
                 doLoadAd(activity, adType, adIdCache[adType] ?: return, callback)
             }
 
             isCacheExpired(adType) -> {
-                log("$TAG: ${adType.name} cache expired (${getCacheAge(adType)}ms old), clearing and reloading")
+                AdLog.logMessage(
+                    message = "${adType.name} cache expired (${getCacheAge(adType)}ms old), clearing and reloading",
+                    providerType = providerType,
+                    adType = adType,
+                    success = false
+                )
                 removeCachedAd(adType)
                 callback?.onAdFail(-2, "Cache expired for ${adType.name}")
 
                 val adId = getAdId(adType)
                 if (adId != null) {
-                    log("$TAG: Reloading ${adType.name} with id: $adId")
+                    AdLog.logMessage(
+                        message = "Reloading ${adType.name} | ID: $adId",
+                        providerType = providerType,
+                        adType = adType,
+                    )
                     doLoadAd(activity, adType, adId, object : IAdCallback {
                         override fun onAdLoaded() {
-                            log("$TAG: ${adType.name} reloaded successfully after expiration")
+                            AdLog.logMessage(
+                                message = "${adType.name} reloaded successfully after expiration",
+                                providerType = providerType,
+                                adType = adType,
+                                success = true
+                            )
                         }
 
                         override fun onAdFail(errorCode: Int, errorMessage: String) {
-                            log("$TAG: ${adType.name} reload failed after expiration: $errorMessage")
+                            AdLog.logMessage(
+                                message = "${adType.name} reload failed after expiration: $errorMessage",
+                                providerType = providerType,
+                                adType = adType,
+                                success = false
+                            )
                         }
                     })
                 } else {
-                    log("$TAG: No adId found for ${adType.name}, cannot reload")
+                    AdLog.logMessage(
+                        message = "No adId found for ${adType.name}, cannot reload",
+                        providerType = providerType,
+                        adType = adType,
+                        success = false
+                    )
                 }
             }
 
@@ -108,6 +150,12 @@ abstract class BaseAdProvider : IAdProvider {
     }
 
     override fun destroy() {
+        val providerType = getProviderType()
+        AdLog.logMessage(
+            message = "Destroying provider - clearing all caches",
+            providerType = providerType,
+            adType = AdType.BANNER,
+        )
         adCache.clear()
         adIdCache.clear()
         adCacheTimeMap.clear()
@@ -119,10 +167,19 @@ abstract class BaseAdProvider : IAdProvider {
         callback: (() -> Unit)?
     ) {
         val providerType = getProviderType()
-        log("${TAG}: $providerType Initializing...")
+        AdLog.logMessage(
+            message = "Initializing...",
+            providerType = providerType,
+            adType = AdType.BANNER,
+        )
 
         if (isInit()) {
-            log("${TAG}: $providerType already initialized")
+            AdLog.logMessage(
+                message = "Already initialized",
+                providerType = providerType,
+                adType = AdType.BANNER,
+                success = true
+            )
             callback?.invoke()
             return
         }
@@ -133,16 +190,32 @@ abstract class BaseAdProvider : IAdProvider {
     protected fun finishInit(callback: (() -> Unit)?) {
         isInitialized = true
         val providerType = getProviderType()
-        log("${TAG}: $providerType initialized successfully")
+        AdLog.logMessage(
+            message = "Initialized successfully",
+            providerType = providerType,
+            adType = AdType.BANNER,
+            success = true
+        )
         callback?.invoke()
     }
 
     protected fun handleOnAdLoaded(adType: AdType, ad: Any, callback: IAdCallback?) {
         val providerType = getProviderType()
-        log("${TAG}: $providerType ${adType.name} ad loaded successfully")
+        AdLog.logMessage(
+            message = "${adType.name} ad loaded successfully",
+            providerType = providerType,
+            adType = adType,
+            success = true
+        )
         cacheAd(adType, ad)
         val simulatedECPM = generateSimulatedPrice()
-        log("${TAG}: $providerType ${adType.name} ad (simulated eCPM: $$simulatedECPM)")
+        
+        AdLog.logMessage(
+            message = "Simulated eCPM: $$simulatedECPM",
+            providerType = providerType,
+            adType = adType,
+        )
+        
         callback?.onAdLoadedWithPrice(simulatedECPM)
     }
 
@@ -153,13 +226,23 @@ abstract class BaseAdProvider : IAdProvider {
         callback: IAdCallback?
     ) {
         val providerType = getProviderType()
-        log("${TAG}: $providerType ${adType.name} ad failed to load: $errorMessage")
+        AdLog.logMessage(
+            message = "${adType.name} ad failed to load | Error($errorCode): $errorMessage",
+            providerType = providerType,
+            adType = adType,
+            success = false
+        )
         callback?.onAdFail(errorCode, errorMessage)
     }
 
     protected fun handleOnAdShow(adType: AdType, callback: IAdCallback?) {
         val providerType = getProviderType()
-        log("${TAG}: $providerType ${adType.name} ad showed")
+        AdLog.logMessage(
+            message = "${adType.name} ad showed",
+            providerType = providerType,
+            adType = adType,
+            success = true
+        )
         callback?.onAdShow()
     }
 
@@ -170,20 +253,32 @@ abstract class BaseAdProvider : IAdProvider {
         callback: IAdCallback?
     ) {
         val providerType = getProviderType()
-        log("${TAG}: $providerType ${adType.name} ad failed to show: $errorMessage")
+        AdLog.logMessage(
+            message = "${adType.name} ad failed to show | Error($errorCode): $errorMessage",
+            providerType = providerType,
+            adType = adType,
+            success = false
+        )
         callback?.onAdFail(errorCode, errorMessage)
     }
 
-    //click
     protected fun handleOnAdClick(adType: AdType, callback: IAdCallback?) {
         val providerType = getProviderType()
-        log("${TAG}: $providerType ${adType.name} ad clicked")
+        AdLog.logMessage(
+            message = "${adType.name} ad clicked",
+            providerType = providerType,
+            adType = adType,
+        )
         callback?.onAdClick()
     }
 
     protected fun handleAdDismissed(adType: AdType, callback: IAdCallback?) {
         val providerType = getProviderType()
-        log("${TAG}: $providerType ${adType.name} ad dismissed")
+        AdLog.logMessage(
+            message = "${adType.name} ad dismissed",
+            providerType = providerType,
+            adType = adType,
+        )
         removeCachedAd(adType)
         callback?.onAdDismiss()
         preloadAdOnDismiss(adType)
@@ -196,7 +291,12 @@ abstract class BaseAdProvider : IAdProvider {
         callback: IAdCallback?
     ) {
         val providerType = getProviderType()
-        log("${TAG}:${adType.name}: User earned reward from $providerType ")
+        AdLog.logMessage(
+            message = "User earned reward | Amount: $rewardAmount, Name: $rewardName",
+            providerType = providerType,
+            adType = adType,
+            success = true
+        )
         callback?.onAdRewarded(rewardAmount, rewardName)
     }
 
@@ -248,6 +348,8 @@ abstract class BaseAdProvider : IAdProvider {
             } catch (e: Exception) {
                 handleOnAdShowFail(AdType.INTERSTITIAL, -1, e.message ?: "Unknown error", callback)
             }
+        } ?: run {
+            handleOnAdShowFail(AdType.INTERSTITIAL, -1, "Interstitial ad not ready", callback)
         }
     }
 
@@ -263,6 +365,8 @@ abstract class BaseAdProvider : IAdProvider {
             } catch (e: Exception) {
                 handleOnAdShowFail(AdType.REWARD_VIDEO, -1, e.message ?: "Unknown error", callback)
             }
+        } ?: run {
+            handleOnAdShowFail(AdType.REWARD_VIDEO, -1, "Rewarded ad not ready", callback)
         }
     }
 
@@ -272,12 +376,20 @@ abstract class BaseAdProvider : IAdProvider {
         adId: String,
         callback: IAdCallback?
     ) {
+        val providerType = getProviderType()
+        
         when (adType) {
             AdType.SPLASH -> loadSplashAd(context, adId, callback)
             AdType.INTERSTITIAL -> loadInterstitialAd(context, adId, callback)
             AdType.REWARD_VIDEO -> loadRewardedAd(context, adId, callback)
             AdType.BANNER -> loadBannerAd(context, adId, callback)
             else -> {
+                AdLog.logMessage(
+                    message = "${adType.name} not supported yet",
+                    providerType = providerType,
+                    adType = adType,
+                    success = false
+                )
                 handleOnAdLoadFail(adType, -1, "${adType.name} not supported yet", callback)
             }
         }
@@ -289,26 +401,46 @@ abstract class BaseAdProvider : IAdProvider {
         container: ViewGroup?,
         callback: IAdCallback?
     ) {
+        val providerType = getProviderType()
+        
         when (adType) {
             AdType.SPLASH -> showSplashAd(activity, callback)
             AdType.INTERSTITIAL -> showInterstitialAd(activity, callback)
             AdType.REWARD_VIDEO -> showRewardedAd(activity, callback)
             AdType.BANNER -> showBannerAd(container, callback)
             else -> {
-                log("${getProviderType()}: ${adType.name} show not implemented")
+                AdLog.logMessage(
+                    message = "${adType.name} show not implemented",
+                    providerType = providerType,
+                    adType = adType,
+                    success = false
+                )
             }
         }
     }
 
     protected fun cacheAd(adType: AdType, ad: Any) {
+        val providerType = getProviderType()
         adCache[adType] = ad
         adCacheTimeMap[adType] = System.currentTimeMillis()
-        log("$TAG: ${adType.name} cached at ${adCacheTimeMap[adType]}")
+        
+        AdLog.logMessage(
+            message = "${adType.name} cached at ${adCacheTimeMap[adType]}",
+            providerType = providerType,
+            adType = adType,
+        )
     }
 
     protected fun getCachedAd(adType: AdType): Any? {
+        val providerType = getProviderType()
+        
         return if (isCacheExpired(adType)) {
-            log("$TAG: ${adType.name} cache expired on access, removing")
+            AdLog.logMessage(
+                message = "${adType.name} cache expired on access, removing",
+                providerType = providerType,
+                adType = adType,
+                success = false
+            )
             removeCachedAd(adType)
             null
         } else {
@@ -334,27 +466,48 @@ abstract class BaseAdProvider : IAdProvider {
     }
 
     protected fun preloadAdOnDismiss(adType: AdType) {
+        val providerType = getProviderType()
+        
         if (!shouldAutoPreload(adType)) {
-            log("$TAG: Auto preload disabled for ${adType.name}")
+            AdLog.logMessage(
+                message = "Auto preload disabled for ${adType.name}",
+                providerType = providerType,
+                adType = adType,
+            )
             return
         }
 
-        log("$TAG: [PRELOAD] Starting preload for ${adType.name} (triggered by ad dismiss)")
-        log("$TAG: [PRELOAD] 📌 This is the ONLY time we preload - after user closes the ad")
-        log("$TAG: [PRELOAD] Strategy: Use → Close → Preload next → Ready for next show")
+        AdLog.logMessage(
+            message = "Starting preload (triggered by ad dismiss)",
+            providerType = providerType,
+            adType = adType,
+        )
+        AdLog.logMessage(
+            message = "📌 This is the ONLY time we preload - after user closes the ad",
+            providerType = providerType,
+            adType = adType,
+        )
+        AdLog.logMessage(
+            message = "Strategy: Use → Close → Preload next → Ready for next show",
+            providerType = providerType,
+            adType = adType,
+        )
 
         AdManager.currentStrategy.preload(App.context, adType)
     }
 
-    /**
-     * 检查缓存是否过期
-     */
     private fun isCacheExpired(adType: AdType): Boolean {
+        val providerType = getProviderType()
         val age = getCacheAge(adType)
         val expired = age > cacheExpireTimeMs
 
         if (expired) {
-            logE("$TAG: ${adType.name} cache age: ${age}ms > expire time: ${cacheExpireTimeMs}ms")
+            AdLog.logMessage(
+                message = "${adType.name} cache expired | Age: ${age}ms > Expire time: ${cacheExpireTimeMs}ms",
+                providerType = providerType,
+                adType = adType,
+                success = false
+            )
         }
 
         return expired
