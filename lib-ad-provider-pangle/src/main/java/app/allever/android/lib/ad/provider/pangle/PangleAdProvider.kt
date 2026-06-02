@@ -35,7 +35,7 @@ class PangleAdProvider : BaseAdProvider() {
 
     companion object {
         private const val TAG = "PangleAdProvider"
-        const val PROVIDER_NAME = "PANGLE"
+        const val PROVIDER_NAME = "Pangle"
     }
 
     private var interstitialAd: PAGInterstitialAd? = null

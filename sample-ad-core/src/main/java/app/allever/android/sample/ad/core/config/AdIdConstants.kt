@@ -28,4 +28,13 @@ object AdIdConstants {
         const val BANNER_AD_ID = "10182906-10156618"
         const val NATIVE_AD_ID = "10182906-10087503"
     }
+
+    object AppLovin {
+        const val APP_ID = "05TMDQ5tZabpXQ45_UTbmEGNUtVAzSTzT6KmWQc5_CuWdzccS4DCITZoL3yIWUG3bbq60QC_d4WF28tUC4gVTF"
+        const val SPLASH_AD_ID = "splash_id"
+        const val INTERSTITIAL_AD_ID = "619f75501965fcec"
+        const val REWARD_VIDEO_AD_ID = "b7a278733c8ae6c6"
+        const val BANNER_AD_ID = "deb0327b3f01cdb9"
+        const val NATIVE_AD_ID = ""
+    }
 }

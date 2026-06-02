@@ -28,7 +28,7 @@ class AdMobAdProvider : BaseAdProvider() {
 
     companion object {
         private const val TAG = "AdMobAdProvider"
-        const val PROVIDER_NAME = "ADMOB"
+        const val PROVIDER_NAME = "AdMob"
     }
 
     private var interstitialAd: InterstitialAd? = null

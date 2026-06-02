@@ -42,7 +42,7 @@
                     android:id="@+id/btnRegisterProviders"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="📝 Register 3 Providers" />
+                    android:text="📝 Register Providers" />
 
                 <!-- Initialization -->
                 <TextView

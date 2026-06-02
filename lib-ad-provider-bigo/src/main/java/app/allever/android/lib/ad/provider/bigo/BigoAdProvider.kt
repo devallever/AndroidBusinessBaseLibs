@@ -33,7 +33,7 @@ class BigoAdProvider : BaseAdProvider() {
 
     companion object {
         private const val TAG = "BigoAdProvider"
-        const val PROVIDER_NAME = "BIGO"
+        const val PROVIDER_NAME = "Bigo"
     }
 
     private var interstitialAd: InterstitialAd? = null

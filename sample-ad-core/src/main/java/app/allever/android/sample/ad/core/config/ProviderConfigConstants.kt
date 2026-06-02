@@ -35,4 +35,15 @@ object ProviderConfigConstants {
         supportWaterfall = true,
         supportBidding = true
     )
+
+    val APPLOVIN = AdProviderConfig(
+        appId = AdIdConstants.AppLovin.APP_ID,
+        splashAdId = AdIdConstants.AppLovin.SPLASH_AD_ID,
+        interstitialAdId = AdIdConstants.AppLovin.INTERSTITIAL_AD_ID,
+        rewardVideoAdId = AdIdConstants.AppLovin.REWARD_VIDEO_AD_ID,
+        bannerAdId = AdIdConstants.AppLovin.BANNER_AD_ID,
+        nativeAdId = AdIdConstants.AppLovin.NATIVE_AD_ID,
+        supportWaterfall = true,
+        supportBidding = true
+    )
 }

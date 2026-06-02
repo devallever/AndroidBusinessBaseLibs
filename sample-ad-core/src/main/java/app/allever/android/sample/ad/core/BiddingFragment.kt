@@ -7,6 +7,7 @@ import app.allever.android.lib.ad.core.AdManager.LoadMode
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.provider.admob.AdMobAdProvider
+import app.allever.android.lib.ad.provider.applovin.AppLovinAdProvider
 import app.allever.android.lib.ad.provider.bigo.BigoAdProvider
 import app.allever.android.lib.ad.provider.pangle.PangleAdProvider
 import app.allever.android.lib.common.BaseFragment
@@ -88,7 +89,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             config = ProviderConfigConstants.PANGLE
         )
         appendStatus("✓ [1] PANGLE - Bidding: ✅ ON")
-        appendStatus("    Simulated price range: $2.00 - $6.00")
+        appendStatus("    Simulated price range: $1.00 - $5.00")
 
         AdManager.registerProvider(
             providerType = BigoAdProvider.PROVIDER_NAME,
@@ -96,7 +97,15 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             config = ProviderConfigConstants.BIGO
         )
         appendStatus("✓ [2] BIGO - Bidding: ✅ ON")
-        appendStatus("    Simulated price range: $3.00 - $7.00")
+        appendStatus("    Simulated price range: $1.00 - $5.00")
+        AdManager.registerProvider(
+            providerType = AppLovinAdProvider.PROVIDER_NAME,
+            providerClass = AppLovinAdProvider::class.java,
+            config = ProviderConfigConstants.APPLOVIN
+        )
+        appendStatus("✓ [3] APPLOVIN - Bidding: ✅ ON")
+        appendStatus("    Simulated price range: $1.00 - $5.00")
+
         appendStatus("")
         appendStatus("=".repeat(60))
         appendStatus("")
@@ -122,6 +131,13 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         AdManager.init(context, BigoAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 appendStatus("✓ BIGO initialized & in pool")
+            }
+        }
+
+        AdManager.init(context, AppLovinAdProvider.PROVIDER_NAME) {
+            runOnUiThread {
+                appendStatus("✓ APPLOVIN initialized & in pool")
+
                 appendStatus("")
                 appendStatus("All providers ready! Set mode to BIDDING.")
                 updateCurrentModeDisplay()

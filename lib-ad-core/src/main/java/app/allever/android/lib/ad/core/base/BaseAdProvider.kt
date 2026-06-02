@@ -154,7 +154,6 @@ abstract class BaseAdProvider : IAdProvider {
         AdLog.logMessage(
             message = "Destroying provider - clearing all caches",
             providerType = providerType,
-            adType = AdType.BANNER,
         )
         adCache.clear()
         adIdCache.clear()
@@ -170,7 +169,6 @@ abstract class BaseAdProvider : IAdProvider {
         AdLog.logMessage(
             message = "Initializing...",
             providerType = providerType,
-            adType = AdType.BANNER,
         )
 
         if (isInit()) {
@@ -193,7 +191,6 @@ abstract class BaseAdProvider : IAdProvider {
         AdLog.logMessage(
             message = "Initialized successfully",
             providerType = providerType,
-            adType = AdType.BANNER,
             success = true
         )
         callback?.invoke()
