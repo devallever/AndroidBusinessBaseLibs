@@ -53,6 +53,7 @@ adjustAndroid = "5.7.0"
 glideVersion = "5.0.5"
 bigoAds = "5.9.0"
 pangleSdk = "8.0.0.4"
+leakcanaryAndroid = "2.14"
 
 
 
@@ -124,6 +125,7 @@ play-services-ads-identifier = { module = "com.google.android.gms:play-services-
 applovinqualityservicegradleplugin = { module = "com.applovin.quality:AppLovinQualityServiceGradlePlugin", version.ref = "applovinqualityservicegradleplugin" }
 applovin-sdk = { module = "com.applovin:applovin-sdk", version.ref = "applovinSdk" }
 pangle-sdk = { module = "com.pangle.global:pag-sdk", version.ref = "pangleSdk" }
+leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanaryAndroid" }
 
 
 [plugins]

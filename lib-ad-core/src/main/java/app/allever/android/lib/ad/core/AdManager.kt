@@ -116,7 +116,7 @@ object AdManager {
             return
         }
 
-        provider.init(context, config) {
+        provider.init(context.applicationContext, config) {
             providerPool[providerType] = provider
 
             log("$TAG: Provider ${provider.getProviderType()} initialized successfully")
@@ -197,7 +197,7 @@ object AdManager {
             log("$TAG: [CACHE] Cache-first mode DISABLED, skipping cache check")
         }
 
-        currentStrategy.loadAd(context, adType, callback)
+        currentStrategy.loadAd(context.applicationContext, adType, callback)
     }
 
     fun showAd(
@@ -216,7 +216,7 @@ object AdManager {
         container: ViewGroup? = null,
         callback: IAdCallback? = null
     ) {
-        loadAd(activity, adType, object : IAdCallback {
+        loadAd(activity.applicationContext, adType, object : IAdCallback {
             override fun onAdLoaded() {
                 showAd(activity, adType, container, callback)
                 callback?.onAdLoaded()
