@@ -24,6 +24,7 @@ import com.applovin.sdk.AppLovinSdkInitializationConfiguration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
 
 class AppLovinAdProvider : BaseAdProvider() {
 
@@ -44,7 +45,9 @@ class AppLovinAdProvider : BaseAdProvider() {
 
 
     override fun init(context: Context, config: AdProviderConfig, callback: (() -> Unit)?) {
-        initInternal({
+        val safeCallback = WeakReference(callback)
+
+        initInternal(realInit = {
             CoroutineScope(Dispatchers.IO).launch {
                 val initConfig = AppLovinSdkInitializationConfiguration.builder(config.appId)
                     .setMediationProvider(AppLovinMediationProvider.MAX)
@@ -55,10 +58,11 @@ class AppLovinAdProvider : BaseAdProvider() {
                 }
 
                 AppLovinSdk.getInstance(context).initialize(initConfig) { sdkConfig ->
-                    finishInit(callback)
+                    safeCallback.get()?.invoke()
+                    finishInit(null)
                 }
             }
-        }, callback)
+        }, callback = null)
     }
 
     override fun loadSplashAd(context: Context, adId: String, callback: IAdCallback?) {
@@ -245,6 +249,7 @@ class AppLovinAdProvider : BaseAdProvider() {
         interstitialAd = null
         rewardedAd = null
         bannerAd = null
+        splashAd = null
     }
 
 

@@ -29,6 +29,8 @@ import sg.bigo.ads.api.SplashAdInteractionListener
 import sg.bigo.ads.api.SplashAdLoader
 import sg.bigo.ads.api.SplashAdRequest
 
+import java.lang.ref.WeakReference
+
 class BigoAdProvider : BaseAdProvider() {
 
     companion object {
@@ -44,6 +46,8 @@ class BigoAdProvider : BaseAdProvider() {
     override fun getProviderType(): String = PROVIDER_NAME
 
     override fun init(context: Context, config: AdProviderConfig, callback: (() -> Unit)?) {
+        val safeCallback = WeakReference(callback)
+
         initInternal(realInit = {
             val bigoConfig = AdConfig.Builder()
                 .setAppId(config.appId)
@@ -51,12 +55,17 @@ class BigoAdProvider : BaseAdProvider() {
                 .build()
 
             BigoAdSdk.initialize(context, bigoConfig) {
-                finishInit(callback)
+                safeCallback.get()?.invoke()
+                finishInit(null)
             }
-        }, callback)
+        }, callback = null)
     }
 
     override fun onDestroy() {
+        interstitialAd?.setAdInteractionListener(null)
+        rewardedAd?.setAdInteractionListener(null)
+        splashAd?.setAdInteractionListener(null)
+        bannerAd?.setAdInteractionListener(null)
         interstitialAd = null
         rewardedAd = null
         bannerAd = null
@@ -307,5 +316,12 @@ class BigoAdProvider : BaseAdProvider() {
     override fun showBannerAd(container: ViewGroup?, callback: IAdCallback?) {
         val ad = bannerAd
         showBannerInternal(ad?.adView(), container, callback)
+    }
+
+    override fun destroy() {
+        interstitialAd = null
+        rewardedAd = null
+        splashAd = null
+        bannerAd = null
     }
 }

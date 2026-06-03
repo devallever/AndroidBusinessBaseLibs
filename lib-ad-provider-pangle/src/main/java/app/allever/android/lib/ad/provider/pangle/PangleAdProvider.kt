@@ -31,6 +31,8 @@ import com.bytedance.sdk.openadsdk.api.reward.PAGRewardedAdInteractionCallback
 import com.bytedance.sdk.openadsdk.api.reward.PAGRewardedAdLoadListener
 import com.bytedance.sdk.openadsdk.api.reward.PAGRewardedRequest
 
+import java.lang.ref.WeakReference
+
 class PangleAdProvider : BaseAdProvider() {
 
     companion object {
@@ -46,6 +48,8 @@ class PangleAdProvider : BaseAdProvider() {
     override fun getProviderType(): String = PROVIDER_NAME
 
     override fun init(context: Context, config: AdProviderConfig, callback: (() -> Unit)?) {
+        val safeCallback = WeakReference(callback)
+
         initInternal(realInit = {
             val pagConfig = PAGConfig.Builder()
                 .appId(config.appId)
@@ -55,17 +59,22 @@ class PangleAdProvider : BaseAdProvider() {
 
             PAGSdk.init(context, pagConfig, object : PAGSdk.PAGInitCallback {
                 override fun success() {
-                    finishInit(callback)
+                    safeCallback.get()?.invoke()
+                    finishInit(null)
                 }
 
                 override fun fail(code: Int, message: String?) {
                     logE("$TAG: Pangle initialization failed: $code - $message")
                 }
             })
-        }, callback)
+        }, callback = null)
     }
 
     override fun onDestroy() {
+        interstitialAd?.setAdInteractionCallback(null)
+        rewardedAd?.setAdInteractionCallback(null)
+        splashAd?.setAdInteractionCallback(null)
+        bannerAd?.setAdInteractionCallback(null)
         interstitialAd = null
         rewardedAd = null
         bannerAd = null
@@ -236,5 +245,12 @@ class PangleAdProvider : BaseAdProvider() {
     override fun showBannerAd(container: ViewGroup?, callback: IAdCallback?) {
         val ad = bannerAd
         showBannerInternal(ad?.bannerView, container, callback)
+    }
+
+    override fun destroy(){
+        splashAd = null
+        interstitialAd = null
+        rewardedAd = null
+        bannerAd = null
     }
 }

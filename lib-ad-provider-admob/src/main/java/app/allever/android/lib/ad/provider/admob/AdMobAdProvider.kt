@@ -23,6 +23,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import java.lang.ref.WeakReference
 
 class AdMobAdProvider : BaseAdProvider() {
 
@@ -39,11 +40,14 @@ class AdMobAdProvider : BaseAdProvider() {
     override fun getProviderType(): String = PROVIDER_NAME
 
     override fun init(context: Context, config: AdProviderConfig, callback: (() -> Unit)?) {
+        val safeCallback = WeakReference(callback)
+
         initInternal(realInit = {
             MobileAds.initialize(context) {
-                finishInit(callback)
+                safeCallback.get()?.invoke()
+                finishInit(null)
             }
-        }, callback)
+        }, callback = null)
     }
 
     override fun onDestroy() {
