@@ -18,7 +18,7 @@ import app.allever.android.lib.core.function.permission.PermissionHelper
 import com.chad.library.adapter.base.BaseQuickAdapter
 import androidx.core.net.toUri
 
-class PermissionMainFragment: ListFragment<FragmentListBinding, ListViewModel, TextClickItem>() {
+class PermissionBaseSampleFragment: ListFragment<FragmentListBinding, ListViewModel, TextClickItem>() {
 
     // ==================== 相机权限 ====================
 
@@ -218,7 +218,8 @@ class PermissionMainFragment: ListFragment<FragmentListBinding, ListViewModel, T
         },
         TextClickItem("申请邻近设备权限 (版本适配)") {
             requestNearbyDevicesPermission()
-        }
+        },
+        TextClickItem("")
     )
 
     private fun requestCameraPermission() {

@@ -9,5 +9,5 @@ import com.alibaba.android.arouter.facade.annotation.Route
 class PermissionMainActivity: SampleMainActivity<ActivitySampleMainBinding, BaseViewModel>() {
     override fun getSampleName() = "Permission"
 
-    override fun getSampleFragment() = PermissionMainFragment()
+    override fun getSampleFragment() = PermissionTabFragment()
 }
