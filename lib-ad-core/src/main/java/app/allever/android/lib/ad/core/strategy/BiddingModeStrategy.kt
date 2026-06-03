@@ -12,8 +12,6 @@ import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.core.type.BiddingResult
 import app.allever.android.lib.core.ext.log
 import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -109,55 +107,74 @@ class BiddingModeStrategy : BaseModeStrategy() {
         AdLog.logMessage("Parallel ${if (isPreload) "requesting" else "loading"} ${biddingProviders.size} providers with coroutines", isPreload = isPreload)
 
         scope.launch {
-            var results: Map<String, BiddingEntry> = emptyMap()
+            val timeout = getBiddingTimeout(biddingProviders)
+            val collectedResults = mutableMapOf<String, BiddingEntry>()
 
             try {
-                val timeout = getBiddingTimeout(biddingProviders)
-
-                results = withTimeout(timeout) {
-                    parallelBiddingRequest(biddingProviders, context, adType)
-                }
-
-                handleBiddingResults(results, adType, callback, isPreload)
-
-            } catch (e: TimeoutCancellationException) {
-                AdLog.logMessage("⏰ TIMEOUT! (${getBiddingTimeout(biddingProviders)}ms)", strategyName = TAG, success = false)
-
-                if (!isPreload) {
-                    if (results.isEmpty()) {
-                        callback?.onAdFail(-1, "Bidding timeout")
-                    } else {
-                        handleBiddingResults(results, adType, callback, isPreload)
+                withTimeout(timeout) {
+                    coroutineScope {
+                        biddingProviders.mapIndexed { index, (providerType, config) ->
+                            launch {
+                                val result = tryLoadFromSingleProvider(
+                                    index,
+                                    biddingProviders.size,
+                                    providerType,
+                                    config,
+                                    context,
+                                    adType
+                                )
+                                synchronized(collectedResults) {
+                                    collectedResults[providerType] = result.second
+                                }
+                            }
+                        }
                     }
                 }
 
-            } catch (e: Exception) {
-                AdLog.logMessage("${e.message}", strategyName = TAG, success = false)
+                AdLog.logMessage(
+                    message = "All providers responded within ${timeout}ms",
+                    strategyName = TAG,
+                    isPreload = isPreload
+                )
 
+            } catch (e: TimeoutCancellationException) {
+                AdLog.logMessage(
+                    message = "⏰ TIMEOUT! (${timeout}ms) | Collected ${collectedResults.size}/${biddingProviders.size} results before timeout",
+                    strategyName = TAG,
+                    isPreload = isPreload,
+                    success = false
+                )
+            } catch (e: Exception) {
+                AdLog.logMessage(
+                    message = e.message ?: "Unknown error",
+                    strategyName = TAG,
+                    isPreload = isPreload,
+                    success = false
+                )
+            }
+
+            // 超时后，只要有结果（无论是否全部完成），都执行竞价
+            if (collectedResults.isNotEmpty()) {
+                val successCount = collectedResults.values.count { it.success }
+                AdLog.logMessage(
+                    message = "Executing bidding with ${collectedResults.size} results ($successCount success)",
+                    strategyName = TAG,
+                    adType = adType,
+                    isPreload = isPreload
+                )
+                handleBiddingResults(collectedResults.toMap(), adType, callback, isPreload)
+            } else {
+                AdLog.logMessage(
+                    message = "No results collected, all failed or cancelled",
+                    strategyName = TAG,
+                    adType = adType,
+                    isPreload = isPreload,
+                    success = false
+                )
                 if (!isPreload) {
-                    callback?.onAdFail(-1, e.message ?: "Unknown error")
+                    fallbackToSingle(context, adType, callback, false)
                 }
             }
-        }
-    }
-
-    private suspend fun parallelBiddingRequest(
-        providers: List<Pair<String, AdProviderConfig>>, context: Context, adType: AdType
-    ): Map<String, BiddingEntry> {
-
-        return coroutineScope {
-            providers.mapIndexed { index, (providerType, config) ->
-                async {
-                    tryLoadFromSingleProvider(
-                        index,
-                        providers.size,
-                        providerType,
-                        config,
-                        context,
-                        adType
-                    )
-                }
-            }.awaitAll().toMap()
         }
     }
 
