@@ -8,6 +8,7 @@ import app.allever.android.lib.media.core.query.MediaFolderDetail
 import app.allever.android.lib.media.core.query.MediaQuery
 import app.allever.android.lib.media.core.source.MediaSource
 import app.allever.android.lib.media.core.source.MediaStoreSource
+import app.allever.android.lib.core.ext.log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -42,10 +43,13 @@ internal object MediaLoader {
                 val cacheKey = folderCacheKey(query)
                 folderCacheMutex.withLock {
                     folderCache[cacheKey]?.let { cached ->
+                        log("MediaLoader", "queryFolders 缓存命中: $cacheKey, 全量=${cached.size}, 返回切片")
                         return@withContext cached.paginate(query.pagination)
                     }
                 }
             }
+
+            log("MediaLoader", "queryFolders 缓存未命中/强制刷新, 执行查询...")
 
             // 缓存未命中或强制刷新，执行查询
             val allFolders = source.queryFolders(query)
@@ -55,6 +59,8 @@ internal object MediaLoader {
                 folderCache[folderCacheKey(query)] = allFolders
             }
 
+            log("MediaLoader", "queryFolders 查询完成: 全量=${allFolders.size} 个目录, 已更新缓存")
+
             // 返回分页结果
             allFolders.paginate(query.pagination)
         }
@@ -63,7 +69,9 @@ internal object MediaLoader {
      * 清除目录列表缓存
      */
     suspend fun clearFolderCache() = withContext(Dispatchers.IO) {
+        val size = folderCache.size
         folderCacheMutex.withLock { folderCache.clear() }
+        log("MediaLoader", "clearFolderCache ← 已清除 $size 条缓存")
     }
 
     // ==================== 目录详情查询 ====================

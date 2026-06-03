@@ -3,6 +3,7 @@ package app.allever.android.lib.media.core
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.media.core.loader.MediaLoader
 import app.allever.android.lib.media.core.model.MediaFolder
@@ -69,7 +70,10 @@ object MediaLib {
      */
     suspend fun queryFolders(block: MediaQueryBuilder.() -> Unit): List<MediaFolder> {
         val query = MediaQueryBuilder().apply(block).build()
-        return MediaLoader.queryFolders(query)
+        log("MediaLib", "queryFolders → type=${typeFlagsLabel(query.typeFlags)}, ${paginationLabel(query.pagination)}, sortBy=${query.sortBy}")
+        val result = MediaLoader.queryFolders(query)
+        log("MediaLib", "queryFolders ← 返回 ${result.size} 个目录")
+        return result
     }
 
     /**
@@ -80,6 +84,7 @@ object MediaLib {
      */
     fun queryFoldersFlow(block: MediaQueryBuilder.() -> Unit): Flow<List<MediaFolder>> {
         val query = MediaQueryBuilder().apply(block).build()
+        log("MediaLib", "queryFoldersFlow → type=${typeFlagsLabel(query.typeFlags)}, ${paginationLabel(query.pagination)}")
         return flow {
             when (query.pagination) {
                 is Pagination.All -> {
@@ -107,6 +112,7 @@ object MediaLib {
      */
     fun queryFoldersLiveData(block: MediaQueryBuilder.() -> Unit): LiveData<List<MediaFolder>> {
         val query = MediaQueryBuilder().apply(block).build()
+        log("MediaLib", "queryFoldersLiveData → type=${typeFlagsLabel(query.typeFlags)}, ${paginationLabel(query.pagination)}")
         return liveData(Dispatchers.IO) {
             emit(MediaLoader.queryFolders(query))
         }
@@ -119,7 +125,10 @@ object MediaLib {
      */
     suspend fun queryFolderDetail(block: FolderDetailQueryBuilder.() -> Unit): MediaFolderDetail {
         val query = FolderDetailQueryBuilder().apply(block).build()
-        return MediaLoader.queryFolderDetail(query)
+        log("MediaLib", "queryFolderDetail → bucketId=${query.bucketId}, type=${typeFlagsLabel(query.typeFlags)}")
+        val result = MediaLoader.queryFolderDetail(query)
+        log("MediaLib", "queryFolderDetail ← img:${result.images.size} vid:${result.videos.size} aud:${result.audios.size}")
+        return result
     }
 
     /**
@@ -129,6 +138,7 @@ object MediaLib {
         block: FolderDetailQueryBuilder.() -> Unit,
     ): Flow<MediaFolderDetail> {
         val query = FolderDetailQueryBuilder().apply(block).build()
+        log("MediaLib", "queryFolderDetailFlow → bucketId=${query.bucketId}")
         return flow {
             emit(MediaLoader.queryFolderDetail(query))
         }.flowOn(Dispatchers.IO)
@@ -142,6 +152,7 @@ object MediaLib {
         block: FolderDetailQueryBuilder.() -> Unit,
     ): LiveData<MediaFolderDetail> {
         val query = FolderDetailQueryBuilder().apply(block).build()
+        log("MediaLib", "queryFolderDetailLiveData → bucketId=${query.bucketId}")
         return liveData(Dispatchers.IO) {
             emit(MediaLoader.queryFolderDetail(query))
         }
@@ -154,7 +165,10 @@ object MediaLib {
      */
     suspend fun queryAll(block: MediaQueryBuilder.() -> Unit): List<MediaItem> {
         val query = MediaQueryBuilder().apply(block).build()
-        return MediaLoader.queryAll(query)
+        log("MediaLib", "queryAll → type=${typeFlagsLabel(query.typeFlags)}, ${paginationLabel(query.pagination)}")
+        val result = MediaLoader.queryAll(query)
+        log("MediaLib", "queryAll ← 返回 ${result.size} 项资源")
+        return result
     }
 
     /**
@@ -162,6 +176,7 @@ object MediaLib {
      */
     fun queryAllFlow(block: MediaQueryBuilder.() -> Unit): Flow<MediaItem> {
         val query = MediaQueryBuilder().apply(block).build()
+        log("MediaLib", "queryAllFlow → type=${typeFlagsLabel(query.typeFlags)}, ${paginationLabel(query.pagination)}")
         return flow {
             val items = MediaLoader.queryAll(query)
             items.forEach { emit(it) }
@@ -174,6 +189,7 @@ object MediaLib {
      */
     fun queryAllLiveData(block: MediaQueryBuilder.() -> Unit): LiveData<List<MediaItem>> {
         val query = MediaQueryBuilder().apply(block).build()
+        log("MediaLib", "queryAllLiveData → type=${typeFlagsLabel(query.typeFlags)}")
         return liveData(Dispatchers.IO) {
             emit(MediaLoader.queryAll(query))
         }
@@ -183,7 +199,9 @@ object MediaLib {
 
     /** 清除目录列表缓存（下次查询将重新从系统读取） */
     suspend fun clearCache() {
+        log("MediaLib", "clearCache → 清除目录列表缓存")
         MediaLoader.clearFolderCache()
+        log("MediaLib", "clearCache ← 缓存已清除")
     }
 
     // ==================== 权限检查便捷方法 ====================
@@ -207,5 +225,19 @@ object MediaLib {
      */
     fun requiredPermissions(@MediaType.Type typeFlags: Int): Array<String> {
         return MediaPermission.requiredPermissions(typeFlags)
+    }
+
+    // ==================== 日志辅助 ====================
+
+    private fun typeFlagsLabel(@MediaType.Type typeFlags: Int): String = buildString {
+        if (typeFlags == MediaType.ALL) { append("ALL"); return@buildString }
+        if (MediaType.contains(typeFlags, MediaType.IMAGE)) append("IMG")
+        if (MediaType.contains(typeFlags, MediaType.VIDEO)) append(if (isNotEmpty()) "+VID" else "VID")
+        if (MediaType.contains(typeFlags, MediaType.AUDIO)) append(if (isNotEmpty()) "+AUD" else "AUD")
+    }
+
+    private fun paginationLabel(pagination: Pagination): String = when (pagination) {
+        is Pagination.All -> "全量"
+        is Pagination.Paged -> "分页(page=${pagination.page}, size=${pagination.pageSize})"
     }
 }

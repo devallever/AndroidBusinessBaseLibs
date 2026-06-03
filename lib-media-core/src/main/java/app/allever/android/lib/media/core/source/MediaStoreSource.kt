@@ -5,6 +5,8 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.media.core.model.MediaFolder
 import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.core.model.MediaStoreColumn
@@ -113,11 +115,14 @@ internal class MediaStoreSource : MediaSource {
         orderBy: String?,
     ): Cursor? {
         return try {
-            contentResolver.query(baseUri, projection, selection, selectionArgs, orderBy)
+            val cursor = contentResolver.query(baseUri, projection, selection, selectionArgs, orderBy)
+            log("MediaStoreSource", "query → selection=$selection, args=${selectionArgs?.contentToString()}, orderBy=$orderBy")
+            cursor
         } catch (e: SecurityException) {
-            // 权限不足时静默返回 null，由上层处理
+            logE("MediaStoreSource", "query SecurityException: 权限不足 | ${e.message}")
             null
         } catch (e: Exception) {
+            logE("MediaStoreSource", "query Exception: ${e.message}")
             null
         }
     }
@@ -220,7 +225,9 @@ internal class MediaStoreSource : MediaSource {
             }
         }
 
-        return folderMap.values.map { it.build() }
+        return folderMap.values.map { it.build() }.also {
+            log("MediaStoreSource", "buildFoldersFromCursor → 解析完成: ${it.size} 个目录, 原始记录=${folderMap.values.sumOf { it.images.size + it.videos.size + it.audios.size }}")
+        }
     }
 
     /**

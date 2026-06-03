@@ -5,6 +5,8 @@ import android.net.Uri
 import android.os.Build
 import android.util.Size
 import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.logE
 import androidx.annotation.RequiresApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -51,14 +53,21 @@ object ThumbnailLoader {
 
             // 1. 查缓存
             val cacheKey = "${uri}_w${size.width}h${size.height}"
-            getCached(cacheKey)?.let { return@withContext it }
+            getCached(cacheKey)?.let {
+                log("ThumbnailLoader", "loadThumbnail 缓存命中: $uri")
+                return@withContext it
+            }
 
             // 2. 实际加载
+            log("ThumbnailLoader", "loadThumbnail 缓存未命中, 加载: $uri (${size.width}x${size.height})")
             val bitmap = loadThumbnailInternal(uri, size)
 
             // 3. 写入缓存
             if (bitmap != null && !bitmap.isRecycled) {
                 cache[cacheKey] = SoftReference(bitmap)
+                log("ThumbnailLoader", "loadThumbnail 加载成功: ${bitmap.width}x${bitmap.height}, 已缓存")
+            } else {
+                logE("ThumbnailLoader", "loadThumbnail 加载失败: $uri")
             }
 
             bitmap
@@ -73,10 +82,12 @@ object ThumbnailLoader {
         uris: Collection<Uri>,
         size: Size = DEFAULT_SIZE,
     ): Map<Uri, Bitmap> = withContext(Dispatchers.IO) {
+        log("ThumbnailLoader", "loadThumbnails → 批量请求: ${uris.size} 个")
         val results = mutableMapOf<Uri, Bitmap>()
         for (uri in uris) {
             loadThumbnail(uri, size)?.let { results[uri] = it }
         }
+        log("ThumbnailLoader", "loadThumbnails ← 完成: ${results.size}/${uris.size} 成功")
         results
     }
 
@@ -84,7 +95,9 @@ object ThumbnailLoader {
      * 清除缓存
      */
     fun clearCache() {
+        val size = cache.size
         cache.clear()
+        log("ThumbnailLoader", "clearCache ← 已清除 $size 条缩略图缓存")
     }
 
     // ==================== 内部实现 ====================
@@ -93,11 +106,14 @@ object ThumbnailLoader {
         withContext(Dispatchers.IO) {
             try {
                 if (Build.VERSION.SDK_INT >= 29) {
+                    log("ThumbnailLoader", "使用 API29+ loadThumbnail")
                     loadThumbnailApi29(uri, size)
                 } else {
+                    log("ThumbnailLoader", "使用兼容方案 (API < 29)")
                     loadThumbnailLegacy(uri)
                 }
             } catch (e: Exception) {
+                logE("ThumbnailLoader", "loadThumbnailInternal 异常: ${e.message}")
                 null
             }
         }
