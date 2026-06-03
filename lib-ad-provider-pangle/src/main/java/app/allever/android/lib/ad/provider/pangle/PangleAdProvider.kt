@@ -84,28 +84,30 @@ class PangleAdProvider : BaseAdProvider() {
     override fun loadSplashAd(context: Context, adId: String, callback: IAdCallback?) {
         log("$TAG: Loading splash ad: $adId")
 
+        val callbackRef = WeakReference(callback)
+
         val request = PAGAppOpenRequest()
         PAGAppOpenAd.loadAd(adId, request, object : PAGAppOpenAdLoadListener {
             override fun onError(code: Int, message: String) {
-                handleOnAdLoadFail(AdType.SPLASH, code, message, callback)
+                handleOnAdLoadFail(AdType.SPLASH, code, message, callbackRef.get())
             }
 
             override fun onAdLoaded(ad: PAGAppOpenAd) {
                 splashAd = ad
-                handleOnAdLoaded(AdType.SPLASH, ad, callback)
+                handleOnAdLoaded(AdType.SPLASH, ad, callbackRef.get())
 
                 ad.setAdInteractionCallback(object : PAGAppOpenAdInteractionCallback() {
                     override fun onAdShowed() {
-                        handleOnAdShow(AdType.SPLASH, callback)
+                        handleOnAdShow(AdType.SPLASH, callbackRef.get())
                     }
 
                     override fun onAdClicked() {
-                        handleOnAdClick(AdType.SPLASH, callback)
+                        handleOnAdClick(AdType.SPLASH, callbackRef.get())
                     }
 
                     override fun onAdDismissed() {
                         splashAd = null
-                        handleAdDismissed(AdType.SPLASH, callback)
+                        handleAdDismissed(AdType.SPLASH, callbackRef.get())
                     }
                 })
             }
@@ -121,28 +123,30 @@ class PangleAdProvider : BaseAdProvider() {
     override fun loadInterstitialAd(context: Context, adId: String, callback: IAdCallback?) {
         log("$TAG: Loading interstitial ad: $adId")
 
+        val callbackRef = WeakReference(callback)
+
         val request = PAGInterstitialRequest()
         PAGInterstitialAd.loadAd(adId, request, object : PAGInterstitialAdLoadListener {
             override fun onError(code: Int, message: String) {
-                handleOnAdLoadFail(AdType.INTERSTITIAL, code, message, callback)
+                handleOnAdLoadFail(AdType.INTERSTITIAL, code, message, callbackRef.get())
             }
 
             override fun onAdLoaded(ad: PAGInterstitialAd) {
                 interstitialAd = ad
-                handleOnAdLoaded(AdType.INTERSTITIAL, ad, callback)
+                handleOnAdLoaded(AdType.INTERSTITIAL, ad, callbackRef.get())
 
                 ad.setAdInteractionCallback(object : PAGInterstitialAdInteractionCallback() {
                     override fun onAdShowed() {
-                        handleOnAdShow(AdType.INTERSTITIAL, callback)
+                        handleOnAdShow(AdType.INTERSTITIAL, callbackRef.get())
                     }
 
                     override fun onAdClicked() {
-                        handleOnAdClick(AdType.INTERSTITIAL, callback)
+                        handleOnAdClick(AdType.INTERSTITIAL, callbackRef.get())
                     }
 
                     override fun onAdDismissed() {
                         interstitialAd = null
-                        handleAdDismissed(AdType.INTERSTITIAL, callback)
+                        handleAdDismissed(AdType.INTERSTITIAL, callbackRef.get())
                     }
 
                     override fun onAdShowFailed(errorModel: PAGErrorModel) {
@@ -151,7 +155,7 @@ class PangleAdProvider : BaseAdProvider() {
                             AdType.INTERSTITIAL,
                             errorModel.errorCode,
                             errorModel.errorMessage,
-                            callback
+                            callbackRef.get()
                         )
                     }
                 })
@@ -168,32 +172,34 @@ class PangleAdProvider : BaseAdProvider() {
     override fun loadRewardedAd(context: Context, adId: String, callback: IAdCallback?) {
         log("$TAG: Loading rewarded ad: $adId")
 
+        val callbackRef = WeakReference(callback)
+
         val request = PAGRewardedRequest()
         PAGRewardedAd.loadAd(adId, request, object : PAGRewardedAdLoadListener {
             override fun onError(code: Int, message: String) {
-                handleOnAdLoadFail(AdType.REWARD_VIDEO, code, message, callback)
+                handleOnAdLoadFail(AdType.REWARD_VIDEO, code, message, callbackRef.get())
             }
 
             override fun onAdLoaded(ad: PAGRewardedAd) {
                 rewardedAd = ad
-                handleOnAdLoaded(AdType.REWARD_VIDEO, ad, callback)
+                handleOnAdLoaded(AdType.REWARD_VIDEO, ad, callbackRef.get())
 
                 ad.setAdInteractionCallback(object : PAGRewardedAdInteractionCallback() {
                     override fun onAdShowed() {
-                        handleOnAdShow(AdType.REWARD_VIDEO, callback)
+                        handleOnAdShow(AdType.REWARD_VIDEO, callbackRef.get())
                     }
 
                     override fun onAdClicked() {
-                        handleOnAdClick(AdType.REWARD_VIDEO, callback)
+                        handleOnAdClick(AdType.REWARD_VIDEO, callbackRef.get())
                     }
 
                     override fun onAdDismissed() {
                         rewardedAd = null
-                        handleAdDismissed(AdType.REWARD_VIDEO, callback)
+                        handleAdDismissed(AdType.REWARD_VIDEO, callbackRef.get())
                     }
 
                     override fun onUserEarnedReward(pagRewardItem: PAGRewardItem?) {
-                        callback?.onAdRewarded(
+                        callbackRef.get()?.onAdRewarded(
                             pagRewardItem?.rewardAmount ?: 0,
                             pagRewardItem?.rewardName ?: ""
                         )
@@ -212,6 +218,8 @@ class PangleAdProvider : BaseAdProvider() {
     override fun loadBannerAd(context: Context, adId: String, callback: IAdCallback?) {
         log("$TAG: Loading banner ad: $adId")
 
+        val callbackRef = WeakReference(callback)
+
         try {
             val bannerSize = PAGBannerSize.BANNER_W_320_H_50
 
@@ -219,38 +227,31 @@ class PangleAdProvider : BaseAdProvider() {
 
             PAGBannerAd.loadAd(adId, request, object : PAGBannerAdLoadListener {
                 override fun onError(code: Int, message: String) {
-                    handleOnAdLoadFail(AdType.BANNER, code, message, callback)
+                    handleOnAdLoadFail(AdType.BANNER, code, message, callbackRef.get())
                 }
 
                 override fun onAdLoaded(ad: PAGBannerAd) {
                     bannerAd = ad
-                    handleOnAdLoaded(AdType.BANNER, ad, callback)
+                    handleOnAdLoaded(AdType.BANNER, ad, callbackRef.get())
 
                     ad.setAdInteractionCallback(object : PAGBannerAdInteractionCallback() {
                         override fun onAdShowed() {
-                            handleOnAdShow(AdType.BANNER, callback)
+                            handleOnAdShow(AdType.BANNER, callbackRef.get())
                         }
 
                         override fun onAdClicked() {
-                            handleOnAdClick(AdType.BANNER, callback)
+                            handleOnAdClick(AdType.BANNER, callbackRef.get())
                         }
                     })
                 }
             })
         } catch (e: Exception) {
-            handleOnAdLoadFail(AdType.BANNER, -1, e.message ?: "Unknown error", callback)
+            handleOnAdLoadFail(AdType.BANNER, -1, e.message ?: "Unknown error", callbackRef.get())
         }
     }
 
     override fun showBannerAd(container: ViewGroup?, callback: IAdCallback?) {
         val ad = bannerAd
         showBannerInternal(ad?.bannerView, container, callback)
-    }
-
-    override fun destroy(){
-        splashAd = null
-        interstitialAd = null
-        rewardedAd = null
-        bannerAd = null
     }
 }

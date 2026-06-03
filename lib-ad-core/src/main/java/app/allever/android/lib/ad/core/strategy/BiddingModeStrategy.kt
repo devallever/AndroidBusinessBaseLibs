@@ -14,6 +14,7 @@ import app.allever.android.lib.core.ext.log
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeout
 import kotlin.coroutines.resume
@@ -107,6 +108,7 @@ class BiddingModeStrategy : BaseModeStrategy() {
         AdLog.logMessage("Parallel ${if (isPreload) "requesting" else "loading"} ${biddingProviders.size} providers with coroutines", isPreload = isPreload)
 
         scope.launch {
+            val callbackRef = WeakReference(callback)
             val timeout = getBiddingTimeout(biddingProviders)
             val collectedResults = mutableMapOf<String, BiddingEntry>()
 
@@ -162,7 +164,7 @@ class BiddingModeStrategy : BaseModeStrategy() {
                     adType = adType,
                     isPreload = isPreload
                 )
-                handleBiddingResults(collectedResults.toMap(), adType, callback, isPreload)
+                handleBiddingResults(collectedResults.toMap(), adType, callbackRef.get(), isPreload)
             } else {
                 AdLog.logMessage(
                     message = "No results collected, all failed or cancelled",
@@ -172,7 +174,7 @@ class BiddingModeStrategy : BaseModeStrategy() {
                     success = false
                 )
                 if (!isPreload) {
-                    fallbackToSingle(context, adType, callback, false)
+                    fallbackToSingle(context, adType, callbackRef.get(), false)
                 }
             }
         }

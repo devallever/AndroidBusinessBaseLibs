@@ -51,6 +51,9 @@ class AdMobAdProvider : BaseAdProvider() {
     }
 
     override fun onDestroy() {
+        interstitialAd?.fullScreenContentCallback = null
+        rewardedAd?.fullScreenContentCallback = null
+        splashAd?.fullScreenContentCallback = null
         interstitialAd = null
         rewardedAd = null
         splashAd = null
@@ -64,6 +67,8 @@ class AdMobAdProvider : BaseAdProvider() {
 
         log("$TAG: Loading splash ad: $adId")
 
+        val callbackRef = WeakReference(callback)
+
         AppOpenAd.load(
             context,
             adId,
@@ -71,26 +76,26 @@ class AdMobAdProvider : BaseAdProvider() {
             object : AppOpenAd.AppOpenAdLoadCallback() {
                 override fun onAdLoaded(ad: AppOpenAd) {
                     splashAd = ad
-                    handleOnAdLoaded(AdType.SPLASH, ad, callback)
+                    handleOnAdLoaded(AdType.SPLASH, ad, callbackRef.get())
 
                     ad.fullScreenContentCallback = object : FullScreenContentCallback() {
                         override fun onAdDismissedFullScreenContent() {
                             splashAd = null
-                            handleAdDismissed(AdType.SPLASH, callback)
+                            handleAdDismissed(AdType.SPLASH, callbackRef.get())
                         }
 
                         override fun onAdShowedFullScreenContent() {
-                            handleOnAdShow(AdType.SPLASH, callback)
+                            handleOnAdShow(AdType.SPLASH, callbackRef.get())
                         }
 
                         override fun onAdClicked() {
-                            handleOnAdClick(AdType.SPLASH, callback)
+                            handleOnAdClick(AdType.SPLASH, callbackRef.get())
                         }
                     }
                 }
 
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    handleOnAdLoadFail(AdType.SPLASH, adError.code, adError.message, callback)
+                    handleOnAdLoadFail(AdType.SPLASH, adError.code, adError.message, callbackRef.get())
                 }
             }
         )
@@ -109,29 +114,31 @@ class AdMobAdProvider : BaseAdProvider() {
     ) {
         log("$TAG: Loading interstitial ad: $adId")
 
+        val callbackRef = WeakReference(callback)
+
         val adRequest = AdRequest.Builder().build()
 
         InterstitialAd.load(context, adId, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
-                handleOnAdLoadFail(AdType.INTERSTITIAL, adError.code, adError.message, callback)
+                handleOnAdLoadFail(AdType.INTERSTITIAL, adError.code, adError.message, callbackRef.get())
             }
 
             override fun onAdLoaded(ad: InterstitialAd) {
                 interstitialAd = ad
-                handleOnAdLoaded(AdType.INTERSTITIAL, ad, callback)
+                handleOnAdLoaded(AdType.INTERSTITIAL, ad, callbackRef.get())
 
                 ad.fullScreenContentCallback = object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
                         interstitialAd = null
-                        handleAdDismissed(AdType.INTERSTITIAL, callback)
+                        handleAdDismissed(AdType.INTERSTITIAL, callbackRef.get())
                     }
 
                     override fun onAdShowedFullScreenContent() {
-                        handleOnAdShow(AdType.INTERSTITIAL, callback)
+                        handleOnAdShow(AdType.INTERSTITIAL, callbackRef.get())
                     }
 
                     override fun onAdClicked() {
-                        handleOnAdClick(AdType.INTERSTITIAL, callback)
+                        handleOnAdClick(AdType.INTERSTITIAL, callbackRef.get())
                     }
                 }
             }
@@ -153,27 +160,29 @@ class AdMobAdProvider : BaseAdProvider() {
 
         val adRequest = AdRequest.Builder().build()
 
-        RewardedAd.load(context, adId, adRequest, object : RewardedAdLoadCallback() {
+        val callbackRef = WeakReference(callback)
+
+        RewardedAd.load(context.applicationContext, adId, adRequest, object : RewardedAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
-                handleOnAdLoadFail(AdType.REWARD_VIDEO, adError.code, adError.message, callback)
+                handleOnAdLoadFail(AdType.REWARD_VIDEO, adError.code, adError.message, callbackRef.get())
             }
 
             override fun onAdLoaded(ad: RewardedAd) {
                 rewardedAd = ad
-                handleOnAdLoaded(AdType.REWARD_VIDEO, ad, callback)
+                handleOnAdLoaded(AdType.REWARD_VIDEO, ad, callbackRef.get())
 
                 ad.fullScreenContentCallback = object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
                         rewardedAd = null
-                        handleAdDismissed(AdType.REWARD_VIDEO, callback)
+                        handleAdDismissed(AdType.REWARD_VIDEO, callbackRef.get())
                     }
 
                     override fun onAdShowedFullScreenContent() {
-                        handleOnAdShow(AdType.REWARD_VIDEO, callback)
+                        handleOnAdShow(AdType.REWARD_VIDEO, callbackRef.get())
                     }
 
                     override fun onAdClicked() {
-                        handleOnAdClick(AdType.REWARD_VIDEO, callback)
+                        handleOnAdClick(AdType.REWARD_VIDEO, callbackRef.get())
                     }
                 }
             }
@@ -181,13 +190,14 @@ class AdMobAdProvider : BaseAdProvider() {
     }
 
     override fun showRewardedAd(activity: Activity, callback: IAdCallback?) {
+        val callbackRef = WeakReference(callback)
         showRewardedAdInternal(rewardedAd, callback) {
             rewardedAd?.show(activity) { rewardItem ->
                 handleOnAdRewarded(
                     AdType.REWARD_VIDEO,
                     rewardItem.amount,
                     rewardItem.type,
-                    callback
+                    callbackRef.get()
                 )
             }
         }
@@ -199,6 +209,8 @@ class AdMobAdProvider : BaseAdProvider() {
         callback: IAdCallback?
     ) {
         log("$TAG: Loading banner ad: $adId")
+
+        val callbackRef = WeakReference(callback)
 
         try {
             val adView = AdView(context)
@@ -214,21 +226,21 @@ class AdMobAdProvider : BaseAdProvider() {
 
             adView.adListener = object : AdListener() {
                 override fun onAdLoaded() {
-                    handleOnAdLoaded(AdType.BANNER, adView, callback)
+                    handleOnAdLoaded(AdType.BANNER, adView, callbackRef.get())
                 }
 
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    handleOnAdLoadFail(AdType.BANNER, adError.code, adError.message, callback)
+                    handleOnAdLoadFail(AdType.BANNER, adError.code, adError.message, callbackRef.get())
                 }
 
                 override fun onAdOpened() {
-                    handleOnAdShow(AdType.BANNER, callback)
+                    handleOnAdShow(AdType.BANNER, callbackRef.get())
                 }
             }
 
             adView.loadAd(AdRequest.Builder().build())
         } catch (e: Exception) {
-            handleOnAdLoadFail(AdType.BANNER, -1, e.message ?: "Unknown error", callback)
+            handleOnAdLoadFail(AdType.BANNER, -1, e.message ?: "Unknown error", callbackRef.get())
         }
     }
 

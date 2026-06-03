@@ -75,6 +75,8 @@ class BigoAdProvider : BaseAdProvider() {
     override fun loadSplashAd(context: Context, adId: String, callback: IAdCallback?) {
         log("$TAG: Loading splash ad: $adId")
 
+        val callbackRef = WeakReference(callback)
+
         val request = SplashAdRequest.Builder()
             .withSlotId(adId)
             .build()
@@ -82,12 +84,12 @@ class BigoAdProvider : BaseAdProvider() {
         val loader = SplashAdLoader.Builder()
             .withAdLoadListener(object : AdLoadListener<SplashAd> {
                 override fun onError(adError: AdError) {
-                    handleOnAdLoadFail(AdType.SPLASH, adError.code, adError.message, callback)
+                    handleOnAdLoadFail(AdType.SPLASH, adError.code, adError.message, callbackRef.get())
                 }
 
                 override fun onAdLoaded(ad: SplashAd) {
                     splashAd = ad
-                    handleOnAdLoaded(AdType.SPLASH, ad, callback)
+                    handleOnAdLoaded(AdType.SPLASH, ad, callbackRef.get())
 
                     ad.setAdInteractionListener(object : SplashAdInteractionListener {
                         override fun onAdError(adError: AdError) {
@@ -96,16 +98,16 @@ class BigoAdProvider : BaseAdProvider() {
                                 AdType.SPLASH,
                                 adError.code,
                                 adError.message,
-                                callback
+                                callbackRef.get()
                             )
                         }
 
                         override fun onAdImpression() {
-                            handleOnAdShow(AdType.SPLASH, callback)
+                            handleOnAdShow(AdType.SPLASH, callbackRef.get())
                         }
 
                         override fun onAdClicked() {
-                            handleOnAdClick(AdType.SPLASH, callback)
+                            handleOnAdClick(AdType.SPLASH, callbackRef.get())
                         }
 
                         override fun onAdOpened() {
@@ -118,7 +120,7 @@ class BigoAdProvider : BaseAdProvider() {
 
                         override fun onAdSkipped() {
                             splashAd = null
-                            handleAdDismissed(AdType.SPLASH, callback)
+                            handleAdDismissed(AdType.SPLASH, callbackRef.get())
                         }
 
                         override fun onAdFinished() {
@@ -142,6 +144,8 @@ class BigoAdProvider : BaseAdProvider() {
     override fun loadInterstitialAd(context: Context, adId: String, callback: IAdCallback?) {
         log("$TAG: Loading interstitial ad: $adId")
 
+        val callbackRef = WeakReference(callback)
+
         val request = InterstitialAdRequest.Builder()
             .withSlotId(adId)
             .build()
@@ -149,12 +153,12 @@ class BigoAdProvider : BaseAdProvider() {
         val loader = InterstitialAdLoader.Builder()
             .withAdLoadListener(object : AdLoadListener<InterstitialAd> {
                 override fun onError(adError: AdError) {
-                    handleOnAdLoadFail(AdType.INTERSTITIAL, adError.code, adError.message, callback)
+                    handleOnAdLoadFail(AdType.INTERSTITIAL, adError.code, adError.message, callbackRef.get())
                 }
 
                 override fun onAdLoaded(ad: InterstitialAd) {
                     interstitialAd = ad
-                    handleOnAdLoaded(AdType.INTERSTITIAL, ad, callback)
+                    handleOnAdLoaded(AdType.INTERSTITIAL, ad, callbackRef.get())
 
                     ad.setAdInteractionListener(object : AdInteractionListener {
                         override fun onAdError(adError: AdError) {
@@ -163,16 +167,16 @@ class BigoAdProvider : BaseAdProvider() {
                                 AdType.INTERSTITIAL,
                                 adError.code,
                                 adError.message,
-                                callback
+                                callbackRef.get()
                             )
                         }
 
                         override fun onAdImpression() {
-                            handleOnAdShow(AdType.INTERSTITIAL, callback)
+                            handleOnAdShow(AdType.INTERSTITIAL, callbackRef.get())
                         }
 
                         override fun onAdClicked() {
-                            handleOnAdClick(AdType.INTERSTITIAL, callback)
+                            handleOnAdClick(AdType.INTERSTITIAL, callbackRef.get())
                         }
 
                         override fun onAdOpened() {
@@ -180,7 +184,7 @@ class BigoAdProvider : BaseAdProvider() {
 
                         override fun onAdClosed() {
                             interstitialAd = null
-                            handleAdDismissed(AdType.INTERSTITIAL, callback)
+                            handleAdDismissed(AdType.INTERSTITIAL, callbackRef.get())
                         }
                     })
                 }
@@ -199,6 +203,8 @@ class BigoAdProvider : BaseAdProvider() {
     override fun loadRewardedAd(context: Context, adId: String, callback: IAdCallback?) {
         log("$TAG: Loading rewarded ad: $adId")
 
+        val callbackRef = WeakReference(callback)
+
         val request = RewardVideoAdRequest.Builder()
             .withSlotId(adId)
             .build()
@@ -206,12 +212,12 @@ class BigoAdProvider : BaseAdProvider() {
         val loader = RewardVideoAdLoader.Builder()
             .withAdLoadListener(object : AdLoadListener<RewardVideoAd> {
                 override fun onError(adError: AdError) {
-                    handleOnAdLoadFail(AdType.REWARD_VIDEO, adError.code, adError.message, callback)
+                    handleOnAdLoadFail(AdType.REWARD_VIDEO, adError.code, adError.message, callbackRef.get())
                 }
 
                 override fun onAdLoaded(ad: RewardVideoAd) {
                     rewardedAd = ad
-                    handleOnAdLoaded(AdType.REWARD_VIDEO, ad, callback)
+                    handleOnAdLoaded(AdType.REWARD_VIDEO, ad, callbackRef.get())
 
                     ad.setAdInteractionListener(object : RewardAdInteractionListener {
                         override fun onAdError(adError: AdError) {
@@ -220,16 +226,16 @@ class BigoAdProvider : BaseAdProvider() {
                                 AdType.REWARD_VIDEO,
                                 adError.code,
                                 adError.message,
-                                callback
+                                callbackRef.get()
                             )
                         }
 
                         override fun onAdImpression() {
-                            handleOnAdShow(AdType.REWARD_VIDEO, callback)
+                            handleOnAdShow(AdType.REWARD_VIDEO, callbackRef.get())
                         }
 
                         override fun onAdClicked() {
-                            handleOnAdClick(AdType.REWARD_VIDEO, callback)
+                            handleOnAdClick(AdType.REWARD_VIDEO, callbackRef.get())
                         }
 
                         override fun onAdOpened() {
@@ -237,11 +243,11 @@ class BigoAdProvider : BaseAdProvider() {
 
                         override fun onAdClosed() {
                             rewardedAd = null
-                            handleAdDismissed(AdType.REWARD_VIDEO, callback)
+                            handleAdDismissed(AdType.REWARD_VIDEO, callbackRef.get())
                         }
 
                         override fun onAdRewarded() {
-                            handleOnAdRewarded(AdType.REWARD_VIDEO, 1, "conins", callback)
+                            handleOnAdRewarded(AdType.REWARD_VIDEO, 1, "conins", callbackRef.get())
                         }
 
                     })
@@ -261,6 +267,8 @@ class BigoAdProvider : BaseAdProvider() {
     override fun loadBannerAd(context: Context, adId: String, callback: IAdCallback?) {
         log("$TAG: Loading banner ad: $adId")
 
+        val callbackRef = WeakReference(callback)
+
         try {
             val request = BannerAdRequest.Builder()
                 .withSlotId(adId)
@@ -270,12 +278,12 @@ class BigoAdProvider : BaseAdProvider() {
             val loader = BannerAdLoader.Builder()
                 .withAdLoadListener(object : AdLoadListener<BannerAd> {
                     override fun onError(adError: AdError) {
-                        handleOnAdLoadFail(AdType.BANNER, adError.code, adError.message, callback)
+                        handleOnAdLoadFail(AdType.BANNER, adError.code, adError.message, callbackRef.get())
                     }
 
                     override fun onAdLoaded(ad: BannerAd) {
                         bannerAd = ad
-                        handleOnAdLoaded(AdType.BANNER, ad, callback)
+                        handleOnAdLoaded(AdType.BANNER, ad, callbackRef.get())
 
                         ad.setAdInteractionListener(object : AdInteractionListener {
                             override fun onAdError(adError: AdError) {
@@ -284,23 +292,23 @@ class BigoAdProvider : BaseAdProvider() {
                                     AdType.BANNER,
                                     adError.code,
                                     adError.message,
-                                    callback
+                                    callbackRef.get()
                                 )
                             }
 
                             override fun onAdImpression() {
-                                handleOnAdShow(AdType.BANNER, callback)
+                                handleOnAdShow(AdType.BANNER, callbackRef.get())
                             }
 
                             override fun onAdClicked() {
-                                handleOnAdClick(AdType.BANNER, callback)
+                                handleOnAdClick(AdType.BANNER, callbackRef.get())
                             }
 
                             override fun onAdOpened() {
                             }
 
                             override fun onAdClosed() {
-                                handleAdDismissed(AdType.BANNER, callback)
+                                handleAdDismissed(AdType.BANNER, callbackRef.get())
                             }
                         })
                     }
@@ -309,19 +317,12 @@ class BigoAdProvider : BaseAdProvider() {
 
             loader.loadAd(request)
         } catch (e: Exception) {
-            handleOnAdShowFail(AdType.BANNER, -1, e.message ?: "Unknown error", callback)
+            handleOnAdShowFail(AdType.BANNER, -1, e.message ?: "Unknown error", callbackRef.get())
         }
     }
 
     override fun showBannerAd(container: ViewGroup?, callback: IAdCallback?) {
         val ad = bannerAd
         showBannerInternal(ad?.adView(), container, callback)
-    }
-
-    override fun destroy() {
-        interstitialAd = null
-        rewardedAd = null
-        splashAd = null
-        bannerAd = null
     }
 }

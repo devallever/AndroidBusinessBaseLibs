@@ -69,32 +69,33 @@ class AppLovinAdProvider : BaseAdProvider() {
         log("$TAG: Loading splash ad: $adId")
         splashAd = MaxAppOpenAd(adId)
         splashAd?.setListener(object : MaxAdListener {
+            val callbackRef = WeakReference(callback)
             override fun onAdLoaded(p0: MaxAd) {
-                handleOnAdLoaded(AdType.SPLASH, splashAd!!, callback)
+                handleOnAdLoaded(AdType.SPLASH, splashAd!!, callbackRef.get())
             }
 
             override fun onAdDisplayed(p0: MaxAd) {
-                handleOnAdShow(AdType.SPLASH, callback)
+                handleOnAdShow(AdType.SPLASH, callbackRef.get())
             }
 
             override fun onAdHidden(p0: MaxAd) {
                 splashAd = null
-                handleAdDismissed(AdType.SPLASH, callback)
+                handleAdDismissed(AdType.SPLASH, callbackRef.get())
             }
 
             override fun onAdClicked(p0: MaxAd) {
-                handleOnAdClick(AdType.SPLASH, callback)
+                handleOnAdClick(AdType.SPLASH, callbackRef.get())
             }
 
             override fun onAdLoadFailed(p0: String, error: MaxError) {
-                handleOnAdLoadFail(AdType.SPLASH, error.code, error.message, callback)
+                handleOnAdLoadFail(AdType.SPLASH, error.code, error.message, callbackRef.get())
             }
 
             override fun onAdDisplayFailed(
                 ad: MaxAd,
                 error: MaxError
             ) {
-                handleOnAdShowFail(AdType.SPLASH, error.code, error.message, callback)
+                handleOnAdShowFail(AdType.SPLASH, error.code, error.message, callbackRef.get())
             }
 
         })
@@ -116,29 +117,30 @@ class AppLovinAdProvider : BaseAdProvider() {
 
         interstitialAd = MaxInterstitialAd(adId)
         interstitialAd?.setListener(object : MaxAdListener {
+            val callbackRef = WeakReference(callback)
             override fun onAdLoaded(ad: MaxAd) {
-                handleOnAdLoaded(AdType.INTERSTITIAL, interstitialAd!!, callback)
+                handleOnAdLoaded(AdType.INTERSTITIAL, interstitialAd!!, callbackRef.get())
             }
 
             override fun onAdDisplayed(ad: MaxAd) {
-                handleOnAdShow(AdType.INTERSTITIAL, callback)
+                handleOnAdShow(AdType.INTERSTITIAL, callbackRef.get())
             }
 
             override fun onAdHidden(ad: MaxAd) {
                 interstitialAd = null
-                handleAdDismissed(AdType.INTERSTITIAL, callback)
+                handleAdDismissed(AdType.INTERSTITIAL, callbackRef.get())
             }
 
             override fun onAdClicked(ad: MaxAd) {
-                handleOnAdClick(AdType.INTERSTITIAL, callback)
+                handleOnAdClick(AdType.INTERSTITIAL, callbackRef.get())
             }
 
             override fun onAdLoadFailed(adUnitId: String, error: MaxError) {
-                handleOnAdLoadFail(AdType.INTERSTITIAL, error.code, error.message, callback)
+                handleOnAdLoadFail(AdType.INTERSTITIAL, error.code, error.message, callbackRef.get())
             }
 
             override fun onAdDisplayFailed(ad: MaxAd, error: MaxError) {
-                handleOnAdShowFail(AdType.INTERSTITIAL, error.code, error.message, callback)
+                handleOnAdShowFail(AdType.INTERSTITIAL, error.code, error.message, callbackRef.get())
             }
         })
 
@@ -160,33 +162,34 @@ class AppLovinAdProvider : BaseAdProvider() {
 
         rewardedAd = MaxRewardedAd.getInstance(adId)
         rewardedAd?.setListener(object : MaxRewardedAdListener {
+            val callbackRef = WeakReference(callback)
             override fun onUserRewarded(ad: MaxAd, reward: MaxReward) {
-                handleOnAdRewarded(AdType.REWARD_VIDEO, reward.amount, reward.label, callback)
+                handleOnAdRewarded(AdType.REWARD_VIDEO, reward.amount, reward.label, callbackRef.get())
             }
 
             override fun onAdLoaded(ad: MaxAd) {
-                handleOnAdLoaded(AdType.REWARD_VIDEO, rewardedAd!!, callback)
+                handleOnAdLoaded(AdType.REWARD_VIDEO, rewardedAd!!, callbackRef.get())
             }
 
             override fun onAdDisplayed(ad: MaxAd) {
-                handleOnAdShow(AdType.REWARD_VIDEO, callback)
+                handleOnAdShow(AdType.REWARD_VIDEO, callbackRef.get())
             }
 
             override fun onAdHidden(ad: MaxAd) {
                 rewardedAd = null
-                handleAdDismissed(AdType.REWARD_VIDEO, callback)
+                handleAdDismissed(AdType.REWARD_VIDEO, callbackRef.get())
             }
 
             override fun onAdClicked(ad: MaxAd) {
-                handleOnAdClick(AdType.REWARD_VIDEO, callback)
+                handleOnAdClick(AdType.REWARD_VIDEO, callbackRef.get())
             }
 
             override fun onAdLoadFailed(adUnitId: String, error: MaxError) {
-                handleOnAdLoadFail(AdType.REWARD_VIDEO, error.code, error.message, callback)
+                handleOnAdLoadFail(AdType.REWARD_VIDEO, error.code, error.message, callbackRef.get())
             }
 
             override fun onAdDisplayFailed(ad: MaxAd, error: MaxError) {
-                handleOnAdShowFail(AdType.REWARD_VIDEO, error.code, error.message, callback)
+                handleOnAdShowFail(AdType.REWARD_VIDEO, error.code, error.message, callbackRef.get())
             }
         })
 
@@ -203,39 +206,40 @@ class AppLovinAdProvider : BaseAdProvider() {
         log("$TAG: Loading banner ad: $adId")
         bannerAd = MaxAdView(adId)
         bannerAd?.setListener(object : MaxAdViewAdListener {
+            val callbackRef = WeakReference(callback)
             override fun onAdExpanded(ad: MaxAd) {
-                handleOnAdShow(AdType.BANNER, callback)
+                handleOnAdShow(AdType.BANNER, callbackRef.get())
             }
 
             override fun onAdCollapsed(ad: MaxAd) {
             }
 
             override fun onAdLoaded(ad: MaxAd) {
-                handleOnAdLoaded(AdType.BANNER, bannerAd!!, callback)
+                handleOnAdLoaded(AdType.BANNER, bannerAd!!, callbackRef.get())
             }
 
             override fun onAdDisplayed(ad: MaxAd) {
-                handleOnAdShow(AdType.BANNER, callback)
+                handleOnAdShow(AdType.BANNER, callbackRef.get())
             }
 
             override fun onAdHidden(ad: MaxAd) {
                 bannerAd = null
-                handleAdDismissed(AdType.BANNER, callback)
+                handleAdDismissed(AdType.BANNER, callbackRef.get())
             }
 
             override fun onAdClicked(ad: MaxAd) {
-                handleOnAdClick(AdType.BANNER, callback)
+                handleOnAdClick(AdType.BANNER, callbackRef.get())
             }
 
             override fun onAdLoadFailed(p0: String, error: MaxError) {
-                handleOnAdLoadFail(AdType.BANNER, error.code, error.message, callback)
+                handleOnAdLoadFail(AdType.BANNER, error.code, error.message, callbackRef.get())
             }
 
             override fun onAdDisplayFailed(
                 ad: MaxAd,
                 error: MaxError
             ) {
-                handleOnAdShowFail(AdType.BANNER, error.code, error.message, callback)
+                handleOnAdShowFail(AdType.BANNER, error.code, error.message, callbackRef.get())
             }
         })
         bannerAd?.loadAd()
@@ -246,6 +250,10 @@ class AppLovinAdProvider : BaseAdProvider() {
     }
 
     override fun onDestroy() {
+        interstitialAd?.setListener(null)
+        rewardedAd?.setListener(null)
+        splashAd?.setListener(null)
+        bannerAd?.setListener(null)
         interstitialAd = null
         rewardedAd = null
         bannerAd = null
