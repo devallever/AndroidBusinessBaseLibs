@@ -71,7 +71,7 @@ object MediaLib {
     suspend fun queryFolders(block: MediaQueryBuilder.() -> Unit): List<MediaFolder> {
         val query = MediaQueryBuilder().apply(block).build()
         log("MediaLib", "queryFolders → type=${typeFlagsLabel(query.typeFlags)}, ${paginationLabel(query.pagination)}, sortBy=${query.sortBy}")
-        val result = MediaLoader.queryFolders(query)
+        val result = MediaLoader.queryFolders(query, true)
         log("MediaLib", "queryFolders ← 返回 ${result.size} 个目录")
         return result
     }

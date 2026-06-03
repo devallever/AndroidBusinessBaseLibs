@@ -39,13 +39,23 @@ internal class MediaStoreSource : MediaSource {
 
     override suspend fun queryFolders(query: MediaQuery): List<MediaFolder> =
         withContext(Dispatchers.IO) {
+            val selection = buildSelection(query)
+            val selectionArgs = buildSelectionArgs(query.typeFlags)
+            val orderBy = SortBy.toOrderByClause(query.sortBy, bucketGrouped = true)
+            log("MediaStoreSource", "queryFolders → selection=$selection, args=${selectionArgs.contentToString()}, orderBy=$orderBy")
+
             val cursor = executeQuery(
                 projection = ProjectionBuilder.buildForFolders(query.typeFlags),
-                selection = buildSelection(query),
-                selectionArgs = buildSelectionArgs(query.typeFlags),
-                orderBy = SortBy.toOrderByClause(query.sortBy, bucketGrouped = true),
+                selection = selection,
+                selectionArgs = selectionArgs,
+                orderBy = orderBy,
             )
-            cursor?.use { buildFoldersFromCursor(it, query.typeFlags) } ?: emptyList()
+            if (cursor == null) {
+                logE("MediaStoreSource", "queryFolders ← cursor 为 null, 返回空列表")
+                return@withContext emptyList()
+            }
+            log("MediaStoreSource", "queryFolders ← cursor.count=${cursor.count}")
+            cursor.use { buildFoldersFromCursor(it, query.typeFlags) }
         }
 
     // ==================== 目录详情查询 ====================
@@ -191,11 +201,21 @@ internal class MediaStoreSource : MediaSource {
      */
     private fun buildFoldersFromCursor(cursor: Cursor, typeFlags: Int): List<MediaFolder> {
         // bucketId → 文件夹构建器
+        val totalCount = cursor.count
+        log("MediaStoreSource", "buildFoldersFromCursor → cursor 总行数=$totalCount")
+        if (totalCount <= 0) return emptyList()
+
         val folderMap = LinkedHashMap<Long, MutableMediaFolder>()
+        var skippedBucketId = 0
 
         while (cursor.moveToNext()) {
             val bucketId = cursor.getLongOrDefault(MediaStoreColumn.BUCKET_ID, -1L)
-            if (bucketId < 0) continue
+            if (bucketId == (-1).toLong()) {
+                val dirPath = cursor.getStringOrDefault(MediaStoreColumn.DATA, "NULL")
+                logE("MediaStoreSource", "buildFoldersFromCursor → 忽略无效 bucketId=$bucketId, dirPath = $dirPath")
+                skippedBucketId++
+                continue
+            }
 
             val mediaType = cursor.getIntOrDefault(MediaStoreColumn.MEDIA_TYPE, 0)
             val typeFlag = MediaType.fromMediaStoreMediaType(mediaType)
@@ -225,8 +245,15 @@ internal class MediaStoreSource : MediaSource {
             }
         }
 
-        return folderMap.values.map { it.build() }.also {
-            log("MediaStoreSource", "buildFoldersFromCursor → 解析完成: ${it.size} 个目录, 原始记录=${folderMap.values.sumOf { it.images.size + it.videos.size + it.audios.size }}")
+        return folderMap.values.map { it.build() }.also { result ->
+            val totalItems = folderMap.values.sumOf { it.images.size + it.videos.size + it.audios.size }
+            log("MediaStoreSource", "buildFoldersFromCursor → 解析完成: ${result.size} 个目录, 总记录=$totalCount, 跳过(无效bucketId)=$skippedBucketId, 有效记录=$totalItems")
+            if (result.isNotEmpty()) {
+                result.take(5).forEach { f ->
+                    log("MediaStoreSource", "  目录: bucketId=${f.bucketId}, name=${f.name}, path=${f.path}, img=${f.images.size} vid=${f.videos.size} aud=${f.audios.size}")
+                }
+                if (result.size > 5) log("MediaStoreSource", "  ... 还有 ${result.size - 5} 个目录")
+            }
         }
     }
 
