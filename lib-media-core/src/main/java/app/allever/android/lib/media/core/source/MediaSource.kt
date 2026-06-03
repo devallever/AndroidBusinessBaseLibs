@@ -1,121 +1,86 @@
 package app.allever.android.lib.media.core.source
 
-import android.content.ContentUris
-import android.database.Cursor
-import android.net.Uri
 import android.provider.MediaStore
-import app.allever.android.lib.media.core.model.MediaFolder
-import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.core.model.MediaStoreColumn
 import app.allever.android.lib.media.core.model.MediaType
-import app.allever.android.lib.media.core.model.SortBy
-import app.allever.android.lib.media.core.query.FolderDetailQuery
-import app.allever.android.lib.media.core.query.MediaFolderDetail
-import app.allever.android.lib.media.core.query.MediaQuery
 
 /**
- * 数据源接口
- * 负责从系统媒体库查询数据，返回结构化的模型对象
+ * 媒体数据源接口
+ * 定义查询目录列表、目录详情、全局资源的能力
  */
 internal interface MediaSource {
 
-    /**
-     * 查询目录列表
-     * 一次 Cursor 遍历完成：按 bucket_id 分组 → 每个 Folder 内按类型分类存放
-     */
-    suspend fun queryFolders(query: MediaQuery): List<MediaFolder>
+    /** 查询目录列表 */
+    suspend fun queryFolders(query: app.allever.android.lib.media.core.query.MediaQuery): List<app.allever.android.lib.media.core.model.MediaFolder>
 
-    /**
-     * 查询某个目录下的详情（支持分页）
-     */
-    suspend fun queryFolderDetail(query: FolderDetailQuery): MediaFolderDetail
+    /** 查询某个目录的详情（含该目录下的媒体文件列表） */
+    suspend fun queryFolderDetail(query: app.allever.android.lib.media.core.query.FolderDetailQuery): app.allever.android.lib.media.core.query.MediaFolderDetail
 
-    /**
-     * 全局查询所有资源（不分目录）
-     */
-    suspend fun queryAll(query: MediaQuery): List<MediaItem>
+    /** 全局查询（不分目录） */
+    suspend fun queryAll(query: app.allever.android.lib.media.core.query.MediaQuery): List<app.allever.android.lib.media.core.model.MediaItem>
 }
 
 /**
- * 投影列构建器 — 根据请求的类型动态计算需要查询的列
- * 只查需要的列，避免 SELECT * 的性能浪费
+ * 投影列构建器
+ * 根据查询类型动态生成所需的列，避免不必要的列读取
  */
 internal object ProjectionBuilder {
 
     /**
-     * 构建目录列表查询的投影列（包含 bucket 相关列 + 各类型的专属列）
+     * 目录/详情查询的投影列
+     * 包含：基础信息 + bucket 信息 + 类型相关列
+     *
+     * @param types 查询的媒体类型集合
      */
-    fun buildForFolders(typeFlags: Int): Array<String> {
-        val columns = mutableListOf<String>().apply {
-            // 公共列（必须）
-            add(MediaStoreColumn.ID)
-            add(MediaStoreColumn.MEDIA_TYPE)
-            add(MediaStoreColumn.DATA)
-            add(MediaStoreColumn.DATE_ADDED)
-            add(MediaStoreColumn.DATE_TAKEN)
-            add(MediaStoreColumn.SIZE)
-            add(MediaStoreColumn.MIME_TYPE)
-            add(MediaStoreColumn.DISPLAY_NAME)
-            // 目录分组用
-            add(MediaStoreColumn.BUCKET_ID)
-            add(MediaStoreColumn.BUCKET_DISPLAY_NAME)
+    fun buildForFolders(types: Set<MediaType.Type>): Array<String> {
+        val columns = mutableListOf(
+            // 基础列
+            MediaStoreColumn.ID,
+            MediaStoreColumn.DATA,
+            MediaStoreColumn.DISPLAY_NAME,
+            MediaStoreColumn.MIME_TYPE,
+            MediaStoreColumn.MEDIA_TYPE,
+            MediaStoreColumn.SIZE,
+            MediaStoreColumn.DATE_ADDED,
+            // 目录分组列
+            MediaStoreColumn.BUCKET_ID,
+            MediaStoreColumn.BUCKET_DISPLAY_NAME,
+        )
 
-            // 图片独有列
-            if (MediaType.contains(typeFlags, MediaType.IMAGE)) {
-                add(MediaStoreColumn.WIDTH)
-                add(MediaStoreColumn.HEIGHT)
-                add(MediaStoreColumn.ORIENTATION)
-            }
-            // 视频独有列
-            if (MediaType.contains(typeFlags, MediaType.VIDEO)) {
-                add(MediaStoreColumn.DURATION)
-                add(MediaStoreColumn.WIDTH)
-                add(MediaStoreColumn.HEIGHT)
-            }
-            // 音频独有列（Files 表中可用的列）
-            if (MediaType.contains(typeFlags, MediaType.AUDIO)) {
-                add(MediaStoreColumn.DURATION)
-                add(MediaStoreColumn.TITLE)
-                add(MediaStoreColumn.ARTIST)
-                add(MediaStoreColumn.ALBUM)
-                // 注意: album_id 不在 MediaStore.Files 表中，仅在 Audio 表中存在
-            }
+        // 图片特有列
+        if (types.contains(MediaType.Type.IMAGE)) {
+            columns.addAll(listOf(MediaStoreColumn.WIDTH, MediaStoreColumn.HEIGHT, MediaStoreColumn.ORIENTATION))
         }
+
+        // 视频/音频特有列
+        if (types.contains(MediaType.Type.VIDEO) || types.contains(MediaType.Type.AUDIO)) {
+            columns.add(MediaStoreColumn.DURATION)
+        }
+
+        // 视频尺寸列
+        if (types.contains(MediaType.Type.VIDEO)) {
+            columns.addAll(listOf(MediaStoreColumn.WIDTH, MediaStoreColumn.HEIGHT))
+        }
+
+        // 音频特有列
+        if (types.contains(MediaType.Type.AUDIO)) {
+            columns.addAll(listOf(MediaStoreColumn.TITLE, MediaStoreColumn.ARTIST, MediaStoreColumn.ALBUM))
+        }
+
         return columns.toTypedArray()
     }
 
     /**
-     * 构建全局资源查询的投影列（不含 bucket 列）
+     * 全局查询的投影列（同 buildForFolders，保持一致）
      */
-    fun buildForAll(typeFlags: Int): Array<String> {
-        val columns = mutableListOf<String>().apply {
-            add(MediaStoreColumn.ID)
-            add(MediaStoreColumn.MEDIA_TYPE)
-            add(MediaStoreColumn.DATA)
-            add(MediaStoreColumn.DATE_ADDED)
-            add(MediaStoreColumn.DATE_TAKEN)
-            add(MediaStoreColumn.SIZE)
-            add(MediaStoreColumn.MIME_TYPE)
-            add(MediaStoreColumn.DISPLAY_NAME)
+    fun buildForAll(types: Set<MediaType.Type>): Array<String> = buildForFolders(types)
 
-            if (MediaType.contains(typeFlags, MediaType.IMAGE)) {
-                add(MediaStoreColumn.WIDTH)
-                add(MediaStoreColumn.HEIGHT)
-                add(MediaStoreColumn.ORIENTATION)
-            }
-            if (MediaType.contains(typeFlags, MediaType.VIDEO)) {
-                add(MediaStoreColumn.DURATION)
-                add(MediaStoreColumn.WIDTH)
-                add(MediaStoreColumn.HEIGHT)
-            }
-            if (MediaType.contains(typeFlags, MediaType.AUDIO)) {
-                add(MediaStoreColumn.DURATION)
-                add(MediaStoreColumn.TITLE)
-                add(MediaStoreColumn.ARTIST)
-                add(MediaStoreColumn.ALBUM)
-                // album_id 不在 Files 表中
-            }
-        }
-        return columns.toTypedArray()
-    }
+    /**
+     * 最小投影列（仅用于 count 等轻量操作）
+     */
+    val MINIMAL: Array<String> = arrayOf(
+        MediaStoreColumn.ID,
+        MediaStoreColumn.MEDIA_TYPE,
+        MediaStoreColumn.BUCKET_ID,
+    )
 }

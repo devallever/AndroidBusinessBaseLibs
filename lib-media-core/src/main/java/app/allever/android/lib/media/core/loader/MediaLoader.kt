@@ -2,6 +2,7 @@ package app.allever.android.lib.media.core.loader
 
 import app.allever.android.lib.media.core.model.MediaFolder
 import app.allever.android.lib.media.core.model.MediaItem
+import app.allever.android.lib.media.core.model.MediaType
 import app.allever.android.lib.media.core.model.paginate
 import app.allever.android.lib.media.core.query.FolderDetailQuery
 import app.allever.android.lib.media.core.query.MediaFolderDetail
@@ -26,7 +27,7 @@ internal object MediaLoader {
     /** 数据源（懒加载单例） */
     private val source: MediaSource by lazy { MediaStoreSource() }
 
-    /** 目录列表缓存：typeFlags+sortBy → List<MediaFolder> */
+    /** 目录列表缓存：types+sortBy → List<MediaFolder> */
     private val folderCache = mutableMapOf<String, List<MediaFolder>>()
     private val folderCacheMutex = Mutex()
 
@@ -91,6 +92,6 @@ internal object MediaLoader {
     // ==================== 缓存 Key ====================
 
     private fun folderCacheKey(query: MediaQuery): String {
-        return "folders_${query.typeFlags}_${query.sortBy}_${query.bucketId}"
+        return "folders_${MediaType.label(query.types)}_${query.sortBy}_${query.bucketId}"
     }
 }

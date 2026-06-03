@@ -20,13 +20,13 @@ data class MediaFolder(
 
     /**
      * 该目录下指定类型的总数量
-     * @param typeFlags MediaType 组合标志
+     * @param types 媒体类型集合
      */
-    fun totalCount(@MediaType.Type typeFlags: Int): Int {
+    fun totalCount(types: Set<MediaType.Type>): Int {
         var count = 0
-        if (MediaType.contains(typeFlags, MediaType.IMAGE)) count += images.size
-        if (MediaType.contains(typeFlags, MediaType.VIDEO)) count += videos.size
-        if (MediaType.contains(typeFlags, MediaType.AUDIO)) count += audios.size
+        if (types.contains(MediaType.Type.IMAGE)) count += images.size
+        if (types.contains(MediaType.Type.VIDEO)) count += videos.size
+        if (types.contains(MediaType.Type.AUDIO)) count += audios.size
         return count
     }
 

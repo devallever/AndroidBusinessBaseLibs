@@ -37,21 +37,21 @@ import kotlinx.coroutines.flow.flowOn
  * ```kotlin
  * // 1. 获取目录列表（原始数据）
  * val folders = MediaLib.queryFolders {
- *     type = MediaType.IMAGE or MediaType.VIDEO
+ *     types = setOf(MediaType.Type.IMAGE, MediaType.Type.VIDEO)
  *     pagination = Pagination.All
  * }
  *
  * // 2. Flow 分页加载
- * MediaLib.queryFoldersFlow { type = MediaType.IMAGE; pagination = Pagination.Paged(0, 20) }
+ * MediaLib.queryFoldersFlow { types = MediaType.IMAGE_AND_VIDEO; pagination = Pagination.Paged(0, 20) }
  *     .collect { pageFolders -> ... }
  *
  * // 3. LiveData 观察
- * MediaLib.queryFoldersLiveData { type = MediaType.ALL }.observe(this) { folders -> ... }
+ * MediaLib.queryFoldersLiveData { types = MediaType.ALL }.observe(this) { folders -> ... }
  *
  * // 4. 进入某个目录查看详情
  * val detail = MediaLib.queryFolderDetail {
  *     bucketId = folder.bucketId
- *     type = MediaType.ALL
+ *     types = MediaType.ALL
  * }
  *
  * // 5. 加载缩略图
@@ -70,7 +70,7 @@ object MediaLib {
      */
     suspend fun queryFolders(block: MediaQueryBuilder.() -> Unit): List<MediaFolder> {
         val query = MediaQueryBuilder().apply(block).build()
-        log("MediaLib", "queryFolders → type=${typeFlagsLabel(query.typeFlags)}, ${paginationLabel(query.pagination)}, sortBy=${query.sortBy}")
+        log("MediaLib", "queryFolders → type=${MediaType.label(query.types)}, ${paginationLabel(query.pagination)}, sortBy=${query.sortBy}")
         val result = MediaLoader.queryFolders(query, true)
         log("MediaLib", "queryFolders ← 返回 ${result.size} 个目录")
         return result
@@ -84,7 +84,7 @@ object MediaLib {
      */
     fun queryFoldersFlow(block: MediaQueryBuilder.() -> Unit): Flow<List<MediaFolder>> {
         val query = MediaQueryBuilder().apply(block).build()
-        log("MediaLib", "queryFoldersFlow → type=${typeFlagsLabel(query.typeFlags)}, ${paginationLabel(query.pagination)}")
+        log("MediaLib", "queryFoldersFlow → type=${MediaType.label(query.types)}, ${paginationLabel(query.pagination)}")
         return flow {
             when (query.pagination) {
                 is Pagination.All -> {
@@ -112,7 +112,7 @@ object MediaLib {
      */
     fun queryFoldersLiveData(block: MediaQueryBuilder.() -> Unit): LiveData<List<MediaFolder>> {
         val query = MediaQueryBuilder().apply(block).build()
-        log("MediaLib", "queryFoldersLiveData → type=${typeFlagsLabel(query.typeFlags)}, ${paginationLabel(query.pagination)}")
+        log("MediaLib", "queryFoldersLiveData → type=${MediaType.label(query.types)}, ${paginationLabel(query.pagination)}")
         return liveData(Dispatchers.IO) {
             emit(MediaLoader.queryFolders(query))
         }
@@ -125,7 +125,7 @@ object MediaLib {
      */
     suspend fun queryFolderDetail(block: FolderDetailQueryBuilder.() -> Unit): MediaFolderDetail {
         val query = FolderDetailQueryBuilder().apply(block).build()
-        log("MediaLib", "queryFolderDetail → bucketId=${query.bucketId}, type=${typeFlagsLabel(query.typeFlags)}")
+        log("MediaLib", "queryFolderDetail → bucketId=${query.bucketId}, type=${MediaType.label(query.types)}")
         val result = MediaLoader.queryFolderDetail(query)
         log("MediaLib", "queryFolderDetail ← img:${result.images.size} vid:${result.videos.size} aud:${result.audios.size}")
         return result
@@ -165,7 +165,7 @@ object MediaLib {
      */
     suspend fun queryAll(block: MediaQueryBuilder.() -> Unit): List<MediaItem> {
         val query = MediaQueryBuilder().apply(block).build()
-        log("MediaLib", "queryAll → type=${typeFlagsLabel(query.typeFlags)}, ${paginationLabel(query.pagination)}")
+        log("MediaLib", "queryAll → type=${MediaType.label(query.types)}, ${paginationLabel(query.pagination)}")
         val result = MediaLoader.queryAll(query)
         log("MediaLib", "queryAll ← 返回 ${result.size} 项资源")
         return result
@@ -176,7 +176,7 @@ object MediaLib {
      */
     fun queryAllFlow(block: MediaQueryBuilder.() -> Unit): Flow<MediaItem> {
         val query = MediaQueryBuilder().apply(block).build()
-        log("MediaLib", "queryAllFlow → type=${typeFlagsLabel(query.typeFlags)}, ${paginationLabel(query.pagination)}")
+        log("MediaLib", "queryAllFlow → type=${MediaType.label(query.types)}, ${paginationLabel(query.pagination)}")
         return flow {
             val items = MediaLoader.queryAll(query)
             items.forEach { emit(it) }
@@ -189,7 +189,7 @@ object MediaLib {
      */
     fun queryAllLiveData(block: MediaQueryBuilder.() -> Unit): LiveData<List<MediaItem>> {
         val query = MediaQueryBuilder().apply(block).build()
-        log("MediaLib", "queryAllLiveData → type=${typeFlagsLabel(query.typeFlags)}")
+        log("MediaLib", "queryAllLiveData → type=${MediaType.label(query.types)}")
         return liveData(Dispatchers.IO) {
             emit(MediaLoader.queryAll(query))
         }
@@ -209,8 +209,8 @@ object MediaLib {
     /**
      * 检查是否拥有指定类型所需的权限
      */
-    fun hasPermission(@MediaType.Type typeFlags: Int): Boolean {
-        return MediaPermission.hasPermission(App.context, typeFlags)
+    fun hasPermission(types: Set<MediaType.Type>): Boolean {
+        return MediaPermission.hasPermission(App.context, types)
     }
 
     /**
@@ -223,18 +223,11 @@ object MediaLib {
     /**
      * 获取指定类型所需权限数组（用于动态申请）
      */
-    fun requiredPermissions(@MediaType.Type typeFlags: Int): Array<String> {
-        return MediaPermission.requiredPermissions(typeFlags)
+    fun requiredPermissions(types: Set<MediaType.Type>): Array<String> {
+        return MediaPermission.requiredPermissions(types)
     }
 
     // ==================== 日志辅助 ====================
-
-    private fun typeFlagsLabel(@MediaType.Type typeFlags: Int): String = buildString {
-        if (typeFlags == MediaType.ALL) { append("ALL"); return@buildString }
-        if (MediaType.contains(typeFlags, MediaType.IMAGE)) append("IMG")
-        if (MediaType.contains(typeFlags, MediaType.VIDEO)) append(if (isNotEmpty()) "+VID" else "VID")
-        if (MediaType.contains(typeFlags, MediaType.AUDIO)) append(if (isNotEmpty()) "+AUD" else "AUD")
-    }
 
     private fun paginationLabel(pagination: Pagination): String = when (pagination) {
         is Pagination.All -> "全量"

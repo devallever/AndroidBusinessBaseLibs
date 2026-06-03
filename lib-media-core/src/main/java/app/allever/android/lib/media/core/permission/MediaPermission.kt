@@ -18,16 +18,16 @@ object MediaPermission {
     // ==================== 权限判断 ====================
 
     /**
-     * 根据请求的类型组合，返回所需权限数组
+     * 根据请求的类型集合，返回所需权限数组
      */
-    fun requiredPermissions(@MediaType.Type typeFlags: Int): Array<String> {
+    fun requiredPermissions(types: Set<MediaType.Type>): Array<String> {
         return when {
             Build.VERSION.SDK_INT >= 33 -> buildList {
-                if (MediaType.contains(typeFlags, MediaType.IMAGE))
+                if (types.contains(MediaType.Type.IMAGE))
                     add(Manifest.permission.READ_MEDIA_IMAGES)
-                if (MediaType.contains(typeFlags, MediaType.VIDEO))
+                if (types.contains(MediaType.Type.VIDEO))
                     add(Manifest.permission.READ_MEDIA_VIDEO)
-                if (MediaType.contains(typeFlags, MediaType.AUDIO))
+                if (types.contains(MediaType.Type.AUDIO))
                     add(Manifest.permission.READ_MEDIA_AUDIO)
             }.toTypedArray()
             else -> arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -38,8 +38,8 @@ object MediaPermission {
      * 检查是否已拥有所需权限
      * @return true 已全部授权，false 存在未授权的权限
      */
-    fun hasPermission(context: Context, @MediaType.Type typeFlags: Int): Boolean {
-        return requiredPermissions(typeFlags).all {
+    fun hasPermission(context: Context, types: Set<MediaType.Type>): Boolean {
+        return requiredPermissions(types).all {
             ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
         }
     }

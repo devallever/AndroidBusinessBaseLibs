@@ -40,12 +40,12 @@ internal class MediaStoreSource : MediaSource {
     override suspend fun queryFolders(query: MediaQuery): List<MediaFolder> =
         withContext(Dispatchers.IO) {
             val selection = buildSelection(query)
-            val selectionArgs = buildSelectionArgs(query.typeFlags)
+            val selectionArgs = buildSelectionArgs(query.types)
             val orderBy = SortBy.toOrderByClause(query.sortBy, bucketGrouped = true)
             log("MediaStoreSource", "queryFolders → selection=$selection, args=${selectionArgs.contentToString()}, orderBy=$orderBy")
 
             val cursor = executeQuery(
-                projection = ProjectionBuilder.buildForFolders(query.typeFlags),
+                projection = ProjectionBuilder.buildForFolders(query.types),
                 selection = selection,
                 selectionArgs = selectionArgs,
                 orderBy = orderBy,
@@ -55,7 +55,7 @@ internal class MediaStoreSource : MediaSource {
                 return@withContext emptyList()
             }
             log("MediaStoreSource", "queryFolders ← cursor.count=${cursor.count}")
-            cursor.use { buildFoldersFromCursor(it, query.typeFlags) }
+            cursor.use { buildFoldersFromCursor(it, query.types) }
         }
 
     // ==================== 目录详情查询 ====================
@@ -65,24 +65,24 @@ internal class MediaStoreSource : MediaSource {
             val selection = StringBuilder().apply {
                 append("${MediaStoreColumn.BUCKET_ID} = ?")
                 append(" AND ")
-                append(buildTypeCondition(query.typeFlags))
+                append(buildTypeCondition(query.types))
             }.toString()
 
             val args = buildList {
                 add(query.bucketId.toString())
-                addAll(buildTypeArgs(query.typeFlags))
+                addAll(buildTypeArgs(query.types))
             }.toTypedArray()
 
             val cursor = executeQuery(
-                projection = ProjectionBuilder.buildForFolders(query.typeFlags),
+                projection = ProjectionBuilder.buildForFolders(query.types),
                 selection = selection,
                 selectionArgs = args,
                 orderBy = SortBy.toOrderByClause(query.sortBy),
             )
 
             cursor?.use { c ->
-                val allItems = parseCursorToTypedLists(c, query.typeFlags)
-                val folder = resolveFolder(c, query.bucketId, query.typeFlags, allItems)
+                val allItems = parseCursorToTypedLists(c, query.types)
+                val folder = resolveFolder(c, query.bucketId, query.types, allItems)
                 MediaFolderDetail(
                     folder = folder,
                     images = allItems.images.paginate(query.pagination),
@@ -102,9 +102,9 @@ internal class MediaStoreSource : MediaSource {
     override suspend fun queryAll(query: MediaQuery): List<MediaItem> =
         withContext(Dispatchers.IO) {
             val cursor = executeQuery(
-                projection = ProjectionBuilder.buildForAll(query.typeFlags),
+                projection = ProjectionBuilder.buildForAll(query.types),
                 selection = buildSelection(query),
-                selectionArgs = buildSelectionArgs(query.typeFlags),
+                selectionArgs = buildSelectionArgs(query.types),
                 orderBy = SortBy.toOrderByClause(query.sortBy),
             )
             cursor?.use { c ->
@@ -144,7 +144,7 @@ internal class MediaStoreSource : MediaSource {
      */
     private fun buildSelection(query: MediaQuery): String {
         return buildString {
-            append(buildTypeCondition(query.typeFlags))
+            append(buildTypeCondition(query.types))
             append(" AND ${MediaStoreColumn.SIZE} > 0")
 
             query.bucketId?.let {
@@ -160,35 +160,34 @@ internal class MediaStoreSource : MediaSource {
     }
 
     /**
-     * 构建 SelectionArgs
+     * 构建 SelectionArgs — 和 buildTypeCondition 的 ? 占位符一一对应
      */
-    private fun buildSelectionArgs(typeFlags: Int): Array<String> {
-        return buildTypeArgs(typeFlags).toTypedArray()
+    private fun buildSelectionArgs(types: Set<MediaType.Type>): Array<String> {
+        return buildTypeArgs(types).toTypedArray()
     }
 
     /**
      * 类型条件：MEDIA_TYPE IN (?, ?, ...)
      */
-    private fun buildTypeCondition(typeFlags: Int): String {
-        val types = mutableListOf<Int>()
-        if (MediaType.contains(typeFlags, MediaType.IMAGE))
-            types.add(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
-        if (MediaType.contains(typeFlags, MediaType.VIDEO))
-            types.add(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)
-        if (MediaType.contains(typeFlags, MediaType.AUDIO))
-            types.add(MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO)
-
-        val placeholders = types.joinToString(",") { "?" }
+    private fun buildTypeCondition(types: Set<MediaType.Type>): String {
+        val mediaTypes = types.mapNotNull { type ->
+            when (type) {
+                MediaType.Type.IMAGE -> MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
+                MediaType.Type.VIDEO -> MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
+                MediaType.Type.AUDIO -> MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO
+            }
+        }
+        val placeholders = mediaTypes.joinToString(",") { "?" }
         return "${MediaStoreColumn.MEDIA_TYPE} IN ($placeholders)"
     }
 
-    private fun buildTypeArgs(typeFlags: Int): List<String> {
+    private fun buildTypeArgs(types: Set<MediaType.Type>): List<String> {
         return buildList {
-            if (MediaType.contains(typeFlags, MediaType.IMAGE))
+            if (types.contains(MediaType.Type.IMAGE))
                 add(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString())
-            if (MediaType.contains(typeFlags, MediaType.VIDEO))
+            if (types.contains(MediaType.Type.VIDEO))
                 add(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString())
-            if (MediaType.contains(typeFlags, MediaType.AUDIO))
+            if (types.contains(MediaType.Type.AUDIO))
                 add(MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO.toString())
         }
     }
@@ -199,8 +198,7 @@ internal class MediaStoreSource : MediaSource {
      * 从 Cursor 构建目录列表
      * 核心逻辑：一次遍历，按 bucket_id 分组，组内按 media_type 分类
      */
-    private fun buildFoldersFromCursor(cursor: Cursor, typeFlags: Int): List<MediaFolder> {
-        // bucketId → 文件夹构建器
+    private fun buildFoldersFromCursor(cursor: Cursor, types: Set<MediaType.Type>): List<MediaFolder> {
         val totalCount = cursor.count
         log("MediaStoreSource", "buildFoldersFromCursor → cursor 总行数=$totalCount")
         if (totalCount <= 0) return emptyList()
@@ -217,9 +215,9 @@ internal class MediaStoreSource : MediaSource {
                 continue
             }
 
-            val mediaType = cursor.getIntOrDefault(MediaStoreColumn.MEDIA_TYPE, 0)
-            val typeFlag = MediaType.fromMediaStoreMediaType(mediaType)
-            if (!MediaType.contains(typeFlags, typeFlag)) continue
+            val mediaTypeValue = cursor.getIntOrDefault(MediaStoreColumn.MEDIA_TYPE, 0)
+            val mediaTypeEnum = MediaType.fromMediaStoreMediaType(mediaTypeValue)
+            if (mediaTypeEnum == null || !types.contains(mediaTypeEnum)) continue
 
             // 获取或创建文件夹
             val folder = folderMap.getOrPut(bucketId) {
@@ -235,7 +233,7 @@ internal class MediaStoreSource : MediaSource {
             }
 
             // 按类型添加到对应列表
-            when (mediaType) {
+            when (mediaTypeValue) {
                 MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE ->
                     folder.addImage(cursor.toImage())
                 MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO ->
@@ -260,26 +258,26 @@ internal class MediaStoreSource : MediaSource {
     /**
      * 解析 Cursor 为按类型分类的三个列表
      */
-    private fun parseCursorToTypedLists(cursor: Cursor, typeFlags: Int): TypedLists {
+    private fun parseCursorToTypedLists(cursor: Cursor, types: Set<MediaType.Type>): TypedLists {
         val images = mutableListOf<MediaItem.Image>()
         val videos = mutableListOf<MediaItem.Video>()
         val audios = mutableListOf<MediaItem.Audio>()
 
         while (cursor.moveToNext()) {
-            val mediaType = cursor.getIntOrDefault(MediaStoreColumn.MEDIA_TYPE, 0)
-            when (mediaType) {
+            val mediaTypeValue = cursor.getIntOrDefault(MediaStoreColumn.MEDIA_TYPE, 0)
+            when (mediaTypeValue) {
                 MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE -> {
-                    if (MediaType.contains(typeFlags, MediaType.IMAGE)) {
+                    if (types.contains(MediaType.Type.IMAGE)) {
                         cursor.toImage()?.let { images.add(it) }
                     }
                 }
                 MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO -> {
-                    if (MediaType.contains(typeFlags, MediaType.VIDEO)) {
+                    if (types.contains(MediaType.Type.VIDEO)) {
                         cursor.toVideo()?.let { videos.add(it) }
                     }
                 }
                 MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO -> {
-                    if (MediaType.contains(typeFlags, MediaType.AUDIO)) {
+                    if (types.contains(MediaType.Type.AUDIO)) {
                         cursor.toAudio()?.let { audios.add(it) }
                     }
                 }
@@ -294,10 +292,9 @@ internal class MediaStoreSource : MediaSource {
     private fun resolveFolder(
         cursor: Cursor,
         bucketId: Long,
-        typeFlags: Int,
+        types: Set<MediaType.Type>,
         items: TypedLists,
     ): MediaFolder {
-        // 尝试从第一行获取文件夹元信息
         return if (cursor.moveToFirst()) {
             val name = cursor.getStringOrDefault(MediaStoreColumn.BUCKET_DISPLAY_NAME, "")
             val dataPath = cursor.getStringOrDefault(MediaStoreColumn.DATA, "")
@@ -323,10 +320,7 @@ internal class MediaStoreSource : MediaSource {
             MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE -> toImage()
             MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO -> toVideo()
             MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO -> toAudio()
-            else -> {
-                // 未知类型跳过
-                null
-            }
+            else -> null
         }
     }
 
@@ -406,9 +400,7 @@ internal class MediaStoreSource : MediaSource {
 
     // ==================== 工具方法 ====================
 
-    /**
-     * 安全读取 _data 列（Android 10+ 可能抛异常或返回空）
-     */
+    /** 安全读取 _data 列（Android 10+ 可能抛异常或返回空） */
     private fun Cursor.safeGetData(): String {
         return try {
             val index = getColumnIndex(MediaStoreColumn.DATA)
@@ -432,9 +424,7 @@ internal class MediaStoreSource : MediaSource {
 
     // ==================== 内部数据结构 ====================
 
-    /**
-     * 可变的文件夹构建器（用于 Cursor 遍历时逐步填充）
-     */
+    /** 可变的文件夹构建器（用于 Cursor 遍历时逐步填充） */
     private class MutableMediaFolder(
         val bucketId: Long,
         var name: String,
@@ -460,9 +450,7 @@ internal class MediaStoreSource : MediaSource {
         )
     }
 
-    /**
-     * 按类型分类的三个列表
-     */
+    /** 按类型分类的三个列表 */
     private class TypedLists(
         val images: List<MediaItem.Image>,
         val videos: List<MediaItem.Video>,

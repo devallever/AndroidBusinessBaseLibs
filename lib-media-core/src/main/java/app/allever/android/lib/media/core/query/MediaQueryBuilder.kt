@@ -10,14 +10,14 @@ import app.allever.android.lib.media.core.model.SortBy
  * 使用示例：
  * ```kotlin
  * val query = mediaQuery {
- *     type = MediaType.IMAGE or MediaType.VIDEO
+ *     types = setOf(MediaType.Type.IMAGE, MediaType.Type.VIDEO)
  *     pagination = Pagination.Paged(0, 30)
  *     sortBy = SortBy.DATE_DESC
  * }
  * ```
  */
 class MediaQueryBuilder {
-    var typeFlags: Int = MediaType.ALL
+    var types: Set<MediaType.Type> = MediaType.ALL
     var pagination: Pagination = Pagination.All
     @SortBy.Type
     var sortBy: Int = SortBy.DATE_DESC
@@ -27,7 +27,7 @@ class MediaQueryBuilder {
     var maxDuration: Long = Long.MAX_VALUE
 
     fun build(): MediaQuery = MediaQuery(
-        typeFlags = typeFlags,
+        types = types,
         pagination = pagination,
         sortBy = sortBy,
         bucketId = bucketId,

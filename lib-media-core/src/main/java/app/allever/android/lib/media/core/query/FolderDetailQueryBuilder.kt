@@ -11,14 +11,14 @@ import app.allever.android.lib.media.core.model.SortBy
  * ```kotlin
  * val query = folderDetailQuery {
  *     bucketId = 123L
- *     type = MediaType.ALL
+ *     types = MediaType.ALL
  *     pagination = Pagination.Paged(0, 30)
  * }
  * ```
  */
 class FolderDetailQueryBuilder {
     var bucketId: Long = -1L
-    var typeFlags: Int = MediaType.ALL
+    var types: Set<MediaType.Type> = MediaType.ALL
     var pagination: Pagination = Pagination.All
     @SortBy.Type
     var sortBy: Int = SortBy.DATE_DESC
@@ -27,7 +27,7 @@ class FolderDetailQueryBuilder {
         require(bucketId >= 0) { "bucketId is required" }
         return FolderDetailQuery(
             bucketId = bucketId,
-            typeFlags = typeFlags,
+            types = types,
             pagination = pagination,
             sortBy = sortBy,
         )
