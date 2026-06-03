@@ -37,6 +37,7 @@ dependencies {
 //    implementation(project(":sample-ad-applovin"))
     //permission
     implementation(project(":sample-permission"))
+    implementation(project(":sample-media-core"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

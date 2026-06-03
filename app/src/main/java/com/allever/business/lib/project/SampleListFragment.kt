@@ -40,6 +40,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         },
         TextClickItem("Permission") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_PERMISSION).navigation()
+        },
+        TextClickItem("Media") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_MEDIA).navigation()
         }
     )
 }
