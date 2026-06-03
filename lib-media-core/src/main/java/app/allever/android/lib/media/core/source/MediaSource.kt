@@ -72,13 +72,13 @@ internal object ProjectionBuilder {
                 add(MediaStoreColumn.WIDTH)
                 add(MediaStoreColumn.HEIGHT)
             }
-            // 音频独有列
+            // 音频独有列（Files 表中可用的列）
             if (MediaType.contains(typeFlags, MediaType.AUDIO)) {
                 add(MediaStoreColumn.DURATION)
                 add(MediaStoreColumn.TITLE)
                 add(MediaStoreColumn.ARTIST)
                 add(MediaStoreColumn.ALBUM)
-                add(MediaStoreColumn.ALBUM_ID)
+                // 注意: album_id 不在 MediaStore.Files 表中，仅在 Audio 表中存在
             }
         }
         return columns.toTypedArray()
@@ -113,7 +113,7 @@ internal object ProjectionBuilder {
                 add(MediaStoreColumn.TITLE)
                 add(MediaStoreColumn.ARTIST)
                 add(MediaStoreColumn.ALBUM)
-                add(MediaStoreColumn.ALBUM_ID)
+                // album_id 不在 Files 表中
             }
         }
         return columns.toTypedArray()
