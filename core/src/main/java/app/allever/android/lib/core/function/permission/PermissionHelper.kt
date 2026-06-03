@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.AppOpsManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.helper.ActivityHelper
 
 object PermissionHelper : IPermissionEngine {
@@ -19,6 +20,7 @@ object PermissionHelper : IPermissionEngine {
 
     fun init(engine: IPermissionEngine) {
         mEngine = engine
+        log("PermissionHelper init: ${engine.javaClass.simpleName}")
     }
 
 
@@ -115,7 +117,7 @@ object PermissionHelper : IPermissionEngine {
             }
 
             is Fragment -> {
-                context.activity
+                context.requireActivity()
             }
 
             else -> {

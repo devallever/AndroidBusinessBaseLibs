@@ -37,6 +37,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextClickItem("AdCore") {
 //            ActivityHelper.startActivity<AdProviderExampleActivity> {  }
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AD_CORE).navigation()
+        },
+        TextClickItem("Permission") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_PERMISSION).navigation()
         }
     )
 }

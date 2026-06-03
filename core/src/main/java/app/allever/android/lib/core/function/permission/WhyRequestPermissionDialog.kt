@@ -12,7 +12,6 @@ class WhyRequestPermissionDialog(
 ) :
     PermissionDialog(context, title, message) {
 
-
     override fun initView() {
         super.initView()
         findViewById<TextView>(R.id.tvConfirm).text = "确定"

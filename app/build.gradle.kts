@@ -35,6 +35,8 @@ dependencies {
     implementation(project(":sample-ad-bigo"))
     implementation(project(":sample-ad-core"))
 //    implementation(project(":sample-ad-applovin"))
+    //permission
+    implementation(project(":sample-permission"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

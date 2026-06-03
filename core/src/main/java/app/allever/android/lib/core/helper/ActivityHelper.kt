@@ -94,7 +94,7 @@ object ActivityHelper {
 
     fun getTopActivity(): Activity? {
         return weakReference?.get() ?: if (activityList.isNotEmpty()) {
-            return activityList[activityList.size - 1]?.get()
+            return activityList[0]?.get()
         } else {
             null
         }
