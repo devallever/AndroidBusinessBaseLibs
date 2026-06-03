@@ -217,6 +217,12 @@ internal class MediaStoreSource : MediaSource {
 
             val mediaTypeValue = cursor.getIntOrDefault(MediaStoreColumn.MEDIA_TYPE, 0)
             val mediaTypeEnum = MediaType.fromMediaStoreMediaType(mediaTypeValue)
+            if (mediaTypeEnum == null) {
+                logE("MediaStoreSource", "buildFoldersFromCursor → 忽略无效 mediaTypeEnum=null")
+            }
+            if (!types.contains(mediaTypeEnum)) {
+                logE("MediaStoreSource", "buildFoldersFromCursor → 忽略无效 types not contains mediaTypeEnum")
+            }
             if (mediaTypeEnum == null || !types.contains(mediaTypeEnum)) continue
 
             // 获取或创建文件夹

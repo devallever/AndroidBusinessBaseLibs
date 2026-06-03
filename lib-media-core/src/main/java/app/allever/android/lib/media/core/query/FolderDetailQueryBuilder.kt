@@ -24,7 +24,7 @@ class FolderDetailQueryBuilder {
     var sortBy: Int = SortBy.DATE_DESC
 
     fun build(): FolderDetailQuery {
-        require(bucketId >= 0) { "bucketId is required" }
+        require(bucketId != 0.toLong()) { "bucketId is required" }
         return FolderDetailQuery(
             bucketId = bucketId,
             types = types,

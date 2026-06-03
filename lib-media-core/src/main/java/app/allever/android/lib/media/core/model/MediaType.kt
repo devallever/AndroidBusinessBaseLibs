@@ -32,8 +32,8 @@ object MediaType {
     fun fromMediaStoreMediaType(mediaStoreType: Int): Type? {
         return when (mediaStoreType) {
             1 -> Type.IMAGE   // MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
-            2 -> Type.VIDEO   // MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
-            3 -> Type.AUDIO   // MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO
+            2 -> Type.AUDIO   // MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
+            3 -> Type.VIDEO   // MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO
             else -> null
         }
     }
