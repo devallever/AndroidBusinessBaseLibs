@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import app.allever.android.lib.ad.core.AdManager
+import app.allever.android.lib.ad.core.AdCore
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.strategy.AdLog
 import app.allever.android.lib.ad.core.type.AdType
@@ -490,7 +490,7 @@ abstract class BaseAdProvider : IAdProvider {
             adType = adType,
         )
 
-        AdManager.currentStrategy.preload(App.context, adType)
+        AdCore.currentStrategy.preload(App.context, adType)
     }
 
     private fun isCacheExpired(adType: AdType): Boolean {

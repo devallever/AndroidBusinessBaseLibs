@@ -2,8 +2,8 @@ package app.allever.android.sample.ad.core
 
 import android.util.Log
 import android.widget.TextView
-import app.allever.android.lib.ad.core.AdManager
-import app.allever.android.lib.ad.core.AdManager.LoadMode
+import app.allever.android.lib.ad.core.AdCore
+import app.allever.android.lib.ad.core.AdCore.LoadMode
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.provider.admob.AdMobAdProvider
@@ -75,7 +75,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         appendStatus("")
         appendStatus("")
 
-        AdManager.registerProvider(
+        AdCore.registerProvider(
             providerType = AdMobAdProvider.PROVIDER_NAME,
             providerClass = AdMobAdProvider::class.java,
             config = ProviderConfigConstants.ADMOB
@@ -83,7 +83,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         appendStatus("✓ [0] ADMOB - Bidding: ✅ ON")
         appendStatus("    Simulated price range: $1.00 - $5.00")
 
-        AdManager.registerProvider(
+        AdCore.registerProvider(
             providerType = PangleAdProvider.PROVIDER_NAME,
             providerClass = PangleAdProvider::class.java,
             config = ProviderConfigConstants.PANGLE
@@ -91,14 +91,14 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         appendStatus("✓ [1] PANGLE - Bidding: ✅ ON")
         appendStatus("    Simulated price range: $1.00 - $5.00")
 
-        AdManager.registerProvider(
+        AdCore.registerProvider(
             providerType = BigoAdProvider.PROVIDER_NAME,
             providerClass = BigoAdProvider::class.java,
             config = ProviderConfigConstants.BIGO
         )
         appendStatus("✓ [2] BIGO - Bidding: ✅ ON")
         appendStatus("    Simulated price range: $1.00 - $5.00")
-        AdManager.registerProvider(
+        AdCore.registerProvider(
             providerType = AppLovinAdProvider.PROVIDER_NAME,
             providerClass = AppLovinAdProvider::class.java,
             config = ProviderConfigConstants.APPLOVIN
@@ -116,25 +116,25 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
 
         val context = requireContext()
 
-        AdManager.init(context, AdMobAdProvider.PROVIDER_NAME) {
+        AdCore.init(context, AdMobAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 appendStatus("✓ ADMOB initialized & in pool")
             }
         }
 
-        AdManager.init(context, PangleAdProvider.PROVIDER_NAME) {
+        AdCore.init(context, PangleAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 appendStatus("✓ PANGLE initialized & in pool")
             }
         }
 
-        AdManager.init(context, BigoAdProvider.PROVIDER_NAME) {
+        AdCore.init(context, BigoAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 appendStatus("✓ BIGO initialized & in pool")
             }
         }
 
-        AdManager.init(context, AppLovinAdProvider.PROVIDER_NAME) {
+        AdCore.init(context, AppLovinAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 appendStatus("✓ APPLOVIN initialized & in pool")
 
@@ -146,7 +146,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
     }
 
     private fun setMode(mode: LoadMode) {
-        AdManager.setLoadMode(mode)
+        AdCore.setLoadMode(mode)
 
         val modeName = when (mode) {
             LoadMode.SINGLE -> "🎯 SINGLE"
@@ -184,7 +184,7 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
     }
 
     private fun updateCurrentModeDisplay() {
-        val mode = AdManager.loadMode
+        val mode = AdCore.loadMode
         val modeText = when (mode) {
             LoadMode.SINGLE -> "🎯 SINGLE (Active Provider Only)"
             LoadMode.WATERFALL -> "💧 WATERFALL (Auto Try All)"
@@ -195,34 +195,34 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
     }
 
     private fun showBiddingInfo() {
-        val info = AdManager.getBiddingProvidersInfo()
+        val info = AdCore.getBiddingProvidersInfo()
 
         appendStatus("")
         appendStatus("-".repeat(50))
         appendStatus(info)
         appendStatus("")
-        appendStatus("Active Provider: ${AdManager.getActiveProviderType()}")
-        appendStatus("All Initialized: ${AdManager.getInitializedProviders()}")
+        appendStatus("Active Provider: ${AdCore.getActiveProviderType()}")
+        appendStatus("All Initialized: ${AdCore.getInitializedProviders()}")
         appendStatus("-".repeat(50))
         appendStatus("")
     }
 
     private fun loadInterstitial() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             appendStatus("⚠️ No active provider! Initialize first.")
             return
         }
 
-        val mode = AdManager.loadMode
+        val mode = AdCore.loadMode
 
         appendStatus("")
         appendStatus("-".repeat(60))
         appendStatus("Loading INTERSTITIAL ad...")
         appendStatus("Mode: $mode")
-        appendStatus("Cache-First: ${if (AdManager.cacheFirstEnabled) "✅ ON" else "❌ OFF"}")
+        appendStatus("Cache-First: ${if (AdCore.cacheFirstEnabled) "✅ ON" else "❌ OFF"}")
 
         if (mode == LoadMode.BIDDING) {
-            if (AdManager.cacheFirstEnabled) {
+            if (AdCore.cacheFirstEnabled) {
                 appendStatus("[BIDDING] Will check cache FIRST before bidding...")
                 appendStatus("[BIDDING] If cache HIT → instant response!")
                 appendStatus("[BIDDING] If cache MISS → start parallel requests to ALL 3 providers")
@@ -233,11 +233,11 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             }
         }
 
-        AdManager.loadAd(requireContext(), AdType.INTERSTITIAL, object : IAdCallback {
+        AdCore.loadAd(requireContext(), AdType.INTERSTITIAL, object : IAdCallback {
 
             override fun onAdLoadedWithPrice(eCPM: Double) {
                 appendStatus("✅ Interstitial LOADED via BIDDING SIMULATION!")
-                appendStatus("  🏆 WINNER: ${AdManager.getActiveProviderType()}")
+                appendStatus("  🏆 WINNER: ${AdCore.getActiveProviderType()}")
                 appendStatus("  💰 Winning Price: $$${String.format("%.2f", eCPM)} eCPM (SIMULATED)")
                 appendStatus("  [Random price generated for testing]")
                 appendStatus("-".repeat(60))
@@ -246,13 +246,13 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             override fun onAdLoaded() {
                 appendStatus("✅ Interstitial LOADED successfully!")
 
-                if (AdManager.cacheFirstEnabled) {
+                if (AdCore.cacheFirstEnabled) {
                     //
                     appendStatus("  ⚡ CACHE HIT! Served from cache (instant!)")
-                    appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
+                    appendStatus("  Provider: ${AdCore.getActiveProviderType()}")
                     appendStatus("  [No network request needed - using cached ad]")
                 } else {
-                    appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
+                    appendStatus("  Provider: ${AdCore.getActiveProviderType()}")
                     appendStatus("  (Normal load - no caching)")
                 }
 
@@ -265,13 +265,13 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
                     appendStatus("  [All bidding providers failed or timed out]")
                     appendStatus("  [Or no bidding-enabled providers available]")
                 } else {
-                    appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
+                    appendStatus("  Provider: ${AdCore.getActiveProviderType()}")
                 }
                 appendStatus("-".repeat(60))
             }
 
             override fun onAdShow() {
-                appendStatus("📺 Interstitial SHOWING from: ${AdManager.getActiveProviderType()}")
+                appendStatus("📺 Interstitial SHOWING from: ${AdCore.getActiveProviderType()}")
             }
 
             override fun onAdClick() {
@@ -287,12 +287,12 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
     }
 
     private fun loadRewardVideo() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             appendStatus("⚠️ No active provider! Initialize first.")
             return
         }
 
-        val mode = AdManager.loadMode
+        val mode = AdCore.loadMode
 
         appendStatus("")
         appendStatus("-".repeat(60))
@@ -304,18 +304,18 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             appendStatus("[BIDDING] Each provider will generate RANDOM simulated price")
         }
 
-        AdManager.loadAd(requireActivity(), AdType.REWARD_VIDEO, object : IAdCallback {
+        AdCore.loadAd(requireActivity(), AdType.REWARD_VIDEO, object : IAdCallback {
 
             override fun onAdLoadedWithPrice(eCPM: Double) {
                 appendStatus("✅ Reward Video LOADED via BIDDING SIMULATION!")
-                appendStatus("  🏆 WINNER: ${AdManager.getActiveProviderType()}")
+                appendStatus("  🏆 WINNER: ${AdCore.getActiveProviderType()}")
                 appendStatus("  💰 Winning Price: $$${String.format("%.2f", eCPM)} eCPM (SIMULATED)")
                 appendStatus("-".repeat(60))
             }
 
             override fun onAdLoaded() {
                 appendStatus("✓ Reward Video LOADED!")
-                appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
+                appendStatus("  Provider: ${AdCore.getActiveProviderType()}")
                 appendStatus("  (No bidding - loaded in single/waterfall mode)")
                 appendStatus("-".repeat(60))
             }
@@ -348,14 +348,14 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
     }
 
     private fun showInterstitial() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             appendStatus("⚠️ No active provider! Initialize first.")
             return
         }
 
         appendStatus("Showing cached interstitial...")
 
-        AdManager.showAd(
+        AdCore.showAd(
             activity = requireActivity(),
             adType = AdType.INTERSTITIAL,
             callback = object : IAdCallback {
@@ -379,14 +379,14 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
     }
 
     private fun showReward() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             appendStatus("⚠️ No active provider! Initialize first.")
             return
         }
 
         appendStatus("Showing cached reward video...")
 
-        AdManager.showAd(
+        AdCore.showAd(
             activity = requireActivity(),
             adType = AdType.REWARD_VIDEO,
             callback = object : IAdCallback {
@@ -412,21 +412,21 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
     }
 
     private fun loadSplashAd() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             appendStatus("⚠️ No active provider! Initialize first.")
             return
         }
 
-        val mode = AdManager.loadMode
+        val mode = AdCore.loadMode
 
         appendStatus("")
         appendStatus("-".repeat(60))
         appendStatus("Loading SPLASH ad...")
         appendStatus("Mode: $mode")
-        appendStatus("Cache-First: ${if (AdManager.cacheFirstEnabled) "✅ ON" else "❌ OFF"}")
+        appendStatus("Cache-First: ${if (AdCore.cacheFirstEnabled) "✅ ON" else "❌ OFF"}")
 
         if (mode == LoadMode.BIDDING) {
-            if (AdManager.cacheFirstEnabled) {
+            if (AdCore.cacheFirstEnabled) {
                 appendStatus("[BIDDING] Will check cache FIRST before bidding...")
                 appendStatus("[BIDDING] If cache HIT → instant response!")
                 appendStatus("[BIDDING] If cache MISS → start parallel requests to ALL 3 providers")
@@ -437,11 +437,11 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             }
         }
 
-        AdManager.loadAd(requireActivity(), AdType.SPLASH, object : IAdCallback {
+        AdCore.loadAd(requireActivity(), AdType.SPLASH, object : IAdCallback {
 
             override fun onAdLoadedWithPrice(eCPM: Double) {
                 appendStatus("✅ Splash LOADED via BIDDING SIMULATION!")
-                appendStatus("  🏆 WINNER: ${AdManager.getActiveProviderType()}")
+                appendStatus("  🏆 WINNER: ${AdCore.getActiveProviderType()}")
                 appendStatus("  💰 Winning Price: $$${String.format("%.2f", eCPM)} eCPM (SIMULATED)")
                 appendStatus("  [Random price generated for testing]")
                 appendStatus("-".repeat(60))
@@ -450,12 +450,12 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             override fun onAdLoaded() {
                 appendStatus("✅ Splash LOADED successfully!")
 
-                if (AdManager.cacheFirstEnabled) {
+                if (AdCore.cacheFirstEnabled) {
                     appendStatus("  ⚡ CACHE HIT! Served from cache (instant!)")
-                    appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
+                    appendStatus("  Provider: ${AdCore.getActiveProviderType()}")
                     appendStatus("  [No network request needed - using cached ad]")
                 } else {
-                    appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
+                    appendStatus("  Provider: ${AdCore.getActiveProviderType()}")
                     appendStatus("  (Normal load - no caching)")
                 }
 
@@ -468,13 +468,13 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
                     appendStatus("  [All bidding providers failed or timed out]")
                     appendStatus("  [Or no bidding-enabled providers available]")
                 } else {
-                    appendStatus("  Provider: ${AdManager.getActiveProviderType()}")
+                    appendStatus("  Provider: ${AdCore.getActiveProviderType()}")
                 }
                 appendStatus("-".repeat(60))
             }
 
             override fun onAdShow() {
-                appendStatus("📺 Splash SHOWING from: ${AdManager.getActiveProviderType()}")
+                appendStatus("📺 Splash SHOWING from: ${AdCore.getActiveProviderType()}")
             }
 
             override fun onAdClick() {
@@ -491,14 +491,14 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
     }
 
     private fun showSplash() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             appendStatus("⚠️ No active provider! Initialize first.")
             return
         }
 
         appendStatus("Showing cached splash ad...")
 
-        AdManager.showAd(
+        AdCore.showAd(
             activity = requireActivity(),
             adType = AdType.SPLASH,
             callback = object : IAdCallback {

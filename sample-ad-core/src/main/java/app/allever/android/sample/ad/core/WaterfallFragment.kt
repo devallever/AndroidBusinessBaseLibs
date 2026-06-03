@@ -2,8 +2,8 @@ package app.allever.android.sample.ad.core
 
 import android.util.Log
 import android.widget.TextView
-import app.allever.android.lib.ad.core.AdManager
-import app.allever.android.lib.ad.core.AdManager.LoadMode
+import app.allever.android.lib.ad.core.AdCore
+import app.allever.android.lib.ad.core.AdCore.LoadMode
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.provider.admob.AdMobAdProvider
@@ -45,24 +45,24 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
     private fun registerProviders() {
         appendStatus("Registering providers with waterfall config...")
 
-        AdManager.registerProvider(
+        AdCore.registerProvider(
             providerType = AdMobAdProvider.PROVIDER_NAME,
             providerClass = AdMobAdProvider::class.java,
             config = ProviderConfigConstants.ADMOB
         )
 
-        AdManager.registerProvider(
+        AdCore.registerProvider(
             providerType = PangleAdProvider.PROVIDER_NAME,
             providerClass = PangleAdProvider::class.java,
             config = ProviderConfigConstants.PANGLE
         )
 
-        AdManager.registerProvider(
+        AdCore.registerProvider(
             providerType = BigoAdProvider.PROVIDER_NAME,
             providerClass = BigoAdProvider::class.java,
             config = ProviderConfigConstants.BIGO
         )
-        AdManager.registerProvider(
+        AdCore.registerProvider(
             providerType = AppLovinAdProvider.PROVIDER_NAME,
             providerClass = AppLovinAdProvider::class.java,
             config = ProviderConfigConstants.APPLOVIN
@@ -82,25 +82,25 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
 
         val context = requireContext()
 
-        AdManager.init(context, AdMobAdProvider.PROVIDER_NAME) {
+        AdCore.init(context, AdMobAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 appendStatus("✓ ADMOB initialized & in pool")
             }
         }
 
-        AdManager.init(context, PangleAdProvider.PROVIDER_NAME) {
+        AdCore.init(context, PangleAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 appendStatus("✓ PANGLE initialized & in pool")
             }
         }
 
-        AdManager.init(context, BigoAdProvider.PROVIDER_NAME) {
+        AdCore.init(context, BigoAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 appendStatus("✓ BIGO initialized & in pool")
             }
         }
 
-        AdManager.init(context, AppLovinAdProvider.PROVIDER_NAME) {
+        AdCore.init(context, AppLovinAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 appendStatus("✓ Applovin initialized & in pool")
                 appendStatus("")
@@ -111,7 +111,7 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
     }
 
     private fun setMode(mode: LoadMode) {
-        AdManager.setLoadMode(mode)
+        AdCore.setLoadMode(mode)
 
         val modeName = when (mode) {
             LoadMode.SINGLE -> "🎯 SINGLE"
@@ -146,7 +146,7 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
     }
 
     private fun updateCurrentModeDisplay() {
-        val mode = AdManager.loadMode
+        val mode = AdCore.loadMode
         val modeText = when (mode) {
             LoadMode.SINGLE -> "🎯 SINGLE (Active Provider Only)"
             LoadMode.WATERFALL -> "💧 WATERFALL (Auto Try All)"
@@ -157,26 +157,26 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
     }
 
     private fun showWaterfallInfo() {
-        val info = AdManager.getWaterfallProvidersInfo()
+        val info = AdCore.getWaterfallProvidersInfo()
 
         appendStatus("")
         appendStatus("─".repeat(50))
         appendStatus(info)
         appendStatus("")
-        appendStatus("Active Provider: ${AdManager.getActiveProviderType()}")
-        appendStatus("All Initialized: ${AdManager.getInitializedProviders()}")
+        appendStatus("Active Provider: ${AdCore.getActiveProviderType()}")
+        appendStatus("All Initialized: ${AdCore.getInitializedProviders()}")
         appendStatus("─".repeat(50))
         appendStatus("")
     }
 
     private fun loadInterstitial() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             appendStatus("⚠️ No active provider! Initialize first.")
             return
         }
 
-        val mode = AdManager.loadMode
-        val activeType = AdManager.getActiveProviderType()
+        val mode = AdCore.loadMode
+        val activeType = AdCore.getActiveProviderType()
 
         appendStatus("")
         appendStatus("Loading INTERSTITIAL ad...")
@@ -186,10 +186,10 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
             appendStatus("[WATERFALL] Will try providers in order until success...")
         }
 
-        AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL, object : IAdCallback {
+        AdCore.loadAd(requireActivity(), AdType.INTERSTITIAL, object : IAdCallback {
             override fun onAdLoaded() {
                 appendStatus("✓ Interstitial LOADED successfully!")
-                appendStatus("  Winner: ${AdManager.getActiveProviderType()}")
+                appendStatus("  Winner: ${AdCore.getActiveProviderType()}")
                 if (mode == LoadMode.WATERFALL) {
                     appendStatus("  [Waterfall stopped at winner]")
                 }
@@ -205,7 +205,7 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
             }
 
             override fun onAdShow() {
-                appendStatus("📺 Interstitial SHOWING from: ${AdManager.getActiveProviderType()}")
+                appendStatus("📺 Interstitial SHOWING from: ${AdCore.getActiveProviderType()}")
             }
 
             override fun onAdClick() {
@@ -221,21 +221,21 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
     }
 
     private fun loadRewardVideo() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             appendStatus("⚠️ No active provider! Initialize first.")
             return
         }
 
-        val mode = AdManager.loadMode
+        val mode = AdCore.loadMode
 
         appendStatus("")
         appendStatus("Loading REWARD VIDEO ad...")
         appendStatus("Mode: $mode")
 
-        AdManager.loadAd(requireActivity(), AdType.REWARD_VIDEO, object : IAdCallback {
+        AdCore.loadAd(requireActivity(), AdType.REWARD_VIDEO, object : IAdCallback {
             override fun onAdLoaded() {
                 appendStatus("✓ Reward Video LOADED!")
-                appendStatus("  Winner: ${AdManager.getActiveProviderType()}")
+                appendStatus("  Winner: ${AdCore.getActiveProviderType()}")
             }
 
             override fun onAdFail(errorCode: Int, errorMessage: String) {
@@ -261,14 +261,14 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
     }
 
     private fun showInterstitial() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             appendStatus("⚠️ No active provider! Initialize first.")
             return
         }
 
         appendStatus("Showing cached interstitial...")
 
-        AdManager.showAd(
+        AdCore.showAd(
             activity = requireActivity(),
             adType = AdType.INTERSTITIAL,
             callback = object : IAdCallback {
@@ -292,14 +292,14 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
     }
 
     private fun showReward() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             appendStatus("⚠️ No active provider! Initialize first.")
             return
         }
 
         appendStatus("Showing cached interstitial...")
 
-        AdManager.showAd(
+        AdCore.showAd(
             activity = requireActivity(),
             adType = AdType.REWARD_VIDEO,
             callback = object : IAdCallback {
@@ -325,13 +325,13 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
     }
 
     private fun loadSplashAd() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             appendStatus("⚠️ No active provider! Initialize first.")
             return
         }
 
-        val mode = AdManager.loadMode
-        val activeType = AdManager.getActiveProviderType()
+        val mode = AdCore.loadMode
+        val activeType = AdCore.getActiveProviderType()
 
         appendStatus("")
         appendStatus("-".repeat(60))
@@ -342,10 +342,10 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
             appendStatus("[WATERFALL] Will try providers in order until success...")
         }
 
-        AdManager.loadAd(requireActivity(), AdType.SPLASH, object : IAdCallback {
+        AdCore.loadAd(requireActivity(), AdType.SPLASH, object : IAdCallback {
             override fun onAdLoaded() {
                 appendStatus("✓ Splash LOADED successfully!")
-                appendStatus("  Winner: ${AdManager.getActiveProviderType()}")
+                appendStatus("  Winner: ${AdCore.getActiveProviderType()}")
                 if (mode == LoadMode.WATERFALL) {
                     appendStatus("  [Waterfall stopped at winner]")
                 }
@@ -361,7 +361,7 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
             }
 
             override fun onAdShow() {
-                appendStatus("📺 Splash SHOWING from: ${AdManager.getActiveProviderType()}")
+                appendStatus("📺 Splash SHOWING from: ${AdCore.getActiveProviderType()}")
             }
 
             override fun onAdClick() {
@@ -378,14 +378,14 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
     }
 
     private fun showSplash() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             appendStatus("⚠️ No active provider! Initialize first.")
             return
         }
 
         appendStatus("Showing cached splash ad...")
 
-        AdManager.showAd(
+        AdCore.showAd(
             activity = requireActivity(),
             adType = AdType.SPLASH,
             callback = object : IAdCallback {

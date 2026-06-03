@@ -12,9 +12,7 @@ import app.allever.android.lib.media.core.model.MediaType
 import app.allever.android.lib.media.core.model.Pagination
 import app.allever.android.lib.media.core.permission.MediaPermission
 import app.allever.android.lib.media.core.query.FolderDetailQueryBuilder
-import app.allever.android.lib.media.core.query.FolderDetailQuery
 import app.allever.android.lib.media.core.query.MediaFolderDetail
-import app.allever.android.lib.media.core.query.MediaQuery
 import app.allever.android.lib.media.core.query.MediaQueryBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -58,7 +56,7 @@ import kotlinx.coroutines.flow.flowOn
  * val bitmap = ThumbnailLoader.loadThumbnail(mediaItem.uri)
  * ```
  */
-object MediaLib {
+object MediaCore {
 
     // ==================== 目录列表查询 ====================
 

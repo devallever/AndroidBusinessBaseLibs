@@ -16,7 +16,7 @@ import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import java.util.concurrent.ConcurrentHashMap
 
-object AdManager {
+object AdCore {
 
     private const val TAG = "AdManager"
 

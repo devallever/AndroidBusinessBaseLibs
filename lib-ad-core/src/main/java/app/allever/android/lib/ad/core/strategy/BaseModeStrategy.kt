@@ -1,13 +1,11 @@
 package app.allever.android.lib.ad.core.strategy
 
 import android.content.Context
-import app.allever.android.lib.ad.core.AdManager
-import app.allever.android.lib.ad.core.AdManager.LoadMode
+import app.allever.android.lib.ad.core.AdCore
+import app.allever.android.lib.ad.core.AdCore.LoadMode
 import app.allever.android.lib.ad.core.base.IAdProvider
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.type.AdType
-import app.allever.android.lib.core.ext.log
-import app.allever.android.lib.core.ext.logE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -15,7 +13,7 @@ import kotlinx.coroutines.cancel
 
 abstract class BaseModeStrategy : ILoadModeStrategy {
 
-    protected val adManager = AdManager
+    protected val adManager = AdCore
 
     protected val TAG: String
         get() = this::class.simpleName ?: "BaseModeStrategy"

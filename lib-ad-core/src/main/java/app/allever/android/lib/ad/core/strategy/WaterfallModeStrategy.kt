@@ -1,15 +1,13 @@
 package app.allever.android.lib.ad.core.strategy
 
 import android.content.Context
-import app.allever.android.lib.ad.core.AdManager.LoadMode
-import app.allever.android.lib.ad.core.AdManager.getActiveProvider
-import app.allever.android.lib.ad.core.AdManager.providerPool
-import app.allever.android.lib.ad.core.AdManager.switchToProvider
+import app.allever.android.lib.ad.core.AdCore.LoadMode
+import app.allever.android.lib.ad.core.AdCore.providerPool
+import app.allever.android.lib.ad.core.AdCore.switchToProvider
 import app.allever.android.lib.ad.core.base.AdProviderFactory
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
-import app.allever.android.lib.core.ext.log
 import kotlin.collections.component1
 import kotlin.collections.component2
 

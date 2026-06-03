@@ -1,8 +1,8 @@
 package app.allever.android.sample.ad.core
 
 import android.util.Log
-import app.allever.android.lib.ad.core.AdManager
-import app.allever.android.lib.ad.core.AdManager.LoadMode
+import app.allever.android.lib.ad.core.AdCore
+import app.allever.android.lib.ad.core.AdCore.LoadMode
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.provider.admob.AdMobAdProvider
@@ -42,69 +42,69 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
     }
 
     private fun registerAllProviders() {
-        AdManager.registerProvider(
+        AdCore.registerProvider(
             providerType = AdMobAdProvider.PROVIDER_NAME,
             providerClass = AdMobAdProvider::class.java,
             config = ProviderConfigConstants.ADMOB
         )
 
-        AdManager.registerProvider(
+        AdCore.registerProvider(
             providerType = PangleAdProvider.PROVIDER_NAME,
             providerClass = PangleAdProvider::class.java,
             config = ProviderConfigConstants.PANGLE
         )
 
-        AdManager.registerProvider(
+        AdCore.registerProvider(
             providerType = BigoAdProvider.PROVIDER_NAME,
             providerClass = BigoAdProvider::class.java,
             config = ProviderConfigConstants.BIGO
         )
 
         updateStatus("✓ All 3 providers registered (ADMOB✓PANGLE✓BIGO○ waterfall)")
-        Log.d("MultiProvider", "Registered: ${AdManager.getRegisteredProvidersInfo()}")
+        Log.d("MultiProvider", "Registered: ${AdCore.getRegisteredProvidersInfo()}")
     }
 
     private fun initAllProviders() {
         updateStatus("Initializing all providers...")
 
         val context = requireContext()
-        AdManager.init(context, AdMobAdProvider.PROVIDER_NAME) {
+        AdCore.init(context, AdMobAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 updateStatus("✓ AdMob initialized")
                 logProviderStatus()
             }
         }
 
-        AdManager.init(context, PangleAdProvider.PROVIDER_NAME) {
+        AdCore.init(context, PangleAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 updateStatus("✓ Pangle initialized")
                 logProviderStatus()
             }
         }
 
-        AdManager.init(context, BigoAdProvider.PROVIDER_NAME) {
+        AdCore.init(context, BigoAdProvider.PROVIDER_NAME) {
             runOnUiThread {
                 updateStatus("✓ Bigo initialized!")
                 logProviderStatus()
 
-                AdManager.loadAd(requireContext(), AdType.INTERSTITIAL)
-                AdManager.loadAd(requireContext(), AdType.REWARD_VIDEO)
+                AdCore.loadAd(requireContext(), AdType.INTERSTITIAL)
+                AdCore.loadAd(requireContext(), AdType.REWARD_VIDEO)
             }
         }
     }
 
     private fun switchToProvider(providerType: String) {
-        val success = AdManager.switchToProvider(providerType)
+        val success = AdCore.switchToProvider(providerType)
 
         if (success) {
             updateStatus("✓ Switched to: $providerType")
 
             runOnUiThread {
-                AdManager.loadAd(requireContext(), AdType.INTERSTITIAL)
-                AdManager.loadAd(requireContext(), AdType.REWARD_VIDEO)
+                AdCore.loadAd(requireContext(), AdType.INTERSTITIAL)
+                AdCore.loadAd(requireContext(), AdType.REWARD_VIDEO)
             }
         } else {
-            if (!AdManager.isProviderInitialized(providerType)) {
+            if (!AdCore.isProviderInitialized(providerType)) {
                 updateStatus("⚠️ $providerType not initialized yet")
             } else {
                 updateStatus("✗ Failed to switch to: $providerType")
@@ -115,14 +115,14 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
     }
 
     private fun loadInterstitial() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             updateStatus("⚠️ No active provider")
             return
         }
 
-        updateStatus("Loading Interstitial from: ${AdManager.getActiveProviderType()}")
+        updateStatus("Loading Interstitial from: ${AdCore.getActiveProviderType()}")
 
-        AdManager.showAd(
+        AdCore.showAd(
             activity = requireActivity(),
             adType = AdType.INTERSTITIAL,
             callback = object : IAdCallback {
@@ -152,14 +152,14 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
     }
 
     private fun loadRewardVideo() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             updateStatus("⚠️ No active provider")
             return
         }
 
-        updateStatus("Loading Reward from: ${AdManager.getActiveProviderType()}")
+        updateStatus("Loading Reward from: ${AdCore.getActiveProviderType()}")
 
-        AdManager.showAd(
+        AdCore.showAd(
             activity = requireActivity(),
             adType = AdType.REWARD_VIDEO,
             callback = object : IAdCallback {
@@ -191,19 +191,19 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
     }
 
     private fun destroyActiveProvider() {
-        val activeType = AdManager.getActiveProviderType()
+        val activeType = AdCore.getActiveProviderType()
         if (activeType == null) {
             updateStatus("⚠️ No active provider to destroy")
             return
         }
 
-        AdManager.destroyProvider(activeType)
+        AdCore.destroyProvider(activeType)
         updateStatus("✗ Destroyed: $activeType")
         logProviderStatus()
     }
 
     private fun reinitActiveProvider() {
-        val activeType = AdManager.getActiveProviderType()
+        val activeType = AdCore.getActiveProviderType()
         if (activeType == null) {
             updateStatus("⚠️ No active provider to reinitialize")
             return
@@ -211,7 +211,7 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
 
         updateStatus("Re-initializing: $activeType...")
 
-        AdManager.init(requireContext(), activeType, forceReinit = true) {
+        AdCore.init(requireContext(), activeType, forceReinit = true) {
             runOnUiThread {
                 updateStatus("✓ Re-initialized: $activeType")
                 logProviderStatus()
@@ -227,15 +227,15 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
     private fun logProviderStatus() {
         val sb = StringBuilder()
         sb.appendLine("=== Provider Status ===")
-        sb.appendLine("Active: ${AdManager.getActiveProviderType()}")
-        sb.appendLine("Mode: ${AdManager.loadMode}")
-        sb.appendLine("Initialized: ${AdManager.getInitializedProviders()}")
+        sb.appendLine("Active: ${AdCore.getActiveProviderType()}")
+        sb.appendLine("Mode: ${AdCore.loadMode}")
+        sb.appendLine("Initialized: ${AdCore.getInitializedProviders()}")
 
         Log.d("MultiProvider", sb.toString())
     }
 
     private fun setLoadMode(mode: LoadMode) {
-        AdManager.setLoadMode(mode)
+        AdCore.setLoadMode(mode)
 
         val modeText = when (mode) {
             LoadMode.SINGLE -> "🎯 SINGLE"
@@ -248,7 +248,7 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
     }
 
     private fun showWaterfallInfo() {
-        val info = AdManager.getWaterfallProvidersInfo()
+        val info = AdCore.getWaterfallProvidersInfo()
         updateStatus(info)
     }
 }

@@ -1,17 +1,16 @@
 package app.allever.android.lib.ad.core.strategy
 
 import android.content.Context
-import app.allever.android.lib.ad.core.AdManager.LoadMode
-import app.allever.android.lib.ad.core.AdManager.getActiveProvider
-import app.allever.android.lib.ad.core.AdManager.providerPool
-import app.allever.android.lib.ad.core.AdManager.switchToProvider
+import app.allever.android.lib.ad.core.AdCore.LoadMode
+import app.allever.android.lib.ad.core.AdCore.getActiveProvider
+import app.allever.android.lib.ad.core.AdCore.providerPool
+import app.allever.android.lib.ad.core.AdCore.switchToProvider
 import app.allever.android.lib.ad.core.base.AdProviderFactory
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.config.AdProviderConfig
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.core.type.BiddingResult
 import app.allever.android.lib.core.ext.log
-import app.allever.android.lib.core.ext.logE
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll

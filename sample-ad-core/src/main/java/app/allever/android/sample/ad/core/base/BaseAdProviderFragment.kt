@@ -1,7 +1,7 @@
 package app.allever.android.sample.ad.core.base
 
 import android.util.Log
-import app.allever.android.lib.ad.core.AdManager
+import app.allever.android.lib.ad.core.AdCore
 import app.allever.android.lib.ad.core.base.IAdProvider
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.config.AdProviderConfig
@@ -20,7 +20,7 @@ abstract class BaseAdProviderFragment<DB, VM> :
     override fun inflate() = FragmentBaseAdProviderBinding.inflate(layoutInflater)
 
     override fun init() {
-        AdManager.registerProvider(
+        AdCore.registerProvider(
             providerType = providerName,
             providerClass = getProviderClass(),
             config = providerConfig,
@@ -31,7 +31,7 @@ abstract class BaseAdProviderFragment<DB, VM> :
 
     private fun setupButtons() {
         mBinding.btnInit.setOnClickListener {
-            AdManager.destroy()
+            AdCore.destroy()
             initProvider()
         }
 
@@ -46,7 +46,7 @@ abstract class BaseAdProviderFragment<DB, VM> :
     private fun initProvider() {
         updateStatus("Initializing $providerName...")
 
-        AdManager.init(requireContext(), providerName) {
+        AdCore.init(requireContext(), providerName) {
             runOnUiThread {
                 updateStatus("✓ $providerName Initialized")
                 onProviderInitialized()
@@ -55,10 +55,10 @@ abstract class BaseAdProviderFragment<DB, VM> :
     }
 
     protected open fun onProviderInitialized() {
-        AdManager.loadAd(requireActivity(), AdType.SPLASH)
-        AdManager.loadAd(requireActivity(), AdType.INTERSTITIAL)
-        AdManager.loadAd(requireActivity(), AdType.REWARD_VIDEO)
-        AdManager.loadAd(requireActivity(), AdType.BANNER)
+        AdCore.loadAd(requireActivity(), AdType.SPLASH)
+        AdCore.loadAd(requireActivity(), AdType.INTERSTITIAL)
+        AdCore.loadAd(requireActivity(), AdType.REWARD_VIDEO)
+        AdCore.loadAd(requireActivity(), AdType.BANNER)
     }
 
     protected fun updateStatus(message: String) {
@@ -67,14 +67,14 @@ abstract class BaseAdProviderFragment<DB, VM> :
     }
 
     private fun showSplash() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             updateStatus("⚠️ Please initialize an ad provider first")
             return
         }
 
         updateStatus("Loading Splash Ad...")
 
-        AdManager.showAd(
+        AdCore.showAd(
             activity = requireActivity(),
             adType = AdType.SPLASH,
             callback = createAdCallback("Splash")
@@ -82,14 +82,14 @@ abstract class BaseAdProviderFragment<DB, VM> :
     }
 
     private fun showInterstitial() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             updateStatus("⚠️ Please initialize an ad provider first")
             return
         }
 
         updateStatus("Loading Interstitial Ad...")
 
-        AdManager.showAd(
+        AdCore.showAd(
             activity = requireActivity(),
             adType = AdType.INTERSTITIAL,
             callback = createAdCallback("Interstitial")
@@ -97,14 +97,14 @@ abstract class BaseAdProviderFragment<DB, VM> :
     }
 
     private fun showRewardVideo() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             updateStatus("⚠️ Please initialize an ad provider first")
             return
         }
 
         updateStatus("Loading Reward Video...")
 
-        AdManager.showAd(
+        AdCore.showAd(
             activity = requireActivity(),
             adType = AdType.REWARD_VIDEO,
             callback = object : IAdCallback {
@@ -136,14 +136,14 @@ abstract class BaseAdProviderFragment<DB, VM> :
     }
 
     private fun showBanner() {
-        if (!AdManager.isInitialized()) {
+        if (!AdCore.isInitialized()) {
             updateStatus("⚠️ Please initialize an ad provider first")
             return
         }
 
         updateStatus("Loading Banner Ad...")
 
-        AdManager.showAd(
+        AdCore.showAd(
             activity = requireActivity(),
             adType = AdType.BANNER,
             container = mBinding.bannerContainer,

@@ -12,7 +12,7 @@ import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.function.permission.JumpPermissionSettingDialog
 import app.allever.android.lib.core.function.permission.PermissionHelper
-import app.allever.android.lib.media.core.MediaLib
+import app.allever.android.lib.media.core.MediaCore
 import app.allever.android.lib.media.core.model.MediaType
 import app.allever.android.lib.media.core.model.Pagination
 import app.allever.android.lib.media.core.model.SortBy
@@ -100,37 +100,37 @@ class MediaSampleFragment :
     // ==================== 权限 ====================
 
     private fun checkAndRequestAllMediaPermissions() {
-        if (MediaLib.hasPermission(MediaType.ALL)) {
+        if (MediaCore.hasPermission(MediaType.ALL)) {
             toast("已有全部媒体权限")
             return
         }
-        requestMediaPermissionLauncher.launch(MediaLib.requiredPermissions(MediaType.ALL))
+        requestMediaPermissionLauncher.launch(MediaCore.requiredPermissions(MediaType.ALL))
     }
 
     private fun checkAndRequestImageVideoPermissions() {
-        if (MediaLib.hasPermission(MediaType.IMAGE_AND_VIDEO)) {
+        if (MediaCore.hasPermission(MediaType.IMAGE_AND_VIDEO)) {
             toast("已有图片+视频权限")
             return
         }
-        requestMediaPermissionLauncher.launch(MediaLib.requiredPermissions(MediaType.IMAGE_AND_VIDEO))
+        requestMediaPermissionLauncher.launch(MediaCore.requiredPermissions(MediaType.IMAGE_AND_VIDEO))
     }
 
     private fun checkAndRequestAudioPermissions() {
-        if (MediaLib.hasPermission(setOf(MediaType.Type.AUDIO))) {
+        if (MediaCore.hasPermission(setOf(MediaType.Type.AUDIO))) {
             toast("已有音频权限")
             return
         }
-        requestMediaPermissionLauncher.launch(MediaLib.requiredPermissions(setOf(MediaType.Type.AUDIO)))
+        requestMediaPermissionLauncher.launch(MediaCore.requiredPermissions(setOf(MediaType.Type.AUDIO)))
     }
 
     private fun printRequiredPermissions() {
         val sb = StringBuilder()
         sb.appendLine("=== SDK ${Build.VERSION.SDK_INT} (${Build.VERSION.RELEASE}) ===")
-        sb.appendLine("ALL: ${MediaLib.requiredPermissions(MediaType.ALL).contentToString()}")
-        sb.appendLine("IMAGE: ${MediaLib.requiredPermissions(setOf(MediaType.Type.IMAGE)).contentToString()}")
-        sb.appendLine("VIDEO: ${MediaLib.requiredPermissions(setOf(MediaType.Type.VIDEO)).contentToString()}")
-        sb.appendLine("AUDIO: ${MediaLib.requiredPermissions(setOf(MediaType.Type.AUDIO)).contentToString()}")
-        sb.appendLine("hasAll=${MediaLib.hasAllPermission()} img=${MediaLib.hasPermission(setOf(MediaType.Type.IMAGE))} vid=${MediaLib.hasPermission(setOf(MediaType.Type.VIDEO))} aud=${MediaLib.hasPermission(setOf(MediaType.Type.AUDIO))}")
+        sb.appendLine("ALL: ${MediaCore.requiredPermissions(MediaType.ALL).contentToString()}")
+        sb.appendLine("IMAGE: ${MediaCore.requiredPermissions(setOf(MediaType.Type.IMAGE)).contentToString()}")
+        sb.appendLine("VIDEO: ${MediaCore.requiredPermissions(setOf(MediaType.Type.VIDEO)).contentToString()}")
+        sb.appendLine("AUDIO: ${MediaCore.requiredPermissions(setOf(MediaType.Type.AUDIO)).contentToString()}")
+        sb.appendLine("hasAll=${MediaCore.hasAllPermission()} img=${MediaCore.hasPermission(setOf(MediaType.Type.IMAGE))} vid=${MediaCore.hasPermission(setOf(MediaType.Type.VIDEO))} aud=${MediaCore.hasPermission(setOf(MediaType.Type.AUDIO))}")
         log("MediaSample", sb.toString())
         toast(sb.toString())
     }
@@ -139,8 +139,8 @@ class MediaSampleFragment :
 
     /** 有权限返回 true，无权限请求后返回 false */
     private fun ensurePermissionOrReturn(types: Set<MediaType.Type>): Boolean {
-        return if (MediaLib.hasPermission(types)) true else {
-            requestMediaPermissionLauncher.launch(MediaLib.requiredPermissions(types))
+        return if (MediaCore.hasPermission(types)) true else {
+            requestMediaPermissionLauncher.launch(MediaCore.requiredPermissions(types))
             false
         }
     }
@@ -160,7 +160,7 @@ class MediaSampleFragment :
     private fun queryFoldersAllTypes() {
         ensurePermissionOrReturn(MediaType.ALL) || return
         ioQuery("queryFoldersAllTypes") {
-            val folders = MediaLib.queryFolders {
+            val folders = MediaCore.queryFolders {
                 types = MediaType.ALL; pagination = Pagination.All; sortBy = SortBy.DATE_DESC
             }
             logFolderList(folders, "全部类型目录")
@@ -171,7 +171,7 @@ class MediaSampleFragment :
     private fun queryFoldersImageAndVideo() {
         ensurePermissionOrReturn(MediaType.IMAGE_AND_VIDEO) || return
         ioQuery("queryFoldersImageAndVideo") {
-            val folders = MediaLib.queryFolders {
+            val folders = MediaCore.queryFolders {
                 types = MediaType.IMAGE_AND_VIDEO; pagination = Pagination.All
             }
             logFolderList(folders, "图片+视频目录")
@@ -182,7 +182,7 @@ class MediaSampleFragment :
     private fun queryFoldersImageOnly() {
         ensurePermissionOrReturn(setOf(MediaType.Type.IMAGE)) || return
         ioQuery("queryFoldersImageOnly") {
-            val folders = MediaLib.queryFolders {
+            val folders = MediaCore.queryFolders {
                 types = setOf(MediaType.Type.IMAGE); pagination = Pagination.All
             }
             logFolderList(folders, "纯图片目录")
@@ -193,7 +193,7 @@ class MediaSampleFragment :
     private fun queryFoldersVideoOnly() {
         ensurePermissionOrReturn(setOf(MediaType.Type.VIDEO)) || return
         ioQuery("queryFoldersVideoOnly") {
-            val folders = MediaLib.queryFolders {
+            val folders = MediaCore.queryFolders {
                 types = setOf(MediaType.Type.VIDEO); pagination = Pagination.All
             }
             logFolderList(folders, "纯视频目录")
@@ -204,7 +204,7 @@ class MediaSampleFragment :
     private fun queryFoldersAudioOnly() {
         ensurePermissionOrReturn(setOf(MediaType.Type.AUDIO)) || return
         ioQuery("queryFoldersAudioOnly") {
-            val folders = MediaLib.queryFolders {
+            val folders = MediaCore.queryFolders {
                 types = setOf(MediaType.Type.AUDIO); pagination = Pagination.All
             }
             logFolderList(folders, "纯音频目录")
@@ -216,7 +216,7 @@ class MediaSampleFragment :
         ensurePermissionOrReturn(MediaType.ALL) || return
         val pageSize = 3
         ioQuery("queryFoldersPaged") {
-            val folders = MediaLib.queryFolders {
+            val folders = MediaCore.queryFolders {
                 types = MediaType.ALL; pagination = Pagination.Paged(page, pageSize); sortBy = SortBy.DATE_DESC
             }
             logFolderList(folders, "目录 第${page + 1}页")
@@ -229,7 +229,7 @@ class MediaSampleFragment :
         lifecycleScope.launch {
             var pageCount = 0
             var totalFolders = 0
-            MediaLib.queryFoldersFlow {
+            MediaCore.queryFoldersFlow {
                 types = MediaType.ALL; pagination = Pagination.Paged(0, 3); sortBy = SortBy.DATE_DESC
             }.catch { e -> logE("MediaSample", "queryFoldersFlow error: ${e.message}") }
              .collect { pageFolders ->
@@ -246,7 +246,7 @@ class MediaSampleFragment :
 
     private fun queryFoldersLiveData() {
         ensurePermissionOrReturn(MediaType.ALL) || return
-        MediaLib.queryFoldersLiveData {
+        MediaCore.queryFoldersLiveData {
             types = MediaType.ALL; pagination = Pagination.All; sortBy = SortBy.DATE_DESC
         }.observe(viewLifecycleOwner) { folders ->
             logFolderList(folders, "LiveData 更新")
@@ -266,7 +266,7 @@ class MediaSampleFragment :
             else -> "未知"
         }
         ioQuery("queryFoldersWithSort") {
-            val folders = MediaLib.queryFolders {
+            val folders = MediaCore.queryFolders {
                 types = setOf(MediaType.Type.IMAGE); pagination = Pagination.All; this.sortBy = sortBy
             }
             logFolderList(folders, "图片目录 ($name)")
@@ -279,11 +279,11 @@ class MediaSampleFragment :
     private fun queryFirstFolderDetailAll() {
         ensurePermissionOrReturn(MediaType.ALL) || return
         ioQuery("queryFirstFolderDetailAll") {
-            val folders = MediaLib.queryFolders {
+            val folders = MediaCore.queryFolders {
                 types = MediaType.ALL; pagination = Pagination.Paged(0, 1)
             }
             if (folders.isEmpty()) { showToast("没有找到任何目录"); return@ioQuery }
-            val detail = MediaLib.queryFolderDetail {
+            val detail = MediaCore.queryFolderDetail {
                 bucketId = folders[0].bucketId; types = MediaType.ALL; pagination = Pagination.All
             }
             logFolderDetail(detail, "${folders[0].name} 详情(全量)")
@@ -294,11 +294,11 @@ class MediaSampleFragment :
     private fun queryFirstFolderDetailPaged() {
         ensurePermissionOrReturn(MediaType.ALL) || return
         ioQuery("queryFirstFolderDetailPaged") {
-            val folders = MediaLib.queryFolders {
+            val folders = MediaCore.queryFolders {
                 types = MediaType.ALL; pagination = Pagination.Paged(0, 1)
             }
             if (folders.isEmpty()) { showToast("没有找到任何目录"); return@ioQuery }
-            val detail = MediaLib.queryFolderDetail {
+            val detail = MediaCore.queryFolderDetail {
                 bucketId = folders[0].bucketId; types = MediaType.ALL; pagination = Pagination.Paged(0, 5)
             }
             logFolderDetail(detail, "${folders[0].name} 详情(分页)")
@@ -309,11 +309,11 @@ class MediaSampleFragment :
     private fun queryFolderDetailFlow() {
         ensurePermissionOrReturn(MediaType.ALL) || return
         lifecycleScope.launch {
-            val folders = MediaLib.queryFolders {
+            val folders = MediaCore.queryFolders {
                 types = MediaType.ALL; pagination = Pagination.Paged(0, 1)
             }
             if (folders.isEmpty()) { toast("没有找到任何目录"); return@launch }
-            MediaLib.queryFolderDetailFlow {
+            MediaCore.queryFolderDetailFlow {
                 bucketId = folders[0].bucketId; types = setOf(MediaType.Type.IMAGE); pagination = Pagination.All
             }.collect { detail ->
                 logFolderDetail(detail, "Flow-${folders[0].name}")
@@ -327,7 +327,7 @@ class MediaSampleFragment :
     private fun queryAllImages() {
         ensurePermissionOrReturn(setOf(MediaType.Type.IMAGE)) || return
         ioQuery("queryAllImages") {
-            val items = MediaLib.queryAll { types = setOf(MediaType.Type.IMAGE); pagination = Pagination.All }
+            val items = MediaCore.queryAll { types = setOf(MediaType.Type.IMAGE); pagination = Pagination.All }
             logItems(items, "全局图片")
             showToast("共 ${items.size} 张图片")
         }
@@ -336,7 +336,7 @@ class MediaSampleFragment :
     private fun queryAllVideos() {
         ensurePermissionOrReturn(setOf(MediaType.Type.VIDEO)) || return
         ioQuery("queryAllVideos") {
-            val items = MediaLib.queryAll { types = setOf(MediaType.Type.VIDEO); pagination = Pagination.All }
+            val items = MediaCore.queryAll { types = setOf(MediaType.Type.VIDEO); pagination = Pagination.All }
             logItems(items, "全局视频")
             showToast("共 ${items.size} 个视频")
         }
@@ -345,7 +345,7 @@ class MediaSampleFragment :
     private fun queryAllAudios() {
         ensurePermissionOrReturn(setOf(MediaType.Type.AUDIO)) || return
         ioQuery("queryAllAudios") {
-            val items = MediaLib.queryAll { types = setOf(MediaType.Type.AUDIO); pagination = Pagination.All }
+            val items = MediaCore.queryAll { types = setOf(MediaType.Type.AUDIO); pagination = Pagination.All }
             logItems(items, "全局音频")
             showToast("共 ${items.size} 个音频")
         }
@@ -354,7 +354,7 @@ class MediaSampleFragment :
     private fun queryAllImagesPaged() {
         ensurePermissionOrReturn(setOf(MediaType.Type.IMAGE)) || return
         ioQuery("queryAllImagesPaged") {
-            val items = MediaLib.queryAll { types = setOf(MediaType.Type.IMAGE); pagination = Pagination.Paged(0, 10) }
+            val items = MediaCore.queryAll { types = setOf(MediaType.Type.IMAGE); pagination = Pagination.Paged(0, 10) }
             logItems(items, "全局图片(第1页)")
             showToast("第1页: ${items.size} 张图片")
         }
@@ -364,7 +364,7 @@ class MediaSampleFragment :
         ensurePermissionOrReturn(setOf(MediaType.Type.IMAGE)) || return
         lifecycleScope.launch {
             var count = 0
-            MediaLib.queryAllFlow { types = setOf(MediaType.Type.IMAGE); pagination = Pagination.Paged(0, 20) }
+            MediaCore.queryAllFlow { types = setOf(MediaType.Type.IMAGE); pagination = Pagination.Paged(0, 20) }
                 .catch { e -> logE("MediaSample", "queryAllImagesFlow error: ${e.message}") }
                 .collect { item ->
                     count++
@@ -379,7 +379,7 @@ class MediaSampleFragment :
     private fun loadFirstImageThumbnail() {
         ensurePermissionOrReturn(setOf(MediaType.Type.IMAGE)) || return
         ioQuery("loadThumbnail") {
-            val items = MediaLib.queryAll { types = setOf(MediaType.Type.IMAGE); pagination = Pagination.Paged(0, 1) }
+            val items = MediaCore.queryAll { types = setOf(MediaType.Type.IMAGE); pagination = Pagination.Paged(0, 1) }
             if (items.isEmpty()) { showToast("没有图片"); return@ioQuery }
             val bitmap = ThumbnailLoader.loadThumbnail(items[0].uri)
             if (bitmap != null && !bitmap.isRecycled) {
@@ -394,7 +394,7 @@ class MediaSampleFragment :
     private fun loadBatchThumbnails() {
         ensurePermissionOrReturn(setOf(MediaType.Type.IMAGE)) || return
         ioQuery("loadBatchThumbnails") {
-            val items = MediaLib.queryAll { types = setOf(MediaType.Type.IMAGE); pagination = Pagination.Paged(0, 10) }
+            val items = MediaCore.queryAll { types = setOf(MediaType.Type.IMAGE); pagination = Pagination.Paged(0, 10) }
             if (items.isEmpty()) { showToast("没有图片"); return@ioQuery }
             val uris = items.map { it.uri }
             val result = ThumbnailLoader.loadThumbnails(uris)
@@ -411,7 +411,7 @@ class MediaSampleFragment :
     // ==================== 缓存管理 ====================
 
     private fun clearFolderCache() {
-        lifecycleScope.launch { MediaLib.clearCache(); toast("目录缓存已清除") }
+        lifecycleScope.launch { MediaCore.clearCache(); toast("目录缓存已清除") }
     }
 
     // ==================== 日志工具 ====================
