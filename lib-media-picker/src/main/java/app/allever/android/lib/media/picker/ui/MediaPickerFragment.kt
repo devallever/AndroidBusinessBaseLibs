@@ -148,13 +148,34 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
 
     private fun showFolderDrawer() {
         val dialog = folderDrawerDialog ?: FolderDrawerDialog(requireContext()).also { folderDrawerDialog = it }
+
+        // 在第一项插入"全部目录"，取最新资源作为封面
+        val allCoverUri = (videos.firstOrNull()?.uri ?: images.firstOrNull()?.uri ?: audios.firstOrNull()?.uri)
+        val allFolderItem = MediaFolder(
+            bucketId = -1L,
+            name = getString(R.string.media_picker_all_folders),
+            path = "",
+            coverUri = allCoverUri,
+            images = images.toList(),
+            videos = videos.toList(),
+            audios = audios.toList(),
+        )
+        val displayFolders = listOf(allFolderItem) + allFolders
+
         dialog.showWithFolders(
-            allFolders,
+            displayFolders,
             currentBucketId ?: -1L,
         ) { folder ->
-            currentBucketId = folder.bucketId
-            updateDirectoryBar(if (folder.bucketId < 0L) getString(R.string.media_picker_all_folders) else folder.name)
-            loadFolderDetail()
+            if (folder.bucketId == -1L) {
+                // 全部目录
+                currentBucketId = null
+                updateDirectoryBar(getString(R.string.media_picker_all_folders))
+                loadAllItems()
+            } else {
+                currentBucketId = folder.bucketId
+                updateDirectoryBar(folder.name)
+                loadFolderDetail()
+            }
         }
     }
 
