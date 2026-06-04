@@ -3,6 +3,7 @@ package app.allever.android.lib.media.picker.ui
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,6 +23,7 @@ import app.allever.android.lib.media.picker.selection.SelectionManager
 import app.allever.android.lib.media.picker.ui.adapter.MediaGridAdapter
 import app.allever.android.lib.media.picker.ui.adapter.MediaListAdapter
 import app.allever.android.lib.media.picker.ui.widget.FolderDrawerDialog
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.launch
 
@@ -256,13 +258,34 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
         val inflater = LayoutInflater.from(context)
         selectionManager.toList().forEachIndexed { index, item ->
             val view = inflater.inflate(R.layout.item_selected_preview, mBinding.layoutSelectedItems, false)
-            // TODO: 用 Glide 加载缩略图
+
+            // 序号角标
             view.findViewById<View>(R.id.tvIndex)?.let {
                 (it as? android.widget.TextView)?.text = "${index + 1}"
             }
+
+            // 删除按钮
             view.findViewById<View>(R.id.ivRemove)?.setOnClickListener {
                 selectionManager.remove(item)
             }
+
+            // 加载缩略图：图片/视频用 Glide，音频用图标
+            val ivThumbnail = view.findViewById<ImageView>(R.id.ivThumbnail)
+            when (item) {
+                is MediaItem.Image, is MediaItem.Video -> {
+                    Glide.with(this)
+                        .load(item.uri)
+                        .placeholder(R.color.media_picker_placeholder)
+                        .centerCrop()
+                        .error(R.color.media_picker_placeholder)
+                        .into(ivThumbnail)
+                }
+                is MediaItem.Audio -> {
+                    ivThumbnail.setImageResource(R.drawable.ic_media_picker_audio)
+                    ivThumbnail.scaleType = ImageView.ScaleType.CENTER
+                }
+            }
+
             mBinding.layoutSelectedItems.addView(view)
         }
     }
