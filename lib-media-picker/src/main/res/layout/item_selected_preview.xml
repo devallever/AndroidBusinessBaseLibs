@@ -16,23 +16,24 @@
         android:id="@+id/tvIndex"
         android:layout_width="18dp"
         android:layout_height="18dp"
-        android:layout_gravity="top|end"
+        android:layout_gravity="top|start"
         android:layout_margin="-2dp"
         android:gravity="center"
         android:textSize="10sp"
         android:textColor="#FFFFFF"
-        android:background="@drawable/bg_media_picker_index_badge" />
+        android:background="@drawable/bg_media_picker_index_badge"
+        android:visibility="gone"/>
 
-    <!-- 删除按钮 -->
+    <!-- 删除按钮（右上角） -->
     <ImageView
         android:id="@+id/ivRemove"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_gravity="top|start"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="top|end"
         android:layout_margin="-4dp"
+        android:padding="2dp"
         android:src="@drawable/ic_media_picker_remove"
         android:background="@drawable/bg_media_picker_remove_btn"
-        android:visibility="gone"
         android:clickable="true"
         android:focusable="true" />
 
