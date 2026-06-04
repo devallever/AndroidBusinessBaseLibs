@@ -53,56 +53,15 @@
             android:alpha="0.6" />
     </LinearLayout>
 
-    <!-- 内容区域：RecyclerView（Grid 或 List） -->
-    <FrameLayout
-        android:id="@+id/contentContainer"
+    <!-- 内容区域：ViewPager2（左右滑动切换 Tab） -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerContent"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/layoutDirectoryBar"
         app:layout_constraintBottom_toTopOf="@id/layoutBottomBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewMedia"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:padding="2dp" />
-
-        <!-- 空状态提示 -->
-        <LinearLayout
-            android:id="@+id/layoutEmpty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@drawable/ic_media_picker_empty"
-                android:alpha="0.3" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="暂无资源"
-                android:textSize="14sp"
-                android:textColor="#999999" />
-        </LinearLayout>
-
-        <!-- 加载中 -->
-        <ProgressBar
-            android:id="@+id/progressBarLoading"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-    </FrameLayout>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- 底部已选预览条 -->
     <LinearLayout

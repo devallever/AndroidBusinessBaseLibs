@@ -8,11 +8,8 @@ import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import app.allever.android.lib.core.base.AbstractBindingFragment
-import app.allever.android.lib.core.base.AbstractFragment
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.media.core.MediaCore
 import app.allever.android.lib.media.core.model.MediaFolder
@@ -22,18 +19,17 @@ import app.allever.android.lib.media.picker.MediaPickerConfig
 import app.allever.android.lib.media.picker.R
 import app.allever.android.lib.media.picker.databinding.FragmentMediaPickerBinding
 import app.allever.android.lib.media.picker.selection.SelectionManager
-import app.allever.android.lib.media.picker.ui.adapter.MediaGridAdapter
-import app.allever.android.lib.media.picker.ui.adapter.MediaListAdapter
+import app.allever.android.lib.media.picker.ui.adapter.MediaPageAdapter
 import app.allever.android.lib.media.picker.ui.widget.FolderDrawerDialog
 import com.bumptech.glide.Glide
-import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 
 /**
  * 媒体选择器主界面 Fragment
  *
  * 功能：
- * - Tab 切换媒体类型（图片/视频/音频）
+ * - Tab 切换媒体类型（图片/视频/音频），支持左右滑动切换
  * - 目录栏点击弹出目录抽屉
  * - 图片/视频用网格展示，音频用列表展示
  * - 最多选中 N 个（默认9个）
@@ -44,19 +40,23 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
     private lateinit var config: MediaPickerConfig
     private lateinit var selectionManager: SelectionManager
 
+    /** 当前可用的媒体类型列表（与 Tab 一一对应） */
+    private val tabTypes = mutableListOf<MediaType.Type>()
+    /** 当前选中的 Tab 索引 */
+    private var currentTabPosition: Int = 0
+    /** 当前媒体类型 */
     private var currentType: MediaType.Type = MediaType.Type.IMAGE
+
     private var currentBucketId: Long? = null // null = 全部目录
     private var allFolders: List<MediaFolder> = emptyList()
 
-    /** 当前目录下的图片列表 */
+    /** 各类型的数据 */
     private val images = mutableListOf<MediaItem.Image>()
-    /** 当前目录下的视频列表 */
     private val videos = mutableListOf<MediaItem.Video>()
-    /** 当前目录下的音频列表 */
     private val audios = mutableListOf<MediaItem.Audio>()
 
-    private var gridAdapter: MediaGridAdapter? = null
-    private var listAdapter: MediaListAdapter? = null
+    /** ViewPager2 页面 Adapter */
+    private lateinit var pageAdapter: MediaPageAdapter
     private var folderDrawerDialog: FolderDrawerDialog? = null
 
     /** 预览结果回调 */
@@ -64,7 +64,6 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
         if (result.resultCode == android.app.Activity.RESULT_OK) {
             val items = result.data?.getParcelableArrayListExtra<MediaItem>(MediaPreviewActivity.KEY_RESULT)
             if (!items.isNullOrEmpty()) {
-                // 恢复预览界面的选中状态
                 selectionManager.clear()
                 items.forEach { selectionManager.forceAdd(it) }
             }
@@ -79,75 +78,88 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
         config = arguments?.getParcelable(MediaPickerConfig.KEY_CONFIG) ?: MediaPickerConfig()
         selectionManager = SelectionManager(config.maxSelect)
 
+        buildTabTypes()
         setupTabs()
         setupDirectoryBar()
-        setupRecyclerView()
+        setupViewPager()
         setupBottomBar()
         loadFolders()
 
         // 监听选中状态变化，更新 UI
         selectionManager.selectionChanged.observe(viewLifecycleOwner) {
             updateBottomBar()
-            gridAdapter?.updateSelection()
-            listAdapter?.updateSelection()
+            pageAdapter.updateAllSelection()
         }
     }
 
-    // ==================== Tab 切换 ====================
+    // ==================== Tab 类型构建 ====================
+
+    private fun buildTabTypes() {
+        tabTypes.clear()
+        if (config.hasImage) tabTypes.add(MediaType.Type.IMAGE)
+        if (config.hasVideo) tabTypes.add(MediaType.Type.VIDEO)
+        if (config.hasAudio) tabTypes.add(MediaType.Type.AUDIO)
+        currentType = tabTypes.firstOrNull() ?: MediaType.Type.IMAGE
+    }
+
+    // ==================== Tab 设置 ====================
 
     private fun setupTabs() {
         mBinding.tabLayoutType.removeAllTabs()
-        if (config.hasImage) {
-            mBinding.tabLayoutType.addTab(
-                mBinding.tabLayoutType.newTab().setText(R.string.media_picker_tab_image)
-            )
-        }
-        if (config.hasVideo) {
-            mBinding.tabLayoutType.addTab(
-                mBinding.tabLayoutType.newTab().setText(R.string.media_picker_tab_video)
-            )
-        }
-        if (config.hasAudio) {
-            mBinding.tabLayoutType.addTab(
-                mBinding.tabLayoutType.newTab().setText(R.string.media_picker_tab_audio)
-            )
-        }
-
-        // 默认选中第一个 Tab
-        if (mBinding.tabLayoutType.tabCount > 0) {
-            currentType = when (mBinding.tabLayoutType.getTabAt(0)?.text.toString()) {
-                getString(R.string.media_picker_tab_image) -> MediaType.Type.IMAGE
-                getString(R.string.media_picker_tab_video) -> MediaType.Type.VIDEO
-                else -> MediaType.Type.AUDIO
+        for (type in tabTypes) {
+            val textRes = when (type) {
+                MediaType.Type.IMAGE -> R.string.media_picker_tab_image
+                MediaType.Type.VIDEO -> R.string.media_picker_tab_video
+                MediaType.Type.AUDIO -> R.string.media_picker_tab_audio
             }
+            mBinding.tabLayoutType.addTab(mBinding.tabLayoutType.newTab().setText(textRes))
         }
 
-        mBinding.tabLayoutType.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.let { onTypeTabChanged(it.position) }
-            }
+        // TabLayout 与 ViewPager2 联动在 setupViewPager 中通过 TabLayoutMediator 完成
+    }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
+    // ==================== ViewPager2 ====================
+
+    private fun setupViewPager() {
+        pageAdapter = MediaPageAdapter(selectionManager) { item ->
+            handleItemClick(item)
+        }
+        // 每页对应的类型
+        pageAdapter.pageTypes.addAll(tabTypes)
+
+        mBinding.viewPagerContent.adapter = pageAdapter
+        mBinding.viewPagerContent.offscreenPageLimit = tabTypes.size.coerceAtMost(3)
+
+        // TabLayout 与 ViewPager2 联动：滑动切换 Tab，点击 Tab 切换页面
+        TabLayoutMediator(mBinding.tabLayoutType, mBinding.viewPagerContent) { tab, position ->
+            tab.text = when (tabTypes[position]) {
+                MediaType.Type.IMAGE -> getString(R.string.media_picker_tab_image)
+                MediaType.Type.VIDEO -> getString(R.string.media_picker_tab_video)
+                MediaType.Type.AUDIO -> getString(R.string.media_picker_tab_audio)
+            }
+        }.attach()
+
+        mBinding.viewPagerContent.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                currentTabPosition = position
+                currentType = tabTypes[position]
+                refreshCurrentPageData()
+            }
         })
+
+        // 默认显示第一页
+        mBinding.viewPagerContent.setCurrentItem(0, false)
     }
 
-    private fun onTypeTabChanged(position: Int) {
-        // 根据 Tab position 确定类型
-        var idx = 0
-        if (config.hasImage && position == idx++) {
-            switchToType(MediaType.Type.IMAGE)
-        } else if (config.hasVideo && position == idx++) {
-            switchToType(MediaType.Type.VIDEO)
-        } else {
-            switchToType(MediaType.Type.AUDIO)
+    /** 根据当前 Tab 位置刷新对应页的数据 */
+    private fun refreshCurrentPageData() {
+        val type = currentType
+        val items = when (type) {
+            MediaType.Type.IMAGE -> images.map { it }
+            MediaType.Type.VIDEO -> videos.map { it }
+            MediaType.Type.AUDIO -> audios.map { it }
         }
-    }
-
-    private fun switchToType(type: MediaType.Type) {
-        if (currentType == type) return
-        currentType = type
-        refreshContent()
+        pageAdapter.submitPageData(currentTabPosition, items)
     }
 
     // ==================== 目录栏 ====================
@@ -165,7 +177,6 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
     private fun showFolderDrawer() {
         val dialog = folderDrawerDialog ?: FolderDrawerDialog(requireContext()).also { folderDrawerDialog = it }
 
-        // 在第一项插入"全部目录"，取最新资源作为封面
         val allCoverUri = (videos.firstOrNull()?.uri ?: images.firstOrNull()?.uri ?: audios.firstOrNull()?.uri)
         val allFolderItem = MediaFolder(
             bucketId = -1L,
@@ -183,7 +194,6 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
             currentBucketId ?: -1L,
         ) { folder ->
             if (folder.bucketId == -1L) {
-                // 全部目录
                 currentBucketId = null
                 updateDirectoryBar(getString(R.string.media_picker_all_folders))
                 loadAllItems()
@@ -193,52 +203,6 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
                 loadFolderDetail()
             }
         }
-    }
-
-    // ==================== RecyclerView ====================
-
-    private fun setupRecyclerView() {
-        // 图片/视频：网格布局（3列）
-        gridAdapter = MediaGridAdapter(selectionManager) { item, _ ->
-            handleItemClick(item)
-        }
-        mBinding.recyclerViewMedia.layoutManager = GridLayoutManager(context, 3)
-        mBinding.recyclerViewMedia.adapter = gridAdapter
-
-        // 音频：列表布局
-        listAdapter = MediaListAdapter(selectionManager) { item, _ ->
-            handleItemClick(item)
-        }
-    }
-
-    /**
-     * 根据当前媒体类型切换 RecyclerView 的 Adapter 和 LayoutManager
-     */
-    private fun refreshContent() {
-        when (currentType) {
-            MediaType.Type.IMAGE, MediaType.Type.VIDEO -> {
-                mBinding.recyclerViewMedia.layoutManager = GridLayoutManager(context, 3)
-                mBinding.recyclerViewMedia.adapter = gridAdapter
-                val items = if (currentType == MediaType.Type.IMAGE) images.map { it } else videos.map { it }
-                gridAdapter?.submitList(items)
-            }
-            MediaType.Type.AUDIO -> {
-                mBinding.recyclerViewMedia.layoutManager = LinearLayoutManager(context)
-                mBinding.recyclerViewMedia.adapter = listAdapter
-                listAdapter?.submitList(audios)
-            }
-        }
-        updateEmptyVisibility()
-    }
-
-    private fun updateEmptyVisibility() {
-        val isEmpty = when (currentType) {
-            MediaType.Type.IMAGE -> images.isEmpty()
-            MediaType.Type.VIDEO -> videos.isEmpty()
-            MediaType.Type.AUDIO -> audios.isEmpty()
-        }
-        setVisibility(mBinding.layoutEmpty, isEmpty)
-        setVisibility(mBinding.recyclerViewMedia, !isEmpty)
     }
 
     // ==================== 底部操作栏 ====================
@@ -258,7 +222,6 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
         mBinding.tvSelectCount.text =
             getString(R.string.media_picker_selected_format, count, config.maxSelect)
 
-        // 更新底部预览条
         if (count > 0) {
             mBinding.scrollSelected.visibility = View.VISIBLE
             renderSelectedPreview()
@@ -273,17 +236,14 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
         selectionManager.toList().forEachIndexed { index, item ->
             val view = inflater.inflate(R.layout.item_selected_preview, mBinding.layoutSelectedItems, false)
 
-            // 序号角标
             view.findViewById<View>(R.id.tvIndex)?.let {
                 (it as? android.widget.TextView)?.text = "${index + 1}"
             }
 
-            // 删除按钮
             view.findViewById<View>(R.id.ivRemove)?.setOnClickListener {
                 selectionManager.remove(item)
             }
 
-            // 加载缩略图：图片/视频用 Glide，音频用图标
             val ivThumbnail = view.findViewById<ImageView>(R.id.ivThumbnail)
             when (item) {
                 is MediaItem.Image, is MediaItem.Video -> {
@@ -316,10 +276,7 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
                 }
                 log("MediaPicker", "loadFolders → ${allFolders.size} 个目录")
 
-                // 默认选中"全部目录"
                 updateDirectoryBar(getString(R.string.media_picker_all_folders))
-
-                // 加载全部目录的资源
                 loadAllItems()
             } catch (e: Exception) {
                 log("MediaPicker", "loadFolders error: ${e.message}")
@@ -343,7 +300,7 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
                 videos.clear(); videos.addAll(detail.videos)
                 audios.clear(); audios.addAll(detail.audios)
                 log("MediaPicker", "loadFolderDetail → img=${images.size} vid=${videos.size} aud=${audios.size}")
-                refreshContent()
+                refreshCurrentPageData()
             } catch (e: Exception) {
                 log("MediaPicker", "loadFolderDetail error: ${e.message}")
             } finally {
@@ -355,7 +312,6 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
     private fun loadAllItems() {
         lifecycleScope.launch {
             try {
-                // 按类型分别查询全部资源
                 if (config.types.contains(MediaType.Type.IMAGE)) {
                     val imgItems = MediaCore.queryAll {
                         types = setOf(MediaType.Type.IMAGE)
@@ -381,7 +337,7 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
                     audItems.filterIsInstance<MediaItem.Audio>().forEach { audios.add(it) }
                 }
                 log("MediaPicker", "loadAllItems → img=${images.size} vid=${videos.size} aud=${audios.size}")
-                refreshContent()
+                refreshCurrentPageData()
             } catch (e: Exception) {
                 log("MediaPicker", "loadAllItems error: ${e.message}")
             }
@@ -391,7 +347,6 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
     // ==================== 交互处理 ====================
 
     private fun handleItemClick(item: MediaItem) {
-        // 打开预览界面
         openPreview(item)
     }
 
@@ -412,7 +367,6 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
         }
         val selectedIds = selectionManager.toList().map { it.id }.toSet()
 
-        // 通过静态持有者传递数据，避免 Binder 1MB 限制
         MediaPreviewActivity.setPreviewData(items, position, mediaType, config.maxSelect, selectedIds)
 
         val intent = Intent(requireContext(), MediaPreviewActivity::class.java)
@@ -420,13 +374,17 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
     }
 
     private fun showLoading(show: Boolean) {
-        setVisibility(mBinding.progressBarLoading, show)
+        // 遍历 ViewPager2 所有已创建的页面，更新 loading 状态
+        for (i in 0 until mBinding.viewPagerContent.childCount) {
+            val child = mBinding.viewPagerContent.getChildAt(i)
+            child.findViewById<View>(R.id.progressBarLoading)?.visibility =
+                if (show) View.VISIBLE else View.GONE
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        gridAdapter = null
-        listAdapter = null
+        folderDrawerDialog = null
     }
 
     companion object {
