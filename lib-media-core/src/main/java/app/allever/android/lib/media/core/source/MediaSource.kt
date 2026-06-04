@@ -1,8 +1,12 @@
 package app.allever.android.lib.media.core.source
 
-import android.provider.MediaStore
+import app.allever.android.lib.media.core.model.MediaFolder
+import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.core.model.MediaStoreColumn
 import app.allever.android.lib.media.core.model.MediaType
+import app.allever.android.lib.media.core.query.FolderDetailQuery
+import app.allever.android.lib.media.core.query.MediaFolderDetail
+import app.allever.android.lib.media.core.query.MediaQuery
 
 /**
  * 媒体数据源接口
@@ -11,13 +15,13 @@ import app.allever.android.lib.media.core.model.MediaType
 internal interface MediaSource {
 
     /** 查询目录列表 */
-    suspend fun queryFolders(query: app.allever.android.lib.media.core.query.MediaQuery): List<app.allever.android.lib.media.core.model.MediaFolder>
+    suspend fun queryFolders(query: MediaQuery): List<MediaFolder>
 
     /** 查询某个目录的详情（含该目录下的媒体文件列表） */
-    suspend fun queryFolderDetail(query: app.allever.android.lib.media.core.query.FolderDetailQuery): app.allever.android.lib.media.core.query.MediaFolderDetail
+    suspend fun queryFolderDetail(query: FolderDetailQuery): MediaFolderDetail
 
     /** 全局查询（不分目录） */
-    suspend fun queryAll(query: app.allever.android.lib.media.core.query.MediaQuery): List<app.allever.android.lib.media.core.model.MediaItem>
+    suspend fun queryAll(query: MediaQuery): List<MediaItem>
 }
 
 /**

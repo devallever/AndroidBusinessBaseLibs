@@ -13,6 +13,8 @@ import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.function.permission.JumpPermissionSettingDialog
 import app.allever.android.lib.core.function.permission.PermissionHelper
 import app.allever.android.lib.media.core.MediaCore
+import app.allever.android.lib.media.core.model.MediaFolder
+import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.core.model.MediaType
 import app.allever.android.lib.media.core.model.Pagination
 import app.allever.android.lib.media.core.model.SortBy
@@ -416,7 +418,7 @@ class MediaSampleFragment :
 
     // ==================== 日志工具 ====================
 
-    private fun logFolderList(folders: List<app.allever.android.lib.media.core.model.MediaFolder>, tag: String) {
+    private fun logFolderList(folders: List<MediaFolder>, tag: String) {
         val sb = StringBuilder("========== $tag ==========\n共 ${folders.size} 个目录:\n")
         for ((i, f) in folders.withIndex()) {
             sb.append("  [$i] ${f.name} | path=${f.path} | img:${f.images.size} vid:${f.videos.size} aud:${f.audios.size}\n")
@@ -439,15 +441,15 @@ class MediaSampleFragment :
         log("MediaSample", sb.toString())
     }
 
-    private fun logItems(items: List<app.allever.android.lib.media.core.model.MediaItem>, tag: String) {
+    private fun logItems(items: List<MediaItem>, tag: String) {
         val sb = StringBuilder("========== $tag ==========\n共 ${items.size} 项:\n")
         for ((i, item) in items.take(20).withIndex()) {
             when (item) {
-                is app.allever.android.lib.media.core.model.MediaItem.Image ->
+                is MediaItem.Image ->
                     sb.append("  [$i] [IMG] ${item.name} | ${item.width}x${item.height} | ${formatSize(item.size)}\n")
-                is app.allever.android.lib.media.core.model.MediaItem.Video ->
+                is MediaItem.Video ->
                     sb.append("  [$i] [VID] ${item.name} | ${item.duration}ms | ${item.width}x${item.height}\n")
-                is app.allever.android.lib.media.core.model.MediaItem.Audio ->
+                is MediaItem.Audio ->
                     sb.append("  [$i] [AUD] ${item.name} | ${item.duration}ms | ${item.artist}\n")
             }
         }

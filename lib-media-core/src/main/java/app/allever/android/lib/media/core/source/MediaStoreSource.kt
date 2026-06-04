@@ -28,7 +28,7 @@ import kotlinx.coroutines.withContext
  * - 内存中按 bucket_id 分组构建目录树
  * - 支持分页切片（在内存中对全量结果进行 offset/limit）
  */
-internal class MediaStoreSource : MediaSource {
+class MediaStoreSource : MediaSource {
 
     private val contentResolver get() = App.context.contentResolver
 
