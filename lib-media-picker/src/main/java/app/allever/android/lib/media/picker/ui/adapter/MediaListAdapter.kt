@@ -1,5 +1,7 @@
 package app.allever.android.lib.media.picker.ui.adapter
 
+import android.net.Uri
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,6 +10,7 @@ import app.allever.android.lib.media.picker.R
 import app.allever.android.lib.media.picker.databinding.ItemMediaListBinding
 import app.allever.android.lib.media.picker.selection.SelectionManager
 import com.bumptech.glide.Glide
+import androidx.core.net.toUri
 
 /**
  * 音频列表 Adapter（用于音频展示）
@@ -78,6 +81,19 @@ class MediaListAdapter(
             }
             binding.tvArtist.text = artistAlbum.ifEmpty { "未知艺术家" }
             binding.tvDuration.text = formatDuration(item.duration)
+
+            // 加载专辑封面，无封面时回退到音频图标
+            if (item.albumId > 0) {
+                val albumArtUri = "content://media/external/audio/albumart/${item.albumId}".toUri()
+                Glide.with(binding.root)
+                    .load(albumArtUri)
+                    .placeholder(R.drawable.ic_media_picker_audio)
+                    .error(R.drawable.ic_media_picker_audio)
+                    .centerCrop()
+                    .into(binding.ivIcon)
+            } else {
+                binding.ivIcon.setImageResource(R.drawable.ic_media_picker_audio)
+            }
 
             updateSelection(item)
         }

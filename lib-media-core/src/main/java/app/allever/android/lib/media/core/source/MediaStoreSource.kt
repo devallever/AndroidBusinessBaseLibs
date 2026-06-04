@@ -82,12 +82,14 @@ class MediaStoreSource : MediaSource {
 
             cursor?.use { c ->
                 val allItems = parseCursorToTypedLists(c, query.types)
-                val folder = resolveFolder(c, query.bucketId, query.types, allItems)
+                // 从 Audio.Media 表补充获取 albumId（Files 表无此列）
+                val filledAudios = fillAudioAlbumIdsForAudios(allItems.audios)
+                val folder = resolveFolderWithAudios(c, query.bucketId, query.types, allItems, filledAudios)
                 MediaFolderDetail(
                     folder = folder,
                     images = allItems.images.paginate(query.pagination),
                     videos = allItems.videos.paginate(query.pagination),
-                    audios = allItems.audios.paginate(query.pagination),
+                    audios = filledAudios.paginate(query.pagination),
                 )
             } ?: MediaFolderDetail(
                 folder = MediaFolder(bucketId = query.bucketId, name = "", path = "", coverUri = null),
@@ -112,7 +114,7 @@ class MediaStoreSource : MediaSource {
                 while (c.moveToNext()) {
                     c.toMediaItem()?.let { items.add(it) }
                 }
-                items.paginate(query.pagination)
+                fillAudioAlbumIds(items).paginate(query.pagination)
             } ?: emptyList()
         }
 
@@ -319,6 +321,34 @@ class MediaStoreSource : MediaSource {
         }
     }
 
+    /**
+     * 从已解析的数据中构建单个文件夹信息（使用补充了 albumId 的音频列表）
+     */
+    private fun resolveFolderWithAudios(
+        cursor: Cursor,
+        bucketId: Long,
+        types: Set<MediaType.Type>,
+        items: TypedLists,
+        filledAudios: List<MediaItem.Audio>,
+    ): MediaFolder {
+        return if (cursor.moveToFirst()) {
+            val name = cursor.getStringOrDefault(MediaStoreColumn.BUCKET_DISPLAY_NAME, "")
+            val dataPath = cursor.getStringOrDefault(MediaStoreColumn.DATA, "")
+            val dirPath = extractDirPath(dataPath)
+            MediaFolder(
+                bucketId = bucketId,
+                name = name.ifEmpty { extractDirName(dirPath) },
+                path = dirPath,
+                coverUri = if (items.allItems.isNotEmpty()) items.allItems.first().uri else null,
+                images = items.images,
+                videos = items.videos,
+                audios = filledAudios,
+            )
+        } else {
+            MediaFolder(bucketId = bucketId, name = "", path = "", coverUri = null)
+        }
+    }
+
     // ==================== Cursor 行 → 具体类型转换 ====================
 
     private fun Cursor.toMediaItem(): MediaItem? {
@@ -402,6 +432,69 @@ class MediaStoreSource : MediaSource {
             else -> baseUri
         }
         return ContentUris.withAppendedId(baseUri, id)
+    }
+
+    // ==================== albumId 补充查询 ====================
+
+    /**
+     * 从 MediaStore.Audio.Media 表补充获取音频的 albumId
+     *
+     * 原因：主查询使用 MediaStore.Files 表，该表没有 album_id 列
+     * 需要通过 Audio.Media 表按 _id 批量查询补充
+     */
+    private fun fillAudioAlbumIds(items: List<MediaItem>): List<MediaItem> {
+        val audioIds = items.filterIsInstance<MediaItem.Audio>().map { it.id }
+        if (audioIds.isEmpty()) return items
+        val albumIdMap = queryAudioAlbumIds(audioIds)
+        return items.map { item ->
+            if (item is MediaItem.Audio) {
+                item.copy(albumId = albumIdMap[item.id] ?: -1L)
+            } else {
+                item
+            }
+        }
+    }
+
+    /** 对纯音频列表补充 albumId */
+    private fun fillAudioAlbumIdsForAudios(audios: List<MediaItem.Audio>): List<MediaItem.Audio> {
+        if (audios.isEmpty()) return audios
+        val albumIdMap = queryAudioAlbumIds(audios.map { it.id })
+        return audios.map { it.copy(albumId = albumIdMap[it.id] ?: -1L) }
+    }
+
+    /**
+     * 批量查询音频的 album_id
+     * @param audioIds 音频 _id 列表
+     * @return Map<音频ID, albumId>
+     */
+    private fun queryAudioAlbumIds(audioIds: List<Long>): Map<Long, Long> {
+        if (audioIds.isEmpty()) return emptyMap()
+        return try {
+            val idPlaceholders = audioIds.joinToString(",") { "?" }
+            val projection = arrayOf(
+                MediaStore.Audio.Media._ID,
+                MediaStore.Audio.Media.ALBUM_ID,
+            )
+            val selection = "${MediaStore.Audio.Media._ID} IN ($idPlaceholders)"
+            val args = audioIds.map { it.toString() }.toTypedArray()
+
+            contentResolver.query(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                projection, selection, args, null,
+            )?.use { cursor ->
+                val map = mutableMapOf<Long, Long>()
+                while (cursor.moveToNext()) {
+                    val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID))
+                    val albumId = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID))
+                    map[id] = albumId
+                }
+                log("MediaStoreSource", "queryAudioAlbumIds → 查询 ${audioIds.size} 条，匹配 ${map.size} 条")
+                map
+            } ?: emptyMap()
+        } catch (e: Exception) {
+            logE("MediaStoreSource", "queryAudioAlbumIds 异常: ${e.message}")
+            emptyMap()
+        }
     }
 
     // ==================== 工具方法 ====================

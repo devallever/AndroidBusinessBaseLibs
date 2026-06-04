@@ -13,7 +13,7 @@
         app:tabIndicatorColor="@color/media_picker_primary"
         app:tabSelectedTextColor="@color/media_picker_primary"
         app:tabTextColor="@color/media_picker_text_secondary"
-        app:tabMode="scrollable"
+        app:tabMode="fixed"
         app:tabGravity="fill"
         app:tabTextAppearance="@style/MediaPickerTabTextStyle"
         app:layout_constraintTop_toTopOf="parent"
