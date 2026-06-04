@@ -7,6 +7,11 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait"
             android:exported="false" />
+        <activity
+            android:name=".ui.MediaPreviewActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait"
+            android:exported="false" />
     </application>
 
 </manifest>

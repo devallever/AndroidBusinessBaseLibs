@@ -46,6 +46,9 @@ sealed class MediaItem : Parcelable {
         )
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
+            // 先写入类型标签（基类负责）
+            parcel.writeString(typeLabel())
+            // 再写入自身字段
             parcel.apply {
                 writeLong(id)
                 writeParcelable(uri, flags)
@@ -92,6 +95,7 @@ sealed class MediaItem : Parcelable {
         )
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
+            parcel.writeString(typeLabel())
             parcel.apply {
                 writeLong(id)
                 writeParcelable(uri, flags)
@@ -142,6 +146,7 @@ sealed class MediaItem : Parcelable {
         )
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
+            parcel.writeString(typeLabel())
             parcel.apply {
                 writeLong(id)
                 writeParcelable(uri, flags)
@@ -178,14 +183,11 @@ sealed class MediaItem : Parcelable {
 
     /**
      * 写入时先写入类型名称用于反序列化区分
+     * 各子类在 writeToParcel 开头调用此方法
      */
-    protected open fun typeLabel(): String = when (this) {
+    protected fun typeLabel(): String = when (this) {
         is Image -> "Image"
         is Video -> "Video"
         is Audio -> "Audio"
-    }
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(typeLabel())
     }
 }

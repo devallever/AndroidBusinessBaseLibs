@@ -50,6 +50,14 @@ class SelectionManager(private val maxSelect: Int = 9) {
         return true
     }
 
+    /** 强制添加（用于恢复已选中状态，不受 maxSelect 限制） */
+    fun forceAdd(item: MediaItem) {
+        if (_selectedItems.add(item)) {
+            _selectedCount = _selectedItems.size
+            notifyChange()
+        }
+    }
+
     /** 移除选中项 */
     fun remove(item: MediaItem) {
         if (_selectedItems.remove(item)) {

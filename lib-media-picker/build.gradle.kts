@@ -15,8 +15,10 @@ dependencies {
     api(project(":core"))
     api(project(":lib-media-core"))
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.viewpager2)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.glide)
+    implementation("com.github.chrisbanes:photoview:2.3.0")
     implementation(libs.androidx.activity.ktx)
 }

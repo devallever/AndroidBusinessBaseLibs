@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 播放按钮圆形背景 -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#99000000" />
+            <size
+                android:width="64dp"
+                android:height="64dp" />
+        </shape>
+    </item>
+    <!-- 三角播放图标 -->
+    <item
+        android:gravity="center"
+        android:width="28dp"
+        android:height="28dp">
+        <vector xmlns:android="http://schemas.android.com/apk/res/android"
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24">
+            <path
+                android:fillColor="#FFFFFF"
+                android:pathData="M8,5v14l11,-7z" />
+        </vector>
+    </item>
+</layer-list>

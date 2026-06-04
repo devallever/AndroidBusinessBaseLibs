@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <!-- 顶部操作栏 -->
+    <RelativeLayout
+        android:id="@+id/layoutTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#CC000000"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_media_picker_back"
+            android:contentDescription="返回" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            tools:text="1/10" />
+
+        <TextView
+            android:id="@+id/tvSelectToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="选择"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <!-- 图片/视频预览区域（ViewPager2，视频播放在 item 内部） -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="56dp" />
+
+    <!-- 音频播放器底部栏 -->
+    <LinearLayout
+        android:id="@+id/layoutAudioBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:background="#E6FFFFFF"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/ivAudioCover"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_media_picker_audio"
+            android:scaleType="centerCrop"
+            android:contentDescription="封面" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:id="@+id/tvAudioTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                tools:text="歌曲名" />
+
+            <TextView
+                android:id="@+id/tvAudioArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#999999"
+                android:textSize="12sp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                tools:text="艺术家 · 专辑" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btnPlayPause"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_media_picker_play"
+            android:contentDescription="播放/暂停" />
+    </LinearLayout>
+
+    <!-- 底部选中预览（图片/视频预览时显示） -->
+    <FrameLayout
+        android:id="@+id/layoutBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom"
+        android:background="#E6FFFFFF"
+        android:visibility="visible">
+
+        <HorizontalScrollView
+            android:id="@+id/scrollSelected"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/layoutSelectedItems"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
+        </HorizontalScrollView>
+    </FrameLayout>
+
+</FrameLayout>

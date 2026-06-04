@@ -1,9 +1,11 @@
 package app.allever.android.lib.media.picker.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -56,6 +58,18 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
     private var gridAdapter: MediaGridAdapter? = null
     private var listAdapter: MediaListAdapter? = null
     private var folderDrawerDialog: FolderDrawerDialog? = null
+
+    /** 预览结果回调 */
+    private val previewLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == android.app.Activity.RESULT_OK) {
+            val items = result.data?.getParcelableArrayListExtra<MediaItem>(MediaPreviewActivity.KEY_RESULT)
+            if (!items.isNullOrEmpty()) {
+                // 恢复预览界面的选中状态
+                selectionManager.clear()
+                items.forEach { selectionManager.forceAdd(it) }
+            }
+        }
+    }
 
     var onConfirm: ((List<MediaItem>) -> Unit)? = null
 
@@ -377,18 +391,32 @@ class MediaPickerFragment : AbstractBindingFragment<FragmentMediaPickerBinding>(
     // ==================== 交互处理 ====================
 
     private fun handleItemClick(item: MediaItem) {
-        // 切换选中状态
-        val toggled = selectionManager.toggle(item)
-        if (!toggled && selectionManager.isFull) {
-            // 已满提示
-            context?.let {
-                android.widget.Toast.makeText(
-                    it,
-                    getString(R.string.media_picker_max_select, config.maxSelect),
-                    android.widget.Toast.LENGTH_SHORT
-                ).show()
-            }
+        // 打开预览界面
+        openPreview(item)
+    }
+
+    /**
+     * 打开媒体预览
+     */
+    private fun openPreview(item: MediaItem) {
+        val items = when (currentType) {
+            MediaType.Type.IMAGE -> images.map { it }
+            MediaType.Type.VIDEO -> videos.map { it }
+            MediaType.Type.AUDIO -> audios.map { it }
         }
+        val position = items.indexOf(item).coerceAtLeast(0)
+        val mediaType = when (currentType) {
+            MediaType.Type.IMAGE -> "image"
+            MediaType.Type.VIDEO -> "video"
+            MediaType.Type.AUDIO -> "audio"
+        }
+        val selectedIds = selectionManager.toList().map { it.id }.toSet()
+
+        // 通过静态持有者传递数据，避免 Binder 1MB 限制
+        MediaPreviewActivity.setPreviewData(items, position, mediaType, config.maxSelect, selectedIds)
+
+        val intent = Intent(requireContext(), MediaPreviewActivity::class.java)
+        previewLauncher.launch(intent)
     }
 
     private fun showLoading(show: Boolean) {
