@@ -97,10 +97,7 @@ class MediaSampleFragment :
             // 缓存管理
             TextClickItem("【缓存】清除目录列表缓存") { clearFolderCache() },
 
-            // 媒体选择器
-            TextClickItem("【选择器】打开媒体选择器（图片+视频+音频，最多9个）") { openMediaPickerAllTypes() },
-            TextClickItem("【选择器】仅选图片（最多6个）") { openMediaPickerImageOnly() },
-            TextClickItem("【选择器】仅选视频（最多3个）") { openMediaPickerVideoOnly() },
+
         )
     }
 
@@ -468,47 +465,5 @@ class MediaSampleFragment :
         else -> "${bytes / 1024 / 1024}MB"
     }
 
-    // ==================== 媒体选择器示例 ====================
 
-    private val mediaPickerLauncher = registerForActivityResult(
-        app.allever.android.lib.media.picker.MediaPickerContract()
-    ) { items ->
-        if (items.isNotEmpty()) {
-            val sb = StringBuilder("选择器返回 ${items.size} 项:\n")
-            items.forEachIndexed { index, item ->
-                sb.append("  [$index+1] [${item::class.simpleName}] ${item.name}\n")
-            }
-            log("MediaSample", sb.toString())
-            toast("已选 ${items.size} 项资源")
-        } else {
-            toast("未选择任何资源")
-        }
-    }
-
-    private fun openMediaPickerAllTypes() {
-        mediaPickerLauncher.launch(
-            app.allever.android.lib.media.picker.MediaPickerConfig(
-                types = setOf(MediaType.Type.IMAGE, MediaType.Type.VIDEO, MediaType.Type.AUDIO),
-                maxSelect = 9,
-            )
-        )
-    }
-
-    private fun openMediaPickerImageOnly() {
-        mediaPickerLauncher.launch(
-            app.allever.android.lib.media.picker.MediaPickerConfig(
-                types = setOf(MediaType.Type.IMAGE),
-                maxSelect = 6,
-            )
-        )
-    }
-
-    private fun openMediaPickerVideoOnly() {
-        mediaPickerLauncher.launch(
-            app.allever.android.lib.media.picker.MediaPickerConfig(
-                types = setOf(MediaType.Type.VIDEO),
-                maxSelect = 3,
-            )
-        )
-    }
 }

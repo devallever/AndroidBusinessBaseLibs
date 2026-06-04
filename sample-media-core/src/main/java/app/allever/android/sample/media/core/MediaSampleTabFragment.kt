@@ -6,7 +6,7 @@ import app.allever.android.lib.common.TabViewModel
 import app.allever.android.lib.common.databinding.FragmentTabBinding
 
 class MediaSampleTabFragment : TabFragment<FragmentTabBinding, TabViewModel>() {
-    override fun getTabTitles(): MutableList<String> = mutableListOf("MediaSample")
+    override fun getTabTitles(): MutableList<String> = mutableListOf("MediaSample", "MediaPickerSample")
 
-    override fun getFragments(): MutableList<Fragment> = mutableListOf(MediaSampleFragment())
+    override fun getFragments(): MutableList<Fragment> = mutableListOf(MediaSampleFragment(), MediaPickerSampleFragment())
 }

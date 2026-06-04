@@ -18,6 +18,7 @@ class MediaPickerActivity : AbstractBindingActivity<ActivityMediaPickerBinding>(
     override fun inflate(): ActivityMediaPickerBinding = ActivityMediaPickerBinding.inflate(layoutInflater)
 
     override fun init() {
+        adaptStatusBar(mBinding.fragmentContainer)
         config = intent?.getParcelableExtra(MediaPickerConfig.KEY_CONFIG) ?: MediaPickerConfig()
 
         val fragment = MediaPickerFragment.newInstance(config).apply {
