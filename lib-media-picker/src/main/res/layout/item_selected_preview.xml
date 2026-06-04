@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="56dp"
+    android:layout_height="56dp"
+    android:layout_marginEnd="8dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivThumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:background="@drawable/bg_media_picker_selected_item" />
+
+    <!-- 序号角标 -->
+    <TextView
+        android:id="@+id/tvIndex"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="-2dp"
+        android:gravity="center"
+        android:textSize="10sp"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/bg_media_picker_index_badge" />
+
+    <!-- 删除按钮 -->
+    <ImageView
+        android:id="@+id/ivRemove"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_gravity="top|start"
+        android:layout_margin="-4dp"
+        android:src="@drawable/ic_media_picker_remove"
+        android:background="@drawable/bg_media_picker_remove_btn"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true" />
+
+</FrameLayout>

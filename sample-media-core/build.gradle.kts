@@ -16,5 +16,5 @@ dependencies {
     implementation(project(":sample-common"))
     implementation(project(":lib-ad-core"))
     implementation(project(":lib-media-core"))
-
+    implementation(project(":lib-media-picker"))
 }

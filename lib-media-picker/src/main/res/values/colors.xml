@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="media_picker_primary">#4CAF50</color>
+    <color name="media_picker_primary_dark">#388E3C</color>
+    <color name="media_picker_text_primary">#333333</color>
+    <color name="media_picker_text_secondary">#666666</color>
+    <color name="media_picker_text_hint">#999999</color>
+    <color name="media_picker_divider">#EEEEEE</color>
+    <color name="media_picker_bg_page">#FFFFFF</color>
+    <color name="media_picker_bg_directory">#FAFAFA</color>
+    <color name="media_picker_placeholder">#F0F0F0</color>
+    <color name="media_picker_check_unselected">#B3FFFFFF</color>
+    <color name="media_picker_check_selected">#4CAF50</color>
+</resources>

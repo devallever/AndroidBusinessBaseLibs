@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="media_picker_tab_image">图片</string>
+    <string name="media_picker_tab_video">视频</string>
+    <string name="media_picker_tab_audio">音频</string>
+    <string name="media_picker_all_folders">全部目录</string>
+    <string name="media_picker_empty">暂无资源</string>
+    <string name="media_picker_confirm">确定</string>
+    <string name="media_picker_selected_format">已选 %1$d/%2$d</string>
+    <string name="media_picker_max_select">最多选择%1$d个</string>
+</resources>

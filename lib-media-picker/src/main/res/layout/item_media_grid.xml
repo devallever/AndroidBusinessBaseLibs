@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackgroundBorderless">
+
+    <!-- 缩略图（正方形） -->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivThumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:scaleType="centerCrop"
+        tools:src="@color/media_picker_placeholder" />
+
+    <!-- 视频时长标签（仅视频显示） -->
+    <TextView
+        android:id="@+id/tvDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="4dp"
+        android:paddingHorizontal="6dp"
+        android:gravity="center"
+        android:textSize="11sp"
+        android:textColor="#FFFFFF"
+        android:background="#66000000"
+        android:maxLines="1"
+        android:visibility="gone"
+        tools:text="01:23" />
+
+    <!-- 选中勾选框（右上角） -->
+    <FrameLayout
+        android:id="@+id/layoutCheck"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="4dp"
+        android:background="@drawable/bg_media_picker_check"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:id="@+id/tvCheckNum"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="11sp"
+            android:textColor="#FFFFFF"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</FrameLayout>

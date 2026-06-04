@@ -1,9 +1,9 @@
 package app.allever.android.lib.common
 
 import app.allever.android.lib.common.databinding.EmptyPageBinding
-import app.allever.android.lib.core.base.BaseSimpleActivity
+import app.allever.android.lib.core.base.AbstractBindingActivity
 
-class FullScreenActivity : BaseSimpleActivity<EmptyPageBinding>() {
+class FullScreenActivity : AbstractBindingActivity<EmptyPageBinding>() {
     override fun init() {
         adaptStatusBar(mBinding.btnTopView)
     }

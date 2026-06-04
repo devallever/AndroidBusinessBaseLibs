@@ -1,8 +1,6 @@
 package com.allever.business.lib.project
 
 import app.allever.android.lib.core.app.App
-import app.allever.android.sample.adjust.AdJustHelper
-import app.allever.android.sample.appsflyer.AFHelper
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -22,14 +20,14 @@ class MyApp: App() {
 
     private fun initAppsflyer() {
         GlobalScope.launch(Dispatchers.IO) {
-            AFHelper.init("JJYLVQRfKZm7qgoUCYAr9V")
+//            AFHelper.init("JJYLVQRfKZm7qgoUCYAr9V")
 
         }
     }
 
     private fun initAdJust() {
         GlobalScope.launch(Dispatchers.IO) {
-            AdJustHelper.init("appToken")
+//            AdJustHelper.init("appToken")
         }
     }
 }
