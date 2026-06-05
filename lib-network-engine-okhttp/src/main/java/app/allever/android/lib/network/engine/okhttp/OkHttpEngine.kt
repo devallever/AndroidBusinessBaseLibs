@@ -24,6 +24,10 @@ import java.util.concurrent.TimeUnit
  *         readTimeout(15_000)
  *         (this as? OkHttpConfig)?.apply {
  *             retryOnConnectionFailure(true)
+ *            addInterceptor(HttpLoggingInterceptor().setLevel(BODY))
+ *  *         addNetworkInterceptor(StaleIfErrorInterceptor())
+ *  *         authenticator(TokenAuthenticator())
+ *  *         cache(cacheDir, 10 * 1024 * 1024)
  *         }
  *     }
  * }
@@ -79,16 +83,35 @@ class OkHttpEngine(private val config: OkHttpConfig) : HttpEngine {
      * 构建 OkHttpClient 实例
      */
     private fun buildClient(): okhttp3.OkHttpClient {
-        return okhttp3.OkHttpClient.Builder()
+        val builder = okhttp3.OkHttpClient.Builder()
             .connectTimeout(config.connectTimeoutMs, TimeUnit.MILLISECONDS)
             .readTimeout(config.readTimeoutMs, TimeUnit.MILLISECONDS)
             .writeTimeout(config.writeTimeoutMs, TimeUnit.MILLISECONDS)
             .retryOnConnectionFailure(config.retryOnConnectionFailure)
-            .also { builder ->
-                config.connectionPool?.let { builder.connectionPool(it) }
-                config.protocols?.let { builder.protocols(it) }
-            }
-            .build()
+
+        // 应用层拦截器
+        for (interceptor in config.interceptors) {
+            builder.addInterceptor(interceptor)
+        }
+
+        // 网络层拦截器
+        for (interceptor in config.networkInterceptors) {
+            builder.addNetworkInterceptor(interceptor)
+        }
+
+        // 认证器
+        config.authenticator?.let { builder.authenticator(it) }
+
+        // 缓存
+        if (config.cacheDir != null && config.cacheSize > 0) {
+            builder.cache(okhttp3.Cache(config.cacheDir!!, config.cacheSize))
+        }
+
+        // 连接池 & 协议
+        config.connectionPool?.let { builder.connectionPool(it) }
+        config.protocols?.let { builder.protocols(it) }
+
+        return builder.build()
     }
 
     /**

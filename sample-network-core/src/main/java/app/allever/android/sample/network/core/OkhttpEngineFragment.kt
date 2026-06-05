@@ -101,6 +101,8 @@ class OkhttpEngineFragment :
                 (this as? OkHttpConfig)?.apply {
                     connectionPool(5, 5, java.util.concurrent.TimeUnit.MINUTES)
                     retryOnConnectionFailure(true)
+//                    addInterceptor("LoggingInterceptor")
+//                    addNetworkInterceptor("LoggingInterceptor")
                 }
             }
 
