@@ -3,10 +3,8 @@ package app.allever.android.lib.network.core.repository
 import app.allever.android.lib.network.core.NetCore
 import app.allever.android.lib.network.core.engine.HttpMethod
 import app.allever.android.lib.network.core.engine.NetRequest
-import app.allever.android.lib.network.core.exception.ExceptionHandler
-import app.allever.android.lib.network.core.exception.NetworkException
 import app.allever.android.lib.network.core.response.IBaseResponse
-import java.lang.reflect.Field
+import app.allever.android.lib.network.core.util.FailureResponseFactory
 
 /**
  * Repository 基类 — 统一异常封装，永不抛异常
@@ -108,143 +106,30 @@ abstract class BaseRepository {
         block: (NetRequest.Builder.() -> Unit)? = null
     ): T = request(HttpMethod.DELETE, path, requestBlock = block)
 
-    // ==================== 失败响应创建 ====================
+    // ==================== 失败响应创建（委托给 FailureResponseFactory）====================
 
     /**
      * 创建失败响应实例（通过反射）
-     *
-     * 使用 [NetCore.config.baseResponseClass] 配置的类进行反射实例化，
-     * 设置 errorCode 和 errorMsg 字段。
-     *
-     * 反射策略（按优先级）：
-     * 1. 尝试无参构造函数创建实例
-     * 2. 通过字段赋值设置 errorCode、errorMsg
-     * 3. 如果反射失败，打印警告并尝试返回默认值
-     *
-     * @param message 错误信息
-     * @return 填充了错误信息的响应实例
      */
     @Suppress("UNCHECKED_CAST")
     private fun <T : IBaseResponse> createFailureResponse(message: String): T {
         val clazz = NetCore.config.baseResponseClass
-        if (clazz == null) {
-            throw IllegalStateException(
+            ?: throw IllegalStateException(
                 "未配置 baseResponseClass，无法创建失败响应。" +
                 "请在 Network.init { baseResponseClass(BaseResponse::class.java) } 中配置"
             )
-        }
-
-        return try {
-            // 1. 创建实例（优先找无参构造）
-            val instance = createInstance(clazz)
-
-            // 2. 设置 errorCode 字段
-            setFieldValue(instance, "code", -1)
-                || setFieldValue(instance, "errorCode", -1)
-                || setFieldValue(instance, "errCode", -1)
-
-            // 3. 设置 errorMsg 字段
-            setFieldValue(instance, "msg", message)
-                || setFieldValue(instance, "message", message)
-                || setFieldValue(instance, "errorMsg", message)
-                || setFieldValue(instance, "errorMessage", message)
-
-            instance as T
-        } catch (e: Exception) {
-            throw RuntimeException("反射创建失败响应失败: ${e.message}", e)
-        }
+        return FailureResponseFactory.create(clazz, -1, message)
     }
 
     /**
      * 从 Exception 创建失败响应
-     * 提取 NetworkException 的 displayMessage 作为错误信息
      */
     private fun <T : IBaseResponse> createFailureResponse(exception: Exception): T {
-        val networkException = ExceptionHandler.handle(exception)
-        val message = if (networkException is NetworkException) {
-            networkException.displayMessage
-        } else {
-            exception.message ?: "未知错误"
-        }
-        return createFailureResponse(message)
-    }
-
-    // ==================== 反射工具方法 ====================
-
-    companion object {
-        /**
-         * 通过反射创建实例
-         * 策略：优先使用无参构造函数
-         */
-        internal fun createInstance(clazz: Class<*>): Any {
-            // 尝试无参构造
-            return try {
-                clazz.getDeclaredConstructor().apply { isAccessible = true }.newInstance()
-            } catch (e: NoSuchMethodException) {
-                // 尝试查找参数全有默认值的合成构造函数
-                val constructors = clazz.declaredConstructors
-                if (constructors.isNotEmpty()) {
-                    constructors[0].apply { isAccessible = true }.newInstance(*emptyArray())
-                } else {
-                    throw IllegalArgumentException("${clazz.name} 无可用构造函数")
-                }
-            }
-        }
-
-        /**
-         * 通过反射设置字段值
-         * 支持自身声明的字段和父类字段
-         *
-         * @param instance 目标实例
-         * @param fieldName 字段名
-         * @param value 要设置的值
-         * @return 是否设置成功
-         */
-        internal fun setFieldValue(instance: Any, fieldName: String, value: Any?): Boolean {
-            var clazz: Class<*>? = instance::class.java
-            while (clazz != null) {
-                try {
-                    val field: Field = clazz.getDeclaredField(fieldName)
-                    field.isAccessible = true
-
-                    // 处理基础类型转换
-                    val finalValue = when {
-                        field.type == Int::class.javaPrimitiveType && value is Number -> value.toInt()
-                        field.type == Long::class.javaPrimitiveType && value is Number -> value.toLong()
-                        field.type == Double::class.javaPrimitiveType && value is Number -> value.toDouble()
-                        field.type == Float::class.javaPrimitiveType && value is Number -> value.toFloat()
-                        else -> value
-                    }
-
-                    field.set(instance, finalValue)
-                    return true
-                } catch (_: NoSuchFieldException) {
-                    clazz = clazz.superclass
-                } catch (_: Exception) {
-                    return false
-                }
-            }
-            return false
-        }
-
-        /**
-         * 通过反射获取字段值
-         */
-        @Suppress("UNCHECKED_CAST")
-        internal fun <T> getFieldValue(instance: Any, fieldName: String): T? {
-            var clazz: Class<*>? = instance::class.java
-            while (clazz != null) {
-                try {
-                    val field: Field = clazz.getDeclaredField(fieldName)
-                    field.isAccessible = true
-                    return field.get(instance) as? T
-                } catch (_: NoSuchFieldException) {
-                    clazz = clazz.superclass
-                } catch (_: Exception) {
-                    return null
-                }
-            }
-            return null
-        }
+        val clazz = NetCore.config.baseResponseClass
+            ?: throw IllegalStateException(
+                "未配置 baseResponseClass，无法创建失败响应。" +
+                "请在 Network.init { baseResponseClass(BaseResponse::class.java) } 中配置"
+            )
+        return FailureResponseFactory.create(clazz, exception)
     }
 }

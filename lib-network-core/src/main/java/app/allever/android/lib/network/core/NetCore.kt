@@ -9,6 +9,7 @@ import app.allever.android.lib.network.core.interceptor.NetChain
 import app.allever.android.lib.network.core.interceptor.LoggerInterceptor
 import app.allever.android.lib.network.core.response.GsonConverter
 import app.allever.android.lib.network.core.response.ResponseAdapter
+import app.allever.android.lib.network.core.util.FailureResponseFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.reflect.Type
@@ -166,37 +167,55 @@ object NetCore {
 
                 // 3. 检查 HTTP 层状态码
                 if (!httpResponse.isSuccessful) {
-                    throw NetworkException.HttpError(httpResponse.code, httpResponse.message)
+                    return@withContext createFailureResponse(
+                        code = httpResponse.code,
+                        message = httpResponse.message,
+                        explicitType
+                    )
                 }
 
                 // 4. 反序列化为业务响应
                 val responseBody = httpResponse.body
-                    ?: throw NetworkException.EmptyBodyError()
+                    ?: return@withContext createFailureResponse(
+                        code = -1,
+                        message = "响应体为空",
+                        explicitType
+                    )
 
                 // 使用显式传入的 Type 或 responseClass 或 T 的 Class
                 val parsedResponse: Any? = when {
                     explicitType != null -> {
                         convertWithType(responseBody, explicitType)
-                            ?: throw NetworkException.ParseError("反序列化结果为空")
+                            ?: return@withContext createFailureResponse(
+                                code = -2,
+                                message = "反序列化结果为空",
+                                explicitType
+                            )
                     }
                     config.responseClass != null -> {
                         config.converter.convert(responseBody, config.responseClass!!)
-                            ?: throw NetworkException.ParseError("反序列化结果为空")
+                            ?: return@withContext createFailureResponse(
+                                code = -2,
+                                message = "反序列化结果为空",
+                                explicitType
+                            )
                     }
                     else -> {
-                        // 无法获取泛型 T 的实际类型，尝试用 Object 再强转
                         @Suppress("UNCHECKED_CAST")
                         config.converter.convert(responseBody, Any::class.java) as? T
-                            ?: throw NetworkException.ParseError("反序列化失败，请设置 responseClass")
+                            ?: return@withContext createFailureResponse(
+                                code = -3,
+                                message = "反序列化失败，请设置 responseClass",
+                                explicitType
+                            )
                     }
                 }
 
                 parsedResponse as T
 
             } catch (e: Exception) {
-                val networkException = ExceptionHandler.handle(e)
-                handleGlobalError(networkException, null)
-                throw networkException
+                handleGlobalError(ExceptionHandler.handle(e), null)
+                createFailureResponse(e, explicitType)
             }
         }
     }
@@ -230,6 +249,37 @@ object NetCore {
     private fun <T> convertWithType(bytes: ByteArray, type: Type): T? {
         val gsonConverter = config.converter as? GsonConverter
         return gsonConverter?.convert(bytes, type)
+    }
+
+    // ==================== 失败响应创建（委托给 FailureResponseFactory）====================
+
+    /**
+     * 通过 code + message 创建失败响应实例
+     */
+    @Suppress("UNCHECKED_CAST")
+    private fun <T> createFailureResponse(code: Int, message: String, explicitType: Type?): T {
+        val clazz = resolveFailureClass(explicitType)
+            ?: throw IllegalStateException("未配置 responseClass 或 baseResponseClass，无法创建失败响应")
+        return FailureResponseFactory.create(clazz, code, message)
+    }
+
+    /**
+     * 从异常创建失败响应
+     */
+    private fun <T> createFailureResponse(exception: Exception, explicitType: Type?): T {
+        val clazz = resolveFailureClass(explicitType)
+            ?: throw IllegalStateException("未配置 responseClass 或 baseResponseClass，无法创建失败响应")
+        return FailureResponseFactory.create(clazz, exception)
+    }
+
+    /**
+     * 确定用于创建失败响应的 Class
+     */
+    private fun resolveFailureClass(explicitType: Type?): Class<*>? = when {
+        explicitType != null && explicitType is Class<*> -> explicitType
+        config.responseClass != null -> config.responseClass
+        config.baseResponseClass != null -> config.baseResponseClass
+        else -> null
     }
 
     private fun buildRequest(
