@@ -1,0 +1,320 @@
+package app.allever.android.lib.network.core
+
+import android.util.Log
+import app.allever.android.lib.network.core.engine.*
+import app.allever.android.lib.network.core.exception.ExceptionHandler
+import app.allever.android.lib.network.core.exception.NetworkException
+import app.allever.android.lib.network.core.interceptor.HeaderInterceptor
+import app.allever.android.lib.network.core.interceptor.InterceptorChain
+import app.allever.android.lib.network.core.interceptor.LoggerInterceptor
+import app.allever.android.lib.network.core.response.GsonConverter
+import app.allever.android.lib.network.core.response.ResponseAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.lang.reflect.Type
+
+/**
+ * 网络组件库统一入口
+ *
+ * ## 初始化
+ * ```kotlin
+ * class MyApp : Application() {
+ *     override fun onCreate() {
+ *         super.onCreate()
+ *         Network.init {
+ *             baseUrl("https://api.example.com")
+ *             engine("url_connection") {
+ *                 connectTimeout(10_000)
+ *                 readTimeout(15_000)
+ *             }
+ *             successCode(0)
+ *             header("Accept", "application/json")
+ *             enableLog(true)
+ *         }
+ *     }
+ * }
+ * ```
+ *
+ * ## 使用
+ * ```kotlin
+ * // GET 请求
+ * val result = Network.get<MyResponse<User>>("/user/123") {
+ *     header("Authorization", "Bearer token")
+ * }
+ *
+ * when (result) {
+ *     is Result.Success -> { ... }
+ *     is Result.Error -> showError(result.exception.displayMessage)
+ * }
+ * ```
+ */
+object Network {
+
+    private const val TAG = "Network"
+
+    /** 统一配置（init 后可用） */
+    lateinit var config: NetworkConfig
+        private set
+
+    /** HTTP 引擎实例（懒加载） */
+    private var _engine: HttpEngine? = null
+
+    private val engine: HttpEngine
+        get() {
+            if (_engine == null) {
+                _engine = EngineRegistry.createDefault(config.engineConfig).also {
+                    Log.d(TAG, "引擎已创建: ${it.engineName}")
+                }
+            }
+            return _engine!!
+        }
+
+    /** 是否已完成初始化 */
+    val isInitialized: Boolean get() = ::config.isInitialized
+
+    // ==================== 初始化 ====================
+
+    /**
+     * 初始化网络组件（在 Application.onCreate 中调用一次即可）
+     * @param block DSL 配置块
+     */
+    fun init(block: NetworkConfig.Builder.() -> Unit) {
+        if (isInitialized) {
+            Log.w(TAG, "Network 已初始化，重复调用将被忽略")
+            return
+        }
+
+        config = NetworkConfig.Builder().apply(block).build()
+
+        // 注册默认引擎到 EngineRegistry
+        EngineRegistry.setDefault(config.engineName)
+
+        Log.i(TAG, """
+            |Network 初始化完成:
+            |  baseUrl   = ${config.baseUrl}
+            |  engine    = ${config.engineName}
+            |  successCode= ${config.successCode}
+            |  converters= ${config.converter::class.simpleName}
+            |  interceptors= ${config.interceptors.size} 个
+        """.trimMargin())
+    }
+
+    // ==================== GET / POST / PUT / DELETE / PATCH ====================
+
+    suspend fun <T> get(
+        path: String,
+        type: Type? = null,
+        block: (HttpRequest.Builder.() -> Unit)? = null,
+    ): Result<T> = executeRequest(HttpMethod.GET, path, null, block, null)
+
+    suspend fun <T> post(
+        path: String,
+        bodyData: Any? = null,
+        block: (HttpRequest.Builder.() -> Unit)? = null,
+        type: Type? = null
+    ): Result<T> = executeRequest(HttpMethod.POST, path, bodyData, block, type)
+
+    suspend fun <T> put(
+        path: String,
+        bodyData: Any? = null,
+        block: (HttpRequest.Builder.() -> Unit)? = null,
+        type: Type? = null
+    ): Result<T> = executeRequest(HttpMethod.PUT, path, bodyData, block, type)
+
+    suspend fun <T> delete(
+        path: String,
+        block: (HttpRequest.Builder.() -> Unit)? = null,
+        type: Type? = null
+    ): Result<T> = executeRequest(HttpMethod.DELETE, path, null, block, type)
+
+    suspend fun <T> patch(
+        path: String,
+        bodyData: Any? = null,
+        block: (HttpRequest.Builder.() -> Unit)? = null,
+        type: Type? = null
+    ): Result<T> = executeRequest(HttpMethod.PATCH, path, bodyData, block, type)
+
+    // ==================== 核心请求执行（非 inline，内部使用）====================
+
+    @Suppress("UNCHECKED_CAST")
+    private suspend fun <T> executeRequest(
+        method: HttpMethod,
+        path: String,
+        bodyData: Any?,
+        customBlock: (HttpRequest.Builder.() -> Unit)?,
+        explicitType: Type?
+    ): Result<T> {
+        checkInitialized()
+
+        return withContext(Dispatchers.IO) {
+            try {
+                // 1. 构建请求
+                val request = buildRequest(method, path, bodyData, customBlock)
+
+                // 2. 构建拦截器链并执行
+                val allInterceptors = buildInterceptors()
+                val chain = InterceptorChain(
+                    interceptors = allInterceptors,
+                    engineExecute = { req ->
+                        val startTime = System.currentTimeMillis()
+                        val response = engine.execute(req)
+                        response.copy(elapsedMs = System.currentTimeMillis() - startTime)
+                    }
+                )
+                chain.request = request
+                val httpResponse = chain.proceed(request)
+
+                // 3. 检查 HTTP 层状态码
+                if (!httpResponse.isSuccessful) {
+                    throw NetworkException.HttpError(httpResponse.code, httpResponse.message)
+                }
+
+                // 4. 反序列化为业务响应
+                val responseBody = httpResponse.body
+                    ?: throw NetworkException.EmptyBodyError()
+
+                // 使用显式传入的 Type 或 responseClass 或 T 的 Class
+                val parsedResponse: Any? = when {
+                    explicitType != null -> {
+                        convertWithType(responseBody, explicitType)
+                            ?: throw NetworkException.ParseError("反序列化结果为空")
+                    }
+                    config.responseClass != null -> {
+                        config.converter.convert(responseBody, config.responseClass!!)
+                            ?: throw NetworkException.ParseError("反序列化结果为空")
+                    }
+                    else -> {
+                        // 无法获取泛型 T 的实际类型，尝试用 Object 再强转
+                        @Suppress("UNCHECKED_CAST")
+                        config.converter.convert(responseBody, Any::class.java) as? T
+                            ?: throw NetworkException.ParseError("反序列化失败，请设置 responseClass")
+                    }
+                }
+
+                @Suppress("UNCHECKED_CAST")
+                Result.success(parsedResponse as T)
+
+            } catch (e: Exception) {
+                val networkException = ExceptionHandler.handle(e)
+                handleGlobalError(networkException, null)
+                Result.failure(networkException)
+            }
+        }
+    }
+
+    /**
+     * 获取原始 HttpResponse（不进行业务反序列化）
+     */
+    suspend fun rawGet(
+        path: String,
+        block: (HttpRequest.Builder.() -> Unit)? = null
+    ): Result<HttpResponse> {
+        checkInitialized()
+
+        return try {
+            val request = buildRequest(HttpMethod.GET, path, null, block)
+            val startTime = System.currentTimeMillis()
+            val response = engine.execute(request)
+            Result.success(response.copy(elapsedMs = System.currentTimeMillis() - startTime))
+        } catch (e: Exception) {
+            val networkException = ExceptionHandler.handle(e)
+            handleGlobalError(networkException, null)
+            Result.failure(networkException)
+        }
+    }
+
+    // ==================== 内部工具方法 ====================
+
+    /**
+     * 使用 GsonConverter 的 Type 方式转换（支持泛型）
+     */
+    private fun <T> convertWithType(bytes: ByteArray, type: Type): T? {
+        val gsonConverter = config.converter as? GsonConverter
+        return gsonConverter?.convert(bytes, type)
+    }
+
+    private fun buildRequest(
+        method: HttpMethod,
+        path: String,
+        bodyData: Any?,
+        customBlock: (HttpRequest.Builder.() -> Unit)?
+    ): HttpRequest {
+        val fullUrl = resolveUrl(path)
+
+        return HttpRequest.Builder().apply {
+            url(fullUrl)
+            method(method)
+            connectTimeout(config.engineConfig.connectTimeoutMs)
+            readTimeout(config.engineConfig.readTimeoutMs)
+            writeTimeout(config.engineConfig.writeTimeoutMs)
+
+            // 请求体：将对象转为 JSON 字符串
+            if (bodyData != null && method in listOf(HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH)) {
+                val json = when (bodyData) {
+                    is String -> bodyData
+                    else -> (config.converter as? GsonConverter)
+                        ?.toJson(bodyData) ?: bodyData.toString()
+                }
+                body(RequestBody.create(json))
+            }
+
+            // 用户自定义配置
+            customBlock?.invoke(this)
+        }.build()
+    }
+
+    private fun resolveUrl(path: String): String {
+        val base = config.baseUrl.trimEnd('/')
+        val p = path.trimStart('/')
+        return "$base/$p"
+    }
+
+    private fun buildInterceptors(): List<app.allever.android.lib.network.core.interceptor.Interceptor> {
+        val list = mutableListOf<app.allever.android.lib.network.core.interceptor.Interceptor>()
+
+        if (config.logEnabled) {
+            list.add(LoggerInterceptor())
+        }
+
+        list.add(HeaderInterceptor(config.headers))
+        list.addAll(config.interceptors)
+
+        return list
+    }
+
+    private fun handleGlobalError(exception: NetworkException, response: Any?) {
+        try {
+            config.globalErrorHandler?.onError(exception, response)
+        } catch (_: Exception) {
+            // 全局错误回调本身不应影响主流程
+        }
+    }
+
+    private fun checkInitialized() {
+        require(isInitialized) {
+            "Network 未初始化！请先在 Application.onCreate() 中调用 Network.init { ... }"
+        }
+    }
+
+    // ==================== 公开便捷方法 ====================
+
+    /**
+     * 从业务响应中安全提取 data
+     */
+    fun <T> extractData(response: Any): T? {
+        return ResponseAdapter.extractData<T>(response, config)
+    }
+
+    /**
+     * 获取当前使用的引擎名称
+     */
+    fun currentEngine(): String = EngineRegistry.getDefaultName() ?: "未设置"
+
+    /**
+     * 释放资源（应用退出时调用）
+     */
+    fun shutdown() {
+        _engine?.shutdown()
+        _engine = null
+    }
+}
