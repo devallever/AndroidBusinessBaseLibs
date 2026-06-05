@@ -1,7 +1,6 @@
 package app.allever.android.lib.media.picker.ui
 
 import android.content.Intent
-import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -9,46 +8,32 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import app.allever.android.lib.core.base.AbstractBindingActivity
-import app.allever.android.lib.core.ext.log
-import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.picker.R
 import app.allever.android.lib.media.picker.databinding.ActivityMediaPreviewBinding
-import app.allever.android.lib.media.picker.selection.SelectionManager
 import app.allever.android.lib.media.picker.ui.adapter.PreviewAdapter
 import com.bumptech.glide.Glide
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
- * 媒体预览 Activity
+ * 媒体预览 Activity（纯 View 层）
  *
- * 功能：
- * - 图片：ViewPager2 滑动浏览 + PhotoView 手势缩放
- * - 视频：ViewPager2 内 VideoView 播放 + 控制栏（进度条、播放/暂停、上下切换）
- * - 音频：底部播放栏，支持播放/暂停/进度
- * - 选中/取消选中当前项
+ * 职责：
+ * - UI 初始化与渲染（ViewPager2、音频栏、顶部栏、底部选中栏）
+ * - 观察 ViewModel 的 StateFlow，数据变化时刷新界面
+ * - 用户交互事件 → 委托给 ViewModel 处理
+ *
+ * 所有业务逻辑由 [MediaPreviewViewModel] 管理
  */
 class MediaPreviewActivity : AbstractBindingActivity<ActivityMediaPreviewBinding>() {
-    
-    private lateinit var selectionManager: SelectionManager
-    private var maxSelect: Int = 9
-    private lateinit var mediaType: String // "image", "video", "audio"
 
-    /** 当前展示的媒体列表（用于图片/视频滑动切换） */
-    private val previewItems = mutableListOf<MediaItem>()
-    /** 当前位置 */
-    private var currentPosition: Int = 0
-
-    /** 音频播放器 */
-    private var mediaPlayer: MediaPlayer? = null
-    private var isAudioPlaying = false
-    private var audioUpdateJob: kotlinx.coroutines.Job? = null
+    private val viewModel: MediaPreviewViewModel by viewModels()
 
     companion object {
         const val KEY_ITEMS = "preview_items"
@@ -69,8 +54,6 @@ class MediaPreviewActivity : AbstractBindingActivity<ActivityMediaPreviewBinding
             val selectedIds: Set<Long>,
         )
 
-
-
         fun setPreviewData(items: List<MediaItem>, position: Int, mediaType: String, maxSelect: Int, selectedIds: Set<Long>) {
             previewData = PreviewData(items, position, mediaType, maxSelect, selectedIds)
         }
@@ -85,57 +68,71 @@ class MediaPreviewActivity : AbstractBindingActivity<ActivityMediaPreviewBinding
 
     override fun init() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        mBinding = ActivityMediaPreviewBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
 
-        // 优先从静态持有者取数据（避免 Binder 溢出），兼容旧方式
+        // 读取数据（优先静态持有者，兼容旧 Intent 方式）
         val data = takePreviewData()
         val items = data?.items
             ?: intent?.getParcelableArrayListExtra<MediaItem>(KEY_ITEMS)
             ?: return
 
-        currentPosition = data?.position ?: intent.getIntExtra(KEY_POSITION, 0)
-        mediaType = data?.mediaType ?: intent.getStringExtra(KEY_MEDIA_TYPE) ?: "image"
-        maxSelect = data?.maxSelect ?: intent.getIntExtra(KEY_MAX_SELECT, 9)
-        val selectedIds = data?.selectedIds
-            ?: intent.getLongArrayExtra(KEY_SELECTED_IDS)?.toSet()
-            ?: emptySet()
+        // 初始化 ViewModel（所有业务数据交给它管理）
+        viewModel.init(
+            items = items,
+            position = data?.position ?: intent.getIntExtra(KEY_POSITION, 0),
+            mediaType = data?.mediaType ?: intent.getStringExtra(KEY_MEDIA_TYPE) ?: "image",
+            maxSelect = data?.maxSelect ?: intent.getIntExtra(KEY_MAX_SELECT, 9),
+            selectedIds = data?.selectedIds
+                ?: intent.getLongArrayExtra(KEY_SELECTED_IDS)?.toSet()
+                ?: emptySet(),
+        )
 
-        selectionManager = SelectionManager(maxSelect)
+        setupUI()
+        observeViewModel()
+    }
 
-        // 恢复已选中状态
-        for (item in items) {
-            if (selectedIds.contains(item.id)) {
-                selectionManager.forceAdd(item)
-            }
-        }
+    // ==================== UI 初始化（根据模式） ====================
 
-        when (mediaType) {
-            "audio" -> setupAudioMode(items)
-            else -> setupImageVideoMode(items)
+    private fun setupUI() {
+        if (viewModel.isAudioMode) {
+            setupAudioMode()
+        } else {
+            setupImageVideoMode()
         }
     }
 
-    // ==================== 图片/视频模式 ====================
-
-    private fun setupImageVideoMode(items: List<MediaItem>) {
-        previewItems.clear()
-        previewItems.addAll(items)
-
-        // 隐藏音频栏，显示 ViewPager 和底部选中栏
+    /** 图片/视频模式：显示 ViewPager + 底部选中栏 */
+    private fun setupImageVideoMode() {
         mBinding.layoutAudioBar.visibility = View.GONE
         mBinding.viewPagerPreview.visibility = View.VISIBLE
         mBinding.layoutBottomBar.visibility = View.VISIBLE
 
         setupViewPager()
-        updateTopBar()
-        updateBottomBar()
         setupClickListeners()
+    }
+
+    /** 音频模式：显示音频播放栏 */
+    private fun setupAudioMode() {
+        mBinding.viewPagerPreview.visibility = View.GONE
+        mBinding.layoutAudioBar.visibility = View.VISIBLE
+        mBinding.layoutBottomBar.visibility = View.GONE
+
+        // 初始化当前音频的 MediaPlayer
+        val uri = viewModel.currentAudioUri()
+        if (uri != null) {
+            viewModel.prepareAudioWithContext(this, uri)
+        }
+
+        // 加载封面
+        loadAudioCover()
+
+        mBinding.ivBack.setOnClickListener { finishWithResult() }
+        mBinding.tvSelectToggle.setOnClickListener { handleToggleSelection() }
+        mBinding.btnPlayPause.setOnClickListener { viewModel.toggleAudioPlay() }
     }
 
     private fun setupViewPager() {
         val adapter = PreviewAdapter(
-            items = previewItems,
+            items = viewModel.previewItems.value,
             lifecycleOwner = this,
             onItemClick = { finishWithResult() },
             onNavigateTo = { position -> mBinding.viewPagerPreview.setCurrentItem(position, true) },
@@ -143,156 +140,88 @@ class MediaPreviewActivity : AbstractBindingActivity<ActivityMediaPreviewBinding
         mBinding.viewPagerPreview.adapter = adapter
         mBinding.viewPagerPreview.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                currentPosition = position
-                updateTopBar()
+                viewModel.onPageSelected(position)
             }
         })
-        mBinding.viewPagerPreview.setCurrentItem(currentPosition, false)
+        mBinding.viewPagerPreview.setCurrentItem(viewModel.currentPosition.value, false)
     }
 
-    // ==================== 音频模式 ====================
-
-    private fun setupAudioMode(items: List<MediaItem>) {
-        if (items.isEmpty()) { finish(); return }
-
-        val audioItem = items[currentPosition] as? MediaItem.Audio ?: run { finish(); return }
-        previewItems.clear()
-        previewItems.addAll(items)
-
-        // 显示音频栏，隐藏其他
-        mBinding.viewPagerPreview.visibility = View.GONE
-        mBinding.layoutAudioBar.visibility = View.VISIBLE
-        mBinding.layoutBottomBar.visibility = View.GONE
-
-        // 更新顶部标题
-        mBinding.tvTitle.text = buildString {
-            append(audioItem.title.ifEmpty { audioItem.name })
-            if (items.size > 1) append(" (${currentPosition + 1}/${items.size})")
-        }
-
-        // 更新音频信息
-        mBinding.tvAudioTitle.text = audioItem.title.ifEmpty { audioItem.name }
-        mBinding.tvAudioArtist.text = buildString {
-            if (audioItem.artist.isNotEmpty()) append(audioItem.artist)
-            if (audioItem.album.isNotEmpty()) {
-                if (isNotEmpty()) append(" · ")
-                append(audioItem.album)
-            }
-        }.ifEmpty { "未知艺术家" }
-
-        loadAudioCover(audioItem)
-        initMediaPlayer(audioItem.uri)
-        updateSelectToggle()
-
+    private fun setupClickListeners() {
         mBinding.ivBack.setOnClickListener { finishWithResult() }
-        mBinding.tvSelectToggle.setOnClickListener { toggleSelection(previewItems[currentPosition]) }
-        mBinding.btnPlayPause.setOnClickListener { toggleAudioPlay() }
+        mBinding.tvSelectToggle.setOnClickListener { handleToggleSelection() }
     }
 
-    private fun initMediaPlayer(uri: Uri) {
-        releaseMediaPlayer()
-        try {
-            mediaPlayer = MediaPlayer().apply {
-                setDataSource(this@MediaPreviewActivity, uri)
-                setOnPreparedListener {
-                    log("MediaPreview", "音频准备完成")
-                    it.start()
-                    isAudioPlaying = true
-                    updatePlayButton()
-                    startProgressUpdate()
-                }
-                setOnCompletionListener {
-                    isAudioPlaying = false
-                    updatePlayButton()
-                    audioUpdateJob?.cancel()
-                    // 播放下一个（如果有）
-                    if (this@MediaPreviewActivity.currentPosition < previewItems.size - 1) {
-                        this@MediaPreviewActivity.currentPosition = this@MediaPreviewActivity.currentPosition + 1
-                        val nextItem = previewItems[this@MediaPreviewActivity.currentPosition] as? MediaItem.Audio
-                        if (nextItem != null) {
-                            setupAudioMode(previewItems.toList())
-                        }
-                    }
-                }
-                setOnErrorListener { _, what, extra ->
-                    logE("MediaPreview", "播放错误: what=$what extra=$extra")
-                    isAudioPlaying = false
-                    updatePlayButton()
-                    true
-                }
-                prepareAsync()
+    // ==================== 观察 ViewModel 状态（唯一的数据来源） ====================
+
+    private fun observeViewModel() {
+        // 顶部标题变化
+        lifecycleScope.launch {
+            viewModel.topBarTitle.collect { text ->
+                mBinding.tvTitle.text = text
             }
-        } catch (e: Exception) {
-            logE("MediaPreview", "初始化播放器失败: ${e.message}")
         }
-    }
 
-    private fun toggleAudioPlay() {
-        val player = mediaPlayer ?: return
-        if (isAudioPlaying) {
-            player.pause()
-            isAudioPlaying = false
-            audioUpdateJob?.cancel()
-        } else {
-            player.start()
-            isAudioPlaying = true
-            startProgressUpdate()
+        // 选择按钮文字
+        lifecycleScope.launch {
+            viewModel.selectToggleText.collect { text ->
+                mBinding.tvSelectToggle.text = text
+            }
         }
-        updatePlayButton()
-    }
 
-    private fun updatePlayButton() {
-        mBinding.btnPlayPause.setImageResource(
-            if (isAudioPlaying) R.drawable.ic_media_picker_pause
-            else R.drawable.ic_media_picker_play
-        )
-    }
+        // 底部选中栏显隐
+        lifecycleScope.launch {
+            viewModel.hasSelection.collect { has ->
+                mBinding.scrollSelected.visibility = if (has) View.VISIBLE else View.GONE
+                if (has) renderSelectedPreview()
+            }
+        }
 
-    private fun startProgressUpdate() {
-        audioUpdateJob?.cancel()
-        audioUpdateJob = lifecycleScope.launch {
-            while (isActive && isAudioPlaying) {
-                mediaPlayer?.let { player ->
-                    if (player.isPlaying) {
-                        val current = player.currentPosition
-                        val duration = player.duration
-                        if (duration > 0) {
-                            mBinding.tvTitle.text = formatTime(current) + " / " + formatTime(duration)
+        // 音频模式专用状态
+        if (viewModel.isAudioMode) {
+            lifecycleScope.launch {
+                viewModel.audioTitle.collect { text ->
+                    mBinding.tvAudioTitle.text = text
+                }
+            }
+            lifecycleScope.launch {
+                viewModel.audioArtist.collect { text ->
+                    mBinding.tvAudioArtist.text = text
+                }
+            }
+            lifecycleScope.launch {
+                viewModel.isAudioPlaying.collect { playing ->
+                    mBinding.btnPlayPause.setImageResource(
+                        if (playing) R.drawable.ic_media_picker_pause
+                        else R.drawable.ic_media_picker_play
+                    )
+                }
+            }
+            lifecycleScope.launch {
+                viewModel.audioProgressText.collect { text ->
+                    mBinding.tvTitle.text = text.ifEmpty { viewModel.topBarTitle.value }
+                }
+            }
+            // 自动播放下一首
+            lifecycleScope.launch {
+                viewModel.needNextAudioPrepare.collect { need ->
+                    if (need) {
+                        val uri = viewModel.currentAudioUri()
+                        if (uri != null) {
+                            viewModel.prepareAudioWithContext(this@MediaPreviewActivity, uri)
+                            loadAudioCover()
                         }
                     }
                 }
-                delay(500)
             }
         }
     }
 
-    // ==================== UI 更新 ====================
-
-    private fun updateTopBar() {
-        mBinding.tvTitle.text = "${currentPosition + 1}/${previewItems.size}"
-        updateSelectToggle()
-    }
-
-    private fun updateSelectToggle() {
-        val item = previewItems.getOrNull(currentPosition) ?: return
-        val isSelected = selectionManager.isSelected(item)
-        mBinding.tvSelectToggle.text = if (isSelected) "取消选择" else "选择"
-    }
-
-    private fun updateBottomBar() {
-        val count = selectionManager.selectedCount
-        if (count > 0) {
-            mBinding.scrollSelected.visibility = View.VISIBLE
-            renderSelectedPreview()
-        } else {
-            mBinding.scrollSelected.visibility = View.GONE
-        }
-    }
+    // ==================== 渲染方法（纯 UI 操作） ====================
 
     private fun renderSelectedPreview() {
         mBinding.layoutSelectedItems.removeAllViews()
         val inflater = layoutInflater
-        selectionManager.toList().forEachIndexed { index, item ->
+        viewModel.getSelectedList().forEachIndexed { index, item ->
             val view = inflater.inflate(R.layout.item_selected_preview, mBinding.layoutSelectedItems, false)
 
             view.findViewById<View>(R.id.tvIndex)?.let {
@@ -300,9 +229,8 @@ class MediaPreviewActivity : AbstractBindingActivity<ActivityMediaPreviewBinding
             }
 
             view.findViewById<View>(R.id.ivRemove)?.setOnClickListener {
-                selectionManager.remove(item)
-                updateSelectToggle()
-                updateBottomBar()
+                viewModel.selectionManager.remove(item)
+                // 触发 UI 刷新（通过 selectionManager 内部的 LiveData 驱动）
             }
 
             view.findViewById<ImageView>(R.id.ivThumbnail)?.let { iv ->
@@ -325,28 +253,10 @@ class MediaPreviewActivity : AbstractBindingActivity<ActivityMediaPreviewBinding
         }
     }
 
-    private fun setupClickListeners() {
-        mBinding.ivBack.setOnClickListener { finishWithResult() }
-        mBinding.tvSelectToggle.setOnClickListener {
-            val item = previewItems.getOrNull(currentPosition) ?: return@setOnClickListener
-            toggleSelection(item)
-        }
-    }
-
-    private fun toggleSelection(item: MediaItem) {
-        val toggled = selectionManager.toggle(item)
-        if (!toggled && selectionManager.isFull) {
-            Toast.makeText(this, "最多选择${maxSelect}个", Toast.LENGTH_SHORT).show()
-        }
-        updateSelectToggle()
-        updateBottomBar()
-    }
-
-    // ==================== 工具方法 ====================
-
-    private fun loadAudioCover(item: MediaItem.Audio) {
-        if (item.albumId > 0) {
-            val albumArtUri = Uri.parse("content://media/external/audio/albumart/${item.albumId}")
+    private fun loadAudioCover() {
+        val albumId = viewModel.currentAudioAlbumId()
+        if (albumId > 0) {
+            val albumArtUri = Uri.parse("content://media/external/audio/albumart/$albumId")
             Glide.with(this)
                 .load(albumArtUri)
                 .placeholder(R.drawable.ic_media_picker_audio)
@@ -358,25 +268,24 @@ class MediaPreviewActivity : AbstractBindingActivity<ActivityMediaPreviewBinding
         }
     }
 
-    private fun releaseMediaPlayer() {
-        audioUpdateJob?.cancel()
-        audioUpdateJob = null
-        mediaPlayer?.apply {
-            if (isPlaying) stop()
-            reset()
-            release()
+    // ==================== 交互事件处理 ====================
+
+    private fun handleToggleSelection() {
+        val toggled = viewModel.toggleSelection()
+        if (!toggled && viewModel.isFullAndNotToggled()) {
+            Toast.makeText(this, "最多选择${viewModel.maxSelect.value}个", Toast.LENGTH_SHORT).show()
         }
-        mediaPlayer = null
-        isAudioPlaying = false
     }
 
     private fun finishWithResult() {
         val result = Intent().apply {
-            putParcelableArrayListExtra(KEY_RESULT, ArrayList(selectionManager.toList()))
+            putParcelableArrayListExtra(KEY_RESULT, ArrayList(viewModel.getSelectedList()))
         }
         setResult(RESULT_OK, result)
         finish()
     }
+
+    // ==================== 生命周期 ====================
 
     override fun onBackPressed() {
         finishWithResult()
@@ -384,14 +293,6 @@ class MediaPreviewActivity : AbstractBindingActivity<ActivityMediaPreviewBinding
 
     override fun onDestroy() {
         super.onDestroy()
-        releaseMediaPlayer()
-    }
-
-    /** 格式化时间 mm:ss */
-    private fun formatTime(ms: Int): String {
-        val totalSeconds = ms / 1000
-        val minutes = totalSeconds / 60
-        val seconds = totalSeconds % 60
-        return "%02d:%02d".format(minutes, seconds)
+        // MediaPlayer 由 ViewModel.onCleared() 统一释放
     }
 }
