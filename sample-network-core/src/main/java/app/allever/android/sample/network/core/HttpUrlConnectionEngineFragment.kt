@@ -1,7 +1,6 @@
 package app.allever.android.sample.network.core
 
 import android.util.Log
-import android.widget.Toast
 import app.allever.android.lib.common.ListFragment
 import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextClickAdapter
@@ -11,7 +10,7 @@ import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toJson
 import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.network.core.Network
+import app.allever.android.lib.network.core.NetCore
 import app.allever.android.lib.network.core.engine.NetCall
 import app.allever.android.lib.network.core.engine.NetCallback
 import app.allever.android.lib.network.core.engine.HttpMethod
@@ -97,12 +96,12 @@ class HttpUrlConnectionEngineFragment :
      * 1. 初始化 Network（使用 HttpURLConnection 引擎）
      */
     private fun initNetwork() {
-        if (Network.isInitialized) {
-            toast("Network 已初始化，当前引擎: ${Network.currentEngine()}")
+        if (NetCore.isInitialized) {
+            toast("Network 已初始化，当前引擎: ${NetCore.currentEngine()}")
             return
         }
 
-        Network.init {
+        NetCore.init {
             // 使用公开测试 API
             baseUrl("https://www.wanandroid.com")
 
@@ -135,8 +134,8 @@ class HttpUrlConnectionEngineFragment :
 //            }
         }
 
-        toast("初始化完成！引擎: ${Network.currentEngine()}")
-        Log.i("HUC-Sample", "Network 已初始化，引擎: ${Network.currentEngine()}")
+        toast("初始化完成！引擎: ${NetCore.currentEngine()}")
+        Log.i("HUC-Sample", "Network 已初始化，引擎: ${NetCore.currentEngine()}")
     }
 
     /**
@@ -149,7 +148,7 @@ class HttpUrlConnectionEngineFragment :
             try {
                 toast("正在发起 GET 请求...")
 
-                val result = Network.get<BaseResponse<List<BannerData>>>("banner/json")
+                val result = NetCore.get<BaseResponse<List<BannerData>>>("banner/json")
                 if (result.isSuccess) {
                     val resp = result.getOrNull()
                     if (resp != null && resp.errorCode == 0) {
@@ -190,7 +189,7 @@ class HttpUrlConnectionEngineFragment :
         toast("正在发起异步请求 (enqueue)...")
 
         // 1. 创建 NetCall（不立即执行）
-        currentCall = Network.newCall(HttpMethod.GET, "banner/json") {
+        currentCall = NetCore.newCall(HttpMethod.GET, "banner/json") {
             header("X-Request-Type", "async-callback")
         }
 
@@ -208,7 +207,7 @@ class HttpUrlConnectionEngineFragment :
                 // 手动反序列化业务数据
                 response.body?.let { bytes ->
                     @Suppress("UNCHECKED_CAST")
-                    val resp = Network.config.converter.convert(
+                    val resp = NetCore.config.converter.convert(
                         bytes,
                         BaseResponse::class.java
                     ) as? BaseResponse<*>
@@ -242,7 +241,7 @@ class HttpUrlConnectionEngineFragment :
                 toast("正在发起异步请求 (await)...")
 
                 // 1. 创建 NetCall
-                val call = Network.newCall(HttpMethod.GET, "banner/json") {
+                val call = NetCore.newCall(HttpMethod.GET, "banner/json") {
                     header("X-Request-Type", "async-await")
                 }
 
@@ -252,7 +251,7 @@ class HttpUrlConnectionEngineFragment :
                 log("HUC-Sample", "await 成功! HTTP ${response.code}, 耗时 ${response.elapsedMs}ms")
 
                 // 3. 反序列化业务数据
-                val parsed = response.toObject(Network.config.converter, BaseResponse::class.java)
+                val parsed = response.toObject(NetCore.config.converter, BaseResponse::class.java)
                     as? BaseResponse<*>
 
                 if (parsed != null && parsed.errorCode == 0) {
@@ -278,7 +277,7 @@ class HttpUrlConnectionEngineFragment :
         toast("发起请求后 500ms 自动取消...")
 
         // 1. 发起一个较慢的请求
-        currentCall = Network.newCall(HttpMethod.GET, "banner/json") {
+        currentCall = NetCore.newCall(HttpMethod.GET, "banner/json") {
             connectTimeout(30_000)   // 设置较长超时，确保请求还在进行中
             readTimeout(30_000)
         }
@@ -334,9 +333,9 @@ class HttpUrlConnectionEngineFragment :
             // ✅ 无需 try-catch，直接用！
             val resp = WanAndroidRepository.getBanner()
 
-            if (resp.errorCode == 0) {
+            if (resp.isSuccess()) {
                 log("HUC-Sample", "Repo-GET 成功! data = ${resp.data?.toJson()}")
-                toast("Repo-GET 成功! 共 ${resp.data?.size ?: 0} 条 Banner")
+                toast("Repo-GET 成功! 共 ${resp.data?.size} 条 Banner")
             } else {
                 logE("HUC-Sample", "Repo-GET 失败: code=${resp.errorCode}, msg=${resp.errorMsg}")
                 toast("Repo-GET 失败: ${resp.errorMsg}")
@@ -350,16 +349,16 @@ class HttpUrlConnectionEngineFragment :
     private fun showEngineInfo() {
         val info = buildString {
             appendLine("=== Network 引擎信息 ===")
-            appendLine("引擎名称: ${Network.currentEngine()}")
-            appendLine("已初始化: ${Network.isInitialized}")
-            if (Network.isInitialized) {
-                appendLine("baseUrl: ${Network.config.baseUrl}")
-                appendLine("successCode: ${Network.config.successCode}")
-                appendLine("responseClass: ${Network.config.responseClass?.simpleName}")
-                appendLine("baseResponseClass: ${Network.config.baseResponseClass?.simpleName}")
-                appendLine("拦截器数: ${Network.config.interceptors.size}")
-                appendLine("公共头数: ${Network.config.headers.size}")
-                appendLine("日志开关: ${Network.config.logEnabled}")
+            appendLine("引擎名称: ${NetCore.currentEngine()}")
+            appendLine("已初始化: ${NetCore.isInitialized}")
+            if (NetCore.isInitialized) {
+                appendLine("baseUrl: ${NetCore.config.baseUrl}")
+                appendLine("successCode: ${NetCore.config.successCode}")
+                appendLine("responseClass: ${NetCore.config.responseClass?.simpleName}")
+                appendLine("baseResponseClass: ${NetCore.config.baseResponseClass?.simpleName}")
+                appendLine("拦截器数: ${NetCore.config.interceptors.size}")
+                appendLine("公共头数: ${NetCore.config.headers.size}")
+                appendLine("日志开关: ${NetCore.config.logEnabled}")
             }
         }
         Log.i("HUC-Sample", info)
@@ -413,7 +412,7 @@ class HttpUrlConnectionEngineFragment :
      * 确保已初始化
      */
     private fun checkAndInit() {
-        if (!Network.isInitialized) {
+        if (!NetCore.isInitialized) {
             initNetwork()
         }
     }

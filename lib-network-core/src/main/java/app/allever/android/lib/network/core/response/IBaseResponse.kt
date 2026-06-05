@@ -1,5 +1,6 @@
 package app.allever.android.lib.network.core.response
 
+import app.allever.android.lib.network.core.NetCore
 import app.allever.android.lib.network.core.NetworkConfig
 
 /**
@@ -17,10 +18,10 @@ interface IBaseResponse {
     fun getResponseMsg(): String
 
     /** 是否成功（与配置的 successCode 比较） */
-    fun isSuccess(successCode: Int): Boolean = getResponseCode() == successCode
+    fun isSuccess(): Boolean = getResponseCode() == NetCore.config.successCode
 
     /** 是否失败 */
-    fun isFailure(successCode: Int): Boolean = !isSuccess(successCode)
+    fun isFailure(): Boolean = !isSuccess()
 
     /**
      * 获取数据（通过 ResponseAdapter 提取）

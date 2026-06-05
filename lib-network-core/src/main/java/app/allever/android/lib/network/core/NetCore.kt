@@ -48,9 +48,9 @@ import java.lang.reflect.Type
  * }
  * ```
  */
-object Network {
+object NetCore {
 
-    private const val TAG = "Network"
+    private val TAG = NetCore::class.java.simpleName
 
     /** 统一配置（init 后可用） */
     lateinit var config: NetworkConfig
@@ -105,7 +105,7 @@ object Network {
         path: String,
         type: Type? = null,
         block: (NetRequest.Builder.() -> Unit)? = null,
-    ): Result<T> = executeRequest(HttpMethod.GET, path, null, block, null)
+    ): Result<T> = executeRequest(HttpMethod.GET, path, null, block, type)
 
     suspend fun <T> post(
         path: String,

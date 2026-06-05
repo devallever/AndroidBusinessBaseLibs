@@ -1,6 +1,6 @@
 package app.allever.android.lib.network.core.repository
 
-import app.allever.android.lib.network.core.Network
+import app.allever.android.lib.network.core.NetCore
 import app.allever.android.lib.network.core.engine.HttpMethod
 import app.allever.android.lib.network.core.engine.NetRequest
 import app.allever.android.lib.network.core.exception.ExceptionHandler
@@ -14,7 +14,7 @@ import java.lang.reflect.Field
  * 核心能力：
  * 1. **统一异常处理**：所有网络错误自动转换为 BaseResponse 失败实例，调用方无需 try-catch
  * 2. **反射实例化**：失败时通过反射创建 baseResponseClass 实例，填充 errorCode/errorMsg
- * 3. **便捷方法**：提供 get/post/put/delete 快捷方法，内部委托给 [Network]
+ * 3. **便捷方法**：提供 get/post/put/delete 快捷方法，内部委托给 [NetCore]
  *
  * 使用方式：
  * ```kotlin
@@ -44,7 +44,7 @@ abstract class BaseRepository {
      * - **失败**：通过反射创建失败响应实例（code=-1, msg=错误信息），返回非 null
      *
      * @param T 响应类型，必须实现 [IBaseResponse]
-     * @param block 实际的请求逻辑，通常调用 [Network.get] / [Network.post] 等
+     * @param block 实际的请求逻辑，通常调用 [NetCore.get] / [NetCore.post] 等
      * @return 永不返回 null（失败时返回填充了错误信息的响应实例）
      */
     protected suspend fun <T : IBaseResponse> request(block: suspend () -> Result<T>): T {
@@ -73,11 +73,11 @@ abstract class BaseRepository {
     ): T = request {
         @Suppress("UNCHECKED_CAST")
         when (method) {
-            HttpMethod.GET -> Network.get<T>(path, block = requestBlock)
-            HttpMethod.POST -> Network.post<T>(path, body, block = requestBlock)
-            HttpMethod.PUT -> Network.put<T>(path, body, block = requestBlock)
-            HttpMethod.DELETE -> Network.delete<T>(path, block = requestBlock)
-            else -> Network.get<T>(path, block = requestBlock)
+            HttpMethod.GET -> NetCore.get<T>(path, block = requestBlock)
+            HttpMethod.POST -> NetCore.post<T>(path, body, block = requestBlock)
+            HttpMethod.PUT -> NetCore.put<T>(path, body, block = requestBlock)
+            HttpMethod.DELETE -> NetCore.delete<T>(path, block = requestBlock)
+            else -> NetCore.get<T>(path, block = requestBlock)
         }
     }
 
@@ -114,7 +114,7 @@ abstract class BaseRepository {
     /**
      * 创建失败响应实例（通过反射）
      *
-     * 使用 [Network.config.baseResponseClass] 配置的类进行反射实例化，
+     * 使用 [NetCore.config.baseResponseClass] 配置的类进行反射实例化，
      * 设置 errorCode 和 errorMsg 字段。
      *
      * 反射策略（按优先级）：
@@ -127,7 +127,7 @@ abstract class BaseRepository {
      */
     @Suppress("UNCHECKED_CAST")
     private fun <T : IBaseResponse> createFailureResponse(message: String): T {
-        val clazz = Network.config.baseResponseClass
+        val clazz = NetCore.config.baseResponseClass
         if (clazz == null) {
             throw IllegalStateException(
                 "未配置 baseResponseClass，无法创建失败响应。" +

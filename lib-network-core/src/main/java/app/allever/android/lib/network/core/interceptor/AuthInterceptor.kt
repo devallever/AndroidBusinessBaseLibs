@@ -3,7 +3,6 @@ package app.allever.android.lib.network.core.interceptor
 import android.util.Log
 import app.allever.android.lib.network.core.engine.NetRequest
 import app.allever.android.lib.network.core.engine.NetResponse
-import app.allever.android.lib.network.core.exception.NetworkException
 import app.allever.android.lib.network.core.response.ResponseAdapter
 import kotlinx.coroutines.runBlocking
 import java.net.HttpURLConnection
@@ -115,7 +114,7 @@ class AuthInterceptor(
 
         // 业务层面：如果配置了 responseClass，尝试解析业务码
         val clazz = responseClass ?: return false
-        val config = app.allever.android.lib.network.core.Network.config
+        val config = app.allever.android.lib.network.core.NetCore.config
             ?: return false
         val converter = config.converter
         val responseBody = response.body ?: return false
