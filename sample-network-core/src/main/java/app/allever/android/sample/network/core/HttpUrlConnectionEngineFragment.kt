@@ -12,7 +12,12 @@ import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toJson
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.network.core.Network
+import app.allever.android.lib.network.core.engine.Call
+import app.allever.android.lib.network.core.engine.CallCallback
 import app.allever.android.lib.network.core.engine.EngineRegistry
+import app.allever.android.lib.network.core.engine.HttpEngine
+import app.allever.android.lib.network.core.engine.HttpMethod
+import app.allever.android.lib.network.core.engine.HttpResponse
 import app.allever.android.lib.network.core.exception.NetworkException
 import app.allever.android.lib.network.core.response.ResponseCode
 import app.allever.android.lib.network.core.response.ResponseData
@@ -47,8 +52,17 @@ class HttpUrlConnectionEngineFragment :
         },
 
         // ==================== 基础请求示例 ====================
-        TextClickItem("2. GET 请求 - 获取用户信息") {
+        TextClickItem("2. GET 请求 - 获取Banner") {
             requestGetUser()
+        },
+        TextClickItem("3. 异步请求 - 回调方式 (enqueue)") {
+            requestAsyncCallback()
+        },
+        TextClickItem("4. 异步请求 - 协程方式 (await)") {
+            requestAsyncAwait()
+        },
+        TextClickItem("5. 异步请求 - 取消请求 (cancel)") {
+            requestAsyncCancel()
         },
 //        TextClickItem("3. POST 请求 - 登录") {
 //            requestLogin()
@@ -163,7 +177,7 @@ class HttpUrlConnectionEngineFragment :
     }
 
     /**
-     * 2. GET 请求示例
+     * 2. GET 请求示例（协程方式 - 高层封装）
      */
     private fun requestGetUser() {
         checkAndInit()
@@ -194,6 +208,149 @@ class HttpUrlConnectionEngineFragment :
                 toast("请求异常: ${e.message}")
             }
         }
+    }
+
+    // ==================== 异步请求示例 ====================
+
+    /** 保存当前 Call 引用，用于取消演示 */
+    private var currentCall: Call? = null
+
+    /**
+     * 3. 异步请求 - 回调方式 (enqueue)
+     *
+     * 使用 Network.newCall() 创建 Call，通过 enqueue 回调获取结果
+     * 适用于：不需要协程的场景、传统回调模式
+     */
+    private fun requestAsyncCallback() {
+        checkAndInit()
+
+        toast("正在发起异步请求 (enqueue)...")
+
+        // 1. 创建 Call（不立即执行）
+        currentCall = Network.newCall(HttpMethod.GET, "banner/json") {
+            header("X-Request-Type", "async-callback")
+        }
+
+        // 2. 通过 enqueue 异步执行，结果在回调中返回
+        currentCall!!.enqueue(object : CallCallback {
+            override fun onSuccess(response: HttpResponse) {
+                log("HUC-Sample", "enqueue 成功! HTTP ${response.code}, 耗时 ${response.elapsedMs}ms")
+                log("HUC-Sample", "响应体: ${String(response.body ?: ByteArray(0))}")
+
+                // 切回主线程更新 UI
+                CoroutineScope(Dispatchers.Main).launch {
+                    toast("enqueue 回调成功！HTTP ${response.code}, 耗时 ${response.elapsedMs}ms")
+                }
+
+                // 手动反序列化业务数据
+                response.body?.let { bytes ->
+                    @Suppress("UNCHECKED_CAST")
+                    val resp = Network.config.converter.convert(
+                        bytes,
+                        BaseResponse::class.java
+                    ) as? BaseResponse<*>
+                    if (resp != null && resp.errorCode == 0) {
+                        log("HUC-Sample", "Banner 数据: ${resp.data?.toJson()}")
+                    }
+                }
+            }
+
+            override fun onFailure(exception: Exception) {
+                logE("HUC-Sample", "enqueue 失败: ${exception.message}")
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    handleNetworkError(exception)
+                }
+            }
+        })
+    }
+
+    /**
+     * 4. 异步请求 - 协程方式 (await)
+     *
+     * 使用 Call.await() 挂起函数，结合协程使用
+     * 优点：自动取消（协程取消时）、代码更简洁
+     */
+    private fun requestAsyncAwait() {
+        checkAndInit()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                toast("正在发起异步请求 (await)...")
+
+                // 1. 创建 Call
+                val call = Network.newCall(HttpMethod.GET, "banner/json") {
+                    header("X-Request-Type", "async-await")
+                }
+
+                // 2. await 挂起等待结果（协程取消时自动 cancel）
+                val response = call.await()
+
+                log("HUC-Sample", "await 成功! HTTP ${response.code}, 耗时 ${response.elapsedMs}ms")
+
+                // 3. 反序列化业务数据
+                val parsed = response.toObject(Network.config.converter, BaseResponse::class.java)
+                    as? BaseResponse<*>
+
+                if (parsed != null && parsed.errorCode == 0) {
+                    log("HUC-Sample", "Banner 数据: ${parsed.data?.toJson()}")
+                    toast("await 成功！HTTP ${response.code}, 耗时 ${response.elapsedMs}ms")
+                } else {
+                    toast("业务失败: code=${parsed?.errorCode}, msg=${parsed?.errorMsg}")
+                }
+            } catch (e: Exception) {
+                handleNetworkError(e)
+            }
+        }
+    }
+
+    /**
+     * 5. 异步请求 - 取消演示 (cancel)
+     *
+     * 展示如何主动取消一个正在执行的请求
+     */
+    private fun requestAsyncCancel() {
+        checkAndInit()
+
+        toast("发起请求后 500ms 自动取消...")
+
+        // 1. 发起一个较慢的请求
+        currentCall = Network.newCall(HttpMethod.GET, "banner/json") {
+            connectTimeout(30_000)   // 设置较长超时，确保请求还在进行中
+            readTimeout(30_000)
+        }
+
+        // 2. 通过 enqueue 执行
+        currentCall!!.enqueue(object : CallCallback {
+            override fun onSuccess(response: HttpResponse) {
+                log("HUC-Sample", "请求未被取消，正常完成: HTTP ${response.code}")
+                CoroutineScope(Dispatchers.Main).launch {
+                    toast("请求正常完成（未取消）")
+                }
+            }
+
+            override fun onFailure(exception: Exception) {
+                logE("HUC-Sample", "请求被取消或失败: ${exception.javaClass.simpleName} - ${exception.message}")
+                CoroutineScope(Dispatchers.Main).launch {
+                    when (exception) {
+                        is java.io.IOException -> toast("请求已取消！（IOException）")
+                        else -> toast("请求失败: ${exception.message}")
+                    }
+                }
+            }
+        })
+
+        // 3. 延迟 500ms 后取消请求
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+            currentCall?.let { call ->
+                if (!call.isCanceled && !call.isExecuted) {
+                    call.cancel()
+                    log("HUC-Sample", "已调用 call.cancel(), isCanceled=${call.isCanceled}")
+                } else {
+                    toast("请求已完成，无法取消")
+                }
+            }
+        }, 500)
     }
 
     /**

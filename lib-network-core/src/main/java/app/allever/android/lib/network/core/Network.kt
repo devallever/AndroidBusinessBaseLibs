@@ -311,6 +311,37 @@ object Network {
     fun currentEngine(): String = EngineRegistry.getDefaultName() ?: "未设置"
 
     /**
+     * 创建异步 Call（支持取消、回调、协程 await）
+     *
+     * 使用示例：
+     * ```kotlin
+     * // 回调方式
+     * val call = Network.newCall(HttpMethod.GET, "/user/123") { header("token", "xxx") }
+     * call.enqueue(object : CallCallback {
+     *     override fun onSuccess(response: HttpResponse) { ... }
+     *     override fun onFailure(e: Exception) { ... }
+     * })
+     *
+     * // 协程方式
+     * val response = call.await()
+     * ```
+     *
+     * @param method 请求方法
+     * @param path 接口路径
+     * @param block 请求构建
+     * @return Call 对象，可随时 cancel()
+     */
+    fun newCall(
+        method: HttpMethod,
+        path: String,
+        block: (HttpRequest.Builder.() -> Unit)? = null
+    ): Call {
+        checkInitialized()
+        val request = buildRequest(method, path, null, block)
+        return engine.newCall(request)
+    }
+
+    /**
      * 释放资源（应用退出时调用）
      */
     fun shutdown() {
