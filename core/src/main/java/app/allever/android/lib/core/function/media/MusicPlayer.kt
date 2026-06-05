@@ -5,7 +5,6 @@ import android.media.MediaPlayer
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.core.function.network.HttpHelper
 import app.allever.android.lib.core.helper.CoroutineHelper
 import app.allever.android.lib.core.util.FileUtils
 import app.allever.android.lib.core.util.MD5
@@ -142,7 +141,7 @@ class MusicPlayer {
     }
 
     private fun cacheData(url: String, path: String) {
-        HttpHelper.downloadFile(url, path)
+//        HttpHelper.downloadFile(url, path)
     }
 
     private fun log(msg: String) {

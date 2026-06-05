@@ -40,15 +40,6 @@ dependencies {
     api(libs.coil.svg)
     api(libs.coil.video)
 
-    // okhttp
-    api(libs.okhttp)
-    api(libs.okhttp.logging.interceptor)
-
-    // retrofit
-    api(libs.retrofit)
-    api(libs.retrofit.converter.gson)
-    api(libs.retrofit.converter.scalars)
-
     // gson
     api(libs.gson)
 
