@@ -2,7 +2,7 @@ package app.allever.android.lib.network.core.repository
 
 import app.allever.android.lib.network.core.Network
 import app.allever.android.lib.network.core.engine.HttpMethod
-import app.allever.android.lib.network.core.engine.HttpRequest
+import app.allever.android.lib.network.core.engine.NetRequest
 import app.allever.android.lib.network.core.exception.ExceptionHandler
 import app.allever.android.lib.network.core.exception.NetworkException
 import app.allever.android.lib.network.core.response.IBaseResponse
@@ -69,7 +69,7 @@ abstract class BaseRepository {
         method: HttpMethod,
         path: String,
         body: Any? = null,
-        requestBlock: (HttpRequest.Builder.() -> Unit)? = null
+        requestBlock: (NetRequest.Builder.() -> Unit)? = null
     ): T = request {
         @Suppress("UNCHECKED_CAST")
         when (method) {
@@ -86,27 +86,27 @@ abstract class BaseRepository {
     /** GET 请求 */
     protected suspend fun <T : IBaseResponse> get(
         path: String,
-        block: (HttpRequest.Builder.() -> Unit)? = null
+        block: (NetRequest.Builder.() -> Unit)? = null
     ): T = request(HttpMethod.GET, path, requestBlock = block)
 
     /** POST 请求 */
     protected suspend fun <T : IBaseResponse> post(
         path: String,
         body: Any? = null,
-        block: (HttpRequest.Builder.() -> Unit)? = null
+        block: (NetRequest.Builder.() -> Unit)? = null
     ): T = request(HttpMethod.POST, path, body, block)
 
     /** PUT 请求 */
     protected suspend fun <T : IBaseResponse> put(
         path: String,
         body: Any? = null,
-        block: (HttpRequest.Builder.() -> Unit)? = null
+        block: (NetRequest.Builder.() -> Unit)? = null
     ): T = request(HttpMethod.PUT, path, body, block)
 
     /** DELETE 请求 */
     protected suspend fun <T : IBaseResponse> delete(
         path: String,
-        block: (HttpRequest.Builder.() -> Unit)? = null
+        block: (NetRequest.Builder.() -> Unit)? = null
     ): T = request(HttpMethod.DELETE, path, requestBlock = block)
 
     // ==================== 失败响应创建 ====================
