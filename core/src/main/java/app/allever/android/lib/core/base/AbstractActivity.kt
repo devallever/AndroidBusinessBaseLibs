@@ -56,8 +56,11 @@ abstract class AbstractActivity : AppCompatActivity(), BGASwipeBackHelper.Delega
             StatusBarCompat.translucentStatusBar(this, true)
         }
 
-        // 适配导航栏：设置透明并确保可见
-//        window.navigationBarColor = Color.TRANSPARENT
+        // 适配导航栏：根据主题设置不透明颜色
+        window.navigationBarColor = if (isDarkMode()) Color.BLACK else Color.WHITE
+        // 导航栏按钮图标颜色与背景相反
+        val navController = WindowInsetsControllerCompat(window, window.decorView)
+        navController.isAppearanceLightNavigationBars = !isDarkMode()
 
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 //            val controller = window.insetsController
