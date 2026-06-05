@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
+import app.allever.android.lib.core.base.AbstractBindingActivity
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.media.core.model.MediaItem
@@ -33,10 +34,8 @@ import kotlinx.coroutines.launch
  * - 音频：底部播放栏，支持播放/暂停/进度
  * - 选中/取消选中当前项
  */
-class MediaPreviewActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityMediaPreviewBinding
-
+class MediaPreviewActivity : AbstractBindingActivity<ActivityMediaPreviewBinding>() {
+    
     private lateinit var selectionManager: SelectionManager
     private var maxSelect: Int = 9
     private lateinit var mediaType: String // "image", "video", "audio"
@@ -70,6 +69,8 @@ class MediaPreviewActivity : AppCompatActivity() {
             val selectedIds: Set<Long>,
         )
 
+
+
         fun setPreviewData(items: List<MediaItem>, position: Int, mediaType: String, maxSelect: Int, selectedIds: Set<Long>) {
             previewData = PreviewData(items, position, mediaType, maxSelect, selectedIds)
         }
@@ -80,11 +81,12 @@ class MediaPreviewActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun inflate() = ActivityMediaPreviewBinding.inflate(layoutInflater)
+
+    override fun init() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        binding = ActivityMediaPreviewBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        mBinding = ActivityMediaPreviewBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
 
         // 优先从静态持有者取数据（避免 Binder 溢出），兼容旧方式
         val data = takePreviewData()
@@ -121,9 +123,9 @@ class MediaPreviewActivity : AppCompatActivity() {
         previewItems.addAll(items)
 
         // 隐藏音频栏，显示 ViewPager 和底部选中栏
-        binding.layoutAudioBar.visibility = View.GONE
-        binding.viewPagerPreview.visibility = View.VISIBLE
-        binding.layoutBottomBar.visibility = View.VISIBLE
+        mBinding.layoutAudioBar.visibility = View.GONE
+        mBinding.viewPagerPreview.visibility = View.VISIBLE
+        mBinding.layoutBottomBar.visibility = View.VISIBLE
 
         setupViewPager()
         updateTopBar()
@@ -136,16 +138,16 @@ class MediaPreviewActivity : AppCompatActivity() {
             items = previewItems,
             lifecycleOwner = this,
             onItemClick = { finishWithResult() },
-            onNavigateTo = { position -> binding.viewPagerPreview.setCurrentItem(position, true) },
+            onNavigateTo = { position -> mBinding.viewPagerPreview.setCurrentItem(position, true) },
         )
-        binding.viewPagerPreview.adapter = adapter
-        binding.viewPagerPreview.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        mBinding.viewPagerPreview.adapter = adapter
+        mBinding.viewPagerPreview.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 currentPosition = position
                 updateTopBar()
             }
         })
-        binding.viewPagerPreview.setCurrentItem(currentPosition, false)
+        mBinding.viewPagerPreview.setCurrentItem(currentPosition, false)
     }
 
     // ==================== 音频模式 ====================
@@ -158,19 +160,19 @@ class MediaPreviewActivity : AppCompatActivity() {
         previewItems.addAll(items)
 
         // 显示音频栏，隐藏其他
-        binding.viewPagerPreview.visibility = View.GONE
-        binding.layoutAudioBar.visibility = View.VISIBLE
-        binding.layoutBottomBar.visibility = View.GONE
+        mBinding.viewPagerPreview.visibility = View.GONE
+        mBinding.layoutAudioBar.visibility = View.VISIBLE
+        mBinding.layoutBottomBar.visibility = View.GONE
 
         // 更新顶部标题
-        binding.tvTitle.text = buildString {
+        mBinding.tvTitle.text = buildString {
             append(audioItem.title.ifEmpty { audioItem.name })
             if (items.size > 1) append(" (${currentPosition + 1}/${items.size})")
         }
 
         // 更新音频信息
-        binding.tvAudioTitle.text = audioItem.title.ifEmpty { audioItem.name }
-        binding.tvAudioArtist.text = buildString {
+        mBinding.tvAudioTitle.text = audioItem.title.ifEmpty { audioItem.name }
+        mBinding.tvAudioArtist.text = buildString {
             if (audioItem.artist.isNotEmpty()) append(audioItem.artist)
             if (audioItem.album.isNotEmpty()) {
                 if (isNotEmpty()) append(" · ")
@@ -182,9 +184,9 @@ class MediaPreviewActivity : AppCompatActivity() {
         initMediaPlayer(audioItem.uri)
         updateSelectToggle()
 
-        binding.ivBack.setOnClickListener { finishWithResult() }
-        binding.tvSelectToggle.setOnClickListener { toggleSelection(previewItems[currentPosition]) }
-        binding.btnPlayPause.setOnClickListener { toggleAudioPlay() }
+        mBinding.ivBack.setOnClickListener { finishWithResult() }
+        mBinding.tvSelectToggle.setOnClickListener { toggleSelection(previewItems[currentPosition]) }
+        mBinding.btnPlayPause.setOnClickListener { toggleAudioPlay() }
     }
 
     private fun initMediaPlayer(uri: Uri) {
@@ -240,7 +242,7 @@ class MediaPreviewActivity : AppCompatActivity() {
     }
 
     private fun updatePlayButton() {
-        binding.btnPlayPause.setImageResource(
+        mBinding.btnPlayPause.setImageResource(
             if (isAudioPlaying) R.drawable.ic_media_picker_pause
             else R.drawable.ic_media_picker_play
         )
@@ -255,7 +257,7 @@ class MediaPreviewActivity : AppCompatActivity() {
                         val current = player.currentPosition
                         val duration = player.duration
                         if (duration > 0) {
-                            binding.tvTitle.text = formatTime(current) + " / " + formatTime(duration)
+                            mBinding.tvTitle.text = formatTime(current) + " / " + formatTime(duration)
                         }
                     }
                 }
@@ -267,31 +269,31 @@ class MediaPreviewActivity : AppCompatActivity() {
     // ==================== UI 更新 ====================
 
     private fun updateTopBar() {
-        binding.tvTitle.text = "${currentPosition + 1}/${previewItems.size}"
+        mBinding.tvTitle.text = "${currentPosition + 1}/${previewItems.size}"
         updateSelectToggle()
     }
 
     private fun updateSelectToggle() {
         val item = previewItems.getOrNull(currentPosition) ?: return
         val isSelected = selectionManager.isSelected(item)
-        binding.tvSelectToggle.text = if (isSelected) "取消选择" else "选择"
+        mBinding.tvSelectToggle.text = if (isSelected) "取消选择" else "选择"
     }
 
     private fun updateBottomBar() {
         val count = selectionManager.selectedCount
         if (count > 0) {
-            binding.scrollSelected.visibility = View.VISIBLE
+            mBinding.scrollSelected.visibility = View.VISIBLE
             renderSelectedPreview()
         } else {
-            binding.scrollSelected.visibility = View.GONE
+            mBinding.scrollSelected.visibility = View.GONE
         }
     }
 
     private fun renderSelectedPreview() {
-        binding.layoutSelectedItems.removeAllViews()
+        mBinding.layoutSelectedItems.removeAllViews()
         val inflater = layoutInflater
         selectionManager.toList().forEachIndexed { index, item ->
-            val view = inflater.inflate(R.layout.item_selected_preview, binding.layoutSelectedItems, false)
+            val view = inflater.inflate(R.layout.item_selected_preview, mBinding.layoutSelectedItems, false)
 
             view.findViewById<View>(R.id.tvIndex)?.let {
                 (it as? TextView)?.text = "${index + 1}"
@@ -319,13 +321,13 @@ class MediaPreviewActivity : AppCompatActivity() {
                 }
             }
 
-            binding.layoutSelectedItems.addView(view)
+            mBinding.layoutSelectedItems.addView(view)
         }
     }
 
     private fun setupClickListeners() {
-        binding.ivBack.setOnClickListener { finishWithResult() }
-        binding.tvSelectToggle.setOnClickListener {
+        mBinding.ivBack.setOnClickListener { finishWithResult() }
+        mBinding.tvSelectToggle.setOnClickListener {
             val item = previewItems.getOrNull(currentPosition) ?: return@setOnClickListener
             toggleSelection(item)
         }
@@ -350,9 +352,9 @@ class MediaPreviewActivity : AppCompatActivity() {
                 .placeholder(R.drawable.ic_media_picker_audio)
                 .error(R.drawable.ic_media_picker_audio)
                 .centerCrop()
-                .into(binding.ivAudioCover)
+                .into(mBinding.ivAudioCover)
         } else {
-            binding.ivAudioCover.setImageResource(R.drawable.ic_media_picker_audio)
+            mBinding.ivAudioCover.setImageResource(R.drawable.ic_media_picker_audio)
         }
     }
 
