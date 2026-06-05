@@ -13,12 +13,12 @@ package app.allever.android.lib.network.core.engine
  * @param contentLength Content-Length（用于下载进度计算）
  * @param elapsedMs 请求耗时（毫秒）
  */
-data class HttpResponse(
+data class NetResponse(
     val code: Int,
     val message: String = "",
     val headers: Map<String, String> = emptyMap(),
     val body: ByteArray? = null,
-    val request: HttpRequest? = null,
+    val request: NetRequest? = null,
     val contentLength: Long = -1L,
     val elapsedMs: Long = 0L
 ) {
@@ -52,3 +52,7 @@ data class HttpResponse(
         return body?.let { converter.convert(it, clazz) }
     }
 }
+
+/** 旧名兼容别名（后续版本移除） */
+@Deprecated("请使用 NetResponse 替代", ReplaceWith("NetResponse"))
+typealias HttpResponse = NetResponse

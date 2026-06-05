@@ -1,10 +1,10 @@
 package app.allever.android.lib.network.engine.huc
 
 import android.os.Build
-import app.allever.android.lib.network.core.engine.Call
-import app.allever.android.lib.network.core.engine.CallCallback
-import app.allever.android.lib.network.core.engine.HttpRequest
-import app.allever.android.lib.network.core.engine.HttpResponse
+import app.allever.android.lib.network.core.engine.NetCall
+import app.allever.android.lib.network.core.engine.NetCallback
+import app.allever.android.lib.network.core.engine.NetRequest
+import app.allever.android.lib.network.core.engine.NetResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -24,8 +24,8 @@ import kotlin.coroutines.resumeWithException
  */
 class UrlConnectionCall(
     private val engine: UrlConnectionEngine,
-    private val request: HttpRequest
-) : Call {
+    private val request: NetRequest
+) : NetCall {
 
     private val _executed = AtomicBoolean(false)
     private val _canceled = AtomicBoolean(false)
@@ -33,13 +33,13 @@ class UrlConnectionCall(
     override val isExecuted: Boolean get() = _executed.get()
     override val isCanceled: Boolean get() = _canceled.get()
 
-    override fun execute(): HttpResponse {
+    override fun execute(): NetResponse {
         checkNotCanceled()
         _executed.set(true)
         return engine.execute(request)
     }
 
-    override fun enqueue(callback: CallCallback) {
+    override fun enqueue(callback: NetCallback) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 checkNotCanceled()
@@ -62,9 +62,9 @@ class UrlConnectionCall(
     /**
      * 协程挂起方式执行
      */
-    override suspend fun await(): HttpResponse = suspendCancellableCoroutine { continuation ->
-        enqueue(object : CallCallback {
-            override fun onSuccess(response: HttpResponse) {
+    override suspend fun await(): NetResponse = suspendCancellableCoroutine { continuation ->
+        enqueue(object : NetCallback {
+            override fun onSuccess(response: NetResponse) {
                 continuation.resume(response)
             }
 

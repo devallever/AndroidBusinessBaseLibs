@@ -9,13 +9,13 @@ import kotlin.coroutines.resumeWithException
  *
  * 各引擎实现此接口以提供统一的取消能力
  */
-interface Call {
+interface NetCall {
 
     /** 同步执行（阻塞当前线程） */
-    fun execute(): HttpResponse
+    fun execute(): NetResponse
 
     /** 异步执行（回调方式） */
-    fun enqueue(callback: CallCallback)
+    fun enqueue(callback: NetCallback)
 
     /** 取消请求 */
     fun cancel()
@@ -27,9 +27,9 @@ interface Call {
     val isCanceled: Boolean
 
     /** 协程挂起方式执行（自动取消） */
-    suspend fun await(): HttpResponse = suspendCancellableCoroutine { continuation ->
-        val callback = object : CallCallback {
-            override fun onSuccess(response: HttpResponse) {
+    suspend fun await(): NetResponse = suspendCancellableCoroutine { continuation ->
+        val callback = object : NetCallback {
+            override fun onSuccess(response: NetResponse) {
                 continuation.resume(response)
             }
 
@@ -49,7 +49,14 @@ interface Call {
 /**
  * 异步回调接口
  */
-interface CallCallback {
-    fun onSuccess(response: HttpResponse)
+interface NetCallback {
+    fun onSuccess(response: NetResponse)
     fun onFailure(exception: Exception)
 }
+
+/** 旧名兼容别名（后续版本移除） */
+@Deprecated("请使用 NetCall 替代", ReplaceWith("NetCall"))
+typealias Call = NetCall
+
+@Deprecated("请使用 NetCallback 替代", ReplaceWith("NetCallback"))
+typealias CallCallback = NetCallback

@@ -1,7 +1,7 @@
 package app.allever.android.lib.network.core.interceptor
 
-import app.allever.android.lib.network.core.engine.HttpRequest
-import app.allever.android.lib.network.core.engine.HttpResponse
+import app.allever.android.lib.network.core.engine.NetRequest
+import app.allever.android.lib.network.core.engine.NetResponse
 
 /**
  * 拦截器链
@@ -11,26 +11,26 @@ import app.allever.android.lib.network.core.engine.HttpResponse
  * - 通过 chain.proceed() 传递到下一个拦截器或引擎执行
  * - 支持短路（直接返回，不调用 proceed）
  */
-class InterceptorChain(
-    private val interceptors: List<Interceptor>,
+class NetChain(
+    private val interceptors: List<NetInterceptor>,
     private val index: Int = 0,
-    private val engineExecute: (HttpRequest) -> HttpResponse
+    private val engineExecute: (NetRequest) -> NetResponse
 ) {
 
     /** 当前请求（可通过 interceptors 修改） */
-    var request: HttpRequest? = null
+    var request: NetRequest? = null
 
     /**
      * 执行请求（传递给下一个拦截器或引擎）
      * @param request 可修改后的请求
      * @return 响应
      */
-    fun proceed(request: HttpRequest): HttpResponse {
+    fun proceed(request: NetRequest): NetResponse {
         this.request = request
 
         // 还有未执行的拦截器 → 交给下一个
         if (index < interceptors.size) {
-            val nextChain = InterceptorChain(
+            val nextChain = NetChain(
                 interceptors = interceptors,
                 index = index + 1,
                 engineExecute = engineExecute
@@ -43,3 +43,7 @@ class InterceptorChain(
         return engineExecute(request)
     }
 }
+
+/** 旧名兼容别名（后续版本移除） */
+@Deprecated("请使用 NetChain 替代", ReplaceWith("NetChain"))
+typealias InterceptorChain = NetChain

@@ -1,6 +1,6 @@
 package app.allever.android.lib.network.core.interceptor
 
-import app.allever.android.lib.network.core.engine.HttpResponse
+import app.allever.android.lib.network.core.engine.NetResponse
 import app.allever.android.lib.network.core.exception.NetworkException
 import kotlin.math.min
 
@@ -23,13 +23,13 @@ class RetryInterceptor(
     private val linearBackoff: Boolean = true,
     /** 自定义判断：该异常是否可重试 */
     private val shouldRetry: ((Throwable) -> Boolean)? = null
-) : Interceptor {
+) : NetInterceptor {
 
     companion object {
         private const val MAX_RETRY_INTERVAL_MS = 5000L
     }
 
-    override fun intercept(chain: InterceptorChain): HttpResponse {
+    override fun intercept(chain: NetChain): NetResponse {
         var lastException: Exception? = null
 
         repeat(maxRetries + 1) { attempt ->

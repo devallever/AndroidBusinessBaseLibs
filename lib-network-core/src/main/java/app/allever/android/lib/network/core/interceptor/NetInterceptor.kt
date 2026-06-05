@@ -1,7 +1,7 @@
 package app.allever.android.lib.network.core.interceptor
 
-import app.allever.android.lib.network.core.engine.HttpRequest
-import app.allever.android.lib.network.core.engine.HttpResponse
+import app.allever.android.lib.network.core.engine.NetRequest
+import app.allever.android.lib.network.core.engine.NetResponse
 
 /**
  * 应用层拦截器接口（引擎无关）
@@ -15,7 +15,7 @@ import app.allever.android.lib.network.core.engine.HttpResponse
  * - RetryInterceptor: 失败重试
  * - LoggerInterceptor: 请求/响应日志
  */
-interface Interceptor {
+interface NetInterceptor {
 
     /**
      * 拦截处理
@@ -23,5 +23,9 @@ interface Interceptor {
      * @return 响应
      */
     @Throws(Exception::class)
-    fun intercept(chain: InterceptorChain): HttpResponse
+    fun intercept(chain: NetChain): NetResponse
 }
+
+/** 旧名兼容别名（后续版本移除） */
+@Deprecated("请使用 NetInterceptor 替代", ReplaceWith("NetInterceptor"))
+typealias Interceptor = NetInterceptor

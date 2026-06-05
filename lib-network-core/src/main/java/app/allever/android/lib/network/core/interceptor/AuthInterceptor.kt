@@ -1,8 +1,8 @@
 package app.allever.android.lib.network.core.interceptor
 
 import android.util.Log
-import app.allever.android.lib.network.core.engine.HttpRequest
-import app.allever.android.lib.network.core.engine.HttpResponse
+import app.allever.android.lib.network.core.engine.NetRequest
+import app.allever.android.lib.network.core.engine.NetResponse
 import app.allever.android.lib.network.core.exception.NetworkException
 import app.allever.android.lib.network.core.response.ResponseAdapter
 import kotlinx.coroutines.runBlocking
@@ -41,7 +41,7 @@ class AuthInterceptor(
     private val successCode: Int = 0,
     /** 配置中的 responseClass，用于解析响应 */
     private val responseClass: Class<*>? = null
-) : Interceptor {
+) : NetInterceptor {
 
     companion object {
         private const val TAG = "AuthInterceptor"
@@ -49,7 +49,7 @@ class AuthInterceptor(
         const val TOKEN_EXPIRED_CODE = 401
     }
 
-    override fun intercept(chain: InterceptorChain): HttpResponse {
+    override fun intercept(chain: NetChain): NetResponse {
         val originalRequest = chain.request!!
 
         // 判断是否需要携带 Token
@@ -92,8 +92,8 @@ class AuthInterceptor(
     /**
      * 向请求中注入 Token
      */
-    private fun injectToken(request: HttpRequest, token: String): HttpRequest {
-        return HttpRequest.Builder()
+    private fun injectToken(request: NetRequest, token: String): NetRequest {
+        return NetRequest.Builder()
             .url(request.url)
             .method(request.method)
             .headers(request.headers)
@@ -109,7 +109,7 @@ class AuthInterceptor(
     /**
      * 判断是否需要刷新 Token
      */
-    private fun shouldRefreshToken(response: HttpResponse): Boolean {
+    private fun shouldRefreshToken(response: NetResponse): Boolean {
         // HTTP 层面的 401
         if (response.code == HttpURLConnection.HTTP_UNAUTHORIZED) return true
 

@@ -3,7 +3,7 @@ package app.allever.android.lib.network.core
 import app.allever.android.lib.network.core.engine.EngineConfig
 import app.allever.android.lib.network.core.engine.ResponseConverter
 import app.allever.android.lib.network.core.exception.NetworkException
-import app.allever.android.lib.network.core.interceptor.Interceptor
+import app.allever.android.lib.network.core.interceptor.NetInterceptor
 import app.allever.android.lib.network.core.response.GsonConverter
 
 /**
@@ -22,8 +22,8 @@ import app.allever.android.lib.network.core.response.GsonConverter
  *     header("Accept", "application/json")
  *
  *     // 应用层拦截器
- *     interceptor(AuthInterceptor(...))
- *     interceptor(RetryInterceptor(3))
+ *     interceptor(AuthNetInterceptor(...))
+ *     interceptor(RetryNetInterceptor(3))
  *
  *     // 响应体配置（支持任意字段名）
  *     responseClass(MyResponse::class.java)
@@ -65,7 +65,7 @@ class NetworkConfig internal constructor(builder: Builder) {
     // ==================== 拦截器 ====================
 
     /** 应用层拦截器列表（按添加顺序执行） */
-    val interceptors: List<Interceptor> = builder.interceptors.toList()
+    val interceptors: List<NetInterceptor> = builder.interceptors.toList()
 
     /** 是否启用日志拦截器 */
     val logEnabled: Boolean = builder.logEnabled
@@ -141,8 +141,8 @@ class NetworkConfig internal constructor(builder: Builder) {
         val headers: Map<String, String> get() = _headers
 
         // ---- 拦截器 ----
-        private val _interceptors = mutableListOf<Interceptor>()
-        val interceptors: List<Interceptor> get() = _interceptors
+        private val _interceptors = mutableListOf<NetInterceptor>()
+        val interceptors: List<NetInterceptor> get() = _interceptors
         var logEnabled: Boolean = true
 
         // ---- 响应体映射 ----
@@ -189,7 +189,7 @@ class NetworkConfig internal constructor(builder: Builder) {
 
         // ---- 拦截器 ----
 
-        fun interceptor(interceptor: Interceptor) = apply {
+        fun interceptor(interceptor: NetInterceptor) = apply {
             _interceptors.add(interceptor)
         }
 

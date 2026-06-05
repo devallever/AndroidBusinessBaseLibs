@@ -20,14 +20,14 @@ interface HttpEngine {
      * @param request 引擎无关的请求对象
      * @return 引擎无关的响应对象
      */
-    fun execute(request: HttpRequest): HttpResponse
+    fun execute(request: NetRequest): NetResponse
 
     /**
      * 创建异步调用（支持取消）
      * @param request 引擎无关的请求对象
      * @return 可取消的 Call 对象
      */
-    fun newCall(request: HttpRequest): Call
+    fun newCall(request: NetRequest): NetCall
 
     /**
      * 释放引擎资源

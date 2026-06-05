@@ -5,7 +5,7 @@ import app.allever.android.lib.network.core.engine.*
 import app.allever.android.lib.network.core.exception.ExceptionHandler
 import app.allever.android.lib.network.core.exception.NetworkException
 import app.allever.android.lib.network.core.interceptor.HeaderInterceptor
-import app.allever.android.lib.network.core.interceptor.InterceptorChain
+import app.allever.android.lib.network.core.interceptor.NetChain
 import app.allever.android.lib.network.core.interceptor.LoggerInterceptor
 import app.allever.android.lib.network.core.response.GsonConverter
 import app.allever.android.lib.network.core.response.ResponseAdapter
@@ -104,33 +104,33 @@ object Network {
     suspend fun <T> get(
         path: String,
         type: Type? = null,
-        block: (HttpRequest.Builder.() -> Unit)? = null,
+        block: (NetRequest.Builder.() -> Unit)? = null,
     ): Result<T> = executeRequest(HttpMethod.GET, path, null, block, null)
 
     suspend fun <T> post(
         path: String,
         bodyData: Any? = null,
-        block: (HttpRequest.Builder.() -> Unit)? = null,
+        block: (NetRequest.Builder.() -> Unit)? = null,
         type: Type? = null
     ): Result<T> = executeRequest(HttpMethod.POST, path, bodyData, block, type)
 
     suspend fun <T> put(
         path: String,
         bodyData: Any? = null,
-        block: (HttpRequest.Builder.() -> Unit)? = null,
+        block: (NetRequest.Builder.() -> Unit)? = null,
         type: Type? = null
     ): Result<T> = executeRequest(HttpMethod.PUT, path, bodyData, block, type)
 
     suspend fun <T> delete(
         path: String,
-        block: (HttpRequest.Builder.() -> Unit)? = null,
+        block: (NetRequest.Builder.() -> Unit)? = null,
         type: Type? = null
     ): Result<T> = executeRequest(HttpMethod.DELETE, path, null, block, type)
 
     suspend fun <T> patch(
         path: String,
         bodyData: Any? = null,
-        block: (HttpRequest.Builder.() -> Unit)? = null,
+        block: (NetRequest.Builder.() -> Unit)? = null,
         type: Type? = null
     ): Result<T> = executeRequest(HttpMethod.PATCH, path, bodyData, block, type)
 
@@ -141,7 +141,7 @@ object Network {
         method: HttpMethod,
         path: String,
         bodyData: Any?,
-        customBlock: (HttpRequest.Builder.() -> Unit)?,
+        customBlock: (NetRequest.Builder.() -> Unit)?,
         explicitType: Type?
     ): Result<T> {
         checkInitialized()
@@ -153,7 +153,7 @@ object Network {
 
                 // 2. 构建拦截器链并执行
                 val allInterceptors = buildInterceptors()
-                val chain = InterceptorChain(
+                val chain = NetChain(
                     interceptors = allInterceptors,
                     engineExecute = { req ->
                         val startTime = System.currentTimeMillis()
@@ -203,12 +203,12 @@ object Network {
     }
 
     /**
-     * 获取原始 HttpResponse（不进行业务反序列化）
+     * 获取原始 NetResponse（不进行业务反序列化）
      */
     suspend fun rawGet(
         path: String,
-        block: (HttpRequest.Builder.() -> Unit)? = null
-    ): Result<HttpResponse> {
+        block: (NetRequest.Builder.() -> Unit)? = null
+    ): Result<NetResponse> {
         checkInitialized()
 
         return try {
@@ -237,11 +237,11 @@ object Network {
         method: HttpMethod,
         path: String,
         bodyData: Any?,
-        customBlock: (HttpRequest.Builder.() -> Unit)?
-    ): HttpRequest {
+        customBlock: (NetRequest.Builder.() -> Unit)?
+    ): NetRequest {
         val fullUrl = resolveUrl(path)
 
-        return HttpRequest.Builder().apply {
+        return NetRequest.Builder().apply {
             url(fullUrl)
             method(method)
             connectTimeout(config.engineConfig.connectTimeoutMs)
@@ -255,7 +255,7 @@ object Network {
                     else -> (config.converter as? GsonConverter)
                         ?.toJson(bodyData) ?: bodyData.toString()
                 }
-                body(RequestBody.create(json))
+                body(NetBody.create(json))
             }
 
             // 用户自定义配置
@@ -269,8 +269,8 @@ object Network {
         return "$base/$p"
     }
 
-    private fun buildInterceptors(): List<app.allever.android.lib.network.core.interceptor.Interceptor> {
-        val list = mutableListOf<app.allever.android.lib.network.core.interceptor.Interceptor>()
+    private fun buildInterceptors(): List<app.allever.android.lib.network.core.interceptor.NetInterceptor> {
+        val list = mutableListOf<app.allever.android.lib.network.core.interceptor.NetInterceptor>()
 
         if (config.logEnabled) {
             list.add(LoggerInterceptor())
@@ -317,8 +317,8 @@ object Network {
      * ```kotlin
      * // 回调方式
      * val call = Network.newCall(HttpMethod.GET, "/user/123") { header("token", "xxx") }
-     * call.enqueue(object : CallCallback {
-     *     override fun onSuccess(response: HttpResponse) { ... }
+     * call.enqueue(object : NetCallback {
+     *     override fun onSuccess(response: NetResponse) { ... }
      *     override fun onFailure(e: Exception) { ... }
      * })
      *
@@ -329,13 +329,13 @@ object Network {
      * @param method 请求方法
      * @param path 接口路径
      * @param block 请求构建
-     * @return Call 对象，可随时 cancel()
+     * @return NetCall 对象，可随时 cancel()
      */
     fun newCall(
         method: HttpMethod,
         path: String,
-        block: (HttpRequest.Builder.() -> Unit)? = null
-    ): Call {
+        block: (NetRequest.Builder.() -> Unit)? = null
+    ): NetCall {
         checkInitialized()
         val request = buildRequest(method, path, null, block)
         return engine.newCall(request)

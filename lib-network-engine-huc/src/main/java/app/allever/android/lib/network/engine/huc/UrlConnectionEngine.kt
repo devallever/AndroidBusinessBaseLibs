@@ -32,7 +32,7 @@ class UrlConnectionEngine(private val config: UrlConnectionConfig) : HttpEngine 
 
     override val engineName: String = ENGINE_NAME
 
-    override fun execute(request: HttpRequest): HttpResponse {
+    override fun execute(request: NetRequest): NetResponse {
         val startTime = System.currentTimeMillis()
         var connection: HttpURLConnection? = null
 
@@ -54,7 +54,7 @@ class UrlConnectionEngine(private val config: UrlConnectionConfig) : HttpEngine 
             val body = readBody(connection)
             val contentLength = connection.contentLength.toLong()
 
-            return HttpResponse(
+            return NetResponse(
                 code = code,
                 message = message,
                 headers = headers,
@@ -71,7 +71,7 @@ class UrlConnectionEngine(private val config: UrlConnectionConfig) : HttpEngine 
         }
     }
 
-    override fun newCall(request: HttpRequest): Call {
+    override fun newCall(request: NetRequest): NetCall {
         return UrlConnectionCall(this, request)
     }
 
@@ -85,7 +85,7 @@ class UrlConnectionEngine(private val config: UrlConnectionConfig) : HttpEngine 
     /**
      * 创建并配置 HttpURLConnection
      */
-    private fun createConnection(request: HttpRequest): HttpURLConnection {
+    private fun createConnection(request: NetRequest): HttpURLConnection {
         val url = URL(request.url)
         val connection = url.openConnection() as HttpURLConnection
 
@@ -130,7 +130,7 @@ class UrlConnectionEngine(private val config: UrlConnectionConfig) : HttpEngine 
     /**
      * 写入请求体
      */
-    private fun writeBody(connection: HttpURLConnection, body: RequestBody) {
+    private fun writeBody(connection: HttpURLConnection, body: NetBody) {
         body.contentType?.let {
             connection.setRequestProperty("Content-Type", it)
         }

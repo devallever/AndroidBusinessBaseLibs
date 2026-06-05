@@ -7,7 +7,7 @@ package app.allever.android.lib.network.core.engine
  * - OkHttp → okhttp3.RequestBody
  * - HttpURLConnection → OutputStream 写入
  */
-abstract class RequestBody {
+abstract class NetBody {
 
     /** Content-Type (如 "application/json; charset=utf-8") */
     abstract val contentType: String?
@@ -20,22 +20,21 @@ abstract class RequestBody {
 
     // ==================== 工厂方法 ====================
 
-    /** 创建 JSON 请求体 */
     companion object {
         /**
          * 从字符串创建请求体
          * @param content 字符串内容
          * @param contentType MIME 类型，默认 application/json
          */
-        fun create(content: String, contentType: String = "application/json; charset=utf-8"): RequestBody {
-            return StringRequestBody(content, contentType)
+        fun create(content: String, contentType: String = "application/json; charset=utf-8"): NetBody {
+            return StringNetBody(content, contentType)
         }
 
         /**
          * 从字节数组创建请求体
          */
-        fun create(bytes: ByteArray, contentType: String = "application/octet-stream"): RequestBody {
-            return BytesRequestBody(bytes, contentType)
+        fun create(bytes: ByteArray, contentType: String = "application/octet-stream"): NetBody {
+            return BytesNetBody(bytes, contentType)
         }
 
         /**
@@ -43,22 +42,22 @@ abstract class RequestBody {
          * @param file 文件
          * @param contentType MIME 类型
          */
-        fun create(file: java.io.File, contentType: String? = null): RequestBody {
-            return FileRequestBody(file, contentType)
+        fun create(file: java.io.File, contentType: String? = null): NetBody {
+            return FileNetBody(file, contentType)
         }
 
         /**
          * 空请求体
          */
-        fun empty(): RequestBody = EmptyRequestBody()
+        fun empty(): NetBody = EmptyNetBody()
     }
 }
 
 /** 字符串请求体 */
-private class StringRequestBody(
+private class StringNetBody(
     private val content: String,
     override val contentType: String?
-) : RequestBody() {
+) : NetBody() {
     override fun contentLength(): Long = content.toByteArray(Charsets.UTF_8).size.toLong()
 
     override fun writeTo(output: java.io.OutputStream) {
@@ -67,10 +66,10 @@ private class StringRequestBody(
 }
 
 /** 字节数组请求体 */
-private class BytesRequestBody(
+private class BytesNetBody(
     private val bytes: ByteArray,
     override val contentType: String?
-) : RequestBody() {
+) : NetBody() {
     override fun contentLength(): Long = bytes.size.toLong()
 
     override fun writeTo(output: java.io.OutputStream) {
@@ -79,10 +78,10 @@ private class BytesRequestBody(
 }
 
 /** 文件请求体 */
-private class FileRequestBody(
+private class FileNetBody(
     private val file: java.io.File,
     private val _contentType: String?
-) : RequestBody() {
+) : NetBody() {
     override val contentType: String? get() = _contentType
         ?: when (file.extension.lowercase()) {
             "json" -> "application/json"
@@ -104,10 +103,14 @@ private class FileRequestBody(
 }
 
 /** 空请求体 */
-private class EmptyRequestBody : RequestBody() {
+private class EmptyNetBody : NetBody() {
     override val contentType: String? = null
     override fun contentLength(): Long = 0L
     override fun writeTo(output: java.io.OutputStream) {
         // 无操作
     }
 }
+
+/** 旧名兼容别名（后续版本移除） */
+@Deprecated("请使用 NetBody 替代", ReplaceWith("NetBody"))
+typealias RequestBody = NetBody

@@ -1,8 +1,8 @@
 package app.allever.android.lib.network.core.interceptor
 
 import android.util.Log
-import app.allever.android.lib.network.core.engine.HttpRequest
-import app.allever.android.lib.network.core.engine.HttpResponse
+import app.allever.android.lib.network.core.engine.NetRequest
+import app.allever.android.lib.network.core.engine.NetResponse
 
 /**
  * 日志拦截器
@@ -22,9 +22,9 @@ import app.allever.android.lib.network.core.engine.HttpResponse
 class LoggerInterceptor(
     private val enabled: Boolean = true,
     private val tag: String = "Network"
-) : Interceptor {
+) : NetInterceptor {
 
-    override fun intercept(chain: InterceptorChain): HttpResponse {
+    override fun intercept(chain: NetChain): NetResponse {
         if (!enabled) return chain.proceed(chain.request!!)
 
         val request = chain.request!!
@@ -39,7 +39,7 @@ class LoggerInterceptor(
         return response
     }
 
-    private fun logRequest(request: HttpRequest) {
+    private fun logRequest(request: NetRequest) {
         Log.d(tag, "┌────────── Request ──────────→")
         Log.d(tag, "${request.method} ${request.url}")
         Log.d(tag, "Headers: ${request.headers}")
@@ -51,7 +51,7 @@ class LoggerInterceptor(
         Log.d(tag, "Timeouts: connect=${request.connectTimeoutMs}ms read=${request.readTimeoutMs}ms")
     }
 
-    private fun logResponse(response: HttpResponse, elapsedMs: Long) {
+    private fun logResponse(response: NetResponse, elapsedMs: Long) {
         Log.d(tag, "←───────── Response ───────────")
         Log.d(tag, "Code: ${response.code} (${elapsedMs}ms)")
         Log.d(tag, "Headers: ${response.headers.keys}")

@@ -5,19 +5,19 @@ package app.allever.android.lib.network.core.engine
  *
  * 使用示例：
  * ```kotlin
- * val request = HttpRequest.Builder()
+ * val request = NetRequest.Builder()
  *     .url("https://api.example.com/user")
  *     .method(HttpMethod.GET)
  *     .header("Authorization", "Bearer token")
  *     .build()
  * ```
  */
-class HttpRequest private constructor(
+class NetRequest private constructor(
     val url: String,
     val method: HttpMethod,
     val headers: Map<String, String>,
     val params: Map<String, String>,
-    val body: RequestBody?,
+    val body: NetBody?,
     val tag: Any?,
     val connectTimeoutMs: Long,
     val readTimeoutMs: Long,
@@ -39,7 +39,7 @@ class HttpRequest private constructor(
         var method: HttpMethod = HttpMethod.GET
         private val headers = mutableMapOf<String, String>()
         private val params = mutableMapOf<String, String>()
-        var body: RequestBody? = null
+        var body: NetBody? = null
         var tag: Any? = null
         var connectTimeoutMs: Long = 10_000L
         var readTimeoutMs: Long = 15_000L
@@ -66,7 +66,7 @@ class HttpRequest private constructor(
         /** 批量添加 query 参数 */
         fun params(map: Map<String, String>) = apply { params.putAll(map) }
 
-        fun body(body: RequestBody?) = apply { this.body = body }
+        fun body(body: NetBody?) = apply { this.body = body }
         fun tag(tag: Any?) = apply { this.tag = tag }
         fun connectTimeout(ms: Long) = apply { connectTimeoutMs = ms }
         fun readTimeout(ms: Long) = apply { readTimeoutMs = ms }
@@ -80,9 +80,9 @@ class HttpRequest private constructor(
             return "$url$separator$queryString"
         }
 
-        fun build(): HttpRequest {
-            require(url.isNotBlank()) { "HttpRequest url 不能为空" }
-            return HttpRequest(
+        fun build(): NetRequest {
+            require(url.isNotBlank()) { "NetRequest url 不能为空" }
+            return NetRequest(
                 url = buildUrl(),
                 method = method,
                 headers = headers.toMap(),
@@ -98,7 +98,11 @@ class HttpRequest private constructor(
 
     /** DSL 创建请求的便捷方法 */
     companion object {
-        inline fun request(block: Builder.() -> Unit): HttpRequest =
+        inline fun request(block: Builder.() -> Unit): NetRequest =
             Builder().apply(block).build()
     }
 }
+
+/** 旧名兼容别名（后续版本移除） */
+@Deprecated("请使用 NetRequest 替代", ReplaceWith("NetRequest"))
+typealias HttpRequest = NetRequest

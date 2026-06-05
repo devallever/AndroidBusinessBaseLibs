@@ -12,10 +12,10 @@ import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toJson
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.network.core.Network
-import app.allever.android.lib.network.core.engine.Call
-import app.allever.android.lib.network.core.engine.CallCallback
+import app.allever.android.lib.network.core.engine.NetCall
+import app.allever.android.lib.network.core.engine.NetCallback
 import app.allever.android.lib.network.core.engine.HttpMethod
-import app.allever.android.lib.network.core.engine.HttpResponse
+import app.allever.android.lib.network.core.engine.NetResponse
 import app.allever.android.lib.network.core.exception.NetworkException
 import app.allever.android.lib.network.engine.huc.UrlConnectionConfig
 import app.allever.android.lib.network.engine.huc.UrlConnectionEngine
@@ -64,23 +64,6 @@ class HttpUrlConnectionEngineFragment :
         TextClickItem("6. Repository - GET 获取Banner (永不抛异常)") {
             requestRepoGetBanner()
         },
-//        TextClickItem("3. POST 请求 - 登录") {
-//            requestLogin()
-//        },
-//        TextClickItem("4. PUT 请求 - 更新用户") {
-//            requestUpdateUser()
-//        },
-//        TextClickItem("5. DELETE 请求 - 删除资源") {
-//            requestDelete()
-//        },
-
-        // ==================== 错误处理示例 ====================
-//        TextClickItem("6. 模拟网络异常处理") {
-//            simulateNetworkError()
-//        },
-//        TextClickItem("7. 模拟业务错误处理") {
-//            simulateBizError()
-//        },
 
         // ==================== 高级功能示例 ====================
         TextClickItem("9. 查看当前引擎信息") {
@@ -104,8 +87,6 @@ class HttpUrlConnectionEngineFragment :
      * Token 数据
      */
     data class TokenData(val accessToken: String, val refreshToken: String)
-
-    // ==================== 数据模型（见 Models.kt）====================
 
     // BaseResponse<T> / BannerData 已提取到顶层 Models.kt
 
@@ -195,12 +176,12 @@ class HttpUrlConnectionEngineFragment :
     // ==================== 异步请求示例 ====================
 
     /** 保存当前 Call 引用，用于取消演示 */
-    private var currentCall: Call? = null
+    private var currentCall: NetCall? = null
 
     /**
      * 3. 异步请求 - 回调方式 (enqueue)
      *
-     * 使用 Network.newCall() 创建 Call，通过 enqueue 回调获取结果
+     * 使用 Network.newCall() 创建 NetCall，通过 enqueue 回调获取结果
      * 适用于：不需要协程的场景、传统回调模式
      */
     private fun requestAsyncCallback() {
@@ -208,14 +189,14 @@ class HttpUrlConnectionEngineFragment :
 
         toast("正在发起异步请求 (enqueue)...")
 
-        // 1. 创建 Call（不立即执行）
+        // 1. 创建 NetCall（不立即执行）
         currentCall = Network.newCall(HttpMethod.GET, "banner/json") {
             header("X-Request-Type", "async-callback")
         }
 
         // 2. 通过 enqueue 异步执行，结果在回调中返回
-        currentCall!!.enqueue(object : CallCallback {
-            override fun onSuccess(response: HttpResponse) {
+        currentCall!!.enqueue(object : NetCallback {
+            override fun onSuccess(response: NetResponse) {
                 log("HUC-Sample", "enqueue 成功! HTTP ${response.code}, 耗时 ${response.elapsedMs}ms")
                 log("HUC-Sample", "响应体: ${String(response.body ?: ByteArray(0))}")
 
@@ -250,7 +231,7 @@ class HttpUrlConnectionEngineFragment :
     /**
      * 4. 异步请求 - 协程方式 (await)
      *
-     * 使用 Call.await() 挂起函数，结合协程使用
+     * 使用 NetCall.await() 挂起函数，结合协程使用
      * 优点：自动取消（协程取消时）、代码更简洁
      */
     private fun requestAsyncAwait() {
@@ -260,7 +241,7 @@ class HttpUrlConnectionEngineFragment :
             try {
                 toast("正在发起异步请求 (await)...")
 
-                // 1. 创建 Call
+                // 1. 创建 NetCall
                 val call = Network.newCall(HttpMethod.GET, "banner/json") {
                     header("X-Request-Type", "async-await")
                 }
@@ -303,8 +284,8 @@ class HttpUrlConnectionEngineFragment :
         }
 
         // 2. 通过 enqueue 执行
-        currentCall!!.enqueue(object : CallCallback {
-            override fun onSuccess(response: HttpResponse) {
+        currentCall!!.enqueue(object : NetCallback {
+            override fun onSuccess(response: NetResponse) {
                 log("HUC-Sample", "请求未被取消，正常完成: HTTP ${response.code}")
                 CoroutineScope(Dispatchers.Main).launch {
                     toast("请求正常完成（未取消）")

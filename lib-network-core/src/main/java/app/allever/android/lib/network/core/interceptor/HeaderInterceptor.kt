@@ -1,8 +1,8 @@
 package app.allever.android.lib.network.core.interceptor
 
 import android.util.Log
-import app.allever.android.lib.network.core.engine.HttpRequest
-import app.allever.android.lib.network.core.engine.HttpResponse
+import app.allever.android.lib.network.core.engine.NetRequest
+import app.allever.android.lib.network.core.engine.NetResponse
 
 /**
  * 公共请求头拦截器
@@ -15,17 +15,17 @@ import app.allever.android.lib.network.core.engine.HttpResponse
  * - Accept: application/json
  * - Content-Type: application/json; charset=utf-8
  */
-class HeaderInterceptor(private val globalHeaders: Map<String, String>) : Interceptor {
+class HeaderInterceptor(private val globalHeaders: Map<String, String>) : NetInterceptor {
 
     companion object {
         private const val TAG = "HeaderInterceptor"
     }
 
-    override fun intercept(chain: InterceptorChain): HttpResponse {
+    override fun intercept(chain: NetChain): NetResponse {
         val originalRequest = chain.request ?: return chain.proceed(chain.request!!)
 
         // 构建新请求，合并全局 header
-        val builder = HttpRequest.Builder()
+        val builder = NetRequest.Builder()
             .url(originalRequest.url)
             .method(originalRequest.method)
             .connectTimeout(originalRequest.connectTimeoutMs)
