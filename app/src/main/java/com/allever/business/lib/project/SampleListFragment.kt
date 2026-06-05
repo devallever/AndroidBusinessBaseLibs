@@ -43,6 +43,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         },
         TextClickItem("Media") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_MEDIA).navigation()
-        }
+        },
+        TextClickItem("NetworkCore") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_NETWORK_CORE).navigation()
+        },
     )
 }

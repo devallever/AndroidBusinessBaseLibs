@@ -22,5 +22,7 @@ class RouterPath {
         const val PATH_SAMPLE_PERMISSION = "/permission/main"
 
         const val PATH_SAMPLE_MEDIA = "/media/main"
+
+        const val PATH_SAMPLE_NETWORK_CORE = "/network/main"
     }
 }
