@@ -80,7 +80,6 @@ class PreviewAdapter(
                     Glide.with(binding.root)
                         .load(item.uri)
                         .placeholder(R.color.media_picker_placeholder)
-                        .centerCrop()
                         .into(binding.photoView)
                     binding.photoView.setScale(1f, false)
                 }
@@ -107,7 +106,6 @@ class PreviewAdapter(
             Glide.with(binding.root)
                 .load(item.uri)
                 .placeholder(R.color.media_picker_placeholder)
-                .centerCrop()
                 .into(binding.photoView)
 
             binding.tvVideoTotalTime.text = formatDurationMs(item.duration)

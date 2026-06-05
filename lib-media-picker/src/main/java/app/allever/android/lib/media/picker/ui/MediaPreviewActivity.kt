@@ -88,6 +88,7 @@ class MediaPreviewActivity : AbstractBindingActivity<ActivityMediaPreviewBinding
 
         setupUI()
         observeViewModel()
+        adaptStatusBar(mBinding.layoutTopBar)
     }
 
     // ==================== UI 初始化（根据模式） ====================

@@ -6,12 +6,22 @@
     android:layout_height="match_parent"
     android:background="#000000">
 
+
+
+    <!-- 图片/视频预览区域（ViewPager2，视频播放在 item 内部） -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="56dp" />
+
     <!-- 顶部操作栏 -->
     <RelativeLayout
         android:id="@+id/layoutTopBar"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="#CC000000"
+        android:background="#80000000"
         android:gravity="center_vertical">
 
         <ImageView
@@ -46,14 +56,6 @@
             android:textColor="#FFFFFF"
             android:textSize="14sp" />
     </RelativeLayout>
-
-    <!-- 图片/视频预览区域（ViewPager2，视频播放在 item 内部） -->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPagerPreview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="56dp" />
 
     <!-- 音频播放器底部栏 -->
     <LinearLayout
