@@ -199,21 +199,23 @@ class UrlConnectionEngine(private val config: UrlConnectionConfig) : HttpEngine 
     }
 
     companion object {
-        const val ENGINE_NAME = "url_connection"
+        /** 引擎名称（非 const，避免编译期内联导致类不被加载） */
+        val ENGINE_NAME = "url_connection"
 
         /**
          * 模块被引用时自动注册到 EngineRegistry
          */
-        init {EngineRegistry.register(ENGINE_NAME) { rawConfig ->
-            when (rawConfig) {
-                is UrlConnectionConfig -> rawConfig
-                else -> UrlConnectionConfig().also {
-                    it.connectTimeoutMs = rawConfig.connectTimeoutMs
-                    it.readTimeoutMs = rawConfig.readTimeoutMs
-                    it.writeTimeoutMs = rawConfig.writeTimeoutMs
-                }
-            }.let { UrlConnectionEngine(it) }
-        }
+        init {
+            EngineRegistry.register(ENGINE_NAME) { rawConfig ->
+                when (rawConfig) {
+                    is UrlConnectionConfig -> rawConfig
+                    else -> UrlConnectionConfig().also {
+                        it.connectTimeoutMs = rawConfig.connectTimeoutMs
+                        it.readTimeoutMs = rawConfig.readTimeoutMs
+                        it.writeTimeoutMs = rawConfig.writeTimeoutMs
+                    }
+                }.let { UrlConnectionEngine(it) }
+            }
 
         }
     }
