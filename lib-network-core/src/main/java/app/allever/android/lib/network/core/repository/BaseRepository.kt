@@ -39,18 +39,17 @@ abstract class BaseRepository {
     /**
      * 统一请求方法 — 永不抛异常
      *
-     * 执行 [block] 获取 Result<T>：
+     * 执行 [block] 获取业务响应：
      * - **成功**：直接返回解析后的响应对象（T 必须实现 [IBaseResponse]）
      * - **失败**：通过反射创建失败响应实例（code=-1, msg=错误信息），返回非 null
      *
      * @param T 响应类型，必须实现 [IBaseResponse]
-     * @param block 实际的请求逻辑，通常调用 [NetCore.get] / [NetCore.post] 等
+     * @param block 实际的请求逻辑，通常调用 [NetCore.get] / [NetCore.post] 等（内部抛异常）
      * @return 永不返回 null（失败时返回填充了错误信息的响应实例）
      */
-    protected suspend fun <T : IBaseResponse> request(block: suspend () -> Result<T>): T {
+    protected suspend fun <T : IBaseResponse> request(block: suspend () -> T): T {
         return try {
-            val result = block()
-            result.getOrNull() ?: createFailureResponse("响应数据为空")
+            block()
         } catch (e: Exception) {
             createFailureResponse(e)
         }

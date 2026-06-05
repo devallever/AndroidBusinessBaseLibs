@@ -131,26 +131,21 @@ class OkhttpEngineFragment :
             try {
                 toast("正在发起 GET 请求...")
 
-                val result = NetCore.get<BaseResponse<List<BannerData>>>("banner/json")
-                if (result.isSuccess) {
-                    val resp = result.getOrNull()
-                    if (resp != null && resp.errorCode == 0) {
-                        val data = resp.data
-                        if (data != null) {
-                            log("OkHttp-Sample", "response = ${data.toJson()}")
-                            toast("GET 成功！response = ${data.toJson()}")
-                        } else {
-                            toast("GET 成功但 data 为空")
-                        }
+                val resp = NetCore.get<BaseResponse<List<BannerData>>>("banner/json")
+                if (resp.isSuccess()) {
+                    val data = resp.data
+                    if (data != null) {
+                        log("OkHttp-Sample", "response = ${data.toJson()}")
+                        toast("GET 成功！response = ${data.toJson()}")
                     } else {
-                        logE("业务失败: code=${resp?.errorCode}, msg=${resp?.errorMsg}")
-                        toast("业务失败: code=${resp?.errorCode}, msg=${resp?.errorMsg}")
+                        toast("GET 成功但 data 为空")
                     }
                 } else {
-                    handleNetworkError(result.exceptionOrNull()!!)
+                    logE("业务失败: code=${resp.errorCode}, msg=${resp.errorMsg}")
+                    toast("业务失败: code=${resp.errorCode}, msg=${resp.errorMsg}")
                 }
             } catch (e: Exception) {
-                toast("请求异常: ${e.message}")
+                handleNetworkError(e)
             }
         }
     }

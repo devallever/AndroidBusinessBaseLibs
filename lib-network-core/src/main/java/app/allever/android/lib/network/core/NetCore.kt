@@ -105,34 +105,34 @@ object NetCore {
         path: String,
         type: Type? = null,
         block: (NetRequest.Builder.() -> Unit)? = null,
-    ): Result<T> = executeRequest(HttpMethod.GET, path, null, block, type)
+    ): T = executeRequest(HttpMethod.GET, path, null, block, type)
 
     suspend fun <T> post(
         path: String,
         bodyData: Any? = null,
         block: (NetRequest.Builder.() -> Unit)? = null,
         type: Type? = null
-    ): Result<T> = executeRequest(HttpMethod.POST, path, bodyData, block, type)
+    ): T = executeRequest(HttpMethod.POST, path, bodyData, block, type)
 
     suspend fun <T> put(
         path: String,
         bodyData: Any? = null,
         block: (NetRequest.Builder.() -> Unit)? = null,
         type: Type? = null
-    ): Result<T> = executeRequest(HttpMethod.PUT, path, bodyData, block, type)
+    ): T = executeRequest(HttpMethod.PUT, path, bodyData, block, type)
 
     suspend fun <T> delete(
         path: String,
         block: (NetRequest.Builder.() -> Unit)? = null,
         type: Type? = null
-    ): Result<T> = executeRequest(HttpMethod.DELETE, path, null, block, type)
+    ): T = executeRequest(HttpMethod.DELETE, path, null, block, type)
 
     suspend fun <T> patch(
         path: String,
         bodyData: Any? = null,
         block: (NetRequest.Builder.() -> Unit)? = null,
         type: Type? = null
-    ): Result<T> = executeRequest(HttpMethod.PATCH, path, bodyData, block, type)
+    ): T = executeRequest(HttpMethod.PATCH, path, bodyData, block, type)
 
     // ==================== 核心请求执行（非 inline，内部使用）====================
 
@@ -143,7 +143,7 @@ object NetCore {
         bodyData: Any?,
         customBlock: (NetRequest.Builder.() -> Unit)?,
         explicitType: Type?
-    ): Result<T> {
+    ): T {
         checkInitialized()
 
         return withContext(Dispatchers.IO) {
@@ -191,13 +191,12 @@ object NetCore {
                     }
                 }
 
-                @Suppress("UNCHECKED_CAST")
-                Result.success(parsedResponse as T)
+                parsedResponse as T
 
             } catch (e: Exception) {
                 val networkException = ExceptionHandler.handle(e)
                 handleGlobalError(networkException, null)
-                Result.failure(networkException)
+                throw networkException
             }
         }
     }
