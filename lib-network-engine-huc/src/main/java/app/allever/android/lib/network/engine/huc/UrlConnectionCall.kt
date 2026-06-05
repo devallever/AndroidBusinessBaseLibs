@@ -5,6 +5,7 @@ import app.allever.android.lib.network.core.engine.NetCall
 import app.allever.android.lib.network.core.engine.NetCallback
 import app.allever.android.lib.network.core.engine.NetRequest
 import app.allever.android.lib.network.core.engine.NetResponse
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -40,7 +41,7 @@ class UrlConnectionCall(
     }
 
     override fun enqueue(callback: NetCallback) {
-        GlobalScope.launch(Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
                 checkNotCanceled()
                 val response = engine.execute(request)
