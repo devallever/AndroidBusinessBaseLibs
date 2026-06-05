@@ -219,7 +219,6 @@ class PermissionBaseSampleFragment: ListFragment<FragmentListBinding, ListViewMo
         TextClickItem("申请邻近设备权限 (版本适配)") {
             requestNearbyDevicesPermission()
         },
-        TextClickItem("")
     )
 
     private fun requestCameraPermission() {

@@ -1,10 +1,16 @@
 package app.allever.android.lib.core.base
 
 import android.app.Activity
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import app.allever.android.lib.core.R
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
@@ -50,6 +56,9 @@ abstract class AbstractActivity : AppCompatActivity(), BGASwipeBackHelper.Delega
             StatusBarCompat.translucentStatusBar(this, true)
         }
 
+        // 适配导航栏：设置透明并确保可见
+//        window.navigationBarColor = Color.TRANSPARENT
+
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 //            val controller = window.insetsController
 //            if (controller != null) {
@@ -83,21 +92,19 @@ abstract class AbstractActivity : AppCompatActivity(), BGASwipeBackHelper.Delega
         }
     }
 
-//    override fun setContentView(view: View?) {
-//        val start = System.currentTimeMillis()
-//        super.setContentView(view)
-//        val end = System.currentTimeMillis()
-//        val duration = end - start
-//        log("页面加载时长：${this::class.java.simpleName} -> $duration ms")
-//    }
-//
-//    override fun setContentView(layoutResID: Int) {
-//        val start = System.currentTimeMillis()
-//        super.setContentView(layoutResID)
-//        val end = System.currentTimeMillis()
-//        val duration = end - start
-//        log("页面加载时长：${this::class.java.simpleName} -> $duration ms")
-//    }
+    override fun setContentView(view: View?) {
+        super.setContentView(view)
+        adaptNavigationBar(view)
+    }
+
+    override fun setContentView(layoutResID: Int) {
+        super.setContentView(layoutResID)
+        val contentView = window.findViewById<ViewGroup>(android.R.id.content)
+        val childView = contentView.getChildAt(0)
+        if (childView != null) {
+            adaptNavigationBar(childView)
+        }
+    }
 
     /**
      * 初始化滑动返回。在 super.onCreate(savedInstanceState) 之前调用该方法
@@ -253,5 +260,17 @@ abstract class AbstractActivity : AppCompatActivity(), BGASwipeBackHelper.Delega
      */
     protected fun adaptStatusBar(view: View) {
         ViewHelper.setMarginTop(view, DisplayHelper.getStatusBarHeight(this))
+    }
+
+    /**
+     * 适配导航栏：确保内容不被导航栏覆盖
+     */
+    private fun adaptNavigationBar(view: View?) {
+        if (view == null) return
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, navigationBars.bottom)
+            insets
+        }
     }
 }

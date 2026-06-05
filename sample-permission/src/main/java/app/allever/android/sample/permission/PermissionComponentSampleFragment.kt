@@ -211,7 +211,6 @@ class PermissionComponentSampleFragment :
                     onDenied = { deniedList -> toast("${deniedList.size}个权限被拒绝") },
                 )
             },
-            TextClickItem("")
         )
     }
 
