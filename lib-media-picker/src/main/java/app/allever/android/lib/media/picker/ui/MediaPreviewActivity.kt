@@ -150,6 +150,7 @@ class MediaPreviewActivity : AbstractBindingActivity<ActivityMediaPreviewBinding
     private fun setupClickListeners() {
         mBinding.ivBack.setOnClickListener { finishWithResult() }
         mBinding.tvSelectToggle.setOnClickListener { handleToggleSelection() }
+        mBinding.btnConfirm.setOnClickListener { finishWithResult() }
     }
 
     // ==================== 观察 ViewModel 状态（唯一的数据来源） ====================
@@ -169,11 +170,13 @@ class MediaPreviewActivity : AbstractBindingActivity<ActivityMediaPreviewBinding
             }
         }
 
-        // 底部选中栏显隐
+        // 底部选中栏：显隐 + 渲染（由 selectCountText 驱动，确保每次选中变化都刷新）
         lifecycleScope.launch {
-            viewModel.hasSelection.collect { has ->
-                mBinding.scrollSelected.visibility = if (has) View.VISIBLE else View.GONE
-                if (has) renderSelectedPreview()
+            viewModel.selectCountText.collect { text ->
+                mBinding.tvSelectCount.text = text
+                val hasSelection = viewModel.hasSelection.value
+                mBinding.scrollSelected.visibility = if (hasSelection) View.VISIBLE else View.GONE
+                if (hasSelection) renderSelectedPreview()
             }
         }
 
@@ -230,8 +233,7 @@ class MediaPreviewActivity : AbstractBindingActivity<ActivityMediaPreviewBinding
             }
 
             view.findViewById<View>(R.id.ivRemove)?.setOnClickListener {
-                viewModel.selectionManager.remove(item)
-                // 触发 UI 刷新（通过 selectionManager 内部的 LiveData 驱动）
+                viewModel.removeSelection(item)
             }
 
             view.findViewById<ImageView>(R.id.ivThumbnail)?.let { iv ->

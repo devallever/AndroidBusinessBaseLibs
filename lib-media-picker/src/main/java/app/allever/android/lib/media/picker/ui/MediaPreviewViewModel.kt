@@ -77,6 +77,9 @@ class MediaPreviewViewModel : ViewModel() {
     private var _hasSelection = MutableStateFlow(false)
     val hasSelection: StateFlow<Boolean> = _hasSelection.asStateFlow()
 
+    private var _selectCountText = MutableStateFlow("已选 0/9")
+    val selectCountText: StateFlow<String> = _selectCountText.asStateFlow()
+
     // ==================== MediaPlayer ====================
 
     private var mediaPlayer: MediaPlayer? = null
@@ -130,6 +133,13 @@ class MediaPreviewViewModel : ViewModel() {
         updateSelectToggleUI()
         updateHasSelectionUI()
         return toggled
+    }
+
+    /** 移除指定项（供底部栏删除按钮调用） */
+    fun removeSelection(item: MediaItem) {
+        selectionManager.remove(item)
+        updateSelectToggleUI()
+        updateHasSelectionUI()
     }
 
     fun isFullAndNotToggled(): Boolean {
@@ -264,7 +274,9 @@ class MediaPreviewViewModel : ViewModel() {
     }
 
     private fun updateHasSelectionUI() {
-        _hasSelection.value = selectionManager.selectedCount > 0
+        val count = selectionManager.selectedCount
+        _hasSelection.value = count > 0
+        _selectCountText.value = "已选 $count/${_maxSelect.value}"
     }
 
     /** 根据当前 item 更新音频信息（仅音频模式） */

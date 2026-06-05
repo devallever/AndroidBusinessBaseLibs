@@ -114,30 +114,67 @@
             android:contentDescription="播放/暂停" />
     </LinearLayout>
 
-    <!-- 底部选中预览（图片/视频预览时显示） -->
-    <FrameLayout
+    <!-- 底部已选预览（图片/视频预览时显示，与 MediaPickerFragment 底部栏一致） -->
+    <LinearLayout
         android:id="@+id/layoutBottomBar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="#E6FFFFFF"
-        android:visibility="visible">
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:elevation="8dp">
 
+        <!-- 分割线 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#EEEEEE" />
+
+        <!-- 已选预览横向列表 -->
         <HorizontalScrollView
             android:id="@+id/scrollSelected"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none">
+            android:layout_height="72dp"
+            android:scrollbars="none"
+            android:fillViewport="true"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/layoutSelectedItems"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp" />
+                android:paddingVertical="8dp"
+                android:paddingStart="12dp" />
         </HorizontalScrollView>
-    </FrameLayout>
+
+        <!-- 底部操作栏：确认 + 计数 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical|end"
+            android:paddingHorizontal="16dp">
+
+            <TextView
+                android:id="@+id/tvSelectCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已选 0/9"
+                android:textSize="14sp"
+                android:textColor="#666666" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnConfirm"
+                android:layout_width="72dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="16dp"
+                android:text="确定"
+                android:textSize="14sp"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:background="@drawable/bg_media_picker_btn_confirm" />
+        </LinearLayout>
+    </LinearLayout>
 
 </FrameLayout>
