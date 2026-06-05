@@ -75,8 +75,11 @@ abstract class AbstractActivity : AppCompatActivity(), BGASwipeBackHelper.Delega
 
 
         if (enableEnterAnim()) {
-            //打开动画
-            overridePendingTransition(R.anim.open_begin, R.anim.open_end)
+            // 使用 decorView.post 延迟到主线程队列末尾执行，
+            // 避免 LeakCanary 等通过 ContentProvider 提前注册的 ActivityLifecycleCallbacks 覆盖动画设置
+            window.decorView.post {
+                overridePendingTransition(R.anim.open_begin, R.anim.open_end)
+            }
         }
     }
 
