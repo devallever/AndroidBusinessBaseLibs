@@ -14,17 +14,12 @@ import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.network.core.Network
 import app.allever.android.lib.network.core.engine.Call
 import app.allever.android.lib.network.core.engine.CallCallback
-import app.allever.android.lib.network.core.engine.EngineRegistry
-import app.allever.android.lib.network.core.engine.HttpEngine
 import app.allever.android.lib.network.core.engine.HttpMethod
 import app.allever.android.lib.network.core.engine.HttpResponse
 import app.allever.android.lib.network.core.exception.NetworkException
-import app.allever.android.lib.network.core.response.ResponseCode
-import app.allever.android.lib.network.core.response.ResponseData
-import app.allever.android.lib.network.core.response.ResponseMsg
 import app.allever.android.lib.network.engine.huc.UrlConnectionConfig
 import app.allever.android.lib.network.engine.huc.UrlConnectionEngine
-import app.allever.android.lib.network.engine.huc.UrlConnectionEngine.Companion.ENGINE_NAME
+import app.allever.android.sample.network.core.repository.WanAndroidRepository
 import com.chad.library.adapter.base.BaseQuickAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -64,6 +59,11 @@ class HttpUrlConnectionEngineFragment :
         TextClickItem("5. 异步请求 - 取消请求 (cancel)") {
             requestAsyncCancel()
         },
+
+        // ==================== Repository 层封装示例 ====================
+        TextClickItem("6. Repository - GET 获取Banner (永不抛异常)") {
+            requestRepoGetBanner()
+        },
 //        TextClickItem("3. POST 请求 - 登录") {
 //            requestLogin()
 //        },
@@ -83,7 +83,7 @@ class HttpUrlConnectionEngineFragment :
 //        },
 
         // ==================== 高级功能示例 ====================
-        TextClickItem("8. 查看当前引擎信息") {
+        TextClickItem("9. 查看当前引擎信息") {
             showEngineInfo()
         }
     )
@@ -105,27 +105,9 @@ class HttpUrlConnectionEngineFragment :
      */
     data class TokenData(val accessToken: String, val refreshToken: String)
 
-    // ==================== 自定义响应体（演示不同字段名）====================
+    // ==================== 数据模型（见 Models.kt）====================
 
-    /**
-     * 示例 A：标准格式 { code, msg, data }
-     */
-    data class BaseResponse<T>(
-        @ResponseCode val errorCode: Int = -1,
-        @ResponseMsg val errorMsg: String = "",
-        @ResponseData val data: T? = null
-    )
-
-    data class BannerData(
-        val desc: String,
-        val id: Int,
-        val imagePath: String,
-        val isVisible: Int,
-        val order: Int,
-        val title: String,
-        val type: Int,
-        val url: String
-    )
+    // BaseResponse<T> / BannerData 已提取到顶层 Models.kt
 
 
     // ==================== 示例方法 ====================
@@ -353,8 +335,36 @@ class HttpUrlConnectionEngineFragment :
         }, 500)
     }
 
+    // ==================== Repository 层封装示例 ====================
+
     /**
-     * 8. 显示当前引擎信息
+     * 6. Repository - GET 获取Banner
+     *
+     * 核心优势：**永不抛异常，无需 try-catch**
+     *
+     * 对比 Network.get()：
+     * - Network.get() 返回 Result<T>，需要 isSuccess / getOrNull() / exceptionOrNull()
+     * - Repository.get() 直接返回 BaseResponse<T>，只需判断 errorCode
+     */
+    private fun requestRepoGetBanner() {
+        checkAndInit()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            // ✅ 无需 try-catch，直接用！
+            val resp = WanAndroidRepository.getBanner()
+
+            if (resp.errorCode == 0) {
+                log("HUC-Sample", "Repo-GET 成功! data = ${resp.data?.toJson()}")
+                toast("Repo-GET 成功! 共 ${resp.data?.size ?: 0} 条 Banner")
+            } else {
+                logE("HUC-Sample", "Repo-GET 失败: code=${resp.errorCode}, msg=${resp.errorMsg}")
+                toast("Repo-GET 失败: ${resp.errorMsg}")
+            }
+        }
+    }
+
+    /**
+     * 9. 显示当前引擎信息
      */
     private fun showEngineInfo() {
         val info = buildString {
@@ -365,6 +375,7 @@ class HttpUrlConnectionEngineFragment :
                 appendLine("baseUrl: ${Network.config.baseUrl}")
                 appendLine("successCode: ${Network.config.successCode}")
                 appendLine("responseClass: ${Network.config.responseClass?.simpleName}")
+                appendLine("baseResponseClass: ${Network.config.baseResponseClass?.simpleName}")
                 appendLine("拦截器数: ${Network.config.interceptors.size}")
                 appendLine("公共头数: ${Network.config.headers.size}")
                 appendLine("日志开关: ${Network.config.logEnabled}")

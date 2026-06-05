@@ -114,6 +114,13 @@ class NetworkConfig internal constructor(builder: Builder) {
      */
     val responseClass: Class<*>? = builder.responseClass
 
+    /**
+     * 基础响应类（用于 Repository 层反射实例化失败响应）
+     * 必须有无参构造函数，且可通过字段赋值设置 code/msg/data
+     * 如不设置，BaseRepository 将返回 null
+     */
+    val baseResponseClass: Class<*>? = builder.responseClass
+
     // ==================== 错误处理 ====================
 
     /** 全局错误回调 */
@@ -216,6 +223,13 @@ class NetworkConfig internal constructor(builder: Builder) {
          * @param clazz 响应类的 Class，如 MyResponse::class.java
          */
         fun responseClass(clazz: Class<*>) = apply { responseClass = clazz }
+
+        /**
+         * 设置基础响应类（用于 Repository 层反射实例化失败响应）
+         * 该类必须有无参构造函数
+         * @param clazz 基础响应类的 Class
+         */
+        fun baseResponseClass(clazz: Class<*>) = apply { responseClass = clazz }
 
         // ---- 错误处理 ----
 
