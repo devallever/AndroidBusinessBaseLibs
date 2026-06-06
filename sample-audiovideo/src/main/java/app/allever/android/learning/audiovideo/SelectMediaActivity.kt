@@ -8,19 +8,16 @@ import app.allever.android.lib.common.BaseActivity
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.media.core.model.MediaItem
-import app.allever.android.lib.media.core.model.MediaType
-import app.allever.android.lib.media.picker.MediaPickerConfig
-import app.allever.android.lib.media.picker.MediaPickerContract
+import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.audiovideo.databinding.ActivitySelectMediaBinding
 
 class SelectMediaActivity : BaseActivity<ActivitySelectMediaBinding, SelectMediaViewModel>() {
-    private val launcher = registerForActivityResult(
-        MediaPickerContract()
-    ) { items ->
+
+    val videoPickerLauncher = MediaPickerCore.registerPickerLauncher( this) {items ->
         if (items.isEmpty()) {
-            toast("未选择任何资源")
-            return@registerForActivityResult
+            toast("请选择视频文件")
+            return@registerPickerLauncher
         }
         items.firstOrNull()?.let { item ->
             when (item) {
@@ -29,6 +26,7 @@ class SelectMediaActivity : BaseActivity<ActivitySelectMediaBinding, SelectMedia
                         0 -> {
                             ActivityHelper.startActivity<VideoViewPlayerActivity> {
                                 putExtra("MEDIA_BEAN", item)
+                                finish()
                             }
                         }
 
@@ -36,12 +34,14 @@ class SelectMediaActivity : BaseActivity<ActivitySelectMediaBinding, SelectMedia
                             ActivityHelper.startActivity<TextureViewPlayerActivity> {
                                 putExtra("MEDIA_BEAN", item)
                             }
+                            finish()
                         }
 
                         2 -> {
                             ActivityHelper.startActivity<SurfaceViewPlayerActivity> {
                                 putExtra("MEDIA_BEAN", item)
                             }
+                            finish()
                         }
                     }
                 }
@@ -49,19 +49,13 @@ class SelectMediaActivity : BaseActivity<ActivitySelectMediaBinding, SelectMedia
                 else -> toast("请选择视频文件")
             }
         }
-
     }
     override fun init() {
         initTopBar("选择视频")
         mViewModel.initExtra(intent)
 
         binding.btnSelectMedia.setOnClickListener {
-            launcher.launch(
-                MediaPickerConfig(
-                    types = setOf(MediaType.Type.VIDEO),
-                    maxSelect = 1,
-                )
-            )
+            MediaPickerCore.launchVideo(videoPickerLauncher)
         }
 
     }
