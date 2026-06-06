@@ -14,7 +14,7 @@ class TimerTask2(
     private val task = Runnable {
         block()
         if (loop) {
-            log("开始: 间隔 = $delay")
+//            log("开始: 间隔 = $delay")
             start()
         }
     }

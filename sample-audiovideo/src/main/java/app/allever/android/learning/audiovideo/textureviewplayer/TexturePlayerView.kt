@@ -14,8 +14,8 @@ import app.allever.android.learning.audiovideo.StatusListener
 import app.allever.android.sample.audiovideo.databinding.TexturePlayerViewBinding
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.core.function.media.MediaBean
 import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.core.helper.ViewHelper
 import app.allever.android.lib.core.util.TimeUtils
@@ -174,6 +174,11 @@ class TexturePlayerView @JvmOverloads constructor(
         binding.seekBar.max = duration.toInt()
         val text = TimeUtils.formatTime(duration, TimeUtils.FORMAT_mm_ss)
         binding.tvDuration.text = " / $text"
+        binding.videoView.post {
+            if (binding.videoView.width > 0 && binding.videoView.height > 0) {
+                stretching(binding.videoView.width.toFloat(), binding.videoView.height.toFloat())
+            }
+        }
     }
 
     override fun onVideoPlay() {
@@ -209,6 +214,11 @@ class TexturePlayerView @JvmOverloads constructor(
             val mVideoWidth = mTextureViewHandler.getMediaPlayer()?.videoWidth?.toFloat() ?: 0f
             val mVideoHeight = mTextureViewHandler.getMediaPlayer()?.videoHeight?.toFloat() ?: 0f
 
+            if (mVideoWidth == 0f || mVideoHeight == 0f) {
+                logE("视频宽高为0")
+                return@post
+            }
+
             //得到缩放比，从而获得最佳缩放比
             val sx = mtextureViewWidth / mVideoWidth;
             val sy = mtextureViewHeight / mVideoHeight;
@@ -216,7 +226,7 @@ class TexturePlayerView @JvmOverloads constructor(
             val sx1 = mVideoWidth / mtextureViewWidth;
             val sy1 = mVideoHeight / mtextureViewHeight;
             matrix.preScale(sx1, sy1);
-            log("mat", matrix.toString());
+//            log("mat", matrix.toString());
             //然后判断最佳比例，满足一边能够填满
             if (sx >= sy) {
                 matrix.preScale(sy, sy);
