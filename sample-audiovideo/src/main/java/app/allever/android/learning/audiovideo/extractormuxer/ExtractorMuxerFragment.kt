@@ -19,6 +19,7 @@ import app.allever.android.lib.core.function.media.SongMediaPlayer
 import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.core.util.FileUtils
 import app.allever.android.lib.media.core.model.MediaItem
+import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.audiovideo.databinding.FragmentExtractorMuxerBinding
 import kotlinx.coroutines.Dispatchers
@@ -42,11 +43,26 @@ class ExtractorMuxerFragment : BaseFragment<FragmentExtractorMuxerBinding, BaseV
         SongMediaPlayer()
     }
 
+    private val videoPickerLauncher = MediaPickerCore.registerPickerLauncher(this) {
+        if (it.isEmpty()) {
+            toast("请选择视频")
+            return@registerPickerLauncher
+        }
+
+        val item = it[0]
+        mSelectMediaPath = item.path
+        mOriginFileName = FileUtils.getFileName(mSelectMediaPath)
+        log("path = $mSelectMediaPath")
+        lifecycleScope.launch {
+            mBinding.tvSelectMediaPath.text = getSelectMediaInfo()
+        }
+    }
+
     override fun inflate() = FragmentExtractorMuxerBinding.inflate(layoutInflater)
 
     override fun init() {
         mBinding.btnSelectMedia.setOnClickListener {
-            selectVideo()
+            MediaPickerCore.launchVideo(videoPickerLauncher)
         }
         mBinding.btnExtraAudio.setOnClickListener {
             if (mSelectMediaPath.isEmpty()) {
@@ -84,7 +100,7 @@ class ExtractorMuxerFragment : BaseFragment<FragmentExtractorMuxerBinding, BaseV
                 return@setOnClickListener
             }
             ActivityHelper.startActivity<TextureViewPlayerActivity> {
-                val mediaBean = MediaItem.Video.newDefault(FileUtils.getFileName(mExtraVideoPath), mExtraVideoPath)
+                val mediaBean = MediaItem.Video.newDefault(mExtraVideoPath, FileUtils.getFileName(mExtraVideoPath))
                 mBinding.videoViewExtra.setData(mediaBean)
                 putExtra("MEDIA_BEAN", mediaBean)
             }
@@ -100,32 +116,17 @@ class ExtractorMuxerFragment : BaseFragment<FragmentExtractorMuxerBinding, BaseV
                 mBinding.tvMuxerVideoPath.text = "合成视频路径：${mMuxerAudioVideoPath}"
             }
         }
-    }
 
-    /**
-     * 选则视频
-     */
-    private fun selectVideo() {
-        toast("请选择视频")
-//        MediaPicker.launchPickerActivity(
-//            MediaHelper.TYPE_VIDEO,
-//            mediaPickerListener = object : MediaPickerListener {
-//                override fun onPicked(
-//                    all: MutableList<MediaBean>,
-//                    imageList: MutableList<MediaBean>,
-//                    videoList: MutableList<MediaBean>,
-//                    audioList: MutableList<MediaBean>
-//                ) {
-//                    mSelectMediaPath = videoList[0].path
-//                    mOriginFileName = FileUtils.getFileName(mSelectMediaPath)
-//                    log("path = $mSelectMediaPath")
-//                    if (videoList.isNotEmpty()) {
-//                        lifecycleScope.launch {
-//                            mBinding.tvSelectMediaPath.text = getSelectMediaInfo()
-//                        }
-//                    }
-//                }
-//            })
+        mBinding.btnPlayMuxerVideo.setOnClickListener {
+            if (mMuxerAudioVideoPath.isEmpty() || mMuxerAudioVideoPath.isEmpty()) {
+                return@setOnClickListener
+            }
+            ActivityHelper.startActivity<TextureViewPlayerActivity> {
+                val mediaBean = MediaItem.Video.newDefault(mMuxerAudioVideoPath, FileUtils.getFileName(mMuxerAudioVideoPath))
+                mBinding.videoViewMuxer.setData(mediaBean)
+                putExtra("MEDIA_BEAN", mediaBean)
+            }
+        }
     }
 
     private suspend fun getSelectMediaInfo() = withContext(Dispatchers.IO) {

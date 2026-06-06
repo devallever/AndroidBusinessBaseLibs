@@ -165,7 +165,7 @@ class SurfacePlayerView @JvmOverloads constructor(
         mMediaBean = mediaBean
         playerHandler.initVideoView(binding.videoView, mediaBean, this)
         binding.tvTitle.text = mMediaBean.name
-        changeVideoSize()
+//        changeVideoSize()
     }
 
     override fun onPrepare(duration: Long) {
@@ -193,7 +193,7 @@ class SurfacePlayerView @JvmOverloads constructor(
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        changeVideoSize()
+//        changeVideoSize()
     }
 
     //改变视频的尺寸自适应。

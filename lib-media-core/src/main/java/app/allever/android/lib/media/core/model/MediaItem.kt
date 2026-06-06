@@ -3,6 +3,7 @@ package app.allever.android.lib.media.core.model
 import android.net.Uri
 import android.os.Parcelable
 import android.os.Parcel
+import androidx.core.net.toUri
 
 /**
  * 媒体资源基类，使用 sealed class 保证类型安全
@@ -87,7 +88,7 @@ sealed class MediaItem : Parcelable {
             fun newDefault( path: String, name: String): Video {
                 return Video(
                     id = 0,
-                    uri = Uri.EMPTY,
+                    uri = path.toUri(),
                     path = path,
                     name = name,
                     dateAdded = 0,
