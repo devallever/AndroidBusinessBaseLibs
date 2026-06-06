@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import android.view.Surface
 import android.view.TextureView
 import android.view.View
-import app.allever.android.lib.core.function.player.kernel.internal.AbsPlayer
+import app.allever.android.learning.audiovideo.kernel.internal.AbsPlayer
 
 class TextureRenderView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null

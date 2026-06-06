@@ -15,10 +15,10 @@ import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.core.function.media.SongMediaPlayer
 import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.core.util.FileUtils
 import app.allever.android.lib.media.core.model.MediaItem
+import app.allever.android.lib.media.core.player.SongMediaPlayer
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.audiovideo.databinding.FragmentExtractorMuxerBinding

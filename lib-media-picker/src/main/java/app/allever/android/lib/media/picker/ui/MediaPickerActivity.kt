@@ -2,6 +2,8 @@ package app.allever.android.lib.media.picker.ui
 
 import android.content.Intent
 import app.allever.android.lib.core.base.AbstractBindingActivity
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toJson
 import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.picker.MediaPickerConfig
 import app.allever.android.lib.media.picker.R
@@ -40,6 +42,9 @@ class MediaPickerActivity : AbstractBindingActivity<ActivityMediaPickerBinding>(
     private fun returnResult(items: List<MediaItem>) {
         val result = Intent().apply {
             putParcelableArrayListExtra(MediaPickerConfig.KEY_RESULT, ArrayList(items))
+        }
+        items.forEach {
+            log("选中媒体: ${it.toJson()}")
         }
         setResult(RESULT_OK, result)
         finish()

@@ -1,4 +1,4 @@
-package app.allever.android.lib.core.function.player.kernel.internal
+package app.allever.android.learning.audiovideo.kernel.internal
 
 import app.allever.android.lib.core.ext.log
 

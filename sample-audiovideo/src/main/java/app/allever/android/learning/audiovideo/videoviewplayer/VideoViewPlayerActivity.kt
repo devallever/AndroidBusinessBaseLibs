@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Build
 import app.allever.android.sample.audiovideo.databinding.ActivityVideoViewPlayerBinding
 import app.allever.android.lib.common.BaseActivity
-import app.allever.android.lib.core.function.media.MediaBean
 import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.mvvm.base.BaseViewModel
 

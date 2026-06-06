@@ -7,7 +7,6 @@ import android.view.Surface
 import android.view.TextureView
 import app.allever.android.learning.audiovideo.BasePlayerHandler
 import app.allever.android.learning.audiovideo.StatusListener
-import app.allever.android.lib.core.function.media.MediaBean
 import app.allever.android.lib.media.core.model.MediaItem
 
 class TextureViewHandler : BasePlayerHandler(), TextureView.SurfaceTextureListener {

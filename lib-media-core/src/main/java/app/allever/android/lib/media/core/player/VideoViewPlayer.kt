@@ -1,29 +1,29 @@
-package app.allever.android.learning.audiovideo.videoviewplayer
+package app.allever.android.lib.media.core.player
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.media.MediaPlayer
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.widget.MediaController
 import android.widget.SeekBar
+import android.widget.VideoView
 import androidx.constraintlayout.widget.ConstraintLayout
-import app.allever.android.learning.audiovideo.StatusListener
-import app.allever.android.sample.audiovideo.databinding.VideoPlayerViewBinding
-import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.R
+import app.allever.android.lib.core.databinding.VideoPlayerViewBinding
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.function.work.TimerTask2
 import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.core.helper.ViewHelper
 import app.allever.android.lib.core.util.TimeUtils
 import app.allever.android.lib.media.core.model.MediaItem
-import app.allever.android.sample.audiovideo.R
 import kotlin.math.abs
 
-class VideoPlayerView @JvmOverloads constructor(
+class VideoViewPlayer @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : ConstraintLayout(context, attrs), StatusListener {
 
@@ -35,8 +35,10 @@ class VideoPlayerView @JvmOverloads constructor(
 
     private var mMediaBean: MediaItem? = null
 
+    private var mShowTitleBar = false
+
     init {
-        binding = VideoPlayerViewBinding.inflate(LayoutInflater.from(App.context), this, true)
+        binding = VideoPlayerViewBinding.inflate(LayoutInflater.from(context))
 
         initListener()
     }
@@ -79,16 +81,20 @@ class VideoPlayerView @JvmOverloads constructor(
         }
 
         binding.controlView.setOnClickListener {
-            val visible = binding.controlContainer.visibility == View.VISIBLE
+            val visible = binding.controlContainer.visibility == VISIBLE
             ViewHelper.setVisible(binding.controlContainer, !visible)
-            ViewHelper.setVisible(binding.topBarContainer, !visible)
+            if (!mShowTitleBar) {
+                ViewHelper.setVisible(binding.topBarContainer, false)
+            } else {
+                ViewHelper.setVisible(binding.topBarContainer, !visible)
+            }
         }
 
         val screenWidth = DisplayHelper.getScreenWidth()
         val screenHeight = DisplayHelper.getScreenHeight()
-        val leftSide = screenWidth / 8
-        val rightSide = screenWidth / 8 * 7
-        val bottomSide = screenHeight / 3 * 2
+        screenWidth / 8
+        screenWidth / 8 * 7
+        screenHeight / 3 * 2
         var moved = false
         var downX = 0f
         var downY = 0f
@@ -106,6 +112,7 @@ class VideoPlayerView @JvmOverloads constructor(
                     lastRealDownX = downX
                     moved = false
                 }
+
                 MotionEvent.ACTION_UP -> {
                     if (!moved) {
 //                        toast("没移动")
@@ -116,6 +123,7 @@ class VideoPlayerView @JvmOverloads constructor(
                     }
                     moved = false
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     val rawX = motionEvent.rawX
                     val rawY = motionEvent.rawY
@@ -132,9 +140,11 @@ class VideoPlayerView @JvmOverloads constructor(
                         rawX < leftSide -> {
                             log("左边滑动")
                         }
+
                         rawX > rightSide -> {
                             log("右边滑动")
                         }
+
                         rawY > bottomSide -> {
                             log("下边滑动")
 
@@ -148,12 +158,14 @@ class VideoPlayerView @JvmOverloads constructor(
                                 log(" progress = $progress")
                             }
                         }
+
                         else -> {
                         }
                     }
                     lastRealDownX = rawX
 
                 }
+
                 MotionEvent.ACTION_CANCEL -> {
                     moved = false
                 }
@@ -179,22 +191,34 @@ class VideoPlayerView @JvmOverloads constructor(
         binding.tvTitle.text = mMediaBean?.name
     }
 
-    override fun onPrepare(duration: Long) {
-        binding.seekBar.max = duration.toInt()
-        val text = TimeUtils.formatTime(duration, TimeUtils.FORMAT_mm_ss)
+    fun showTitleBar(show: Boolean) {
+        mShowTitleBar = show
+    }
+
+    fun play() {
+        videoViewHandler.play()
+    }
+
+    fun pause() {
+        videoViewHandler.pause()
+    }
+
+    override fun onPrepare(duration: Int) {
+        binding.seekBar.max = duration
+        val text = TimeUtils.formatTime(duration.toLong(), TimeUtils.FORMAT_mm_ss)
         binding.tvDuration.text = " / $text"
     }
 
     override fun onVideoPlay() {
-        binding.ivPlayPause.setImageResource(R.drawable.icon_album_video_preview_pause)
+        binding.ivPlayPause.setImageResource(R.drawable.ic_pause)
     }
 
     override fun onVideoPause() {
-        binding.ivPlayPause.setImageResource(R.drawable.icon_album_video_preview_play)
+        binding.ivPlayPause.setImageResource(R.drawable.ic_play)
     }
 
     override fun onVideoError() {
-        binding.ivPlayPause.setImageResource(R.drawable.icon_album_video_preview_play)
+        binding.ivPlayPause.setImageResource(R.drawable.ic_play)
     }
 
     override fun onVideoPlaying(currentPosition: Int) {
@@ -212,15 +236,100 @@ class VideoPlayerView @JvmOverloads constructor(
 
             if (isWidthMode) {
                 val lp = binding.videoView.layoutParams
-                lp.width = ViewGroup.LayoutParams.WRAP_CONTENT
-                lp.height = ViewGroup.LayoutParams.MATCH_PARENT
+                lp.width = LayoutParams.WRAP_CONTENT
+                lp.height = LayoutParams.MATCH_PARENT
                 binding.videoView.layoutParams = lp
             } else {
                 val lp = binding.videoView.layoutParams
-                lp.width = ViewGroup.LayoutParams.MATCH_PARENT
-                lp.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                lp.width = LayoutParams.MATCH_PARENT
+                lp.height = LayoutParams.WRAP_CONTENT
                 binding.videoView.layoutParams = lp
             }
         }
+    }
+}
+
+interface StatusListener {
+    fun onPrepare(duration: Int)
+    fun onVideoPlay()
+    fun onVideoPause()
+    fun onVideoError()
+    fun onVideoPlaying(currentPosition: Int)
+}
+
+class VideoViewHandler : MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener {
+
+    private var mMediaPlayer: MediaPlayer? = null
+    private lateinit var mMediaBean: MediaItem
+    private var mStatusListener: StatusListener? = null
+
+    private val timerTask = TimerTask2(null, 1000L, true) {
+        mStatusListener?.onVideoPlaying(mMediaPlayer?.currentPosition ?: 0)
+    }
+
+    fun isPlaying(): Boolean = mMediaPlayer?.isPlaying ?: false
+
+    fun getMediaPlayer() = mMediaPlayer
+
+    private lateinit var mVideoView: VideoView
+
+    fun initVideoView(
+        videoView: VideoView,
+        mediaBean: MediaItem,
+        mediaController: MediaController? = null,
+        statusListener: StatusListener? = null
+    ) {
+        this.mVideoView = videoView
+        mMediaBean = mediaBean
+        videoView.setOnCompletionListener(this)
+        //处理开始播放时的短暂黑屏
+        videoView.setOnPreparedListener(this)
+        videoView.setOnErrorListener { mediaPlayer, i, i2 ->
+            return@setOnErrorListener true
+        }
+//        mediaController?.setAnchorView(videoView)
+//        videoView.setMediaController(mediaController)
+        videoView.setVideoURI(mediaBean.uri)
+        mStatusListener = statusListener
+    }
+
+    fun play() {
+        mStatusListener?.onVideoPlay()
+        timerTask.start()
+        mVideoView.start()
+    }
+
+    fun pause() {
+        timerTask.cancel()
+        mStatusListener?.onVideoPause()
+        mVideoView.pause()
+    }
+
+    fun stop() {
+        timerTask.cancel()
+        mStatusListener?.onVideoPause()
+        mVideoView.pause()
+        mMediaPlayer?.release()
+    }
+
+    fun seekTo(value: Int) {
+        mVideoView.seekTo(value)
+    }
+
+    override fun onCompletion(mp: MediaPlayer?) {
+        mStatusListener?.onVideoError()
+    }
+
+    override fun onPrepared(mp: MediaPlayer?) {
+        if (mMediaPlayer == null) {
+            mMediaPlayer = mp
+        }
+        //适应屏幕显示
+        mMediaPlayer?.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT)
+        //显示第一帧
+        seekTo(1)
+        val duration = (mMediaBean as? MediaItem.Video) ?.duration ?: 0
+        mStatusListener?.onPrepare(duration.toInt())
+        log("duration = ${mMediaPlayer?.duration}")
     }
 }

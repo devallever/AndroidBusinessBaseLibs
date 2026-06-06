@@ -6,8 +6,8 @@ import app.allever.android.lib.common.BaseActivity
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.core.function.media.SongMediaPlayer
 import app.allever.android.lib.core.util.UIKit.runOnUiThread
+import app.allever.android.lib.media.core.player.SongMediaPlayer
 import app.allever.android.lib.mvvm.base.BaseViewModel
 
 class AudioRecordFragment : BaseFragment<FragmentAudioRecordBinding, AudioRecordViewModel>() {

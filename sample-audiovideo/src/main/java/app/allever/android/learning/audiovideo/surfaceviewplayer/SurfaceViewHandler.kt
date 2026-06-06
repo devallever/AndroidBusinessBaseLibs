@@ -8,7 +8,6 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import app.allever.android.learning.audiovideo.BasePlayerHandler
 import app.allever.android.learning.audiovideo.StatusListener
-import app.allever.android.lib.core.function.media.MediaBean
 import app.allever.android.lib.media.core.model.MediaItem
 
 class SurfaceViewHandler : BasePlayerHandler(), SurfaceHolder.Callback {
