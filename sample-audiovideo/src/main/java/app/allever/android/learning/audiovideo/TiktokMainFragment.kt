@@ -1,6 +1,6 @@
 package app.allever.android.learning.audiovideo
 
-import app.allever.android.sample.audiovideo.tiktok.RvJzIjkTiktokFragment
+import app.allever.android.learning.audiovideo.tiktok.RvJzIjkTiktokFragment
 import app.allever.android.lib.common.FragmentActivity
 import app.allever.android.lib.common.ListFragment
 import app.allever.android.lib.common.ListViewModel
