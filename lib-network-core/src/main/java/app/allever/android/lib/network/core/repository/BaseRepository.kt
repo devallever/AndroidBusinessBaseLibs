@@ -5,6 +5,7 @@ import app.allever.android.lib.network.core.engine.HttpMethod
 import app.allever.android.lib.network.core.engine.NetRequest
 import app.allever.android.lib.network.core.response.IBaseResponse
 import app.allever.android.lib.network.core.util.FailureResponseFactory
+import app.allever.android.lib.network.core.util.NetLogger
 
 /**
  * Repository 基类 — 统一异常封装，永不抛异常
@@ -49,6 +50,7 @@ abstract class BaseRepository {
         return try {
             block()
         } catch (e: Exception) {
+            NetLogger.logE("${this::class.java.simpleName} 请求异常: ${e.message}")
             createFailureResponse(e)
         }
     }

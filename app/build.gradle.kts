@@ -28,13 +28,14 @@ dependencies {
     implementation(project(":lib-ad-core"))
     implementation(project(":sample-common"))
 //    implementation(project(":sample-appsflyer"))
+//    implementation(project(":sample-ad-applovin"))
 //    implementation(project(":sample-adjust"))
+
 //    implementation(project(":sample-mvvm"))
 //    implementation(project(":sample-ad-admob"))
 //    implementation(project(":sample-ad-pangle"))
 //    implementation(project(":sample-ad-bigo"))
 //    implementation(project(":sample-ad-core"))
-//    implementation(project(":sample-ad-applovin"))
     //permission
     implementation(project(":sample-permission"))
     implementation(project(":sample-media-core"))

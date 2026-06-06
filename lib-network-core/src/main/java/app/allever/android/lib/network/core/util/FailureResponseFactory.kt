@@ -42,9 +42,12 @@ object FailureResponseFactory {
                 || setFieldValue(instance, "errorMsg", message)
                 || setFieldValue(instance, "errorMessage", message)
 
+            NetLogger.log("失败响应创建成功: ${clazz.simpleName}(code=$code, msg=$message)")
+
             @Suppress("UNCHECKED_CAST")
             instance as T
         } catch (e: Exception) {
+            NetLogger.logE("反射创建失败响应异常: ${clazz.simpleName} → ${e.message}")
             throw RuntimeException("反射创建失败响应失败: ${e.message}", e)
         }
     }
@@ -79,8 +82,11 @@ object FailureResponseFactory {
      */
     internal fun createInstance(clazz: Class<*>): Any {
         return try {
-            clazz.getDeclaredConstructor().apply { isAccessible = true }.newInstance()
+            val instance = clazz.getDeclaredConstructor().apply { isAccessible = true }.newInstance()
+            NetLogger.log("反射实例化成功: ${clazz.simpleName}")
+            instance
         } catch (e: NoSuchMethodException) {
+            NetLogger.logE("${clazz.simpleName} 无参构造函数不存在，尝试其他构造函数")
             val constructors = clazz.declaredConstructors
             if (constructors.isNotEmpty()) {
                 constructors[0].apply { isAccessible = true }.newInstance(*emptyArray())

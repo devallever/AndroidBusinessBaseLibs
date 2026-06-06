@@ -2,6 +2,7 @@ package app.allever.android.lib.network.core.interceptor
 
 import app.allever.android.lib.network.core.engine.NetResponse
 import app.allever.android.lib.network.core.exception.NetworkException
+import app.allever.android.lib.network.core.util.NetLogger
 import kotlin.math.min
 
 /**
@@ -26,6 +27,7 @@ class RetryInterceptor(
 ) : NetInterceptor {
 
     companion object {
+        private const val TAG = "RetryInterceptor"
         private const val MAX_RETRY_INTERVAL_MS = 5000L
     }
 
@@ -40,6 +42,7 @@ class RetryInterceptor(
 
                 // 判断是否应该重试
                 if (attempt >= maxRetries || !isRetryable(e)) {
+                    NetLogger.logE(TAG, "重试结束（不可重试或已达上限）: attempt=${attempt + 1}/${maxRetries + 1}, error=${e.message}")
                     throw e
                 }
 
@@ -49,6 +52,8 @@ class RetryInterceptor(
                 } else {
                     retryIntervalMs
                 }
+
+                NetLogger.log(TAG, "第 ${attempt + 1} 次请求失败，${delay}ms 后重试 (${e.message})")
 
                 if (delay > 0) {
                     Thread.sleep(delay)

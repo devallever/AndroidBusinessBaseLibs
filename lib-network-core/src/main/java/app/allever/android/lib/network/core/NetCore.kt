@@ -1,6 +1,5 @@
 package app.allever.android.lib.network.core
 
-import android.util.Log
 import app.allever.android.lib.network.core.engine.*
 import app.allever.android.lib.network.core.exception.ExceptionHandler
 import app.allever.android.lib.network.core.exception.NetworkException
@@ -10,6 +9,7 @@ import app.allever.android.lib.network.core.interceptor.LoggerInterceptor
 import app.allever.android.lib.network.core.response.GsonConverter
 import app.allever.android.lib.network.core.response.ResponseAdapter
 import app.allever.android.lib.network.core.util.FailureResponseFactory
+import app.allever.android.lib.network.core.util.NetLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.reflect.Type
@@ -64,7 +64,7 @@ object NetCore {
         get() {
             if (_engine == null) {
                 _engine = EngineRegistry.createDefault(config.engineConfig).also {
-                    Log.d(TAG, "引擎已创建: ${it.engineName}")
+                    NetLogger.log(TAG, "引擎已创建: ${it.engineName}")
                 }
             }
             return _engine!!
@@ -81,7 +81,7 @@ object NetCore {
      */
     fun init(block: NetworkConfig.Builder.() -> Unit) {
         if (isInitialized) {
-            Log.w(TAG, "Network 已初始化，重复调用将被忽略")
+            NetLogger.log(TAG, "Network 已初始化，重复调用将被忽略")
             return
         }
 
@@ -90,7 +90,7 @@ object NetCore {
         // 注册默认引擎到 EngineRegistry
         EngineRegistry.setDefault(config.engineName)
 
-        Log.i(TAG, """
+        NetLogger.log(TAG, """
             |Network 初始化完成:
             |  baseUrl   = ${config.baseUrl}
             |  engine    = ${config.engineName}
@@ -148,16 +148,18 @@ object NetCore {
         checkInitialized()
 
         return withContext(Dispatchers.IO) {
-            try {
-                // 1. 构建请求
-                val request = buildRequest(method, path, bodyData, customBlock)
+            // 1. 构建请求（提前声明，catch 块中可访问）
+            val request = buildRequest(method, path, bodyData, customBlock)
 
+            try {
                 // 2. 构建拦截器链并执行
                 val allInterceptors = buildInterceptors()
                 val chain = NetChain(
                     interceptors = allInterceptors,
                     engineExecute = { req ->
                         val startTime = System.currentTimeMillis()
+                        //执行全部拦截器后执行引擎请求
+                        NetLogger.log(TAG, "请求开始: ${req.url}")
                         val response = engine.execute(req)
                         response.copy(elapsedMs = System.currentTimeMillis() - startTime)
                     }
@@ -165,8 +167,11 @@ object NetCore {
                 chain.request = request
                 val httpResponse = chain.proceed(request)
 
+                NetLogger.log(TAG, "请求完成: ${request.url} → ${httpResponse.code} (${httpResponse.elapsedMs}ms)")
+
                 // 3. 检查 HTTP 层状态码
                 if (!httpResponse.isSuccessful) {
+                    NetLogger.logE(TAG, "HTTP 请求失败: ${httpResponse.code} ${httpResponse.message}")
                     return@withContext createFailureResponse(
                         code = httpResponse.code,
                         message = httpResponse.message,
@@ -176,29 +181,38 @@ object NetCore {
 
                 // 4. 反序列化为业务响应
                 val responseBody = httpResponse.body
-                    ?: return@withContext createFailureResponse(
-                        code = -1,
-                        message = "响应体为空",
-                        explicitType
-                    )
+                    ?: run {
+                        NetLogger.logE(TAG, "响应体为空: ${request.url}")
+                        return@withContext createFailureResponse(
+                            code = -1,
+                            message = "响应体为空",
+                            explicitType
+                        )
+                    }
 
                 // 使用显式传入的 Type 或 responseClass 或 T 的 Class
                 val parsedResponse: Any? = when {
                     explicitType != null -> {
                         convertWithType(responseBody, explicitType)
-                            ?: return@withContext createFailureResponse(
-                                code = -2,
-                                message = "反序列化结果为空",
-                                explicitType
-                            )
+                            ?: run {
+                                NetLogger.logE(TAG, "反序列化结果为空: ${request.url}")
+                                return@withContext createFailureResponse(
+                                    code = -2,
+                                    message = "反序列化结果为空",
+                                    explicitType
+                                )
+                            }
                     }
                     config.responseClass != null -> {
                         config.converter.convert(responseBody, config.responseClass!!)
-                            ?: return@withContext createFailureResponse(
-                                code = -2,
-                                message = "反序列化结果为空",
-                                explicitType
-                            )
+                            ?: run {
+                                NetLogger.logE(TAG, "反序列化结果为空: ${request.url}")
+                                return@withContext createFailureResponse(
+                                    code = -2,
+                                    message = "反序列化结果为空",
+                                    explicitType
+                                )
+                            }
                     }
                     else -> {
                         @Suppress("UNCHECKED_CAST")
@@ -214,6 +228,7 @@ object NetCore {
                 parsedResponse as T
 
             } catch (e: Exception) {
+                NetLogger.logE(TAG, "请求异常: ${request?.url} → ${e.message}")
                 handleGlobalError(ExceptionHandler.handle(e), null)
                 createFailureResponse(e, explicitType)
             }

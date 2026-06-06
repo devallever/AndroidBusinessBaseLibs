@@ -1,6 +1,7 @@
 package app.allever.android.lib.network.core.engine
 
 import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.network.core.util.NetLogger
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -52,6 +53,7 @@ object EngineRegistry {
             log("引擎 '$name' 已注册，不可重复注册")
         } else {
             factories[name] = factory
+            log("引擎注册成功: $name")
         }
     }
 
@@ -63,6 +65,7 @@ object EngineRegistry {
             throw IllegalStateException("引擎 '$name' 未注册，请先确保已引入对应引擎模块")
         }
         defaultName = name
+        NetLogger.log("默认引擎设置为: $name (已注册: ${factories.keys.joinToString()})")
     }
 
     /**

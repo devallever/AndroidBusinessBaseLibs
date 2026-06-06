@@ -1,7 +1,10 @@
 package app.allever.android.lib.network.core.interceptor
 
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.network.core.NetCore
 import app.allever.android.lib.network.core.engine.NetRequest
 import app.allever.android.lib.network.core.engine.NetResponse
+import app.allever.android.lib.network.core.util.NetLogger
 
 /**
  * 拦截器链
@@ -27,9 +30,9 @@ class NetChain(
      */
     fun proceed(request: NetRequest): NetResponse {
         this.request = request
-
         // 还有未执行的拦截器 → 交给下一个
         if (index < interceptors.size) {
+            NetLogger.log("InterceptorChain", "执行拦截器：${interceptors[index].javaClass.simpleName}")
             val nextChain = NetChain(
                 interceptors = interceptors,
                 index = index + 1,

@@ -1,9 +1,9 @@
 package app.allever.android.lib.network.core.interceptor
 
-import android.util.Log
 import app.allever.android.lib.network.core.engine.NetRequest
 import app.allever.android.lib.network.core.engine.NetResponse
 import app.allever.android.lib.network.core.response.ResponseAdapter
+import app.allever.android.lib.network.core.util.NetLogger
 import kotlinx.coroutines.runBlocking
 import java.net.HttpURLConnection
 
@@ -72,16 +72,16 @@ class AuthInterceptor(
 
         // 检查是否需要刷新 Token（HTTP 401 或业务码表示过期）
         if (needAuth && shouldRefreshToken(response)) {
-            Log.d(TAG, "检测到 Token 过期，尝试刷新...")
+            NetLogger.log(TAG, "检测到 Token 过期，尝试刷新...")
 
             val newToken = tryRefreshToken()
             if (newToken != null) {
-                Log.d(TAG, "Token 刷新成功，重发请求...")
+                NetLogger.log(TAG, "Token 刷新成功，重发请求...")
                 // 用新 Token 重发请求
                 val retriedRequest = injectToken(originalRequest, newToken)
                 response = chain.proceed(retriedRequest)
             } else {
-                Log.w(TAG, "Token 刷新失败")
+                NetLogger.logE(TAG, "Token 刷新失败")
             }
         }
 
@@ -136,7 +136,7 @@ class AuthInterceptor(
         return try {
             runBlocking { refresher() }
         } catch (e: Exception) {
-            Log.e(TAG, "Token 刷新异常", e)
+            NetLogger.logE(TAG, "Token 刷新异常: ${e.message}")
             null
         }
     }

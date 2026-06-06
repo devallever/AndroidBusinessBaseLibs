@@ -1,8 +1,8 @@
 package app.allever.android.lib.network.core.interceptor
 
-import android.util.Log
 import app.allever.android.lib.network.core.engine.NetRequest
 import app.allever.android.lib.network.core.engine.NetResponse
+import app.allever.android.lib.network.core.util.NetLogger
 
 /**
  * 日志拦截器
@@ -21,7 +21,7 @@ import app.allever.android.lib.network.core.engine.NetResponse
  */
 class LoggerInterceptor(
     private val enabled: Boolean = true,
-    private val tag: String = "Network"
+    private val tag: String = LoggerInterceptor::class.java.simpleName
 ) : NetInterceptor {
 
     override fun intercept(chain: NetChain): NetResponse {
@@ -40,25 +40,25 @@ class LoggerInterceptor(
     }
 
     private fun logRequest(request: NetRequest) {
-        Log.d(tag, "┌────────── Request ──────────→")
-        Log.d(tag, "${request.method} ${request.url}")
-        Log.d(tag, "Headers: ${request.headers}")
+        NetLogger.log(tag, "┌────────── Request ──────────→")
+        NetLogger.log(tag, "${request.method} ${request.url}")
+        NetLogger.log(tag, "Headers: ${request.headers}")
         request.body?.let {
-            Log.d(tag, "Body: ${it.contentLength()} bytes")
+            NetLogger.log(tag, "Body: ${it.contentLength()} bytes")
         } ?: run {
-            Log.d(tag, "Body: null")
+            NetLogger.log(tag, "Body: null")
         }
-        Log.d(tag, "Timeouts: connect=${request.connectTimeoutMs}ms read=${request.readTimeoutMs}ms")
+        NetLogger.log(tag, "Timeouts: connect=${request.connectTimeoutMs}ms read=${request.readTimeoutMs}ms")
     }
 
     private fun logResponse(response: NetResponse, elapsedMs: Long) {
-        Log.d(tag, "←───────── Response ───────────")
-        Log.d(tag, "Code: ${response.code} (${elapsedMs}ms)")
-        Log.d(tag, "Headers: ${response.headers.keys}")
+        NetLogger.log(tag, "←───────── Response ───────────")
+        NetLogger.log(tag, "Code: ${response.code} (${elapsedMs}ms)")
+        NetLogger.log(tag, "Headers: ${response.headers.keys}")
         val bodyPreview = response.bodyString?.let {
             if (it.length > 1024) it.substring(0, 1024) + "...(truncated)" else it
         }
-        Log.d(tag, "Body: $bodyPreview")
-        Log.d(tag, "───────────────────────────────")
+        NetLogger.log(tag, "Body: $bodyPreview")
+        NetLogger.log(tag, "───────────────────────────────")
     }
 }
