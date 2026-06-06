@@ -9,6 +9,7 @@ import android.view.SurfaceView
 import app.allever.android.learning.audiovideo.BasePlayerHandler
 import app.allever.android.learning.audiovideo.StatusListener
 import app.allever.android.lib.core.function.media.MediaBean
+import app.allever.android.lib.media.core.model.MediaItem
 
 class SurfaceViewHandler : BasePlayerHandler(), SurfaceHolder.Callback {
     private lateinit var mSurfaceView: SurfaceView
@@ -17,7 +18,7 @@ class SurfaceViewHandler : BasePlayerHandler(), SurfaceHolder.Callback {
 
     fun initVideoView(
         surfaceView: SurfaceView,
-        mediaBean: MediaBean,
+        mediaBean: MediaItem,
         statusListener: StatusListener? = null
     ) {
         mMediaBean = mediaBean

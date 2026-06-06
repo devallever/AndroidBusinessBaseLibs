@@ -26,5 +26,7 @@ class RouterPath {
         const val PATH_SAMPLE_NETWORK_CORE = "/network/main"
 
         const val PATH_SAMPLE_PLAYER_CORE = "/player/main"
+
+        const val PATH_SAMPLE_AUDIO_VIDEO = "/audiovideo/main"
     }
 }

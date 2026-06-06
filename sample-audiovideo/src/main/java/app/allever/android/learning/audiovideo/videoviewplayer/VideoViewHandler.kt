@@ -6,6 +6,7 @@ import android.widget.VideoView
 import app.allever.android.learning.audiovideo.BasePlayerHandler
 import app.allever.android.learning.audiovideo.StatusListener
 import app.allever.android.lib.core.function.media.MediaBean
+import app.allever.android.lib.media.core.model.MediaItem
 
 class VideoViewHandler : BasePlayerHandler(), MediaPlayer.OnPreparedListener {
 
@@ -13,7 +14,7 @@ class VideoViewHandler : BasePlayerHandler(), MediaPlayer.OnPreparedListener {
 
     fun initVideoView(
         videoView: VideoView,
-        mediaBean: MediaBean,
+        mediaBean: MediaItem,
         mediaController: MediaController? = null,
         statusListener: StatusListener? = null
     ) {

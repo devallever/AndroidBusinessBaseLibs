@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import app.allever.android.lib.core.function.media.MediaBean
+import app.allever.android.lib.media.core.model.MediaItem
 
 open class BasePlayerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
@@ -15,7 +16,7 @@ open class BasePlayerView @JvmOverloads constructor(
         attrs: AttributeSet? = null
     ) : this(context, attrs)
 
-    protected lateinit var mMediaBean: MediaBean
+    protected lateinit var mMediaBean: MediaItem
 
 
 }

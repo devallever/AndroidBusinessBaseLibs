@@ -1,9 +1,11 @@
 package app.allever.android.learning.audiovideo.videoviewplayer
 
 import android.content.Intent
+import android.os.Build
 import app.allever.android.sample.audiovideo.databinding.ActivityVideoViewPlayerBinding
 import app.allever.android.lib.common.BaseActivity
 import app.allever.android.lib.core.function.media.MediaBean
+import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.mvvm.base.BaseViewModel
 
 class VideoViewPlayerActivity :
@@ -26,12 +28,16 @@ class VideoViewPlayerActivity :
 
 
 class VideoViewPlayerViewModel : BaseViewModel() {
-    var mediaBean: MediaBean? = null
+    var mediaBean: MediaItem? = null
     override fun init() {
 
     }
 
     fun initExtra(intent: Intent?) {
-        mediaBean = intent?.getParcelableExtra("MEDIA_BEAN")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            mediaBean = intent?.getParcelableExtra("MEDIA_BEAN", MediaItem::class.java)
+        } else {
+            mediaBean = intent?.getParcelableExtra("MEDIA_BEAN")
+        }
     }
 }

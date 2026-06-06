@@ -14,10 +14,10 @@ import app.allever.android.sample.audiovideo.databinding.SurfacePlayerViewBindin
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.core.function.media.MediaBean
 import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.core.helper.ViewHelper
 import app.allever.android.lib.core.util.TimeUtils
+import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.sample.audiovideo.R
 import kotlin.math.abs
 
@@ -161,16 +161,16 @@ class SurfacePlayerView @JvmOverloads constructor(
         playerHandler.stop()
     }
 
-    fun setData(mediaBean: MediaBean) {
+    fun setData(mediaBean: MediaItem) {
         mMediaBean = mediaBean
         playerHandler.initVideoView(binding.videoView, mediaBean, this)
         binding.tvTitle.text = mMediaBean.name
         changeVideoSize()
     }
 
-    override fun onPrepare(duration: Int) {
-        binding.seekBar.max = duration
-        val text = TimeUtils.formatTime(duration.toLong(), TimeUtils.FORMAT_mm_ss)
+    override fun onPrepare(duration: Long) {
+        binding.seekBar.max = duration.toInt()
+        val text = TimeUtils.formatTime(duration, TimeUtils.FORMAT_mm_ss)
         binding.tvDuration.text = " / $text"
     }
 
@@ -199,8 +199,8 @@ class SurfacePlayerView @JvmOverloads constructor(
     //改变视频的尺寸自适应。
     private fun changeVideoSize() {
         binding.controlView.post {
-            val w: Float = mMediaBean.width.toFloat()
-            val h: Float = mMediaBean.height.toFloat()
+            val w: Float = (mMediaBean as? MediaItem.Video)?.width?.toFloat()?:0f
+            val h: Float = (mMediaBean as? MediaItem.Video)?.height?.toFloat()?:0f
             val sw: Float = binding.controlView.width.toFloat()
             val sh: Float = binding.controlView.height.toFloat()
 

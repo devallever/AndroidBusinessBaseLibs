@@ -14,13 +14,11 @@ import app.allever.android.learning.audiovideo.util.isVideo
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
-import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.core.function.media.MediaBean
-import app.allever.android.lib.core.function.media.MediaHelper
 import app.allever.android.lib.core.function.media.SongMediaPlayer
 import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.core.util.FileUtils
+import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.audiovideo.databinding.FragmentExtractorMuxerBinding
 import kotlinx.coroutines.Dispatchers
@@ -86,9 +84,7 @@ class ExtractorMuxerFragment : BaseFragment<FragmentExtractorMuxerBinding, BaseV
                 return@setOnClickListener
             }
             ActivityHelper.startActivity<TextureViewPlayerActivity> {
-                val mediaBean = MediaBean()
-                mediaBean.name = FileUtils.getFileName(mExtraVideoPath)
-                mediaBean.path = mExtraVideoPath
+                val mediaBean = MediaItem.Video.newDefault(FileUtils.getFileName(mExtraVideoPath), mExtraVideoPath)
                 mBinding.videoViewExtra.setData(mediaBean)
                 putExtra("MEDIA_BEAN", mediaBean)
             }

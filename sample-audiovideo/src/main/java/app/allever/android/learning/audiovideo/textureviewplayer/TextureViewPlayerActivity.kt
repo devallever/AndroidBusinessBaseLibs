@@ -3,7 +3,7 @@ package app.allever.android.learning.audiovideo.textureviewplayer
 import android.content.Intent
 import app.allever.android.sample.audiovideo.databinding.ActivityTextureViewPlayerBinding
 import app.allever.android.lib.common.BaseActivity
-import app.allever.android.lib.core.function.media.MediaBean
+import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.mvvm.base.BaseViewModel
 
 class TextureViewPlayerActivity :
@@ -21,7 +21,7 @@ class TextureViewPlayerActivity :
 }
 
 class TextureViewPlayerViewModel : BaseViewModel() {
-    var mediaBean: MediaBean? = null
+    var mediaBean: MediaItem? = null
     override fun init() {
     }
 

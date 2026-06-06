@@ -81,6 +81,24 @@ sealed class MediaItem : Parcelable {
         val width: Int,                // 视频宽度
         val height: Int,               // 视频高度
     ) : MediaItem() {
+
+
+        companion object {
+            fun newDefault( path: String, name: String): Video {
+                return Video(
+                    id = 0,
+                    uri = Uri.EMPTY,
+                    path = path,
+                    name = name,
+                    dateAdded = 0,
+                    size = 0,
+                    mimeType = "",
+                    duration = 0,
+                    width = 0,
+                    height = 0,
+                )
+            }
+        }
         constructor(parcel: Parcel) : this(
             id = parcel.readLong(),
             uri = parcel.readParcelable(Uri::class.java.classLoader) ?: Uri.EMPTY,

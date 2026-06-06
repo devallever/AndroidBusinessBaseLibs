@@ -6,7 +6,7 @@ import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.audiovideo.databinding.ActivityMainBinding
 
-class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
+class MainActivity : BaseActivity<ActivityMainBinding, BaseViewModel>() {
 
     override fun init() {
         initTopBar("音视频", showBackIcon = false)
@@ -20,9 +20,4 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     override fun inflateChildBinding() = ActivityMainBinding.inflate(layoutInflater)
-}
-
-class MainViewModel : BaseViewModel() {
-    override fun init() {
-    }
 }

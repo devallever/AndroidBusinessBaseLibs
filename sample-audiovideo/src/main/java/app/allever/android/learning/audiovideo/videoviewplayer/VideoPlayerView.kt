@@ -20,6 +20,7 @@ import app.allever.android.lib.core.function.media.MediaBean
 import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.core.helper.ViewHelper
 import app.allever.android.lib.core.util.TimeUtils
+import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.sample.audiovideo.R
 import kotlin.math.abs
 
@@ -33,7 +34,7 @@ class VideoPlayerView @JvmOverloads constructor(
 
     private var binding: VideoPlayerViewBinding
 
-    private var mMediaBean: MediaBean? = null
+    private var mMediaBean: MediaItem? = null
 
     init {
         binding = VideoPlayerViewBinding.inflate(LayoutInflater.from(App.context), this, true)
@@ -168,7 +169,7 @@ class VideoPlayerView @JvmOverloads constructor(
         videoViewHandler.stop()
     }
 
-    fun setData(mediaBean: MediaBean) {
+    fun setData(mediaBean: MediaItem) {
         mMediaBean = mediaBean
         videoViewHandler.initVideoView(
             binding.videoView,
@@ -179,9 +180,9 @@ class VideoPlayerView @JvmOverloads constructor(
         binding.tvTitle.text = mMediaBean?.name
     }
 
-    override fun onPrepare(duration: Int) {
-        binding.seekBar.max = duration
-        val text = TimeUtils.formatTime(duration.toLong(), TimeUtils.FORMAT_mm_ss)
+    override fun onPrepare(duration: Long) {
+        binding.seekBar.max = duration.toInt()
+        val text = TimeUtils.formatTime(duration, TimeUtils.FORMAT_mm_ss)
         binding.tvDuration.text = " / $text"
     }
 

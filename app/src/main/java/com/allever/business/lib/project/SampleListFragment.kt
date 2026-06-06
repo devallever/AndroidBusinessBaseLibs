@@ -49,6 +49,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         },
         TextClickItem("PlayerCore") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_PLAYER_CORE).navigation()
+        },
+        TextClickItem("音视频") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AUDIO_VIDEO).navigation()
         }
     )
 }

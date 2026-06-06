@@ -4,12 +4,13 @@ import android.media.MediaPlayer
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.function.media.MediaBean
 import app.allever.android.lib.core.function.work.TimerTask2
+import app.allever.android.lib.media.core.model.MediaItem
 
 abstract class BasePlayerHandler : MediaPlayer.OnCompletionListener,
     MediaPlayer.OnPreparedListener {
 
     protected var mMediaPlayer: MediaPlayer? = null
-    protected lateinit var mMediaBean: MediaBean
+    protected lateinit var mMediaBean: MediaItem
     protected var mStatusListener: StatusListener? = null
 
     private val timerTask = TimerTask2(null, 1000L, true) {
@@ -50,7 +51,8 @@ abstract class BasePlayerHandler : MediaPlayer.OnCompletionListener,
         mMediaPlayer?.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT)
         //显示第一帧
         seekTo(1)
-        mStatusListener?.onPrepare(mMediaBean.duration.toInt())
+        val duration = (mMediaBean as? MediaItem.Video)?.duration ?: 0.toLong()
+        mStatusListener?.onPrepare(duration)
         log("duration = ${mMediaPlayer?.duration}")
     }
 }
