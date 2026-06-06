@@ -15,5 +15,15 @@ class LibListFragment : ListFragment<FragmentListBinding, ListViewModel, TextCli
         TextClickItem("MVVM") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_MVVM).navigation()
         },
+        TextClickItem("Ad") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AD_CORE).navigation()
+        },
+        TextClickItem("Media") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_MEDIA).navigation()
+        },
+        TextClickItem("Network") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_NETWORK_CORE).navigation()
+        },
+
     )
 }

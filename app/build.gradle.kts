@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":sample-permission"))
     implementation(project(":sample-media-core"))
     implementation(project(":sample-network-core"))
+    implementation(project(":sample-player-core"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
