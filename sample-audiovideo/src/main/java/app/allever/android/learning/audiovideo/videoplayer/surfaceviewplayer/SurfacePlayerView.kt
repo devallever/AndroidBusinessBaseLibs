@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.widget.SeekBar
+import app.allever.android.learning.audiovideo.VideoViewHelper
 import app.allever.android.learning.audiovideo.videoplayer.BasePlayerView
 import app.allever.android.learning.audiovideo.videoplayer.StatusListener
 import app.allever.android.sample.audiovideo.databinding.SurfacePlayerViewBinding
@@ -196,64 +197,21 @@ class SurfacePlayerView @JvmOverloads constructor(
         changeVideoSize()
     }
 
+
     //改变视频的尺寸自适应。
     private fun changeVideoSize() {
-        binding.controlView.post {
-            val w: Float = (mMediaBean as? MediaItem.Video)?.width?.toFloat()?:0f
-            val h: Float = (mMediaBean as? MediaItem.Video)?.height?.toFloat()?:0f
-            val sw: Float = binding.controlView.width.toFloat()
-            val sh: Float = binding.controlView.height.toFloat()
-
-            var displayW = 0
-            var displayH = 0
-
-            log("video size = $w x $h")
-            log("surface size = $sw x $sh")
-
-            if (resources.configuration.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-                log("竖屏")
-                if (w > h) {
-                    //横向视频
-                    displayW = sw.toInt()
-                    displayH = (h * sw / w).toInt()
-                } else {
-                    //纵向视频
-                    if (h > sh) {
-                        // 超高视频
-                    } else {
-                        //
-                        displayW = sw.toInt()
-                        displayH = (h * sw / w).toInt()
-                    }
-                }
-
-            } else {
-                log("横屏")
-                if (w > h) {
-                    //横向视频
-                    if (w > sw) {
-                        //超宽视频
-                    } else {
-                        //
-                        displayH = sh.toInt()
-                        displayW = (w * sh / h).toInt()
-                    }
-                } else {
-                    //纵向视频
-                    displayH = sh.toInt()
-                    displayW = (w * sh / h).toInt()
-                }
-            }
-
-
-            log("surface size = $displayW x $displayH")
-
+        val w: Float = (mMediaBean as? MediaItem.Video)?.width?.toFloat() ?: 0f
+        val h: Float = (mMediaBean as? MediaItem.Video)?.height?.toFloat() ?: 0f
+        VideoViewHelper.autoFixContainerSize(
+            binding.controlView,
+            w.toInt(),
+            h.toInt()
+        ) { displayWidth, displayHeight ->
             //无法直接设置视频尺寸，将计算出的视频尺寸设置到surfaceView 让视频自动填充。
             val params = binding.videoView.layoutParams
-            params.width = displayW
-            params.height = displayH
+            params.width = displayWidth
+            params.height = displayHeight
             binding.videoView.layoutParams = params
         }
-
     }
 }

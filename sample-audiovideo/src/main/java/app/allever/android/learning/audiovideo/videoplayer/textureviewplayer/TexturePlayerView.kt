@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.SeekBar
 import androidx.constraintlayout.widget.ConstraintLayout
+import app.allever.android.learning.audiovideo.VideoViewHelper
 import app.allever.android.learning.audiovideo.videoplayer.StatusListener
 import app.allever.android.sample.audiovideo.databinding.TexturePlayerViewBinding
 import app.allever.android.lib.core.app.App
@@ -176,7 +177,8 @@ class TexturePlayerView @JvmOverloads constructor(
         binding.tvDuration.text = " / $text"
         binding.videoView.post {
             if (binding.videoView.width > 0 && binding.videoView.height > 0) {
-                stretching(binding.videoView.width.toFloat(), binding.videoView.height.toFloat())
+                changeVideoSize()
+//                stretching(binding.videoView.width.toFloat(), binding.videoView.height.toFloat())
             }
         }
     }
@@ -200,7 +202,8 @@ class TexturePlayerView @JvmOverloads constructor(
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        stretching(w.toFloat(), h.toFloat())
+//        stretching(w.toFloat(), h.toFloat())
+        changeVideoSize()
     }
 
     //设置避免视频播放时拉伸，复制可直接使用
@@ -243,5 +246,23 @@ class TexturePlayerView @JvmOverloads constructor(
             binding.videoView.postInvalidate();//重绘视图
         }
 
+    }
+
+
+    //改变视频的尺寸自适应。
+    private fun changeVideoSize() {
+        val w: Float = (mMediaBean as? MediaItem.Video)?.width?.toFloat() ?: 0f
+        val h: Float = (mMediaBean as? MediaItem.Video)?.height?.toFloat() ?: 0f
+        VideoViewHelper.autoFixContainerSize(
+            binding.controlView,
+            w.toInt(),
+            h.toInt()
+        ) { displayWidth, displayHeight ->
+            //无法直接设置视频尺寸，将计算出的视频尺寸设置到surfaceView 让视频自动填充。
+            val params = binding.videoView.layoutParams
+            params.width = displayWidth
+            params.height = displayHeight
+            binding.videoView.layoutParams = params
+        }
     }
 }

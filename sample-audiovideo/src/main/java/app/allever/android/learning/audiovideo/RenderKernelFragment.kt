@@ -15,6 +15,7 @@ import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.helper.FragmentHelper
 import app.allever.android.lib.core.helper.ViewHelper
+import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.audiovideo.databinding.FragmentRenderKernelBinding
@@ -107,28 +108,12 @@ class RenderKernelFragment : BaseFragment<FragmentRenderKernelBinding, BaseViewM
 
             override fun onPrepared() {
                 log("onPrepared")
-                if (mRender is TextureRenderView) {
-                    mBinding.textureRenderView.post {
-                        if (mBinding.textureRenderView.width > 0 && mBinding.textureRenderView.height > 0) {
-                            handleTextureSize(mBinding.textureRenderView.width.toFloat(), mBinding.textureRenderView.height.toFloat())
-                        }
-                    }
-                }
+                changeVideoSize()
             }
 
             override fun onVideoSizeChanged(width: Int, height: Int) {
                 log("onVideoSizeChanged: width = $width , height = $height")
-                //不处理就是默认视频占满布局
-
-//                handleSurfaceSize(width, height)
-//                mRender?.setVideoSize(width, height)
-//                mRender?.setScaleType(ConstantKeys.PlayerScreenScaleType.SCREEN_SCALE_16_9)
-//                mBinding.surfaceRenderView.setScaleType(ConstantKeys.PlayerScreenScaleType.SCREEN_SCALE_16_9)
-//                mBinding.surfaceRenderView.setVideoSize(width, height)
-
-                if (mRender is TextureRenderView) {
-                    handleTextureSize(width.toFloat(), height.toFloat())
-                }
+                changeVideoSize()
             }
 
         }
@@ -138,78 +123,22 @@ class RenderKernelFragment : BaseFragment<FragmentRenderKernelBinding, BaseViewM
         MediaPickerCore.launchVideo(videoPickerLauncher)
     }
 
-    private fun handleSurfaceSize(width: Int, height: Int) {
-        val w: Float = width.toFloat()
-        val h: Float = height.toFloat()
-        val sw: Float = mBinding.renderViewContainer.width.toFloat()
-        val sh: Float = mBinding.renderViewContainer.height.toFloat()
-        var displayW = 0
-        var displayH = 0
+    //改变视频的尺寸自适应。
+    private fun changeVideoSize() {
 
-        if (w > h) {
-            //横向视频
-            if (w > sw) {
-                //超宽视频
-            } else {
-                //
-                displayH = sh.toInt()
-                displayW = (w * sh / h).toInt()
-            }
-        } else {
-            //纵向视频
-            displayH = sh.toInt()
-            displayW = (w * sh / h).toInt()
+        val videoWidth = player?.getVideoWidth()?.toFloat() ?: 0f
+        val videoHeight = player?.getVideoHeight()?.toFloat() ?: 0f
+        log("显示视频尺寸: $videoWidth x $videoHeight")
+        VideoViewHelper.autoFixContainerSize(
+            mBinding.renderViewContainer,
+            videoWidth.toInt(),
+            videoHeight.toInt()
+        ) { displayWidth, displayHeight ->
+            //无法直接设置视频尺寸，将计算出的视频尺寸设置到surfaceView 让视频自动填充。
+            val params = mRender?.getView()?.layoutParams
+            params?.width = displayWidth
+            params?.height = displayHeight
+            mRender?.getView()?.layoutParams = params
         }
-
-        log("surface size = $displayW x $displayH")
-
-        //无法直接设置视频尺寸，将计算出的视频尺寸设置到surfaceView 让视频自动填充。
-        val params = mBinding.surfaceView.layoutParams
-        params.width = displayW
-        params.height = displayH
-        mBinding.surfaceRenderView.layoutParams = params
-        mBinding.textureRenderView.layoutParams = params
-    }
-
-    private fun handleTextureSize(mtextureViewWidth: Float, mtextureViewHeight: Float) {
-        log("视频拉伸: $mtextureViewWidth x $mtextureViewHeight")
-        mBinding.textureRenderView.post {
-            //mtextureViewWidth为textureView宽，mtextureViewHeight为textureView高
-            //mtextureViewWidth宽高，为什么需要用传入的，因为全屏显示时宽高不会及时更新
-            val matrix = Matrix();
-            //videoView为new MediaPlayer()
-            val mVideoWidth = player?.getVideoWidth()?.toFloat() ?: 0f
-            val mVideoHeight = player?.getVideoHeight()?.toFloat() ?: 0f
-            log("视频宽高: $mVideoWidth x $mVideoHeight")
-
-            if (mVideoWidth == 0f || mVideoHeight == 0f) {
-                logE("视频宽高为0")
-                return@post
-            }
-
-            //得到缩放比，从而获得最佳缩放比
-            val sx = mtextureViewWidth / mVideoWidth;
-            val sy = mtextureViewHeight / mVideoHeight;
-            //先将视频变回原来的大小
-            val sx1 = mVideoWidth / mtextureViewWidth;
-            val sy1 = mVideoHeight / mtextureViewHeight;
-            matrix.preScale(sx1, sy1);
-//            log("mat", matrix.toString());
-            //然后判断最佳比例，满足一边能够填满
-            if (sx >= sy) {
-                matrix.preScale(sy, sy);
-                //然后判断出左右偏移，实现居中，进入到这个判断，证明y轴是填满了的
-                val leftX = (mtextureViewWidth - mVideoWidth * sy) / 2;
-                matrix.postTranslate(leftX, 0f);
-            } else {
-                matrix.preScale(sx, sx);
-                val leftY = (mtextureViewHeight - mVideoHeight * sx) / 2;
-                matrix.postTranslate(0f, leftY);
-            }
-
-            mBinding.textureRenderView.setTransform(matrix);//将矩阵添加到textureView
-            mBinding.textureRenderView.postInvalidate();//重绘视图
-        }
-
     }
 }
