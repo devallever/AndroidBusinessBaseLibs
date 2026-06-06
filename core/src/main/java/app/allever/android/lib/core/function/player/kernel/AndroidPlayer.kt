@@ -158,6 +158,14 @@ class AndroidPlayer : AbsPlayer() {
         return mMediaPlayer?.duration?.toLong() ?: 0L
     }
 
+    override fun getVideoWidth(): Int {
+        return mMediaPlayer?.videoWidth?:0
+    }
+
+    override fun getVideoHeight(): Int {
+        return mMediaPlayer?.videoHeight?:0
+    }
+
     override fun getBufferedPercentage(): Int {
         return mBufferedPercent
     }

@@ -1,25 +1,34 @@
 package app.allever.android.learning.audiovideo.kernel.demo
 
+import android.graphics.Matrix
 import app.allever.android.learning.audiovideo.kernel.IJKPlayerFactory
-import app.allever.android.learning.audiovideo.render.ConstantKeys
 import app.allever.android.learning.audiovideo.render.IRenderView
+import app.allever.android.learning.audiovideo.render.TextureRenderView
 import app.allever.android.sample.audiovideo.databinding.FragmentRenderKernelBinding
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.core.function.media.MediaBean
-import app.allever.android.lib.core.function.media.MediaHelper
 import app.allever.android.lib.core.function.player.kernel.AndroidPlayerFactory
 import app.allever.android.lib.core.function.player.kernel.internal.AbsPlayer
 import app.allever.android.lib.core.function.player.kernel.internal.AbsPlayerFactory
 import app.allever.android.lib.core.function.player.kernel.internal.PlayerStatusListener
 import app.allever.android.lib.core.helper.FragmentHelper
 import app.allever.android.lib.core.helper.ViewHelper
-import app.allever.android.lib.core.util.FileUtils
+import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
 
 class RenderKernelFragment : BaseFragment<FragmentRenderKernelBinding, BaseViewModel>() {
+
+    private val videoPickerLauncher = MediaPickerCore.registerPickerLauncher( this) {
+        if (it.isEmpty()) {
+            toast("未选择任何文件")
+            return@registerPickerLauncher
+        }
+        val item = it[0]
+        player?.setDataSource(item.path)
+    }
 
     private var player: AbsPlayer? = AbsPlayerFactory.create<AndroidPlayerFactory>().createPlayer()
 
@@ -97,38 +106,36 @@ class RenderKernelFragment : BaseFragment<FragmentRenderKernelBinding, BaseViewM
             }
 
             override fun onPrepared() {
+                log("onPrepared")
+                if (mRender is TextureRenderView) {
+                    mBinding.textureRenderView.post {
+                        if (mBinding.textureRenderView.width > 0 && mBinding.textureRenderView.height > 0) {
+                            handleTextureSize(mBinding.textureRenderView.width.toFloat(), mBinding.textureRenderView.height.toFloat())
+                        }
+                    }
+                }
             }
 
             override fun onVideoSizeChanged(width: Int, height: Int) {
-                log("width = $width x height = $height")
+                log("onVideoSizeChanged: width = $width , height = $height")
+                //不处理就是默认视频占满布局
+
 //                handleSurfaceSize(width, height)
-                mBinding.surfaceRenderView.setScaleType(ConstantKeys.PlayerScreenScaleType.SCREEN_SCALE_16_9)
-                mBinding.surfaceRenderView.setVideoSize(width, height)
+//                mRender?.setVideoSize(width, height)
+//                mRender?.setScaleType(ConstantKeys.PlayerScreenScaleType.SCREEN_SCALE_16_9)
+//                mBinding.surfaceRenderView.setScaleType(ConstantKeys.PlayerScreenScaleType.SCREEN_SCALE_16_9)
+//                mBinding.surfaceRenderView.setVideoSize(width, height)
+
+                if (mRender is TextureRenderView) {
+                    handleTextureSize(width.toFloat(), height.toFloat())
+                }
             }
 
         }
     }
 
     private fun selectVideo() {
-        toast("选择视频")
-//        MediaPicker.launchPickerActivity(
-//            MediaHelper.TYPE_VIDEO,
-//            mediaPickerListener = object : MediaPickerListener {
-//                override fun onPicked(
-//                    all: MutableList<MediaBean>,
-//                    imageList: MutableList<MediaBean>,
-//                    videoList: MutableList<MediaBean>,
-//                    audioList: MutableList<MediaBean>
-//                ) {
-//                    val mSelectMediaPath = videoList[0].path
-//                    val mOriginFileName = FileUtils.getFileName(mSelectMediaPath)
-//                    log("path = $mSelectMediaPath")
-//                    toast("path = $mSelectMediaPath")
-//                    videoList[0].uri?.let {
-//                        player?.setDataSource(it)
-//                    }
-//                }
-//            })
+        MediaPickerCore.launchVideo(videoPickerLauncher)
     }
 
     private fun handleSurfaceSize(width: Int, height: Int) {
@@ -160,6 +167,49 @@ class RenderKernelFragment : BaseFragment<FragmentRenderKernelBinding, BaseViewM
         val params = mBinding.surfaceView.layoutParams
         params.width = displayW
         params.height = displayH
-        mBinding.surfaceView.layoutParams = params
+        mBinding.surfaceRenderView.layoutParams = params
+        mBinding.textureRenderView.layoutParams = params
+    }
+
+    private fun handleTextureSize(mtextureViewWidth: Float, mtextureViewHeight: Float) {
+        log("视频拉伸: $mtextureViewWidth x $mtextureViewHeight")
+        mBinding.textureRenderView.post {
+            //mtextureViewWidth为textureView宽，mtextureViewHeight为textureView高
+            //mtextureViewWidth宽高，为什么需要用传入的，因为全屏显示时宽高不会及时更新
+            val matrix = Matrix();
+            //videoView为new MediaPlayer()
+            val mVideoWidth = player?.getVideoWidth()?.toFloat() ?: 0f
+            val mVideoHeight = player?.getVideoHeight()?.toFloat() ?: 0f
+            log("视频宽高: $mVideoWidth x $mVideoHeight")
+
+            if (mVideoWidth == 0f || mVideoHeight == 0f) {
+                logE("视频宽高为0")
+                return@post
+            }
+
+            //得到缩放比，从而获得最佳缩放比
+            val sx = mtextureViewWidth / mVideoWidth;
+            val sy = mtextureViewHeight / mVideoHeight;
+            //先将视频变回原来的大小
+            val sx1 = mVideoWidth / mtextureViewWidth;
+            val sy1 = mVideoHeight / mtextureViewHeight;
+            matrix.preScale(sx1, sy1);
+//            log("mat", matrix.toString());
+            //然后判断最佳比例，满足一边能够填满
+            if (sx >= sy) {
+                matrix.preScale(sy, sy);
+                //然后判断出左右偏移，实现居中，进入到这个判断，证明y轴是填满了的
+                val leftX = (mtextureViewWidth - mVideoWidth * sy) / 2;
+                matrix.postTranslate(leftX, 0f);
+            } else {
+                matrix.preScale(sx, sx);
+                val leftY = (mtextureViewHeight - mVideoHeight * sx) / 2;
+                matrix.postTranslate(0f, leftY);
+            }
+
+            mBinding.textureRenderView.setTransform(matrix);//将矩阵添加到textureView
+            mBinding.textureRenderView.postInvalidate();//重绘视图
+        }
+
     }
 }

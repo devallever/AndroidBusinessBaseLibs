@@ -54,6 +54,9 @@ interface IFunctionPlayer {
      */
     fun getDuration(): Long
 
+    fun getVideoWidth(): Int
+    fun getVideoHeight(): Int
+
     /**
      * 获取缓冲百分比
      * @return 获取缓冲百分比
