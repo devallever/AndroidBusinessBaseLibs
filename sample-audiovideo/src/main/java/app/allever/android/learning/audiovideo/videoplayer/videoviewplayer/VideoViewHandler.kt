@@ -1,10 +1,10 @@
-package app.allever.android.learning.audiovideo.videoviewplayer
+package app.allever.android.learning.audiovideo.videoplayer.videoviewplayer
 
 import android.media.MediaPlayer
 import android.widget.MediaController
 import android.widget.VideoView
-import app.allever.android.learning.audiovideo.BasePlayerHandler
-import app.allever.android.learning.audiovideo.StatusListener
+import app.allever.android.learning.audiovideo.videoplayer.BasePlayerHandler
+import app.allever.android.learning.audiovideo.videoplayer.StatusListener
 import app.allever.android.lib.media.core.model.MediaItem
 
 class VideoViewHandler : BasePlayerHandler(), MediaPlayer.OnPreparedListener {

@@ -1,12 +1,12 @@
-package app.allever.android.learning.audiovideo.textureviewplayer
+package app.allever.android.learning.audiovideo.videoplayer.textureviewplayer
 
 import android.graphics.SurfaceTexture
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.view.Surface
 import android.view.TextureView
-import app.allever.android.learning.audiovideo.BasePlayerHandler
-import app.allever.android.learning.audiovideo.StatusListener
+import app.allever.android.learning.audiovideo.videoplayer.BasePlayerHandler
+import app.allever.android.learning.audiovideo.videoplayer.StatusListener
 import app.allever.android.lib.media.core.model.MediaItem
 
 class TextureViewHandler : BasePlayerHandler(), TextureView.SurfaceTextureListener {

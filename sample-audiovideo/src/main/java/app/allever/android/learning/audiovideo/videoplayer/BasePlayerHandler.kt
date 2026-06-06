@@ -1,11 +1,6 @@
-package app.allever.android.learning.audiovideo
+package app.allever.android.learning.audiovideo.videoplayer
 
 import android.media.MediaPlayer
-import app.allever.android.lib.common.ListFragment
-import app.allever.android.lib.common.ListViewModel
-import app.allever.android.lib.common.adapter.TextClickAdapter
-import app.allever.android.lib.common.adapter.bean.TextClickItem
-import app.allever.android.lib.common.databinding.FragmentListBinding
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.function.work.TimerTask2
 import app.allever.android.lib.media.core.model.MediaItem
@@ -59,11 +54,4 @@ abstract class BasePlayerHandler : MediaPlayer.OnCompletionListener,
         mStatusListener?.onPrepare(duration)
         log("duration = ${mMediaPlayer?.duration}")
     }
-}
-
-class MediaKernelFragment(private val data: MutableList<TextClickItem>) :
-    ListFragment<FragmentListBinding, ListViewModel, TextClickItem>() {
-    override fun getAdapter() = TextClickAdapter()
-
-    override fun getList() = data
 }

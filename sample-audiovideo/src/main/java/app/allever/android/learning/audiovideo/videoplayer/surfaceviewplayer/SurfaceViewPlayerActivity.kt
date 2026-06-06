@@ -1,26 +1,26 @@
-package app.allever.android.learning.audiovideo.textureviewplayer
+package app.allever.android.learning.audiovideo.videoplayer.surfaceviewplayer
 
 import android.content.Intent
-import app.allever.android.sample.audiovideo.databinding.ActivityTextureViewPlayerBinding
+import app.allever.android.sample.audiovideo.databinding.ActivitySurfaceViewPlayerBinding
 import app.allever.android.lib.common.BaseActivity
 import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.mvvm.base.BaseViewModel
 
-class TextureViewPlayerActivity :
-    BaseActivity<ActivityTextureViewPlayerBinding, TextureViewPlayerViewModel>() {
+class SurfaceViewPlayerActivity :
+    BaseActivity<ActivitySurfaceViewPlayerBinding, SurfaceViewPlayerViewModel>() {
     override fun init() {
         mViewModel.initExtra(intent)
         binding.videoPlayerView.setData(mViewModel.mediaBean ?: return)
     }
 
-    override fun inflateChildBinding() = ActivityTextureViewPlayerBinding.inflate(layoutInflater)
+    override fun inflateChildBinding() = ActivitySurfaceViewPlayerBinding.inflate(layoutInflater)
 
     override fun showTopBar() = false
 
     override fun isSupportSwipeBack() = false
 }
 
-class TextureViewPlayerViewModel : BaseViewModel() {
+class SurfaceViewPlayerViewModel : BaseViewModel() {
     var mediaBean: MediaItem? = null
     override fun init() {
     }

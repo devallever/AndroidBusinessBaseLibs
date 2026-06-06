@@ -1,4 +1,4 @@
-package app.allever.android.learning.audiovideo.render
+package app.allever.android.learning.audiovideo.render.internal
 
 import android.graphics.Bitmap
 import android.view.View

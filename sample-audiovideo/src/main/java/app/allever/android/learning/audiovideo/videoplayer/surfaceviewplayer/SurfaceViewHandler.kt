@@ -1,4 +1,4 @@
-package app.allever.android.learning.audiovideo.surfaceviewplayer
+package app.allever.android.learning.audiovideo.videoplayer.surfaceviewplayer
 
 import android.graphics.SurfaceTexture
 import android.media.AudioManager
@@ -6,8 +6,8 @@ import android.media.MediaPlayer
 import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import app.allever.android.learning.audiovideo.BasePlayerHandler
-import app.allever.android.learning.audiovideo.StatusListener
+import app.allever.android.learning.audiovideo.videoplayer.BasePlayerHandler
+import app.allever.android.learning.audiovideo.videoplayer.StatusListener
 import app.allever.android.lib.media.core.model.MediaItem
 
 class SurfaceViewHandler : BasePlayerHandler(), SurfaceHolder.Callback {

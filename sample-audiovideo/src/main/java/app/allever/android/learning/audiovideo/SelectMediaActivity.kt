@@ -1,9 +1,9 @@
 package app.allever.android.learning.audiovideo
 
 import android.content.Intent
-import app.allever.android.learning.audiovideo.surfaceviewplayer.SurfaceViewPlayerActivity
-import app.allever.android.learning.audiovideo.textureviewplayer.TextureViewPlayerActivity
-import app.allever.android.learning.audiovideo.videoviewplayer.VideoViewPlayerActivity
+import app.allever.android.learning.audiovideo.videoplayer.surfaceviewplayer.SurfaceViewPlayerActivity
+import app.allever.android.learning.audiovideo.videoplayer.textureviewplayer.TextureViewPlayerActivity
+import app.allever.android.learning.audiovideo.videoplayer.videoviewplayer.VideoViewPlayerActivity
 import app.allever.android.lib.common.BaseActivity
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.helper.ActivityHelper

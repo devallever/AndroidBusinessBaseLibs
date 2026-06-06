@@ -5,7 +5,7 @@
     android:background="@color/black">
 
 
-    <app.allever.android.learning.audiovideo.textureviewplayer.TexturePlayerView
+    <app.allever.android.learning.audiovideo.videoplayer.textureviewplayer.TexturePlayerView
         android:id="@+id/videoPlayerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

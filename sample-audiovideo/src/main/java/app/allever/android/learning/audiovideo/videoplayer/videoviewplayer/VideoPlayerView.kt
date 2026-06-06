@@ -1,4 +1,4 @@
-package app.allever.android.learning.audiovideo.videoviewplayer
+package app.allever.android.learning.audiovideo.videoplayer.videoviewplayer
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.constraintlayout.widget.ConstraintLayout
-import app.allever.android.learning.audiovideo.StatusListener
+import app.allever.android.learning.audiovideo.videoplayer.StatusListener
 import app.allever.android.sample.audiovideo.databinding.VideoPlayerViewBinding
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
@@ -79,7 +79,7 @@ class VideoPlayerView @JvmOverloads constructor(
         }
 
         binding.controlView.setOnClickListener {
-            val visible = binding.controlContainer.visibility == View.VISIBLE
+            val visible = binding.controlContainer.visibility == VISIBLE
             ViewHelper.setVisible(binding.controlContainer, !visible)
             ViewHelper.setVisible(binding.topBarContainer, !visible)
         }
@@ -212,13 +212,13 @@ class VideoPlayerView @JvmOverloads constructor(
 
             if (isWidthMode) {
                 val lp = binding.videoView.layoutParams
-                lp.width = ViewGroup.LayoutParams.WRAP_CONTENT
-                lp.height = ViewGroup.LayoutParams.MATCH_PARENT
+                lp.width = LayoutParams.WRAP_CONTENT
+                lp.height = LayoutParams.MATCH_PARENT
                 binding.videoView.layoutParams = lp
             } else {
                 val lp = binding.videoView.layoutParams
-                lp.width = ViewGroup.LayoutParams.MATCH_PARENT
-                lp.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                lp.width = LayoutParams.MATCH_PARENT
+                lp.height = LayoutParams.WRAP_CONTENT
                 binding.videoView.layoutParams = lp
             }
         }

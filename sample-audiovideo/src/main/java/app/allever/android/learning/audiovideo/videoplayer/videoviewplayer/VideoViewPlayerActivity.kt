@@ -1,4 +1,4 @@
-package app.allever.android.learning.audiovideo.videoviewplayer
+package app.allever.android.learning.audiovideo.videoplayer.videoviewplayer
 
 import android.content.Intent
 import android.os.Build

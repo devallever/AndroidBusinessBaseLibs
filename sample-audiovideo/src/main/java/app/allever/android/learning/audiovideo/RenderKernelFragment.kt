@@ -1,16 +1,12 @@
 package app.allever.android.learning.audiovideo
 
-import android.content.Context
 import android.graphics.Matrix
-import android.util.AttributeSet
-import androidx.constraintlayout.widget.ConstraintLayout
 import app.allever.android.learning.audiovideo.kernel.AndroidPlayerFactory
 import app.allever.android.learning.audiovideo.kernel.IJKPlayerFactory
-import app.allever.android.learning.audiovideo.MediaKernelFragment
 import app.allever.android.learning.audiovideo.kernel.internal.AbsPlayer
 import app.allever.android.learning.audiovideo.kernel.internal.AbsPlayerFactory
 import app.allever.android.learning.audiovideo.kernel.internal.PlayerStatusListener
-import app.allever.android.learning.audiovideo.render.IRenderView
+import app.allever.android.learning.audiovideo.render.internal.IRenderView
 import app.allever.android.learning.audiovideo.render.TextureRenderView
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.common.adapter.bean.TextClickItem
@@ -19,25 +15,9 @@ import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.helper.FragmentHelper
 import app.allever.android.lib.core.helper.ViewHelper
-import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.audiovideo.databinding.FragmentRenderKernelBinding
-
-open class BasePlayerView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null
-) : ConstraintLayout(context, attrs) {
-
-    constructor(
-        basePlayerHandler: BasePlayerHandler,
-        context: Context,
-        attrs: AttributeSet? = null
-    ) : this(context, attrs)
-
-    protected lateinit var mMediaBean: MediaItem
-
-
-}
 
 class RenderKernelFragment : BaseFragment<FragmentRenderKernelBinding, BaseViewModel>() {
 

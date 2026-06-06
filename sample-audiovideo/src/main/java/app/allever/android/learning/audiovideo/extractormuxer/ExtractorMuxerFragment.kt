@@ -8,7 +8,7 @@ import android.media.MediaMuxer
 import android.os.Build
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
-import app.allever.android.learning.audiovideo.textureviewplayer.TextureViewPlayerActivity
+import app.allever.android.learning.audiovideo.videoplayer.textureviewplayer.TextureViewPlayerActivity
 import app.allever.android.learning.audiovideo.util.isAudio
 import app.allever.android.learning.audiovideo.util.isVideo
 import app.allever.android.lib.common.BaseFragment

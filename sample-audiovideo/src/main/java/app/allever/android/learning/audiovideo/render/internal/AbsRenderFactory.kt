@@ -1,6 +1,7 @@
-package app.allever.android.learning.audiovideo.render
+package app.allever.android.learning.audiovideo.render.internal
 
 import android.content.Context
+import app.allever.android.learning.audiovideo.render.internal.IRenderView
 
 abstract class AbsRenderFactory {
     companion object {

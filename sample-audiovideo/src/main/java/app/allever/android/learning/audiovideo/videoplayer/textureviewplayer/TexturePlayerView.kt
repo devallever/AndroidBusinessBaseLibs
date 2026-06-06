@@ -1,18 +1,20 @@
-package app.allever.android.learning.audiovideo.surfaceviewplayer
+package app.allever.android.learning.audiovideo.videoplayer.textureviewplayer
 
 import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.graphics.Matrix
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.widget.SeekBar
-import app.allever.android.learning.audiovideo.BasePlayerView
-import app.allever.android.learning.audiovideo.StatusListener
-import app.allever.android.sample.audiovideo.databinding.SurfacePlayerViewBinding
+import androidx.constraintlayout.widget.ConstraintLayout
+import app.allever.android.learning.audiovideo.videoplayer.StatusListener
+import app.allever.android.sample.audiovideo.databinding.TexturePlayerViewBinding
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.core.helper.ViewHelper
@@ -21,16 +23,17 @@ import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.sample.audiovideo.R
 import kotlin.math.abs
 
-class SurfacePlayerView @JvmOverloads constructor(
+class TexturePlayerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
-) : BasePlayerView(context, attrs), StatusListener {
-    private var binding: SurfacePlayerViewBinding
-    private val playerHandler: SurfaceViewHandler by lazy {
-        SurfaceViewHandler()
+) : ConstraintLayout(context, attrs), StatusListener {
+    private var binding: TexturePlayerViewBinding
+    private lateinit var mMediaBean: MediaItem
+    private val mTextureViewHandler: TextureViewHandler by lazy {
+        TextureViewHandler()
     }
 
     init {
-        binding = SurfacePlayerViewBinding.inflate(LayoutInflater.from(App.context), this, true)
+        binding = TexturePlayerViewBinding.inflate(LayoutInflater.from(App.context), this, true)
 
         initListener()
     }
@@ -41,16 +44,16 @@ class SurfacePlayerView @JvmOverloads constructor(
             (context as? Activity)?.finish()
         }
         binding.ivPlayPause.setOnClickListener {
-            if (playerHandler.isPlaying()) {
-                playerHandler.pause()
+            if (mTextureViewHandler.isPlaying()) {
+                mTextureViewHandler.pause()
             } else {
-                playerHandler.play()
+                mTextureViewHandler.play()
             }
         }
         binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 if (p2) {
-                    playerHandler.seekTo(p1)
+                    mTextureViewHandler.seekTo(p1)
                 }
                 binding.tvProgress.text = TimeUtils.formatTime(p1.toLong(), TimeUtils.FORMAT_mm_ss)
             }
@@ -71,7 +74,7 @@ class SurfacePlayerView @JvmOverloads constructor(
         }
 
         binding.controlView.setOnClickListener {
-            val visible = binding.controlContainer.visibility == View.VISIBLE
+            val visible = binding.controlContainer.visibility == VISIBLE
             ViewHelper.setVisible(binding.controlContainer, !visible)
             ViewHelper.setVisible(binding.topBarContainer, !visible)
         }
@@ -104,7 +107,7 @@ class SurfacePlayerView @JvmOverloads constructor(
                         binding.controlView.performClick()
                     } else {
 //                        toast("移动了")
-                        playerHandler.play()
+                        mTextureViewHandler.play()
                     }
                     moved = false
                 }
@@ -131,12 +134,12 @@ class SurfacePlayerView @JvmOverloads constructor(
                             log("下边滑动")
 
                             if (moved) {
-                                playerHandler.pause()
+                                mTextureViewHandler.pause()
                                 val currentPosition =
                                     binding.seekBar.max * realOffsetX / screenWidth.toFloat()
                                 val progress = binding.seekBar.progress + currentPosition.toInt()
                                 binding.seekBar.progress = progress
-                                playerHandler.seekTo(progress)
+                                mTextureViewHandler.seekTo(progress)
                                 log(" progress = $progress")
                             }
                         }
@@ -158,20 +161,24 @@ class SurfacePlayerView @JvmOverloads constructor(
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        playerHandler.stop()
+        mTextureViewHandler.stop()
     }
 
     fun setData(mediaBean: MediaItem) {
         mMediaBean = mediaBean
-        playerHandler.initVideoView(binding.videoView, mediaBean, this)
+        mTextureViewHandler.initVideoView(binding.videoView, mediaBean, this)
         binding.tvTitle.text = mMediaBean.name
-//        changeVideoSize()
     }
 
     override fun onPrepare(duration: Long) {
         binding.seekBar.max = duration.toInt()
         val text = TimeUtils.formatTime(duration, TimeUtils.FORMAT_mm_ss)
         binding.tvDuration.text = " / $text"
+        binding.videoView.post {
+            if (binding.videoView.width > 0 && binding.videoView.height > 0) {
+                stretching(binding.videoView.width.toFloat(), binding.videoView.height.toFloat())
+            }
+        }
     }
 
     override fun onVideoPlay() {
@@ -193,66 +200,47 @@ class SurfacePlayerView @JvmOverloads constructor(
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-//        changeVideoSize()
+        stretching(w.toFloat(), h.toFloat())
     }
 
-    //改变视频的尺寸自适应。
-    private fun changeVideoSize() {
-        binding.controlView.post {
-            val w: Float = (mMediaBean as? MediaItem.Video)?.width?.toFloat()?:0f
-            val h: Float = (mMediaBean as? MediaItem.Video)?.height?.toFloat()?:0f
-            val sw: Float = binding.controlView.width.toFloat()
-            val sh: Float = binding.controlView.height.toFloat()
+    //设置避免视频播放时拉伸，复制可直接使用
+    private fun stretching(mtextureViewWidth: Float, mtextureViewHeight: Float) {
+        log("视频拉伸: $mtextureViewWidth x $mtextureViewHeight")
+        binding.videoView.post {
+            //mtextureViewWidth为textureView宽，mtextureViewHeight为textureView高
+            //mtextureViewWidth宽高，为什么需要用传入的，因为全屏显示时宽高不会及时更新
+            val matrix = Matrix();
+            //videoView为new MediaPlayer()
+            val mVideoWidth = mTextureViewHandler.getMediaPlayer()?.videoWidth?.toFloat() ?: 0f
+            val mVideoHeight = mTextureViewHandler.getMediaPlayer()?.videoHeight?.toFloat() ?: 0f
 
-            var displayW = 0
-            var displayH = 0
-
-            log("video size = $w x $h")
-            log("surface size = $sw x $sh")
-
-            if (resources.configuration.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-                log("竖屏")
-                if (w > h) {
-                    //横向视频
-                    displayW = sw.toInt()
-                    displayH = (h * sw / w).toInt()
-                } else {
-                    //纵向视频
-                    if (h > sh) {
-                        // 超高视频
-                    } else {
-                        //
-                        displayW = sw.toInt()
-                        displayH = (h * sw / w).toInt()
-                    }
-                }
-
-            } else {
-                log("横屏")
-                if (w > h) {
-                    //横向视频
-                    if (w > sw) {
-                        //超宽视频
-                    } else {
-                        //
-                        displayH = sh.toInt()
-                        displayW = (w * sh / h).toInt()
-                    }
-                } else {
-                    //纵向视频
-                    displayH = sh.toInt()
-                    displayW = (w * sh / h).toInt()
-                }
+            if (mVideoWidth == 0f || mVideoHeight == 0f) {
+                logE("视频宽高为0")
+                return@post
             }
 
+            //得到缩放比，从而获得最佳缩放比
+            val sx = mtextureViewWidth / mVideoWidth;
+            val sy = mtextureViewHeight / mVideoHeight;
+            //先将视频变回原来的大小
+            val sx1 = mVideoWidth / mtextureViewWidth;
+            val sy1 = mVideoHeight / mtextureViewHeight;
+            matrix.preScale(sx1, sy1);
+//            log("mat", matrix.toString());
+            //然后判断最佳比例，满足一边能够填满
+            if (sx >= sy) {
+                matrix.preScale(sy, sy);
+                //然后判断出左右偏移，实现居中，进入到这个判断，证明y轴是填满了的
+                val leftX = (mtextureViewWidth - mVideoWidth * sy) / 2;
+                matrix.postTranslate(leftX, 0f);
+            } else {
+                matrix.preScale(sx, sx);
+                val leftY = (mtextureViewHeight - mVideoHeight * sx) / 2;
+                matrix.postTranslate(0f, leftY);
+            }
 
-            log("surface size = $displayW x $displayH")
-
-            //无法直接设置视频尺寸，将计算出的视频尺寸设置到surfaceView 让视频自动填充。
-            val params = binding.videoView.layoutParams
-            params.width = displayW
-            params.height = displayH
-            binding.videoView.layoutParams = params
+            binding.videoView.setTransform(matrix);//将矩阵添加到textureView
+            binding.videoView.postInvalidate();//重绘视图
         }
 
     }

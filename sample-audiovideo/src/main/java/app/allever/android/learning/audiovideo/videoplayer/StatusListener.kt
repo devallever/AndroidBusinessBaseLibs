@@ -1,4 +1,4 @@
-package app.allever.android.learning.audiovideo
+package app.allever.android.learning.audiovideo.videoplayer
 
 interface StatusListener {
     fun onPrepare(duration: Long)

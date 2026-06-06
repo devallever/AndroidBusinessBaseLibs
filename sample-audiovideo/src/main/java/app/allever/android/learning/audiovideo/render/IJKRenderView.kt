@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.View
 import app.allever.android.learning.audiovideo.ijkplayer.widget.media.IjkVideoView
 import app.allever.android.learning.audiovideo.kernel.internal.AbsPlayer
+import app.allever.android.learning.audiovideo.render.internal.IRenderView
 
 class IJKRenderView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null

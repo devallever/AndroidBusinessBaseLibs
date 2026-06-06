@@ -8,6 +8,8 @@ import android.view.Surface
 import android.view.TextureView
 import android.view.View
 import app.allever.android.learning.audiovideo.kernel.internal.AbsPlayer
+import app.allever.android.learning.audiovideo.render.internal.IRenderView
+import app.allever.android.learning.audiovideo.render.internal.MeasureHelper
 
 class TextureRenderView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null

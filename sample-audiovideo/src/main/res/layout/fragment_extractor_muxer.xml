@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:text="停止播放提取视频" />
 
-                <app.allever.android.learning.audiovideo.surfaceviewplayer.SurfacePlayerView
+                <app.allever.android.learning.audiovideo.videoplayer.surfaceviewplayer.SurfacePlayerView
                     android:id="@+id/videoViewExtra"
                     android:layout_width="match_parent"
                     android:layout_height="240dp"
@@ -109,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:text="停止播放合并视频" />
 
-                <app.allever.android.learning.audiovideo.surfaceviewplayer.SurfacePlayerView
+                <app.allever.android.learning.audiovideo.videoplayer.surfaceviewplayer.SurfacePlayerView
                     android:id="@+id/videoViewMuxer"
                     android:layout_width="match_parent"
                     android:layout_height="240dp"

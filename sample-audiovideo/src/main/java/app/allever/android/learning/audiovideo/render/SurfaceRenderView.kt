@@ -7,6 +7,8 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
 import app.allever.android.learning.audiovideo.kernel.internal.AbsPlayer
+import app.allever.android.learning.audiovideo.render.internal.IRenderView
+import app.allever.android.learning.audiovideo.render.internal.MeasureHelper
 
 class SurfaceRenderView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
