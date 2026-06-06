@@ -1,10 +1,10 @@
 package app.allever.android.learning.audiovideo
 
-import app.allever.android.learning.audiovideo.audio.AudioRecordFragment
-import app.allever.android.learning.audiovideo.extractormuxer.ExtractorMuxerFragment
-import app.allever.android.learning.audiovideo.ijkplayer.IJKPlayerMainFragment
-import app.allever.android.learning.audiovideo.kernel.demo.RenderKernelFragment
-import app.allever.android.learning.audiovideo.render.demo.MediaRenderFragment
+import app.allever.android.sample.audiovideo.audio.AudioRecordFragment
+import app.allever.android.sample.audiovideo.extractormuxer.ExtractorMuxerFragment
+import app.allever.android.sample.audiovideo.ijkplayer.IJKPlayerMainFragment
+import app.allever.android.sample.audiovideo.kernel.demo.RenderKernelFragment
+import app.allever.android.sample.audiovideo.render.demo.MediaRenderFragment
 import app.allever.android.lib.common.FragmentActivity
 import app.allever.android.lib.common.ListFragment
 import app.allever.android.lib.common.ListViewModel

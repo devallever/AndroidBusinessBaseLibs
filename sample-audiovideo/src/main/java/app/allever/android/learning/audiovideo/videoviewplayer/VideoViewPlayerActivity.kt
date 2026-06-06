@@ -1,7 +1,7 @@
 package app.allever.android.learning.audiovideo.videoviewplayer
 
 import android.content.Intent
-import app.allever.android.learning.audiovideo.databinding.ActivityVideoViewPlayerBinding
+import app.allever.android.sample.audiovideo.databinding.ActivityVideoViewPlayerBinding
 import app.allever.android.lib.common.BaseActivity
 import app.allever.android.lib.core.function.media.MediaBean
 import app.allever.android.lib.mvvm.base.BaseViewModel

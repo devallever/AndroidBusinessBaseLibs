@@ -1,9 +1,10 @@
 package app.allever.android.learning.audiovideo
 
-import app.allever.android.learning.audiovideo.databinding.ActivityAudioVideoMainBinding
 import app.allever.android.lib.common.BaseActivity
 import app.allever.android.lib.core.helper.FragmentHelper
 import app.allever.android.lib.mvvm.base.BaseViewModel
+import app.allever.android.sample.audiovideo.R
+import app.allever.android.sample.audiovideo.databinding.ActivityAudioVideoMainBinding
 
 class AudioVideoMainActivity :
     BaseActivity<ActivityAudioVideoMainBinding, AudioVideoMainViewModel>() {

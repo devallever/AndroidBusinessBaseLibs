@@ -1,8 +1,8 @@
 package app.allever.android.learning.audiovideo.ijkplayer
 
 import android.net.Uri
-import app.allever.android.learning.audiovideo.databinding.FragmentIjkBaseBinding
 import app.allever.android.learning.audiovideo.ijkplayer.widget.media.AndroidMediaController
+import app.allever.android.sample.audiovideo.databinding.FragmentIjkBaseBinding
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.mvvm.base.BaseViewModel
 

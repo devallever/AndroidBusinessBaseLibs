@@ -44,9 +44,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import app.allever.android.learning.audiovideo.R;
-import app.allever.android.learning.audiovideo.ijkplayer.Settings;
-import app.allever.android.learning.audiovideo.ijkplayer.services.MediaPlayerService;
+import app.allever.android.sample.audiovideo.R;
+import app.allever.android.sample.audiovideo.ijkplayer.Settings;
+import app.allever.android.sample.audiovideo.ijkplayer.services.MediaPlayerService;
 //import tv.danmaku.ijk.media.exo.IjkExoMediaPlayer;
 import tv.danmaku.ijk.media.player.AndroidMediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;

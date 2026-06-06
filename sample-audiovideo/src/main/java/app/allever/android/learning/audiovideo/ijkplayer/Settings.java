@@ -20,7 +20,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import app.allever.android.learning.audiovideo.R;
+import app.allever.android.sample.audiovideo.R;
 
 
 public class Settings {

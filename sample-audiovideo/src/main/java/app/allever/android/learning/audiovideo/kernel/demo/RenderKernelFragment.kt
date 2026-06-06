@@ -1,9 +1,9 @@
 package app.allever.android.learning.audiovideo.kernel.demo
 
-import app.allever.android.learning.audiovideo.databinding.FragmentRenderKernelBinding
-import app.allever.android.learning.audiovideo.kernel.*
+import app.allever.android.learning.audiovideo.kernel.IJKPlayerFactory
 import app.allever.android.learning.audiovideo.render.ConstantKeys
 import app.allever.android.learning.audiovideo.render.IRenderView
+import app.allever.android.sample.audiovideo.databinding.FragmentRenderKernelBinding
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.core.ext.log
@@ -18,11 +18,6 @@ import app.allever.android.lib.core.helper.FragmentHelper
 import app.allever.android.lib.core.helper.ViewHelper
 import app.allever.android.lib.core.util.FileUtils
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import app.allever.android.lib.widget.mediapicker.MediaPicker
-import app.allever.android.lib.widget.mediapicker.MediaPickerListener
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 class RenderKernelFragment : BaseFragment<FragmentRenderKernelBinding, BaseViewModel>() {
 
@@ -115,24 +110,25 @@ class RenderKernelFragment : BaseFragment<FragmentRenderKernelBinding, BaseViewM
     }
 
     private fun selectVideo() {
-        MediaPicker.launchPickerActivity(
-            MediaHelper.TYPE_VIDEO,
-            mediaPickerListener = object : MediaPickerListener {
-                override fun onPicked(
-                    all: MutableList<MediaBean>,
-                    imageList: MutableList<MediaBean>,
-                    videoList: MutableList<MediaBean>,
-                    audioList: MutableList<MediaBean>
-                ) {
-                    val mSelectMediaPath = videoList[0].path
-                    val mOriginFileName = FileUtils.getFileName(mSelectMediaPath)
-                    log("path = $mSelectMediaPath")
-                    toast("path = $mSelectMediaPath")
-                    videoList[0].uri?.let {
-                        player?.setDataSource(it)
-                    }
-                }
-            })
+        toast("选择视频")
+//        MediaPicker.launchPickerActivity(
+//            MediaHelper.TYPE_VIDEO,
+//            mediaPickerListener = object : MediaPickerListener {
+//                override fun onPicked(
+//                    all: MutableList<MediaBean>,
+//                    imageList: MutableList<MediaBean>,
+//                    videoList: MutableList<MediaBean>,
+//                    audioList: MutableList<MediaBean>
+//                ) {
+//                    val mSelectMediaPath = videoList[0].path
+//                    val mOriginFileName = FileUtils.getFileName(mSelectMediaPath)
+//                    log("path = $mSelectMediaPath")
+//                    toast("path = $mSelectMediaPath")
+//                    videoList[0].uri?.let {
+//                        player?.setDataSource(it)
+//                    }
+//                }
+//            })
     }
 
     private fun handleSurfaceSize(width: Int, height: Int) {

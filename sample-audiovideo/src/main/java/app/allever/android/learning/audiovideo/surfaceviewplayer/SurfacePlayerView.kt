@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.SeekBar
 import app.allever.android.learning.audiovideo.BasePlayerView
 import app.allever.android.learning.audiovideo.StatusListener
-import app.allever.android.learning.audiovideo.databinding.SurfacePlayerViewBinding
+import app.allever.android.sample.audiovideo.databinding.SurfacePlayerViewBinding
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast
@@ -18,6 +18,7 @@ import app.allever.android.lib.core.function.media.MediaBean
 import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.core.helper.ViewHelper
 import app.allever.android.lib.core.util.TimeUtils
+import app.allever.android.sample.audiovideo.R
 import kotlin.math.abs
 
 class SurfacePlayerView @JvmOverloads constructor(
@@ -174,15 +175,15 @@ class SurfacePlayerView @JvmOverloads constructor(
     }
 
     override fun onVideoPlay() {
-        binding.ivPlayPause.setImageResource(app.allever.android.lib.widget.R.drawable.icon_album_video_preview_pause)
+        binding.ivPlayPause.setImageResource(R.drawable.icon_album_video_preview_pause)
     }
 
     override fun onVideoPause() {
-        binding.ivPlayPause.setImageResource(app.allever.android.lib.widget.R.drawable.icon_album_video_preview_play)
+        binding.ivPlayPause.setImageResource(R.drawable.icon_album_video_preview_play)
     }
 
     override fun onVideoError() {
-        binding.ivPlayPause.setImageResource(app.allever.android.lib.widget.R.drawable.icon_album_video_preview_play)
+        binding.ivPlayPause.setImageResource(R.drawable.icon_album_video_preview_play)
     }
 
     override fun onVideoPlaying(currentPosition: Int) {

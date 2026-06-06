@@ -1,8 +1,7 @@
 package app.allever.android.learning.audiovideo.audio
 
 import android.text.TextUtils
-import app.allever.android.learning.audiovideo.databinding.ActivityAudioRecordBinding
-import app.allever.android.learning.audiovideo.databinding.FragmentAudioRecordBinding
+import app.allever.android.sample.audiovideo.databinding.FragmentAudioRecordBinding
 import app.allever.android.lib.common.BaseActivity
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.ext.logE

@@ -11,7 +11,7 @@ import android.view.View
 import android.widget.SeekBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import app.allever.android.learning.audiovideo.StatusListener
-import app.allever.android.learning.audiovideo.databinding.TexturePlayerViewBinding
+import app.allever.android.sample.audiovideo.databinding.TexturePlayerViewBinding
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast

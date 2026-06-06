@@ -22,7 +22,7 @@ import android.preference.ListPreference;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 
-import app.allever.android.learning.audiovideo.R;
+import app.allever.android.sample.audiovideo.R;
 
 
 public class IjkListPreference extends ListPreference {

@@ -9,7 +9,7 @@ import android.widget.TableLayout;
 
 import java.util.Locale;
 
-import app.allever.android.learning.audiovideo.R;
+import app.allever.android.sample.audiovideo.R;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 import tv.danmaku.ijk.media.player.MediaPlayerProxy;

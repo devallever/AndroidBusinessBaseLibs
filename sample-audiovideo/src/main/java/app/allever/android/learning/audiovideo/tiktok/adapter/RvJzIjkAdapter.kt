@@ -1,9 +1,9 @@
 package app.allever.android.learning.audiovideo.tiktok.adapter
 
-import app.allever.android.learning.audiovideo.R
-import app.allever.android.learning.audiovideo.databinding.ItemRvJzIjkBinding
 import app.allever.android.learning.audiovideo.jz.JZMediaIjk
 import app.allever.android.learning.audiovideo.tiktok.VideoBean
+import app.allever.android.sample.audiovideo.R
+import app.allever.android.sample.audiovideo.databinding.ItemRvJzIjkBinding
 import cn.jzvd.JZDataSource
 import cn.jzvd.Jzvd
 import com.chad.library.adapter.base.BaseQuickAdapter

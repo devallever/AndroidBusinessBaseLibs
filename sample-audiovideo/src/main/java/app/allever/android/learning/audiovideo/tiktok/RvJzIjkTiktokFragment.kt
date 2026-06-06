@@ -4,10 +4,10 @@ import android.view.View
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
-import app.allever.android.learning.audiovideo.R
-import app.allever.android.learning.audiovideo.databinding.FragmentTiktokVideoListBinding
 import app.allever.android.learning.audiovideo.jz.JzvdStdTikTok
 import app.allever.android.learning.audiovideo.tiktok.adapter.RvJzIjkAdapter
+import app.allever.android.sample.audiovideo.R
+import app.allever.android.sample.audiovideo.databinding.FragmentTiktokVideoListBinding
 import app.allever.android.lib.mvvm.base.BaseMvvmFragment
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import cn.jzvd.Jzvd

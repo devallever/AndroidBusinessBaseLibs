@@ -8,7 +8,6 @@ import android.media.MediaMuxer
 import android.os.Build
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
-import app.allever.android.learning.audiovideo.databinding.FragmentExtractorMuxerBinding
 import app.allever.android.learning.audiovideo.textureviewplayer.TextureViewPlayerActivity
 import app.allever.android.learning.audiovideo.util.isAudio
 import app.allever.android.learning.audiovideo.util.isVideo
@@ -23,8 +22,7 @@ import app.allever.android.lib.core.function.media.SongMediaPlayer
 import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.core.util.FileUtils
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import app.allever.android.lib.widget.mediapicker.MediaPicker
-import app.allever.android.lib.widget.mediapicker.MediaPickerListener
+import app.allever.android.sample.audiovideo.databinding.FragmentExtractorMuxerBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -112,25 +110,26 @@ class ExtractorMuxerFragment : BaseFragment<FragmentExtractorMuxerBinding, BaseV
      * 选则视频
      */
     private fun selectVideo() {
-        MediaPicker.launchPickerActivity(
-            MediaHelper.TYPE_VIDEO,
-            mediaPickerListener = object : MediaPickerListener {
-                override fun onPicked(
-                    all: MutableList<MediaBean>,
-                    imageList: MutableList<MediaBean>,
-                    videoList: MutableList<MediaBean>,
-                    audioList: MutableList<MediaBean>
-                ) {
-                    mSelectMediaPath = videoList[0].path
-                    mOriginFileName = FileUtils.getFileName(mSelectMediaPath)
-                    log("path = $mSelectMediaPath")
-                    if (videoList.isNotEmpty()) {
-                        lifecycleScope.launch {
-                            mBinding.tvSelectMediaPath.text = getSelectMediaInfo()
-                        }
-                    }
-                }
-            })
+        toast("请选择视频")
+//        MediaPicker.launchPickerActivity(
+//            MediaHelper.TYPE_VIDEO,
+//            mediaPickerListener = object : MediaPickerListener {
+//                override fun onPicked(
+//                    all: MutableList<MediaBean>,
+//                    imageList: MutableList<MediaBean>,
+//                    videoList: MutableList<MediaBean>,
+//                    audioList: MutableList<MediaBean>
+//                ) {
+//                    mSelectMediaPath = videoList[0].path
+//                    mOriginFileName = FileUtils.getFileName(mSelectMediaPath)
+//                    log("path = $mSelectMediaPath")
+//                    if (videoList.isNotEmpty()) {
+//                        lifecycleScope.launch {
+//                            mBinding.tvSelectMediaPath.text = getSelectMediaInfo()
+//                        }
+//                    }
+//                }
+//            })
     }
 
     private suspend fun getSelectMediaInfo() = withContext(Dispatchers.IO) {

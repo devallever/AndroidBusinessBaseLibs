@@ -1,10 +1,10 @@
 package app.allever.android.learning.audiovideo
 
-import app.allever.android.learning.audiovideo.databinding.ActivityMainBinding
 import app.allever.android.lib.common.BaseActivity
+import app.allever.android.lib.common.widget.ripple.RippleHelper
 import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import app.allever.android.lib.widget.ripple.RippleHelper
+import app.allever.android.sample.audiovideo.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 

@@ -23,7 +23,7 @@ import androidx.annotation.NonNull;
 
 import java.lang.ref.WeakReference;
 
-import app.allever.android.learning.audiovideo.R;
+import app.allever.android.sample.audiovideo.R;
 
 public final class MeasureHelper {
     private WeakReference<View> mWeakView;

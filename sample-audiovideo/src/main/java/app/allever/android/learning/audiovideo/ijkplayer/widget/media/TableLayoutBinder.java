@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
-import app.allever.android.learning.audiovideo.R;
+import app.allever.android.sample.audiovideo.R;
 
 
 public class TableLayoutBinder {
