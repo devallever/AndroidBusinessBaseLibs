@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- 标题 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DSL 用法示例"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+
+        <!-- 最简用法 -->
+        <TextView
+            style="?attr/textAppearanceBody2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="// 最简用法：一行代码加载网络图片"
+            android:textColor="#388E3C"
+            android:textStyle="bold"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/tvCode1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#F5F5F5"
+            android:padding="12dp"
+            android:text='imageView.load("https://example.com/photo.jpg")'
+            android:textColor="#555555"
+            android:textSize="11sp" />
+        <ImageView
+            android:id="@+id/ivSimple"
+            android:layout_width="220dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+        <!-- 带占位图和错误图 -->
+        <TextView
+            style="?attr/textAppearanceBody2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="// 带占位图和错误图"
+            android:textColor="#388E3C"
+            android:textStyle="bold"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/tvCode2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#F5F5F5"
+            android:padding="12dp"
+            android:text="imageView.load(url) {\n    placeholder(R.drawable.loading)\n    error(R.drawable.error)\n}"
+            android:textColor="#555555"
+            android:textSize="11sp" />
+        <ImageView
+            android:id="@+id/ivPlaceholderError"
+            android:layout_width="200dp"
+            android:layout_height="130dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+        <!-- 圆角 + 占位图 -->
+        <TextView
+            style="?attr/textAppearanceBody2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="// 圆角 + 占位图"
+            android:textColor="#388E3C"
+            android:textStyle="bold"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/tvCode3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#F5F5F5"
+            android:padding="12dp"
+            android:text="imageView.load(url) {\n    roundedCorners(16f)\n    placeholder(R.drawable.placeholder)\n}"
+            android:textColor="#555555"
+            android:textSize="11sp" />
+        <ImageView
+            android:id="@+id/ivRounded"
+            android:layout_width="180dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+        <!-- 圆形头像 -->
+        <TextView
+            style="?attr/textAppearanceBody2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="// 圆形头像"
+            android:textColor="#388E3C"
+            android:textStyle="bold"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/tvCode4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#F5F5F5"
+            android:padding="12dp"
+            android:text="imageView.load(url) {\n    circle()\n    placeholder(R.drawable.avatar_placeholder)\n}"
+            android:textColor="#555555"
+            android:textSize="11sp" />
+        <ImageView
+            android:id="@+id/ivCircleAvatar"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+        <!-- 高斯模糊背景 -->
+        <TextView
+            style="?attr/textAppearanceBody2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="// 高斯模糊背景"
+            android:textColor="#388E3C"
+            android:textStyle="bold"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/tvCode5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#F5F5F5"
+            android:padding="12dp"
+            android:text="imageView.load(url) {\n    blur(15)\n}"
+            android:textColor="#555555"
+            android:textSize="11sp" />
+        <ImageView
+            android:id="@+id/ivBlurBg"
+            android:layout_width="200dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+        <!-- 组合效果 -->
+        <TextView
+            style="?attr/textAppearanceBody2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="// 组合：圆角 + 灰度化"
+            android:textColor="#388E3C"
+            android:textStyle="bold"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/tvCode6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#F5F5F5"
+            android:padding="12dp"
+            android:text="imageView.load(url) {\n    roundedCorners(24f)\n    grayscale()\n}"
+            android:textColor="#555555"
+            android:textSize="11sp" />
+        <ImageView
+            android:id="@+id/ivCombined"
+            android:layout_width="180dp"
+            android:layout_height="110dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+        <!-- ResId 加载 -->
+        <TextView
+            style="?attr/textAppearanceBody2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="// 加载本地资源"
+            android:textColor="#388E3C"
+            android:textStyle="bold"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/tvCode7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#F5F5F5"
+            android:padding="12dp"
+            android:text="imageView.load(R.drawable.icon)"
+            android:textColor="#555555"
+            android:textSize="11sp" />
+        <ImageView
+            android:id="@+id/ivResId"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="32dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+    </LinearLayout>
+</ScrollView>

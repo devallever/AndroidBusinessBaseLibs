@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- 标题 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="变换效果"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+
+        <!-- 1. 原图 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="原图"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+        <ImageView
+            android:id="@+id/ivOriginal"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+        <!-- 2. 圆角 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="圆角 (radius=24dp)"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+        <ImageView
+            android:id="@+id/ivRounded24"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+        <!-- 3. 大圆角 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="大圆角 (radius=40dp)"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+        <ImageView
+            android:id="@+id/ivRounded40"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+        <!-- 4. 圆形 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="圆形"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+        <ImageView
+            android:id="@+id/ivCircle"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+        <!-- 5. 高斯模糊 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="高斯模糊 (radius=15)"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+        <ImageView
+            android:id="@+id/ivBlur15"
+            android:layout_width="160dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+        <!-- 6. 强模糊 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="高斯模糊 (radius=25)"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+        <ImageView
+            android:id="@+id/ivBlur25"
+            android:layout_width="160dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+        <!-- 7. 灰度化 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="灰度化"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+        <ImageView
+            android:id="@+id/ivGrayscale"
+            android:layout_width="160dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+        <!-- 8. 组合：圆角 + 模糊 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="组合：圆角 + 模糊"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+        <ImageView
+            android:id="@+id/ivCombined"
+            android:layout_width="160dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="32dp"
+            android:background="#EEEEEE"
+            android:scaleType="centerCrop" />
+
+    </LinearLayout>
+</ScrollView>
