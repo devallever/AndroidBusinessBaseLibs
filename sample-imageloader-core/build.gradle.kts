@@ -15,4 +15,5 @@ android {
 dependencies {
     implementation(project(":sample-common"))
     implementation(project(":lib-imageloader-core"))
+    implementation(project(":lib-media-picker"))
 }
