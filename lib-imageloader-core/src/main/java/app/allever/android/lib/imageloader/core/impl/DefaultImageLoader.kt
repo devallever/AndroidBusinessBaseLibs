@@ -202,7 +202,7 @@ class DefaultImageLoader(
         if (policy != ImageRequest.CachePolicy.MEMORY_ONLY && policy != ImageRequest.CachePolicy.NONE) {
             diskCache?.get(cacheKey)?.let { bytes ->
                 Log.d(TAG, "磁盘缓存命中 | cacheKey=$cacheKey")
-                decodeBytes(bytes)?.let { return it }
+                decodeSampledBitmapFromBytes(bytes)?.let { return it }
             }
             Log.d(TAG, "磁盘缓存未命中 | cacheKey=$cacheKey")
         }
@@ -217,7 +217,7 @@ class DefaultImageLoader(
             diskCache?.put(cacheKey, bytes)
         }
 
-        return decodeBytes(bytes)
+        return decodeSampledBitmapFromBytes(bytes)
     }
 
     /**
@@ -241,7 +241,7 @@ class DefaultImageLoader(
         if (policy != ImageRequest.CachePolicy.MEMORY_ONLY && policy != ImageRequest.CachePolicy.NONE) {
             diskCache?.get(cacheKey)?.let { bytes ->
                 Log.d(TAG, "磁盘缓存命中 | cacheKey=$cacheKey")
-                decodeBytes(bytes)?.let { return it }
+                decodeSampledBitmapFromBytes(bytes)?.let { return it }
             }
             Log.d(TAG, "磁盘缓存未命中 | cacheKey=$cacheKey")
         }
@@ -278,16 +278,16 @@ class DefaultImageLoader(
         if (policy != ImageRequest.CachePolicy.MEMORY_ONLY && policy != ImageRequest.CachePolicy.NONE) {
             diskCache?.get(cacheKey)?.let { bytes ->
                 Log.d(TAG, "磁盘缓存命中 | cacheKey=$cacheKey")
-                decodeBytes(bytes)?.let { return it }
+                decodeSampledBitmapFromBytes(bytes)?.let { return it }
             }
             Log.d(TAG, "磁盘缓存未命中 | cacheKey=$cacheKey")
         }
 
-        // 从 URI 解码（含 EXIF 修正）
+        // 从 URI 解码（含 EXIF 修正 + 大图采样）
         context ?: return null
         val bitmap = try {
             context.contentResolver.openInputStream(uri)?.use { stream ->
-                val decoded = BitmapFactory.decodeStream(stream)
+                val decoded = decodeSampledStream(stream)
                 correctExifOrientation(decoded, uri, context)
             }
         } catch (_: Exception) { null }
@@ -307,13 +307,31 @@ class DefaultImageLoader(
         return bitmap
     }
 
-    /**
-     * 从字节数组解码
-     */
+    // ==================== 解码方法（全部带采样） ====================
+
+    /** 从字节数组解码（无采样，仅用于小图兜底） */
     private fun decodeBytes(data: ByteArray): Bitmap? =
         try { BitmapFactory.decodeByteArray(data, 0, data.size) } catch (_: Exception) { null }
 
-    // ==================== 采样解码 ====================
+    /**
+     * 从字节数组解码（带大图采样）
+     * 磁盘缓存读取、网络下载后解码等场景统一使用此方法
+     */
+    private fun decodeSampledBitmapFromBytes(data: ByteArray): Bitmap? {
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeByteArray(data, 0, data.size, options)
+
+        val maxSize = 2048
+        val sampleSize = calculateInSampleSize(options.outWidth, options.outHeight, maxSize, maxSize)
+
+        return if (sampleSize > 1) {
+            Log.d(TAG, "大图降采样 (bytes) | ${options.outWidth}x${options.outHeight} → inSampleSize=$sampleSize")
+            BitmapFactory.decodeByteArray(data, 0, data.size,
+                BitmapFactory.Options().apply { inSampleSize = sampleSize })
+        } else {
+            BitmapFactory.decodeByteArray(data, 0, data.size)
+        }
+    }
 
     /**
      * 从文件解码（含 EXIF 修正 + 大图采样）
@@ -341,15 +359,28 @@ class DefaultImageLoader(
         }
     }
 
-    /** 计算合适的 inSampleSize（2 的幂次） */
+    /**
+     * 从 InputStream 解码（含大图采样）— 用于 Content URI 等流式场景
+     */
+    private fun decodeSampledStream(stream: java.io.InputStream): Bitmap? {
+        // 先读入内存获取尺寸信息（小开销，不解码像素）
+        val bytes = stream.readBytes()
+        return decodeSampledBitmapFromBytes(bytes)
+    }
+
+    /**
+     * 计算合适的 inSampleSize（2 的幂次）
+     * 确保解码后的任一维度不超过 maxSize
+     */
     private fun calculateInSampleSize(width: Int, height: Int, reqWidth: Int, reqHeight: Int): Int {
         var inSampleSize = 1
-        if (height > reqHeight || width > reqWidth) {
-            val halfHeight = height / 2
-            val halfWidth = width / 2
-            while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
-                inSampleSize *= 2
-            }
+        var w = width
+        var h = height
+        // 持续降采样直到两个维度都不超过阈值
+        while (w > reqWidth || h > reqHeight) {
+            inSampleSize *= 2
+            w /= 2
+            h /= 2
         }
         return inSampleSize
     }
