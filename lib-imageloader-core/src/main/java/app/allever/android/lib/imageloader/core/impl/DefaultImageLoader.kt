@@ -236,8 +236,6 @@ class DefaultImageLoader(
     private fun deliverResult(request: ImageRequest, bitmap: Bitmap, cacheKey: String) {
         Log.d(TAG, "加载成功 | cacheKey=$cacheKey | bitmap=${bitmap.width}x${bitmap.height}")
         postOnMainThread {
-            if (!isInflight(cacheKey)) return@postOnMainThread
-
             when (val target = request.target) {
                 is ImageTarget.ImageViewTarget -> {
                     setBitmapToView(target.view, bitmap, request.crossfadeEnabled, request.crossfadeDuration)
