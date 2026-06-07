@@ -168,8 +168,8 @@ class DefaultImageLoader(
             is ImageSource.ResId -> loadFromResId(source.resId, request.getContext())
             is ImageSource.Bitmap -> source.bitmap
             is ImageSource.Drawable -> drawableToBitmap(source.drawable)
-            is ImageSource.File -> decodeFile(source.file)
-            is ImageSource.ContentUri -> loadFromUri(source.uri, request.getContext())
+            is ImageSource.File -> loadFromFile(source.file, policy, cacheKey)
+            is ImageSource.ContentUri -> loadFromContentUri(source.uri, policy, cacheKey, request.getContext())
             is ImageSource.Bytes -> decodeBytes(source.data)
         } ?: return null
 
@@ -231,32 +231,128 @@ class DefaultImageLoader(
     }
 
     /**
-     * 从 Content URI 加载
+     * 从本地文件加载：磁盘缓存检查 → 文件解码
      */
-    private fun loadFromUri(uri: android.net.Uri, context: Context?): Bitmap? {
-        context ?: return null
-        return try {
-            context.contentResolver.openInputStream(uri)?.use { stream ->
-                val bitmap = BitmapFactory.decodeStream(stream)
-                correctExifOrientation(bitmap, uri, context)
+    private fun loadFromFile(file: java.io.File, policy: ImageRequest.CachePolicy, cacheKey: String): Bitmap? {
+        Log.d(TAG, "loadFromFile() | path=${file.absolutePath}")
+        ensureDiskCache(null) // 尝试初始化（可能之前已通过 URL 初始化过）
+
+        // 磁盘缓存检查
+        if (policy != ImageRequest.CachePolicy.MEMORY_ONLY && policy != ImageRequest.CachePolicy.NONE) {
+            diskCache?.get(cacheKey)?.let { bytes ->
+                Log.d(TAG, "磁盘缓存命中 | cacheKey=$cacheKey")
+                decodeBytes(bytes)?.let { return it }
             }
-        } catch (_: Exception) { null }
+            Log.d(TAG, "磁盘缓存未命中 | cacheKey=$cacheKey")
+        }
+
+        // 从文件解码（含 EXIF 修正）
+        val bitmap = decodeFile(file)
+
+        // 写入磁盘缓存（存储原始文件字节）
+        if (bitmap != null && policy != ImageRequest.CachePolicy.MEMORY_ONLY && policy != ImageRequest.CachePolicy.NONE) {
+            try {
+                file.inputStream().use { it.readBytes() }.let { bytes ->
+                    diskCache?.put(cacheKey, bytes)
+                    Log.d(TAG, "写入磁盘缓存 | cacheKey=$cacheKey | size=${bytes.size}B")
+                }
+            } catch (_: Exception) { /* 写入失败不影响显示 */ }
+        }
+
+        return bitmap
     }
 
     /**
-     * 从文件解码
+     * 从 Content URI 加载：磁盘缓存检查 → URI 解码
      */
-    private fun decodeFile(file: java.io.File): Bitmap? =
-        try {
-            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-            correctExifOrientation(bitmap, file)
+    private fun loadFromContentUri(
+        uri: android.net.Uri,
+        policy: ImageRequest.CachePolicy,
+        cacheKey: String,
+        context: Context?
+    ): Bitmap? {
+        Log.d(TAG, "loadFromContentUri() | uri=$uri")
+        ensureDiskCache(context)
+
+        // 磁盘缓存检查
+        if (policy != ImageRequest.CachePolicy.MEMORY_ONLY && policy != ImageRequest.CachePolicy.NONE) {
+            diskCache?.get(cacheKey)?.let { bytes ->
+                Log.d(TAG, "磁盘缓存命中 | cacheKey=$cacheKey")
+                decodeBytes(bytes)?.let { return it }
+            }
+            Log.d(TAG, "磁盘缓存未命中 | cacheKey=$cacheKey")
+        }
+
+        // 从 URI 解码（含 EXIF 修正）
+        context ?: return null
+        val bitmap = try {
+            context.contentResolver.openInputStream(uri)?.use { stream ->
+                val decoded = BitmapFactory.decodeStream(stream)
+                correctExifOrientation(decoded, uri, context)
+            }
         } catch (_: Exception) { null }
+
+        // 写入磁盘缓存
+        if (bitmap != null && policy != ImageRequest.CachePolicy.MEMORY_ONLY && policy != ImageRequest.CachePolicy.NONE) {
+            try {
+                context.contentResolver.openInputStream(uri)?.use { stream ->
+                    stream.readBytes()
+                }?.let { bytes ->
+                    diskCache?.put(cacheKey, bytes)
+                    Log.d(TAG, "写入磁盘缓存 | cacheKey=$cacheKey | size=${bytes.size}B")
+                }
+            } catch (_: Exception) { /* 写入失败不影响显示 */ }
+        }
+
+        return bitmap
+    }
 
     /**
      * 从字节数组解码
      */
     private fun decodeBytes(data: ByteArray): Bitmap? =
         try { BitmapFactory.decodeByteArray(data, 0, data.size) } catch (_: Exception) { null }
+
+    // ==================== 采样解码 ====================
+
+    /**
+     * 从文件解码（含 EXIF 修正 + 大图采样）
+     */
+    private fun decodeFile(file: java.io.File): Bitmap? =
+        try {
+            val bitmap = decodeSampledBitmap(file.absolutePath)
+            correctExifOrientation(bitmap, file)
+        } catch (_: Exception) { null }
+
+    /** 带采样的解码：超过阈值时自动降采样以节省内存 */
+    private fun decodeSampledBitmap(path: String): Bitmap {
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(path, options)
+
+        // 计算采样率（任一边超过 2048 则降采样）
+        val maxSize = 2048
+        val sampleSize = calculateInSampleSize(options.outWidth, options.outHeight, maxSize, maxSize)
+
+        return if (sampleSize > 1) {
+            Log.d(TAG, "大图降采样 | ${options.outWidth}x${options.outHeight} → inSampleSize=$sampleSize")
+            BitmapFactory.decodeFile(path, BitmapFactory.Options().apply { inSampleSize = sampleSize })
+        } else {
+            BitmapFactory.decodeFile(path)
+        }
+    }
+
+    /** 计算合适的 inSampleSize（2 的幂次） */
+    private fun calculateInSampleSize(width: Int, height: Int, reqWidth: Int, reqHeight: Int): Int {
+        var inSampleSize = 1
+        if (height > reqHeight || width > reqWidth) {
+            val halfHeight = height / 2
+            val halfWidth = width / 2
+            while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+        return inSampleSize
+    }
 
     // ==================== EXIF 方向修正 ====================
 
