@@ -165,7 +165,7 @@ class SurfacePlayerView @JvmOverloads constructor(
     fun setData(mediaBean: MediaItem) {
         mMediaBean = mediaBean
         playerHandler.initVideoView(binding.videoView, mediaBean, this)
-        binding.tvTitle.text = mMediaBean.name
+        binding.tvTitle.text = mMediaBean?.name
         changeVideoSize()
     }
 
@@ -200,6 +200,9 @@ class SurfacePlayerView @JvmOverloads constructor(
 
     //改变视频的尺寸自适应。
     private fun changeVideoSize() {
+        if (mMediaBean == null) {
+             return
+        }
         val w: Float = (mMediaBean as? MediaItem.Video)?.width?.toFloat() ?: 0f
         val h: Float = (mMediaBean as? MediaItem.Video)?.height?.toFloat() ?: 0f
         VideoViewHelper.autoFixContainerSize(

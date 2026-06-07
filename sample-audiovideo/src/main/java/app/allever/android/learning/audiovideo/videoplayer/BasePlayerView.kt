@@ -16,7 +16,7 @@ open class BasePlayerView @JvmOverloads constructor(
         attrs: AttributeSet? = null
     ) : this(context, attrs)
 
-    protected lateinit var mMediaBean: MediaItem
+    protected var mMediaBean: MediaItem? = null
 
 
 }
