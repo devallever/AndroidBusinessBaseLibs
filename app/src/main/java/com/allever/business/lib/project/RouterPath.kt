@@ -30,5 +30,7 @@ class RouterPath {
         const val PATH_SAMPLE_AUDIO_VIDEO = "/audiovideo/main"
 
         const val PATH_SAMPLE_STORE_CORE = "/store/main"
+
+        const val PATH_SAMPLE_IMAGE_LOADER_CORE = "/imageloader/main"
     }
 }

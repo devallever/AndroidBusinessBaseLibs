@@ -1,0 +1,57 @@
+package app.allever.android.lib.imageloader.core.cache
+
+import android.graphics.Bitmap
+import android.util.LruCache
+
+/**
+ * 内存缓存 - 基于 LRU 策略
+ *
+ * 使用 Bitmap 的 byte 大小作为 size 计数单位，
+ * 当总大小超过 maxSize 时自动淘汰最近最少使用的条目。
+ *
+ * @param maxSize 最大缓存容量（字节），默认为可用内存的 1/8
+ */
+class MemoryCache(maxSize: Int = defaultSize()) {
+
+    private val cache: LruCache<String, Bitmap> = object : LruCache<String, Bitmap>(maxSize) {
+        override fun sizeOf(key: String, value: Bitmap): Int {
+            // API 19+ 使用 allocationByteCount，兼容使用 byteCount
+            return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                value.allocationByteCount
+            } else {
+                value.byteCount
+            }
+        }
+    }
+
+    /** 获取缓存的 Bitmap */
+    operator fun get(key: String): Bitmap? = cache.get(key)
+
+    /** 存入缓存 */
+    fun put(key: String, bitmap: Bitmap): Bitmap? = cache.put(key, bitmap)
+
+    /** 移除指定 key 的缓存 */
+    fun remove(key: String): Bitmap? = cache.remove(key)
+
+    /** 是否包含指定 key */
+    fun containsKey(key: String): Boolean = cache.get(key) != null
+
+    /** 清空所有缓存 */
+    fun clear() { cache.evictAll() }
+
+    /** 当前缓存大小（字节） */
+    fun size(): Int = cache.size()
+
+    /** 最大缓存容量（字节） */
+    fun maxSize(): Int = cache.maxSize()
+
+    companion object {
+        /**
+         * 默认内存缓存大小：可用堆内存的 1/8
+         */
+        fun defaultSize(): Int {
+            val maxMemory = Runtime.getRuntime().maxMemory().toInt()
+            return (maxMemory / 8).coerceAtLeast(4 * 1024 * 1024) // 至少 4MB
+        }
+    }
+}

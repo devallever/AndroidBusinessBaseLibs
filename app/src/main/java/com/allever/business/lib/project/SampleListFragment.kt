@@ -55,6 +55,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         },
         TextClickItem("存储") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_STORE_CORE).navigation()
+        },
+        TextClickItem("图片加载") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_IMAGE_LOADER_CORE).navigation()
         }
     )
 }
