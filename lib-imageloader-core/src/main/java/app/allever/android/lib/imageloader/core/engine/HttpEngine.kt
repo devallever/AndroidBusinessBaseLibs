@@ -3,6 +3,10 @@ package app.allever.android.lib.imageloader.core.engine
 import java.net.HttpURLConnection
 import java.net.URL
 import java.io.IOException
+import android.util.Log
+
+/** HttpEngine 日志 TAG */
+private const val TAG = "ImageLoader-Http"
 
 /**
  * HttpURLConnection 网络引擎实现
@@ -30,6 +34,8 @@ object HttpEngine : NetworkEngine {
     var readTimeout: Int = DEFAULT_READ_TIMEOUT
 
     override fun load(url: String): ByteArray {
+        Log.d(TAG, "请求开始 | url=$url | connectTimeout=${connectTimeout}ms | readTimeout=${readTimeout}ms")
+
         val conn = (URL(url).openConnection() as HttpURLConnection).apply {
             this@HttpEngine.connectTimeout.also { connectTimeout = it }
             this@HttpEngine.readTimeout.also { readTimeout = it }
@@ -45,6 +51,7 @@ object HttpEngine : NetworkEngine {
 
         return try {
             checkResponseCode(conn)
+            Log.d(TAG, "响应成功 | code=${conn.responseCode} | contentType=${conn.contentType}")
             val stream = if ("gzip" == conn.contentEncoding) {
                 java.util.zip.GZIPInputStream(conn.inputStream)
             } else {

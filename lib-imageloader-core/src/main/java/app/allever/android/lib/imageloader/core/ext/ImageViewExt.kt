@@ -12,6 +12,9 @@ import app.allever.android.lib.imageloader.core.transformation.CircleTransformat
 import app.allever.android.lib.imageloader.core.transformation.GrayscaleTransformation
 import app.allever.android.lib.imageloader.core.transformation.RoundedCorners
 import app.allever.android.lib.imageloader.core.transformation.Transformation
+import android.util.Log
+
+private const val TAG = "ImageLoader"
 
 /**
  * 图片加载 DSL 选项
@@ -100,9 +103,11 @@ class ImageOptions {
 fun ImageView.load(source: Any?, block: (ImageOptions.() -> Unit)? = null) {
     if (source == null) return
 
+    Log.d(TAG, "load() DSL 入口 | sourceType=${source::class.simpleName} | view=${this::class.simpleName}")
+
     val imageSource = ImageSource.from(source)
     if (imageSource == null) {
-        // 不支持的数据源类型
+        Log.w(TAG, "不支持的数据源类型 | type=${source::class.simpleName}")
         return
     }
 

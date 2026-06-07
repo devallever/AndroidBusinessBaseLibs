@@ -2,6 +2,10 @@ package app.allever.android.lib.imageloader.core.cache
 
 import android.graphics.Bitmap
 import android.util.LruCache
+import android.util.Log
+
+/** MemoryCache 日志 TAG */
+private const val TAG = "ImageLoader-Memory"
 
 /**
  * 内存缓存 - 基于 LRU 策略
@@ -25,12 +29,16 @@ class MemoryCache(maxSize: Int = defaultSize()) {
     }
 
     /** 获取缓存的 Bitmap */
-    operator fun get(key: String): Bitmap? = cache.get(key)
+    operator fun get(key: String): Bitmap? = cache.get(key).also { result ->
+        if (result != null) Log.d(TAG, "get() 命中 | key=$key")
+    }
 
     /** 存入缓存 */
-    fun put(key: String, bitmap: Bitmap): Bitmap? = cache.put(key, bitmap)
+    fun put(key: String, bitmap: Bitmap): Bitmap? = cache.put(key, bitmap).also {
+        val bitmapSize = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) bitmap.allocationByteCount else bitmap.byteCount
+        Log.d(TAG, "put() 写入 | key=$key | bitmap=${bitmap.width}x${bitmap.height} | size=${bitmapSize}B | total=${size()}/${maxSize()}B")
+    }
 
-    /** 移除指定 key 的缓存 */
     fun remove(key: String): Bitmap? = cache.remove(key)
 
     /** 是否包含指定 key */

@@ -4,6 +4,10 @@ import android.content.Context
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import android.util.Log
+
+/** DiskCache 日志 TAG */
+private const val TAG = "ImageLoader-Disk"
 
 /**
  * 磁盘缓存
@@ -27,8 +31,13 @@ class DiskCache(
     fun get(key: String): ByteArray? {
         val file = getFile(key)
         return if (file.exists() && file.canRead()) {
-            FileInputStream(file).use { it.readBytes() }
-        } else null
+            FileInputStream(file).use { it.readBytes() }.also {
+                Log.d(TAG, "get() 命中 | key=$key | size=${it.size}B")
+            }
+        } else {
+            Log.d(TAG, "get() 未命中 | key=$key")
+            null
+        }
     }
 
     /** 写入缓存数据 */
@@ -37,9 +46,10 @@ class DiskCache(
             val file = getFile(key)
             file.parentFile?.mkdirs()
             FileOutputStream(file).use { it.write(data) }
+            Log.d(TAG, "put() 写入 | key=$key | size=${data.size}B")
             trimIfNeeded()
         } catch (_: Exception) {
-            // 写入失败静默处理
+            Log.e(TAG, "put() 写入失败 | key=$key")
         }
     }
 

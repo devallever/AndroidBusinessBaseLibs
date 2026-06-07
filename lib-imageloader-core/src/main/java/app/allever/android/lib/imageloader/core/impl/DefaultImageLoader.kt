@@ -20,6 +20,10 @@ import app.allever.android.lib.imageloader.core.source.ImageSource
 import app.allever.android.lib.imageloader.core.target.ImageTarget
 import java.io.ByteArrayInputStream
 import java.util.concurrent.ConcurrentHashMap
+import android.util.Log
+
+/** ImageLoader 日志 TAG */
+private const val TAG = "ImageLoader"
 
 /**
  * 内置图片加载器实现
@@ -48,6 +52,7 @@ class DefaultImageLoader(
 
     override fun load(request: ImageRequest) {
         val cacheKey = request.cacheKey()
+        Log.d(TAG, "load() 开始 | source=${request.source::class.simpleName} | cacheKey=$cacheKey | policy=${request.cachePolicy}")
         inflightRequests[cacheKey] = true
 
         // 1. 通知开始加载
@@ -99,7 +104,11 @@ class DefaultImageLoader(
 
         // ===== Step 1: 内存缓存 =====
         if (policy != ImageRequest.CachePolicy.DISK_ONLY && policy != ImageRequest.CachePolicy.NONE) {
-            memoryCache[cacheKey]?.let { return it }
+            memoryCache[cacheKey]?.let {
+                Log.d(TAG, "内存缓存命中 | cacheKey=$cacheKey")
+                return it
+            }
+            Log.d(TAG, "内存缓存未命中 | cacheKey=$cacheKey")
         }
 
         // ===== Step 2: 根据数据源类型处理 =====
@@ -132,15 +141,21 @@ class DefaultImageLoader(
         policy: ImageRequest.CachePolicy,
         cacheKey: String
     ): Bitmap? {
+        Log.d(TAG, "loadFromUrl() | url=$url")
+
         // 磁盘缓存
         if (policy != ImageRequest.CachePolicy.MEMORY_ONLY && policy != ImageRequest.CachePolicy.NONE) {
             diskCache?.get(cacheKey)?.let { bytes ->
+                Log.d(TAG, "磁盘缓存命中 | cacheKey=$cacheKey")
                 decodeBytes(bytes)?.let { return it }
             }
+            Log.d(TAG, "磁盘缓存未命中 | cacheKey=$cacheKey")
         }
 
         // 网络下载
+        Log.d(TAG, "开始网络下载 | url=$url")
         val bytes = networkEngine.load(url)
+        Log.d(TAG, "网络下载完成 | size=${bytes.size}B")
 
         // 写入磁盘缓存
         if (policy != ImageRequest.CachePolicy.MEMORY_ONLY && policy != ImageRequest.CachePolicy.NONE) {
@@ -208,7 +223,9 @@ class DefaultImageLoader(
         transformations: List<app.allever.android.lib.imageloader.core.transformation.Transformation>
     ): Bitmap {
         if (transformations.isEmpty()) return bitmap
+        Log.d(TAG, "应用变换 | count=${transformations.size} | keys=${transformations.joinToString(",") { it.key() }}")
         return transformations.fold(bitmap) { current, transform ->
+            Log.d(TAG, "  → 执行变换: ${transform.key()}")
             transform.transform(current)
         }
     }
@@ -217,6 +234,7 @@ class DefaultImageLoader(
 
     /** 分发成功结果到主线程 */
     private fun deliverResult(request: ImageRequest, bitmap: Bitmap, cacheKey: String) {
+        Log.d(TAG, "加载成功 | cacheKey=$cacheKey | bitmap=${bitmap.width}x${bitmap.height}")
         postOnMainThread {
             if (!isInflight(cacheKey)) return@postOnMainThread
 
@@ -234,6 +252,7 @@ class DefaultImageLoader(
 
     /** 分发错误到主线程 */
     private fun deliverError(request: ImageRequest, error: Throwable, cacheKey: String) {
+        Log.e(TAG, "加载失败 | cacheKey=$cacheKey | error=${error.message}", error)
         postOnMainThread {
             setErrorImage(request)
             request.listener?.onError(error)
