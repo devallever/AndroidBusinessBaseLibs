@@ -33,6 +33,10 @@ object MediaPickerCore {
         launcher.launch(MediaPickerConfig(setOf(MediaType.Type.VIDEO), max))
     }
 
+    fun launchImage(launcher: ActivityResultLauncher<MediaPickerConfig>, max: Int = 1) {
+        launcher.launch(MediaPickerConfig(setOf(MediaType.Type.IMAGE), max))
+    }
+
     /**
      * 直接启动（已废弃，保留兼容）
      * @Deprecated 使用 registerPicker() 替代
