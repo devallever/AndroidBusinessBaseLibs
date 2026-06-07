@@ -202,7 +202,7 @@ class DefaultImageLoader(
         if (policy != ImageRequest.CachePolicy.MEMORY_ONLY && policy != ImageRequest.CachePolicy.NONE) {
             diskCache?.get(cacheKey)?.let { bytes ->
                 Log.d(TAG, "磁盘缓存命中 | cacheKey=$cacheKey")
-                decodeSampledBitmapFromBytes(bytes)?.let { return it }
+                decodeSampledBitmapFromBytes(bytes)?.let { return correctExifOrientation(it, bytes) }
             }
             Log.d(TAG, "磁盘缓存未命中 | cacheKey=$cacheKey")
         }
@@ -217,7 +217,7 @@ class DefaultImageLoader(
             diskCache?.put(cacheKey, bytes)
         }
 
-        return decodeSampledBitmapFromBytes(bytes)
+        return correctExifOrientation(decodeSampledBitmapFromBytes(bytes), bytes)
     }
 
     /**
@@ -241,7 +241,7 @@ class DefaultImageLoader(
         if (policy != ImageRequest.CachePolicy.MEMORY_ONLY && policy != ImageRequest.CachePolicy.NONE) {
             diskCache?.get(cacheKey)?.let { bytes ->
                 Log.d(TAG, "磁盘缓存命中 | cacheKey=$cacheKey")
-                decodeSampledBitmapFromBytes(bytes)?.let { return it }
+                decodeSampledBitmapFromBytes(bytes)?.let { return correctExifOrientation(it, bytes) }
             }
             Log.d(TAG, "磁盘缓存未命中 | cacheKey=$cacheKey")
         }
@@ -278,7 +278,7 @@ class DefaultImageLoader(
         if (policy != ImageRequest.CachePolicy.MEMORY_ONLY && policy != ImageRequest.CachePolicy.NONE) {
             diskCache?.get(cacheKey)?.let { bytes ->
                 Log.d(TAG, "磁盘缓存命中 | cacheKey=$cacheKey")
-                decodeSampledBitmapFromBytes(bytes)?.let { return it }
+                decodeSampledBitmapFromBytes(bytes)?.let { return correctExifOrientation(it, bytes) }
             }
             Log.d(TAG, "磁盘缓存未命中 | cacheKey=$cacheKey")
         }
@@ -398,6 +398,14 @@ class DefaultImageLoader(
     private fun correctExifOrientation(bitmap: Bitmap?, uri: android.net.Uri, context: Context): Bitmap? {
         if (bitmap == null) return null
         val exif = try { ExifInterface(context.contentResolver.openInputStream(uri)!!) } catch (_: Exception) { null }
+            ?: return bitmap
+        return applyExifRotation(bitmap, exif)
+    }
+
+    /** 从原始图片字节读取 EXIF 并修正旋转（用于磁盘缓存命中路径） */
+    private fun correctExifOrientation(bitmap: Bitmap?, bytes: ByteArray): Bitmap? {
+        if (bitmap == null) return null
+        val exif = try { ExifInterface(java.io.ByteArrayInputStream(bytes)) } catch (_: Exception) { null }
             ?: return bitmap
         return applyExifRotation(bitmap, exif)
     }
