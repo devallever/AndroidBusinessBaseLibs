@@ -56,7 +56,7 @@ sealed interface ImageSource {
          */
         fun from(any: Any?): ImageSource? = when (any) {
             null -> null
-            is String -> Url(any)
+            is String -> fromString(any)
             is Int -> ResId(any)
             is android.graphics.Bitmap -> Bitmap(any)
             is android.graphics.drawable.Drawable -> Drawable(any)
@@ -65,6 +65,31 @@ sealed interface ImageSource {
             is kotlin.ByteArray -> Bytes(any)
             is ImageSource -> any
             else -> null
+        }
+
+        /**
+         * 智能判断 String 类型：URL / 本地文件路径
+         */
+        private fun fromString(str: String): ImageSource {
+            val trimmed = str.trim()
+            // 网络协议：http / https
+            if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+                return Url(trimmed)
+            }
+            // Content URI 协议
+            if (trimmed.startsWith("content://")) {
+                return ContentUri(Uri.parse(trimmed))
+            }
+            // File URI 协议
+            if (trimmed.startsWith("file://")) {
+                return File(File(Uri.parse(trimmed).path!!))
+            }
+            // 绝对文件路径（以 / 开头）
+            if (trimmed.startsWith("/")) {
+                return File(File(trimmed))
+            }
+            // 默认当作 URL（兼容性兜底）
+            return Url(trimmed)
         }
     }
 }
