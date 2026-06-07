@@ -530,16 +530,20 @@ class DefaultImageLoader(
 
     /**
      * 确保磁盘缓存已初始化（懒加载）
-     * 首次加载 URL 图片时自动调用，无需用户手动 init
+     * 首次加载图片时自动调用，无需用户手动 init
      */
     private fun ensureDiskCache(context: Context?) {
         if (diskCache == null && context != null) {
             synchronized(this) {
                 if (diskCache == null) {
                     Log.d(TAG, "自动初始化磁盘缓存")
-                    diskCache = DiskCache(context)
+                    diskCache = DiskCache()
                 }
             }
+        }
+        // 调用 init（幂等，已初始化则跳过）
+        if (context != null) {
+            diskCache?.init(context)
         }
     }
 
