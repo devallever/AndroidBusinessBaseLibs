@@ -1,40 +1,28 @@
 package app.allever.android.sample.store.core
 
 import androidx.fragment.app.Fragment
-import app.allever.android.lib.common.ListFragment
-import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.TabFragment
 import app.allever.android.lib.common.TabViewModel
-import app.allever.android.lib.common.adapter.TextAdapter
-import app.allever.android.lib.common.adapter.TextClickAdapter
-import app.allever.android.lib.common.adapter.bean.TextClickItem
-import app.allever.android.lib.common.databinding.FragmentListBinding
 import app.allever.android.lib.common.databinding.FragmentTabBinding
-import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.store.core.Storage
-import app.allever.android.lib.store.core.engine.SPEngine
-import app.allever.android.lib.store.datastore.engine.DataStoreEngine
-import app.allever.android.lib.store.mmkv.engine.MMKVEngine
 import com.chad.library.adapter.base.BaseQuickAdapter
 
-class SampleStoreMainFragment: ListFragment<FragmentListBinding, ListViewModel, TextClickItem>() {
-    override fun getAdapter(): BaseQuickAdapter<TextClickItem, *> = TextClickAdapter()
+/**
+ * 存储组件示例主入口
+ *
+ * 包含三个演示模块：
+ * 1. 引擎切换 — 演示 SP / DataStore / MMKV 之间的无缝切换
+ * 2. 基础操作 — 演示 CRUD、批量操作、查询等完整 API
+ * 3. 多实例 — 演示 StorageKit 多存储域隔离
+ */
+class SampleStoreMainFragment : TabFragment<FragmentTabBinding, TabViewModel>() {
 
-    override fun getList(): MutableList<TextClickItem> = mutableListOf(
-        TextClickItem("SP存储"){
-            Storage.init {
-                SPEngine()
-            }
-        },
-        TextClickItem("DataStore存储"){
-            Storage.init {
-                DataStoreEngine()
-            }
-        },
-        TextClickItem("MMKV存储"){
-            Storage.init {
-                MMKVEngine()
-            }
-        }
+    override fun getTabTitles(): MutableList<String> = mutableListOf(
+        "引擎切换", "基础操作", "多实例"
+    )
+
+    override fun getFragments(): MutableList<Fragment> = mutableListOf(
+        EngineSwitchFragment(),
+        BasicCrudFragment(),
+        StorageKitDemoFragment(),
     )
 }
