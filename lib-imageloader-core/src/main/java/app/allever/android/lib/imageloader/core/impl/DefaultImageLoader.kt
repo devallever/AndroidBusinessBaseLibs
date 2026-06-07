@@ -18,7 +18,8 @@ import app.allever.android.lib.imageloader.core.request.ImageLoader
 import app.allever.android.lib.imageloader.core.request.ImageRequest
 import app.allever.android.lib.imageloader.core.source.ImageSource
 import app.allever.android.lib.imageloader.core.target.ImageTarget
-import java.io.ByteArrayInputStream
+import android.graphics.Matrix
+import android.media.ExifInterface
 import java.util.concurrent.ConcurrentHashMap
 import android.util.Log
 
@@ -236,7 +237,8 @@ class DefaultImageLoader(
         context ?: return null
         return try {
             context.contentResolver.openInputStream(uri)?.use { stream ->
-                BitmapFactory.decodeStream(stream)
+                val bitmap = BitmapFactory.decodeStream(stream)
+                correctExifOrientation(bitmap, uri, context)
             }
         } catch (_: Exception) { null }
     }
@@ -245,13 +247,66 @@ class DefaultImageLoader(
      * 从文件解码
      */
     private fun decodeFile(file: java.io.File): Bitmap? =
-        try { BitmapFactory.decodeFile(file.absolutePath) } catch (_: Exception) { null }
+        try {
+            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+            correctExifOrientation(bitmap, file)
+        } catch (_: Exception) { null }
 
     /**
      * 从字节数组解码
      */
     private fun decodeBytes(data: ByteArray): Bitmap? =
         try { BitmapFactory.decodeByteArray(data, 0, data.size) } catch (_: Exception) { null }
+
+    // ==================== EXIF 方向修正 ====================
+
+    /** 根据 EXIF 信息修正图片旋转（相机拍摄照片常见问题） */
+    private fun correctExifOrientation(bitmap: Bitmap?, file: java.io.File): Bitmap? {
+        if (bitmap == null) return null
+        val exif = try { ExifInterface(file.absolutePath) } catch (_: Exception) { null }
+            ?: return bitmap
+        return applyExifRotation(bitmap, exif)
+    }
+
+    private fun correctExifOrientation(bitmap: Bitmap?, uri: android.net.Uri, context: Context): Bitmap? {
+        if (bitmap == null) return null
+        val exif = try { ExifInterface(context.contentResolver.openInputStream(uri)!!) } catch (_: Exception) { null }
+            ?: return bitmap
+        return applyExifRotation(bitmap, exif)
+    }
+
+    /**
+     * 根据 EXIF orientation 标签旋转 Bitmap
+     *
+     * EXIF Orientation 值含义：
+     *   1 = 正常 (0°)
+     *   3 = 旋转180°
+     *   6 = 顺时针90°
+     *   8 = 逆时针90°
+     */
+    private fun applyExifRotation(bitmap: Bitmap, exif: ExifInterface): Bitmap {
+        val orientation = exif.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_NORMAL
+        )
+        if (orientation == ExifInterface.ORIENTATION_NORMAL) return bitmap
+
+        val matrix = Matrix()
+        when (orientation) {
+            ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> matrix.setScale(-1f, 1f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
+            ExifInterface.ORIENTATION_FLIP_VERTICAL -> matrix.setScale(1f, -1f)
+            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
+            ExifInterface.ORIENTATION_TRANSPOSE -> { matrix.postRotate(90f); matrix.postScale(-1f, 1f) }
+            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
+            ExifInterface.ORIENTATION_TRANSVERSE -> { matrix.postRotate(-90f); matrix.postScale(-1f, 1f) }
+            else -> return bitmap
+        }
+        Log.d(TAG, "EXIF 修正 | orientation=$orientation | 原始=${bitmap.width}x${bitmap.height}")
+        val result = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+        if (result != bitmap) bitmap.recycle()
+        return result
+    }
 
     /**
      * Drawable 转 Bitmap
