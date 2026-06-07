@@ -42,6 +42,7 @@ dependencies {
     implementation(project(":sample-network-core"))
     implementation(project(":sample-player-core"))
     implementation(project(":sample-audiovideo"))
+    implementation(project(":sample-store-core"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -52,6 +52,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         },
         TextClickItem("音视频") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AUDIO_VIDEO).navigation()
+        },
+        TextClickItem("存储") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_STORE_CORE).navigation()
         }
     )
 }
