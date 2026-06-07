@@ -163,7 +163,7 @@ class DefaultImageLoader(
 
         // ===== Step 2: 根据数据源类型处理 =====
         val rawBitmap: Bitmap? = when (source) {
-            is ImageSource.Url -> loadFromUrl(source.url, policy, cacheKey)
+            is ImageSource.Url -> loadFromUrl(source.url, policy, cacheKey, request)
             is ImageSource.ResId -> loadFromResId(source.resId, request.getContext())
             is ImageSource.Bitmap -> source.bitmap
             is ImageSource.Drawable -> drawableToBitmap(source.drawable)
@@ -189,9 +189,13 @@ class DefaultImageLoader(
     private fun loadFromUrl(
         url: String,
         policy: ImageRequest.CachePolicy,
-        cacheKey: String
+        cacheKey: String,
+        request: ImageRequest
     ): Bitmap? {
         Log.d(TAG, "loadFromUrl() | url=$url")
+
+        // 懒初始化磁盘缓存（从请求中提取 Context）
+        ensureDiskCache(request.getContext())
 
         // 磁盘缓存
         if (policy != ImageRequest.CachePolicy.MEMORY_ONLY && policy != ImageRequest.CachePolicy.NONE) {
@@ -374,16 +378,25 @@ class DefaultImageLoader(
     // ==================== 配置方法 ====================
 
     /**
-     * 初始化磁盘缓存（需要 Context）
-     * 建议在 Application.onCreate() 中调用
+     * 确保磁盘缓存已初始化（懒加载）
+     * 首次加载 URL 图片时自动调用，无需用户手动 init
      */
-    fun initDiskCache(context: Context) {
-        if (diskCache == null) {
+    private fun ensureDiskCache(context: Context?) {
+        if (diskCache == null && context != null) {
             synchronized(this) {
                 if (diskCache == null) {
+                    Log.d(TAG, "自动初始化磁盘缓存")
                     diskCache = DiskCache(context)
                 }
             }
         }
+    }
+
+    /**
+     * 手动初始化磁盘缓存（需要 Context）
+     * 建议在 Application.onCreate() 中调用（可选，不调用也会自动初始化）
+     */
+    fun initDiskCache(context: Context) {
+        ensureDiskCache(context)
     }
 }
