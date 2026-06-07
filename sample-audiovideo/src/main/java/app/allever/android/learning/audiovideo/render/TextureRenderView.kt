@@ -10,10 +10,13 @@ import android.view.View
 import app.allever.android.learning.audiovideo.kernel.internal.AbsPlayer
 import app.allever.android.learning.audiovideo.render.internal.IRenderView
 import app.allever.android.learning.audiovideo.render.internal.MeasureHelper
+import app.allever.android.lib.core.ext.log
 
 class TextureRenderView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : TextureView(context, attrs), IRenderView {
+
+    private val TAG = "TextureRenderView"
 
     private var mMeasureHelper: MeasureHelper? = null
     private var mPlayer: AbsPlayer? = null
@@ -27,12 +30,18 @@ class TextureRenderView @JvmOverloads constructor(
             height: Int
         ) {
             if (mSurfaceTexture != null) {
+                log(TAG, "onSurfaceTextureAvailable: setSurfaceTexture(mSurfaceTexture!!)")
                 setSurfaceTexture(mSurfaceTexture!!)
             } else {
+                log(TAG, "onSurfaceTextureAvailable: mSurfaceTexture = surface")
                 mSurfaceTexture = surfaceTexture
-                mSurface = Surface(surfaceTexture)
+                log(TAG, "onSurfaceTextureAvailable: surfaceTexture == null is ${surfaceTexture == null})")
+                mSurface = Surface(surface)
+                log(TAG, "onSurfaceTextureAvailable: surface == null is ${surface == null}")
                 if (mPlayer != null) {
                     mPlayer?.setSurface(mSurface)
+                } else {
+                    log(TAG, "onSurfaceTextureAvailable: mPlayer == null")
                 }
             }
         }
@@ -42,14 +51,15 @@ class TextureRenderView @JvmOverloads constructor(
             width: Int,
             height: Int
         ) {
+            log(TAG, "onSurfaceTextureSizeChanged")
         }
 
         override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
-            return false
+            return true
         }
 
         override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
-
+            log(TAG, "onSurfaceTextureUpdated")
         }
 
     }
@@ -61,10 +71,13 @@ class TextureRenderView @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val measuredSize = mMeasureHelper?.doMeasure(widthMeasureSpec, heightMeasureSpec)
         setMeasuredDimension(measuredSize!![0], measuredSize[1])
+        log(TAG, "onMeasure: $measuredWidth x $measuredHeight")
     }
 
     override fun attachToPlayer(player: AbsPlayer) {
+        log(TAG, "attachToPlayer")
         mPlayer = player
+        mPlayer?.setSurface(mSurface)
     }
 
     override fun setVideoSize(videoWidth: Int, videoHeight: Int) {
@@ -93,11 +106,7 @@ class TextureRenderView @JvmOverloads constructor(
     }
 
     override fun release() {
-        if (mSurface != null) {
-            mSurface?.release()
-        }
-        if (mSurfaceTexture != null) {
-            mSurfaceTexture?.release()
-        }
+        mSurface?.release()
+        mSurfaceTexture?.release()
     }
 }

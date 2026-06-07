@@ -7,6 +7,7 @@ import android.view.Surface
 import android.view.TextureView
 import app.allever.android.learning.audiovideo.videoplayer.BasePlayerHandler
 import app.allever.android.learning.audiovideo.videoplayer.StatusListener
+import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.media.core.model.MediaItem
 
 class TextureViewHandler : BasePlayerHandler(), TextureView.SurfaceTextureListener {
@@ -47,6 +48,7 @@ class TextureViewHandler : BasePlayerHandler(), TextureView.SurfaceTextureListen
     }
 
     override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
+        log(TAG, "onSurfaceTextureAvailable")
         mSurface = Surface(surface)
         try {
             mMediaBean.uri ?: return
@@ -64,6 +66,7 @@ class TextureViewHandler : BasePlayerHandler(), TextureView.SurfaceTextureListen
     }
 
     override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {
+        log(TAG, "onSurfaceTextureSizeChanged: width = $width, height = $height")
     }
 
     override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {

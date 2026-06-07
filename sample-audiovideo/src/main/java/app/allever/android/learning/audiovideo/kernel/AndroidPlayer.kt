@@ -10,6 +10,7 @@ import android.view.SurfaceHolder
 import app.allever.android.learning.audiovideo.kernel.internal.AbsPlayer
 import app.allever.android.lib.core.app.App
 import app.allever.android.learning.audiovideo.kernel.internal.PlayerConstant
+import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.helper.CoroutineHelper
 import kotlinx.coroutines.launch
 
@@ -282,6 +283,7 @@ class AndroidPlayer : AbsPlayer() {
 
     //准备监听器
     private val mOnPreparedListener = MediaPlayer.OnPreparedListener {
+        log("AndroidPlayer", "onPrepared")
         playerStatusListener?.onPrepared()
         start()
     }

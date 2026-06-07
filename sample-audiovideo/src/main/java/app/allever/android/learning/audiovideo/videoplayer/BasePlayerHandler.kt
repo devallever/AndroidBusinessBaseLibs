@@ -12,6 +12,8 @@ abstract class BasePlayerHandler : MediaPlayer.OnCompletionListener,
     protected lateinit var mMediaBean: MediaItem
     protected var mStatusListener: StatusListener? = null
 
+    protected val TAG = this::class.java.simpleName
+
     private val timerTask = TimerTask2(null, 1000L, true) {
         mStatusListener?.onVideoPlaying(mMediaPlayer?.currentPosition ?: 0)
     }
@@ -43,6 +45,7 @@ abstract class BasePlayerHandler : MediaPlayer.OnCompletionListener,
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
+        log(TAG, "onPrepared")
         if (mMediaPlayer == null) {
             mMediaPlayer = mp
         }
