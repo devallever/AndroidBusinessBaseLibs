@@ -12,6 +12,7 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import app.allever.android.lib.core.helper.GsonHelper
 import app.allever.android.lib.store.core.IStorageEngine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -137,6 +138,18 @@ class DataStoreEngine : IStorageEngine {
         blockingGet {
             requireDataStore().data.map { it[stringSetPreferencesKey(key)] ?: defaultValue }.first()
         }
+
+    // ==================== 对象读写 ====================
+
+    override fun putObject(key: String, value: Any?) {
+        val json = if (value != null) GsonHelper.toJson(value) else null
+        putString(key, json)
+    }
+
+    override fun <T : Any> getObject(key: String, clazz: Class<T>): T? {
+        val json = getString(key) ?: return null
+        return runCatching { GsonHelper.fromJson(json, clazz) }.getOrNull()
+    }
 
     // ==================== 删除 & 清空 ====================
 

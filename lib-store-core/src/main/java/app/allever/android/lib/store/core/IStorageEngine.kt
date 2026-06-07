@@ -28,6 +28,23 @@ interface IStorageEngine {
     fun putStringSet(key: String, value: Set<String>?)
     fun getStringSet(key: String, defaultValue: Set<String>? = null): Set<String>?
 
+    // ========== 对象读写（JSON 序列化） ==========
+
+    /**
+     * 存储任意对象，内部通过 JSON 序列化为字符串存储
+     * @param key 键
+     * @param value 对象值，传 null 等价于删除该键
+     */
+    fun putObject(key: String, value: Any?)
+
+    /**
+     * 读取并反序列化为指定类型的对象
+     * @param key 键
+     * @param clazz 目标类型
+     * @return 反序列化后的对象，不存在或反序列化失败返回 null
+     */
+    fun <T : Any> getObject(key: String, clazz: Class<T>): T?
+
     // ========== 批量操作 ==========
 
     /** 批量写入，value 支持 String / Int / Long / Float / Boolean / Set\<String\> */

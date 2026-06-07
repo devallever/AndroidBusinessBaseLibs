@@ -2,6 +2,7 @@ package app.allever.android.lib.store.mmkv.engine
 
 import android.content.Context
 import android.util.Log
+import app.allever.android.lib.core.helper.GsonHelper
 import app.allever.android.lib.store.core.IStorageEngine
 import com.tencent.mmkv.MMKV
 
@@ -117,6 +118,18 @@ class MMKVEngine : IStorageEngine {
 
     override fun getStringSet(key: String, defaultValue: Set<String>?): Set<String>? =
         requireMmkv().getStringSet(key, defaultValue)
+
+    // ==================== 对象读写 ====================
+
+    override fun putObject(key: String, value: Any?) {
+        val json = if (value != null) GsonHelper.toJson(value) else null
+        requireMmkv().putString(key, json)
+    }
+
+    override fun <T : Any> getObject(key: String, clazz: Class<T>): T? {
+        val json = requireMmkv().getString(key, null) ?: return null
+        return runCatching { GsonHelper.fromJson(json, clazz) }.getOrNull()
+    }
 
     // ==================== 删除 & 清空 ====================
 

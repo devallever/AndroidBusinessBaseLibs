@@ -2,6 +2,7 @@ package app.allever.android.lib.store.core.engine
 
 import android.content.Context
 import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.helper.GsonHelper
 import app.allever.android.lib.store.core.IStorageEngine
 import java.util.concurrent.ConcurrentHashMap
 
@@ -106,6 +107,18 @@ class SPEngine : IStorageEngine {
 
     override fun getStringSet(key: String, defaultValue: Set<String>?): Set<String>? =
         requireSp().getStringSet(key, defaultValue)
+
+    // ==================== 对象读写 ====================
+
+    override fun putObject(key: String, value: Any?) {
+        val json = if (value != null) GsonHelper.toJson(value) else null
+        putString(key, json)
+    }
+
+    override fun <T : Any> getObject(key: String, clazz: Class<T>): T? {
+        val json = getString(key) ?: return null
+        return runCatching { GsonHelper.fromJson(json, clazz) }.getOrNull()
+    }
 
     // ==================== 删除 & 清空 ====================
 

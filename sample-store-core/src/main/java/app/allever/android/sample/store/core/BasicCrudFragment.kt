@@ -74,6 +74,54 @@ class BasicCrudFragment : ListFragment<FragmentListBinding, ListViewModel, TextC
             toast(msg)
         },
 
+        // ========== Object (JSON) ==========
+        TextClickItem("Object: put + get (Class)") {
+            val user = User("Tom", 25, true)
+            Storage.putObject("user_obj", user)
+            val restored = Storage.getObject("user_obj", User::class.java)
+            val msg = "putObject → getObject: $restored"
+            log(msg)
+            toast(msg)
+        },
+        TextClickItem("Object: get (reified)") {
+            val user: User? = Storage.getObject<User>("user_obj")
+            val msg = "getObject<User>: name=${user?.name}, age=${user?.age}"
+            log(msg)
+            toast(msg)
+        },
+        TextClickItem("Object: put null (删除)") {
+            Storage.putObject("user_obj", null)
+            val user = Storage.getObject("user_obj", User::class.java)
+            val msg = "putObject(null) 后读取: $user"
+            log(msg)
+            toast(msg)
+        },
+        TextClickItem("Object: List 存储") {
+            val list = listOf(
+                User("Alice", 20, false),
+                User("Bob", 28, true),
+                User("Carol", 35, false),
+            )
+            Storage.putObject("user_list", list)
+            // List 需要用 TypeToken 方式反序列化，这里用 String 展示
+            val raw = Storage.getString("user_list")
+            val msg = "List JSON: ${raw?.take(80)}..."
+            log(msg)
+            toast(msg)
+        },
+        TextClickItem("Object: Map 存储") {
+            val config = mapOf(
+                "theme" to "dark",
+                "language" to "zh_CN",
+                "version" to 100,
+            )
+            Storage.putObject("config_map", config)
+            val raw = Storage.getString("config_map")
+            val msg = "Map JSON: ${raw?.take(100)}"
+            log(msg)
+            toast(msg)
+        },
+
         // ========== 批量操作 ==========
         TextClickItem("putAll: 批量写入") {
             val map = mapOf<String, Any?>(
@@ -131,3 +179,6 @@ class BasicCrudFragment : ListFragment<FragmentListBinding, ListViewModel, TextC
         // 确保有可用引擎（使用默认 SP）
     }
 }
+
+/** 对象存储示例数据类 */
+data class User(val name: String, val age: Int, val isVip: Boolean)

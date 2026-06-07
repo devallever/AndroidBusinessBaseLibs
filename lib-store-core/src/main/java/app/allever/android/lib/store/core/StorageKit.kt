@@ -98,6 +98,9 @@ interface IStorage {
     fun getStringSet(key: String, defaultValue: Set<String>? = null): Set<String>? =
         engine.getStringSet(key, defaultValue)
 
+    fun putObject(key: String, value: Any?) = engine.putObject(key, value)
+    fun <T : Any> getObject(key: String, clazz: Class<T>): T? = engine.getObject(key, clazz)
+
     fun putAll(map: Map<String, Any?>) = engine.putAll(map)
 
     fun remove(vararg keys: String) = engine.remove(*keys)

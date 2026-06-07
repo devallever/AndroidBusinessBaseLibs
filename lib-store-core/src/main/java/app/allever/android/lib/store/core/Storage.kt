@@ -95,6 +95,18 @@ object Storage {
     fun getStringSet(key: String, defaultValue: Set<String>? = null): Set<String>? =
         getOrCreateEngine().getStringSet(key, defaultValue)
 
+    // ==================== Object (JSON) ====================
+
+    /** 存储对象，内部通过 Gson 序列化为 JSON 字符串 */
+    fun putObject(key: String, value: Any?) = getOrCreateEngine().putObject(key, value)
+
+    /** 读取并反序列化为指定类型的对象 */
+    fun <T : Any> getObject(key: String, clazz: Class<T>): T? =
+        getOrCreateEngine().getObject(key, clazz)
+
+    /** 读取并反序列化为指定类型的对象（reified 版本，推荐使用） */
+    inline fun <reified T : Any> getObject(key: String): T? = getObject(key, T::class.java)
+
     // ==================== 批量操作 ====================
 
     fun putAll(map: Map<String, Any?>) = getOrCreateEngine().putAll(map)
