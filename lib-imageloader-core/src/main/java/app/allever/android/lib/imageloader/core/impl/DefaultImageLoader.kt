@@ -26,6 +26,19 @@ import android.util.Log
 private const val TAG = "ImageLoader"
 
 /**
+ * 进行中的请求条目，支持请求合并（coalesce）
+ *
+ * 首个请求触发实际加载，后续相同 cacheKey 的请求加入等待列表，
+ * 加载完成后统一广播结果。
+ */
+private data class InflightEntry(
+    /** 等待该 key 加载结果的请求列表（含首发请求） */
+    val requests: MutableList<ImageRequest> = mutableListOf(),
+    /** 是否已完成加载 */
+    @Volatile var completed: Boolean = false
+)
+
+/**
  * 内置图片加载器实现
  *
  * 完整的加载流程：
@@ -45,15 +58,50 @@ class DefaultImageLoader(
 ) : ImageLoader {
 
     private val mainHandler = Handler(Looper.getMainLooper())
-    /** 记录正在进行的请求，用于 cancel */
-    private val inflightRequests = ConcurrentHashMap<String, Boolean>()
+    /** 进行中的请求（支持合并）：cacheKey → 请求条目 */
+    private val inflightRequests = ConcurrentHashMap<String, InflightEntry>()
 
     // ==================== 核心加载入口 ====================
 
     override fun load(request: ImageRequest) {
         val cacheKey = request.cacheKey()
         Log.d(TAG, "load() 开始 | source=${request.source::class.simpleName} | cacheKey=$cacheKey | policy=${request.cachePolicy}")
-        inflightRequests[cacheKey] = true
+
+        // ===== 请求合并：检查是否已有相同 key 的加载任务 =====
+        while (true) {
+            val existing = inflightRequests[cacheKey]
+            if (existing != null && !existing.completed) {
+                // 已有相同 key 正在加载 → 合并到等待列表
+                Log.d(TAG, "请求合并 | cacheKey=$cacheKey | 等待者+1 (当前共 ${existing.requests.size + 1})")
+                synchronized(existing) {
+                    if (!existing.completed) { // double-check
+                        existing.requests.add(request)
+                        setPlaceholder(request)
+                        postOnMainThread { request.listener?.onStart() }
+                        return
+                    }
+                }
+                // existing 在等待期间已完成，退出循环重新发起
+                break
+            } else {
+                break
+            }
+        }
+
+        // 首发请求：创建 InflightEntry 并触发加载
+        val entry = InflightEntry(mutableListOf(request))
+        val prev = inflightRequests.putIfAbsent(cacheKey, entry)
+        if (prev != null && !prev.completed) {
+            // 极端竞态：putIfAbsent 时被别的线程抢先了，重试合并逻辑
+            synchronized(prev) {
+                if (!prev.completed) {
+                    prev.requests.add(request)
+                    setPlaceholder(request)
+                    postOnMainThread { request.listener?.onStart() }
+                    return
+                }
+            }
+        }
 
         // 1. 通知开始加载
         postOnMainThread { request.listener?.onStart() }
@@ -61,32 +109,34 @@ class DefaultImageLoader(
         // 2. 设置占位图
         setPlaceholder(request)
 
-        // 3. 异步执行加载流程
+        // 3. 异步执行加载流程（仅首发请求执行一次）
         ImageExecutor.execute {
             try {
-                if (!isInflight(cacheKey)) return@execute
-
                 val bitmap = loadInternal(request, cacheKey)
-                if (bitmap != null && isInflight(cacheKey)) {
-                    deliverResult(request, bitmap, cacheKey)
+                if (bitmap != null) {
+                    broadcastSuccess(entry, bitmap, cacheKey)
+                } else {
+                    broadcastError(entry, IllegalStateException("加载结果为空"), cacheKey)
                 }
             } catch (e: Exception) {
-                if (isInflight(cacheKey)) {
-                    deliverError(request, e, cacheKey)
-                }
+                broadcastError(entry, e, cacheKey)
             } finally {
+                entry.completed = true
                 inflightRequests.remove(cacheKey)
             }
         }
     }
 
     override fun cancel(target: ImageTarget) {
-        // 移除所有与该 target 相关的 in-flight 请求
-        inflightRequests.keys.forEach { key ->
-            // 简单策略：清除所有进行中的请求
-            // 更精细的做法是记录 target→key 的映射，此处简化处理
+        inflightRequests.values.forEach { entry ->
+            synchronized(entry) {
+                if (!entry.completed) {
+                    entry.requests.removeAll { req ->
+                        (req.target as? ImageTarget.ImageViewTarget)?.view == (target as? ImageTarget.ImageViewTarget)?.view
+                    }
+                }
+            }
         }
-        inflightRequests.clear()
     }
 
     override fun clearMemoryCache() { memoryCache.clear() }
@@ -230,11 +280,28 @@ class DefaultImageLoader(
         }
     }
 
-    // ==================== 结果分发 ====================
+    // ==================== 结果广播 ====================
 
-    /** 分发成功结果到主线程 */
+    /** 广播成功结果到所有等待该 key 的请求 */
+    private fun broadcastSuccess(entry: InflightEntry, bitmap: Bitmap, cacheKey: String) {
+        Log.d(TAG, "加载成功 | cacheKey=$cacheKey | bitmap=${bitmap.width}x${bitmap.height} | 广播给 ${entry.requests.size} 个请求")
+        val requests = synchronized(entry) { entry.requests.toList() }
+        for (req in requests) {
+            deliverResult(req, bitmap, cacheKey)
+        }
+    }
+
+    /** 广播错误到所有等待该 key 的请求 */
+    private fun broadcastError(entry: InflightEntry, error: Throwable, cacheKey: String) {
+        Log.e(TAG, "加载失败 | cacheKey=$cacheKey | error=${error.message} | 广播给 ${entry.requests.size} 个请求", error)
+        val requests = synchronized(entry) { entry.requests.toList() }
+        for (req in requests) {
+            deliverError(req, error, cacheKey)
+        }
+    }
+
+    /** 分发单个请求的成功结果到主线程 */
     private fun deliverResult(request: ImageRequest, bitmap: Bitmap, cacheKey: String) {
-        Log.d(TAG, "加载成功 | cacheKey=$cacheKey | bitmap=${bitmap.width}x${bitmap.height}")
         postOnMainThread {
             when (val target = request.target) {
                 is ImageTarget.ImageViewTarget -> {
@@ -248,9 +315,8 @@ class DefaultImageLoader(
         }
     }
 
-    /** 分发错误到主线程 */
+    /** 分发单个请求的错误到主线程 */
     private fun deliverError(request: ImageRequest, error: Throwable, cacheKey: String) {
-        Log.e(TAG, "加载失败 | cacheKey=$cacheKey | error=${error.message}", error)
         postOnMainThread {
             setErrorImage(request)
             request.listener?.onError(error)
@@ -291,8 +357,6 @@ class DefaultImageLoader(
     }
 
     // ==================== 工具方法 ====================
-
-    private fun isInflight(key: String): Boolean = inflightRequests.containsKey(key)
 
     private fun postOnMainThread(action: () -> Unit) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
