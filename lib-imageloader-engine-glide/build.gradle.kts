@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
-val modelPkg = "app.allever.android.lib.imageloader.glide"
+val modelPkg = "app.allever.android.lib.imageloader.engine.glide"
 group = modelPkg
 
 android {

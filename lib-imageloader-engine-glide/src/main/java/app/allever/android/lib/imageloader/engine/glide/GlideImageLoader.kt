@@ -1,4 +1,4 @@
-package app.allever.android.lib.imageloader.glide
+package app.allever.android.lib.imageloader.engine.glide
 
 import android.content.Context
 import android.graphics.Bitmap
