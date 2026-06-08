@@ -54,7 +54,7 @@ glideVersion = "5.0.5"
 bigoAds = "5.9.0"
 pangleSdk = "8.0.0.4"
 leakcanaryAndroid = "2.14"
-
+glideTransformations = "4.3.0"
 
 
 [libraries]
@@ -126,6 +126,7 @@ applovinqualityservicegradleplugin = { module = "com.applovin.quality:AppLovinQu
 applovin-sdk = { module = "com.applovin:applovin-sdk", version.ref = "applovinSdk" }
 pangle-sdk = { module = "com.pangle.global:pag-sdk", version.ref = "pangleSdk" }
 leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanaryAndroid" }
+glide-transformations = { module = "jp.wasabeef:glide-transformations", version.ref = "glideTransformations" }
 
 
 [plugins]

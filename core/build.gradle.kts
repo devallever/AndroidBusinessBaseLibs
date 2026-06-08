@@ -34,12 +34,6 @@ dependencies {
     api(libs.kotlinx.coroutines.core)
     api(libs.kotlinx.coroutines.android)
 
-    // coil
-    api(libs.coil)
-    api(libs.coil.gif)
-    api(libs.coil.svg)
-    api(libs.coil.video)
-
     // gson
     api(libs.gson)
 

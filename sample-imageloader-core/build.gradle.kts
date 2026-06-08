@@ -15,5 +15,7 @@ android {
 dependencies {
     implementation(project(":sample-common"))
     implementation(project(":lib-imageloader-core"))
+    implementation(project(":lib-imageloader-engine-glide"))
+    implementation(project(":lib-imageloader-engine-coil"))
     implementation(project(":lib-media-picker"))
 }
