@@ -1,7 +1,9 @@
 package app.allever.android.sample.imageloader.core
 
+import android.graphics.Color
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.imageloader.core.DefaultLoader
 import app.allever.android.lib.imageloader.core.ImageLoader
 import app.allever.android.lib.imageloader.core.load
 import app.allever.android.lib.imageloader.core.loadBlur
@@ -46,7 +48,8 @@ class BasicImageLoaderFragment: BaseFragment<FragmentBasicLoaderBinding, BaseVie
             loadAllImage()
         }
         mBinding.btnDefault.setOnClickListener {
-//            ImageLoader.init(requireContext(), DefaultImageLoader, ImageLoader.Builder.create())
+            ImageLoader.init(requireContext(), DefaultLoader, ImageLoader.Builder.create())
+            loadAllImage()
         }
 
         mBinding.btnSelectFile.setOnClickListener {
@@ -71,7 +74,7 @@ class BasicImageLoaderFragment: BaseFragment<FragmentBasicLoaderBinding, BaseVie
             // 圆角
             ivNetRound.loadRound(TEST_IMAGE_URL, 20f)
             // 圆形
-            ivNetCircle.loadCircle(TEST_IMAGE_URL)
+            ivNetCircle.loadCircle(TEST_IMAGE_URL, 20, Color.parseColor("#000000"))
             // 模糊
             ivBlur.loadBlur(TEST_IMAGE_URL, 20f)
             //gif
