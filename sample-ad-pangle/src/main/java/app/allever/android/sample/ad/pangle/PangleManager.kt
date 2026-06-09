@@ -36,6 +36,7 @@ import com.bytedance.sdk.openadsdk.api.reward.PAGRewardedAd
 import com.bytedance.sdk.openadsdk.api.reward.PAGRewardedAdInteractionCallback
 import com.bytedance.sdk.openadsdk.api.reward.PAGRewardedAdLoadListener
 import com.bytedance.sdk.openadsdk.api.reward.PAGRewardedRequest
+import java.lang.ref.WeakReference
 
 /**
  * https://www.pangleglobal.com/zh/integration/integrate-pangle-sdk-for-android
@@ -56,10 +57,11 @@ object PangleManager {
     fun init(adConfig: IAdConfig, block: () -> Unit = {}) {
         mAdConfig = adConfig
 
+        val blockRef = WeakReference(block)
         PAGSdk.init(App.app, buildNewConfig(), object : PAGSdk.PAGInitCallback {
             override fun success() {
                 log("init success")
-                block()
+                blockRef.get()?.invoke()
             }
 
             override fun fail(p0: Int, p1: String?) {
@@ -92,6 +94,7 @@ object PangleManager {
 
         mInterAdCache = null
 
+        val callbackRef = WeakReference(adCallback)
         val request = PAGInterstitialRequest()
         PAGInterstitialAd.loadAd(
             mAdConfig.getAdId(IAdConfig.Companion.INTER_AD),
@@ -99,7 +102,7 @@ object PangleManager {
             object : PAGInterstitialAdLoadListener {
                 override fun onError(code: Int, message: String) {
                     logE("interAd: 加载失败 -> $code -> $message")
-                    adCallback?.onAdFailLoad()
+                    callbackRef.get()?.onAdFailLoad()
                 }
 
                 override fun onAdLoaded(interstitialAd: PAGInterstitialAd) {
@@ -107,7 +110,7 @@ object PangleManager {
                     mInterAdCache = interstitialAd
                     mInterAdCacheTime = System.currentTimeMillis()
                     log("interAd: 缓存成功")
-                    adCallback?.onAdLoaded()
+                    callbackRef.get()?.onAdLoaded()
                 }
             })
     }
@@ -122,6 +125,7 @@ object PangleManager {
 
         mRewardAdCache = null
 
+        val callbackRef = WeakReference(adCallback)
         val request = PAGRewardedRequest()
         PAGRewardedAd.loadAd(
             mAdConfig.getAdId(IAdConfig.Companion.REWARD_AD),
@@ -129,7 +133,7 @@ object PangleManager {
             object : PAGRewardedAdLoadListener {
                 override fun onError(code: Int, message: String) {
                     logE("rewardAd: 加载失败 -> ${code}: $message")
-                    adCallback?.onAdFailLoad()
+                    callbackRef.get()?.onAdFailLoad()
                 }
 
                 override fun onAdLoaded(rewardedAd: PAGRewardedAd) {
@@ -137,7 +141,7 @@ object PangleManager {
                     mRewardAdCache = rewardedAd
                     mRewardAdCacheTime = System.currentTimeMillis()
                     log("rewardAd: 缓存成功")
-                    adCallback?.onAdLoaded()
+                    callbackRef.get()?.onAdLoaded()
                 }
             })
 
@@ -163,28 +167,30 @@ object PangleManager {
 
         log("使用InterAdCache")
 
+        val callbackRef = WeakReference(adCallback)
+
         mInterAdCache?.setAdInteractionCallback(object : PAGInterstitialAdInteractionCallback() {
             override fun onAdShowed() {
                 log("InterAdCache: 显示")
-                adCallback?.onAdShow()
+                callbackRef.get()?.onAdShow()
             }
 
             override fun onAdClicked() {
                 log("InterAdCache: 点击")
-                adCallback?.onAdClick()
+                callbackRef.get()?.onAdClick()
             }
 
             override fun onAdDismissed() {
                 log("InterAdCache: 关闭")
                 mInterAdCache = null
-                adCallback?.onAdDismiss()
+                callbackRef.get()?.onAdDismiss()
                 justLoadInter()
             }
 
             override fun onAdShowFailed(pagErrorModel: PAGErrorModel) {
                 log("InterAdCache: 显示失败")
                 mInterAdCache = null
-                adCallback?.onAdFailLoad()
+                callbackRef.get()?.onAdFailLoad()
                 justLoadInter()
             }
 
@@ -208,22 +214,24 @@ object PangleManager {
 
         log("使用RewardAdCache")
 
+        val callbackRef = WeakReference(adCallback)
+
         mRewardAdCache?.setAdInteractionCallback(object : PAGRewardedAdInteractionCallback() {
             override fun onAdClicked() {
                 log("RewardAd: 点击")
-                adCallback?.onAdClick()
+                callbackRef.get()?.onAdClick()
             }
 
             override fun onAdDismissed() {
                 log("RewardAd: 关闭")
                 mRewardAdCache = null
-                adCallback?.onAdDismiss()
+                callbackRef.get()?.onAdDismiss()
                 justLoadReward(adCallback)
             }
 
             override fun onUserEarnedReward(item: PAGRewardItem?) {
                 log("RewardAd: 获取奖励")
-                adCallback?.onRewarded()
+                callbackRef.get()?.onRewarded()
             }
         })
 
@@ -338,6 +346,7 @@ object PangleManager {
         mNativeBannerGroup[page] = viewGroup
 
 
+        val viewGroupRef = WeakReference(viewGroup)
         val request = PAGNativeRequest()
         PAGNativeAd.loadAd(
             mAdConfig.getAdId(IAdConfig.Companion.NATIVE_AD),
@@ -352,9 +361,9 @@ object PangleManager {
 
                     log("forNativeAd")
                     mNativeBannerCache[page] = pagNativeAd
-                    val adView = LayoutInflater.from(viewGroup.context)
+                    val adView = LayoutInflater.from(viewGroupRef.get()?.context)
                         .inflate(adLayoutId, null) as ViewGroup
-                    showNative(adView, pagNativeAd, viewGroup, null)
+                    showNative(adView, pagNativeAd, viewGroupRef.get()?: return, null)
                 }
             }
         )
@@ -399,6 +408,8 @@ object PangleManager {
 
         btnView.text = adData.buttonText
 
+        val callbackRef = WeakReference(adCallback)
+
         nativeAd.registerViewForInteraction(
             adViewContainer,
             listOf(adViewContainer),
@@ -408,17 +419,17 @@ object PangleManager {
                 PAGNativeAdInteractionCallback() {
                 override fun onAdShowed() {
                     log("native banner ad onAdShowed")
-                    adCallback?.onAdShow()
+                    callbackRef.get()?.onAdShow()
                 }
 
                 override fun onAdClicked() {
                     log("native banner ad onAdClicked")
-                    adCallback?.onAdClick()
+                    callbackRef.get()?.onAdClick()
                 }
 
                 override fun onAdDismissed() {
                     log("native banner ad onAdDismissed")
-                    adCallback?.onAdDismiss()
+                    callbackRef.get()?.onAdDismiss()
                 }
             })
 

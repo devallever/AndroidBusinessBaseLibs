@@ -34,6 +34,7 @@ import sg.bigo.ads.api.RewardAdInteractionListener
 import sg.bigo.ads.api.RewardVideoAd
 import sg.bigo.ads.api.RewardVideoAdLoader
 import sg.bigo.ads.api.RewardVideoAdRequest
+import java.lang.ref.WeakReference
 
 
 /**
@@ -61,10 +62,12 @@ object BigoManager {
             block()
             return
         }
+
+        val blockRef = WeakReference(block)
         val config = AdConfig.Builder().setAppId(APP_ID).setDebug(App.DEBUG).build()
         BigoAdSdk.initialize(App.context, config) {
             log("init bigo sdk success")
-            block()
+            blockRef.get()?.invoke()
             isInit = true
         }
     }
@@ -117,23 +120,24 @@ object BigoManager {
             return
         }
 
+        val callbackRef = WeakReference(adCallback)
         log("使用InterAdCache")
         mInterAdCache?.setAdInteractionListener(object : AdInteractionListener {
             override fun onAdError(p0: AdError) {
                 log("InterAdCache: 显示失败 ${p0.code} -> ${p0.message}")
                 mInterAdCache = null
-                adCallback?.onAdFailLoad()
+                callbackRef.get()?.onAdFailLoad()
                 justLoadInter()
             }
 
             override fun onAdImpression() {
                 log("InterAdCache: 显示")
-                adCallback?.onAdShow()
+                callbackRef.get()?.onAdShow()
             }
 
             override fun onAdClicked() {
                 log("InterAdCache: 点击")
-                adCallback?.onAdClick()
+                callbackRef.get()?.onAdClick()
             }
 
             override fun onAdOpened() {
@@ -143,7 +147,7 @@ object BigoManager {
             override fun onAdClosed() {
                 log("InterAdCache: 关闭")
                 mInterAdCache = null
-                adCallback?.onAdDismiss()
+                callbackRef.get()?.onAdDismiss()
                 justLoadInter()
             }
 
@@ -164,11 +168,12 @@ object BigoManager {
         val rewardVideoAdAdRequest = RewardVideoAdRequest.Builder()
             .withSlotId(mAdConfig.getAdId(IAdConfig.Companion.REWARD_AD)).build()
 
+        val callbackRef = WeakReference(adCallback)
         val rewardVideoAdLoader = RewardVideoAdLoader.Builder()
             .withAdLoadListener(object : AdLoadListener<RewardVideoAd> {
                 override fun onError(adError: AdError) {
                     logE("rewardAd: 加载失败 -> ${adError.code}: ${adError.message}")
-                    adCallback?.onAdFailLoad()
+                    callbackRef.get()?.onAdFailLoad()
                 }
 
                 override fun onAdLoaded(rewardVideoAd: RewardVideoAd) {
@@ -176,7 +181,7 @@ object BigoManager {
                     mRewardAdCache = rewardVideoAd
                     mRewardAdCacheTime = System.currentTimeMillis()
                     log("rewardAd: 缓存成功")
-                    adCallback?.onAdLoaded()
+                    callbackRef.get()?.onAdLoaded()
                 }
             }).build()
 
@@ -197,23 +202,25 @@ object BigoManager {
             return
         }
 
+        val callbackRef = WeakReference(adCallback)
         log("使用RewardAdCache")
         mRewardAdCache?.setAdInteractionListener(object : RewardAdInteractionListener {
             override fun onAdError(p0: AdError) {
                 log("RewardAd: 显示失败")
                 mRewardAdCache = null
-                adCallback?.onAdFailLoad()
+                callbackRef.get()?.onAdFailLoad()
                 justLoadReward(adCallback)
 
             }
 
             override fun onAdImpression() {
                 log("RewardAd: 显示")
-                adCallback?.onAdShow()
+                callbackRef.get()?.onAdShow()
             }
 
             override fun onAdClicked() {
                 log("RewardAd: 点击")
+                callbackRef.get()?.onAdClick()
             }
 
             override fun onAdOpened() {
@@ -223,13 +230,13 @@ object BigoManager {
             override fun onAdClosed() {
                 log("RewardAd: 关闭")
                 mRewardAdCache = null
-                adCallback?.onAdDismiss()
+                callbackRef.get()?.onAdDismiss()
                 justLoadReward(adCallback)
             }
 
             override fun onAdRewarded() {
                 log("RewardAd: 获取奖励")
-                adCallback?.onRewarded()
+                callbackRef.get()?.onRewarded()
             }
         })
         mRewardAdCache?.show(activity)
@@ -240,6 +247,7 @@ object BigoManager {
         val mBannerAd = BigoAdView(bannerContainer.context)
         ViewGroup.LayoutParams.MATCH_PARENT
 
+        val bannerContainerRef = WeakReference(bannerContainer)
         val bannerAdRequest =
             BannerAdRequest.Builder().withSlotId(mAdConfig.getAdId(IAdConfig.Companion.BANNER_AD))
                 .withAdSizes(AdSize.LARGE_BANNER).build()
@@ -281,7 +289,7 @@ object BigoManager {
                     }
 
                 })
-                bannerContainer.addView(adView, layoutParams)
+                bannerContainerRef.get()?.addView(adView, layoutParams)
             }
 
         })
@@ -301,7 +309,7 @@ object BigoManager {
     }
 
     private var mNativeBannerCache = mutableMapOf<String, NativeAd>()
-    private var mNativeBannerGroup = mutableMapOf<String, ViewGroup>()
+    private var mNativeBannerGroup = mutableMapOf<String, WeakReference<ViewGroup>>()
     fun loadNativeAd(
         viewGroup: ViewGroup,
         page: String,
@@ -309,7 +317,7 @@ object BigoManager {
         show: Boolean = true
     ) {
         destroyNativeAd(page)
-        mNativeBannerGroup[page] = viewGroup
+        mNativeBannerGroup[page] = WeakReference(viewGroup)
 
         val request =
             NativeAdRequest.Builder().withSlotId(mAdConfig.getAdId(IAdConfig.Companion.NATIVE_AD))
@@ -412,13 +420,13 @@ object BigoManager {
     fun resumeNativeBanner(page: String) {
         destroyNativeAd(page)
         mNativeBannerGroup[page]?.let {
-            loadNativeAd(it, page)
+            loadNativeAd(it.get()?:return, page)
         }
     }
 
     fun destroyNativeAd(page: String) {
         mNativeBannerCache.remove(page)?.destroy()
-        mNativeBannerGroup[page]?.removeAllViews()
+        mNativeBannerGroup[page]?.get()?.removeAllViews()
     }
 
 

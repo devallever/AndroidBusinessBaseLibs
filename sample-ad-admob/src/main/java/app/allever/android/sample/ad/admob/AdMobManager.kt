@@ -29,6 +29,7 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import java.lang.ref.WeakReference
 
 object AdMobManager {
 
@@ -43,9 +44,10 @@ object AdMobManager {
     fun init(adConfig: IAdConfig, context: Application, block: (() -> Unit)? = null) {
         mAdConfig = adConfig
         mContext = context
+        val blockRef = WeakReference(block)
         MobileAds.initialize(context) {
             log("MobileAds: 初始化成功")
-            block?.invoke()
+            blockRef.get()?.invoke()
         }
     }
 
@@ -61,6 +63,8 @@ object AdMobManager {
 
         val adRequest = AdRequest.Builder().build()
 
+        val callbackRef = WeakReference(adCallback)
+
         InterstitialAd.load(
             mContext,
             mAdConfig.getAdId(IAdConfig.Companion.INTER_AD),
@@ -68,6 +72,7 @@ object AdMobManager {
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     logE("interAd: 加载失败 -> ${adError.code}")
+                    callbackRef.get()?.onAdFailLoad()
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
@@ -75,6 +80,7 @@ object AdMobManager {
                     mInterAdCache = interstitialAd
                     mInterAdCacheTime = System.currentTimeMillis()
                     log("interAd: 缓存成功")
+                    callbackRef.get()?.onAdLoaded()
                 }
             })
     }
@@ -91,6 +97,8 @@ object AdMobManager {
 
         val adRequest = AdRequest.Builder().build()
 
+        val callbackRef = WeakReference(adCallback)
+
         RewardedAd.load(
             mContext,
             mAdConfig.getAdId(IAdConfig.Companion.REWARD_AD),
@@ -98,7 +106,8 @@ object AdMobManager {
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     logE("rewardAd: 加载失败 -> ${adError.code}: ${adError.message}")
-                    adCallback?.onAdFailLoad()
+                    callbackRef.get()?.onAdFailLoad()
+
                 }
 
                 override fun onAdLoaded(rewardedAd: RewardedAd) {
@@ -106,7 +115,7 @@ object AdMobManager {
                     mRewardAdCache = rewardedAd
                     mRewardAdCacheTime = System.currentTimeMillis()
                     log("rewardAd: 缓存成功")
-                    adCallback?.onAdLoaded()
+                    callbackRef.get()?.onAdLoaded()
                 }
             })
 
@@ -130,24 +139,26 @@ object AdMobManager {
             return
         }
 
+        val callbackRef = WeakReference(adCallback)
+
         log("使用InterAdCache")
         mInterAdCache?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
                 log("InterAdCache: 关闭")
                 mInterAdCache = null
-                adCallback?.onAdDismiss()
+                callbackRef.get()?.onAdDismiss()
                 justLoadInter()
             }
 
             override fun onAdShowedFullScreenContent() {
                 log("InterAdCache: 显示")
-                adCallback?.onAdShow()
+                callbackRef.get()?.onAdShow()
             }
 
             override fun onAdFailedToShowFullScreenContent(p0: AdError) {
                 log("InterAdCache: 显示失败")
                 mInterAdCache = null
-                adCallback?.onAdFailLoad()
+                callbackRef.get()?.onAdFailLoad()
                 justLoadInter()
             }
         }
@@ -168,30 +179,32 @@ object AdMobManager {
             return
         }
 
+        val callbackRef = WeakReference(adCallback)
+
         log("使用RewardAdCache")
         mRewardAdCache?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
                 log("RewardAd: 关闭")
                 mRewardAdCache = null
-                adCallback?.onAdDismiss()
+                callbackRef.get()?.onAdDismiss()
                 justLoadReward(adCallback)
             }
 
             override fun onAdShowedFullScreenContent() {
                 log("RewardAd: 显示")
-                adCallback?.onAdShow()
+                callbackRef.get()?.onAdShow()
             }
 
             override fun onAdFailedToShowFullScreenContent(p0: AdError) {
                 log("RewardAd: 显示失败")
                 mRewardAdCache = null
-                adCallback?.onAdFailLoad()
+                callbackRef.get()?.onAdFailLoad()
                 justLoadReward(adCallback)
             }
         }
         mRewardAdCache?.show(activity) {
             log("RewardAd: 获取奖励")
-            adCallback?.onRewarded()
+            callbackRef.get()?.onRewarded()
         }
     }
 
@@ -206,9 +219,10 @@ object AdMobManager {
         )
         mBannerAd.adUnitId = mAdConfig.getAdId(IAdConfig.Companion.BANNER_AD)
 
+        val bannerContainerRef = WeakReference(bannerContainer)
         mBannerAd.adListener = object : AdListener() {
             override fun onAdLoaded() {
-                bannerContainer.addView(mBannerAd)
+                bannerContainerRef.get()?.addView(mBannerAd)
                 log("加载成功")
             }
 
@@ -259,6 +273,7 @@ object AdMobManager {
         mInterAdCache = null
         val adRequest = AdRequest.Builder().build()
 
+        val blockRef = WeakReference(block)
         InterstitialAd.load(
             mContext,
             mAdConfig.getAdId(IAdConfig.Companion.INTER_AD),
@@ -271,7 +286,7 @@ object AdMobManager {
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
                     log("interAd: 加载成功")
                     mInterAdCache = interstitialAd
-                    block.invoke(interstitialAd)
+                    blockRef.get()?.invoke(interstitialAd)
                 }
             })
     }
