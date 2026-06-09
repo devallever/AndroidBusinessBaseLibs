@@ -1,4 +1,4 @@
-package app.allever.android.lib.core.function.camera
+package app.allever.android.lib.core.camera
 
 import androidx.annotation.IntDef
 

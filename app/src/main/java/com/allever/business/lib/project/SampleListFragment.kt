@@ -5,7 +5,6 @@ import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
-import app.allever.android.lib.core.helper.ActivityHelper
 import com.alibaba.android.arouter.launcher.ARouter
 
 class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, TextClickItem>() {
@@ -58,6 +57,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         },
         TextClickItem("图片加载") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_IMAGE_LOADER_CORE).navigation()
+        },
+        TextClickItem("CameraCore") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CAMERA_CORE).navigation()
         }
     )
 }

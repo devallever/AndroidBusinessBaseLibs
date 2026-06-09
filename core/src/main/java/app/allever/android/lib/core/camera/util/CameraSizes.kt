@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package app.allever.android.lib.core.function.camera.util
+package app.allever.android.lib.core.camera.util
 
 import android.graphics.Point
 import android.hardware.camera2.CameraCharacteristics

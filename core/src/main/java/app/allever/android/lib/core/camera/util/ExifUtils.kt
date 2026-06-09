@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package app.allever.android.lib.core.function.camera.util
+package app.allever.android.lib.core.camera.util
 
 import android.graphics.Bitmap
 import android.graphics.Matrix

@@ -9,6 +9,7 @@ import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.helper.CoroutineHelper
 import app.allever.android.lib.core.helper.DisplayHelper
+import app.allever.android.lib.core.permission.DefaultEngine
 import app.allever.android.lib.core.util.FileUtils
 import app.allever.android.lib.core.util.MD5
 import kotlinx.coroutines.Dispatchers
@@ -18,8 +19,8 @@ import java.io.File
 
 object ImageLoader {
 
-    private var mLoaderEngine: ILoader? = null
-    private var mBuilder: Builder? = null
+    private var mLoaderEngine: ILoader? = DefaultLoader
+    private var mBuilder: Builder? = Builder()
 
     private val mDownloadRequestSet = mutableSetOf<String>()
 

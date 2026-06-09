@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package app.allever.android.lib.core.function.camera
+package app.allever.android.lib.core.camera
 
 import android.content.Context
 import android.graphics.Canvas

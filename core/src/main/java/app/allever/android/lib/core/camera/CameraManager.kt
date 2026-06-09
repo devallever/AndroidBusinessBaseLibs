@@ -1,11 +1,14 @@
-package app.allever.android.lib.core.function.camera
+package app.allever.android.lib.core.camera
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.hardware.camera2.CameraManager
+import android.os.Environment
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.log
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
@@ -101,14 +104,26 @@ object CameraManager : ICameraProxy {
         return Bitmap.createBitmap(b, 0, 0, b.width, b.height, matrix, false)
     }
 
-    fun saveBitmap2File(bitmap: Bitmap?, filePath: String?): Boolean {
+    //OUTER: Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath + File.separator + System.currentTimeMillis() + ".jpg"
+    //CACHE: App.context.externalCacheDir?.absolutePath + File.separator + System.currentTimeMillis() + ".jpg"
+    fun saveBitmap2File(
+        bitmap: Bitmap?,
+        filePath: String = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath + File.separator + System.currentTimeMillis() + ".jpg"
+    ): String? {
         if (bitmap == null) {
-            return false
+            return null
         }
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val bytes = baos.toByteArray()
-        return saveByteToSDFile(bytes, filePath)
+        val result = saveByteToSDFile(bytes, filePath)
+        if (result) {
+            log("保存成功：$filePath")
+            return filePath
+        } else {
+            log("保存失败")
+            return null
+        }
     }
 
 
