@@ -10,8 +10,8 @@ import app.allever.android.lib.common.databinding.FragmentListBinding
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.core.function.permission.JumpPermissionSettingDialog
-import app.allever.android.lib.core.function.permission.PermissionHelper
+import app.allever.android.lib.core.permission.JumpPermissionSettingDialog
+import app.allever.android.lib.core.permission.PermissionHelper
 import app.allever.android.lib.media.core.MediaCore
 import app.allever.android.lib.media.core.model.MediaFolder
 import app.allever.android.lib.media.core.model.MediaItem

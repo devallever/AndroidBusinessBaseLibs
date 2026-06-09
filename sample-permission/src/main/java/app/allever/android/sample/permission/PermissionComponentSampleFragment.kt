@@ -9,20 +9,34 @@ import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.core.function.permission.*
+import app.allever.android.lib.core.permission.BluetoothPermissionStrategy
+import app.allever.android.lib.core.permission.CalendarPermissionStrategy
+import app.allever.android.lib.core.permission.CameraPermissionStrategy
+import app.allever.android.lib.core.permission.ContactsPermissionStrategy
+import app.allever.android.lib.core.permission.ForegroundLocationPermissionStrategy
+import app.allever.android.lib.core.permission.JumpPermissionSettingDialog
+import app.allever.android.lib.core.permission.MediaPermissionStrategy
+import app.allever.android.lib.core.permission.NearbyDevicesPermissionStrategy
+import app.allever.android.lib.core.permission.NotificationPermissionStrategy
+import app.allever.android.lib.core.permission.PermissionLauncher
+import app.allever.android.lib.core.permission.PermissionResultCallback
+import app.allever.android.lib.core.permission.PhonePermissionStrategy
+import app.allever.android.lib.core.permission.SensorPermissionStrategy
+import app.allever.android.lib.core.permission.SmsPermissionStrategy
+import app.allever.android.lib.core.permission.StoragePermissionStrategy
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 /**
  * PermissionLauncherComponent 组件使用示例
  *
- * 展示如何使用 [PermissionLauncherComponent] 配合 [PermissionStrategy] 进行权限请求，
+ * 展示如何使用 [app.allever.android.lib.core.permission.PermissionLauncher] 配合 [app.allever.android.lib.core.permission.PermissionStrategy] 进行权限请求，
  * 相比 [PermissionBaseSampleFragment] 中的原始写法，代码量大幅减少，版本适配逻辑完全解耦。
  */
 class PermissionComponentSampleFragment :
     ListFragment<FragmentListBinding, ListViewModel, TextClickItem>() {
 
     /** 权限请求组件（核心：一行初始化） */
-    private val permissionLauncher = PermissionLauncherComponent(this)
+    private val permissionLauncher = PermissionLauncher(this)
 
     override fun getAdapter(): BaseQuickAdapter<TextClickItem, *> {
         return TextClickAdapter()

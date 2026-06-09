@@ -1,5 +1,6 @@
-package app.allever.android.lib.core.function.permission
+package app.allever.android.lib.core.permission
 
+import android.app.Dialog
 import android.content.Context
 
 /**
@@ -25,7 +26,7 @@ interface PermissionResultCallback {
     }
 
     /** 自定义的"总是拒绝"弹窗，返回 null 则使用默认弹窗 */
-    fun getCustomDialog(context: Context): android.app.Dialog? = null
+    fun getCustomDialog(context: Context): Dialog? = null
 
     /** 是否在 always denied 时显示跳转设置弹窗 */
     fun needShowJumpSettingDialog(): Boolean = true

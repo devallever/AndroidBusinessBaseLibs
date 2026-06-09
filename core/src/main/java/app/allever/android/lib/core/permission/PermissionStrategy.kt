@@ -1,7 +1,8 @@
-package app.allever.android.lib.core.function.permission
+package app.allever.android.lib.core.permission
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 
@@ -9,7 +10,7 @@ import android.provider.Settings
  * 权限策略接口
  *
  * 每种权限类型实现此接口，负责根据当前系统版本决定请求哪些权限。
- * 配合 [PermissionLauncherComponent.requestByStrategy] 使用，实现版本适配逻辑与业务代码解耦。
+ * 配合 [PermissionLauncher.requestByStrategy] 使用，实现版本适配逻辑与业务代码解耦。
  */
 interface PermissionStrategy {
     /** 策略名称，用于日志标识 */
@@ -109,7 +110,7 @@ object NotificationPermissionStrategy : PermissionStrategy {
      * 获取通知设置页 Intent（Android 8.0~12 调用方使用）
      */
     fun getNotificationSettingsIntent(context: Context) =
-        android.content.Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+        Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
             putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
         }
 }

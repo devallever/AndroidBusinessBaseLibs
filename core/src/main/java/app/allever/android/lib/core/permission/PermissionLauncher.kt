@@ -1,4 +1,4 @@
-package app.allever.android.lib.core.function.permission
+package app.allever.android.lib.core.permission
 
 import android.app.Activity
 import android.content.Context
@@ -40,7 +40,7 @@ typealias SimplePermissionCallback = (allGranted: Boolean, deniedList: List<Stri
  * )
  * ```
  */
-class PermissionLauncherComponent(owner: ActivityResultCaller) {
+class PermissionLauncher(owner: ActivityResultCaller) {
     private val mOwner = owner
     fun requireContext(): Context {
         return when (mOwner) {
