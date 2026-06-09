@@ -4,9 +4,9 @@ package app.allever.android.lib.store.core
  * 存储引擎接口
  *
  * 所有存储实现（SP、MMKV、DataStore 等）均需实现此接口。
- * 通过 [Storage.init] 可无缝切换底层存储方案，业务代码无需改动。
+ * 通过 [StoreCore.init] 可无缝切换底层存储方案，业务代码无需改动。
  */
-interface IStorageEngine {
+interface IStoreEngine {
 
     // ========== 基础读写 ==========
 

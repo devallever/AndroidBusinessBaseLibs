@@ -13,7 +13,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import app.allever.android.lib.core.helper.GsonHelper
-import app.allever.android.lib.store.core.IStorageEngine
+import app.allever.android.lib.store.core.IStoreEngine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap
  * DataStore (Preferences) 引擎实现
  *
  * 基于 Jetpack DataStore Preferences，提供异步、一致性、事务性的存储能力。
- * 内部通过 runBlocking 将协程操作转为同步调用，对外保持与 [IStorageEngine] 一致的同步接口。
+ * 内部通过 runBlocking 将协程操作转为同步调用，对外保持与 [IStoreEngine] 一致的同步接口。
  *
  * 使用方式：
  * ```
@@ -32,7 +32,7 @@ import java.util.concurrent.ConcurrentHashMap
  * val store = StorageKit.get("cache") { DataStoreEngine() }
  * ```
  */
-class DataStoreEngine : IStorageEngine {
+class DataStoreEngine : IStoreEngine {
 
     private var dataStoreName: String? = null
 

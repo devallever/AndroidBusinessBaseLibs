@@ -3,7 +3,7 @@ package app.allever.android.lib.store.engine.mmkv
 import android.content.Context
 import android.util.Log
 import app.allever.android.lib.core.helper.GsonHelper
-import app.allever.android.lib.store.core.IStorageEngine
+import app.allever.android.lib.store.core.IStoreEngine
 import com.tencent.mmkv.MMKV
 
 /**
@@ -22,7 +22,7 @@ import com.tencent.mmkv.MMKV
  * val store = StorageKit.get("cache") { MMKVEngine() }
  * ```
  */
-class MMKVEngine : IStorageEngine {
+class MMKVEngine : IStoreEngine {
 
     companion object {
         private const val DEFAULT_ID = "default_mmkv"

@@ -3,15 +3,14 @@ package app.allever.android.lib.store.core.engine
 import android.content.Context
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.helper.GsonHelper
-import app.allever.android.lib.store.core.IStorageEngine
-import java.util.concurrent.ConcurrentHashMap
+import app.allever.android.lib.store.core.IStoreEngine
 
 /**
  * SharedPreferences 引擎实现（内置默认）
  *
  * 线程安全：读写均通过 synchronized + apply/commit 保证一致性
  */
-class SPEngine : IStorageEngine {
+class SPEngine : IStoreEngine {
 
     companion object {
         private const val DEFAULT_NAME = "default_storage"

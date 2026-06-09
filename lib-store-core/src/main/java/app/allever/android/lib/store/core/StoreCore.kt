@@ -1,6 +1,5 @@
 package app.allever.android.lib.store.core
 
-import android.content.Context
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.store.core.engine.SPEngine
 
@@ -17,12 +16,12 @@ import app.allever.android.lib.store.core.engine.SPEngine
  * Storage.init { MMKVEngine() }
  * ```
  */
-object Storage {
+object StoreCore {
 
     private const val DEFAULT_NAME = "default_storage"
 
     @Volatile
-    internal var engine: IStorageEngine? = null
+    internal var engine: IStoreEngine? = null
     private val lock = Any()
 
     /**
@@ -31,9 +30,9 @@ object Storage {
      * 必须在 Application.onCreate 中尽早调用。
      * 不调用则默认使用 [SPEngine]。
      *
-     * @param engineFactory 引擎工厂，返回一个已配置好的 [IStorageEngine] 实例
+     * @param engineFactory 引擎工厂，返回一个已配置好的 [IStoreEngine] 实例
      */
-    fun init(engineFactory: () -> IStorageEngine) {
+    fun init(engineFactory: () -> IStoreEngine) {
         synchronized(lock) {
             engine?.destroy()
             val newEngine = engineFactory()
@@ -43,7 +42,7 @@ object Storage {
     }
 
     /** 获取或创建引擎实例 */
-    internal fun getOrCreateEngine(): IStorageEngine {
+    internal fun getOrCreateEngine(): IStoreEngine {
         return engine ?: synchronized(lock) {
             engine ?: run {
                 val spEngine = SPEngine().also { it.init(App.context, DEFAULT_NAME) }

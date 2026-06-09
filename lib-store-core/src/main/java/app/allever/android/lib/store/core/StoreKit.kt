@@ -1,6 +1,5 @@
 package app.allever.android.lib.store.core
 
-import android.content.Context
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.store.core.engine.SPEngine
 import java.util.concurrent.ConcurrentHashMap
@@ -31,13 +30,13 @@ object StorageKit {
      * 获取或创建命名存储实例
      *
      * @param name 存储名称，用于隔离不同数据域
-     * @param engineFactory 自定义引擎工厂。不传则使用全局 [Storage] 的引擎；
+     * @param engineFactory 自定义引擎工厂。不传则使用全局 [StoreCore] 的引擎；
      *                     若 [Storage] 也未初始化则自动使用 [SPEngine]
      * @return 存储实例
      */
     fun get(
         name: String,
-        engineFactory: (() -> IStorageEngine)? = null
+        engineFactory: (() -> IStoreEngine)? = null
     ): IStorage {
         return instances.getOrPut(name) {
             val engine = engineFactory?.invoke() ?: createDefaultEngine(name)
@@ -56,26 +55,26 @@ object StorageKit {
         instances.clear()
     }
 
-    private fun createDefaultEngine(name: String): IStorageEngine {
+    private fun createDefaultEngine(name: String): IStoreEngine {
         return SPEngine().also { it.init(App.context, name) }
     }
 
     /**
      * 内部实现：持有引擎引用的 IStorage
      */
-    internal class StorageImpl(override val engine: IStorageEngine) : IStorage
+    internal class StorageImpl(override val engine: IStoreEngine) : IStorage
 }
 
 /**
  * 存储接口 — 由 [StorageKit] 返回的实例类型
  *
- * 与 [Storage] 门面方法一致，但绑定到特定引擎实例，
+ * 与 [StoreCore] 门面方法一致，但绑定到特定引擎实例，
  * 适用于需要多存储域隔离的场景。
  */
 interface IStorage {
 
     /** 底层引擎引用 */
-    val engine: IStorageEngine
+    val engine: IStoreEngine
 
     fun putString(key: String, value: String?) = engine.putString(key, value)
     fun getString(key: String, defaultValue: String? = null): String? =
