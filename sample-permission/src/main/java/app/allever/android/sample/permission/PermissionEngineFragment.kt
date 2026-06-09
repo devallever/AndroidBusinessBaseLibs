@@ -49,10 +49,7 @@ class PermissionEngineFragment: ListFragment<FragmentListBinding, ListViewModel,
                     android.Manifest.permission.CAMERA,
                     android.Manifest.permission.RECORD_AUDIO,
                 )
-                .explainReason(
-                    title = "需要权限",
-                    message = "相机用于拍照识别，录音用于语音输入"
-                ) { scope ->
+                .explainReason { scope ->
                     WhyRequestPermissionDialog(
                         scope.context(),
                         "需要权限",
@@ -61,11 +58,8 @@ class PermissionEngineFragment: ListFragment<FragmentListBinding, ListViewModel,
                         scope.proceed()
                     }.show()
                 }
-                .forwardToSettings(
-                    title = "权限被拒",
-                    message = "部分权限被拒绝，请前往设置手动授权"
-                ) { context ->
-                    JumpPermissionSettingDialog(context, message = "请手动开启所需权限").show()
+                .forwardToSettings { context ->
+                    JumpPermissionSettingDialog(context, message = "请手动开启所需权限啦啦").show()
                 }
                 .onAllGranted { toast("[引擎] 所有权限已授予") }
                 .onDenied { denied -> toast("[引擎] 部分权限被拒绝: $denied") }

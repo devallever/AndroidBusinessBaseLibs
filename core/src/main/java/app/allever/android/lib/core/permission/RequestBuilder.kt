@@ -1,6 +1,8 @@
 package app.allever.android.lib.core.permission
 
+import android.app.Activity
 import android.content.Context
+import androidx.fragment.app.Fragment
 
 /**
  * 权限请求链式构建器
@@ -62,6 +64,11 @@ class RequestBuilder internal constructor(
      */
     fun permissions(vararg perms: String): RequestBuilder {
         this.permissions = perms
+        forwardSettingsConfig = null
+        explainReasonConfig = null
+        onDeniedCallback = null
+        onAllGrantedCallback = null
+        strategy = null
         return this
     }
 
@@ -86,11 +93,9 @@ class RequestBuilder internal constructor(
      *                  或 [ExplainReasonScope.cancel] 取消请求
      */
     fun explainReason(
-        title: String,
-        message: String,
         callback: (ExplainReasonScope) -> Unit
     ): RequestBuilder {
-        this.explainReasonConfig = ExplainReasonConfig(title, message, callback)
+        this.explainReasonConfig = ExplainReasonConfig( callback)
         return this
     }
 
@@ -105,11 +110,9 @@ class RequestBuilder internal constructor(
      * @param callback 回调，参数为 Context
      */
     fun forwardToSettings(
-        title: String = "需要权限",
-        message: String,
         callback: (Context) -> Unit
     ): RequestBuilder {
-        this.forwardSettingsConfig = ForwardSettingsConfig(title, message, callback)
+        this.forwardSettingsConfig = ForwardSettingsConfig(callback)
         return this
     }
 
@@ -152,33 +155,53 @@ class RequestBuilder internal constructor(
 
             override fun onAlwaysDenied(deniedPermissions: List<String>, context: Context) {
                 if (forwardSettingsConfig != null) {
-                    // 使用自定义的 forwardToSettings 处理
                     forwardSettingsConfig!!.callback.invoke(context)
                 } else {
-                    // 默认行为：弹出 JumpPermissionSettingDialog
-                    super.onAlwaysDenied(deniedPermissions, context)
+                    // 未配置 forwardToSettings 时静默，不弹默认弹窗, 回调失败
+                    onDeniedCallback?.invoke(deniedPermissions)
                 }
             }
 
-            override fun getCustomDialog(context: Context): android.app.Dialog? {
-                // 如果配置了自定义 forwardToSettings，不使用默认弹窗
-                if (forwardSettingsConfig != null) return null
-                return super.getCustomDialog(context)
-            }
+            override fun getCustomDialog(context: Context): android.app.Dialog? = null
 
-            override fun needShowJumpSettingDialog(): Boolean {
-                // 如果没有配置自定义处理，则显示默认弹窗
-                return forwardSettingsConfig == null && super.needShowJumpSettingDialog()
+            override fun needShowJumpSettingDialog(): Boolean = false
+        }
+
+        // 实际发起请求的方法
+        fun doRequest() {
+            val actualStrategy = strategy
+            if (actualStrategy != null) {
+                launcher.requestByStrategy(actualStrategy, resultCallback)
+            } else {
+                launcher.request(permissions, resultCallback)
             }
         }
 
-        // 策略模式优先
-        val actualStrategy = strategy
-        if (actualStrategy != null) {
-            launcher.requestByStrategy(actualStrategy, resultCallback)
-        } else {
-            launcher.request(permissions, resultCallback)
+        // ===== explainReason 前置检查 =====
+        val explainConfig = explainReasonConfig
+        if (explainConfig != null) {
+            val ctx = when (caller) {
+                is Fragment -> caller.context
+                is Activity -> caller
+                else -> null
+            }
+            if (ctx != null) {
+                val permsToCheck = if (strategy != null) strategy!!.getPermissions() else permissions
+                // 检查是否有未授予的权限（之前可能被拒绝过）
+                val notGranted = permsToCheck.filter { !PermissionEngine.isGranted(ctx, it) }
+                if (notGranted.isNotEmpty()) {
+                    val scope = object : ExplainReasonScope {
+                        override fun context(): Context = ctx
+                        override fun proceed() { doRequest() }
+                        override fun cancel() {}
+                    }
+                    explainConfig.callback.invoke(scope)
+                    return
+                }
+            }
         }
+
+        doRequest()
     }
 
     /**
@@ -195,14 +218,10 @@ class RequestBuilder internal constructor(
     // ==================== 内部数据类 ====================
 
     data class ExplainReasonConfig(
-        val title: String,
-        val message: String,
         val callback: (ExplainReasonScope) -> Unit
     )
 
     data class ForwardSettingsConfig(
-        val title: String,
-        val message: String,
         val callback: (Context) -> Unit
     )
 }
