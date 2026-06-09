@@ -1,6 +1,5 @@
 package app.allever.android.sample.store.core
 
-import android.view.View
 import app.allever.android.lib.common.ListFragment
 import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextClickAdapter
@@ -9,7 +8,7 @@ import app.allever.android.lib.common.databinding.FragmentListBinding
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.store.core.StorageKit
-import app.allever.android.lib.store.datastore.engine.DataStoreEngine
+import app.allever.android.lib.store.engine.datastore.DataStoreEngine
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 /**

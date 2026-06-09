@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
-val modelPkg = "app.allever.android.lib.store.datastore"
+val modelPkg = "app.allever.android.lib.store.engine.datastore"
 
 group = modelPkg
 

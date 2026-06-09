@@ -1,4 +1,4 @@
-package app.allever.android.lib.store.datastore.engine
+package app.allever.android.lib.store.engine.datastore
 
 import android.content.Context
 import android.content.ContextWrapper
