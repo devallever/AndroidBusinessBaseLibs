@@ -35,8 +35,7 @@ constraintlayout = "2.2.1"
 gson = "2.10"
 playServicesAds = "23.0.0"
 playServicesAdsIdentifier = "18.2.0"
-applovinSdk = "13.6.2"
-applovinqualityservicegradleplugin = "5.12.7"
+cameraX = "1.2.2"
 
 # third party
 arouter = "1.5.2"
@@ -55,10 +54,20 @@ bigoAds = "5.9.0"
 pangleSdk = "8.0.0.4"
 leakcanaryAndroid = "2.14"
 glideTransformations = "4.3.0"
+applovinSdk = "13.6.2"
+applovinqualityservicegradleplugin = "5.12.7"
+bigoadsAdapter = "5.9.0.0"
+bytedanceAdapter = "8.1.0.3.0"
+jiaozivideoplayer = "7.7.0"
+dkplayer = "3.3.7"
 
 
 [libraries]
 # android & kotlin & google
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraX" }
+androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "cameraX" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraX" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraX" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -127,6 +136,14 @@ applovin-sdk = { module = "com.applovin:applovin-sdk", version.ref = "applovinSd
 pangle-sdk = { module = "com.pangle.global:pag-sdk", version.ref = "pangleSdk" }
 leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanaryAndroid" }
 glide-transformations = { module = "jp.wasabeef:glide-transformations", version.ref = "glideTransformations" }
+bigoads-adapter = { module = "com.applovin.mediation:bigoads-adapter", version.ref = "bigoadsAdapter" }
+bytedance-adapter = { module = "com.applovin.mediation:bytedance-adapter", version.ref = "bytedanceAdapter" }
+dkplayer-ui = { module = "xyz.doikki.android.dkplayer:dkplayer-ui", version.ref = "dkplayer" }
+dkplayer-java = { module = "xyz.doikki.android.dkplayer:dkplayer-java", version.ref = "dkplayer" }
+dkplayer-exo = { module = "xyz.doikki.android.dkplayer:player-exo", version.ref = "dkplayer" }
+dkplayer-ijk = { module = "xyz.doikki.android.dkplayer:player-ijk", version.ref = "dkplayer" }
+dkplayer-videocache = { module = "xyz.doikki.android.dkplayer:videocache", version.ref = "dkplayer" }
+jiaozivideoplayer = { module = "cn.jzvd:jiaozivideoplayer", version.ref = "jiaozivideoplayer" }
 
 
 [plugins]

@@ -28,16 +28,16 @@ dependencies {
 //    implementation 'tv.danmaku.ijk.media:ijkplayer-x86:0.8.8'
 //    implementation 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.8.8'
 
-    implementation("cn.jzvd:jiaozivideoplayer:7.7.0")
+    implementation(libs.jiaozivideoplayer)
 
     // 必选，内部默认使用系统mediaplayer进行解码
-    implementation("xyz.doikki.android.dkplayer:dkplayer-java:3.3.7")
+    implementation(libs.dkplayer.java)
     // 可选，包含StandardVideoController的实现
-    implementation("xyz.doikki.android.dkplayer:dkplayer-ui:3.3.7")
+    implementation(libs.dkplayer.ui)
     // 可选，使用exoplayer进行解码
-    implementation("xyz.doikki.android.dkplayer:player-exo:3.3.7")
+    implementation(libs.dkplayer.exo)
     // 可选，使用ijkplayer进行解码
-    implementation("xyz.doikki.android.dkplayer:player-ijk:3.3.7")
+    implementation(libs.dkplayer.ijk)
     // 可选，如需要缓存或者抖音预加载功能请引入此库
-    implementation("xyz.doikki.android.dkplayer:videocache:3.3.7")
+    implementation(libs.dkplayer.videocache)
 }

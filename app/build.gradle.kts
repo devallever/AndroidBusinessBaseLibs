@@ -45,6 +45,7 @@ dependencies {
 //    implementation(project(":sample-store-core"))
 //    implementation(project(":sample-imageloader-core"))
 //    implementation(project(":sample-camera-core"))
+    implementation(project(":z-sample-billing"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

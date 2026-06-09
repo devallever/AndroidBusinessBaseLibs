@@ -14,12 +14,12 @@ android {
 dependencies {
     api(project(":core"))
     // CameraX core library
-    val camerax_version = "1.2.2"
-    api ("androidx.camera:camera-core:${camerax_version}")
+    // CameraX core library
+    api (libs.androidx.camera.core)
     // CameraX Camera2 extensions
-//    implementation("androidx.camera:camera-camera2:${camerax_version}")
+//    api(libs.androidx.camera.camera2)
     // CameraX Lifecycle library
-    api ("androidx.camera:camera-lifecycle:${camerax_version}")
+    api (libs.androidx.camera.lifecycle)
     // CameraX View class
-    api ("androidx.camera:camera-view:${camerax_version}")
+    api (libs.androidx.camera.view)
 }
