@@ -1,6 +1,5 @@
 package com.allever.business.lib.project
 
-import androidx.activity.enableEdgeToEdge
 import app.allever.android.lib.common.BaseActivity
 import app.allever.android.lib.core.helper.FragmentHelper
 import app.allever.android.lib.mvvm.base.BaseViewModel
@@ -12,7 +11,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         initTopBar(getString(R.string.app_name), showBackIcon = false)
         FragmentHelper.addToContainer(
             supportFragmentManager,
-            MainListFragment(),
+            MainTabFragment(),
             R.id.fragmentContainer
         )
     }
