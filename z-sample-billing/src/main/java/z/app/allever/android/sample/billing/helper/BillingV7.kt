@@ -6,7 +6,7 @@ import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.toJson
 import com.android.billingclient.api.*
 
-class BillingV5 : BaseBilling() {
+class BillingV7 : BaseBilling() {
 
     private var mProduceDetailsMap = mutableMapOf<String, ProductDetails>()
     private var mPurchaseCallback: ((success: Boolean, code: Int, message: String) -> Unit)? = null
@@ -406,9 +406,6 @@ class BillingV5 : BaseBilling() {
         ).setSubscriptionUpdateParams(
             BillingFlowParams.SubscriptionUpdateParams.newBuilder()
                 .setOldPurchaseToken(oldToken)
-                .setReplaceProrationMode(
-                    BillingFlowParams.ProrationMode.IMMEDIATE_AND_CHARGE_FULL_PRICE
-                )
                 .build()
         ).build()
     }

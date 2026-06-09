@@ -36,6 +36,7 @@ gson = "2.10"
 playServicesAds = "23.0.0"
 playServicesAdsIdentifier = "18.2.0"
 cameraX = "1.2.2"
+billingKtx = "7.0.0"
 
 # third party
 arouter = "1.5.2"
@@ -89,6 +90,7 @@ androidx-datastore-preferences = { group = "androidx.datastore", name = "datasto
 androidx-exifinterface = { group = "androidx.exifinterface", name = "exifinterface", version.ref = "exifinterface" }
 androidx-paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billingKtx" }
 
 # compose
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }

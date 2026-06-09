@@ -8,13 +8,13 @@ import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
 import z.app.allever.android.sample.billing.helper.BillingHelper
 import kotlinx.coroutines.launch
-import z.app.allever.android.sample.billing.helper.BillingV5
+import z.app.allever.android.sample.billing.helper.BillingV7
 
 class BillingMainFragment : ListFragment<FragmentListBinding, ListViewModel, TextClickItem>() {
 
     override fun init() {
         super.init()
-        BillingHelper.init(BillingV5())
+        BillingHelper.init(BillingV7())
     }
 
     override fun getAdapter() = TextClickAdapter()

@@ -14,5 +14,5 @@ android {
 
 dependencies {
     implementation(project(":sample-common"))
-    implementation("com.android.billingclient:billing-ktx:5.1.0")
+    implementation(libs.billing.ktx)
 }
