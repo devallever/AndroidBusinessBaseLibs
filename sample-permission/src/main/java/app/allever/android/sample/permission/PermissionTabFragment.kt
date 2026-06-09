@@ -7,8 +7,8 @@ import app.allever.android.lib.common.databinding.FragmentTabBinding
 
 class PermissionTabFragment : TabFragment<FragmentTabBinding, TabViewModel>() {
     override fun getTabTitles(): MutableList<String> =
-        mutableListOf("BasePermission", "PermissionComponent")
+        mutableListOf("BasePermission", "PermissionComponent", "PermissionEngine")
 
     override fun getFragments(): MutableList<Fragment> =
-        mutableListOf(PermissionBaseSampleFragment(), PermissionComponentSampleFragment())
+        mutableListOf(PermissionBaseSampleFragment(), PermissionComponentSampleFragment(), PermissionEngineFragment())
 }

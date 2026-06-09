@@ -88,7 +88,7 @@ class PermissionLauncher(owner: ActivityResultCaller) {
      * @param permissions 要请求的权限数组
      * @param callback 结果回调
      */
-    fun request(permissions: Array<String>, callback: PermissionResultCallback) {
+    fun request(permissions: Array<out String>, callback: PermissionResultCallback) {
         currentCallback = callback
         when (permissions.size) {
             0 -> {
@@ -100,7 +100,7 @@ class PermissionLauncher(owner: ActivityResultCaller) {
                 singlePermissionLauncher.launch(permissions[0])
             }
             else -> {
-                multiPermissionLauncher.launch(permissions)
+                multiPermissionLauncher.launch(permissions.toList().toTypedArray())
             }
         }
     }

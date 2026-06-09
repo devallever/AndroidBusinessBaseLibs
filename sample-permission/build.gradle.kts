@@ -14,4 +14,5 @@ android {
 
 dependencies {
     implementation(project(":sample-common"))
+    implementation(project(":lib-permission-engine-permissionx"))
 }
