@@ -37,7 +37,7 @@ dependencies {
 //    implementation(project(":sample-ad-core"))
     implementation(project(":sample-permission"))
 //    implementation(project(":sample-media-core"))
-//    implementation(project(":sample-network-core"))
+    implementation(project(":sample-network-core"))
 //    implementation(project(":sample-player-core"))
 //    implementation(project(":sample-audiovideo"))
 //    implementation(project(":sample-store-core"))

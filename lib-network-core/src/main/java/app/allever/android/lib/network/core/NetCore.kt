@@ -2,7 +2,6 @@ package app.allever.android.lib.network.core
 
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toJson
-import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.network.core.engine.*
 import app.allever.android.lib.network.core.exception.ExceptionHandler
 import app.allever.android.lib.network.core.exception.NetworkException
@@ -119,73 +118,73 @@ object NetCore {
      * @param block 请求构建 DSL
      * @return 反序列化后的响应对象
      */
-    suspend inline fun <reified T> getT(
+    suspend inline fun <reified T> get(
         path: String,
         noinline block: (NetRequest.Builder.() -> Unit)? = null
-    ): T = get(path, type = object : TypeToken<T>() {}.type, block = block)
+    ): T = getInternal(path, type = object : TypeToken<T>() {}.type, block = block)
 
     /**
      * POST 请求（reified 版本）
      */
-    suspend inline fun <reified T> postT(
+    suspend inline fun <reified T> post(
         path: String,
         bodyData: Any? = null,
         noinline block: (NetRequest.Builder.() -> Unit)? = null
-    ): T = post(path, bodyData, block, type = object : TypeToken<T>() {}.type)
+    ): T = postInternal(path, bodyData, block, type = object : TypeToken<T>() {}.type)
 
     /**
      * PUT 请求（reified 版本）
      */
-    suspend inline fun <reified T> putT(
+    suspend inline fun <reified T> put(
         path: String,
         bodyData: Any? = null,
         noinline block: (NetRequest.Builder.() -> Unit)? = null
-    ): T = put(path, bodyData, block, type = object : TypeToken<T>() {}.type)
+    ): T = putInternal(path, bodyData, block, type = object : TypeToken<T>() {}.type)
 
     /**
      * DELETE 请求（reified 版本）
      */
-    suspend inline fun <reified T> deleteT(
+    suspend inline fun <reified T> delete(
         path: String,
         noinline block: (NetRequest.Builder.() -> Unit)? = null
-    ): T = delete(path, block, type = object : TypeToken<T>() {}.type)
+    ): T = deleteInternal(path, block, type = object : TypeToken<T>() {}.type)
 
     /**
      * PATCH 请求（reified 版本）
      */
-    suspend inline fun <reified T> patchT(
+    suspend inline fun <reified T> patch(
         path: String,
         bodyData: Any? = null,
         noinline block: (NetRequest.Builder.() -> Unit)? = null
-    ): T = patch(path, bodyData, block, type = object : TypeToken<T>() {}.type)
+    ): T = patchInternal(path, bodyData, block, type = object : TypeToken<T>() {}.type)
 
-    suspend fun <T> get(
+    suspend fun <T> getInternal(
         path: String,
         type: Type? = null,
         block: (NetRequest.Builder.() -> Unit)? = null,
     ): T = executeRequest(HttpMethod.GET, path, null, block, type)
 
-    suspend fun <T> post(
+    suspend fun <T> postInternal(
         path: String,
         bodyData: Any? = null,
         block: (NetRequest.Builder.() -> Unit)? = null,
         type: Type? = object : TypeToken<T>() {}.type
     ): T = executeRequest(HttpMethod.POST, path, bodyData, block, type)
 
-    suspend fun <T> put(
+    suspend fun <T> putInternal(
         path: String,
         bodyData: Any? = null,
         block: (NetRequest.Builder.() -> Unit)? = null,
         type: Type? = null
     ): T = executeRequest(HttpMethod.PUT, path, bodyData, block, type)
 
-    suspend fun <T> delete(
+    suspend fun <T> deleteInternal(
         path: String,
         block: (NetRequest.Builder.() -> Unit)? = null,
         type: Type? = null
     ): T = executeRequest(HttpMethod.DELETE, path, null, block, type)
 
-    suspend fun <T> patch(
+    suspend fun <T> patchInternal(
         path: String,
         bodyData: Any? = null,
         block: (NetRequest.Builder.() -> Unit)? = null,

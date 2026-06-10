@@ -1,6 +1,6 @@
 package app.allever.android.sample.network.core.repository
 
-import app.allever.android.lib.network.core.repository.BaseRepository
+import app.allever.android.lib.network.core.NetCore
 import app.allever.android.sample.network.core.BaseResponse
 import app.allever.android.sample.network.core.BannerData
 
@@ -18,12 +18,12 @@ import app.allever.android.sample.network.core.BannerData
  * }
  * ```
  */
-object WanAndroidRepository : BaseRepository() {
+object WanAndroidRepository {
 
     // ==================== 首页相关 ====================
 
     /**
      * 获取首页 Banner 列表
      */
-    suspend fun getBanner(): BaseResponse<List<BannerData>> = get("/banner/json")
+    suspend fun getBanner(): BaseResponse<List<BannerData>> = NetCore.get("/banner/json")
 }
