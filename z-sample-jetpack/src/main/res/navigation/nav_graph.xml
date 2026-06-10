@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/aFragment"
+    tools:ignore="MissingDefaultResource">
+
+    <fragment
+        android:id="@+id/aFragment"
+        android:name="z.app.allever.android.sample.jetpack.navigation.AFragment"
+        tools:layout="@layout/fragment_a">
+        <action
+            android:id="@+id/action2B"
+            app:destination="@id/bFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/bFragment"
+        android:name="z.app.allever.android.sample.jetpack.navigation.BFragment"
+        tools:layout="@layout/fragment_b">
+
+        <deepLink
+            app:action="z.app.allever.android.sample.jetpack.navigation.actionB"
+            app:mimeType="type/subtype"
+            app:uri="app.allever.android.sample" />
+    </fragment>
+
+</navigation>

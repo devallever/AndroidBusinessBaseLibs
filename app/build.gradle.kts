@@ -47,6 +47,7 @@ dependencies {
 //    implementation(project(":z-sample-cleaner"))
 //    implementation(project(":z-sample-designpattern"))
 //    implementation(project(":z-sample-function"))
+    implementation(project(":z-sample-jetpack"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
