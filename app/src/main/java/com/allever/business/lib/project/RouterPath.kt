@@ -43,5 +43,6 @@ class RouterPath {
         const val PATH_Z_SAMPLE_JNI = "/zjni/main"
         const val PATH_Z_SAMPLE_JNI_MK = "/zjnimk/main"
         const val PATH_Z_SAMPLE_KOTLIN = "/zkotlin/main"
+        const val PATH_Z_SAMPLE_LEARNING_ANDROID = "/zlearningandroid/main"
     }
 }

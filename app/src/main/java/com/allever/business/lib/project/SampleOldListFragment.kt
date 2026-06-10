@@ -35,6 +35,9 @@ class SampleOldListFragment: ListFragment<FragmentListBinding, ListViewModel, Te
         },
         TextClickItem("Kotlin") {
             ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_KOTLIN).navigation()
-        }
+        },
+        TextClickItem("LearningAndroid") {
+            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_LEARNING_ANDROID).navigation()
+        },
     )
 }
