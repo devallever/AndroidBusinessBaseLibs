@@ -87,3 +87,4 @@ include(":sample-camera-core")
 
 include(":z-sample-billing")
 include(":z-sample-cleaner")
+include(":z-sample-designpattern")

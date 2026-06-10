@@ -4,7 +4,7 @@ plugins {
     id("kotlin-kapt")
 }
 
-val modelPkg = "z.app.allever.android.sample.cleaner"
+val modelPkg = "z.app.allever.android.sample.designpattern"
 
 group = modelPkg
 

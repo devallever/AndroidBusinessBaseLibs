@@ -18,5 +18,8 @@ class SampleOldListFragment: ListFragment<FragmentListBinding, ListViewModel, Te
         TextClickItem("清理工具(Demo)") {
             ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_CLEANER).navigation()
         },
+        TextClickItem("设计模式") {
+            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_DESIGN_PATTERN).navigation()
+        },
     )
 }

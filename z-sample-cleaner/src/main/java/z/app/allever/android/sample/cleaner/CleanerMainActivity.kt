@@ -3,7 +3,6 @@ package z.app.allever.android.sample.cleaner
 import androidx.fragment.app.Fragment
 import app.allever.android.lib.common.SampleMainActivity
 import app.allever.android.lib.common.databinding.ActivitySampleMainBinding
-import app.allever.android.lib.core.helper.FragmentHelper
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alibaba.android.arouter.facade.annotation.Route
 
