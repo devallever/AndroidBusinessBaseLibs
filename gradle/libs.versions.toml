@@ -37,6 +37,9 @@ playServicesAds = "23.0.0"
 playServicesAdsIdentifier = "18.2.0"
 cameraX = "1.2.2"
 billingKtx = "7.0.0"
+roomRuntime = "2.4.3"
+roomKtx = "2.4.3"
+roomCompiler = "2.4.3"
 
 # third party
 arouter = "1.5.2"
@@ -61,6 +64,14 @@ bigoadsAdapter = "5.9.0.0"
 bytedanceAdapter = "8.1.0.3.0"
 jiaozivideoplayer = "7.7.0"
 dkplayer = "3.3.7"
+emoji2Emojipicker = "1.4.0"
+vanniktechEmojiJava = "5.1.1"
+vanniktechEmojiIos = "0.8.0"
+skinSupport = "4.0.5"
+youthBanner = "2.2.2"
+afollestadMaterialDialogsBottomsheets = "3.3.0"
+circleimageview = "2.2.0"
+afollestadMaterialDialogs = "3.3.0"
 
 
 [libraries]
@@ -70,6 +81,10 @@ androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraX" }
 androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraX" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-emoji2-emojipicker = { module = "androidx.emoji2:emoji2-emojipicker", version.ref = "emoji2Emojipicker" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -146,6 +161,17 @@ dkplayer-exo = { module = "xyz.doikki.android.dkplayer:player-exo", version.ref 
 dkplayer-ijk = { module = "xyz.doikki.android.dkplayer:player-ijk", version.ref = "dkplayer" }
 dkplayer-videocache = { module = "xyz.doikki.android.dkplayer:videocache", version.ref = "dkplayer" }
 jiaozivideoplayer = { module = "cn.jzvd:jiaozivideoplayer", version.ref = "jiaozivideoplayer" }
+circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
+afollestad-material-dialogs = { module = "com.afollestad.material-dialogs:core", version.ref = "afollestadMaterialDialogs" }
+afollestad-material-dialogs-bottomsheets = { module = "com.afollestad.material-dialogs:bottomsheets", version.ref = "afollestadMaterialDialogsBottomsheets" }
+vanniktech-emoji-java = { module = "com.vdurmont:emoji-java", version.ref = "vanniktechEmojiJava" }
+vanniktech-emoji-ios = { module = "com.vanniktech:emoji-ios", version.ref = "vanniktechEmojiIos" }
+skin-support-appcompat = { module = "skin.support:skin-support-appcompat", version.ref = "skinSupport" }
+skin-support = { module = "skin.support:skin-support", version.ref = "skinSupport" }
+skin-support-constraint-layout = { module = "skin.support:skin-support-constraint-layout", version.ref = "skinSupport" }
+skin-support-cardview = { module = "skin.support:skin-support-cardview", version.ref = "skinSupport" }
+skin-support-design = { module = "skin.support:skin-support-design", version.ref = "skinSupport" }
+youth-banner = { module = "io.github.youth5201314:banner", version.ref = "youthBanner" }
 
 
 [plugins]

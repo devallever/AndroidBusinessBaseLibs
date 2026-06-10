@@ -28,10 +28,10 @@ dependencies {
 //    implementation  'io.github.scwang90:refresh-header-two-level:2.0.5'   //二级刷新头
 //    implementation  'io.github.scwang90:refresh-footer-ball:2.0.5'        //球脉冲加载
 //    implementation  'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
-    api("io.github.youth5201314:banner:2.2.2")
-    api("de.hdodenhof:circleimageview:2.2.0")
-    api("com.afollestad.material-dialogs:core:3.3.0")
-    api("com.afollestad.material-dialogs:bottomsheets:3.3.0")
+    api(libs.youth.banner)
+    api(libs.circleimageview)
+    api(libs.afollestad.material.dialogs)
+    api(libs.afollestad.material.dialogs.bottomsheets)
     api("com.github.chrisbanes:photoview:2.3.0") {
         //exclude(module = "tiktok-business-android-sdk-comp")
         //androidx.core已经包含了下面这些
