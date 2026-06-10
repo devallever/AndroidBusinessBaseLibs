@@ -6,6 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.function.paging.BasePagingSource
 import app.allever.android.lib.core.function.paging.PagingHelper.createPagingDiffCallback
@@ -51,6 +52,8 @@ class PagingFragment : BaseMvvmFragment<FragmentPagingBinding, PagingViewModel>(
                 }
                 is LoadState.Error -> {
                     val state = it.refresh as LoadState.Error
+                    state.error.printStackTrace()
+                    log("Paging3", "Load Error: ${state.error.message}")
                     toast("Load Error: ${state.error.message}")
                 }
             }

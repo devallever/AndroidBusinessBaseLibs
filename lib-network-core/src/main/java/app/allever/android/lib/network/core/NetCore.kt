@@ -1,5 +1,8 @@
 package app.allever.android.lib.network.core
 
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toJson
+import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.network.core.engine.*
 import app.allever.android.lib.network.core.exception.ExceptionHandler
 import app.allever.android.lib.network.core.exception.NetworkException
@@ -10,6 +13,7 @@ import app.allever.android.lib.network.core.response.GsonConverter
 import app.allever.android.lib.network.core.response.ResponseAdapter
 import app.allever.android.lib.network.core.util.FailureResponseFactory
 import app.allever.android.lib.network.core.util.NetLogger
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.reflect.Type
@@ -102,6 +106,59 @@ object NetCore {
 
     // ==================== GET / POST / PUT / DELETE / PATCH ====================
 
+
+// ==================== inline reified 扩展函数 ====================
+// 解决 Java 泛型擦除问题：通过 TypeToken 保留完整类型信息
+// 使用方式：NetCore.getT<BaseResponse<UserData>>("/user") 代替 NetCore.get<BaseResponse<UserData>>("/user")
+
+    /**
+     * GET 请求（reified 版本，自动保留泛型类型信息）
+     *
+     * @param T 响应类型（泛型参数会被完整保留，不会擦除为 Object）
+     * @param path 接口路径
+     * @param block 请求构建 DSL
+     * @return 反序列化后的响应对象
+     */
+    suspend inline fun <reified T> getT(
+        path: String,
+        noinline block: (NetRequest.Builder.() -> Unit)? = null
+    ): T = get(path, type = object : TypeToken<T>() {}.type, block = block)
+
+    /**
+     * POST 请求（reified 版本）
+     */
+    suspend inline fun <reified T> postT(
+        path: String,
+        bodyData: Any? = null,
+        noinline block: (NetRequest.Builder.() -> Unit)? = null
+    ): T = post(path, bodyData, block, type = object : TypeToken<T>() {}.type)
+
+    /**
+     * PUT 请求（reified 版本）
+     */
+    suspend inline fun <reified T> putT(
+        path: String,
+        bodyData: Any? = null,
+        noinline block: (NetRequest.Builder.() -> Unit)? = null
+    ): T = put(path, bodyData, block, type = object : TypeToken<T>() {}.type)
+
+    /**
+     * DELETE 请求（reified 版本）
+     */
+    suspend inline fun <reified T> deleteT(
+        path: String,
+        noinline block: (NetRequest.Builder.() -> Unit)? = null
+    ): T = delete(path, block, type = object : TypeToken<T>() {}.type)
+
+    /**
+     * PATCH 请求（reified 版本）
+     */
+    suspend inline fun <reified T> patchT(
+        path: String,
+        bodyData: Any? = null,
+        noinline block: (NetRequest.Builder.() -> Unit)? = null
+    ): T = patch(path, bodyData, block, type = object : TypeToken<T>() {}.type)
+
     suspend fun <T> get(
         path: String,
         type: Type? = null,
@@ -112,7 +169,7 @@ object NetCore {
         path: String,
         bodyData: Any? = null,
         block: (NetRequest.Builder.() -> Unit)? = null,
-        type: Type? = null
+        type: Type? = object : TypeToken<T>() {}.type
     ): T = executeRequest(HttpMethod.POST, path, bodyData, block, type)
 
     suspend fun <T> put(
@@ -190,7 +247,7 @@ object NetCore {
                         )
                     }
 
-                // 使用显式传入的 Type 或 responseClass 或 T 的 Class
+                // 使用显式传入的 Type 或 responseType 或 responseClass 或 T 的 Class
                 val parsedResponse: Any? = when {
                     explicitType != null -> {
                         convertWithType(responseBody, explicitType)
@@ -219,13 +276,15 @@ object NetCore {
                         config.converter.convert(responseBody, Any::class.java) as? T
                             ?: return@withContext createFailureResponse(
                                 code = -3,
-                                message = "反序列化失败，请设置 responseClass",
+                                message = "反序列化失败，请设置 responseClass 或 responseType",
                                 explicitType
                             )
                     }
                 }
 
-                parsedResponse as T
+                val result = parsedResponse as T
+                log(TAG, "请求成功&转换成功: ${result?.toJson()}")
+                result
 
             } catch (e: Exception) {
                 NetLogger.logE(TAG, "请求异常: ${request?.url} → ${e.message}")
