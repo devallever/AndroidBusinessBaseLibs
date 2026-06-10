@@ -86,3 +86,4 @@ include(":sample-imageloader-core")
 include(":sample-camera-core")
 
 include(":z-sample-billing")
+include(":z-sample-cleaner")

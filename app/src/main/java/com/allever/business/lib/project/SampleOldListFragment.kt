@@ -14,6 +14,9 @@ class SampleOldListFragment: ListFragment<FragmentListBinding, ListViewModel, Te
     override fun getList(): MutableList<TextClickItem> = mutableListOf(
         TextClickItem("谷歌内购订阅支付") {
             ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_BILLING).navigation()
-        }
+        },
+        TextClickItem("清理工具(Demo)") {
+            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_CLEANER).navigation()
+        },
     )
 }

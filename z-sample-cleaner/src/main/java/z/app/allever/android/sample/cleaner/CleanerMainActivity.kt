@@ -1,0 +1,20 @@
+package z.app.allever.android.sample.cleaner
+
+import androidx.fragment.app.Fragment
+import app.allever.android.lib.common.SampleMainActivity
+import app.allever.android.lib.common.databinding.ActivitySampleMainBinding
+import app.allever.android.lib.core.helper.FragmentHelper
+import app.allever.android.lib.mvvm.base.BaseViewModel
+import com.alibaba.android.arouter.facade.annotation.Route
+
+/**
+ * https://gitee.com/antonyhuang/DeepCleanProject
+ */
+@Route(path = "/zcleaner/main")
+class CleanerMainActivity : SampleMainActivity<ActivitySampleMainBinding, BaseViewModel>() {
+
+    override fun getSampleName(): String = "清理大师(Demo)"
+
+    override fun getSampleFragment(): Fragment = CleanerMainFragment()
+
+}

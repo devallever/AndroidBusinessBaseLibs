@@ -36,5 +36,6 @@ class RouterPath {
         const val PATH_SAMPLE_CAMERA_CORE = "/camera/main"
 
         const val PATH_Z_SAMPLE_BILLING = "/zbilling/main"
+        const val PATH_Z_SAMPLE_CLEANER = "/zcleaner/main"
     }
 }
