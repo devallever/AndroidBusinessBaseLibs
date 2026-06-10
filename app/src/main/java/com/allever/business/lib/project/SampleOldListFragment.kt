@@ -29,6 +29,9 @@ class SampleOldListFragment: ListFragment<FragmentListBinding, ListViewModel, Te
         },
         TextClickItem("JNI") {
             ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_JNI).navigation()
-        }
+        },
+        TextClickItem("JNI-MK") {
+            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_JNI_MK).navigation()
+        },
     )
 }

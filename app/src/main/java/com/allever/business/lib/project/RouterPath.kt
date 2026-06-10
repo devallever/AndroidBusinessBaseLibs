@@ -41,5 +41,6 @@ class RouterPath {
         const val PATH_Z_SAMPLE_FUNCTION = "/zfunction/main"
         const val PATH_Z_SAMPLE_JETPACK = "/zjetpack/main"
         const val PATH_Z_SAMPLE_JNI = "/zjni/main"
+        const val PATH_Z_SAMPLE_JNI_MK = "/zjnimk/main"
     }
 }
