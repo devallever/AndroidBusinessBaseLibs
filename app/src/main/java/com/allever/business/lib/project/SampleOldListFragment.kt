@@ -39,5 +39,8 @@ class SampleOldListFragment: ListFragment<FragmentListBinding, ListViewModel, Te
         TextClickItem("LearningAndroid") {
             ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_LEARNING_ANDROID).navigation()
         },
+        TextClickItem("登录") {
+            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_LOGIN).navigation()
+        }
     )
 }

@@ -4,7 +4,7 @@ plugins {
     id("kotlin-kapt")
 }
 
-val modelPkg = "z.z.app.allever.android.sample.learning.android"
+val modelPkg = "z.app.allever.android.sample.learning.android"
 
 group = modelPkg
 
