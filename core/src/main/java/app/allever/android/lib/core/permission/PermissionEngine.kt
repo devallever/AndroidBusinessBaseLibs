@@ -36,8 +36,7 @@ object PermissionEngine {
 
     private const val DEFAULT_ENGINE_NAME = "Default"
 
-    @Volatile
-    internal var engine: IPermissionEngine? = null
+    internal var engine: IPermissionEngine = DefaultEngine()
     private val lock = Any()
 
     /**
@@ -50,7 +49,7 @@ object PermissionEngine {
      */
     fun init(engineFactory: () -> IPermissionEngine) {
         synchronized(lock) {
-            engine?.destroy()
+            engine.destroy()
             engine = engineFactory()
         }
     }

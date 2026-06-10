@@ -1,0 +1,21 @@
+package z.app.allever.android.sample.function.im.function.db.entity
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import z.app.allever.android.sample.function.im.constant.ActionType
+import z.app.allever.android.sample.function.im.constant.MessageType
+
+@Entity(tableName = "message")
+class MessageEntity {
+    @PrimaryKey(autoGenerate = true)
+    var id = 0L
+
+    //    @Embedded
+    var userInfoJson: String = ""
+    var actionType = ActionType.SEND
+    var time: Long = 0L
+    var fromUserId: Long = 0L
+    var toUserId: Long = 0L
+    var type = MessageType.TEXT
+    var content: String = ""
+}

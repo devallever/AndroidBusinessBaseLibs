@@ -38,5 +38,6 @@ class RouterPath {
         const val PATH_Z_SAMPLE_BILLING = "/zbilling/main"
         const val PATH_Z_SAMPLE_CLEANER = "/zcleaner/main"
         const val PATH_Z_SAMPLE_DESIGN_PATTERN = "/zdesignpattern/main"
+        const val PATH_Z_SAMPLE_FUNCTION = "/zfunction/main"
     }
 }

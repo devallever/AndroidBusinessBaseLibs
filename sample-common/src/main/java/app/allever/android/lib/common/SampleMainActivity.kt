@@ -8,10 +8,15 @@ import app.allever.android.lib.mvvm.base.BaseViewModel
 abstract class SampleMainActivity<VB, VM> :
     BaseActivity<ActivitySampleMainBinding, BaseViewModel>() {
 
+        companion object {
+            const val INTENT_PAGE_TITLE = "title"
+        }
+
     override fun inflateChildBinding() = ActivitySampleMainBinding.inflate(layoutInflater)
 
     override fun init() {
-        initTopBar(getSampleName())
+        val title = intent?.getStringExtra(INTENT_PAGE_TITLE)?:getSampleName()
+        initTopBar(title)
         FragmentHelper.addToContainer(
             supportFragmentManager, getSampleFragment(), R.id.fragmentContainer
         )
