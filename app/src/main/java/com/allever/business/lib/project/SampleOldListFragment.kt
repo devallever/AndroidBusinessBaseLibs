@@ -45,5 +45,11 @@ class SampleOldListFragment: ListFragment<FragmentListBinding, ListViewModel, Te
         TextClickItem("MaterialDesign") {
             ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_MATERIAL_DESIGN).navigation()
         },
+        TextClickItem("Safe") {
+            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_SAFE).navigation()
+        },
+        TextClickItem("ThirtyPart") {
+            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_THIRTY_PART).navigation()
+        },
     )
 }

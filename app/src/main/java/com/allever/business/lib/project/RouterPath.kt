@@ -46,5 +46,7 @@ class RouterPath {
         const val PATH_Z_SAMPLE_LEARNING_ANDROID = "/zlearningandroid/main"
         const val PATH_Z_SAMPLE_LOGIN = "/zlogin/main"
         const val PATH_Z_SAMPLE_MATERIAL_DESIGN = "/zmaterialdesign/main"
+        const val PATH_Z_SAMPLE_SAFE = "/zsafe/main"
+        const val PATH_Z_SAMPLE_THIRTY_PART = "/zthirtypart/main"
     }
 }
