@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<z.app.allever.android.lib.widget.ReboundNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/uiItemTitleStyle"
+            android:text="点赞效果" />
+
+        <z.app.allever.android.sample.ui.ui.widget.PressLikeView
+            android:id="@+id/pressLikeView"
+            android:layout_width="70dp"
+            android:layout_height="200dp" />
+
+        <TextView
+            style="@style/uiItemTitleStyle"
+            android:text="毛玻璃效果" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/blurBg"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_img" />
+
+            <eightbitlab.com.blurview.BlurView
+                android:id="@+id/blurView"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/blur_round_bg"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </eightbitlab.com.blurview.BlurView>
+
+            <net.center.blurview.ShapeBlurView
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                app:blur_corner_radius="45dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/blurView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            style="@style/uiItemTitleStyle"
+            android:text="自动滚动RecyclerView效果" />
+
+        <z.app.allever.android.sample.ui.ui.widget.AutoScrollRecyclerView
+            android:id="@+id/autoScrollRecyclerView"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+
+        <TextView
+            style="@style/uiItemTitleStyle"
+            android:text="标签文本自动换行效果" />
+
+        <TextView
+            android:id="@+id/tvTagAutoChangeLine"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/uiItemTitleStyle"
+            android:text="折叠RecyclerView Item" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/uiItemTitleStyle"
+            android:text="我的水波球体进度" />
+
+        <z.app.allever.android.sample.ui.ui.widget.MyWaterWaveProgressView
+            android:id="@+id/myWaterWaveProgressView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="10dp" />
+    </LinearLayout>
+
+</z.app.allever.android.lib.widget.ReboundNestedScrollView>

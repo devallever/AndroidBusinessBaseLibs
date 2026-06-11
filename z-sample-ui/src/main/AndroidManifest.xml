@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <application>
+        <activity android:name="z.app.allever.android.sample.ui.ui.sticktop.BaseTwoViewStickyTopActivity" />
+        <activity android:name="z.app.allever.android.sample.ui.ui.sticktop.RemoveAddViewStickyTopActivity" />
+        <activity android:name="z.app.allever.android.sample.ui.ui.sticktop.RecyclerViewHeaderStickyTopActivity" />
+        <activity android:name="z.app.allever.android.sample.ui.ui.sticktop.CoordinatorStickyTopActivity" />
+        <activity android:name="z.app.allever.android.sample.ui.ui.BlurActivity" />
+        <activity android:name="z.app.allever.android.sample.ui.UserCenterActivity" />
+        <activity
+            android:name="z.app.allever.android.sample.ui.ui.dialog.activitydialog.BottomActivityDialog"
+            android:theme="@style/BottomActivityDialog" />
+        <activity android:name="z.app.allever.android.sample.ui.ui.notification.NotificationActivity" />
+        <activity android:name="z.app.allever.android.sample.ui.ui.dragclose.PreviewPhotoActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
+        <activity android:name="z.app.allever.android.sample.ui.UIMainActivity" />
+    </application>
+</manifest>

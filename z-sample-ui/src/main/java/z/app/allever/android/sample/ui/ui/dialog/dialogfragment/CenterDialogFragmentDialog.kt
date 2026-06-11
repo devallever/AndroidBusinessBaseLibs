@@ -1,0 +1,36 @@
+package z.app.allever.android.sample.ui.ui.dialog.dialogfragment
+
+import android.os.Bundle
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
+import app.allever.android.lib.core.helper.DisplayHelper
+import z.app.allever.android.sample.ui.R
+import z.app.allever.android.sample.ui.databinding.DialogCenterBinding
+
+class CenterDialogFragmentDialog : DialogFragment() {
+    private lateinit var mBinding: DialogCenterBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //底部上移弹出
+        setStyle(STYLE_NORMAL, com.google.android.material.R.style.Theme_Design_BottomSheetDialog)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(DisplayHelper.dip2px(285), DisplayHelper.dip2px(250))
+        dialog?.window?.setGravity(Gravity.CENTER)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        mBinding = DialogCenterBinding.inflate(layoutInflater)
+        return mBinding.root
+    }
+}

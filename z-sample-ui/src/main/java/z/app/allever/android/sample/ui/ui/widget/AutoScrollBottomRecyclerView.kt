@@ -1,0 +1,174 @@
+package z.app.allever.android.sample.ui.ui.widget
+
+import android.content.Context
+import android.util.AttributeSet
+import android.view.MotionEvent
+import androidx.core.view.marginBottom
+import androidx.core.view.marginTop
+import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.RecyclerView
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.function.work.TimerTask2
+import app.allever.android.lib.core.helper.DisplayHelper
+import app.allever.android.lib.core.helper.ViewHelper
+import z.app.allever.android.sample.ui.ui.getRecyclerViewItem
+
+/**
+ * RecyclerView 自动循环滚动， 已底部item为边界
+ * https://blog.csdn.net/zhanghuaiwang/article/details/123223178
+ */
+class AutoScrollBottomRecyclerView(context: Context, attrs: AttributeSet?) :
+    RecyclerView(context, attrs) {
+
+    private var mIsTouching = false
+    private var mIsAlreadyScrollToBottom = false
+    private var mInterval = 1000L
+    private var mAutoTask: TimerTask2 = createTimer()
+    private var mScrollOffset = DisplayHelper.dip2px(20)
+
+    init {
+        addOnScrollListener(object : OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == SCROLL_STATE_IDLE) {
+                    // 第一个可见位置
+                    val firstItem = getChildLayoutPosition(getChildAt(0))
+                    // 最后一个可见位置
+                    val lastItem = getChildLayoutPosition(getChildAt(childCount - 1))
+//                    log("第一个可见position = $firstItem")
+//                    log("最后一个可见position = $lastItem")
+                }
+            }
+        })
+    }
+
+    fun getLastVisiblePosition() = getChildLayoutPosition(getChildAt(childCount - 1))
+
+    override fun onTouchEvent(e: MotionEvent?): Boolean {
+        val action = e?.action
+        if (action == MotionEvent.ACTION_DOWN) {
+            mIsTouching = true
+        }
+        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+            mIsTouching = false
+        }
+        return super.onTouchEvent(e)
+    }
+
+    fun start() {
+        mAutoTask.cancel()
+        mAutoTask = createTimer()
+        mAutoTask.start()
+    }
+
+    fun stop() {
+        mAutoTask.cancel()
+    }
+
+    fun setScrollOffset(value: Int) {
+        mScrollOffset = value
+    }
+
+    fun setInterval(interval: Long, autoStart: Boolean = false) {
+        mInterval = interval
+        if (autoStart) {
+            start()
+        }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        stop()
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        start()
+    }
+
+    private fun createTimer() = TimerTask2(context as? LifecycleOwner, mInterval, true) {
+//            smoothScrollBy(0, mScrollOffset)
+
+        // 跳转位置在第一个可见项之后，最后一个可见项之前
+        // smoothScrollToPosition根本不会动，此时调用smoothScrollBy来滑动到指定位置
+//            val movePosition = position - mFirstVisiblePosition;
+        val movePosition = 1
+        if (movePosition in 0 until childCount) {
+
+//            val lastVisiblePosition = getChildLayoutPosition(getChildAt(childCount-1))
+//            val lastChild = layoutManager?.getChildAt(lastVisiblePosition)
+//            val arr = ViewHelper.getLocation(lastChild!!)
+//            val screenH = DisplayHelper.getScreenHeight()
+//            val offsetY = screenH - (arr?.get(1) ?: screenH)
+
+            //屏幕可见的item数
+            log("childCount = $childCount")
+            //最后一个可见view
+            val lastView = getChildAt(childCount - 1)
+            val childAdapterPosition = getChildAdapterPosition(lastView)
+            log("childAdapterPosition = $childAdapterPosition")
+            val childLayoutPosition = getChildLayoutPosition(lastView)
+            log("childLayoutPosition = $childLayoutPosition")
+            log("lastView.y = ${lastView.y}")
+            log("lastView.top = ${lastView.top}")
+            log("lastView.height = ${lastView.height}")
+            log("lostView.marginBottom = ${lastView.marginBottom}")
+            log("lostView.marginTop = ${lastView.marginTop}")
+            val arr = ViewHelper.getLocation(lastView)
+            log("lastView in Window y = ${arr?.get(1) ?: 0}")
+            log("screenH = ${DisplayHelper.getScreenHeight()}")
+            log("fullScreenH = ${DisplayHelper.getFullScreenHeight(context)}")
+            log("naviBarH = ${DisplayHelper.getNavigationBarHeight(context)}")
+
+
+            var offsetY = lastView.height -
+                    (DisplayHelper.getFullScreenHeight(context) - arr?.get(1)!! - DisplayHelper.getNavigationBarHeight(
+                        context
+                    )) + lastView.marginBottom + 1
+
+            log("offsetY = $offsetY")
+
+            if (offsetY == 0) {
+                val adapterPosition = getChildAdapterPosition(lastView) + 1
+                val nextView = adapter?.getRecyclerViewItem(this, adapterPosition)
+                nextView?.post {
+                    offsetY = nextView.height
+                    log("next offsetY = $offsetY")
+                    scrollToOffset(offsetY)
+                }
+            }
+
+
+            scrollToOffset(offsetY)
+
+
+        }
+    }
+
+    private fun scrollToOffset(offsetY: Int) {
+//        val top = getChildAt(movePosition).top
+        if (!mIsTouching) {
+            val itemCount = adapter?.itemCount ?: 0
+//                log("测试滚动到底部 itemCount = $itemCount")
+//                log("测试滚动到底部 最后可见Position = ${getLastVisiblePosition()}")
+            if (itemCount <= getLastVisiblePosition() + 1) {
+                if (!mIsAlreadyScrollToBottom) {
+                    smoothScrollBy(0, offsetY)
+                }
+                mIsAlreadyScrollToBottom = true
+                return
+            }
+            smoothScrollBy(0, offsetY)
+            mIsAlreadyScrollToBottom = false
+        }
+    }
+
+    private fun log(msg: String) {
+        log("AutoScrollRecyclerView", msg)
+    }
+
+    //禁止手动滑动
+//    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+//        return true
+//    }
+}
