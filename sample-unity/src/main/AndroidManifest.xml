@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity android:name="com.plinkopro.wincash.ui.activity.MainActivity" />
+        <activity android:name="app.allever.android.sample.unity.UnitySampleMainActivity" />
+        <activity android:name="app.allever.android.sample.unity.UnityContainerActivity" />
+    </application>
+</manifest>

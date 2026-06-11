@@ -60,6 +60,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         },
         TextClickItem("CameraCore") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CAMERA_CORE).navigation()
-        }
+        },
+        TextClickItem("Unity") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_UNITY).navigation()
+        },
     )
 }

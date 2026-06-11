@@ -1,0 +1,10 @@
+<resources>
+    <string name="game_view_content_description">Game view</string>
+
+    <string name="loading">Loading…</string>
+
+    <string name="ad_fail_state_1">Ad Display Failed</string>
+    <string name="ad_fail_state_2">Ad not ready yet!</string>
+    <string name="ad_fail_state_3">Ad exceeds max display limit</string>
+
+</resources>
