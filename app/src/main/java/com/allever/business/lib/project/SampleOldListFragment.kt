@@ -45,14 +45,23 @@ class SampleOldListFragment: ListFragment<FragmentListBinding, ListViewModel, Te
         TextClickItem("MaterialDesign") {
             ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_MATERIAL_DESIGN).navigation()
         },
+        TextClickItem("MicrosoftSpeech") {
+            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_MICROSOFT_SPEECH).navigation()
+        },
         TextClickItem("Safe") {
             ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_SAFE).navigation()
         },
         TextClickItem("ThirtyPart") {
             ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_THIRTY_PART).navigation()
         },
+        TextClickItem("Toolbox") {
+            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_TOOLBOX).navigation()
+        },
         TextClickItem("UI") {
             ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_UI).navigation()
+        },
+        TextClickItem("VideoEditor") {
+            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_VIDEO_EDITOR).navigation()
         },
     )
 }

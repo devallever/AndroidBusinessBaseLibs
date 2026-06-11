@@ -49,5 +49,8 @@ class RouterPath {
         const val PATH_Z_SAMPLE_SAFE = "/zsafe/main"
         const val PATH_Z_SAMPLE_THIRTY_PART = "/zthirtypart/main"
         const val PATH_Z_SAMPLE_UI = "/zui/main"
+        const val PATH_Z_SAMPLE_TOOLBOX = "/ztoolbox/main"
+        const val PATH_Z_SAMPLE_VIDEO_EDITOR = "/zvideoeditor/main"
+        const val PATH_Z_SAMPLE_MICROSOFT_SPEECH = "/zmicrosoftspeech/main"
     }
 }
