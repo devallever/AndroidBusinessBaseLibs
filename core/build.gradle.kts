@@ -15,7 +15,7 @@ dependencies {
     api(libs.androidx.core.ktx)
     api(libs.androidx.lifecycle.runtime.ktx)
     api(libs.androidx.appcompat)
-    api(libs.material)
+//    api(libs.material)
     api(libs.androidx.constraintlayout)
     api(libs.androidx.activity.ktx)
     api(libs.androidx.fragment.ktx)
@@ -24,9 +24,6 @@ dependencies {
     api(libs.androidx.lifecycle.viewmodel.ktx)
     api(libs.androidx.lifecycle.extensions)
     api(libs.androidx.lifecycle.livedata.ktx)
-    api(libs.androidx.datastore.core)
-    api(libs.androidx.datastore)
-    api(libs.androidx.datastore.preferences)
     api(libs.androidx.exifinterface)
     api(libs.androidx.paging.runtime.ktx)
 
@@ -37,7 +34,5 @@ dependencies {
     // gson
     api(libs.gson)
 
-    // thirty party
-    api(libs.mmkv.static)
     api(libs.basepopup)
 }

@@ -8,10 +8,6 @@ import android.view.Window;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 /**
  * Utils for status bar
@@ -50,8 +46,6 @@ public class StatusBarCompat {
     public static void setStatusBarColor(@NonNull Activity activity, @ColorInt int statusColor) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             StatusBarCompatLollipop.setStatusBarColor(activity, statusColor);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            StatusBarCompatKitKat.setStatusBarColor(activity, statusColor);
         }
     }
 
@@ -72,19 +66,17 @@ public class StatusBarCompat {
     public static void translucentStatusBar(@NonNull Activity activity, boolean hideStatusBarBackground) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             StatusBarCompatLollipop.translucentStatusBar(activity, hideStatusBarBackground);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            StatusBarCompatKitKat.translucentStatusBar(activity);
         }
     }
 
-    public static void setStatusBarColorForCollapsingToolbar(@NonNull Activity activity, AppBarLayout appBarLayout, CollapsingToolbarLayout collapsingToolbarLayout,
-                                                             Toolbar toolbar, @ColorInt int statusColor) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarCompatLollipop.setStatusBarColorForCollapsingToolbar(activity, appBarLayout, collapsingToolbarLayout, toolbar, statusColor);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            StatusBarCompatKitKat.setStatusBarColorForCollapsingToolbar(activity, appBarLayout, collapsingToolbarLayout, toolbar, statusColor);
-        }
-    }
+//    public static void setStatusBarColorForCollapsingToolbar(@NonNull Activity activity, AppBarLayout appBarLayout, CollapsingToolbarLayout collapsingToolbarLayout,
+//                                                             Toolbar toolbar, @ColorInt int statusColor) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            StatusBarCompatLollipop.setStatusBarColorForCollapsingToolbar(activity, appBarLayout, collapsingToolbarLayout, toolbar, statusColor);
+//        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            StatusBarCompatKitKat.setStatusBarColorForCollapsingToolbar(activity, appBarLayout, collapsingToolbarLayout, toolbar, statusColor);
+//        }
+//    }
 
     /**
      * 使用日间模式，字体黑色

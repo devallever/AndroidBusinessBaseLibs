@@ -18,6 +18,7 @@ dependencies {
     api(project(":lib-media-picker"))
     api(project(":lib-store-core"))
     api(project(":z-lib-widget"))
+    api(libs.material)
 
     implementation("com.github.Dimezis:BlurView:version-2.0.6")
     implementation("com.github.centerzx:ShapeBlurView:1.0.5")

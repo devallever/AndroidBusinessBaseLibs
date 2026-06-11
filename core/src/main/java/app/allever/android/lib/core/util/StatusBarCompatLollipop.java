@@ -11,14 +11,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.lang.ref.WeakReference;
 
@@ -105,76 +98,76 @@ class StatusBarCompatLollipop {
      * 5. change statusBarColor by AppBarLayout's offset.
      * 6. add Listener to change statusBarColor
      */
-    static void setStatusBarColorForCollapsingToolbar(Activity activity, final AppBarLayout appBarLayout, final CollapsingToolbarLayout collapsingToolbarLayout,
-                                                      Toolbar toolbar, final int statusColor) {
-        Window window = activity.getWindow();
-
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(Color.TRANSPARENT);
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-
-        ViewCompat.setOnApplyWindowInsetsListener(collapsingToolbarLayout, new OnApplyWindowInsetsListener() {
-            @Override
-            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
-                return insets;
-            }
-        });
-
-        ViewGroup mContentView = window.findViewById(Window.ID_ANDROID_CONTENT);
-        View mChildView = mContentView.getChildAt(0);
-        if (mChildView != null) {
-            ViewCompat.setFitsSystemWindows(mChildView, false);
-            ViewCompat.requestApplyInsets(mChildView);
-        }
-
-        ((View) appBarLayout.getParent()).setFitsSystemWindows(false);
-        appBarLayout.setFitsSystemWindows(false);
-
-        toolbar.setFitsSystemWindows(false);
-        if (toolbar.getTag() == null) {
-            CollapsingToolbarLayout.LayoutParams lp = (CollapsingToolbarLayout.LayoutParams) toolbar.getLayoutParams();
-            int statusBarHeight = getStatusBarHeight(activity);
-            lp.height += statusBarHeight;
-            toolbar.setLayoutParams(lp);
-            toolbar.setPadding(toolbar.getPaddingLeft(), toolbar.getPaddingTop() + statusBarHeight, toolbar.getPaddingRight(), toolbar.getPaddingBottom());
-            toolbar.setTag(true);
-        }
-
-        CoordinatorLayout.Behavior behavior = ((CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams()).getBehavior();
-        if (behavior != null && behavior instanceof AppBarLayout.Behavior) {
-            int verticalOffset = ((AppBarLayout.Behavior) behavior).getTopAndBottomOffset();
-            if (Math.abs(verticalOffset) > appBarLayout.getHeight() - collapsingToolbarLayout.getScrimVisibleHeightTrigger()) {
-                window.setStatusBarColor(statusColor);
-            } else {
-                window.setStatusBarColor(Color.TRANSPARENT);
-            }
-        } else {
-            window.setStatusBarColor(Color.TRANSPARENT);
-        }
-
-        collapsingToolbarLayout.setFitsSystemWindows(false);
-        final WeakReference<Window> windowWeakReference = new WeakReference<>(window);
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                Window weakWindow = windowWeakReference.get();
-                if (weakWindow != null) {
-                    if (Math.abs(verticalOffset) > appBarLayout.getHeight() - collapsingToolbarLayout.getScrimVisibleHeightTrigger()) {
-                        if (weakWindow.getStatusBarColor() != statusColor) {
-                            startColorAnimation(weakWindow.getStatusBarColor(), statusColor, collapsingToolbarLayout.getScrimAnimationDuration(), windowWeakReference);
-                        }
-                    } else {
-                        if (weakWindow.getStatusBarColor() != Color.TRANSPARENT) {
-                            startColorAnimation(weakWindow.getStatusBarColor(), Color.TRANSPARENT, collapsingToolbarLayout.getScrimAnimationDuration(), windowWeakReference);
-                        }
-                    }
-                }
-            }
-        });
-        collapsingToolbarLayout.getChildAt(0).setFitsSystemWindows(false);
-        collapsingToolbarLayout.setStatusBarScrimColor(statusColor);
-    }
+//    static void setStatusBarColorForCollapsingToolbar(Activity activity, final AppBarLayout appBarLayout, final CollapsingToolbarLayout collapsingToolbarLayout,
+//                                                      Toolbar toolbar, final int statusColor) {
+//        Window window = activity.getWindow();
+//
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        window.setStatusBarColor(Color.TRANSPARENT);
+//        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+//
+//        ViewCompat.setOnApplyWindowInsetsListener(collapsingToolbarLayout, new OnApplyWindowInsetsListener() {
+//            @Override
+//            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+//                return insets;
+//            }
+//        });
+//
+//        ViewGroup mContentView = window.findViewById(Window.ID_ANDROID_CONTENT);
+//        View mChildView = mContentView.getChildAt(0);
+//        if (mChildView != null) {
+//            ViewCompat.setFitsSystemWindows(mChildView, false);
+//            ViewCompat.requestApplyInsets(mChildView);
+//        }
+//
+//        ((View) appBarLayout.getParent()).setFitsSystemWindows(false);
+//        appBarLayout.setFitsSystemWindows(false);
+//
+//        toolbar.setFitsSystemWindows(false);
+//        if (toolbar.getTag() == null) {
+//            CollapsingToolbarLayout.LayoutParams lp = (CollapsingToolbarLayout.LayoutParams) toolbar.getLayoutParams();
+//            int statusBarHeight = getStatusBarHeight(activity);
+//            lp.height += statusBarHeight;
+//            toolbar.setLayoutParams(lp);
+//            toolbar.setPadding(toolbar.getPaddingLeft(), toolbar.getPaddingTop() + statusBarHeight, toolbar.getPaddingRight(), toolbar.getPaddingBottom());
+//            toolbar.setTag(true);
+//        }
+//
+//        CoordinatorLayout.Behavior behavior = ((CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams()).getBehavior();
+//        if (behavior != null && behavior instanceof AppBarLayout.Behavior) {
+//            int verticalOffset = ((AppBarLayout.Behavior) behavior).getTopAndBottomOffset();
+//            if (Math.abs(verticalOffset) > appBarLayout.getHeight() - collapsingToolbarLayout.getScrimVisibleHeightTrigger()) {
+//                window.setStatusBarColor(statusColor);
+//            } else {
+//                window.setStatusBarColor(Color.TRANSPARENT);
+//            }
+//        } else {
+//            window.setStatusBarColor(Color.TRANSPARENT);
+//        }
+//
+//        collapsingToolbarLayout.setFitsSystemWindows(false);
+//        final WeakReference<Window> windowWeakReference = new WeakReference<>(window);
+//        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//                Window weakWindow = windowWeakReference.get();
+//                if (weakWindow != null) {
+//                    if (Math.abs(verticalOffset) > appBarLayout.getHeight() - collapsingToolbarLayout.getScrimVisibleHeightTrigger()) {
+//                        if (weakWindow.getStatusBarColor() != statusColor) {
+//                            startColorAnimation(weakWindow.getStatusBarColor(), statusColor, collapsingToolbarLayout.getScrimAnimationDuration(), windowWeakReference);
+//                        }
+//                    } else {
+//                        if (weakWindow.getStatusBarColor() != Color.TRANSPARENT) {
+//                            startColorAnimation(weakWindow.getStatusBarColor(), Color.TRANSPARENT, collapsingToolbarLayout.getScrimAnimationDuration(), windowWeakReference);
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//        collapsingToolbarLayout.getChildAt(0).setFitsSystemWindows(false);
+//        collapsingToolbarLayout.setStatusBarScrimColor(statusColor);
+//    }
 
     /**
      * use ValueAnimator to change statusBarColor when using collapsingToolbarLayout
