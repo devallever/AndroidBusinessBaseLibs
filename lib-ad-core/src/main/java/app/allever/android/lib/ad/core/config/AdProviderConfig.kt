@@ -11,7 +11,7 @@ data class AdProviderConfig(
     val nativeAdId: String = "",
     val supportWaterfall: Boolean = false,
     val supportBidding: Boolean = false,
-    val biddingTimeout: Long = 5000L
+    val biddingTimeout: Long = 20000L
 ) {
     fun isNotEmpty(): Boolean = appId.isNotEmpty()
 

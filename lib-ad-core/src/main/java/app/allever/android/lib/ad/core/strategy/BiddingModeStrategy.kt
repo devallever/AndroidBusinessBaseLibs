@@ -315,10 +315,10 @@ class BiddingModeStrategy : BaseModeStrategy() {
     }
 
     private fun getBiddingTimeout(providers: List<Pair<String, AdProviderConfig>>): Long {
-        if (providers.isEmpty()) return 5000L
+        if (providers.isEmpty()) return 20000L
 
         return providers.maxOf { (_, config) ->
-            config.biddingTimeout.coerceAtLeast(1000L)
+            config.biddingTimeout.coerceAtLeast(10000L)
         }
     }
 
