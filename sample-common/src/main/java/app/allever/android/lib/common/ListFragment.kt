@@ -16,6 +16,12 @@ abstract class ListFragment<DB : ViewBinding, VM : BaseViewModel, T> :
 
     protected var mAdapter: BaseQuickAdapter<T, *>? = null
 
+    /** 外部注入的数据源提供者（替代抽象方法，支持 public static Fragment） */
+    var listProvider: (() -> MutableList<T>)? = null
+
+    /** 外部注入的适配器提供者（替代抽象方法，支持 public static Fragment） */
+    var adapterProvider: (() -> BaseQuickAdapter<T, *>)? = null
+
     override fun inflate() = FragmentListBinding.inflate(layoutInflater)
 
     override fun init() {
@@ -52,8 +58,11 @@ abstract class ListFragment<DB : ViewBinding, VM : BaseViewModel, T> :
         }
     }
 
-    abstract fun getAdapter(): BaseQuickAdapter<T, *>
-    abstract fun getList(): MutableList<T>
+    open fun getAdapter(): BaseQuickAdapter<T, *> =
+        adapterProvider?.invoke() ?: throw NotImplementedError("请设置 adapterProvider 或重写 getAdapter()")
+
+    open fun getList(): MutableList<T> =
+        listProvider?.invoke() ?: throw NotImplementedError("请设置 listProvider 或重写 getList()")
     protected open fun onItemClick(position: Int, item: T) {
 
     }
