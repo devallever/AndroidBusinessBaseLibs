@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
+    id("kotlin-parcelize")
+//    id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
 val modelPkg = "com.github.shadowsocks.core"
@@ -12,9 +14,14 @@ android {
     namespace = modelPkg
 
     defaultConfig {
-        kapt.arguments {
-            arg("room.incremental", true)
-            arg("room.schemaLocation", "$projectDir/schemas")
+        kapt {
+            //kapt 处理 AIDL 生成的 TrafficStats.java 时，遇到 Kotlin 元数据注解中引用的类不存在（ @error.NonExistentClass() ），导致编译失败。
+            //kapt 在处理 AIDL 生成的 Java 文件时，遇到了不存在的注解类。最简单的修复方式是启用 correctErrorTypes ：
+            correctErrorTypes = true
+            arguments {
+                arg("room.incremental", true)
+                arg("room.schemaLocation", "$projectDir/schemas")
+            }
         }
     }
 
@@ -61,7 +68,7 @@ dependencies {
     //viewmodel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     //kotlinx.parcelize
-    implementation("org.jetbrains.kotlin:kotlin-parcelize-runtime:2.0.0")
+    implementation("org.jetbrains.kotlin:kotlin-parcelize-runtime:2.0.21")
 
 //    implementation("androidx.core:core-ktx:1.9.0")
 //    implementation("com.google.android.material:material:1.8.0")
