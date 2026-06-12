@@ -2,6 +2,24 @@ package com.allever.business.lib.project
 
 class RouterPath {
     companion object {
+        const val PATH_Z_SAMPLE_BILLING = "/zbilling/main"
+        const val PATH_Z_SAMPLE_CLEANER = "/zcleaner/main"
+        const val PATH_Z_SAMPLE_DESIGN_PATTERN = "/zdesignpattern/main"
+        const val PATH_Z_SAMPLE_FUNCTION = "/zfunction/main"
+        const val PATH_Z_SAMPLE_JETPACK = "/zjetpack/main"
+        const val PATH_Z_SAMPLE_JNI = "/zjni/main"
+        const val PATH_Z_SAMPLE_JNI_MK = "/zjnimk/main"
+        const val PATH_Z_SAMPLE_KOTLIN = "/zkotlin/main"
+        const val PATH_Z_SAMPLE_LEARNING_ANDROID = "/zlearningandroid/main"
+        const val PATH_Z_SAMPLE_LOGIN = "/zlogin/main"
+        const val PATH_Z_SAMPLE_MATERIAL_DESIGN = "/zmaterialdesign/main"
+        const val PATH_Z_SAMPLE_SAFE = "/zsafe/main"
+        const val PATH_Z_SAMPLE_THIRTY_PART = "/zthirtypart/main"
+        const val PATH_Z_SAMPLE_UI = "/zui/main"
+        const val PATH_Z_SAMPLE_TOOLBOX = "/ztoolbox/main"
+        const val PATH_Z_SAMPLE_VIDEO_EDITOR = "/zvideoeditor/main"
+        const val PATH_Z_SAMPLE_MICROSOFT_SPEECH = "/zmicrosoftspeech/main"
+        ////////////////////////////////////////////////////////////////////////////////////////////
         const val PATH_MAIN = "/app/main"
 
         const val PATH_SAMPLE_MVVM = "/mvvm/main"
@@ -36,23 +54,6 @@ class RouterPath {
         const val PATH_SAMPLE_CAMERA_CORE = "/camera/main"
         const val PATH_SAMPLE_UNITY = "/unity/main"
         const val PATH_SAMPLE_VPN = "/vpn/main"
-
-        const val PATH_Z_SAMPLE_BILLING = "/zbilling/main"
-        const val PATH_Z_SAMPLE_CLEANER = "/zcleaner/main"
-        const val PATH_Z_SAMPLE_DESIGN_PATTERN = "/zdesignpattern/main"
-        const val PATH_Z_SAMPLE_FUNCTION = "/zfunction/main"
-        const val PATH_Z_SAMPLE_JETPACK = "/zjetpack/main"
-        const val PATH_Z_SAMPLE_JNI = "/zjni/main"
-        const val PATH_Z_SAMPLE_JNI_MK = "/zjnimk/main"
-        const val PATH_Z_SAMPLE_KOTLIN = "/zkotlin/main"
-        const val PATH_Z_SAMPLE_LEARNING_ANDROID = "/zlearningandroid/main"
-        const val PATH_Z_SAMPLE_LOGIN = "/zlogin/main"
-        const val PATH_Z_SAMPLE_MATERIAL_DESIGN = "/zmaterialdesign/main"
-        const val PATH_Z_SAMPLE_SAFE = "/zsafe/main"
-        const val PATH_Z_SAMPLE_THIRTY_PART = "/zthirtypart/main"
-        const val PATH_Z_SAMPLE_UI = "/zui/main"
-        const val PATH_Z_SAMPLE_TOOLBOX = "/ztoolbox/main"
-        const val PATH_Z_SAMPLE_VIDEO_EDITOR = "/zvideoeditor/main"
-        const val PATH_Z_SAMPLE_MICROSOFT_SPEECH = "/zmicrosoftspeech/main"
+        const val PATH_SAMPLE_CLEANER = "/cleaner/main"
     }
 }

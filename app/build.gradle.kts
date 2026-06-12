@@ -58,8 +58,9 @@ dependencies {
 //    implementation(project(":sample-imageloader-core"))
 //    implementation(project(":sample-camera-core"))
 //    implementation(project(":sample-unity"))
-    implementation(project(":sample-vpn"))
-    implementation(project(":lib-vpn-shadowsocks-core"))
+//    implementation(project(":sample-vpn"))
+    implementation(project(":sample-cleaner"))
+
 //    implementation(project(":z-sample-billing"))
 //    implementation(project(":z-sample-cleaner"))
 //    implementation(project(":z-sample-designpattern"))
