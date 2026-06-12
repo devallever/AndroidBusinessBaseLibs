@@ -11,10 +11,10 @@ import io.github.studycwq.extension.asLiveData
 import kotlinx.coroutines.flow.Flow
 
 open class BaseViewModel : ViewModel() {
-    protected val _loadMoreStatusLiveData = MutableLiveData(false)
-    val loadMoreStatusLiveData = _loadMoreStatusLiveData.asLiveData()
-    protected val _refreshStatusLiveData = MutableLiveData(false)
-    val refreshStatusLiveData = _refreshStatusLiveData.asLiveData()
+    protected val _loadMoreStatusLiveData  by lazy { MutableLiveData(false) }
+    val loadMoreStatusLiveData by lazy { _loadMoreStatusLiveData.asLiveData() }
+    protected val _refreshStatusLiveData by lazy { MutableLiveData(false) }
+    val refreshStatusLiveData by lazy { _refreshStatusLiveData.asLiveData() }
 
     /***
      * Activity#onCreate()后调用

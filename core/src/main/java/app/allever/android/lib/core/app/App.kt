@@ -1,11 +1,14 @@
 package app.allever.android.lib.core.app
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import app.allever.android.lib.core.BuildConfig
+import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toastDebug
 import app.allever.android.lib.core.function.crash.Cockroach
@@ -23,6 +26,8 @@ abstract class App : Application() {
         initSwipeBack()
 
         initCrashHandler()
+
+        registerActivityLifecycleCallback()
     }
 
     abstract fun init()
@@ -38,6 +43,9 @@ abstract class App : Application() {
         val DEBUG by lazy {
             BuildConfig.DEBUG
         }
+
+        private var activityCount = 0
+        var alreadyInBackground = false
 
         fun init(context: Context) {
             Companion.context = context.applicationContext
@@ -89,5 +97,40 @@ abstract class App : Application() {
 
     private fun initSwipeBack() {
         BGASwipeBackHelper.init(this, null)
+    }
+
+    private fun registerActivityLifecycleCallback() {
+        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
+            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+            }
+
+            override fun onActivityStarted(p0: Activity) {
+                //remove from onResume to onStart
+                //reason: some case just invoke onStart, suddenly onStop,so onStop invoke many times
+                activityCount++
+                log("onActivityStarted: ${p0.javaClass.simpleName}, count = ${activityCount}")
+            }
+
+            override fun onActivityResumed(activity: Activity) {
+                log("onActivityResumed: ${activity::class.java.simpleName}")
+            }
+
+            override fun onActivityPaused(activity: Activity) {
+                log("onActivityPaused: ${activity::class.java.simpleName}")
+            }
+
+            override fun onActivityStopped(p0: Activity) {
+                activityCount--
+                log("onActivityStopped: ${p0.javaClass.simpleName}, count = ${activityCount}")
+                alreadyInBackground = activityCount == 0
+            }
+
+            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
+            }
+
+            override fun onActivityDestroyed(activity: Activity) {
+                log("onActivityDestroyed: ${activity.javaClass.simpleName}, count = ${activityCount}")
+            }
+        })
     }
 }

@@ -1,6 +1,8 @@
 package app.allever.android.lib.core.helper
 
+import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
+import java.util.concurrent.TimeUnit
 
 object TimeHelper {
 
@@ -50,6 +52,15 @@ object TimeHelper {
     fun formatTimeYYYY_MM_DD_HH_MM_SS(time: Long): String {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         return simpleDateFormat.format(time)
+    }
+
+    @SuppressLint("DefaultLocale")
+    fun formatTimeStampToHMS(timestamp: Long): String {
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(timestamp) % 60
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(timestamp) % 60
+        val hours = TimeUnit.MILLISECONDS.toHours(timestamp)
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+
     }
 
     fun getSecondByDay(day: Int): Int {
