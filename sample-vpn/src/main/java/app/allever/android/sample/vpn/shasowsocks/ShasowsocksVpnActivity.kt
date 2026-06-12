@@ -24,10 +24,26 @@ class ShasowsocksVpnActivity: BaseActivity<ActivityShadowsocksVpnBinding, BaseVi
                 ShadowsocksHelper.switchNode()
             }
             btnConnect.setOnClickListener {
-                handleTapToConnectOrDisconnect()
+                when (DataStore.serviceState) {
+                    BaseService.State.Stopped, BaseService.State.Idle -> {
+                        //Connect
+                        ShadowsocksHelper.getSelectedNodeItem()?.entity?.let {
+                            Core.startService()
+                        }
+                    }
+                    else -> {}
+                }
             }
             btnDisConnect.setOnClickListener {
-                handleTapToConnectOrDisconnect()
+                when (DataStore.serviceState) {
+
+                    BaseService.State.Connected -> {
+                        Core.stopService()
+                        ShadowsocksHelper.resetConnectTime()
+                    }
+                    else -> {
+                    }
+                }
             }
             btnAddTime.setOnClickListener {
                 ShadowsocksHelper.appendConnectTime()
@@ -66,31 +82,4 @@ class ShasowsocksVpnActivity: BaseActivity<ActivityShadowsocksVpnBinding, BaseVi
         }
     }
 
-    private fun handleTapToConnectOrDisconnect() {
-        when (DataStore.serviceState) {
-            BaseService.State.Stopped, BaseService.State.Idle -> {
-                //Connect
-                ShadowsocksHelper.getSelectedNodeItem()?.entity?.let {
-                    Core.startService()
-                }
-            }
-
-            BaseService.State.Connected -> {
-                Core.stopService()
-                ShadowsocksHelper.resetConnectTime()
-            }
-            BaseService.State.Connecting -> {
-                //Disconnect
-                return
-            }
-            BaseService.State.Stopping -> {
-                //Disconnect
-                return
-            }
-
-            else -> {
-
-            }
-        }
-    }
 }
