@@ -53,8 +53,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
     //work
-    implementation("androidx.work:work-multiprocess:2.7.1")
-    implementation("androidx.work:work-runtime-ktx:2.7.1")
+    api("androidx.work:work-multiprocess:2.7.1")
+    api("androidx.work:work-runtime-ktx:2.7.1")
     implementation("com.google.android.gms:play-services-oss-licenses:17.0.0")
     //gson
     implementation(libs.gson)

@@ -64,5 +64,8 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextClickItem("Unity") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_UNITY).navigation()
         },
+        TextClickItem("VPN") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_VPN).navigation()
+        },
     )
 }

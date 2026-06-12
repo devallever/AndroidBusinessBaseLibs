@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">AndroidBusinessBaseLibs</string>
+
+    <!-- shadowsocks -->
+    <string name="ticker_success">Flash Tunnel VPN started.</string>
+    <string name="traffic">%1$s↑\t%2$s↓</string>
+    <string name="speed">%s/s</string>
 </resources>
