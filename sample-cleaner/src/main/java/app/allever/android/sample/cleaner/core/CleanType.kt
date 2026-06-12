@@ -22,6 +22,9 @@ enum class CleanType(val displayName: String) {
     /** 广告缓存：Ad SDK 生成的缓存 */
     AD_CACHE("广告缓存"),
 
+    /** 安装包：*.apk 文件（已安装或下载的安装包） */
+    APK("安装包"),
+
     /** 大文件扫描（>= 阈值） */
     LARGE_FILE("大文件"),
 

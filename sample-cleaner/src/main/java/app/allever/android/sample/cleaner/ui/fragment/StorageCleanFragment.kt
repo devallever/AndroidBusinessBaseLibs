@@ -8,42 +8,54 @@ import app.allever.android.lib.common.BaseFragment
 import app.allever.android.sample.cleaner.CleanerViewModel
 import app.allever.android.sample.cleaner.core.CleanEngine
 import app.allever.android.sample.cleaner.core.CleanResult
+import app.allever.android.sample.cleaner.core.CleanType
 import app.allever.android.sample.cleaner.databinding.FragmentStorageCleanBinding
 import app.allever.android.sample.cleaner.scanner.JunkFileItem
+import app.allever.android.sample.cleaner.ui.adapter.JunkCategoryAdapter
 import app.allever.android.sample.cleaner.ui.adapter.JunkFileAdapter
 import kotlinx.coroutines.launch
 
 /**
  * 存储清理 Fragment
  *
- * 负责展示存储清理界面：扫描 → 预览列表 → 选择 → 清理。
- * 通过 CleanEngine 的响应式状态流驱动 UI 更新。
+ * 负责展示存储清理界面：扫描 → 分类概览 → 选择分类查看详情 → 清理。
+ * 扫描结果按 CleanType 归类展示，每个类别显示总大小和文件数量。
  */
 class StorageCleanFragment :
     BaseFragment<FragmentStorageCleanBinding, CleanerViewModel>() {
 
-    private lateinit var adapter: JunkFileAdapter
+    private lateinit var categoryAdapter: JunkCategoryAdapter
+    private lateinit var fileAdapter: JunkFileAdapter
     private var allItems: List<JunkFileItem> = emptyList()
 
     override fun inflate(): FragmentStorageCleanBinding =
         FragmentStorageCleanBinding.inflate(layoutInflater)
 
     override fun init() {
-        initRecyclerView()
+        initCategoryRecyclerView()
+        initFileRecyclerView()
         initClickListeners()
         observeEngineState()
     }
 
     // ========== 初始化 ==========
 
-    private fun initRecyclerView() {
-        adapter = JunkFileAdapter().apply {
+    private fun initCategoryRecyclerView() {
+        categoryAdapter = JunkCategoryAdapter { type, files ->
+            onCategorySelected(type, files)
+        }
+        mBinding.rvCategories.adapter = categoryAdapter
+        mBinding.rvCategories.layoutManager =
+            androidx.recyclerview.widget.LinearLayoutManager(context)
+    }
+
+    private fun initFileRecyclerView() {
+        fileAdapter = JunkFileAdapter().apply {
             onSelectionChanged = { selectedCount, totalCount ->
                 mBinding.tvSelectedCount.text = "已选 $selectedCount 项"
                 mBinding.btnClean.isEnabled = selectedCount > 0
 
                 // 反向同步全选按钮状态
-                // 防止循环触发：只在用户操作子项时更新全选按钮
                 if (selectedCount == totalCount && totalCount > 0) {
                     if (!mBinding.cbSelectAll.isChecked) {
                         mBinding.cbSelectAll.setOnCheckedChangeListener(null)
@@ -59,23 +71,46 @@ class StorageCleanFragment :
                 }
             }
         }
-        mBinding.rvJunkFiles.adapter = adapter
+        mBinding.rvJunkFiles.adapter = fileAdapter
         mBinding.rvJunkFiles.layoutManager =
             androidx.recyclerview.widget.LinearLayoutManager(context)
     }
 
-    /** 注册全选监听器（抽取方法避免重复代码） */
+    /** 注册全选监听器 */
     private fun setupSelectAllListener() {
         mBinding.cbSelectAll.setOnCheckedChangeListener { _, isChecked ->
-            adapter.selectAll(isChecked)
+            // 全选操作作用于当前显示的文件列表（可能是某个分类下的文件）
+            fileAdapter.selectAll(isChecked)
         }
     }
 
     private fun initClickListeners() {
         mBinding.btnScan.setOnClickListener { startScan() }
         mBinding.btnClean.setOnClickListener { startClean() }
-
         setupSelectAllListener()
+    }
+
+    // ========== 分类选择 ==========
+
+    /**
+     * 用户点击了某个垃圾分类
+     *
+     * @param type 选中的 CleanType
+     * @param files 该分类下的所有文件
+     */
+    private fun onCategorySelected(type: CleanType, files: List<JunkFileItem>) {
+        if (files.isEmpty()) return
+
+        // 显示该分类下的文件详情列表
+        setVisibility(mBinding.actionBar, true)
+        setVisibility(mBinding.rvJunkFiles, true)
+
+        val sortedFiles = files.sortedDescending()
+        fileAdapter.setList(sortedFiles)
+
+        // 更新选中计数
+        mBinding.tvSelectedCount.text = "已选 0 项"
+        mBinding.btnClean.isEnabled = false
     }
 
     // ========== 扫描 & 清理逻辑 ==========
@@ -92,7 +127,7 @@ class StorageCleanFragment :
     }
 
     private fun startClean() {
-        val selectedItems = adapter.getSelectedItems()
+        val selectedItems = fileAdapter.getSelectedItems()
         if (selectedItems.isEmpty()) return
 
         setVisibility(mBinding.progressBar, true)
@@ -114,13 +149,17 @@ class StorageCleanFragment :
         mBinding.tvScanStatus.text = "清理完成！"
         mBinding.tvTotalSize.text = "已释放 ${CleanEngine.formatSize(totalSize)}"
         mBinding.tvItemCount.text = "共清理 $totalCount 项文件"
-        setVisibility(mBinding.actionBar, false)
-        setVisibility(mBinding.rvJunkFiles, false)
 
-        val cleanedFiles =
-            results.flatMap { it.cleanedFiles }.map { it.absolutePath }.toSet()
-        allItems = allItems.filter { it.absolutePath !in cleanedFiles }
-        adapter.setList(allItems)
+        // 从全量数据中移除已清理的文件，刷新分类列表
+        val cleanedPaths = results.flatMap { it.cleanedFiles }.map { it.absolutePath }.toSet()
+        allItems = allItems.filter { it.absolutePath !in cleanedPaths }
+
+        if (allItems.isNotEmpty()) {
+            showCategoryResults(allItems.groupBy { it.type })
+        } else {
+            resetUI()
+            mBinding.tvScanStatus.text = "未发现垃圾文件"
+        }
 
         mBinding.btnScan.isEnabled = true
     }
@@ -183,12 +222,13 @@ class StorageCleanFragment :
 
     // ========== UI 辅助方法 ==========
 
+    /**
+     * 扫描完成，按类型归类展示结果
+     */
     private fun onScanCompleted(
-        results: Map<app.allever.android.sample.cleaner.core.CleanType, List<JunkFileItem>>
+        results: Map<CleanType, List<JunkFileItem>>
     ) {
         allItems = results.values.flatten().sortedDescending()
-        adapter.setList(allItems)
-
         val totalSize = allItems.sumOf { it.size }
         val totalCount = allItems.size
 
@@ -196,6 +236,7 @@ class StorageCleanFragment :
             mBinding.tvScanStatus.text = "未发现垃圾文件"
             mBinding.tvTotalSize.text = "可清理：0 B"
             mBinding.tvItemCount.text = "共 0 项"
+            setVisibility(mBinding.rvCategories, false)
             setVisibility(mBinding.actionBar, false)
             setVisibility(mBinding.rvJunkFiles, false)
             mBinding.btnClean.isEnabled = false
@@ -203,21 +244,53 @@ class StorageCleanFragment :
             mBinding.tvScanStatus.text = "扫描完成"
             mBinding.tvTotalSize.text = "可清理：${CleanEngine.formatSize(totalSize)}"
             mBinding.tvItemCount.text = "共 $totalCount 项"
-            setVisibility(mBinding.actionBar, true)
-            setVisibility(mBinding.rvJunkFiles, true)
             mBinding.btnClean.isEnabled = true
+
+            // 按类型分组展示
+            showCategoryResults(results)
         }
 
         mBinding.btnScan.isEnabled = true
     }
 
+    /**
+     * 展示分类结果
+     */
+    private fun showCategoryResults(results: Map<CleanType, List<JunkFileItem>>) {
+        val categories = results
+            .filter { it.value.isNotEmpty() && it.key != CleanType.ALL }
+            .map { (type, files) ->
+                JunkCategoryAdapter.CategoryItem(
+                    type = type,
+                    files = files,
+                    totalSize = files.sumOf { it.size }
+                )
+            }
+            .sortedByDescending { it.totalSize }
+
+        if (categories.isNotEmpty()) {
+            setVisibility(mBinding.rvCategories, true)
+            categoryAdapter.setList(categories)
+        } else {
+            setVisibility(mBinding.rvCategories, false)
+        }
+
+        // 默认不显示详情列表，等用户点击分类后再显示
+        setVisibility(mBinding.actionBar, false)
+        setVisibility(mBinding.rvJunkFiles, false)
+        fileAdapter.setList(emptyList())
+    }
+
     private fun resetUI() {
         allItems = emptyList()
-        adapter.setList(emptyList())
+        categoryAdapter.setList(emptyList())
+        fileAdapter.setList(emptyList())
+
+        setVisibility(mBinding.rvCategories, false)
         setVisibility(mBinding.actionBar, false)
         setVisibility(mBinding.rvJunkFiles, false)
 
-        // 重置全选按钮（先移除 listener 防止触发回调，重置后再恢复）
+        // 重置全选按钮
         mBinding.cbSelectAll.setOnCheckedChangeListener(null)
         mBinding.cbSelectAll.isChecked = false
         setupSelectAllListener()

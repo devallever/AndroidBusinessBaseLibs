@@ -37,6 +37,7 @@ object StorageCleaner {
             val cacheDeferred = async { CacheCleaner.scan() }
             val tempDeferred = async { TempCleaner.scan(maxAgeDays = config.maxFileAgeDays) }
             val adCacheDeferred = async { scanAdCache(config) }
+            val apkDeferred = async { ApkCleaner.scan() }
 
             val results = mutableMapOf<CleanType, List<JunkFileItem>>()
 
@@ -48,6 +49,9 @@ object StorageCleaner {
 
             val adCacheItems = adCacheDeferred.await()
             if (adCacheItems.isNotEmpty()) results[CleanType.AD_CACHE] = adCacheItems
+
+            val apkItems = apkDeferred.await()
+            if (apkItems.isNotEmpty()) results[CleanType.APK] = apkItems
 
             results
         }
@@ -68,6 +72,7 @@ object StorageCleaner {
             CleanType.LOG, CleanType.TEMP -> TempCleaner.scan(maxAgeDays = config.maxFileAgeDays)
             CleanType.AD_CACHE -> scanAdCache(config)
             CleanType.RESIDUAL -> scanResidual(config)
+            CleanType.APK -> ApkCleaner.scan()
             CleanType.ALL -> fullScan(config).values.flatten()
             else -> emptyList()
         }
@@ -96,6 +101,7 @@ object StorageCleaner {
             val result = when (type) {
                 CleanType.CACHE -> CacheCleaner.clean(typeItems)
                 CleanType.TEMP, CleanType.LOG -> TempCleaner.clean(typeItems)
+                CleanType.APK -> ApkCleaner.clean(typeItems)
                 CleanType.AD_CACHE -> cleanGeneric(typeItems, type)
                 CleanType.RESIDUAL -> cleanGeneric(typeItems, type)
                 else -> cleanGeneric(typeItems, type)

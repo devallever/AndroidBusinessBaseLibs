@@ -4,5 +4,6 @@
     <application>
         <activity android:name="app.allever.android.sample.cleaner.SampleCleanerMainActivity" />
         <activity android:name="app.allever.android.sample.cleaner.CleanerActivity" />
+        <activity android:name="app.allever.android.sample.cleaner.ui.activity.FileCategoryDetailActivity" />
     </application>
 </manifest>

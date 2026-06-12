@@ -130,13 +130,27 @@ data class JunkRule(
             )
         )
 
+        /** 安装包规则：*.apk 文件（Download 目录及外部存储根目录） */
+        fun apkRule(): JunkRule = JunkRule(
+            type = CleanType.APK,
+            extensions = setOf("apk"),
+            minSize = 1024 * 100,  // 最小 100KB，排除空文件
+            pathPatterns = listOf(
+                Regex(".*/Download/.*\\.apk$", RegexOption.IGNORE_CASE),
+                Regex(".*/download/.*\\.apk$", RegexOption.IGNORE_CASE),
+                // 外部存储根目录下的 APK
+                Regex("^/storage/emulated/0/[^/]+\\.apk$", RegexOption.IGNORE_CASE)
+            )
+        )
+
         /** 获取所有内置规则 */
         fun builtInRules(): List<JunkRule> = listOf(
             cacheRule(),
             logRule(),
             tempRule(),
             adCacheRule(),
-            residualRule()
+            residualRule(),
+            apkRule()
         )
     }
 }

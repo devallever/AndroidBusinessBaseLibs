@@ -3,100 +3,50 @@ package app.allever.android.sample.cleaner.ui.fragment
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.RecyclerView
 import app.allever.android.lib.common.BaseFragment
+import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.sample.cleaner.CleanerViewModel
 import app.allever.android.sample.cleaner.databinding.FragmentFileCategoryBinding
 import app.allever.android.sample.cleaner.file.FileCategory
-import app.allever.android.sample.cleaner.file.FileInfo
-import app.allever.android.sample.cleaner.file.FileManager
-import app.allever.android.sample.cleaner.ui.adapter.LargeFileAdapter
+import app.allever.android.sample.cleaner.ui.activity.FileCategoryDetailActivity
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import kotlinx.coroutines.launch
 
 /**
- * 文件分类浏览子页面
+ * 文件分类浏览子页面（主入口）
  *
- * 独立页面，展示分类选择网格 + 对应分类下的文件列表。
+ * 展示文件分类选择网格。
+ * 点击某个分类后，跳转到 FileCategoryDetailFragment 显示该分类的详细文件列表。
  */
 class FileCategoryFragment :
     BaseFragment<FragmentFileCategoryBinding, CleanerViewModel>() {
 
-    /** 当前选中的分类 */
-    private var selectedCategory: FileCategory? = null
-
     private lateinit var categoryAdapter: CategoryAdapter
-    private lateinit var fileAdapter: LargeFileAdapter
 
     override fun inflate(): FragmentFileCategoryBinding =
         FragmentFileCategoryBinding.inflate(layoutInflater)
 
     override fun init() {
         setupCategoryGrid()
-        setupFileList()
-        showEmptyState("请选择上方分类查看文件")
     }
 
     // ========== 分类网格 ==========
 
     private fun setupCategoryGrid() {
-        categoryAdapter = CategoryAdapter().apply { onSelected = ::onCategorySelected }
+        categoryAdapter = CategoryAdapter { category ->
+            onCategorySelected(category)
+        }
         mBinding.rvCategories.adapter = categoryAdapter
         categoryAdapter.setList(FileCategory.entries.filter { it != FileCategory.UNKNOWN })
     }
 
-    // ========== 文件列表 ==========
-
-    private fun setupFileList() {
-        fileAdapter = LargeFileAdapter()
-        mBinding.rvCategoryFiles.adapter = fileAdapter
-        mBinding.rvCategoryFiles.layoutManager =
-            androidx.recyclerview.widget.LinearLayoutManager(context)
-    }
-
+    /**
+     * 用户点击了某个分类 → 启动详情 Activity
+     */
     private fun onCategorySelected(category: FileCategory) {
-        selectedCategory = category
-        loadFilesByCategory(category)
-    }
-
-    private fun loadFilesByCategory(category: FileCategory) {
-        showScanningState()
-
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val files = FileManager.getFilesByCategory(category)
-
-                if (files.isNotEmpty()) {
-                    showFileList(files)
-                } else {
-                    showEmptyState("${category.displayName} 分类下暂无文件")
-                }
-            }
+        ActivityHelper.startActivity<FileCategoryDetailActivity>() {
+            putExtra(FileCategoryDetailActivity.ARG_CATEGORY, category.name)
         }
-    }
-
-    // ========== UI 状态 ==========
-
-    private fun showFileList(files: List<FileInfo>) {
-        setVisibility(mBinding.emptyLayout, false)
-        setVisibility(mBinding.rvCategoryFiles, true)
-        fileAdapter.setList(files)
-    }
-
-    private fun showEmptyState(message: String) {
-        setVisibility(mBinding.emptyLayout, true)
-        setVisibility(mBinding.rvCategoryFiles, false)
-        mBinding.tvEmptyHint.text = message
-    }
-
-    private fun showScanningState() {
-        setVisibility(mBinding.emptyLayout, true)
-        setVisibility(mBinding.rvCategoryFiles, false)
-        mBinding.tvEmptyHint.text = "正在扫描 ${selectedCategory?.displayName ?: ""} 文件..."
     }
 
     // ========== 分类选择 Adapter ==========
@@ -104,10 +54,10 @@ class FileCategoryFragment :
     /**
      * 分类选择网格适配器
      */
-    class CategoryAdapter :
-        BaseQuickAdapter<FileCategory, BaseViewHolder>(0) {
+    class CategoryAdapter(
+        private val onSelected: ((FileCategory) -> Unit)? = null
+    ) : BaseQuickAdapter<FileCategory, BaseViewHolder>(0) {
 
-        var onSelected: ((FileCategory) -> Unit)? = null
         private var selectedPosition: Int = -1
 
         override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {

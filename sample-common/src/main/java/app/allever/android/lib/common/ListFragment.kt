@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import app.allever.android.lib.common.databinding.FragmentListBinding
+import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.core.helper.KeyEventHelper
 import app.allever.android.lib.core.helper.ViewHelper
@@ -25,6 +26,7 @@ abstract class ListFragment<DB : ViewBinding, VM : BaseViewModel, T> :
     override fun inflate() = FragmentListBinding.inflate(layoutInflater)
 
     override fun init() {
+        log("init: ${this.javaClass.simpleName}")
 
         initTopBar()
 

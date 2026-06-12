@@ -83,6 +83,14 @@
 
     </androidx.cardview.widget.CardView>
 
+    <!-- 垃圾分类列表（按类型分组） -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="200dp"
+        android:nestedScrollingEnabled="true" />
+
     <!-- 操作栏（全选/取消） -->
     <LinearLayout
         android:id="@+id/actionBar"
@@ -114,7 +122,7 @@
 
     </LinearLayout>
 
-    <!-- 垃圾文件列表 -->
+    <!-- 垃圾文件详情列表（选中某个分类后显示该分类下的文件） -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvJunkFiles"
         android:layout_width="match_parent"
