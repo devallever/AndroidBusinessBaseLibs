@@ -3,8 +3,8 @@ package app.allever.android.sample.imageloader.core
 import android.graphics.Color
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.imageloader.core.DefaultLoader
-import app.allever.android.lib.imageloader.core.ImageLoader
+import app.allever.android.lib.imageloader.core.internal.DefaultLoader
+import app.allever.android.lib.imageloader.core.ImageLoaderCore
 import app.allever.android.lib.imageloader.core.load
 import app.allever.android.lib.imageloader.core.loadBlur
 import app.allever.android.lib.imageloader.core.loadCircle
@@ -40,15 +40,15 @@ class BasicImageLoaderFragment: BaseFragment<FragmentBasicLoaderBinding, BaseVie
 
     override fun init() {
         mBinding.btnGlide.setOnClickListener {
-            ImageLoader.init(requireContext(), GlideLoader, ImageLoader.Builder.create())
+            ImageLoaderCore.init(requireContext(), GlideLoader, ImageLoaderCore.Builder.create())
             loadAllImage()
         }
         mBinding.btnCoil.setOnClickListener {
-            ImageLoader.init(requireContext(), CoilLoader, ImageLoader.Builder.create())
+            ImageLoaderCore.init(requireContext(), CoilLoader, ImageLoaderCore.Builder.create())
             loadAllImage()
         }
         mBinding.btnDefault.setOnClickListener {
-            ImageLoader.init(requireContext(), DefaultLoader, ImageLoader.Builder.create())
+            ImageLoaderCore.init(requireContext(), DefaultLoader, ImageLoaderCore.Builder.create())
             loadAllImage()
         }
 

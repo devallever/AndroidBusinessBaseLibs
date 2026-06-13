@@ -1,12 +1,10 @@
-package app.allever.android.lib.imageloader.core.cache
+package app.allever.android.lib.imageloader.core.internal.cache
 
 import android.content.Context
 import android.util.Log
 import app.allever.android.lib.core.util.DiskLruCache
 import java.io.File
 import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
 
 /** DiskCache 日志 TAG */
 private const val TAG = "ImageLoader-Disk"

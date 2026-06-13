@@ -10,7 +10,7 @@ import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.imageloader.core.ILoader
-import app.allever.android.lib.imageloader.core.ImageLoader
+import app.allever.android.lib.imageloader.core.ImageLoaderCore
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
@@ -33,7 +33,7 @@ object GlideLoader : ILoader {
     }
 
     override fun load(resource: Any, imageView: ImageView, errorResId: Int?, placeholder: Int?) {
-        if (!ImageLoader.checkCanLoad(imageView)) {
+        if (!ImageLoaderCore.checkCanLoad(imageView)) {
             return
         }
         val requestBuilder = Glide.with(imageView.context).load(resource)
@@ -49,7 +49,7 @@ object GlideLoader : ILoader {
         errorResId: Int?,
         placeholder: Int?
     ) {
-        if (!ImageLoader.checkCanLoad(imageView)) {
+        if (!ImageLoaderCore.checkCanLoad(imageView)) {
             return
         }
 
@@ -74,7 +74,7 @@ object GlideLoader : ILoader {
         errorResId: Int?,
         placeholder: Int?
     ) {
-        if (!ImageLoader.checkCanLoad(imageView)) {
+        if (!ImageLoaderCore.checkCanLoad(imageView)) {
             return
         }
         val requestBuilder = Glide.with(imageView.context)
@@ -96,14 +96,14 @@ object GlideLoader : ILoader {
 
 
     override fun loadGif(resource: Any, imageView: ImageView) {
-        if (!ImageLoader.checkCanLoad(imageView)) {
+        if (!ImageLoaderCore.checkCanLoad(imageView)) {
             return
         }
         Glide.with(imageView.context).asGif().load(resource).into(imageView)
     }
 
     override fun loadBlur(resource: Any, imageView: ImageView, radius: Float?) {
-        if (!ImageLoader.checkCanLoad(imageView)) {
+        if (!ImageLoaderCore.checkCanLoad(imageView)) {
             return
         }
 

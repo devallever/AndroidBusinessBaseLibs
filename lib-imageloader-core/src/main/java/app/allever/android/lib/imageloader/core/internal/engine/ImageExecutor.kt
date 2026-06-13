@@ -1,4 +1,4 @@
-package app.allever.android.lib.imageloader.core.engine
+package app.allever.android.lib.imageloader.core.internal.engine
 
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors

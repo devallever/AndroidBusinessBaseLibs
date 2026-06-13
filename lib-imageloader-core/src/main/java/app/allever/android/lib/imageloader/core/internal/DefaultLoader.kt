@@ -1,9 +1,10 @@
-package app.allever.android.lib.imageloader.core
+package app.allever.android.lib.imageloader.core.internal
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Paint
@@ -19,24 +20,22 @@ import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
-import android.util.Log
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
-import androidx.core.content.ContextCompat
 import androidx.exifinterface.media.ExifInterface
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.helper.CoroutineHelper
-import app.allever.android.lib.imageloader.core.cache.DiskCache
-import app.allever.android.lib.imageloader.core.cache.MemoryCache
-import app.allever.android.lib.imageloader.core.engine.HttpEngine
-import app.allever.android.lib.imageloader.core.engine.ImageExecutor
+import app.allever.android.lib.imageloader.core.ILoader
+import app.allever.android.lib.imageloader.core.ImageLoaderCore
+import app.allever.android.lib.imageloader.core.internal.cache.DiskCache
+import app.allever.android.lib.imageloader.core.internal.cache.MemoryCache
+import app.allever.android.lib.imageloader.core.internal.engine.HttpEngine
+import app.allever.android.lib.imageloader.core.internal.engine.ImageExecutor
 import kotlinx.coroutines.launch
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileInputStream
-import java.io.IOException
-import java.io.InputStream
 
 /**
  * 内置图片加载引擎实现
@@ -69,7 +68,7 @@ object DefaultLoader : ILoader {
     // ==================== 基础加载 ====================
 
     override fun load(resource: Any, imageView: ImageView, errorResId: Int?, placeholder: Int?) {
-        if (!ImageLoader.checkCanLoad(imageView)) return
+        if (!ImageLoaderCore.checkCanLoad(imageView)) return
 
         placeholder?.let { imageView.setImageResource(it) }
 
@@ -108,7 +107,7 @@ object DefaultLoader : ILoader {
         errorResId: Int?,
         placeholder: Int?
     ) {
-        if (!ImageLoader.checkCanLoad(imageView)) return
+        if (!ImageLoaderCore.checkCanLoad(imageView)) return
         placeholder?.let { imageView.setImageResource(it) }
 
         val cacheKey = generateCacheKey(resource) + "_round_${radiusDp ?: 0}"
@@ -135,7 +134,7 @@ object DefaultLoader : ILoader {
         errorResId: Int?,
         placeholder: Int?
     ) {
-        if (!ImageLoader.checkCanLoad(imageView)) return
+        if (!ImageLoaderCore.checkCanLoad(imageView)) return
         placeholder?.let { imageView.setImageResource(it) }
 
         val cacheKey = generateCacheKey(resource) + "_circle"
@@ -155,7 +154,7 @@ object DefaultLoader : ILoader {
     // ==================== 模糊加载 ====================
 
     override fun loadBlur(resource: Any, imageView: ImageView, radius: Float?) {
-        if (!ImageLoader.checkCanLoad(imageView)) return
+        if (!ImageLoaderCore.checkCanLoad(imageView)) return
 
         val cacheKey = generateCacheKey(resource) + "_blur_${radius ?: 0}"
 
@@ -253,7 +252,10 @@ object DefaultLoader : ILoader {
 
         val sampleSize = calculateInSampleSize(options.outWidth, options.outHeight, MAX_BITMAP_SIZE, MAX_BITMAP_SIZE)
         if (sampleSize > 1) {
-            log(TAG, "大图降采样 | ${options.outWidth}x${options.outHeight} → inSampleSize=$sampleSize")
+            log(
+                TAG,
+                "大图降采样 | ${options.outWidth}x${options.outHeight} → inSampleSize=$sampleSize"
+            )
         }
 
         return BitmapFactory.Options().apply {
@@ -339,7 +341,7 @@ object DefaultLoader : ILoader {
         val height = source.height
         val output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 
-        val shader = android.graphics.BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        val shader = BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
         val paint = Paint().apply {
             isAntiAlias = true
             this.shader = shader
@@ -418,7 +420,7 @@ object DefaultLoader : ILoader {
     }
 
     private fun setBitmap(view: ImageView, bitmap: Bitmap?) {
-        if (ImageLoader.checkCanLoad(view) && bitmap != null && !bitmap.isRecycled) {
+        if (ImageLoaderCore.checkCanLoad(view) && bitmap != null && !bitmap.isRecycled) {
             view.setImageBitmap(bitmap)
         }
     }
@@ -434,7 +436,7 @@ object DefaultLoader : ILoader {
     }
 
     private fun dpToPx(dp: Float): Float {
-        val density = App.context.resources.displayMetrics.density
+        val density = App.Companion.context.resources.displayMetrics.density
         return dp * density
     }
 

@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import app.allever.android.lib.common.SampleMainActivity
 import app.allever.android.lib.common.databinding.ActivitySampleMainBinding
 import app.allever.android.lib.core.app.App
-import app.allever.android.lib.imageloader.core.ImageLoader
+import app.allever.android.lib.imageloader.core.ImageLoaderCore
 import app.allever.android.lib.imageloader.engine.glide.GlideLoader
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -24,7 +24,7 @@ class FunctionMainActivity: SampleMainActivity<ActivitySampleMainBinding, BaseVi
         super.init()
         Widget.init(applicationContext)
         EmojiManager.install(MyEmojiProvider())
-        ImageLoader.init(applicationContext, GlideLoader, ImageLoader.Builder.create())
+        ImageLoaderCore.init(applicationContext, GlideLoader, ImageLoaderCore.Builder.create())
         initSkin()
     }
     override fun getSampleName(): String  = "功能实现"

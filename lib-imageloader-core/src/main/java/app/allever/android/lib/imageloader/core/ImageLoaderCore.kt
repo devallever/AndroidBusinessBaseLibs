@@ -11,12 +11,13 @@ import app.allever.android.lib.core.helper.CoroutineHelper
 import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.core.util.FileUtils
 import app.allever.android.lib.core.util.MD5
+import app.allever.android.lib.imageloader.core.internal.DefaultLoader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
-object ImageLoader {
+object ImageLoaderCore {
 
     private var mLoaderEngine: ILoader = DefaultLoader
     private var mBuilder: Builder? = Builder()
@@ -108,9 +109,9 @@ object ImageLoader {
 
     suspend fun download(
         url: String,
-        block: ((success: Boolean, file: File?) -> Unit)? = null
+        block: ((success: Boolean, file: File?) -> Unit)
     ) {
-
+        mLoaderEngine.download(url, block)
     }
 
     private suspend fun saveCache(success: Boolean, url: String, src: File?) {
@@ -145,7 +146,9 @@ object ImageLoader {
     private fun downloadInternal(file: File?, resource: Any) {
         if (resource is String && resource.startsWith("http")) {
             file ?: CoroutineHelper.MAIN.launch {
-                download(resource, null)
+                download(resource, {success, file ->
+
+                })
             }
         }
     }

@@ -1,4 +1,4 @@
-package app.allever.android.lib.imageloader.core.cache
+package app.allever.android.lib.imageloader.core.internal.cache
 
 import android.graphics.Bitmap
 import android.util.LruCache

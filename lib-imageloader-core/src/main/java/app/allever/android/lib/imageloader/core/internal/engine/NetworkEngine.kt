@@ -1,4 +1,4 @@
-package app.allever.android.lib.imageloader.core.engine
+package app.allever.android.lib.imageloader.core.internal.engine
 
 /**
  * 网络加载引擎接口

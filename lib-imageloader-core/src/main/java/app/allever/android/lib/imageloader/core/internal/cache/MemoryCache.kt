@@ -1,6 +1,7 @@
-package app.allever.android.lib.imageloader.core.cache
+package app.allever.android.lib.imageloader.core.internal.cache
 
 import android.graphics.Bitmap
+import android.os.Build
 import android.util.LruCache
 import android.util.Log
 
@@ -20,7 +21,7 @@ class MemoryCache(maxSize: Int = defaultSize()) {
     private val cache: LruCache<String, Bitmap> = object : LruCache<String, Bitmap>(maxSize) {
         override fun sizeOf(key: String, value: Bitmap): Int {
             // API 19+ 使用 allocationByteCount，兼容使用 byteCount
-            return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 value.allocationByteCount
             } else {
                 value.byteCount
@@ -35,7 +36,7 @@ class MemoryCache(maxSize: Int = defaultSize()) {
 
     /** 存入缓存 */
     fun put(key: String, bitmap: Bitmap): Bitmap? = cache.put(key, bitmap).also {
-        val bitmapSize = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) bitmap.allocationByteCount else bitmap.byteCount
+        val bitmapSize = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) bitmap.allocationByteCount else bitmap.byteCount
         Log.d(TAG, "put() 写入 | key=$key | bitmap=${bitmap.width}x${bitmap.height} | size=${bitmapSize}B | total=${size()}/${maxSize()}B")
     }
 

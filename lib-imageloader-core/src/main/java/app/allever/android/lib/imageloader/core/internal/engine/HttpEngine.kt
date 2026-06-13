@@ -1,9 +1,10 @@
-package app.allever.android.lib.imageloader.core.engine
+package app.allever.android.lib.imageloader.core.internal.engine
 
 import java.net.HttpURLConnection
 import java.net.URL
 import java.io.IOException
 import android.util.Log
+import java.util.zip.GZIPInputStream
 
 /** HttpEngine 日志 TAG */
 private const val TAG = "ImageLoader-Http"
@@ -53,7 +54,7 @@ object HttpEngine : NetworkEngine {
             checkResponseCode(conn)
             Log.d(TAG, "响应成功 | code=${conn.responseCode} | contentType=${conn.contentType}")
             val stream = if ("gzip" == conn.contentEncoding) {
-                java.util.zip.GZIPInputStream(conn.inputStream)
+                GZIPInputStream(conn.inputStream)
             } else {
                 conn.inputStream
             }
