@@ -86,6 +86,7 @@ class StorageCleanFragment :
 
     private fun initClickListeners() {
         mBinding.btnScan.setOnClickListener { startScan() }
+        mBinding.btnStopScan.setOnClickListener { stopCurrentScan() }
         mBinding.btnClean.setOnClickListener { startClean() }
         setupSelectAllListener()
     }
@@ -119,11 +120,22 @@ class StorageCleanFragment :
         resetUI()
         setVisibility(mBinding.progressBar, true)
         mBinding.tvScanStatus.text = "正在扫描垃圾文件..."
-        mBinding.btnScan.isEnabled = false
+
+        // 切换按钮：隐藏扫描，显示停止
+        setVisibility(mBinding.btnScan, false)
+        setVisibility(mBinding.btnStopScan, true)
 
         lifecycleScope.launch {
             CleanEngine.fullScan()
         }
+    }
+
+    /**
+     * 停止当前扫描
+     */
+    private fun stopCurrentScan() {
+        CleanEngine.stopScan()
+        mBinding.tvScanStatus.text = "正在停止扫描..."
     }
 
     private fun startClean() {
@@ -182,18 +194,37 @@ class StorageCleanFragment :
     private fun onScanStateChanged(state: CleanEngine.ScanState) {
         when (state) {
             is CleanEngine.ScanState.Idle -> {}
+
             is CleanEngine.ScanState.Scanning -> {
                 setVisibility(mBinding.progressBar, true)
                 mBinding.tvScanStatus.text = "正在扫描垃圾文件..."
+                // 切换按钮：隐藏扫描，显示停止
+                setVisibility(mBinding.btnScan, false)
+                setVisibility(mBinding.btnStopScan, true)
             }
 
             is CleanEngine.ScanState.Scanned -> {
                 setVisibility(mBinding.progressBar, false)
+                // 恢复按钮：显示扫描，隐藏停止
+                setVisibility(mBinding.btnScan, true)
+                setVisibility(mBinding.btnStopScan, false)
                 onScanCompleted(state.results)
+            }
+
+            is CleanEngine.ScanState.Cancelled -> {
+                setVisibility(mBinding.progressBar, false)
+                // 恢复按钮
+                setVisibility(mBinding.btnScan, true)
+                setVisibility(mBinding.btnStopScan, false)
+                mBinding.tvScanStatus.text = "扫描已取消"
+                mBinding.btnScan.isEnabled = true
             }
 
             is CleanEngine.ScanState.Error -> {
                 setVisibility(mBinding.progressBar, false)
+                // 恢复按钮
+                setVisibility(mBinding.btnScan, true)
+                setVisibility(mBinding.btnStopScan, false)
                 mBinding.tvScanStatus.text = "扫描失败: ${state.message}"
                 mBinding.btnScan.isEnabled = true
             }
@@ -298,5 +329,19 @@ class StorageCleanFragment :
         mBinding.tvTotalSize.text = "可清理：-- MB"
         mBinding.tvItemCount.text = "共 -- 项"
         mBinding.tvScanStatus.text = "点击扫描检测垃圾文件"
+
+        // 恢复默认按钮状态
+        setVisibility(mBinding.btnScan, true)
+        setVisibility(mBinding.btnStopScan, false)
+    }
+
+    // ========== 生命周期 ==========
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // 退出页面时停止正在进行的扫描
+        if (CleanEngine.isScanning) {
+            CleanEngine.stopScan()
+        }
     }
 }
