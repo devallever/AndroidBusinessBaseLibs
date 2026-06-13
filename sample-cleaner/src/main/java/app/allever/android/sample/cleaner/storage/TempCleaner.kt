@@ -1,6 +1,7 @@
 package app.allever.android.sample.cleaner.storage
 
 import android.os.Environment
+import android.util.Log
 import app.allever.android.lib.core.app.App
 import app.allever.android.sample.cleaner.core.CleanResult
 import app.allever.android.sample.cleaner.core.CleanType
@@ -23,6 +24,8 @@ import java.io.File
  */
 object TempCleaner {
 
+    private const val TAG = "TempCleaner"
+
     /** 默认最大扫描深度 */
     private const val MAX_SCAN_DEPTH = 10
 
@@ -37,6 +40,7 @@ object TempCleaner {
         rootDirs: List<File> = getDefaultScanDirs(),
         maxAgeDays: Int = 0
     ): List<JunkFileItem> = withContext(Dispatchers.IO) {
+        val startTime = System.currentTimeMillis()
         val results = mutableListOf<JunkFileItem>()
 
         val tempRule = if (maxAgeDays > 0) {
@@ -53,10 +57,28 @@ object TempCleaner {
 
         val rules = listOf(tempRule, logRule)
 
-        for (dir in rootDirs) {
-            if (!dir.exists() || !dir.canRead()) continue
+        Log.i(TAG, "[scan] 开始扫描临时文件, 根目录数=${rootDirs.size}, 最大天数=$maxAgeDays")
+
+        for ((index, dir) in rootDirs.withIndex()) {
+            if (!dir.exists() || !dir.canRead()) {
+                Log.d(TAG, "[scan] 目录不存在或不可读: ${dir.absolutePath}")
+                continue
+            }
+            val beforeSize = results.size
             scanRecursive(dir, rules, results, depth = 0)
+            Log.d(
+                TAG,
+                "[scan] [${index + 1}/${rootDirs.size}] ${dir.name}: 命中 ${results.size - beforeSize} 个"
+            )
         }
+
+        val costMs = System.currentTimeMillis() - startTime
+        val totalSize = results.sumOf { it.size }
+        Log.i(
+            TAG,
+            "[scan] 完成, 共 ${results.size} 个文件, " +
+                "${JunkFileItem.formatFileSize(totalSize)}, 耗时 ${costMs}ms"
+        )
 
         results
     }
@@ -72,14 +94,18 @@ object TempCleaner {
         var cleanedSize = 0L
         var cleanedCount = 0
         val cleanedFiles = mutableListOf<File>()
+        val selectedItems = items.filter { it.selected }
 
-        for (item in items) {
-            if (!item.selected) continue
+        Log.i(TAG, "[clean] 开始清理, 共 ${items.size} 项, 已选 ${selectedItems.size} 项")
 
+        for (item in selectedItems) {
             if (app.allever.android.sample.cleaner.safety.SafetyChecker.safeDelete(item.file)) {
                 cleanedSize += item.size
                 cleanedCount++
                 cleanedFiles.add(item.file)
+                Log.v(TAG, "[clean] 已删除: ${item.fileName}")
+            } else {
+                Log.w(TAG, "[clean] 删除失败: ${item.absolutePath}")
             }
         }
 
@@ -90,7 +116,13 @@ object TempCleaner {
             cleanedCount = cleanedCount,
             costTimeMs = System.currentTimeMillis() - startTime,
             cleanedFiles = cleanedFiles
-        )
+        ).also {
+            Log.i(
+                TAG,
+                "[clean] 完成, 删除 $cleanedCount 个文件, " +
+                    "${JunkFileItem.formatFileSize(cleanedSize)}"
+            )
+        }
     }
 
     /**
@@ -135,6 +167,8 @@ object TempCleaner {
                 if (downloadDir.exists()) dirs.add(downloadDir)
             }
         } catch (_: Exception) {}
+
+        Log.d(TAG, "[getDefaultScanDirs] 默认扫描目录: ${dirs.map { it.name }}")
 
         return dirs
     }

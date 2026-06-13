@@ -1,5 +1,6 @@
 package app.allever.android.sample.cleaner.scanner
 
+import android.util.Log
 import app.allever.android.sample.cleaner.core.CleanConfig
 import app.allever.android.sample.cleaner.safety.WhiteList
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +22,8 @@ import java.util.LinkedList
  * 单一职责原则：只负责文件扫描和匹配，不负责删除操作
  */
 object FileScanner {
+
+    private const val TAG = "FileScanner"
 
     /**
      * 扫描策略枚举
@@ -49,19 +52,45 @@ object FileScanner {
         rules: List<JunkRule>,
         config: CleanConfig = CleanConfig()
     ): List<JunkFileItem> = withContext(Dispatchers.IO) {
-        if (rootDirs.isEmpty() || rules.isEmpty()) return@withContext emptyList()
+        val startTime = System.currentTimeMillis()
+
+        if (rootDirs.isEmpty() || rules.isEmpty()) {
+            Log.w(TAG, "[parallelScan] 参数为空: rootDirs=${rootDirs.size}, rules=${rules.size}")
+            return@withContext emptyList()
+        }
+
+        Log.i(
+            TAG,
+            "[parallelScan] 并行扫描开始, 目录数=${rootDirs.size}, 规则数=${rules.size}"
+        )
+
+        val validDirs = rootDirs.filter { it.exists() && it.canRead() }
+        if (validDirs.size < rootDirs.size) {
+            Log.d(TAG, "[parallelScan] 过滤无效目录: ${rootDirs.size} → ${validDirs.size}")
+        }
 
         coroutineScope {
-            rootDirs
-                .filter { it.exists() && it.canRead() }
+            validDirs
                 .map { dir ->
                     async {
-                        scanDirectory(dir, rules, config, Strategy.RECURSIVE)
+                        scanDirectory(dir, rules, config, Strategy.RECURSIVE).also { result ->
+                            Log.d(
+                                TAG,
+                                "[parallelScan] ${dir.name}: 命中 ${result.size} 个"
+                            )
+                        }
                     }
                 }
                 .awaitAll()
                 .flatten()
                 .sortedDescending()
+                .also { sorted ->
+                    val costMs = System.currentTimeMillis() - startTime
+                    Log.i(
+                        TAG,
+                        "[parallelScan] 完成, 共 ${sorted.size} 个文件, 耗时 ${costMs}ms"
+                    )
+                }
         }
     }
 
@@ -80,7 +109,22 @@ object FileScanner {
         config: CleanConfig = CleanConfig(),
         strategy: Strategy = Strategy.BFS
     ): List<JunkFileItem> = withContext(Dispatchers.IO) {
-        scanDirectory(rootDir, rules, config, strategy)
+        val startTime = System.currentTimeMillis()
+
+        Log.i(
+            TAG,
+            "[scan] 开始扫描: ${rootDir.absolutePath}, 策略=$strategy, 规则数=${rules.size}"
+        )
+
+        scanDirectory(rootDir, rules, config, strategy).also { result ->
+            val costMs = System.currentTimeMillis() - startTime
+            val totalSize = result.sumOf { it.size }
+            Log.i(
+                TAG,
+                "[scan] 完成 [${rootDir.name}], ${result.size} 个文件, " +
+                    "${JunkFileItem.formatFileSize(totalSize)}, 耗时 ${costMs}ms"
+            )
+        }
     }
 
     // ========== 内部扫描实现 ==========
@@ -215,19 +259,19 @@ object FileScanner {
         val path = file.absolutePath.lowercase()
 
         // 隐藏目录（但保留 .cache 等常见缓存目录）
-        if (name.startsWith(".") && name !in listOf(".cache", ".tmp", ".temp")) return true
+        if (name.startsWith(".") && name !in listOf(".cache", ".tmp", ".temp")) {
+            Log.v(TAG, "[shouldSkip] 跳过隐藏目录: $name")
+            return true
+        }
 
         // 仅跳过真正的系统关键目录
-        val skipPatterns = listOf(
-            "/system/",
-            "/vendor/",
-            "/proc/",
-            "/sys/",
-            "/dev/"
-        )
+        val skipPatterns = listOf("/system/", "/vendor/", "/proc/", "/sys/", "/dev/")
 
         for (pattern in skipPatterns) {
-            if (path.contains(pattern)) return true
+            if (path.contains(pattern)) {
+                Log.v(TAG, "[shouldSkip] 跳过系统路径: $path (匹配 $pattern)")
+                return true
+            }
         }
 
         return false
@@ -241,9 +285,12 @@ object FileScanner {
      */
     suspend fun calculateDirectorySize(directory: File): Long =
         withContext(Dispatchers.IO) {
+            val startTime = System.currentTimeMillis()
+
             if (!directory.exists() || !directory.isDirectory) return@withContext 0L
 
             var totalSize = 0L
+            var fileCount = 0L
             val queue = LinkedList<File>()
             queue.offer(directory)
 
@@ -253,11 +300,22 @@ object FileScanner {
 
                 for (file in files) {
                     when {
-                        file.isFile -> totalSize += file.length()
-                        file.isDirectory && !shouldSkip(file) -> queue.offer(file)
+                        file.isFile -> {
+                            totalSize += file.length()
+                            fileCount++
+                        }
+                        file.isDirectory && !shouldSkip(file) -> queue.add(file)
                     }
                 }
             }
+
+            val costMs = System.currentTimeMillis() - startTime
+            Log.d(
+                TAG,
+                "[calculateDirectorySize] ${directory.name}: " +
+                    "$fileCount 个文件, ${JunkFileItem.formatFileSize(totalSize)}, " +
+                    "耗时 ${costMs}ms"
+            )
 
             totalSize
         }

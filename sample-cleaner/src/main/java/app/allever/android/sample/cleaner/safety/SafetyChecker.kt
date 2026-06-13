@@ -1,5 +1,6 @@
 package app.allever.android.sample.cleaner.safety
 
+import android.util.Log
 import app.allever.android.sample.cleaner.core.CleanConfig
 import app.allever.android.sample.cleaner.scanner.JunkFileItem
 import java.io.File
@@ -17,6 +18,8 @@ import java.io.File
  */
 object SafetyChecker {
 
+    private const val TAG = "SafetyChecker"
+
     /**
      * 过滤掉受保护的文件
      *
@@ -28,23 +31,41 @@ object SafetyChecker {
         items: List<JunkFileItem>,
         config: CleanConfig = CleanConfig()
     ): List<JunkFileItem> {
-        return items.filter { item ->
+        val originalSize = items.size
+        val safeItems = items.filter { item ->
             !WhiteList.isProtected(item.file, config) && isDeletable(item.file)
         }
+
+        if (safeItems.size < originalSize) {
+            Log.d(
+                TAG,
+                "[filterSafeItems] 安全校验过滤: $originalSize → ${safeItems.size}" +
+                    " (移除 ${originalSize - safeItems.size} 个受保护项)"
+            )
+        }
+
+        return safeItems
     }
 
     /**
      * 检查单个文件是否可以安全删除
      *
      * @param file 目标文件
+     * @param config 清理配置
      * @return 是否可安全删除
      */
     fun canDelete(file: File, config: CleanConfig = CleanConfig()): Boolean {
         // 白名单检查
-        if (WhiteList.isProtected(file, config)) return false
+        if (WhiteList.isProtected(file, config)) {
+            Log.v(TAG, "[canDelete] 白名单保护: ${file.absolutePath}")
+            return false
+        }
 
         // 文件存在性检查
-        if (!file.exists()) return false
+        if (!file.exists()) {
+            Log.v(TAG, "[canDelete] 文件不存在: ${file.absolutePath}")
+            return false
+        }
 
         // 可删除性检查
         return isDeletable(file)
@@ -59,11 +80,19 @@ object SafetyChecker {
         // 目录需要能列出内容或为空
         if (file.isDirectory) {
             // 非空目录也可以删除（递归删除），但需要确认父目录可写
-            return file.parentFile?.canWrite() ?: false
+            val writable = file.parentFile?.canWrite() ?: false
+            if (!writable) {
+                Log.v(TAG, "[isDeletable] 目录父目录不可写: ${file.absolutePath}")
+            }
+            return writable
         }
 
         // 普通文件：存在且父目录可写
-        return file.parentFile?.canWrite() ?: false
+        val writable = file.parentFile?.canWrite() ?: false
+        if (!writable) {
+            Log.v(TAG, "[isDeletable] 文件父目录不可写: ${file.absolutePath}")
+        }
+        return writable
     }
 
     /**
@@ -86,14 +115,20 @@ object SafetyChecker {
      */
     fun safeDelete(file: File): Boolean {
         return try {
-            if (file.isDirectory) {
+            val result = if (file.isDirectory) {
                 file.deleteRecursively()
             } else {
                 file.delete()
             }
+            if (!result) {
+                Log.w(TAG, "[safeDelete] 删除返回 false: ${file.absolutePath}")
+            }
+            result
         } catch (e: SecurityException) {
+            Log.w(TAG, "[safeDelete] 安全异常: ${file.absolutePath} - ${e.message}")
             false
         } catch (e: Exception) {
+            Log.w(TAG, "[safeDelete] 异常: ${file.absolutePath} - ${e.message}")
             false
         }
     }

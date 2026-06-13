@@ -1,5 +1,6 @@
 package app.allever.android.sample.cleaner.core
 
+import android.util.Log
 import app.allever.android.sample.cleaner.scanner.JunkFileItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +18,8 @@ import kotlinx.coroutines.flow.asStateFlow
  * - 开放封闭：新增清理类型只需扩展，无需修改 Engine 核心逻辑
  */
 object CleanEngine {
+
+    private const val TAG = "CleanEngine"
 
     // ========== 状态管理（响应式） ==========
 
@@ -36,14 +39,21 @@ object CleanEngine {
      * 流程：Idle → Scanning → Scanned(结果)
      */
     suspend fun fullScan(config: CleanConfig = CleanConfig()): Map<CleanType, List<JunkFileItem>> {
+        Log.i(TAG, "[fullScan] 状态转换: ${_scanState.value} → Scanning")
         _scanState.value = ScanState.Scanning
 
         return try {
-            val results = app.allever.android.sample.cleaner.storage.StorageCleaner.fullScan(config)
+            val results =
+                app.allever.android.sample.cleaner.storage.StorageCleaner.fullScan(config)
             _scanState.value = ScanState.Scanned(results)
+            Log.i(
+                TAG,
+                "[fullScan] 状态转换: Scanning → Scanned(${results.keys.size} 种类型)"
+            )
             results
         } catch (e: Exception) {
             _scanState.value = ScanState.Error(e.message ?: "扫描失败")
+            Log.e(TAG, "[fullScan] 状态转换: Scanning → Error: ${e.message}", e)
             emptyMap()
         }
     }
@@ -55,14 +65,18 @@ object CleanEngine {
         type: CleanType,
         config: CleanConfig = CleanConfig()
     ): List<JunkFileItem> {
+        Log.i(TAG, "[scanByType] 状态转换: ${_scanState.value} → Scanning, 类型=$type")
         _scanState.value = ScanState.Scanning
 
         return try {
-            val results = app.allever.android.sample.cleaner.storage.StorageCleaner.scanByType(type, config)
+            val results =
+                app.allever.android.sample.cleaner.storage.StorageCleaner.scanByType(type, config)
             _scanState.value = ScanState.Scanned(mapOf(type to results))
+            Log.i(TAG, "[scanByType] 状态转换: Scanning → Scanned(${results.size} 个)")
             results
         } catch (e: Exception) {
             _scanState.value = ScanState.Error(e.message ?: "扫描失败")
+            Log.e(TAG, "[scanByType] 扫描失败 [$type]: ${e.message}", e)
             emptyList()
         }
     }
@@ -80,7 +94,13 @@ object CleanEngine {
         items: List<JunkFileItem>,
         clearStoreData: Boolean = false
     ): List<CleanResult> {
-        _cleanState.value = CleanState.Cleaning(0, items.count { it.selected })
+        val selectedCount = items.count { it.selected }
+        Log.i(
+            TAG,
+            "[clean] 状态转换: ${_cleanState.value} → Cleaning, " +
+                "共${items.size}项, 已选${selectedCount}项, clearStoreData=$clearStoreData"
+        )
+        _cleanState.value = CleanState.Cleaning(0, selectedCount)
 
         return try {
             val results =
@@ -90,9 +110,15 @@ object CleanEngine {
             val totalCount = results.sumOf { it.cleanedCount }
 
             _cleanState.value = CleanState.Completed(results, totalSize, totalCount)
+            Log.i(
+                TAG,
+                "[clean] 状态转换: Cleaning → Completed(" +
+                    "释放${formatSize(totalSize)}, ${totalCount}个文件)"
+            )
             results
         } catch (e: Exception) {
             _cleanState.value = CleanState.Error(e.message ?: "清理失败")
+            Log.e(TAG, "[clean] 清理失败: ${e.message}", e)
             emptyList()
         }
     }
@@ -103,6 +129,7 @@ object CleanEngine {
      * 重置所有状态
      */
     fun reset() {
+        Log.d(TAG, "[reset] 重置所有状态")
         _scanState.value = ScanState.Idle
         _cleanState.value = CleanState.Idle
     }

@@ -1,6 +1,7 @@
 package app.allever.android.sample.cleaner.storage
 
 import android.content.Context
+import android.util.Log
 import app.allever.android.lib.core.app.App
 import app.allever.android.sample.cleaner.core.CleanResult
 import app.allever.android.sample.cleaner.core.CleanType
@@ -22,6 +23,8 @@ import java.io.File
  */
 object CacheCleaner {
 
+    private const val TAG = "CacheCleaner"
+
     /**
      * 扫描应用缓存文件
      *
@@ -33,38 +36,63 @@ object CacheCleaner {
      * @return 扫描到的缓存文件列表
      */
     suspend fun scan(): List<JunkFileItem> = withContext(Dispatchers.IO) {
+        val startTime = System.currentTimeMillis()
         val results = mutableListOf<JunkFileItem>()
         val context = App.context
         val rule = JunkRule.cacheRule()
 
+        Log.i(TAG, "[scan] 开始扫描应用缓存")
+
         // 1. 扫描内部缓存
         scanCacheDir(context.cacheDir, results, rule)
+        Log.d(TAG, "[scan] 内部缓存: ${context.cacheDir?.absolutePath}, 命中 ${results.size} 个")
 
         // 2. 扫描外部缓存
         try {
             val externalCacheDir = context.externalCacheDir
             if (externalCacheDir != null && externalCacheDir != context.cacheDir) {
+                val beforeSize = results.size
                 scanCacheDir(externalCacheDir, results, rule)
+                Log.d(TAG, "[scan] 外部缓存: ${externalCacheDir.absolutePath}, 命中 ${results.size - beforeSize} 个")
             }
         } catch (_: SecurityException) {
-            // Android 11+ 外部缓存可能无权限，忽略
+            Log.w(TAG, "[scan] 外部缓存无权限访问")
         }
 
         // 3. 扫描外部存储下各应用的 cache 目录
         try {
-            val androidDataDir = java.io.File("/storage/emulated/0/Android/data")
+            val androidDataDir = File("/storage/emulated/0/Android/data")
             if (androidDataDir.exists() && androidDataDir.canRead()) {
-                androidDataDir.listFiles()?.forEach { appDir ->
-                    if (!appDir.isDirectory) return@forEach
-                    val cacheDir = java.io.File(appDir, "cache")
-                    if (cacheDir.exists() && cacheDir.canRead()) {
-                        scanCacheDir(cacheDir, results, rule)
+                val appDirs = androidDataDir.listFiles()?.filter { it.isDirectory }
+                if (!appDirs.isNullOrEmpty()) {
+                    Log.d(TAG, "[scan] Android/data 下有 ${appDirs.size} 个应用目录")
+                    var crossAppCount = 0
+                    appDirs.forEach { appDir ->
+                        val cacheDir = File(appDir, "cache")
+                        if (cacheDir.exists() && cacheDir.canRead()) {
+                            val beforeSize = results.size
+                            scanCacheDir(cacheDir, results, rule)
+                            crossAppCount += (results.size - beforeSize)
+                        }
                     }
+                    Log.d(TAG, "[scan] 跨应用缓存命中 $crossAppCount 个文件")
+                } else {
+                    Log.w(TAG, "[scan] Android/data 目录为空或不可读")
                 }
+            } else {
+                Log.d(TAG, "[scan] Android/data 不存在或无读取权限 (Scoped Storage)")
             }
         } catch (_: SecurityException) {
-            // Android 11+ 可能无权限，忽略
+            Log.w(TAG, "[scan] Android/data 无权限访问")
         }
+
+        val costMs = System.currentTimeMillis() - startTime
+        val totalSize = results.sumOf { it.size }
+        Log.i(
+            TAG,
+            "[scan] 扫描完成, 共 ${results.size} 个文件, " +
+                "${JunkFileItem.formatFileSize(totalSize)}, 耗时 ${costMs}ms"
+        )
 
         results
     }
@@ -80,14 +108,18 @@ object CacheCleaner {
         var cleanedSize = 0L
         var cleanedCount = 0
         val cleanedFiles = mutableListOf<File>()
+        val selectedItems = items.filter { it.selected }
 
-        for (item in items) {
-            if (!item.selected) continue
+        Log.i(TAG, "[clean] 开始清理, 共 ${items.size} 项, 已选 ${selectedItems.size} 项")
 
+        for (item in selectedItems) {
             if (app.allever.android.sample.cleaner.safety.SafetyChecker.safeDelete(item.file)) {
                 cleanedSize += item.size
                 cleanedCount++
                 cleanedFiles.add(item.file)
+                Log.v(TAG, "[clean] 已删除: ${item.fileName}")
+            } else {
+                Log.w(TAG, "[clean] 删除失败: ${item.absolutePath}")
             }
         }
 
@@ -98,7 +130,13 @@ object CacheCleaner {
             cleanedCount = cleanedCount,
             costTimeMs = System.currentTimeMillis() - startTime,
             cleanedFiles = cleanedFiles
-        )
+        ).also {
+            Log.i(
+                TAG,
+                "[clean] 完成, 删除 $cleanedCount 个文件, " +
+                    "${JunkFileItem.formatFileSize(cleanedSize)}"
+            )
+        }
     }
 
     /**
@@ -118,9 +156,7 @@ object CacheCleaner {
                     size += calculateDirSize(dir)
                 }
             }
-        } catch (_: SecurityException) {
-            // 忽略
-        }
+        } catch (_: SecurityException) {}
 
         size
     }
@@ -136,7 +172,6 @@ object CacheCleaner {
             if (file.isFile && rule.matches(file, cacheDir.absolutePath)) {
                 results.add(JunkFileItem.from(file, CleanType.CACHE))
             } else if (file.isDirectory) {
-                // 递归子目录中的缓存文件
                 scanSubDirectory(file, results, rule, maxDepth = 5)
             }
         }

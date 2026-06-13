@@ -1,5 +1,6 @@
 package app.allever.android.sample.cleaner.storage
 
+import android.util.Log
 import app.allever.android.lib.core.store.StoreCore
 import app.allever.android.sample.cleaner.core.CleanConfig
 import app.allever.android.sample.cleaner.core.CleanResult
@@ -18,22 +19,36 @@ import java.io.File
 /**
  * 存储清理器
  *
- * 存储清理模块的总入口，组合 CacheCleaner 和 TempCleaner，
+ * 存储清理模块的总入口，组合 CacheCleaner、TempCleaner、ApkCleaner 等独立 Cleaner，
  * 同时集成 StoreCore 进行存储数据清理。
  *
- * 对应文档"存储清理"章节，遵循依赖倒置原则：
- * 通过接口/委托调用底层具体清理实现，自身只负责编排调度。
+ * 各 Cleaner 职责单一，分别负责不同类型垃圾文件的扫描和清理：
+ * - CacheCleaner: 应用缓存文件
+ * - TempCleaner: 临时文件和日志文件
+ * - ApkCleaner: APK 安装包
+ * - 广告缓存/残留: 通过 FileScanner + JunkRule 扫描
  */
 object StorageCleaner {
 
+    private const val TAG = "StorageCleaner"
+
+    // ========== 公共接口 ==========
+
     /**
      * 全面扫描所有可清理项目
+     *
+     * 各 Cleaner 并行执行，互不干扰。
      *
      * @param config 清理配置
      * @return 按类型分组的扫描结果
      */
     suspend fun fullScan(config: CleanConfig = CleanConfig()): Map<CleanType, List<JunkFileItem>> =
         coroutineScope {
+            val startTime = System.currentTimeMillis()
+
+            Log.i(TAG, "[fullScan] 开始全面扫描")
+            Log.d(TAG, "[fullScan] 并行度=${config.parallelism}")
+
             val cacheDeferred = async { CacheCleaner.scan() }
             val tempDeferred = async { TempCleaner.scan(maxAgeDays = config.maxFileAgeDays) }
             val adCacheDeferred = async { scanAdCache(config) }
@@ -41,17 +56,39 @@ object StorageCleaner {
 
             val results = mutableMapOf<CleanType, List<JunkFileItem>>()
 
-            val cacheItems = cacheDeferred.await()
-            if (cacheItems.isNotEmpty()) results[CleanType.CACHE] = cacheItems
+            // 缓存
+            cacheDeferred.await().also { items ->
+                if (items.isNotEmpty()) results[CleanType.CACHE] = items
+                Log.d(TAG, "[fullScan] [CACHE] ${items.size} 个文件")
+            }
 
-            val tempItems = tempDeferred.await()
-            if (tempItems.isNotEmpty()) results[CleanType.TEMP] = tempItems
+            // 临时/日志
+            tempDeferred.await().also { items ->
+                if (items.isNotEmpty()) results[CleanType.TEMP] = items
+                Log.d(TAG, "[fullScan] [TEMP] ${items.size} 个文件")
+            }
 
-            val adCacheItems = adCacheDeferred.await()
-            if (adCacheItems.isNotEmpty()) results[CleanType.AD_CACHE] = adCacheItems
+            // 广告缓存
+            adCacheDeferred.await().also { items ->
+                if (items.isNotEmpty()) results[CleanType.AD_CACHE] = items
+                Log.d(TAG, "[fullScan] [AD_CACHE] ${items.size} 个文件")
+            }
 
-            val apkItems = apkDeferred.await()
-            if (apkItems.isNotEmpty()) results[CleanType.APK] = apkItems
+            // APK
+            apkDeferred.await().also { items ->
+                if (items.isNotEmpty()) results[CleanType.APK] = items
+                Log.d(TAG, "[fullScan] [APK] ${items.size} 个文件")
+            }
+
+            val totalCostMs = System.currentTimeMillis() - startTime
+            val totalCount = results.values.sumOf { it.size }
+            val totalSize = results.values.flatten().sumOf { it.size }
+
+            Log.i(
+                TAG,
+                "[fullScan] 全量扫描完成, $totalCount 个文件, " +
+                    "${JunkFileItem.formatFileSize(totalSize)}, 耗时 ${totalCostMs}ms"
+            )
 
             results
         }
@@ -67,7 +104,9 @@ object StorageCleaner {
         type: CleanType,
         config: CleanConfig = CleanConfig()
     ): List<JunkFileItem> = withContext(Dispatchers.IO) {
-        when (type) {
+        Log.i(TAG, "[scanByType] 扫描类型: $type")
+
+        val result = when (type) {
             CleanType.CACHE -> CacheCleaner.scan()
             CleanType.LOG, CleanType.TEMP -> TempCleaner.scan(maxAgeDays = config.maxFileAgeDays)
             CleanType.AD_CACHE -> scanAdCache(config)
@@ -75,7 +114,14 @@ object StorageCleaner {
             CleanType.APK -> ApkCleaner.scan()
             CleanType.ALL -> fullScan(config).values.flatten()
             else -> emptyList()
+        }.also {
+            Log.i(
+                TAG,
+                "[scanByType] [$type] 完成, ${it.size} 个文件"
+            )
         }
+
+        result
     }
 
     /**
@@ -89,13 +135,22 @@ object StorageCleaner {
         items: List<JunkFileItem>,
         clearStoreData: Boolean = false
     ): List<CleanResult> = withContext(Dispatchers.IO) {
+        val startTime = System.currentTimeMillis()
+        val selectedCount = items.count { it.selected }
+
+        Log.i(TAG, "[clean] 开始清理, 共 ${items.size} 项, 已选 $selectedCount 项")
+
         val results = mutableListOf<CleanResult>()
 
         // 安全校验过滤
         val safeItems = SafetyChecker.filterSafeItems(items)
+        if (safeItems.size != items.size) {
+            Log.d(TAG, "[clean] 安全校验过滤: ${items.size} → ${safeItems.size}")
+        }
 
         // 按 CleanType 分组
         val grouped = safeItems.groupBy { it.type }
+        Log.d(TAG, "[clean] 分组后类型数: ${grouped.keys}")
 
         for ((type, typeItems) in grouped) {
             val result = when (type) {
@@ -106,28 +161,41 @@ object StorageCleaner {
                 CleanType.RESIDUAL -> cleanGeneric(typeItems, type)
                 else -> cleanGeneric(typeItems, type)
             }
+            Log.i(
+                TAG,
+                "[clean] [$type] 清理完成: ${result.cleanedCount} 个文件, " +
+                    "${JunkFileItem.formatFileSize(result.cleanedSize)}, " +
+                    "耗时 ${result.costTimeMs}ms"
+            )
             results.add(result)
         }
 
-        // 可选：清理 StoreCore 存储数据
         if (clearStoreData) {
             try {
                 StoreCore.clear()
+                Log.d(TAG, "[clean] StoreCore 数据已清除")
                 results.add(CleanResult(CleanType.CACHE, true))
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                Log.e(TAG, "[clean] StoreCore 清除失败: ${e.message}", e)
                 results.add(CleanResult.failed(CleanType.CACHE))
             }
         }
 
+        val totalCostMs = System.currentTimeMillis() - startTime
+        val totalCleanedSize = results.sumOf { it.cleanedSize }
+        val totalCleanedCount = results.sumOf { it.cleanedCount }
+
+        Log.i(
+            TAG,
+            "[clean] 全部清理完成, 共删除 $totalCleanedCount 个文件, " +
+                "释放 ${JunkFileItem.formatFileSize(totalCleanedSize)}, " +
+                "总耗时 ${totalCostMs}ms"
+        )
+
         results
     }
 
-    /**
-     * 计算总的可清理大小
-     */
-    fun calculateTotalSize(items: List<JunkFileItem>): Pair<Long, Int> {
-        return SafetyChecker.calculateSummary(items)
-    }
+    // ========== 内部方法 ==========
 
     /**
      * 扫描广告缓存
@@ -138,11 +206,13 @@ object StorageCleaner {
             rules = listOf(JunkRule.adCacheRule()),
             config = config,
             strategy = FileScanner.Strategy.BFS
-        )
+        ).also {
+            Log.v(TAG, "[scanAdCache] 命中 ${it.size} 个广告缓存文件")
+        }
     }
 
     /**
-     * 扫描残留文件
+     * 扫描残留文件（已卸载应用的遗留目录）
      */
     private suspend fun scanResidual(config: CleanConfig): List<JunkFileItem> {
         return FileScanner.scan(
@@ -150,7 +220,9 @@ object StorageCleaner {
             rules = listOf(JunkRule.residualRule()),
             config = config,
             strategy = FileScanner.Strategy.BFS
-        )
+        ).also {
+            Log.v(TAG, "[scanResidual] 命中 ${it.size} 个残留目录")
+        }
     }
 
     /**
@@ -171,6 +243,9 @@ object StorageCleaner {
                 cleanedSize += item.size
                 cleanedCount++
                 cleanedFiles.add(item.file)
+                Log.v(TAG, "[doClean] 已删除: ${item.file.name} (${item.size}B)")
+            } else {
+                Log.w(TAG, "[doClean] 删除失败: ${item.file.absolutePath}")
             }
         }
 
