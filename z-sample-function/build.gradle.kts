@@ -16,7 +16,6 @@ dependencies {
     implementation(project(":sample-common"))
     api(project(":lib-imageloader-engine-glide"))
     api(project(":lib-media-picker"))
-    api(project(":lib-store-core"))
     api(project(":z-lib-widget"))
     api (libs.skin.support)                   // skin-support
     api(libs.skin.support.appcompat)         // skin-support 基础控件支持

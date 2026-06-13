@@ -7,7 +7,7 @@ import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.store.core.StorageKit
+import app.allever.android.lib.core.store.StorageKit
 import app.allever.android.lib.store.engine.datastore.DataStoreEngine
 import com.chad.library.adapter.base.BaseQuickAdapter
 

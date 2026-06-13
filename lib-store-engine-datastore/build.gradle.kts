@@ -12,6 +12,6 @@ android {
 }
 
 dependencies {
-    api(project(":lib-store-core"))
+    api(project(":core"))
     api(libs.androidx.datastore.preferences)
 }

@@ -3,7 +3,7 @@ package z.app.allever.android.sample.function.im.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import app.allever.android.lib.store.core.StoreCore
+import app.allever.android.lib.core.store.StoreCore
 import z.app.allever.android.sample.function.im.function.db.IMDBController
 import z.app.allever.android.sample.function.im.ui.adapter.UserAdapter
 import z.app.allever.android.sample.function.im.user.UserInfo

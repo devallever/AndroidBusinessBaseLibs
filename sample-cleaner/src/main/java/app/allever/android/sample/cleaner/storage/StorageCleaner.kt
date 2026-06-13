@@ -1,6 +1,6 @@
 package app.allever.android.sample.cleaner.storage
 
-import app.allever.android.lib.store.core.StoreCore
+import app.allever.android.lib.core.store.StoreCore
 import app.allever.android.sample.cleaner.core.CleanConfig
 import app.allever.android.sample.cleaner.core.CleanResult
 import app.allever.android.sample.cleaner.core.CleanType

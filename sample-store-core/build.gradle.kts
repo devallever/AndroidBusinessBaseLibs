@@ -14,7 +14,6 @@ android {
 
 dependencies {
     implementation(project(":sample-common"))
-    implementation(project(":lib-store-core"))
     implementation(project(":lib-store-engine-datastore"))
     implementation(project(":lib-store-engine-mmkv"))
 

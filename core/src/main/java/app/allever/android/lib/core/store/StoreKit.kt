@@ -1,7 +1,7 @@
-package app.allever.android.lib.store.core
+package app.allever.android.lib.core.store
 
 import app.allever.android.lib.core.app.App
-import app.allever.android.lib.store.core.engine.SPEngine
+import app.allever.android.lib.core.store.engine.SPEngine
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -30,7 +30,7 @@ object StorageKit {
      * 获取或创建命名存储实例
      *
      * @param name 存储名称，用于隔离不同数据域
-     * @param engineFactory 自定义引擎工厂。不传则使用全局 [StoreCore] 的引擎；
+     * @param engineFactory 自定义引擎工厂。不传则使用全局 [app.allever.android.lib.store.core.StoreCore] 的引擎；
      *                     若 [Storage] 也未初始化则自动使用 [SPEngine]
      * @return 存储实例
      */
@@ -68,7 +68,7 @@ object StorageKit {
 /**
  * 存储接口 — 由 [StorageKit] 返回的实例类型
  *
- * 与 [StoreCore] 门面方法一致，但绑定到特定引擎实例，
+ * 与 [app.allever.android.lib.store.core.StoreCore] 门面方法一致，但绑定到特定引擎实例，
  * 适用于需要多存储域隔离的场景。
  */
 interface IStorage {

@@ -1,7 +1,7 @@
-package app.allever.android.lib.store.core
+package app.allever.android.lib.core.store
 
 import app.allever.android.lib.core.app.App
-import app.allever.android.lib.store.core.engine.SPEngine
+import app.allever.android.lib.core.store.engine.SPEngine
 
 /**
  * 全局存储门面（单例）
@@ -20,36 +20,29 @@ object StoreCore {
 
     private const val DEFAULT_NAME = "default_storage"
 
-    @Volatile
-    internal var engine: IStoreEngine? = null
+    internal var engine: IStoreEngine = SPEngine()
     private val lock = Any()
 
     /**
      * 初始化存储引擎
      *
      * 必须在 Application.onCreate 中尽早调用。
-     * 不调用则默认使用 [SPEngine]。
+     * 不调用则默认使用 [app.allever.android.lib.store.core.engine.SPEngine]。
      *
      * @param engineFactory 引擎工厂，返回一个已配置好的 [IStoreEngine] 实例
      */
     fun init(engineFactory: () -> IStoreEngine) {
         synchronized(lock) {
-            engine?.destroy()
+            engine.destroy()
             val newEngine = engineFactory()
-            newEngine.init(App.context, DEFAULT_NAME)
+            newEngine.init(App.Companion.context, DEFAULT_NAME)
             engine = newEngine
         }
     }
 
     /** 获取或创建引擎实例 */
     internal fun getOrCreateEngine(): IStoreEngine {
-        return engine ?: synchronized(lock) {
-            engine ?: run {
-                val spEngine = SPEngine().also { it.init(App.context, DEFAULT_NAME) }
-                engine = spEngine
-                spEngine
-            }
-        }
+        return engine
     }
 
     // ==================== String ====================

@@ -13,7 +13,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import app.allever.android.lib.core.helper.GsonHelper
-import app.allever.android.lib.store.core.IStoreEngine
+import app.allever.android.lib.core.store.IStoreEngine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking

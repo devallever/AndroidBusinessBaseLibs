@@ -3,7 +3,7 @@ package app.allever.android.lib.store.engine.mmkv
 import android.content.Context
 import android.util.Log
 import app.allever.android.lib.core.helper.GsonHelper
-import app.allever.android.lib.store.core.IStoreEngine
+import app.allever.android.lib.core.store.IStoreEngine
 import com.tencent.mmkv.MMKV
 
 /**

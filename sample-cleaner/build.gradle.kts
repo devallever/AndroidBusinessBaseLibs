@@ -14,7 +14,6 @@ android {
 
 dependencies {
     implementation(project(":sample-common"))
-    implementation(project(":lib-store-core"))
     implementation(libs.material)
     implementation(libs.androidx.viewpager2)
 }

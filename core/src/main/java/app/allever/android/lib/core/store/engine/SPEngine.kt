@@ -1,9 +1,10 @@
-package app.allever.android.lib.store.core.engine
+package app.allever.android.lib.core.store.engine
 
 import android.content.Context
+import android.content.SharedPreferences
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.helper.GsonHelper
-import app.allever.android.lib.store.core.IStoreEngine
+import app.allever.android.lib.core.store.IStoreEngine
 
 /**
  * SharedPreferences 引擎实现（内置默认）
@@ -17,7 +18,7 @@ class SPEngine : IStoreEngine {
     }
 
     @Volatile
-    private var sp: android.content.SharedPreferences? = null
+    private var sp: SharedPreferences? = null
     private val lock = Any()
 
     override fun init(context: Context, name: String) {
@@ -34,9 +35,9 @@ class SPEngine : IStoreEngine {
     }
 
     /** 获取 SP 实例，未初始化时使用默认配置自动初始化 */
-    private fun requireSp(): android.content.SharedPreferences {
+    private fun requireSp(): SharedPreferences {
         if (sp == null) {
-            init(App.context, DEFAULT_NAME)
+            init(App.Companion.context, DEFAULT_NAME)
         }
         return sp!!
     }
@@ -146,7 +147,7 @@ class SPEngine : IStoreEngine {
 
     // ==================== 内部工具 ====================
 
-    private inline fun edit(action: android.content.SharedPreferences.Editor.() -> Unit) {
+    private inline fun edit(action: SharedPreferences.Editor.() -> Unit) {
         synchronized(lock) {
             requireSp().edit().apply(action).apply()
         }

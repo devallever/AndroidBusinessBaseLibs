@@ -1,10 +1,12 @@
-package app.allever.android.lib.store.core
+package app.allever.android.lib.core.store
+
+import android.content.Context
 
 /**
  * 存储引擎接口
  *
  * 所有存储实现（SP、MMKV、DataStore 等）均需实现此接口。
- * 通过 [StoreCore.init] 可无缝切换底层存储方案，业务代码无需改动。
+ * 通过 [app.allever.android.lib.store.core.StoreCore.init] 可无缝切换底层存储方案，业务代码无需改动。
  */
 interface IStoreEngine {
 
@@ -69,7 +71,7 @@ interface IStoreEngine {
      * @param context Application Context
      * @param name 存储名称（对应 SP 文件名 / MMKV ID / DataStore name 等）
      */
-    fun init(context: android.content.Context, name: String)
+    fun init(context: Context, name: String)
 
     /** 销毁引擎，释放资源 */
     fun destroy()

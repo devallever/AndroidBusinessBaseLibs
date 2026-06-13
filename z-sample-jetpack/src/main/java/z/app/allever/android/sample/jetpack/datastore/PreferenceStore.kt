@@ -6,7 +6,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import app.allever.android.lib.core.app.App
-import app.allever.android.lib.store.core.IStoreEngine
+import app.allever.android.lib.core.store.IStoreEngine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
