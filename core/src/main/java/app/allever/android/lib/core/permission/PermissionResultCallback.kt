@@ -2,6 +2,7 @@ package app.allever.android.lib.core.permission
 
 import android.app.Dialog
 import android.content.Context
+import app.allever.android.lib.core.permission.dialog.JumpPermissionSettingDialog
 
 /**
  * 权限请求结果回调

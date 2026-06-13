@@ -1,14 +1,21 @@
-package app.allever.android.lib.core.permission
+package app.allever.android.lib.core.permission.internal
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
+import androidx.activity.result.ActivityResultCaller
 import androidx.fragment.app.Fragment
+import app.allever.android.lib.core.permission.IPermissionEngine
+import app.allever.android.lib.core.permission.IPermissionLauncher
+import app.allever.android.lib.core.permission.PermissionCore
+import app.allever.android.lib.core.permission.PermissionResultCallback
+import app.allever.android.lib.core.permission.PermissionStrategy
 
 /**
  * 权限请求链式构建器
  *
- * 通过 [PermissionEngine.with] 获取实例，链式配置后调用 [request] 发起请求。
- * 底层实现由注入的 [IPermissionEngine] 决定，切换引擎不影响业务代码。
+ * 通过 [app.allever.android.lib.core.permission.PermissionCore.with] 获取实例，链式配置后调用 [request] 发起请求。
+ * 底层实现由注入的 [app.allever.android.lib.core.permission.IPermissionEngine] 决定，切换引擎不影响业务代码。
  *
  * 使用方式：
  * ```kotlin
@@ -35,7 +42,7 @@ import androidx.fragment.app.Fragment
  */
 class RequestBuilder internal constructor(
     private val engine: IPermissionEngine,
-    private val caller: androidx.activity.result.ActivityResultCaller,
+    private val caller: ActivityResultCaller,
 ) {
 
     /** 在构造时立即创建 Launcher（确保 registerForActivityResult 在生命周期之前调用） */
@@ -162,7 +169,7 @@ class RequestBuilder internal constructor(
                 }
             }
 
-            override fun getCustomDialog(context: Context): android.app.Dialog? = null
+            override fun getCustomDialog(context: Context): Dialog? = null
 
             override fun needShowJumpSettingDialog(): Boolean = false
         }
@@ -188,7 +195,7 @@ class RequestBuilder internal constructor(
             if (ctx != null) {
                 val permsToCheck = if (strategy != null) strategy!!.getPermissions() else permissions
                 // 检查是否有未授予的权限（之前可能被拒绝过）
-                val notGranted = permsToCheck.filter { !PermissionEngine.isGranted(ctx, it) }
+                val notGranted = permsToCheck.filter { !PermissionCore.isGranted(ctx, it) }
                 if (notGranted.isNotEmpty()) {
                     val scope = object : ExplainReasonScope {
                         override fun context(): Context = ctx
@@ -234,7 +241,7 @@ class RequestBuilder internal constructor(
 interface ExplainReasonScope {
 
     /** 获取当前 Context */
-    fun context(): android.content.Context
+    fun context(): Context
 
     /** 继续发起权限请求 */
     fun proceed()

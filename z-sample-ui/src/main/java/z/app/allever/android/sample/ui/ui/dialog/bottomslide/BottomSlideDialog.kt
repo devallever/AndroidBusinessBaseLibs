@@ -12,6 +12,7 @@ import z.app.allever.android.sample.ui.databinding.DialogBottomBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import z.app.allever.android.sample.ui.R
 
 class BottomSlideDialog : BottomSheetDialogFragment() {
 
@@ -19,7 +20,7 @@ class BottomSlideDialog : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, app.allever.android.lib.core.R.style.BottomSheetDialog)
+        setStyle(STYLE_NORMAL, R.style.BottomSheetDialog)
     }
 
     override fun onCreateView(

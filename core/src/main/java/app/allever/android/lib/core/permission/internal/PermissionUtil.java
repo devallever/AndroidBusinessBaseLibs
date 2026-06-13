@@ -1,4 +1,4 @@
-package app.allever.android.lib.core.permission;
+package app.allever.android.lib.core.permission.internal;
 
 import android.app.Activity;
 import android.content.ComponentName;

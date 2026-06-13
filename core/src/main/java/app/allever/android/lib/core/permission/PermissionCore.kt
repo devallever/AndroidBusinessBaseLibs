@@ -2,6 +2,8 @@ package app.allever.android.lib.core.permission
 
 import android.content.Context
 import androidx.activity.result.ActivityResultCaller
+import app.allever.android.lib.core.permission.internal.DefaultEngine
+import app.allever.android.lib.core.permission.internal.RequestBuilder
 
 /**
  * 全局权限引擎门面（单例）
@@ -32,9 +34,7 @@ import androidx.activity.result.ActivityResultCaller
  *     .request()
  * ```
  */
-object PermissionEngine {
-
-    private const val DEFAULT_ENGINE_NAME = "Default"
+object PermissionCore {
 
     internal var engine: IPermissionEngine = DefaultEngine()
     private val lock = Any()
@@ -56,13 +56,7 @@ object PermissionEngine {
 
     /** 获取或创建引擎实例 */
     internal fun getOrCreateEngine(): IPermissionEngine {
-        return engine ?: synchronized(lock) {
-            engine ?: run {
-                val defaultEngine = DefaultEngine()
-                engine = defaultEngine
-                defaultEngine
-            }
-        }
+        return engine
     }
 
     // ==================== 链式 API 入口 ====================
@@ -96,7 +90,7 @@ object PermissionEngine {
      * ```
      *
      * @param caller Fragment 或 ComponentActivity
-     * @return [RequestBuilder] 用于链式配置和发起请求
+     * @return [app.allever.android.lib.core.permission.internal.RequestBuilder] 用于链式配置和发起请求
      */
     fun with(caller: ActivityResultCaller): RequestBuilder {
         return RequestBuilder(getOrCreateEngine(), caller)

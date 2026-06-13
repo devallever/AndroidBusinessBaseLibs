@@ -1,17 +1,21 @@
-package app.allever.android.lib.core.permission
+package app.allever.android.lib.core.permission.internal
 
-import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.result.ActivityResultCaller
 import androidx.core.content.ContextCompat
+import app.allever.android.lib.core.permission.IPermissionEngine
+import app.allever.android.lib.core.permission.IPermissionLauncher
+import app.allever.android.lib.core.permission.PermissionLauncher
+import app.allever.android.lib.core.permission.PermissionResultCallback
+import app.allever.android.lib.core.permission.PermissionStrategy
 import java.lang.ref.WeakReference
 
 /**
  * 默认权限引擎实现
  *
- * 基于自研的 [PermissionLauncher] 组件，使用 ActivityResultContract 发起权限请求。
- * 无需任何第三方依赖，作为 [PermissionEngine] 的默认引擎。
+ * 基于自研的 [app.allever.android.lib.core.permission.PermissionLauncher] 组件，使用 ActivityResultContract 发起权限请求。
+ * 无需任何第三方依赖，作为 [app.allever.android.lib.core.permission.PermissionCore] 的默认引擎。
  *
  * 特性：
  * - 支持 Fragment 和 Activity
@@ -58,9 +62,9 @@ class DefaultEngine : IPermissionEngine {
     }
 
     /**
-     * 默认 Launcher 实现 — 内部委托给 [PermissionLauncher]
+     * 默认 Launcher 实现 — 内部委托给 [app.allever.android.lib.core.permission.PermissionLauncher]
      *
-     * 注意：[PermissionLauncher] 必须在 Fragment/Activity 的初始化阶段创建
+     * 注意：[app.allever.android.lib.core.permission.PermissionLauncher] 必须在 Fragment/Activity 的初始化阶段创建
      * （即 onCreate/onAttach 之前），因为其内部会调用 registerForActivityResult()。
      * 因此这里不能使用懒加载，必须在构造时立即创建。
      */

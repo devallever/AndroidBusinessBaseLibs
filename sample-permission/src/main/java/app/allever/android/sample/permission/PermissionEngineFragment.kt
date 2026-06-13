@@ -7,10 +7,10 @@ import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.permission.BluetoothPermissionStrategy
-import app.allever.android.lib.core.permission.DefaultEngine
-import app.allever.android.lib.core.permission.JumpPermissionSettingDialog
-import app.allever.android.lib.core.permission.PermissionEngine
-import app.allever.android.lib.core.permission.WhyRequestPermissionDialog
+import app.allever.android.lib.core.permission.internal.DefaultEngine
+import app.allever.android.lib.core.permission.dialog.JumpPermissionSettingDialog
+import app.allever.android.lib.core.permission.PermissionCore
+import app.allever.android.lib.core.permission.dialog.WhyRequestPermissionDialog
 import app.allever.android.lib.permission.engine.permissionx.PermissionXEngine
 import com.chad.library.adapter.base.BaseQuickAdapter
 
@@ -18,21 +18,21 @@ class PermissionEngineFragment: ListFragment<FragmentListBinding, ListViewModel,
     override fun getAdapter(): BaseQuickAdapter<TextClickItem, *> = TextClickAdapter()
 
     /** 必须在初始化阶段创建 Launcher（不能在点击回调中懒创建，否则 registerForActivityResult 会闪退） */
-    private val permissionLauncher = PermissionEngine.with(this)
+    private val permissionLauncher = PermissionCore.with(this)
 
     override fun getList(): MutableList<TextClickItem> = mutableListOf(
         // ==================== PermissionEngine 引擎模式 ====================
 
         TextClickItem("【引擎】初始化引擎 (DefaultEngine)") {
             // 切换引擎只需改这一行（通常在 Application.onCreate 中调用一次）
-            PermissionEngine.init { DefaultEngine() }
-            toast("引擎已切换为: ${PermissionEngine.currentEngineName}")
+            PermissionCore.init { DefaultEngine() }
+            toast("引擎已切换为: ${PermissionCore.currentEngineName}")
         },
 
         TextClickItem("【引擎】初始化引擎 (PermissionXEngine)") {
             // 切换引擎只需改这一行（通常在 Application.onCreate 中调用一次）
-            PermissionEngine.init { PermissionXEngine() }
-            toast("引擎已切换为: ${PermissionEngine.currentEngineName}")
+            PermissionCore.init { PermissionXEngine() }
+            toast("引擎已切换为: ${PermissionCore.currentEngineName}")
         },
 
         TextClickItem("【引擎】申请相机权限 (链式 API)") {

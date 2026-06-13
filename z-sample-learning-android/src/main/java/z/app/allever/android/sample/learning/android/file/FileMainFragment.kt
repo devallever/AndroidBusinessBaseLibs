@@ -1,6 +1,5 @@
 package z.app.allever.android.sample.learning.android.file
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
@@ -21,7 +20,7 @@ import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.core.permission.PermissionEngine
+import app.allever.android.lib.core.permission.PermissionCore
 import app.allever.android.lib.core.permission.StoragePermissionStrategy
 import app.allever.android.lib.core.util.FileUtils
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +29,7 @@ import java.io.File
 
 class FileMainFragment : ListFragment<FragmentListBinding, ListViewModel, TextClickItem>() {
 
-    private val permissionLauncher = PermissionEngine.with(this)
+    private val permissionLauncher = PermissionCore.with(this)
     override fun getAdapter() = TextClickAdapter()
 
     override fun getList() = mutableListOf(

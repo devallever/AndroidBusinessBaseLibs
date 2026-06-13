@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.helper.ViewHelper
-import app.allever.android.lib.core.permission.PermissionEngine
+import app.allever.android.lib.core.permission.PermissionCore
 import app.allever.android.lib.core.util.KeyboardUtils
 import app.allever.android.lib.core.util.SoftKeyboardUtils
 import app.allever.android.lib.media.core.model.MediaType
@@ -25,7 +25,6 @@ import z.app.allever.android.sample.function.im.ui.widget.InputBar
 import z.app.allever.android.sample.function.im.ui.widget.InputBarDialog
 import z.app.allever.android.sample.function.im.viewmodel.ConversationViewModel
 import com.vanniktech.emoji.EmojiPopup
-import kotlinx.coroutines.launch
 
 
 /**
@@ -45,7 +44,7 @@ class ConversationFragment :
         }
     }
 
-    private val permissionLauncher = PermissionEngine.with(this)
+    private val permissionLauncher = PermissionCore.with(this)
 
     private val imageLauncher = MediaPickerCore.registerPickerLauncher(this) {
         it.map {

@@ -1,6 +1,5 @@
 package app.allever.android.lib.core.permission
 
-import android.app.Activity
 import android.content.Context
 import androidx.activity.result.ActivityResultCaller
 
@@ -8,7 +7,7 @@ import androidx.activity.result.ActivityResultCaller
  * 权限请求引擎接口
  *
  * 所有权限实现（Default、PermissionX、AndPermission 等）均需实现此接口。
- * 通过 [PermissionEngine.init] 可无缝切换底层权限方案，业务代码无需改动。
+ * 通过 [PermissionCore.init] 可无缝切换底层权限方案，业务代码无需改动。
  */
 interface IPermissionEngine {
 

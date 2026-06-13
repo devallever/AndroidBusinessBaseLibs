@@ -1,4 +1,4 @@
-package app.allever.android.lib.core.permission
+package app.allever.android.lib.core.permission.dialog
 
 import android.content.Context
 import android.widget.TextView

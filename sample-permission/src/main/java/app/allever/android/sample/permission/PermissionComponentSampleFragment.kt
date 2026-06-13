@@ -14,7 +14,7 @@ import app.allever.android.lib.core.permission.CalendarPermissionStrategy
 import app.allever.android.lib.core.permission.CameraPermissionStrategy
 import app.allever.android.lib.core.permission.ContactsPermissionStrategy
 import app.allever.android.lib.core.permission.ForegroundLocationPermissionStrategy
-import app.allever.android.lib.core.permission.JumpPermissionSettingDialog
+import app.allever.android.lib.core.permission.dialog.JumpPermissionSettingDialog
 import app.allever.android.lib.core.permission.MediaPermissionStrategy
 import app.allever.android.lib.core.permission.NearbyDevicesPermissionStrategy
 import app.allever.android.lib.core.permission.NotificationPermissionStrategy

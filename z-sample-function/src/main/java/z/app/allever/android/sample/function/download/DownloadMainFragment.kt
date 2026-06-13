@@ -9,8 +9,8 @@ import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.core.permission.PermissionEngine
-import app.allever.android.lib.core.permission.PermissionHelper
+import app.allever.android.lib.core.permission.PermissionCore
+import app.allever.android.lib.core.permission.internal.PermissionHelper
 import app.allever.android.lib.core.permission.StoragePermissionStrategy
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import kotlinx.coroutines.launch
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
  */
 class DownloadMainFragment : ListFragment<FragmentListBinding, BaseViewModel, TextClickItem>() {
 
-    private val permissionLauncher = PermissionEngine.with(this)
+    private val permissionLauncher = PermissionCore.with(this)
 
     private val permissionsList = java.util.ArrayList<String>().apply {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
