@@ -19,6 +19,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.glide)
-    implementation("com.github.chrisbanes:photoview:2.3.0")
+    implementation(libs.chrisbanes.photoview)
     implementation(libs.androidx.activity.ktx)
 }

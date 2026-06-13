@@ -40,6 +40,10 @@ billingKtx = "7.0.0"
 roomRuntime = "2.4.3"
 roomKtx = "2.4.3"
 roomCompiler = "2.4.3"
+workMultiprocess = "2.7.1"
+workRuntimeKtx = "2.7.1"
+kotlinParcelizeRuntime = "2.0.21"
+kotlinxCoroutinesPlayServices = "1.6.4"
 
 # third party
 arouter = "1.5.2"
@@ -72,6 +76,31 @@ youthBanner = "2.2.2"
 afollestadMaterialDialogsBottomsheets = "3.3.0"
 circleimageview = "2.2.0"
 afollestadMaterialDialogs = "3.3.0"
+gestureViews = "2.8.3"
+blurView = "version-2.0.6"
+shapeBlurView = "1.0.5"
+floatWindow = "1.0.9"
+expandableRecyclerView = "0.9.3"
+dragDropSwipeRecyclerview = "1.1.1"
+colorPicker = "0.0.15"
+discreteSeekbar = "1.0.1"
+alerter = "7.0.1"
+lottie = "3.4.0"
+microsoftSpeechSdk = "1.40.0"
+playServicesAuth = "20.4.1"
+facebookLogin = "18.0.3"
+facebookShare = "18.0.3"
+fresco = "3.6.0"
+documentfile = "1.0.1"
+installReferrer = "2.2"
+retrofitRxjava2Adapter = "2.4.0"
+permissionx = "1.6.1"
+photoview = "2.3.0"
+playServicesOssLicenses = "17.0.0"
+preference = "1.2.0"
+timberVersion = "5.0.1"
+dnsjava = "3.5.2"
+
 
 
 [libraries]
@@ -82,14 +111,19 @@ androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "
 androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraX" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-emoji2-emojipicker = { module = "androidx.emoji2:emoji2-emojipicker", version.ref = "emoji2Emojipicker" }
+androidx-preference = { module = "androidx.preference:preference", version.ref = "preference" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
+androidx-work-multiprocess = { module = "androidx.work:work-multiprocess", version.ref = "workMultiprocess" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlin-parcelize-runtime = { module = "org.jetbrains.kotlin:kotlin-parcelize-runtime", version.ref = "kotlinParcelizeRuntime" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
@@ -131,7 +165,10 @@ coil-video = { group = "io.coil-kt", name = "coil-video", version.ref = "coil" }
 # third party
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+permissionx = { module = "com.guolindev.permissionx:permissionx", version.ref = "permissionx" }
+chrisbanes-photoview = { module = "com.github.chrisbanes:photoview", version.ref = "photoview" }
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
+play-services-oss-licenses = { module = "com.google.android.gms:play-services-oss-licenses", version.ref = "playServicesOssLicenses" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 retrofit-converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit" }
@@ -172,7 +209,26 @@ skin-support-constraint-layout = { module = "skin.support:skin-support-constrain
 skin-support-cardview = { module = "skin.support:skin-support-cardview", version.ref = "skinSupport" }
 skin-support-design = { module = "skin.support:skin-support-design", version.ref = "skinSupport" }
 youth-banner = { module = "io.github.youth5201314:banner", version.ref = "youthBanner" }
-
+alexvasilkov-gesture-views = { module = "com.alexvasilkov:gesture-views", version.ref = "gestureViews" }
+dimezis-blur-view = { module = "com.github.Dimezis:BlurView", version.ref = "blurView" }
+centerzx-shape-blur-view = { module = "com.github.centerzx:ShapeBlurView", version.ref = "shapeBlurView" }
+yhaolpz-float-window = { module = "com.github.yhaolpz:FloatWindow", version.ref = "floatWindow" }
+pokercc-expandable-recycler-view = { module = "com.github.pokercc:ExpandableRecyclerView", version.ref = "expandableRecyclerView" }
+ernestoyaquello-drag-drop-swipe-recycler-view = { module = "com.ernestoyaquello.dragdropswiperecyclerview:drag-drop-swipe-recyclerview", version.ref = "dragDropSwipeRecyclerview" }
+quadflask-color-picker = { module = "com.github.QuadFlask:colorpicker", version.ref = "colorPicker" }
+adw-library-discrete-seekbar = { module = "org.adw.library:discrete-seekbar", version.ref = "discreteSeekbar" }
+tapadoo-alerter = { module = "com.tapadoo.android:alerter", version.ref = "alerter" }
+airbnb-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+microsoft-cognitive-speech-sdk = { module = "com.microsoft.cognitiveservices.speech:client-sdk", version.ref = "microsoftSpeechSdk" }
+google-play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebookLogin" }
+facebook-share = { module = "com.facebook.android:facebook-share", version.ref = "facebookShare" }
+facebook-fresco = { module = "com.facebook.fresco:fresco", version.ref = "fresco" }
+androidx-document-file = { module = "androidx.documentfile:documentfile", version.ref = "documentfile" }
+android-install-referrer = { module = "com.android.installreferrer:installreferrer", version.ref = "installReferrer" }
+retrofit-adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofitRxjava2Adapter" }
+jakewharton-timber = { module = "com.jakewharton.timber:timber", version.ref = "timberVersion" }
+dnsjava = { module = "dnsjava:dnsjava", version.ref = "dnsjava" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

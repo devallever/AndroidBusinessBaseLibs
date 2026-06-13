@@ -14,5 +14,5 @@ android {
 
 dependencies {
     implementation(project(":sample-common"))
-    implementation("com.alexvasilkov:gesture-views:2.8.3")
+    implementation(libs.alexvasilkov.gesture.views)
 }

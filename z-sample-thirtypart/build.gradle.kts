@@ -17,8 +17,8 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.glide.transformations)
     implementation(libs.okhttp)
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.retrofit2:adapter-rxjava2:2.4.0")
-    implementation("com.squareup.retrofit2:converter-scalars:2.0.0")
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.scalars)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit.adapter.rxjava2)
 }

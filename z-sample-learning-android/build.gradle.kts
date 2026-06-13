@@ -14,5 +14,5 @@ android {
 
 dependencies {
     implementation(project(":sample-common"))
-    implementation("androidx.documentfile:documentfile:1.0.1")
+    implementation(libs.androidx.document.file)
 }

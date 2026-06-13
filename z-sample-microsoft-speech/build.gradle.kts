@@ -14,5 +14,5 @@ android {
 
 dependencies {
     implementation(project(":sample-common"))
-    implementation("com.microsoft.cognitiveservices.speech:client-sdk:1.40.0")
+    implementation(libs.microsoft.cognitive.speech.sdk)
 }

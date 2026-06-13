@@ -19,9 +19,9 @@ dependencies {
     api(project(":z-lib-widget"))
     api(libs.material)
 
-    implementation("com.github.Dimezis:BlurView:version-2.0.6")
-    implementation("com.github.centerzx:ShapeBlurView:1.0.5")
-    implementation("com.github.yhaolpz:FloatWindow:1.0.9")
-    implementation("com.github.pokercc:ExpandableRecyclerView:0.9.3")
-    implementation("com.ernestoyaquello.dragdropswiperecyclerview:drag-drop-swipe-recyclerview:1.1.1")
+    implementation(libs.dimezis.blur.view)
+    implementation(libs.centerzx.shape.blur.view)
+    implementation(libs.yhaolpz.float.window)
+    implementation(libs.pokercc.expandable.recycler.view)
+    implementation(libs.ernestoyaquello.drag.drop.swipe.recycler.view)
 }

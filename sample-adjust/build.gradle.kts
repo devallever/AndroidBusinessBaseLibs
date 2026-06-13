@@ -16,6 +16,6 @@ dependencies {
     api(project(":sample-common"))
     api(libs.adjust.android)
     //Install Referrer 是一种唯一标识符，可用来将安装归因至来源。
-    implementation("com.android.installreferrer:installreferrer:2.2")
+    implementation(libs.android.install.referrer)
     implementation(libs.play.services.ads.identifier)
 }

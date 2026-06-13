@@ -14,5 +14,5 @@ android {
 dependencies {
     api(project(":core"))
     // PermissionX 依赖（使用时需确保仓库中包含）
-    implementation("com.guolindev.permissionx:permissionx:1.6.1")
+    implementation(libs.permissionx)
 }

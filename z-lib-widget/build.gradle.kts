@@ -32,7 +32,7 @@ dependencies {
     api(libs.circleimageview)
     api(libs.afollestad.material.dialogs)
     api(libs.afollestad.material.dialogs.bottomsheets)
-    api("com.github.chrisbanes:photoview:2.3.0") {
+    api(libs.chrisbanes.photoview) {
         //exclude(module = "tiktok-business-android-sdk-comp")
         //androidx.core已经包含了下面这些
         exclude(group = "com.android.support", module = "support-annotations")

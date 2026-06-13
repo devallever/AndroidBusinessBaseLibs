@@ -14,8 +14,8 @@ android {
 
 dependencies {
     implementation(project(":sample-common"))
-    implementation("com.google.android.gms:play-services-auth:20.4.1")
-    implementation("com.facebook.android:facebook-login:18.0.3")
-    implementation("com.facebook.android:facebook-share:18.0.3")
-    implementation("com.facebook.fresco:fresco:3.6.0")
+    implementation(libs.google.play.services.auth)
+    implementation(libs.facebook.login)
+    implementation(libs.facebook.share)
+    implementation(libs.facebook.fresco)
 }

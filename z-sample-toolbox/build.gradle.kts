@@ -16,8 +16,8 @@ dependencies {
     implementation(project(":sample-common"))
     //material
     implementation(libs.material)
-    implementation("com.github.QuadFlask:colorpicker:0.0.15")
-    implementation("org.adw.library:discrete-seekbar:1.0.1")
-    implementation("com.tapadoo.android:alerter:7.0.1")
-    implementation("com.airbnb.android:lottie:3.4.0")
+    implementation(libs.quadflask.color.picker)
+    implementation(libs.adw.library.discrete.seekbar)
+    implementation(libs.tapadoo.alerter)
+    implementation(libs.airbnb.lottie)
 }
