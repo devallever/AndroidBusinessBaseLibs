@@ -1,4 +1,4 @@
-package app.allever.android.lib.network.engine.huc
+package app.allever.android.lib.network.core.engine.huc
 
 import app.allever.android.lib.network.core.engine.EngineConfig
 

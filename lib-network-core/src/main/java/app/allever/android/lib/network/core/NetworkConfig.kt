@@ -1,7 +1,9 @@
 package app.allever.android.lib.network.core
 
+import app.allever.android.lib.core.app.App
 import app.allever.android.lib.network.core.engine.EngineConfig
 import app.allever.android.lib.network.core.engine.ResponseConverter
+import app.allever.android.lib.network.core.engine.huc.UrlConnectionEngine
 import app.allever.android.lib.network.core.exception.NetworkException
 import app.allever.android.lib.network.core.interceptor.NetInterceptor
 import app.allever.android.lib.network.core.response.GsonConverter
@@ -131,13 +133,16 @@ class NetworkConfig internal constructor(builder: Builder) {
     class Builder {
         // ---- 基础 ----
         var baseUrl: String = ""
-        var engineName: String = ""
+        var engineName: String = UrlConnectionEngine.ENGINE_NAME
         var successCode: Int = 0
         var engineConfig: EngineConfig = EngineConfig()
         var converter: ResponseConverter? = null
 
         // ---- 请求头 ----
-        private val _headers = mutableMapOf<String, String>()
+        private val _headers = mutableMapOf<String, String>().apply {
+            // 公共请求头
+            put("Accept", "application/json")
+        }
         val headers: Map<String, String> get() = _headers
 
         // ---- 拦截器 ----

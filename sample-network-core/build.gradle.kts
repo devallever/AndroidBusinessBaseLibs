@@ -15,6 +15,5 @@ android {
 dependencies {
     implementation(project(":sample-common"))
     implementation(project(":lib-network-core"))
-    implementation(project(":lib-network-engine-huc"))
     implementation(project(":lib-network-engine-okhttp"))
 }

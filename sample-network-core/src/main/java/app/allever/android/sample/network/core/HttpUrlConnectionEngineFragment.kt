@@ -16,8 +16,8 @@ import app.allever.android.lib.network.core.engine.NetCallback
 import app.allever.android.lib.network.core.engine.HttpMethod
 import app.allever.android.lib.network.core.engine.NetResponse
 import app.allever.android.lib.network.core.exception.NetworkException
-import app.allever.android.lib.network.engine.huc.UrlConnectionConfig
-import app.allever.android.lib.network.engine.huc.UrlConnectionEngine
+import app.allever.android.lib.network.core.engine.huc.UrlConnectionConfig
+import app.allever.android.lib.network.core.engine.huc.UrlConnectionEngine
 import app.allever.android.sample.network.core.repository.WanAndroidRepository
 import com.chad.library.adapter.base.BaseQuickAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -96,42 +96,16 @@ class HttpUrlConnectionEngineFragment :
      * 1. 初始化 Network（使用 HttpURLConnection 引擎）
      */
     private fun initNetwork() {
-        if (NetCore.isInitialized) {
-            toast("Network 已初始化，当前引擎: ${NetCore.currentEngine()}")
-            return
-        }
+//        if (NetCore.isInitialized) {
+//            toast("Network 已初始化，当前引擎: ${NetCore.currentEngine()}")
+//            return
+//        }
 
         NetCore.init {
             // 使用公开测试 API
             baseUrl("https://www.wanandroid.com")
-
-            // 选择 HttpURLConnection 引擎
-            engine(UrlConnectionEngine.ENGINE_NAME) {
-                // HUC 专属配置
-                connectTimeout(10_000)
-                readTimeout(15_000)
-                (this as? UrlConnectionConfig)?.apply {
-                    followRedirects(true)
-                    keepAlive(true)
-                }
-            }
-
-            successCode(0)
-
-            // 公共请求头
-            header("Accept", "application/json")
-            header("App-Version", "1.0.0")
-
-            // 启用日志
-            enableLog(true)
-
             // 设置统一业务响应类型
             responseClass(BaseResponse::class.java)
-
-            // 全局错误处理
-//            onError { exception, _ ->
-//                Log.e("HUC-Sample", "全局错误: [${exception.code}] ${exception.displayMessage}")
-//            }
         }
 
         toast("初始化完成！引擎: ${NetCore.currentEngine()}")

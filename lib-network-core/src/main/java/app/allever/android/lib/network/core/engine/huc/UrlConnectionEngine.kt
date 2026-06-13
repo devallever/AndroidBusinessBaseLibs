@@ -1,9 +1,21 @@
-package app.allever.android.lib.network.engine.huc
+package app.allever.android.lib.network.core.engine.huc
 
-import app.allever.android.lib.network.core.engine.*
+import app.allever.android.lib.network.core.engine.EngineRegistry
+import app.allever.android.lib.network.core.engine.HttpEngine
+import app.allever.android.lib.network.core.engine.HttpMethod
+import app.allever.android.lib.network.core.engine.NetBody
+import app.allever.android.lib.network.core.engine.NetCall
+import app.allever.android.lib.network.core.engine.NetRequest
+import app.allever.android.lib.network.core.engine.NetResponse
 import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.net.ConnectException
 import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
 import java.net.URL
+import java.net.UnknownHostException
+import javax.net.ssl.SSLException
+import kotlin.collections.iterator
 
 /**
  * HttpURLConnection 引擎实现
@@ -189,12 +201,12 @@ class UrlConnectionEngine(private val config: UrlConnectionConfig) : HttpEngine 
      */
     private fun mapException(e: Exception): Exception {
         return when (e) {
-            is java.net.SocketTimeoutException -> e
-            is java.net.ConnectException -> e
-            is java.net.UnknownHostException -> e
-            is javax.net.ssl.SSLException -> e
-            is java.io.IOException -> e
-            else -> java.io.IOException("网络请求失败: ${e.message}", e)
+            is SocketTimeoutException -> e
+            is ConnectException -> e
+            is UnknownHostException -> e
+            is SSLException -> e
+            is IOException -> e
+            else -> IOException("网络请求失败: ${e.message}", e)
         }
     }
 

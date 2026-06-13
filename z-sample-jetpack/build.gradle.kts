@@ -17,7 +17,7 @@ dependencies {
 //    api(project(":lib-imageloader-engine-glide"))
 //    api(project(":lib-media-picker"))
     api(project(":lib-store-core"))
-    api(project(":lib-network-engine-huc"))
+    api(project(":lib-network-core"))
     api(project(":z-lib-widget"))
 
     //Room

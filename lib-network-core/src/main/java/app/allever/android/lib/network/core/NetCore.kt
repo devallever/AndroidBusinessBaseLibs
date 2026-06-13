@@ -83,10 +83,10 @@ object NetCore {
      * @param block DSL 配置块
      */
     fun init(block: NetworkConfig.Builder.() -> Unit) {
-        if (isInitialized) {
-            NetLogger.log(TAG, "Network 已初始化，重复调用将被忽略")
-            return
-        }
+//        if (isInitialized) {
+//            NetLogger.log(TAG, "Network 已初始化，重复调用将被忽略")
+//            return
+//        }
 
         config = NetworkConfig.Builder().apply(block).build()
 

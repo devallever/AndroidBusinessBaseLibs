@@ -1,13 +1,11 @@
-package app.allever.android.lib.network.engine.huc
+package app.allever.android.lib.network.core.engine.huc
 
-import android.os.Build
 import app.allever.android.lib.network.core.engine.NetCall
 import app.allever.android.lib.network.core.engine.NetCallback
 import app.allever.android.lib.network.core.engine.NetRequest
 import app.allever.android.lib.network.core.engine.NetResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.concurrent.CancellationException

@@ -5,8 +5,8 @@ import app.allever.android.lib.common.SampleMainActivity
 import app.allever.android.lib.common.databinding.ActivitySampleMainBinding
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.lib.network.core.NetCore
-import app.allever.android.lib.network.engine.huc.UrlConnectionConfig
-import app.allever.android.lib.network.engine.huc.UrlConnectionEngine
+import app.allever.android.lib.network.core.engine.huc.UrlConnectionConfig
+import app.allever.android.lib.network.core.engine.huc.UrlConnectionEngine
 import com.alibaba.android.arouter.facade.annotation.Route
 import z.app.allever.android.sample.jetpack.network.BaseResponse
 

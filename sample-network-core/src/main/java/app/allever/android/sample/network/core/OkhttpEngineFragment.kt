@@ -83,10 +83,10 @@ class OkhttpEngineFragment :
      * 1. 初始化 Network（使用 OkHttp 引擎）
      */
     private fun initNetwork() {
-        if (NetCore.isInitialized) {
-            toast("Network 已初始化，当前引擎: ${NetCore.currentEngine()}")
-            return
-        }
+//        if (NetCore.isInitialized) {
+//            toast("Network 已初始化，当前引擎: ${NetCore.currentEngine()}")
+//            return
+//        }
 
         NetCore.init {
             // 使用公开测试 API
@@ -94,9 +94,6 @@ class OkhttpEngineFragment :
 
             // 选择 OkHttp 引擎
             engine(OkHttpEngine.ENGINE_NAME) {
-                connectTimeout(10_000)
-                readTimeout(15_000)
-
                 // OkHttp 专属配置
                 (this as? OkHttpConfig)?.apply {
                     connectionPool(5, 5, java.util.concurrent.TimeUnit.MINUTES)
@@ -109,7 +106,6 @@ class OkhttpEngineFragment :
             successCode(0)
 
             // 公共请求头
-            header("Accept", "application/json")
             header("App-Version", "1.0.0")
 
             // 启用日志
