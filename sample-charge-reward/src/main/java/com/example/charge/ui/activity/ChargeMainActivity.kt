@@ -327,7 +327,9 @@ class ChargeMainActivity : BaseActivity<ActivityChargeMainBinding>() {
                     mSpeedUpHelper.speedUpBtn()
                     updateSpeedUpButtonUi()
                 } else {
-                    AdManager.showRewardAd(this@ChargeMainActivity, AdIndex.HOME_SPEED_UP)
+//                    AdManager.showRewardAd(this@ChargeMainActivity, AdIndex.HOME_SPEED_UP)
+                    mSpeedUpHelper.speedUpBtn()
+                    updateSpeedUpButtonUi()
                 }
             }
         }
@@ -393,7 +395,21 @@ class ChargeMainActivity : BaseActivity<ActivityChargeMainBinding>() {
                 FloatIconType.GREEN_AD -> {
                     logClickEvent(2)
                     clickFloatView?.isVisible = true
-                    AdManager.showRewardAd(this, AdIndex.HOME_FLOAT_ICON)
+//                    AdManager.showRewardAd(this, AdIndex.HOME_FLOAT_ICON)
+                    clickFloatView?.let {
+                        it.isVisible = false
+                        val data = it.tag as FloatIconData
+                        TaskHelper.addCollectCount()
+                        CurrencyFlyAnimatorUtil.start(
+                            this,
+                            binding.currencyView,
+                            binding.root,
+                            CurrencyType.GREEN,
+                            data.value
+                        ) {
+                            inAppNotify()
+                        }
+                    }
                 }
 
                 FloatIconType.SPEED -> {

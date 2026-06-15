@@ -82,19 +82,20 @@ class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
             if (isFirstLaunchApp) {
                 goMain()
             } else {
-                //获取开屏广告缓存
-                val isShowSuccess = AdManager.isCanShowAdmobOpenAd()
-                if (App.DEBUG) {
-                    LogUtil.ad("获取开屏广告缓存 state : $isShowSuccess")
-                }
-                if (App.DEBUG) {
-                    LogUtil.local("启动页 获取开屏广告缓存 state : $isShowSuccess")
-                }
-                if (isShowSuccess) {
-                    AdManager.showAdMobOpenAd(this, AdIndex.ADMOB_SPLASH_INDEX)
-                } else {
-                    goMain()
-                }
+                goMain()
+//                //获取开屏广告缓存
+//                val isShowSuccess = AdManager.isCanShowAdmobOpenAd()
+//                if (App.DEBUG) {
+//                    LogUtil.ad("获取开屏广告缓存 state : $isShowSuccess")
+//                }
+//                if (App.DEBUG) {
+//                    LogUtil.local("启动页 获取开屏广告缓存 state : $isShowSuccess")
+//                }
+//                if (isShowSuccess) {
+//                    AdManager.showAdMobOpenAd(this, AdIndex.ADMOB_SPLASH_INDEX)
+//                } else {
+//                    goMain()
+//                }
             }
         }
         animator.start()

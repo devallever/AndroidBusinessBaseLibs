@@ -48,7 +48,8 @@ class GameSeeAdDialog(
         binding.apply {
             awareTv.text = "$${aware}"
             seeAdLL.setOnSingleListener {
-                AdManager.showRewardAd(activity, adIndex)
+                closeCallBack.invoke(this@GameSeeAdDialog)
+//                AdManager.showRewardAd(activity, adIndex)
             }
             closeImg.setOnSingleListener {
                 closeCallBack.invoke(this@GameSeeAdDialog)

@@ -74,7 +74,8 @@ class HotLaunchActivity : BaseActivity<ActivityLaunchBinding>() {
         }
         animator.doOnEnd {
             AdmobOpenAdUtil.updateShowTime()
-            AdManager.showAdMobOpenAd(this, AdIndex.ADMOB_SPLASH_INDEX)
+//            AdManager.showAdMobOpenAd(this, AdIndex.ADMOB_SPLASH_INDEX)
+            finish()
         }
         animator.start()
     }

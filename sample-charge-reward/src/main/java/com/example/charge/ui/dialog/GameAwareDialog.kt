@@ -53,7 +53,9 @@ class GameAwareDialog(
             }
 
             doubleAwareLL.setOnSingleListener {
-                AdManager.showRewardAd(activity, adIndex)
+//                AdManager.showRewardAd(activity, adIndex)
+                closeCallBack.invoke(goldNum, greenNum)
+                dismiss()
             }
             closeImg.setOnSingleListener {
                 closeCallBack.invoke(goldNum, greenNum)

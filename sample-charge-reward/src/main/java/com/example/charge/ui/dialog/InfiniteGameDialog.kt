@@ -40,7 +40,8 @@ class InfiniteGameDialog(
         binding.apply {
 
             seeAdLL.setOnSingleListener {
-                AdManager.showRewardAd(activity, adIndex)
+//                AdManager.showRewardAd(activity, adIndex)
+                closeCallBack.invoke(this@InfiniteGameDialog)
             }
             closeImg.setOnSingleListener {
                 closeCallBack.invoke(this@InfiniteGameDialog)

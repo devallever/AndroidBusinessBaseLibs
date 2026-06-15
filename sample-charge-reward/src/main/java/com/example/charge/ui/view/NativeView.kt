@@ -71,12 +71,13 @@ class NativeView @JvmOverloads constructor(
                 bannerFl.visible()
                 stopAnimation()
                 binding.root.postDelayed({
-                    val isLoad = AdManager.showNative(activity, bannerFl, R.mipmap.ic_launcher) {
-                        initView(activity)
-                    }
-                    if (!isLoad) {
-                        AdManager.loadNative(activity)
-                    }
+                    initView(activity)
+//                    val isLoad = AdManager.showNative(activity, bannerFl, R.mipmap.ic_launcher) {
+//                        initView(activity)
+//                    }
+//                    if (!isLoad) {
+//                        AdManager.loadNative(activity)
+//                    }
                 }
                 ,1000
                 )
