@@ -14,7 +14,7 @@ android {
 
 dependencies {
     implementation(project(":sample-common"))
-    implementation(project(":lib-vpn-shadowsocks-core"))
+    api(project(":lib-vpn-shadowsocks-core"))
 
 //    val aarList = mutableListOf("unityLibrary-release.aar")
 //    implementation(fileTree(mapOf("dir" to "libs", "include" to aarList)))

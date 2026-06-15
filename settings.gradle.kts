@@ -17,6 +17,15 @@ pluginManagement {
         jcenter()
         maven (url = "https://artifact.bytedance.com/repository/pangle")
         maven(url = "https://artifacts.applovin.com/android")
+
+        //火山引擎maven仓库地址
+        maven(url = "https://artifact.bytedance.com/repository/Volcengine/")
+        //穿山甲maven仓库地址
+        maven(url = "https://artifact.bytedance.com/repository/pangle")
+
+        maven(url = "https://s01.oss.sonatype.org/content/groups/public")
+
+        maven(url = "https://maven.pkg.github.com/CarGuo/GSYVideoPlayer")
     }
 }
 dependencyResolutionManagement {
@@ -39,6 +48,16 @@ dependencyResolutionManagement {
         jcenter()
         maven (url = "https://artifact.bytedance.com/repository/pangle")
         maven(url = "https://artifacts.applovin.com/android")
+
+
+        //火山引擎maven仓库地址
+        maven(url = "https://artifact.bytedance.com/repository/Volcengine/")
+        //穿山甲maven仓库地址
+        maven(url = "https://artifact.bytedance.com/repository/pangle")
+
+        maven(url = "https://s01.oss.sonatype.org/content/groups/public")
+
+        maven(url = "https://maven.pkg.github.com/CarGuo/GSYVideoPlayer")
     }
 }
 
@@ -105,3 +124,4 @@ include(":sample-unity")
 include(":sample-vpn")
 include(":lib-vpn-shadowsocks-core")
 include(":sample-cleaner")
+include(":sample-dj-csj")

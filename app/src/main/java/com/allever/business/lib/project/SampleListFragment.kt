@@ -37,5 +37,8 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextClickItem("Cleaner") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CLEANER).navigation()
         },
+        TextClickItem("短剧-穿山甲") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_DJ_CSJ).navigation()
+        },
     )
 }

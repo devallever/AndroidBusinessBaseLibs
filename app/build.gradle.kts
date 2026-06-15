@@ -58,8 +58,9 @@ dependencies {
     implementation(project(":sample-imageloader-core"))
     implementation(project(":sample-camera-core"))
     implementation(project(":sample-unity"))
-//    implementation(project(":sample-vpn"))
+    implementation(project(":sample-vpn"))
     implementation(project(":sample-cleaner"))
+//    implementation(project(":sample-dj-csj"))
 
     implementation(project(":z-sample-billing"))
     implementation(project(":z-sample-cleaner"))
