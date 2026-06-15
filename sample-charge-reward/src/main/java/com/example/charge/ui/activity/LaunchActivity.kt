@@ -46,7 +46,7 @@ class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
         if (App.DEBUG) {
             LogUtil.local("进入首页")
         }
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, ChargeMainActivity::class.java))
         finish()
     }
 

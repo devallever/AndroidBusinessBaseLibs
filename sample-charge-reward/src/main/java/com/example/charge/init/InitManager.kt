@@ -10,7 +10,7 @@ import com.example.charge.R
 import com.example.charge.ad.AdActionListener
 import com.example.charge.base.AppNotifyReceiver
 import com.example.charge.ui.activity.LaunchActivity
-import com.example.charge.ui.activity.MainActivity
+import com.example.charge.ui.activity.ChargeMainActivity
 import com.example.charge.ui.activity.WithdrawActivity
 import com.example.charge.withdraw.WithdrawHelper
 import gjofg.frytfkrqy.hxrdk.gddrjgra.ConfigWrapper
@@ -92,7 +92,7 @@ object InitManager {
             ChargeApp.instance.getString(R.string.app_name),
             R.mipmap.ic_launcher,
             LaunchActivity::class.java,
-            MainActivity::class.java
+            ChargeMainActivity::class.java
         )
         // 工具栏通知
         // layoutId 小的布局, bigLayoutId, 如果布局相同, 两个layout可以设置一样
@@ -103,7 +103,7 @@ object InitManager {
             "chargeName",
             20002
         ) //设置整个通知栏的点击 跳转
-            .setContentIntent(ChargeApp.instance, 2002, MainActivity::class.java, null)
+            .setContentIntent(ChargeApp.instance, 2002, ChargeMainActivity::class.java, null)
             .addClickActivity(ChargeApp.instance, R.id.ll_gold, WithdrawActivity::class.java, 2003, null)
             .addClickActivity(ChargeApp.instance, R.id.ll_green, WithdrawActivity::class.java, 2004, null)
             .addClickIntent(

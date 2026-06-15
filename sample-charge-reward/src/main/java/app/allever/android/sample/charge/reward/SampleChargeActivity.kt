@@ -9,7 +9,7 @@ import app.allever.android.lib.core.helper.ActivityHelper
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.example.charge.ui.activity.LaunchActivity
-import com.example.charge.ui.activity.MainActivity
+import com.example.charge.ui.activity.ChargeMainActivity
 
 @Route(path = "/chargereward/main")
 class SampleChargeActivity: ListActivity<ActivityListBinding, ListViewModel, TextClickItem>() {
@@ -22,7 +22,7 @@ class SampleChargeActivity: ListActivity<ActivityListBinding, ListViewModel, Tex
             ActivityHelper.startActivity(LaunchActivity::class.java)
         },
         TextClickItem("网赚充电-主页") {
-            ActivityHelper.startActivity(MainActivity::class.java)
+            ActivityHelper.startActivity(ChargeMainActivity::class.java)
         },
     )
 }

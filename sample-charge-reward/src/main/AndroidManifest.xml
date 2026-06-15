@@ -27,7 +27,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.example.charge.ui.activity.MainActivity"
+            android:name="com.example.charge.ui.activity.ChargeMainActivity"
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

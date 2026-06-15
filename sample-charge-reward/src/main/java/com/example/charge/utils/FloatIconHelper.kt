@@ -12,6 +12,7 @@ import app.allever.android.lib.core.app.App
 import com.example.charge.R
 import com.example.charge.constant.FloatIconType
 import com.example.charge.data.FloatIconData
+import com.example.charge.databinding.ActivityChargeMainBinding
 import com.example.charge.databinding.ActivityMainBinding
 import com.example.charge.init.InitManager
 import kotlin.random.Random
@@ -28,11 +29,11 @@ class FloatIconHelper {
         return list.indexOf(view)
     }
     @SuppressLint("StaticFieldLeak")
-    private var homeBinding: ActivityMainBinding? = null
+    private var homeBinding: ActivityChargeMainBinding? = null
 
     private var timer: CustomTimer? = null
 
-    fun startFloatAnimation(views: List<View>, homeBinding: ActivityMainBinding, block: (target: View)-> Unit) {
+    fun startFloatAnimation(views: List<View>, homeBinding: ActivityChargeMainBinding, block: (target: View)-> Unit) {
         val firstShow = SpUtil.get(SpKey.FIRST_SHOW_FLOAT_ICON, true)
         SpUtil.put(SpKey.FIRST_SHOW_FLOAT_ICON, false)
         this.homeBinding = homeBinding

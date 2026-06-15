@@ -22,6 +22,7 @@ import com.example.charge.currency.CurrencyFlyAnimatorUtil
 import com.example.charge.currency.CurrencyType
 import com.example.charge.currency.CurrencyUtils
 import com.example.charge.data.FloatIconData
+import com.example.charge.databinding.ActivityChargeMainBinding
 import com.example.charge.databinding.ActivityMainBinding
 import com.example.charge.event.InterAdCDTimeEvent
 import com.example.charge.event.UpdateCurrencyEvent
@@ -57,7 +58,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 
-class MainActivity : BaseActivity<ActivityMainBinding>() {
+class ChargeMainActivity : BaseActivity<ActivityChargeMainBinding>() {
 
     private val mFloatIconHelper by lazy {
         FloatIconHelper()
@@ -98,8 +99,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun getBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): ActivityMainBinding {
-        return ActivityMainBinding.inflate(layoutInflater)
+    ): ActivityChargeMainBinding {
+        return ActivityChargeMainBinding.inflate(layoutInflater)
     }
 
     override fun initView() {
@@ -275,11 +276,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.apply {
             ivInteractiveLeft.setOnSingleListener {
                 logClickEvent(6)
-                WebActivity.start(this@MainActivity, Constance.OKSPIN_URL)
+                WebActivity.start(this@ChargeMainActivity, Constance.OKSPIN_URL)
             }
             ivInteractiveRight.setOnSingleListener {
                 logClickEvent(7)
-                WebActivity.start(this@MainActivity, Constance.OKSPIN_URL)
+                WebActivity.start(this@ChargeMainActivity, Constance.OKSPIN_URL)
             }
             gameLeft.setOnSingleListener {
                 logClickEvent(11)
@@ -289,7 +290,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                             VMHelper.hitMoleViewModel.onceInfiniteTime
                     }
                 } else {
-                    goTo<HitMoleActivity>(this@MainActivity)
+                    goTo<HitMoleActivity>(this@ChargeMainActivity)
                 }
             }
             gameRight.setOnSingleListener {
@@ -300,22 +301,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                             VMHelper.receiveCoinViewModel.onceInfiniteTime
                     }
                 } else {
-                    goTo<ReceiveCoinActivity>(this@MainActivity)
+                    goTo<ReceiveCoinActivity>(this@ChargeMainActivity)
                 }
             }
             //设置
             ivSetting.setOnSingleListener {
-                PopupHelper.createDialog(it.context, SettingsDialog(this@MainActivity)).show()
+                PopupHelper.createDialog(it.context, SettingsDialog(this@ChargeMainActivity)).show()
             }
             //提现
             btnWithdraw.setOnSingleListener {
                 logClickEvent(9)
-                goTo<WithdrawActivity>(this@MainActivity)
+                goTo<WithdrawActivity>(this@ChargeMainActivity)
             }
             //任务
             btnTask.setOnSingleListener {
                 logClickEvent(10)
-                goTo<TaskActivity>(this@MainActivity)
+                goTo<TaskActivity>(this@ChargeMainActivity)
             }
             //加速
             btnSpeedup.setOnSingleListener {
@@ -326,7 +327,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     mSpeedUpHelper.speedUpBtn()
                     updateSpeedUpButtonUi()
                 } else {
-                    AdManager.showRewardAd(this@MainActivity, AdIndex.HOME_SPEED_UP)
+                    AdManager.showRewardAd(this@ChargeMainActivity, AdIndex.HOME_SPEED_UP)
                 }
             }
         }
@@ -409,7 +410,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     @SuppressLint("SetTextI18n")
     fun initObserver() {
         VMHelper.hitMoleViewModel.apply {
-            gameCount.observe(this@MainActivity) {
+            gameCount.observe(this@ChargeMainActivity) {
                 if (isInfiniteTime.value == true) {
                     binding.llGameWhackMoleTimes.gone()
                     binding.tvGameCountLeft.gone()
@@ -429,19 +430,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     }
                 }
             }
-            countDownTimer.observe(this@MainActivity) {
+            countDownTimer.observe(this@ChargeMainActivity) {
                 binding.ivInfiniteLeft.isVisible = isInfiniteTime.value?: false
                 if (isInfiniteTime.value == false) {
                     binding.tvGameCountLeft.text = "${(it / 1000).toInt()}s"
                 }
             }
-            isInfiniteTime.observe(this@MainActivity) {
+            isInfiniteTime.observe(this@ChargeMainActivity) {
                 gameCount.value = gameCount.value  //触发游戏次数的监听器，在那个里面有界面刷新
             }
         }
 
         VMHelper.receiveCoinViewModel.apply {
-            gameCount.observe(this@MainActivity) {
+            gameCount.observe(this@ChargeMainActivity) {
                 if (isInfiniteTime.value == true) {
                     binding.llGameReceiveCoinTimes.gone()
                     binding.tvGameCountRight.gone()
@@ -461,13 +462,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     }
                 }
             }
-            countDownTimer.observe(this@MainActivity) {
+            countDownTimer.observe(this@ChargeMainActivity) {
                 binding.ivInfiniteRight.isVisible = isInfiniteTime.value?: false
                 if (isInfiniteTime.value == false) {
                     binding.tvGameCountRight.text = "${(it / 1000).toInt()}s"
                 }
             }
-            isInfiniteTime.observe(this@MainActivity) {
+            isInfiniteTime.observe(this@ChargeMainActivity) {
                 gameCount.value = gameCount.value  //触发游戏次数的监听器，在那个里面有界面刷新
             }
         }

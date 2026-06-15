@@ -1,0 +1,915 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_home_bg">
+
+    <com.example.charge.ui.view.CurrencyWidget
+        android:id="@+id/currencyView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/includeChargeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:rotation="270"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currencyView">
+
+        <ImageView
+            android:id="@+id/ivChargeBottom"
+            android:layout_width="256dp"
+            android:layout_height="263dp"
+            android:layout_marginStart="-40dp"
+            android:src="@drawable/ic_charge_bottom"
+            app:layout_constraintBottom_toBottomOf="@+id/chargeProgressBg"
+            app:layout_constraintStart_toStartOf="@+id/chargeProgressBg"
+            app:layout_constraintTop_toTopOf="@+id/chargeProgressBg" />
+
+        <ImageView
+            android:id="@+id/chargeProgressBg"
+            android:layout_width="252dp"
+            android:layout_height="133dp"
+            android:src="@drawable/ic_charge_progress_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressBarCharge"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="11dp"
+            android:progress="20"
+            android:progressDrawable="@drawable/charge_progress"
+            app:layout_constraintBottom_toBottomOf="@+id/chargeProgressBg"
+            app:layout_constraintEnd_toEndOf="@+id/chargeProgressBg"
+            app:layout_constraintStart_toStartOf="@+id/chargeProgressBg"
+            app:layout_constraintTop_toTopOf="@+id/chargeProgressBg" />
+
+        <ImageView
+            android:id="@+id/ivChargeState"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_charge_ing"
+            app:layout_constraintBottom_toBottomOf="@+id/chargeProgressBg"
+            app:layout_constraintEnd_toEndOf="@+id/chargeProgressBg"
+            app:layout_constraintStart_toStartOf="@+id/chargeProgressBg"
+            android:layout_marginVertical="28dp"
+            android:layout_marginHorizontal="50dp"
+            app:layout_constraintTop_toTopOf="@+id/chargeProgressBg" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="140dp"
+        android:layout_height="250dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/includeChargeContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/currencyView">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/floatAnimContainer1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="30dp"
+            android:layout_marginEnd="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivFloatIcon1"
+                android:layout_width="@dimen/float_icon_size"
+                android:layout_height="@dimen/float_icon_size"
+                android:src="@drawable/ic_float_gold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.example.charge.ui.view.ShapeExtraWidthTextView
+                android:id="@+id/tvFloatGoldValue1"
+                style="@style/ExtraBoldText"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-5dp"
+                android:text="x10"
+                android:textColor="@color/color_FFFF13"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:shape_textStrokeColor="@color/color_E25605"
+                app:shape_textStrokeSize="2dp" />
+
+            <com.example.charge.ui.view.ShapeExtraWidthTextView
+                android:id="@+id/tvFloatGreenValue1"
+                style="@style/ExtraBoldText"
+                android:layout_height="wrap_content"
+                android:text="$0.1"
+                android:textColor="@color/color_2E7E00"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivFloatAd1"
+                android:layout_width="20dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_ad_tag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+<!--            <com.example.charge.ui.view.CircleProgressBar-->
+<!--                android:id="@+id/floatProgress1"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                app:background_color="#00000000"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/ivFloatIcon1"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/ivFloatIcon1"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/ivFloatIcon1"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/ivFloatIcon1"-->
+<!--                app:progress_color="@color/color_5CE438"-->
+<!--                app:progress_value="100"-->
+<!--                app:progress_width="1.5dp" />-->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/floatAnimContainer2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="30dp"
+            android:layout_marginStart="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/ivFloatIcon2"
+                android:layout_width="@dimen/float_icon_size"
+                android:layout_height="@dimen/float_icon_size"
+                android:src="@drawable/ic_float_gold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.example.charge.ui.view.ShapeExtraWidthTextView
+                android:id="@+id/tvFloatGoldValue2"
+                style="@style/ExtraBoldText"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-5dp"
+                android:text="x10"
+                android:textColor="@color/color_FFFF13"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:shape_textStrokeColor="@color/color_E25605"
+                app:shape_textStrokeSize="2dp" />
+
+            <com.example.charge.ui.view.ShapeExtraWidthTextView
+                android:id="@+id/tvFloatGreenValue2"
+                style="@style/ExtraBoldText"
+                android:layout_height="wrap_content"
+                android:text="$0.1"
+                android:textColor="@color/color_2E7E00"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivFloatAd2"
+                android:layout_width="20dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_ad_tag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+<!--            <com.example.charge.ui.view.CircleProgressBar-->
+<!--                android:id="@+id/floatProgress2"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                app:background_color="#00000000"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/ivFloatIcon2"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/ivFloatIcon2"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/ivFloatIcon2"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/ivFloatIcon2"-->
+<!--                app:progress_color="@color/color_5CE438"-->
+<!--                app:progress_value="100"-->
+<!--                app:progress_width="1.5dp" />-->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="140dp"
+        android:layout_height="250dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/includeChargeContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/currencyView">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/floatAnimContainer3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="30dp"
+            android:layout_marginEnd="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivFloatIcon3"
+                android:layout_width="@dimen/float_icon_size"
+                android:layout_height="@dimen/float_icon_size"
+                android:src="@drawable/ic_float_gold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.example.charge.ui.view.ShapeExtraWidthTextView
+                android:id="@+id/tvFloatGoldValue3"
+                style="@style/ExtraBoldText"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-5dp"
+                android:text="x10"
+                android:textColor="@color/color_FFFF13"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:shape_textStrokeColor="@color/color_E25605"
+                app:shape_textStrokeSize="2dp" />
+
+            <com.example.charge.ui.view.ShapeExtraWidthTextView
+                android:id="@+id/tvFloatGreenValue3"
+                style="@style/ExtraBoldText"
+                android:layout_height="wrap_content"
+                android:text="$0.1"
+                android:textColor="@color/color_2E7E00"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivFloatAd3"
+                android:layout_width="20dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_ad_tag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+<!--            <com.example.charge.ui.view.CircleProgressBar-->
+<!--                android:id="@+id/floatProgress3"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                app:background_color="#00000000"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/ivFloatIcon3"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/ivFloatIcon3"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/ivFloatIcon3"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/ivFloatIcon3"-->
+<!--                app:progress_color="@color/color_5CE438"-->
+<!--                app:progress_value="100"-->
+<!--                app:progress_width="1.5dp" />-->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/floatAnimContainer4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="30dp"
+            android:layout_marginStart="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/ivFloatIcon4"
+                android:layout_width="@dimen/float_icon_size"
+                android:layout_height="@dimen/float_icon_size"
+                android:src="@drawable/ic_float_gold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.example.charge.ui.view.ShapeExtraWidthTextView
+                android:id="@+id/tvFloatGoldValue4"
+                style="@style/ExtraBoldText"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-5dp"
+                android:text="x10"
+                android:textColor="@color/color_FFFF13"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:shape_textStrokeColor="@color/color_E25605"
+                app:shape_textStrokeSize="2dp" />
+
+            <com.example.charge.ui.view.ShapeExtraWidthTextView
+                android:id="@+id/tvFloatGreenValue4"
+                style="@style/ExtraBoldText"
+                android:layout_height="wrap_content"
+                android:text="$0.1"
+                android:textColor="@color/color_2E7E00"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivFloatAd4"
+                android:layout_width="20dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_ad_tag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+<!--            <com.example.charge.ui.view.CircleProgressBar-->
+<!--                android:id="@+id/floatProgress4"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                app:background_color="#00000000"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/ivFloatIcon4"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/ivFloatIcon4"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/ivFloatIcon4"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/ivFloatIcon4"-->
+<!--                app:progress_color="@color/color_5CE438"-->
+<!--                app:progress_value="100"-->
+<!--                app:progress_width="1.5dp" />-->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/speedContainerGold"
+        android:layout_width="124dp"
+        android:layout_height="42dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/ic_value_progress_bg"
+        app:layout_constraintEnd_toStartOf="@+id/speedContainerGreen"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/includeChargeContainer">
+
+        <ImageView
+            android:id="@+id/ivSpeedGold"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="2dp"
+            android:src="@drawable/ic_gold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.example.charge.ui.view.ShapeExtraWidthTextView
+            android:id="@+id/tvSpeedGold"
+            style="@style/ExtraBoldText"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:text="1/1s"
+            android:textColor="@color/color_9CFF54"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.example.charge.ui.view.BorderProgressBar
+        android:id="@+id/progressBarGold"
+        android:layout_width="134dp"
+        android:layout_height="52dp"
+        android:visibility="gone"
+        app:bp_backgroundColor="@color/transparent"
+        app:bp_progress="100"
+        app:layout_constraintBottom_toBottomOf="@+id/speedContainerGold"
+        app:layout_constraintEnd_toEndOf="@+id/speedContainerGold"
+        app:layout_constraintStart_toStartOf="@+id/speedContainerGold"
+        app:layout_constraintTop_toTopOf="@+id/speedContainerGold"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/speedContainerGreen"
+        android:layout_width="124dp"
+        android:layout_height="42dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="@drawable/ic_value_progress_bg"
+        app:layout_constraintBottom_toBottomOf="@+id/speedContainerGold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/speedContainerGold"
+        app:layout_constraintTop_toTopOf="@+id/speedContainerGold">
+
+        <ImageView
+            android:id="@+id/ivSpeedGreen"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:src="@drawable/ic_green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.example.charge.ui.view.ShapeExtraWidthTextView
+            android:id="@+id/tvSpeedGreen"
+            style="@style/ExtraBoldText"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:text="1/1s"
+            android:textColor="@color/color_9CFF54"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/btnSpeedup"
+        android:layout_width="164dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/ic_btn_speed_up_normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/speedContainerGreen" />
+
+    <LinearLayout
+        android:id="@+id/tvAppendTimeContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/btnSpeedup"
+        app:layout_constraintStart_toStartOf="@id/btnSpeedup"
+        app:layout_constraintTop_toTopOf="@+id/btnSpeedup">
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="18dp"
+            android:layout_marginHorizontal="1dp"
+            android:src="@drawable/ic_speed_up_video" />
+
+        <com.example.charge.ui.view.ShapeExtraWidthTextView
+            style="@style/BoldText"
+            android:layout_marginHorizontal="1dp"
+            android:text="@string/append_speed_time"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:shape_textStrokeColor="@color/color_9A2F02"
+            app:shape_textStrokeSize="2dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tvSpeedUpContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/btnSpeedup"
+        app:layout_constraintStart_toStartOf="@id/btnSpeedup"
+        app:layout_constraintTop_toTopOf="@+id/btnSpeedup">
+
+        <ImageView
+            android:id="@+id/ivSpeedUpAd"
+            android:layout_width="22dp"
+            android:layout_height="18dp"
+            android:layout_marginHorizontal="1dp"
+            android:src="@drawable/ic_task_ad" />
+
+        <com.example.charge.ui.view.ShapeExtraWidthTextView
+            style="@style/BoldText"
+            android:layout_marginHorizontal="1dp"
+            android:text="@string/speed_up"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:shape_textStrokeColor="@color/color_016C03"
+            app:shape_textStrokeSize="2dp" />
+
+    </LinearLayout>
+
+    <com.example.charge.ui.view.BorderProgressBar
+        android:id="@+id/progressBarSpeedup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="-4dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:bp_backgroundColor="@color/transparent"
+        app:bp_progress="0"
+        app:bp_borderWidth="3dp"
+        app:bp_shadowColor="@color/color_FFFF13"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSpeedup"
+        app:layout_constraintEnd_toEndOf="@+id/btnSpeedup"
+        app:layout_constraintStart_toStartOf="@+id/btnSpeedup"
+        app:layout_constraintTop_toTopOf="@+id/btnSpeedup"
+        tools:bp_progress="100"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tvSpeedUpTime"
+        style="@style/BoldText"
+        android:layout_width="42dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="-10dp"
+        android:layout_marginEnd="-21dp"
+        android:background="@drawable/ic_speed_up_time"
+        android:gravity="center"
+        android:text="60"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/progressBarSpeedup"
+        app:layout_constraintTop_toTopOf="@+id/progressBarSpeedup"
+        tools:visibility="visible" />
+
+
+    <ImageView
+        android:id="@+id/ivInteractiveLeft"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_interactive_ad_2"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSpeedup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnSpeedup" />
+
+    <ImageView
+        android:id="@+id/ivInteractiveRight"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_interactive_ad_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivInteractiveLeft" />
+
+    <TextView
+        android:id="@+id/tipsTv"
+        android:layout_width="200dp"
+        android:layout_height="82.5dp"
+        android:background="@drawable/ic_main_tips"
+        android:gravity="center"
+        android:paddingHorizontal="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="15dp"
+        android:textColor="@color/ffff8800"
+        android:textSize="16sp"
+        android:layout_marginBottom="3dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/gameLeft"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/playing_games_can_earn_you_cash" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/gameLeft"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/viewBottomBar"
+        app:layout_constraintEnd_toStartOf="@+id/gameRight"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivInteractiveLeft">
+
+        <ImageView
+            android:id="@+id/ivGameBottomLeft"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_game_bottom"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivGameLeft"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="25dp"
+            app:layout_constraintDimensionRatio="h,164:116"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_game_groundhog"
+            app:layout_constraintBottom_toBottomOf="@+id/ivGameBottomLeft"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/llGameWhackMoleTimes"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/ivGameLeft"
+            app:layout_constraintTop_toTopOf="@+id/ivGameLeft">
+
+            <ImageView
+                android:id="@+id/hitMoleSize1Img"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_heart" />
+
+            <ImageView
+                android:id="@+id/hitMoleSize2Img"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_heart" />
+
+            <ImageView
+                android:id="@+id/hitMoleSize3Img"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_heart" />
+        </LinearLayout>
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/tvGameCountLeft"
+            style="@style/BoldText"
+            android:layout_width="60dp"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            tools:text="60s"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="@+id/ivGameLeft"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shape_textStrokeColor="@color/color_016C03"
+            app:shape_textStrokeSize="1dp" />
+
+        <ImageView
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:id="@+id/ivInfiniteLeft"
+            android:layout_width="20dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_infinite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.example.charge.ui.view.ShapeExtraWidthTextView
+            style="@style/BoldText"
+            android:layout_marginBottom="7dp"
+            android:text="@string/game_whack_mole"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivGameLeft"
+            app:layout_constraintEnd_toEndOf="@+id/ivGameLeft"
+            app:layout_constraintStart_toStartOf="@+id/ivGameLeft"
+            app:shape_textStrokeColor="@color/color_016C03"
+            app:shape_textStrokeSize="1dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/gameRight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/gameLeft"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/gameLeft"
+        app:layout_constraintTop_toTopOf="@+id/gameLeft">
+
+        <ImageView
+            android:id="@+id/ivGameBottomRight"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_game_bottom"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivGameRight"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="25dp"
+            app:layout_constraintDimensionRatio="h,164:116"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_game_gold"
+            app:layout_constraintBottom_toBottomOf="@+id/ivGameBottomRight"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/llGameReceiveCoinTimes"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/ivGameRight"
+            app:layout_constraintTop_toTopOf="@+id/ivGameRight">
+
+            <ImageView
+                android:id="@+id/receiveCoinSize1Img"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_heart" />
+
+            <ImageView
+                android:id="@+id/receiveCoinSize2Img"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_heart" />
+
+            <ImageView
+                android:id="@+id/receiveCoinSize3Img"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_heart" />
+        </LinearLayout>
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/tvGameCountRight"
+            style="@style/BoldText"
+            android:layout_width="60dp"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            tools:text="60s"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="@+id/ivGameRight"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shape_textStrokeColor="@color/color_016C03"
+            app:shape_textStrokeSize="1dp" />
+
+        <ImageView
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:id="@+id/ivInfiniteRight"
+            android:layout_width="20dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_infinite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.example.charge.ui.view.ShapeExtraWidthTextView
+            style="@style/BoldText"
+            android:layout_marginBottom="7dp"
+            android:text="@string/game_receive_coin"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivGameRight"
+            app:layout_constraintEnd_toEndOf="@+id/ivGameRight"
+            app:layout_constraintStart_toStartOf="@+id/ivGameRight"
+            app:shape_textStrokeColor="@color/color_016C03"
+            app:shape_textStrokeSize="1dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/viewBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="103dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivSetting"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/ic_setting"
+        app:layout_constraintBottom_toBottomOf="@+id/viewBottomBar"
+        app:layout_constraintStart_toStartOf="@+id/viewBottomBar"
+        app:layout_constraintTop_toTopOf="@+id/viewBottomBar" />
+
+    <ImageView
+        android:id="@+id/btnWithdraw"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/ic_withdraw"
+        app:layout_constraintBottom_toBottomOf="@+id/ivSetting"
+        app:layout_constraintEnd_toStartOf="@+id/btnTask"
+        app:layout_constraintTop_toTopOf="@+id/ivSetting" />
+
+    <com.example.charge.ui.view.ShapeExtraWidthTextView
+        style="@style/BoldText"
+        android:gravity="center"
+        android:text="@string/cash_out"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:autoSizeMaxTextSize="15sp"
+        app:autoSizeMinTextSize="10sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="@+id/btnWithdraw"
+        app:layout_constraintEnd_toEndOf="@+id/btnWithdraw"
+        app:layout_constraintStart_toStartOf="@+id/btnWithdraw"
+        app:shape_textStrokeColor="@color/color_016C03"
+        app:shape_textStrokeSize="2dp" />
+
+    <ImageView
+        android:id="@+id/btnTask"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/ic_task"
+        app:layout_constraintBottom_toBottomOf="@+id/ivSetting"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivSetting" />
+
+    <com.example.charge.ui.view.ShapeExtraWidthTextView
+        style="@style/BoldText"
+        android:autoSizeMaxTextSize="15sp"
+        android:gravity="center"
+        android:text="@string/task"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnTask"
+        app:layout_constraintEnd_toEndOf="@+id/btnTask"
+        app:layout_constraintStart_toStartOf="@+id/btnTask"
+        app:shape_textStrokeColor="@color/color_016C03"
+        app:shape_textStrokeSize="2dp" />
+
+    <ImageView
+        android:id="@+id/ivTaskDot"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:src="@drawable/ic_task_dot"
+        app:layout_constraintEnd_toEndOf="@+id/btnTask"
+        app:layout_constraintTop_toTopOf="@+id/btnTask" />
+
+    <com.example.charge.ui.view.FloatUpAnimLayout
+        android:id="@+id/floatUpAnimLayoutGold"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="@+id/speedContainerGold"
+        app:layout_constraintStart_toStartOf="@+id/speedContainerGold" />
+
+    <com.example.charge.ui.view.FloatUpAnimLayout
+        android:id="@+id/floatUpAnimLayoutGreen"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="@+id/speedContainerGreen"
+        app:layout_constraintStart_toStartOf="@+id/speedContainerGreen" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardNotifyContainer"
+        android:layout_width="162dp"
+        android:layout_height="46dp"
+        android:background="@drawable/ic_home_tips"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currencyView">
+
+        <com.example.charge.ui.view.ShapeExtraWidthTextView
+            android:id="@+id/tvNotifyGet"
+            style="@style/BoldText"
+            android:layout_gravity="center"
+            android:text="@string/get_"
+            android:textColor="@color/white"
+            android:textSize="19sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvNotifyFloatIcon"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shape_textStrokeColor="@color/color_CC4B00"
+            app:shape_textStrokeSize="2dp" />
+
+        <com.example.charge.ui.view.ShapeExtraWidthTextView
+            android:id="@+id/tvNotifyFloatIcon"
+            style="@style/BoldText"
+            android:layout_marginHorizontal="4dp"
+            android:text="0"
+            android:textColor="@color/color_9CFF54"
+            android:textSize="19sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvNotifyGet"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shape_textStrokeColor="@color/color_016C03"
+            app:shape_textStrokeSize="2dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

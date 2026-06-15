@@ -3,7 +3,6 @@ package com.example.charge.ui.fragment
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
@@ -16,13 +15,12 @@ import app.allever.android.lib.core.app.App
 import com.example.charge.base.BaseFragment
 import com.example.charge.databinding.FragmentWebBinding
 import com.example.charge.init.Constance
-import com.example.charge.ui.activity.MainActivity
+import com.example.charge.ui.activity.ChargeMainActivity
 import com.example.charge.utils.WebJsOK
 import com.example.charge.utils.getHostSafe
 import com.example.charge.utils.openIntent
 import com.example.charge.utils.setOnSingleListener
 import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
-import org.greenrobot.eventbus.EventBus
 import kotlin.apply
 import kotlin.jvm.javaClass
 import kotlin.let
@@ -53,7 +51,7 @@ class WebFragment : BaseFragment<FragmentWebBinding>() {
             if (_webView?.canGoBack() == true) {
                 _webView?.goBack()
             } else {
-                if (requireActivity() !is MainActivity) {
+                if (requireActivity() !is ChargeMainActivity) {
                     requireActivity().finish()
                     return@setOnSingleListener
                 }
@@ -62,7 +60,7 @@ class WebFragment : BaseFragment<FragmentWebBinding>() {
         }
 
         binding.ivHome.setOnSingleListener {
-            if (requireActivity() !is MainActivity) {
+            if (requireActivity() !is ChargeMainActivity) {
                 requireActivity().finish()
                 return@setOnSingleListener
             }
