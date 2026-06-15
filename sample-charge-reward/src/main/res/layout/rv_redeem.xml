@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="71dp"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="5dp"
+    android:background="@drawable/ic_redeem_item_bg"
+    android:minHeight="60dp">
+
+    <FrameLayout
+        android:id="@+id/btnRedeem"
+        android:layout_width="70dp"
+        android:layout_height="34dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/ic_btn_redeem"
+        android:text="@string/redeem"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.25">
+
+        <com.example.charge.ui.view.ShapeExtraWidthTextView
+            android:id="@+id/tvRedeem"
+            style="@style/BoldText"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:shadowColor="@color/color_016C03"
+            android:shadowDy="2"
+            android:shadowRadius="1"
+            android:text="@string/redeem"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:shape_textStrokeColor="@color/color_016C03"
+            app:shape_textStrokeSize="2dp" />
+
+        <com.example.charge.ui.view.ShapeExtraWidthTextView
+            android:id="@+id/tvRedeemDisable"
+            style="@style/BoldText"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:shadowColor="@color/color_595959"
+            android:shadowDy="2"
+            android:shadowRadius="1"
+            android:text="@string/redeem"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:shape_textStrokeColor="@color/color_595959"
+            app:shape_textStrokeSize="2dp" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="12dp"
+        android:background="@color/color_BE69FF"
+        app:layout_constraintEnd_toStartOf="@+id/btnRedeem" />
+
+    <ImageView
+        android:id="@+id/ivGold"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_gold"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRedeem"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnRedeem" />
+
+    <com.example.charge.ui.view.ShapeExtraWidthTextView
+        android:id="@+id/tvGold"
+        style="@style/ExtraBoldText"
+        android:layout_width="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="8dp"
+        android:shadowColor="@color/color_40000000"
+        android:shadowDy="2"
+        android:shadowRadius="1"
+        android:text="x100000"
+        android:textColor="@color/color_00A203"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRedeem"
+        app:layout_constraintStart_toEndOf="@+id/ivGold"
+        app:layout_constraintTop_toTopOf="@+id/btnRedeem"
+        app:shape_textStrokeColor="@color/white"
+        app:shape_textStrokeSize="2dp" />
+
+    <ImageView
+        android:id="@+id/ivChange"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="50dp"
+        android:orientation="horizontal"
+        android:src="@drawable/ic_redeem_item_change"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRedeem"
+        app:layout_constraintEnd_toStartOf="@+id/line"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnRedeem" />
+
+    <ImageView
+        android:id="@+id/ivGreen"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginHorizontal="12dp"
+        android:src="@drawable/ic_green"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRedeem"
+        app:layout_constraintStart_toEndOf="@+id/ivChange"
+        app:layout_constraintTop_toTopOf="@+id/btnRedeem" />
+
+    <com.example.charge.ui.view.ShapeExtraWidthTextView
+        android:id="@+id/tvGreen"
+        style="@style/ExtraBoldText"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:autoSizeMaxTextSize="17sp"
+        android:autoSizeMinTextSize="10sp"
+        android:shadowColor="@color/color_40000000"
+        android:shadowDy="2"
+        android:shadowRadius="1"
+        android:text="$1"
+        android:textColor="@color/color_00A203"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRedeem"
+        app:layout_constraintStart_toEndOf="@+id/ivGreen"
+        app:layout_constraintTop_toTopOf="@+id/btnRedeem"
+        app:shape_textStrokeColor="@color/white"
+        app:shape_textStrokeSize="2dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="105dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="102dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="54.8dp"
+        android:src="@drawable/bg_burrow_top"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animView"
+        android:layout_width="75dp"
+        android:layout_height="86dp"
+        android:layout_marginTop="44dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView2"
+        tools:lottie_fileName="icon1.json" />
+
+    <FrameLayout
+        android:id="@+id/awareFl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/curry"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:padding="2dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_gold" />
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/numTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:text=" 10 "
+            android:textColor="#FFFFFF13"
+            android:textSize="14sp"
+            app:shape_textStrokeColor="@color/ff6c2700"
+            app:shape_textStrokeSize="2dp"
+            android:gravity="center"/>
+        
+        <ImageView
+            android:id="@+id/seeAdImg"
+            android:layout_width="16dp"
+            android:layout_height="13dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:src="@drawable/ic_see_ad"
+            android:layout_gravity="center_horizontal|bottom"/>
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="102dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="54.4dp"
+        android:src="@drawable/bg_burrow_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/hitAnimView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        tools:lottie_fileName="icon1.json" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

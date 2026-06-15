@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_FFF3D9">
+
+    <ImageView
+        android:id="@+id/paymentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:background="@drawable/ic_payment_bg"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivTopBg"
+        android:layout_width="match_parent"
+        android:layout_height="84dp"
+        android:background="@drawable/ic_wd_top_bar"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.charge.ui.view.ShapeExtraWidthTextView
+        android:id="@+id/tvTitle"
+        style="@style/ExtraBoldText"
+        android:padding="10dp"
+        android:text="@string/cash_out"
+        android:textColor="@color/white"
+        android:textSize="23sp"
+        android:shadowDy="2"
+        android:shadowRadius="1"
+        android:shadowColor="@color/color_CF4900"
+        app:layout_constraintBottom_toBottomOf="@+id/ivTopBg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:shape_textStrokeColor="@color/color_CF4900"
+        app:shape_textStrokeSize="2dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvWallet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/paymentContainer"
+        tools:itemCount="1"
+        tools:listitem="@layout/rv_wallet" />
+
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/paymentContainer">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="90dp">
+
+            <!-- 输入区 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="15dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="15dp">
+
+                <!-- pix账号类型 -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/containerSelectAccount"
+                    style="@style/InputItemStyle"
+                    android:background="@drawable/shape_select_input_type">
+
+                    <ImageView
+                        android:id="@+id/ivIconPaymentSelectAccount"
+                        style="@style/InputItemPayIconStyle"
+                        android:src="@drawable/ic_pay_pix"
+                        tools:ignore="MissingConstraints" />
+
+                    <com.hjq.shape.view.ShapeTextView
+                        android:id="@+id/etInputType"
+                        style="@style/InputItemInfoStyle"
+                        android:clickable="true"
+                        android:enabled="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/input_pix_account_type"
+                        tools:ignore="MissingConstraints" />
+
+                    <ImageView
+                        android:id="@+id/ivIconEditSelectAccount"
+                        style="@style/InputItemEditIconStyle"
+                        android:src="@drawable/ic_select_account_arrow_down"
+                        tools:ignore="MissingConstraints" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- EMAIL -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/containerEmail"
+                    style="@style/InputItemStyle">
+
+                    <ImageView
+                        android:id="@+id/ivIconPaymentEmail"
+                        style="@style/InputItemPayIconStyle"
+                        android:src="@drawable/ic_pay_paypal"
+                        tools:ignore="MissingConstraints" />
+
+                    <com.hjq.shape.view.ShapeEditText
+                        android:id="@+id/etEmail"
+                        style="@style/InputItemInfoStyle"
+                        android:hint="@string/input_email"
+                        tools:ignore="MissingConstraints" />
+
+                    <ImageView
+                        android:id="@+id/ivIconEditEmail"
+                        style="@style/InputItemEditIconStyle"
+                        tools:ignore="MissingConstraints" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- NAME -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/containerName"
+                    style="@style/InputItemStyle">
+
+                    <ImageView
+                        android:id="@+id/ivIconPaymentName"
+                        style="@style/InputItemPayIconStyle"
+                        android:src="@drawable/ic_pay_paypal"
+                        tools:ignore="MissingConstraints" />
+
+                    <com.hjq.shape.view.ShapeEditText
+                        android:id="@+id/etName"
+                        style="@style/InputItemInfoStyle"
+                        android:hint="@string/input_name"
+                        tools:ignore="MissingConstraints" />
+
+                    <ImageView
+                        android:id="@+id/ivIconEditName"
+                        style="@style/InputItemEditIconStyle"
+                        tools:ignore="MissingConstraints" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- ID -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/containerId"
+                    style="@style/InputItemStyle">
+
+                    <ImageView
+                        android:id="@+id/ivIconPaymentId"
+                        style="@style/InputItemPayIconStyle"
+                        android:src="@drawable/ic_pay_paypal"
+                        tools:ignore="MissingConstraints" />
+
+                    <com.hjq.shape.view.ShapeEditText
+                        android:id="@+id/etId"
+                        style="@style/InputItemInfoStyle"
+                        android:hint="@string/input_id"
+                        tools:ignore="MissingConstraints" />
+
+                    <ImageView
+                        android:id="@+id/ivIconEditId"
+                        style="@style/InputItemEditIconStyle"
+                        tools:ignore="MissingConstraints" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- PHONE -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/containerPhone"
+                    style="@style/InputItemStyle">
+
+                    <ImageView
+                        android:id="@+id/ivIconPaymentPhone"
+                        style="@style/InputItemPayIconStyle"
+                        android:src="@drawable/ic_pay_paypal"
+                        tools:ignore="MissingConstraints" />
+
+                    <com.hjq.shape.view.ShapeEditText
+                        android:id="@+id/etPhone"
+                        style="@style/InputItemInfoStyle"
+                        android:hint="@string/input_phone"
+                        tools:ignore="MissingConstraints" />
+
+                    <ImageView
+                        android:id="@+id/ivIconEditPhone"
+                        style="@style/InputItemEditIconStyle"
+                        tools:ignore="MissingConstraints" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- CPF -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/containerCPF"
+                    style="@style/InputItemStyle">
+
+                    <ImageView
+                        android:id="@+id/ivIconPaymentCPF"
+                        style="@style/InputItemPayIconStyle"
+                        android:src="@drawable/ic_pay_paypal"
+                        tools:ignore="MissingConstraints" />
+
+                    <com.hjq.shape.view.ShapeEditText
+                        android:id="@+id/etCPF"
+                        style="@style/InputItemInfoStyle"
+                        android:hint="@string/input_cpf"
+                        tools:ignore="MissingConstraints" />
+
+                    <ImageView
+                        android:id="@+id/ivIconEditCPF"
+                        style="@style/InputItemEditIconStyle"
+                        tools:ignore="MissingConstraints" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRank"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:itemCount="2"
+                tools:listitem="@layout/rv_rank" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="48dp"
+                    android:background="@drawable/ic_redeem_bg"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/redeemTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/ic_redeem_title"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.example.charge.ui.view.ShapeExtraWidthTextView
+                    style="@style/ExtraBoldText"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="@string/redeem"
+                    android:textColor="@color/white"
+                    android:textSize="23sp"
+                    android:shadowDy="2"
+                    android:shadowRadius="1"
+                    android:shadowColor="@color/color_9C1A00"
+                    app:layout_constraintBottom_toBottomOf="@id/redeemTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/redeemTitle"
+                    app:shape_textStrokeColor="@color/color_9C1A00"
+                    app:shape_textStrokeSize="2dp" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="220dp"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/ic_redeem_currency_bg"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/redeemTitle">
+
+                    <ImageView
+                        android:id="@+id/ivGold"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginHorizontal="7dp"
+                        android:src="@drawable/ic_gold_light"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvCurrencyGold"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.example.charge.ui.view.ShapeExtraWidthTextView
+                        android:id="@+id/tvCurrencyGold"
+                        style="@style/ExtraBoldText"
+                        android:layout_marginHorizontal="7dp"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="23sp"
+                        android:shadowDy="2"
+                        android:shadowRadius="1"
+                        android:shadowColor="@color/color_710ABE"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ivGold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shape_textStrokeColor="@color/color_710ABE"
+                        app:shape_textStrokeSize="2dp" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRedeem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                tools:itemCount="2"
+                tools:listitem="@layout/rv_redeem" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <ImageView
+        android:id="@+id/ivClose"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="35dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_page_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

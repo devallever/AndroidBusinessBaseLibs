@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_hit_mole">
+
+    <com.example.charge.ui.view.CurrencyWidget
+        android:id="@+id/currencyView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/countDownFl"
+        android:layout_width="136dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:background="@drawable/bg_count_down"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currencyView">
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/countDownTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="30s"
+            android:textSize="28sp"
+            android:layout_gravity="center"
+            app:shape_textStrokeSize="1dp"
+            app:shape_textStrokeColor="#FFA43700"
+            android:textColor="@color/white"
+            android:shadowColor="#FFA43700"
+            android:shadowDy="2"
+            android:shadowRadius="1"/>
+
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/gameRv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintTop_toTopOf="@+id/currencyView"
+        app:spanCount="3"
+        tools:itemCount="15"
+        android:overScrollMode="never"/>
+    
+    <FrameLayout
+        android:id="@+id/clickNumFl"
+        android:layout_width="136dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="22dp"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        android:background="@drawable/bg_click_num"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gameRv">
+
+        <TextView
+            android:id="@+id/clickNumTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="0"
+            android:textSize="32sp"
+            app:shape_textStrokeSize="1dp"
+            app:shape_textStrokeColor="#FFA43700"
+            android:textColor="@color/white"
+            android:shadowColor="#FFA43700"
+            android:shadowDy="2"
+            android:shadowRadius="1"
+            android:layout_marginStart="78dp"/>
+    </FrameLayout>
+
+    <com.example.charge.ui.view.NumAnimationView
+        android:id="@+id/numView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="33dp"
+        android:layout_marginBottom="-14dp"
+        app:layout_constraintBottom_toTopOf="@+id/clickNumFl"
+        app:layout_constraintEnd_toEndOf="@+id/clickNumFl" />
+
+    <FrameLayout
+        android:id="@+id/startGameFl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:background="@drawable/ic_btn_start_game"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gameRv">
+
+        <com.hjq.shape.view.ShapeTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingBottom="22dp"
+            android:shadowColor="@color/ff016c03"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:text="@string/txt_start_game"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            app:shape_textStrokeColor="@color/ff016c03"
+            app:shape_textStrokeSize="2dp" />
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/backImg"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_back_img"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/taskImg"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/bg_task"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/backImg" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:layout_width="52dp"
+        android:layout_height="wrap_content"
+        android:text="@string/task"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:autoSizeMaxTextSize="16sp"
+        app:autoSizeMinTextSize="10sp"
+        android:autoSizeTextType="uniform"
+        android:lines="1"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/taskImg"
+        app:layout_constraintStart_toStartOf="@+id/taskImg"
+        app:shape_textStrokeColor="@color/ff016c03"
+        app:shape_textStrokeSize="1dp" />
+
+    <ImageView
+        android:id="@+id/tipsImg"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:src="@drawable/ic_tips"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/taskImg"
+        app:layout_constraintTop_toTopOf="@+id/taskImg"
+        tools:visibility="visible" />
+
+    <com.hjq.shape.layout.ShapeLinearLayout
+        android:id="@+id/toastLL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shape_radius="50dp"
+        app:shape_solidColor="@color/_99000000"
+        tools:visibility="visible">
+
+        <com.hjq.shape.view.ShapeTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:shadowColor="@color/ffcc4b00"
+            android:shadowDy="5"
+            android:shadowRadius="2"
+            android:text="@string/get_"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:shape_textStrokeColor="@color/ffcc4b00"
+            app:shape_textStrokeSize="2dp" />
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/greenNumTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:shadowColor="@color/ff016c03"
+            android:shadowDy="5"
+            android:shadowRadius="2"
+            android:text=" $ 3.1"
+            android:textColor="@color/ff9cff54"
+            android:textSize="20sp"
+            app:shape_textStrokeColor="@color/ff016c03"
+            app:shape_textStrokeSize="1dp" />
+
+    </com.hjq.shape.layout.ShapeLinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

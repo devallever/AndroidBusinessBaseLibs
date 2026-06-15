@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CaptchaView">
+        <attr name="captchaLength" format="integer" />
+        <attr name="captchaFontSize" format="dimension" />
+        <attr name="captchaCornerRadius" format="dimension" />
+        <attr name="captchaBorderWidth" format="dimension" />
+        <attr name="captchaBorderColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="ExtraWidthTextView">
+        <attr name="extraWidth" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeExtraWidthTextView">
+        <attr name="shapeExtraWidth" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="CircleProgressBar">
+        <attr name="progress_value" format="integer" />
+        <attr name="progress_color" format="color" />
+        <attr name="background_color" format="color" />
+        <attr name="progress_width" format="dimension" />
+        <attr name="background_width" format="dimension" />
+    </declare-styleable>
+    
+    <declare-styleable name="BorderProgressBar">
+        <attr name="bp_progress" format="integer" />
+        <attr name="bp_max" format="integer" />
+        <attr name="bp_backgroundColor" format="color" />
+        <attr name="bp_progressColor" format="color" />
+        <attr name="bp_cornerRadius" format="dimension" />
+        <attr name="bp_borderWidth" format="dimension" />
+        <attr name="bp_shadowColor" format="color" />
+        <attr name="bp_shadowRadius" format="dimension" />
+    </declare-styleable>
+</resources>

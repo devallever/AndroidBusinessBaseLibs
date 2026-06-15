@@ -1,0 +1,78 @@
+<resources>
+    <string name="app_name">Charge Reward</string>
+    <string name="game_view_content_description">Game view</string>
+    <string name="loading">Loading…</string>
+
+    <string name="ad_fail_state_1">Ad Display Failed</string>
+    <string name="ad_fail_state_2">Ad not ready yet!</string>
+    <string name="ad_fail_state_3">Ad exceeds max display limit</string>
+
+    <string name="cash_out">Cash out</string>
+    <string name="redeem">Redeem</string>
+    <string name="speed_up">Accelerate</string>
+    <string name="append_speed_time">Add 60s</string>
+    <string name="task">Task</string>
+    <string name="menu_cash_out">Cash\nOut</string>
+    <string name="game_whack_mole">Whac-A-Mole</string>
+    <string name="game_receive_coin">Receive coins</string>
+    <string name="get_">Get : </string>
+    <string name="gold">Gold</string>
+
+    <string name="get_double_num">Get %d times</string>
+    <string name="txt_start_game">Start game</string>
+    <string name="txt_sure">Confirm</string>
+    <string name="txt_infinite">15 minutes unlimited gameplay</string>
+    <string name="txt_get">Claim</string>
+    <string name="rank_info">%s players waiting for rewards in front of you. Your position will be refreshed every minute.</string>
+    <string name="obtain">Obtain</string>
+    <string name="confirm_exit_app_tips">Return again to exit the APP</string>
+
+    <!-- Cash out input  -->
+    <string name="input_email">EMAIL</string>
+    <string name="input_name">NAME</string>
+    <string name="input_id">ID</string>
+    <string name="input_cpf">CPF</string>
+    <string name="input_phone">PHONE</string>
+    <string name="input_pix_account_type">PIX Account：%s</string>
+    <string name="input_correct_info">Please fill in your account number correctly</string>
+    <!-- Cash out input  -->
+    <string name="ok"> OK </string>
+    <string name="task_list">Task List</string>
+    <string name="tab_charge">Charge</string>
+    <string name="tab_mole">Mole</string>
+    <string name="tab_coin">Coin</string>
+    <string name="task_desc_charge_collect">Collect %s bubbles</string>
+    <string name="task_desc_charge_sign">sign in for %s days</string>
+    <string name="task_desc_mole_hit">whack %s mole</string>
+    <string name="task_desc_coin_receive">Catch coins %s times</string>
+    <string name="task_desc_game_count">Play %s times</string>
+    <string name="task_btn_state_finish">Finish</string>
+    <string name="task_btn_state_claim">Claim</string>
+    <string name="task_btn_state_sign">Sign</string>
+    <string name="task_btn_state_collect">Collect</string>
+    <string name="task_btn_state_hit">Hit</string>
+    <string name="task_btn_state_receive">Receive</string>
+    <string name="task_tips_obtain">Obtain：</string>
+    <string name="task_already_sign_today">Already Sign today</string>
+
+    <!-- Notification -->
+    <string name="hey_dear">Hey Dear！😄</string>
+    <string name="txt_wd_notify_small_content">You currently have %s to claim</string>
+    <string name="txt_wd_notify_big_content">You currently have %s to claim Come and withdraw it!</string>
+    <!---->
+
+    <string name="dialog_new_user_info">Once you earn enough funds.\nyou can withdraw them.</string>
+    <string name="dialog_new_user_title">Newcomer benefits</string>
+    <string name="english">English</string>
+    <string name="brazil">Brazil</string>
+    <string name="settings">settings</string>
+    <string name="privacy"><u>Privacy</u></string>
+    <string name="feedBook"><u>Feedback</u></string>
+
+    <string name="gain">Gain</string>
+    <string name="get_2_5_times_reward">2-5 times reward</string>
+    <string name="confirm">Confirm</string>
+    <string name="playing_games_can_earn_you_cash">Playing games can earn\nyou cash</string>
+
+
+</resources>

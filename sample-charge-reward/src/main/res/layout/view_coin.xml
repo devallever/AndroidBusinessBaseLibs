@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="56dp"
+    android:layout_height="56dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:id="@+id/goldFl"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:visibility="gone"
+        android:background="@drawable/ic_float_gold">
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/goldNumTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text=" 10 "
+            android:textColor="@color/color_FFFF13"
+            app:shape_textStrokeColor="@color/color_E25605"
+            app:shape_textStrokeSize="3dp"
+            android:textSize="20sp"
+            android:paddingHorizontal="2dp"
+            android:layout_gravity="center_horizontal|bottom"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/greenFl"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="@drawable/ic_float_green">
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/greenNumTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text=" $10 "
+            android:textColor="@color/color_2E7E00"
+            android:textSize="20sp"
+            android:paddingHorizontal="2dp"
+            android:shadowColor="#40000000"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/adImg"
+        android:layout_width="20dp"
+        android:layout_height="15dp"
+        android:src="@drawable/ic_ad_tag"
+        android:layout_gravity="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</FrameLayout>

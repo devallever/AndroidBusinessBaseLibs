@@ -56,5 +56,6 @@ class RouterPath {
         const val PATH_SAMPLE_VPN = "/vpn/main"
         const val PATH_SAMPLE_CLEANER = "/cleaner/main"
         const val PATH_SAMPLE_DJ_CSJ = "/djcsj/main"
+        const val PATH_SAMPLE_CHARGE_REWARD = "/chargereward/main"
     }
 }

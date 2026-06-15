@@ -41,9 +41,9 @@ dependencies {
     implementation(project(":sample-common"))
     implementation(project(":sample-permission"))
 
-//    implementation(project(":sample-appsflyer"))
+    implementation(project(":sample-appsflyer"))
 //    implementation(project(":sample-ad-applovin"))
-//    implementation(project(":sample-adjust"))
+    implementation(project(":sample-adjust"))
 
     implementation(project(":sample-mvvm"))
     implementation(project(":sample-ad-admob"))
@@ -61,6 +61,7 @@ dependencies {
     implementation(project(":sample-vpn"))
     implementation(project(":sample-cleaner"))
 //    implementation(project(":sample-dj-csj"))
+    implementation(project(":sample-charge-reward"))
 
     implementation(project(":z-sample-billing"))
     implementation(project(":z-sample-cleaner"))

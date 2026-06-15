@@ -1,0 +1,23 @@
+{
+  "gameEndInterAdProbability": 0.5,
+  "interLogic": 1,
+  "interAdTime": 80,
+  "userAb": "local_user",
+  "addGameSizeTime": 30,
+  "newUserMinAware": 20,
+  "newUserMaxAware": 40,
+  "withdraw": [
+    {
+      "limit": 299,
+      "showLineUpNum": 299
+    },
+    {
+      "limit": 699,
+      "showLineUpNum": 500
+    },
+    {
+      "limit": 999,
+      "showLineUpNum": 800
+    }
+  ]
+}

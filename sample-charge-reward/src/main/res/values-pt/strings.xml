@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">Charge Reward</string>
+    <string name="game_view_content_description">Visualização do jogo</string>
+    <string name="loading">Carregando…</string>
+
+    <string name="ad_fail_state_1">Exibição de anúncio falhou</string>
+    <string name="ad_fail_state_2">Anúncio ainda não está pronto!</string>
+    <string name="ad_fail_state_3">Anúncio excede o limite máximo de exibição</string>
+
+    <string name="cash_out">Sacar</string>
+    <string name="redeem">Resgatar</string>
+    <string name="speed_up">Acelerar</string>
+    <string name="append_speed_time">Adic. 60s</string>
+    <string name="task">Tarefa</string>
+    <string name="menu_cash_out">Sacar\nDinheiro</string>
+    <string name="game_whack_mole">Bater no Toupeira</string>
+    <string name="game_receive_coin">Receber moedas</string>
+    <string name="get_">Obter : </string>
+    <string name="gold">Ouro</string>
+
+    <string name="get_double_num">Obtenha %d vezes</string>
+    <string name="txt_start_game">Iniciar jogo</string>
+    <string name="txt_sure">Confirmar</string>
+    <string name="txt_infinite">Jogue ilimitado por 15 minutos</string>
+    <string name="txt_get">Coletar</string>
+    <string name="rank_info">%s jogadores aguardando recompensas na sua frente. Sua posição será atualizada a cada minuto.</string>
+    <string name="obtain">Obter</string>
+    <string name="confirm_exit_app_tips">Pressione novamente para sair do APP</string>
+
+    <!-- 输入提现  -->
+    <string name="input_email">EMAIL</string>
+    <string name="input_name">NOME</string>
+    <string name="input_id">ID</string>
+    <string name="input_cpf">CPF</string>
+    <string name="input_phone">TELEFONE</string>
+    <string name="input_pix_account_type">Conta PIX：%s</string>
+    <string name="input_correct_info">Por favor, preencha corretamente o número da sua conta</string>
+    <!-- 输入提现  -->
+    <string name="ok">" OK "</string>
+    <string name="task_list">Lista de Tarefas</string>
+    <string name="tab_charge">Carregar</string>
+    <string name="tab_mole">Toupeira</string>
+    <string name="tab_coin">Moeda</string>
+    <string name="task_desc_charge_collect">Coletar %s bolhas</string>
+    <string name="task_desc_charge_sign">faça login por %s dias</string>
+    <string name="task_desc_mole_hit">Acerte %s toupeiras</string>
+    <string name="task_desc_coin_receive">Pegue moedas %s vezes</string>
+    <string name="task_desc_game_count">Jogue %s vezes</string>
+    <string name="task_btn_state_finish">Concluído</string>
+    <string name="task_btn_state_claim">Resgatar</string>
+    <string name="task_btn_state_sign">Assinar</string>
+    <string name="task_btn_state_collect">Coletar</string>
+    <string name="task_btn_state_hit">Acerto</string>
+    <string name="task_btn_state_receive">Receber</string>
+    <string name="task_tips_obtain">Obter：</string>
+    <string name="task_already_sign_today">Já assinou hoje</string>
+
+    <!--通知-->
+    <string name="hey_dear">Olá Querido！😄</string>
+    <string name="txt_wd_notify_small_content">Você atualmente tem %s para resgatar</string>
+    <string name="txt_wd_notify_big_content">Você atualmente tem %s para resgatar! Venha sacá-lo!</string>
+    <!---->
+
+    <string name="dialog_new_user_info">Depois de ganhar fundos suficientes, \nvocê pode sacá-los.</string>
+    <string name="dialog_new_user_title">Benefícios novos usuários</string>
+    <string name="english">Inglês</string>
+    <string name="brazil">Brasil</string>
+    <string name="settings">Configurações</string>
+    <string name="privacy"><u>Privacidade</u></string>
+    <string name="feedBook"><u>Opinião</u></string>
+    
+    <string name="gain">Ganhar</string>
+    <string name="get_2_5_times_reward">Recompensa de 2–5</string>
+    <string name="confirm">Confirmar</string>
+    <string name="playing_games_can_earn_you_cash">Jogar jogos pode te\nrender dinheiro</string>
+
+</resources>

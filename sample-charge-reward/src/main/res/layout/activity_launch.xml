@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_launch_bg">
+
+
+    <SeekBar
+        app:layout_constraintBottom_toTopOf="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:id="@+id/progressBarIcon"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:clickable="false"
+        android:enabled="false"
+        android:focusable="false"
+        android:max="100"
+        android:progress="0"
+        android:paddingStart="32dp"
+        android:layout_marginBottom="4dp"
+        android:paddingEnd="32dp"
+        android:progressDrawable="@null"
+        android:splitTrack="false"
+        android:thumb="@drawable/ic_launch_progress_fox"
+        android:thumbOffset="0dp"/>
+
+    <View
+        android:id="@+id/progressBg"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginHorizontal="40dp"
+        android:background="@drawable/bg_progress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.89" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:maxHeight="20dp"
+        android:layout_margin="2dp"
+        android:progressDrawable="@drawable/launch_progress"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBg"
+        app:layout_constraintEnd_toEndOf="@+id/progressBg"
+        app:layout_constraintStart_toStartOf="@+id/progressBg"
+        app:layout_constraintTop_toTopOf="@+id/progressBg"
+        tools:progress="60" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/tvProgress"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="0%"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
+        app:layout_constraintEnd_toEndOf="@+id/progress_bar"
+        app:layout_constraintStart_toStartOf="@+id/progress_bar"
+        app:layout_constraintTop_toTopOf="@id/progress_bar"
+        app:shape_textStrokeColor="#FF016C03"
+        app:shape_textStrokeSize="2dp" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/loading"
+        android:textColor="#FF9CFF54"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:shape_textStrokeSize="3dp"
+        app:shape_textStrokeColor="#FF016C03"
+        app:layout_constraintEnd_toEndOf="@+id/progress_bar"
+        app:layout_constraintStart_toStartOf="@+id/progress_bar"
+        app:layout_constraintTop_toBottomOf="@+id/progress_bar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

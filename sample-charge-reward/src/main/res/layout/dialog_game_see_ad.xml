@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/bgImg"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/bg_dialog_see_ad"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/awareTv"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:shadowColor="@color/ffff3706"
+        android:shadowDy="5"
+        android:shadowRadius="2"
+        tools:text="$ 1"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toBottomOf="@+id/bgImg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bgImg"
+        app:layout_constraintVertical_bias="0.539"
+        app:shape_textStrokeColor="@color/ffff3706"
+        app:shape_textStrokeSize="4dp" />
+
+    <LinearLayout
+        android:id="@+id/seeAdLL"
+        android:layout_width="148dp"
+        android:layout_height="49dp"
+        android:background="@drawable/bg_dialog_bt"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/bgImg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bgImg"
+        app:layout_constraintVertical_bias="0.75">
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_ad" />
+
+        <com.hjq.shape.view.ShapeTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:lines="1"
+            android:shadowColor="@color/ff016c03"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:text="@string/txt_get"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:shape_textStrokeColor="@color/ff016c03"
+            app:shape_textStrokeSize="2dp" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/closeImg"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_dialog_close"
+        app:layout_constraintBottom_toBottomOf="@+id/bgImg"
+        app:layout_constraintEnd_toEndOf="@+id/bgImg"
+        app:layout_constraintHorizontal_bias="0.913"
+        app:layout_constraintStart_toStartOf="@+id/bgImg"
+        app:layout_constraintTop_toTopOf="@+id/bgImg"
+        app:layout_constraintVertical_bias="0.208" />
+
+    <com.example.charge.ui.view.NativeView
+        android:id="@+id/naviteView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="26dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/seeAdLL"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,8 +2,11 @@ package com.allever.business.lib.project
 
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.helper.ProcessHelper
+import app.allever.android.sample.adjust.AdJustHelper
+import app.allever.android.sample.appsflyer.AFHelper
 //import app.allever.android.sample.dj.csj.CsjDjHelper
 import com.alibaba.android.arouter.launcher.ARouter
+import com.example.charge.ChargeApp
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.ShadowsSocksConfig
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +31,7 @@ class MyApp: App() {
             initAppsflyer()
             initAdJust()
 //            CsjDjHelper.init()
+            ChargeApp.init()
         }
 
     }
@@ -48,14 +52,14 @@ class MyApp: App() {
 
     private fun initAppsflyer() {
         GlobalScope.launch(Dispatchers.IO) {
-//            AFHelper.init("JJYLVQRfKZm7qgoUCYAr9V")
+            AFHelper.init("JJYLVQRfKZm7qgoUCYAr9V")
 
         }
     }
 
     private fun initAdJust() {
         GlobalScope.launch(Dispatchers.IO) {
-//            AdJustHelper.init("appToken")
+            AdJustHelper.init("appToken")
         }
     }
 }

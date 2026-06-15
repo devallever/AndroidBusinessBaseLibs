@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/bgImg"
+        android:layout_width="match_parent"
+        android:layout_height="162dp"
+        android:layout_marginHorizontal="35dp"
+        android:background="@drawable/ic_dialog_empty_bg"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/tvTips"
+        style="@style/BoldText"
+        android:layout_width="0dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/ad_fail_state_2"
+        android:textColor="@color/color_D34002"
+        android:textSize="23sp"
+        app:layout_constraintEnd_toEndOf="@+id/bgImg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnOk"
+        app:layout_constraintStart_toStartOf="@+id/bgImg"/>
+
+
+    <View
+        android:id="@+id/btnOk"
+        android:layout_width="148dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="-30dp"
+        android:background="@drawable/bg_dialog_bt"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bgImg" />
+
+    <com.example.charge.ui.view.ShapeExtraWidthTextView
+        style="@style/BoldText"
+        android:layout_marginBottom="6dp"
+        android:gravity="center"
+        android:lines="1"
+        android:shadowColor="@color/ff016c03"
+        android:shadowDy="2"
+        android:shadowRadius="2"
+        android:text="@string/ok"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnOk"
+        app:layout_constraintEnd_toEndOf="@+id/btnOk"
+        app:layout_constraintStart_toStartOf="@+id/btnOk"
+        app:layout_constraintTop_toTopOf="@+id/btnOk"
+        app:shape_textStrokeColor="@color/ff016c03"
+        app:shape_textStrokeSize="2dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

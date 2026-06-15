@@ -1,6 +1,9 @@
 [versions]
 # android sdk versions
 compileSdk = "35"
+easyhttp = "12.8"
+gsonfactoryVersion = "9.6"
+kotlinReflectVersion = "1.5.10"
 minSdk = "24"
 targetSdk = "35"
 
@@ -100,7 +103,10 @@ playServicesOssLicenses = "17.0.0"
 preference = "1.2.0"
 timberVersion = "5.0.1"
 dnsjava = "3.5.2"
-
+xPopup = "2.10.0"
+eventbus = "3.3.1"
+shapeView = "9.3"
+shapeDrawable = "3.2"
 
 
 [libraries]
@@ -117,6 +123,9 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx"
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 androidx-work-multiprocess = { module = "androidx.work:work-multiprocess", version.ref = "workMultiprocess" }
+easyhttp = { module = "com.github.getActivity:EasyHttp", version.ref = "easyhttp" }
+jetbrains-kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinReflectVersion" }
+getactivity-gsonfactory = { module = "com.github.getActivity:GsonFactory", version.ref = "gsonfactoryVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -229,6 +238,10 @@ android-install-referrer = { module = "com.android.installreferrer:installreferr
 retrofit-adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofitRxjava2Adapter" }
 jakewharton-timber = { module = "com.jakewharton.timber:timber", version.ref = "timberVersion" }
 dnsjava = { module = "dnsjava:dnsjava", version.ref = "dnsjava" }
+xpopup = {module = "com.github.li-xiaojun:XPopup", version.ref = "xPopup"}
+eventbus = {module = "org.greenrobot:eventbus", version.ref = "eventbus"}
+shapeView = { group = "com.github.getActivity", name = "ShapeView", version.ref = "shapeView"}
+shapeDrawable = { group = "com.github.getActivity", name = "ShapeDrawable", version.ref = "shapeDrawable"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

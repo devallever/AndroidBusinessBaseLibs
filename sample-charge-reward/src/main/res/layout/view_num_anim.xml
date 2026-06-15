@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="40dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+<com.hjq.shape.view.ShapeTextView
+    android:id="@+id/numTv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="- 2 "
+    android:textSize="16sp"
+    android:textColor="@color/white"
+    app:shape_textStrokeSize="2dp"
+    app:shape_textStrokeColor="@color/ffff1904"
+    android:shadowRadius="1"
+    android:shadowDy="1"
+    android:shadowColor="@color/ffff1904"
+    android:layout_gravity="bottom"
+    android:visibility="gone"
+    tools:visibility="visible"/>
+</FrameLayout>

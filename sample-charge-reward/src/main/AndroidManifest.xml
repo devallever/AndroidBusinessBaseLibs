@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <!-- Unity所需的权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 媒体资源权限：Android 12 及以下 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-feature android:glEsVersion="0x00020000" />
+
+    <application>
+        <activity
+            android:name="com.example.charge.ui.activity.LaunchActivity"
+            android:exported="true">
+        </activity>
+
+
+        <activity
+            android:name="com.example.charge.ui.activity.HotLaunchActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.example.charge.ui.activity.MainActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.example.charge.ui.activity.FunctionActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.example.charge.ui.activity.HitMoleActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity android:name="com.example.charge.ui.activity.WithdrawActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name="com.example.charge.ui.activity.ReceiveCoinActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.example.charge.ui.activity.TaskActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+<!--        <meta-data-->
+<!--            android:name="com.google.android.gms.ads.APPLICATION_ID"-->
+<!--            android:value="ca-app-pub-3940256099942544~3347511713" />-->
+
+        <activity android:name=".ui.activity.WebActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <receiver
+            android:name=".base.AppNotifyReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="action_notify_bar_close" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+</manifest>

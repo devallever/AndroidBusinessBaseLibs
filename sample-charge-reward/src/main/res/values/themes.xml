@@ -1,0 +1,100 @@
+<resources>
+
+    <style name="Theme.SanXiao" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- 状态栏 -->
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
+        <!-- 导航栏 -->
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+
+        <!-- 允许内容延伸到系统栏区域 -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
+        <!-- 浅色状态栏文字 (Android 6.0+) -->
+        <item name="android:windowLightStatusBar">false</item>
+
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:textViewStyle">@style/MyAppTextViewStyle</item>
+
+    </style>
+
+    <!-- 自定义 TextView 样式 -->
+    <style name="MyAppTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/baloobhai2_extrabold</item>
+    </style>
+
+    <style name="defaultTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="autoSizeMinTextSize">10sp</item>
+        <item name="autoSizeTextType">uniform</item>
+    </style>
+    <style name="BoldText" parent="defaultTextStyle">
+        <item name="android:fontFamily">@font/baloobhai2_bold</item>
+    </style>
+    <style name="ExtraBoldText" parent="defaultTextStyle">
+        <item name="android:fontFamily">@font/baloobhai2_extrabold</item>
+    </style>
+    <style name="MediumText" parent="defaultTextStyle">
+        <item name="android:fontFamily">@font/baloobhai2_medium</item>
+    </style>
+    <style name="SemiBoldText" parent="defaultTextStyle">
+        <item name="android:fontFamily">@font/baloobhai2_semibold</item>
+    </style>
+    <style name="RegularText" parent="defaultTextStyle">
+        <item name="android:fontFamily">@font/baloobhai2_regular</item>
+    </style>
+    <style name="SpicyriceRegularText" parent="defaultTextStyle">
+        <item name="android:fontFamily">@font/spicyrice_regular</item>
+    </style>
+    <style name="VariablefontWght" parent="defaultTextStyle">
+        <item name="android:fontFamily">@font/baloobhai2_variablefont_wght</item>
+    </style>
+
+    <style name="InputItemStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@drawable/shape_et_input</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+    </style>
+
+    <style name="InputItemPayIconStyle">
+        <item name="android:layout_width">42dp</item>
+        <item name="android:layout_height">42dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+    </style>
+
+    <style name="InputItemEditIconStyle">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:layout_marginEnd">12dp</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="android:src">@drawable/ic_edit</item>
+    </style>
+
+    <style name="InputItemInfoStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginStart">46dp</item>
+        <item name="android:layout_marginEnd">44dp</item>
+        <item name="background">@null</item>
+        <item name="fontFamily">@font/baloobhai2_bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="shape_textColor">@color/white</item>
+        <item name="shape_textStrokeSize">2dp</item>
+        <item name="shape_textStrokeColor">@color/color_9A2F02</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:textColorHint">@color/color_C07900</item>
+        <item name="android:editable">false</item>
+    </style>
+
+</resources>
