@@ -98,10 +98,10 @@ class AdActionListener : IAdmobActionListener {
         }
 
         if (sourceType == SourceType.MAX || sourceType == SourceType.KWAI || sourceType == SourceType.BIGO) {
-            AdManager.loadAll(ChargeApp.Companion.instance, sourceType)
+            AdManager.loadAll(ChargeApp.instance, sourceType)
         } else if (sourceType == SourceType.ADMOB) {
-            AdManager.loadAdmobAppOpenAd(ChargeApp.Companion.instance, "123")
-            AdManager.loadAll(ChargeApp.Companion.instance, sourceType)
+            AdManager.loadAdmobAppOpenAd(ChargeApp.instance, "123")
+            AdManager.loadAll(ChargeApp.instance, sourceType)
 //            AdManager.loadAdmobInterstitialAd(BaseApplication.instance, Constance.ADMOB_INTER_ID)
 //            AdManager.loadAdmobReward(BaseApplication.instance, Constance.ADMOB_REWARD_ID)
         }

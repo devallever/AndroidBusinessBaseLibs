@@ -1,6 +1,7 @@
 package com.example.charge
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.Context
 import app.allever.android.lib.core.app.App
 import com.example.charge.base.AppLifecycleCallback
@@ -17,7 +18,7 @@ import org.greenrobot.eventbus.EventBus
 
 @SuppressLint("StaticFieldLeak")
 object ChargeApp {
-    lateinit var instance: Context
+    lateinit var instance: Application
     val minuteTimer by lazy {
         CustomTimer().apply {
             setInterval(60 * 1000L)
@@ -44,7 +45,7 @@ object ChargeApp {
     }
 
     fun init() {
-        instance = App.context
+        instance = App.app
         SpUtil.Companion.init(App.context)
         InitManager.init(App.app)
         App.app.registerActivityLifecycleCallbacks(AppLifecycleCallback())

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ad-services-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Google Mobile Ads AdServices configuration -->
+    <attribution enabled="true" />
+</ad-services-config>

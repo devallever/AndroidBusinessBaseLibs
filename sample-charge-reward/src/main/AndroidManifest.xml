@@ -60,6 +60,7 @@
         <activity android:name=".ui.activity.WebActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
+        <activity android:name="app.allever.android.sample.charge.reward.SampleChargeActivity" />
 
         <receiver
             android:name=".base.AppNotifyReceiver"

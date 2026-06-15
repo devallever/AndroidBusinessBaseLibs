@@ -50,4 +50,13 @@ dependencies {
 
     implementation(libs.getactivity.gsonfactory)
     implementation(libs.jetbrains.kotlin.reflect)
+    // BouncyCastle (AESUtils / UnityLibManager 需要)
+    implementation("org.bouncycastle:bcprov-jdk15on:1.70")
+    //数据分析
+    implementation("cn.thinkingdata.android:ThinkingAnalyticsSDK:3.0.2")
+    implementation("cn.thinkingdata.android:TAThirdParty:2.0.0")
+    //firebase统计平台
+    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-crashlytics")
 }

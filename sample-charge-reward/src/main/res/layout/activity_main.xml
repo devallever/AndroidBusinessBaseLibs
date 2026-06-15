@@ -596,7 +596,7 @@
         android:src="@mipmap/ic_launcher"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
+        app:layout_constraintBottom_toTopOf="@+id/viewBottomBar"
         app:layout_constraintEnd_toStartOf="@+id/gameRight"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivInteractiveLeft">
@@ -788,7 +788,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/bottomBar"
+        android:id="@+id/viewBottomBar"
         android:layout_width="match_parent"
         android:layout_height="103dp"
         app:layout_constraintBottom_toBottomOf="parent" />
@@ -799,9 +799,9 @@
         android:layout_height="64dp"
         android:layout_marginStart="20dp"
         android:src="@drawable/ic_setting"
-        app:layout_constraintBottom_toBottomOf="@+id/bottomBar"
-        app:layout_constraintStart_toStartOf="@+id/bottomBar"
-        app:layout_constraintTop_toTopOf="@+id/bottomBar" />
+        app:layout_constraintBottom_toBottomOf="@+id/viewBottomBar"
+        app:layout_constraintStart_toStartOf="@+id/viewBottomBar"
+        app:layout_constraintTop_toTopOf="@+id/viewBottomBar" />
 
     <ImageView
         android:id="@+id/btnWithdraw"

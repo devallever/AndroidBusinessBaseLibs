@@ -37,6 +37,12 @@ android {
 }
 
 dependencies {
+    // 排除已废弃的 play:core（与 core-common 存在重复类冲突）
+    // play:core 已拆分为 core-common、app-update、review 等独立模块
+    configurations.all {
+        exclude(group = "com.google.android.play", module = "core")
+    }
+
     implementation(project(":core"))
     implementation(project(":sample-common"))
     implementation(project(":sample-permission"))
