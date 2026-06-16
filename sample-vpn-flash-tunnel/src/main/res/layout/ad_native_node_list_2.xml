@@ -25,7 +25,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/primary"
-            style="@style/defaultTextStyle"
+            style="@style/flashDefaultTextStyle"
             android:layout_width="0dp"
             android:maxLines="1"
             tools:text="Ad: Title"

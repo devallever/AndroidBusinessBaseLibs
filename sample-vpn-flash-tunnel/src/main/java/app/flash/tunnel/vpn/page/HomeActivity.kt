@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.format.Formatter
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -52,6 +53,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() {
 
     override fun init() {
         fixStatusBar(mBinding.topBar)
+        enableEdgeToEdge()
 
         showStatusUi(TunnelHelper.isServiceConnected())
 

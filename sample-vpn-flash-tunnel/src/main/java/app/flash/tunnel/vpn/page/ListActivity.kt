@@ -3,17 +3,17 @@ package app.flash.tunnel.vpn.page
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import app.flash.tunnel.vpn.R
-import app.flash.tunnel.vpn.databinding.ActivityListBinding
+import app.flash.tunnel.vpn.databinding.ActivityFlashListBinding
 import app.flash.tunnel.vpn.helper.TunnelHelper
 import app.flash.tunnel.vpn.lib.common.ext.loadCircle
 import app.flash.tunnel.vpn.lib.common.util.log
 import app.flash.tunnel.vpn.page.adapter.ServerAdapter
 import app.flash.tunnel.vpn.page.viewmodel.ServerViewModel
 
-class ListActivity : BaseActivity<ActivityListBinding>() {
+class ListActivity : BaseActivity<ActivityFlashListBinding>() {
 
     private val mViewModel by viewModels<ServerViewModel>()
-    override fun inflate() = ActivityListBinding.inflate(layoutInflater)
+    override fun inflate() = ActivityFlashListBinding.inflate(layoutInflater)
 
     override fun init() {
         fixStatusBar(mBinding.topBar)

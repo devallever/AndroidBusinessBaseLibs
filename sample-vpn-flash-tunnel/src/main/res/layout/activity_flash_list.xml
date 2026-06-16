@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        style="@style/defaultTextStyle"
+        style="@style/flashDefaultTextStyle"
         android:text="@string/regions"
         android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="@+id/topBar"

@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        style="@style/defaultTextStyle"
+        style="@style/flashDefaultTextStyle"
         android:text="@string/about"
         android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="@+id/topBar"
@@ -57,7 +57,7 @@
                 android:src="@drawable/icon_logo" />
 
             <TextView
-                style="@style/defaultTextStyle"
+                style="@style/flashDefaultTextStyle"
                 android:layout_marginTop="36dp"
                 android:text="@string/app_name"
                 android:textSize="22sp"
@@ -93,7 +93,7 @@
                         android:src="@drawable/icon_rate_us_24" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        style="@style/defaultTextStyle"
+                        style="@style/flashDefaultTextStyle"
                         android:layout_marginStart="16dp"
                         android:text="@string/menu_rate_us"
                         android:textSize="24sp" />
@@ -119,7 +119,7 @@
                         android:src="@drawable/icon_faq_24" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        style="@style/defaultTextStyle"
+                        style="@style/flashDefaultTextStyle"
                         android:layout_marginStart="16dp"
                         android:text="@string/menu_faq"
                         android:textSize="22sp" />
@@ -145,7 +145,7 @@
                         android:src="@drawable/icon_about_24" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        style="@style/defaultTextStyle"
+                        style="@style/flashDefaultTextStyle"
                         android:layout_marginStart="16dp"
                         android:text="@string/mebu_privacy"
                         android:textSize="22sp" />

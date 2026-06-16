@@ -11,7 +11,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvQuestion"
-        style="@style/defaultTextStyle"
+        style="@style/flashDefaultTextStyle"
         android:layout_width="0dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="20dp"

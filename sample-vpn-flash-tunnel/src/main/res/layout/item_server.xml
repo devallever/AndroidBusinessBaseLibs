@@ -22,7 +22,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvNodeName"
-        style="@style/defaultTextStyle"
+        style="@style/flashDefaultTextStyle"
         android:layout_marginTop="10dp"
         android:text="Smart Server"
         app:layout_constraintLeft_toLeftOf="@id/ivFlag"

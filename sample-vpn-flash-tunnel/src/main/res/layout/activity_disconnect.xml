@@ -18,7 +18,7 @@
         android:layout_height="56dp" />
 
     <TextView
-        style="@style/defaultTextStyle"
+        style="@style/flashDefaultTextStyle"
         android:text="@string/summary"
         android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="@+id/topBar"
@@ -78,7 +78,7 @@
 
                 <TextView
                     android:id="@+id/tvTime"
-                    style="@style/defaultTextStyle"
+                    style="@style/flashDefaultTextStyle"
                     android:layout_marginHorizontal="5dp"
                     android:text="00:00:00"
                     android:textColor="@color/color_00EBFF"
