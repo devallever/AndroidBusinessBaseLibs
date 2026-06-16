@@ -8,7 +8,7 @@
         android:id="@+id/ivLogo"
         android:layout_width="168dp"
         android:layout_height="168dp"
-        android:src="@mipmap/ic_launcher"
+        android:src="@mipmap/flash_ic_launcher"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

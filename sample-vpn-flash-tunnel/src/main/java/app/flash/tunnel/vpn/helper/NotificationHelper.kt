@@ -38,7 +38,7 @@ object NotificationHelper {
         val context = TunnelApp.context
         val builder =
             NotificationCompat.Builder(context, "FlashTunnel").apply {
-                setSmallIcon(R.mipmap.ic_launcher_foreground)
+                setSmallIcon(R.mipmap.flash_ic_launcher_foreground)
                 setContentText(message)
                 setTicker(message)
                 setContentIntent(

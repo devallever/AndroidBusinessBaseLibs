@@ -9,7 +9,6 @@
     <string name="permission_permission_need_some_permission">Need Some permissions, please set manually</string>
     <string name="permission_permission_warm_tips">Warm Tips:</string>
 
-    <string name="app_name">HttpModel</string>
     <string name="re_register">重新登录</string>
     <string name="request_failed">请求失败</string>
     <string name="next_action_prompt">下一操作提示</string>

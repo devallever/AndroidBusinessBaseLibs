@@ -36,7 +36,7 @@ object TunnelApp: androidx.work.Configuration.Provider by Core {
     fun onCreate() {
         context = App.context
         ShadowsSocksConfig.notificationMainClz = HomeActivity::class.java
-        ShadowsSocksConfig.notificationIcon = R.mipmap.ic_launcher_foreground
+        ShadowsSocksConfig.notificationIcon = R.mipmap.flash_ic_launcher_foreground
         ShadowsSocksConfig.pkg = "com.allever.business.lib.project"
         ShadowsSocksConfig.autoStopMode = true
         ShadowsSocksConfig.appName = "FlashTunnel"
