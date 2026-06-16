@@ -1,0 +1,51 @@
+{
+  "ftsn": [
+    {
+      "ip": "51.161.212.159",
+      "rp": 6852,
+      "em": "chacha20-ietf-poly1305",
+      "pw": "hrisYWs8jYE9T",
+      "n": "Sydney",
+      "cn": "Australia",
+      "co": "AU",
+      "k": 2
+    },
+    {
+      "ip": "natsg10424.flash-tunnel.com",
+      "rp": 443,
+      "em": "chacha20-ietf-poly1305",
+      "pw": "hrisYWs8jYE9T",
+      "n": "Sydney",
+      "cn": "Australia",
+      "co": "AU",
+      "k": 2
+    },
+    {
+      "ip": "198.252.99.66",
+      "rp": 6852,
+      "em": "chacha20-ietf-poly1305",
+      "pw": "hrisYWs8jYE9T",
+      "n": "Toronto",
+      "cn": "Canada",
+      "co": "CA",
+      "k": 2
+    },
+    {
+      "ip": "91.218.67.228",
+      "rp": 6852,
+      "em": "chacha20-ietf-poly1305",
+      "pw": "hrisYWs8jYE9T",
+      "n": "Frankfurt",
+      "cn": "Germany",
+      "co": "DE",
+      "k": 2
+    }
+  ],
+  "ftau": {
+    "b": "",
+    "n": "",
+    "b_i": "",
+    "i": "",
+    "r": ""
+  }
+}

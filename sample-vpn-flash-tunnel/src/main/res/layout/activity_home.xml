@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/ivBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_page_bg" />
+
+    <View
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        style="@style/defaultTextStyle"
+        android:text="@string/app_name"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/topBar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/topBar" />
+
+    <ImageView
+        android:id="@+id/ivMenu"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_margin="12dp"
+        android:foreground="@drawable/ripple_default"
+        android:src="@drawable/icon_menu_28"
+        app:layout_constraintBottom_toBottomOf="@+id/topBar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/topBar" />
+
+    <ImageView
+        android:id="@+id/ivFlag"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_margin="16dp"
+        android:foreground="@drawable/ripple_default"
+        android:src="@drawable/icon_default_region"
+        app:layout_constraintBottom_toBottomOf="@+id/topBar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/topBar" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/downloadContainer"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/shape_4d17f0c9_r14"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/ivConnect"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/uploadContainer"
+        app:layout_constraintTop_toBottomOf="@+id/topBar">
+
+        <ImageView
+            android:id="@+id/ivDownload"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/icon_download_24"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/smallTextStyle"
+            android:text="@string/download"
+            app:layout_constraintLeft_toRightOf="@+id/ivDownload"
+            app:layout_constraintTop_toTopOf="@+id/ivDownload" />
+
+        <TextView
+            android:id="@+id/tvDownloadSpeed"
+            style="@style/defaultTextStyle"
+            android:layout_marginBottom="4dp"
+            android:text="0"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/ivDownload" />
+
+        <TextView
+            android:id="@+id/tvDownloadUnit"
+            style="@style/superSmallTextStyle"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp"
+            android:text="mb/s"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/tvDownloadSpeed" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/uploadContainer"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/shape_4d06f9ff_r14"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/ivConnect"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toRightOf="@+id/downloadContainer"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topBar">
+
+        <ImageView
+            android:id="@+id/ivUpload"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/icon_upload_24"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/smallTextStyle"
+            android:text="@string/upload"
+            app:layout_constraintLeft_toRightOf="@+id/ivUpload"
+            app:layout_constraintTop_toTopOf="@+id/ivUpload" />
+
+        <TextView
+            android:id="@+id/tvUploadSpeed"
+            style="@style/defaultTextStyle"
+            android:layout_marginBottom="4dp"
+            android:text="0"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/ivUpload" />
+
+        <TextView
+            android:id="@+id/tvUploadUnit"
+            style="@style/superSmallTextStyle"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp"
+            android:text="mb/s"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/tvUploadSpeed" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/ivConnect"
+        android:layout_width="144dp"
+        android:layout_height="144dp"
+        android:layout_marginTop="148dp"
+        android:foreground="@drawable/ripple_default"
+        android:src="@drawable/icon_logo_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topBar" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivConnect">
+
+        <TextView
+            android:id="@+id/tvTime"
+            style="@style/defaultTextStyle"
+            android:text="00:00:00"
+            android:textColor="@color/color_00EBFF"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvTapTo"
+            style="@style/superSmallTextStyle"
+            android:text="@string/tap_to_connect"
+            android:textColor="@color/color_CCFFFFFF" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/topBtnLocation"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="136dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivConnect" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btnBottomNode"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginHorizontal="32dp"
+        android:background="@drawable/shape_item_server_un_selected"
+        android:foreground="@drawable/ripple_default"
+        app:layout_constraintBottom_toBottomOf="@+id/topBtnLocation"
+        app:layout_constraintTop_toTopOf="@+id/topBtnLocation">
+
+
+        <ImageView
+            android:id="@+id/ivFlagBottom"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginHorizontal="20dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_default_region"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvNodeName"
+            style="@style/defaultTextStyle"
+            android:layout_width="0dp"
+            android:layout_marginHorizontal="15dp"
+            android:lines="1"
+            android:text="@string/default_server"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/ivFlagBottom"
+            app:layout_constraintRight_toLeftOf="@+id/ivMoreNode"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivMoreNode"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/icon_more_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btnAddTime"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginHorizontal="32dp"
+        android:background="@drawable/shape_item_server_un_selected"
+        android:foreground="@drawable/ripple_default"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/topBtnLocation"
+        app:layout_constraintTop_toTopOf="@+id/topBtnLocation">
+
+
+        <ImageView
+            android:id="@+id/ivAddTime"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginHorizontal="20dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_add_time_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/defaultTextStyle"
+            android:layout_width="0dp"
+            android:layout_marginHorizontal="15dp"
+            android:lines="1"
+            android:text="@string/add_time"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/ivAddTime"
+            app:layout_constraintRight_toLeftOf="@+id/ivMoreAddTime"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivMoreAddTime"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/icon_more_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btnConnect"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/shape_home_btn_connect"
+        android:foreground="@drawable/ripple_default"
+        app:layout_constraintBottom_toTopOf="@+id/adContainer"
+        app:layout_constraintTop_toBottomOf="@+id/topBtnLocation">
+
+        <ImageView
+            android:id="@+id/ivBtnConnect"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginHorizontal="2dp"
+            android:src="@drawable/icon_join_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/tvBtnConnect"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvBtnConnect"
+            style="@style/defaultTextStyle"
+            android:layout_marginHorizontal="2dp"
+            android:text="@string/go_start_connect"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toRightOf="@+id/ivBtnConnect"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/adContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <FrameLayout
+            android:id="@+id/bannerContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:id="@+id/nativeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

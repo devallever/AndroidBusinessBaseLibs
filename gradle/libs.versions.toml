@@ -107,6 +107,8 @@ xPopup = "2.10.0"
 eventbus = "3.3.1"
 shapeView = "9.3"
 shapeDrawable = "3.2"
+desugar_jdk_libs = "2.0.3"
+
 
 
 [libraries]
@@ -242,6 +244,7 @@ xpopup = {module = "com.github.li-xiaojun:XPopup", version.ref = "xPopup"}
 eventbus = {module = "org.greenrobot:eventbus", version.ref = "eventbus"}
 shapeView = { group = "com.github.getActivity", name = "ShapeView", version.ref = "shapeView"}
 shapeDrawable = { group = "com.github.getActivity", name = "ShapeDrawable", version.ref = "shapeDrawable"}
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

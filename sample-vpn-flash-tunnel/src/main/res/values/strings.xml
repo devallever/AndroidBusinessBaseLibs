@@ -1,0 +1,46 @@
+<resources>
+<!--    <string name="app_name">Flash Tunnel VPN</string>-->
+
+    <string name="admob_app_id">ca-app-pub-0000000000000000~0000000000</string>
+
+    <string name="facebook_app_id">0000000000000000</string>
+    <string name="fb_login_protocol_scheme">fb0000000000000000</string>
+    <string name="facebook_client_token">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</string>
+
+    <string name="ticker_success">Flash Tunnel VPN started.</string>
+
+    <string name="traffic">%1$s↑\t%2$s↓</string>
+    <string name="speed">%s/s</string>
+
+    <string name="loading_connecting">Connecting to VPN for you…</string>
+    <string name="loading_disconnecting">VPN is getting disconnected…</string>
+    <string name="loading">loading…</string>
+    <string name="connecting_when_app_in_bg">Flash Tunnel VPN connect fail, please do not exit the app when connecting to the vpn</string>
+    <string name="ok">OK</string>
+    <string name="dialog_connect_fail_message">VPN connection failed, please try again.</string>
+    <string name="reconnect">Reconnect</string>
+    <string name="dialog_ad_load_fail_message">Advertising video failed to load, please try again.</string>
+    <string name="retry">Retry</string>
+    <string name="dialog_conect_finish_message">The VPN connection time is over, please reconnect the node.</string>
+    <string name="got_it">Got it</string>
+    <string name="dialog_add_time_success_message">Congratulations, you\'ve got one hour of free connection time.</string>
+    <string name="dialog_rate_us_message">Please support us with 5 stars if you like it~</string>
+    <string name="dialog_add_time_message">Watch the full ad video to get one hour of connection time.</string>
+    <string name="success">Success</string>
+    <string name="add_time">Add time</string>
+    <string name="summary">Summary</string>
+    <string name="about">About</string>
+    <string name="menu_rate_us">RATE US</string>
+    <string name="menu_faq">FAQ</string>
+    <string name="mebu_privacy">PRIVACY POLICY</string>
+    <string name="faq">FAQ</string>
+    <string name="regions">Regions</string>
+    <string name="the_fastest_server">the fastest server</string>
+    <string name="default_server">Default region</string>
+    <string name="download">Download</string>
+    <string name="upload">Upload</string>
+    <string name="tap_to_connect">TAP TO CONNECT</string>
+    <string name="go_start_connect">GO START CONNECT</string>
+    <string name="tap_to_disconnect">TAP TO STOP</string>
+    <string name="disconnect">DISCONNECT</string>
+</resources>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="8dp"
+    android:background="@drawable/shape_item_server_un_selected"
+    android:foreground="@drawable/ripple_default">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_marginTop="12dp"
+        android:id="@+id/ivFlag"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginHorizontal="16dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_default_flag"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvNodeName"
+        style="@style/defaultTextStyle"
+        android:layout_marginTop="10dp"
+        android:text="Smart Server"
+        app:layout_constraintLeft_toLeftOf="@id/ivFlag"
+        app:layout_constraintTop_toBottomOf="@+id/ivFlag" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvCountryName"
+        style="@style/superSmallTextStyle"
+        android:layout_marginBottom="12dp"
+        android:text="America"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvNodeName"
+        app:layout_constraintLeft_toLeftOf="@+id/tvNodeName" />
+
+    <ImageView
+        android:id="@+id/ivSelect"
+        android:layout_margin="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="12dp"
+        android:src="@drawable/icon_choose_unselected_12"
+        android:layout_height="12dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

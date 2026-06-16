@@ -15,7 +15,7 @@ fun toastLong(obj: Any?) {
 }
 
 fun toastDebug(obj: Any?) {
-    if (BuildConfig.DEBUG) {
+    if (App.DEBUG) {
         toast(obj)
     }
 }

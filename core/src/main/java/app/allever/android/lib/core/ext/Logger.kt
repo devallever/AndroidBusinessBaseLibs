@@ -12,7 +12,7 @@ fun log(msg: String?) {
 }
 
 fun log(tag: String, msg: String?) {
-    if (BuildConfig.DEBUG) {
+    if (App.DEBUG) {
         logReleaseD(tag, msg)
     }
 }
@@ -22,7 +22,7 @@ fun logE(msg: String?) {
 }
 
 fun logE(tag: String, msg: String?) {
-    if (BuildConfig.DEBUG) {
+    if (App.DEBUG) {
         logReleaseE(tag, msg)
     }
 }

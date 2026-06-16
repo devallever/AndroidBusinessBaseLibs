@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="color_CCFFFFFF">#CCFFFFFF</color>
+    <color name="color_B3000000">#B3000000</color>
+    <color name="color_10000000">#10000000</color>
+    <color name="color_F0F0F0">#F0F0F0</color>
+    <color name="color_04C6E7">#04C6E7</color>
+    <color name="color_005FFF">#005FFF</color>
+    <color name="color_1084F5">#1084F5</color>
+    <color name="color_00EBFF">#00EBFF</color>
+    <color name="color_CC076CAB">#CC076CAB</color>
+    <color name="color_80C5E9FF">#80C5E9FF</color>
+    <color name="color_33FFFFFF">#33FFFFFF</color>
+    <color name="color_1584F0">#1584F0</color>
+    <color name="color_AAD2FF">#AAD2FF</color>
+    <color name="color_4D76D4DC">#4D76D4DC</color>
+    <color name="color_4D17F0C9">#4D17F0C9</color>
+    <color name="color_80FFFFFF">#80FFFFFF</color>
+    <color name="color_CDFBFF">#CDFBFF</color>
+    <color name="color_4D06F9FF">#4D06F9FF</color>
+
+    <color name="gnt_test_background_color">#00F4F4F4</color>
+    <color name="gnt_test_background_color_2">#00A3A3A3</color>
+    <color name="gnt_black">#000000</color>
+    <color name="gnt_white">#FFFFFF</color>
+    <color name="gnt_red">#FF0000</color>
+    <color name="gnt_green">#00FF00</color>
+    <color name="gnt_blue">#4285f4</color>
+    <color name="gnt_ad_green">#3A6728</color>
+    <color name="gnt_gray">#808080</color>
+    <color name="gnt_outline">#E0E0E0</color>
+</resources>

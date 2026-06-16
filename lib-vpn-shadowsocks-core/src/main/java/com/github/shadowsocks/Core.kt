@@ -113,7 +113,7 @@ object Core : Configuration.Provider {
         Timber.plant(object : Timber.DebugTree() {
             override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
                 if (t == null) {
-                    if (priority != Log.DEBUG || BuildConfig.DEBUG) Log.println(priority, tag, message)
+                    if (priority != Log.DEBUG || App.DEBUG) Log.println(priority, tag, message)
                 } else {
                     if (priority >= Log.WARN || priority == Log.DEBUG) Log.println(priority, tag, message)
                 }
@@ -140,7 +140,7 @@ object Core : Configuration.Provider {
 
     override fun getWorkManagerConfiguration() = Configuration.Builder().apply {
         setDefaultProcessName(app.packageName + ":bg")
-        setMinimumLoggingLevel(if (BuildConfig.DEBUG) Log.VERBOSE else Log.INFO)
+        setMinimumLoggingLevel(if (App.DEBUG) Log.VERBOSE else Log.INFO)
         setExecutor { GlobalScope.launch { it.run() } }
         setTaskExecutor { GlobalScope.launch { it.run() } }
     }.build()

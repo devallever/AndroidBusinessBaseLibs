@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.FlashTunnel" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--注意：Android 21（android 5.0 Lollipop）这个系统开始这个属性设置为true，状态栏会呈现半透明加暗效果，并不能全透明-->
+        <item name="android:windowTranslucentStatus">false</item>
+        <!--注意：Android 21（5.0）这个系统开始状态栏透明的话需要把颜色设置为透明，并且上面那个属性需要设置为false-->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!--注意：导航栏设置透明是为了让activity内容延伸至状态栏，导航栏实际为半透明加暗效果-->
+        <item name="android:windowTranslucentNavigation">false</item>
+
+    </style>
+
+    <!-- default textview style -->
+    <style name="defaultTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="smallTextStyle" parent="defaultTextStyle">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="superSmallTextStyle" parent="defaultTextStyle">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="bigTextStyle" parent="defaultTextStyle">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="superBigTextStyle" parent="defaultTextStyle">
+        <item name="android:textSize">20sp</item>
+    </style>
+</resources>

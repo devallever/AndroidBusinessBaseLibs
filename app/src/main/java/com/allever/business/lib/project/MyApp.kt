@@ -46,7 +46,7 @@ class MyApp: App() {
         ShadowsSocksConfig.tickerSuccess = getString(R.string.ticker_success)
         ShadowsSocksConfig.notificationTraffic = R.string.traffic
         ShadowsSocksConfig.notificationSpeed = R.string.speed
-        ShadowsSocksConfig.connectTime = if (BuildConfig.DEBUG) 45 * 60 * 1000L else 30 * 60 * 1000L
+        ShadowsSocksConfig.connectTime = if (App.DEBUG) 45 * 60 * 1000L else 30 * 60 * 1000L
         Core.init(this, MainActivity::class)
     }
 

@@ -41,7 +41,7 @@ abstract class App : Application() {
         lateinit var mainHandler: Handler
 
         val DEBUG by lazy {
-            BuildConfig.DEBUG
+            App.DEBUG
         }
 
         private var activityCount = 0
@@ -87,7 +87,7 @@ abstract class App : Application() {
     protected open fun crashHandler(): ExceptionHandler? = mExceptionHandler
 
     private fun initCrashHandler() {
-        if (BuildConfig.DEBUG) {
+        if (App.DEBUG) {
             return
         }
 

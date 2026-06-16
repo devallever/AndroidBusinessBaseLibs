@@ -33,7 +33,7 @@ interface IAdConfig {
      * 原生高级视频广告	ca-app-pub-3940256099942544/1044960115
      */
     fun getAdId(type: Int): String {
-        return if (BuildConfig.DEBUG) {
+        return if (App.DEBUG) {
             when (type) {
                 BANNER_AD -> "ca-app-pub-3940256099942544/6300978111"
                 INTER_AD -> "ca-app-pub-3940256099942544/1033173712"

@@ -99,7 +99,7 @@ object CustomToast {
             toast.duration = duration
             toast.view = toastLayout
             if (onlyDebug) {
-                if (BuildConfig.DEBUG) {
+                if (App.DEBUG) {
                     toast.show()
                 }
             } else {

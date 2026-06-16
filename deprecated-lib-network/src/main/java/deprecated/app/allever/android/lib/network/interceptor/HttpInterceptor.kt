@@ -30,7 +30,7 @@ class HttpInterceptor : Interceptor {
         val response = chain.proceed(request)
         val responseBody = response.body
         val responseBodyString = responseBody?.string() ?: ""
-        if (BuildConfig.DEBUG) {
+        if (App.DEBUG) {
             val tag = "HttpInterceptor"
             logE(tag, "\n\nHttp ==> Start")
             logE(tag, "请求链接 = " + request.url)
