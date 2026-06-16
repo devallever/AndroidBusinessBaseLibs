@@ -136,7 +136,7 @@ fun Resources.Theme.resolveResourceId(@AttrRes resId: Int): Int {
 fun Preference.remove() = parent!!.removePreference(this)
 
 fun log(msg: String) {
-    if (App.DEBUG) {
+    if (BuildConfig.DEBUG) {
         Timber.tag("Shadowsocks").d(msg)
     }
 }

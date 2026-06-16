@@ -41,7 +41,7 @@ abstract class App : Application() {
         lateinit var mainHandler: Handler
 
         val DEBUG by lazy {
-            App.DEBUG
+            BuildConfig.DEBUG
         }
 
         private var activityCount = 0

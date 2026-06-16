@@ -41,7 +41,7 @@ object PaidEventHelper {
         bundle.putString(Params.fb_c_g_id, ReferrerHelper.facebookReferrerDecryption?.campaignGroupId?.toString()?:"")
 
         block(bundle)
-        if (TunnelApp.DEBUG) {
+        if (App.DEBUG) {
             log("logEvent[$eventName]")
 //            bundle.keySet().map {
 //                val value = bundle.get(it)

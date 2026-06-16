@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
+import app.allever.android.lib.core.app.App
 import app.flash.tunnel.vpn.R
 import app.flash.tunnel.vpn.TunnelApp
 import app.flash.tunnel.vpn.data.AdId
@@ -29,7 +30,7 @@ object AdHelper {
     private const val NATIVE_SCENE_NODE_LIST = "NATIVE_SCENE_NODE_LIST_FT"
 
     private val AD_PRE_STRING =
-        if (TunnelApp.DEBUG) "ca-app-pub-3940256099942544/" else "ca-app-pub-9616944826628432/"
+        if (App.DEBUG) "ca-app-pub-3940256099942544/" else "ca-app-pub-9616944826628432/"
 
     private const val TEST_BANNER = "ca-app-pub-3940256099942544/6300978111"
     private const val TEST_INTER = "ca-app-pub-3940256099942544/1033173712"
@@ -62,32 +63,32 @@ object AdHelper {
         return "$AD_PRE_STRING${adUnitConfig}"
     }
 
-    fun bannerId() = if (TunnelApp.DEBUG) {
+    fun bannerId() = if (App.DEBUG) {
         TEST_BANNER
     } else {
         parseAdUnit(mAdUnit?.bannerId)
     }
 
-    private fun nativeId() = if (TunnelApp.DEBUG) {
+    private fun nativeId() = if (App.DEBUG) {
         TEST_NATIVE
     } else {
         parseAdUnit(mAdUnit?.nativeId)
     }
 
-    private fun rewardId() = if (TunnelApp.DEBUG) {
+    private fun rewardId() = if (App.DEBUG) {
         TEST_REWARD
     } else {
         parseAdUnit(mAdUnit?.rewardId)
     }
 
-    private fun beforeInterId() = if (TunnelApp.DEBUG) {
+    private fun beforeInterId() = if (App.DEBUG) {
         TEST_INTER
     } else {
         parseAdUnit(mAdUnit?.beforeInterId)
     }
 
     private fun interId(): String {
-        return if (TunnelApp.DEBUG) {
+        return if (App.DEBUG) {
             TEST_INTER
         } else {
             val nodeAdUnit = getConnectNodeAdUnitConfig()

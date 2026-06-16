@@ -21,6 +21,10 @@ android {
         applicationId = modelPkg
     }
 
+    compileOptions {
+        isCoreLibraryDesugaringEnabled =  true
+    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -91,4 +95,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 //    debugImplementation (libs.leakcanary.android)
+
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

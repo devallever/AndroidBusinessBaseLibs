@@ -1,5 +1,7 @@
 package app.allever.android.sample.ad.admob
 
+import app.allever.android.lib.core.app.App
+
 
 /**
  *@Description

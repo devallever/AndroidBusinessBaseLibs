@@ -2,6 +2,7 @@ package app.allever.android.lib.core.ext
 
 import android.util.Log
 import app.allever.android.lib.core.BuildConfig
+import app.allever.android.lib.core.app.App
 
 class Logger
 

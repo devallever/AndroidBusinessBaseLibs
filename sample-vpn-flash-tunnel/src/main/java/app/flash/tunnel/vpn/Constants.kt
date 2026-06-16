@@ -1,5 +1,6 @@
 package app.flash.tunnel.vpn
 
+import app.allever.android.lib.core.app.App
 import app.flash.tunnel.vpn.lib.common.util.DeviceManager
 
 object Constants {
@@ -27,7 +28,7 @@ object Constants {
 
     private val did = DeviceManager.getAndroidId(TunnelApp.context)
     private val mcc = DeviceManager.getMcc(TunnelApp.context)
-    private val vCode = BuildConfig.VERSION_CODE
+    private val vCode = 1
     private val pkg = TunnelApp.context.packageName
 
     val API by lazy {

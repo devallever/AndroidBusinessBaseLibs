@@ -22,45 +22,39 @@ import com.github.shadowsocks.ShadowsSocksConfig
 import java.io.File
 import java.io.IOException
 
-class TunnelApp : Application(), androidx.work.Configuration.Provider by Core {
+@SuppressLint("StaticFieldLeak")
+object TunnelApp: androidx.work.Configuration.Provider by Core {
 
-    companion object {
-        @SuppressLint("StaticFieldLeak")
-        lateinit var context: Context
-        val DEBUG = App.DEBUG
+    @SuppressLint("StaticFieldLeak")
+    lateinit var context: Context
+    val DEBUG = App.DEBUG
 
-        var alreadyInBackground = false
-        private var activityCount = 0
-        fun currentInBackground() = activityCount == 0
-    }
+    var alreadyInBackground = false
+    private var activityCount = 0
+    fun currentInBackground() = activityCount == 0
 
-    override fun onCreate() {
-        context = this
+    fun onCreate() {
+        context = App.context
         ShadowsSocksConfig.notificationMainClz = HomeActivity::class.java
         ShadowsSocksConfig.notificationIcon = R.mipmap.ic_launcher_foreground
         ShadowsSocksConfig.pkg = "com.allever.business.lib.project"
         ShadowsSocksConfig.autoStopMode = true
-        ShadowsSocksConfig.appName = getString(R.string.app_name)
-        ShadowsSocksConfig.tickerSuccess = getString(R.string.ticker_success)
+        ShadowsSocksConfig.appName = "FlashTunnel"
+        ShadowsSocksConfig.tickerSuccess = App.context.getString(R.string.ticker_success)
         ShadowsSocksConfig.notificationTraffic = R.string.traffic
         ShadowsSocksConfig.notificationSpeed = R.string.speed
         ShadowsSocksConfig.connectTime = Constants.CONNECT_TIME
-        Core.init(this, SplashActivity::class)
-        super.onCreate()
+        Core.init(App.app, SplashActivity::class)
 
-        if (isInMainProcess(this)) {
+        if (isInMainProcess(App.app)) {
             EventHelper.launchTimeStart = System.currentTimeMillis()
-            Common.init(this)
-            ReferrerHelper.init(this)
+            Common.init(App.app)
+            ReferrerHelper.init(App.app)
             EventHelper.init()
             AdHelper.init()
             FirebaseHelper.init()
-            TunnelHelper.init(this)
+            TunnelHelper.init(App.app)
             registerActivityLifecycleCallback()
-            if (DEBUG) {
-//                FacebookSdk.setIsDebugEnabled(true)
-//                FacebookSdk.setCodelessDebugLogEnabled(true)
-            }
         }
     }
 
@@ -94,7 +88,7 @@ class TunnelApp : Application(), androidx.work.Configuration.Provider by Core {
     }
 
     private fun registerActivityLifecycleCallback() {
-        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
+        App.app.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
             }
 

@@ -67,6 +67,7 @@
             android:theme="@style/Theme.FlashTunnel"
             tools:replace="android:theme"
             tools:ignore="MissingClass" />
+        <activity android:name="app.allever.android.sample.vpn.flash.tunnel.SampleVpnFlashTunnelMainActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -76,9 +77,9 @@
             android:value="@string/facebook_client_token" />
 
     <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
-    <meta-data
-        android:name="com.google.android.gms.ads.APPLICATION_ID"
-        android:value="ca-app-pub-3940256099942544~3347511713" />
+<!--    <meta-data-->
+<!--        android:name="com.google.android.gms.ads.APPLICATION_ID"-->
+<!--        android:value="ca-app-pub-3940256099942544~3347511713" />-->
 
     <meta-data
         android:name="com.google.android.gms.ads.flag.NATIVE_AD_DEBUGGER_ENABLED"

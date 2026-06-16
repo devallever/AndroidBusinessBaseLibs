@@ -180,7 +180,7 @@ object EventHelper {
         bundle.putInt(Params.vState, vState)
 
         block(bundle)
-        if (TunnelApp.DEBUG) {
+        if (App.DEBUG) {
             log("logEvent[$eventName]")
 //            bundle.keySet().map {
 //                val value = bundle.get(it)

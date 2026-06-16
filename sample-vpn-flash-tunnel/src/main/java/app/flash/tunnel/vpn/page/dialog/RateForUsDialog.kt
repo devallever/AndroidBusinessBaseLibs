@@ -37,7 +37,7 @@ class RateForUsDialog(
                 if (ratingBar.rating >= 5) {
                     Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse("market://details?id=${BuildConfig.APPLICATION_ID}")
+                        Uri.parse("market://details?id=com.allever.business.lib.project")
                     ).apply {
                         setPackage("com.android.vending")
                         try {

@@ -4,7 +4,7 @@ import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.helper.ProcessHelper
 import app.allever.android.sample.adjust.AdJustHelper
 import app.allever.android.sample.appsflyer.AFHelper
-//import app.allever.android.sample.dj.csj.CsjDjHelper
+import app.flash.tunnel.vpn.TunnelApp
 import com.alibaba.android.arouter.launcher.ARouter
 import com.example.charge.ChargeApp
 import com.github.shadowsocks.Core
@@ -18,6 +18,7 @@ class MyApp: App() {
     override fun onCreate() {
         initShadowSocks()
         super.onCreate()
+        TunnelApp.onCreate()
     }
     override fun init() {
         if (DEBUG) {

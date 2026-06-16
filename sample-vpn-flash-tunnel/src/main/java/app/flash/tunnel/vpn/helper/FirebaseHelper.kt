@@ -1,6 +1,7 @@
 package app.flash.tunnel.vpn.helper
 
 import android.annotation.SuppressLint
+import app.allever.android.lib.core.app.App
 import app.flash.tunnel.vpn.TunnelApp
 import app.flash.tunnel.vpn.lib.common.util.log
 import app.flash.tunnel.vpn.lib.common.util.runInIoDispatcher
@@ -17,7 +18,7 @@ object FirebaseHelper {
 //    private lateinit var mRemoteConfig: FirebaseRemoteConfig
 
     private val mFetchIntervalInSeconds =
-        if (TunnelApp.DEBUG || !TunnelHelper.hasLocalConfigCache()) 3 else (5 + 1) * 3600L
+        if (App.DEBUG || !TunnelHelper.hasLocalConfigCache()) 3 else (5 + 1) * 3600L
 
     fun init() {
 //        FirebaseApp.initializeApp(TunnelApp.context)

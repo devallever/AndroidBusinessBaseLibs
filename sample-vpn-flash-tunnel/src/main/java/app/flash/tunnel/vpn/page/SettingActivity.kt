@@ -13,7 +13,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         fixStatusBar(mBinding.topBar)
         mBinding.ivClose.setOnClickListener { finish() }
 
-        mBinding.tvVersion.text = "v${BuildConfig.VERSION_NAME}"
+        mBinding.tvVersion.text = "v1.0"
 
         mBinding.btnFaq.setOnClickListener {
             ActivityManager.start(this@SettingActivity, QuestionActivity::class.java)

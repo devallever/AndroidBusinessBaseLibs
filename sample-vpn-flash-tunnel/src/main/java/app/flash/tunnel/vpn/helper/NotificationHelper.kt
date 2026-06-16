@@ -24,8 +24,8 @@ object NotificationHelper {
     // 创建一个通知通道
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channelId = TunnelApp.context.getString(R.string.app_name)
-            val channelName = TunnelApp.context.getString(R.string.app_name)
+            val channelId = "FlashTunnel"
+            val channelName = "FlashTunnel"
             val important = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(channelId, channelName, important)
             val notificationManager: NotificationManager =
@@ -37,7 +37,7 @@ object NotificationHelper {
     fun showNotification(message: String, notificationId: Int = 999) {
         val context = TunnelApp.context
         val builder =
-            NotificationCompat.Builder(context, context.getString(R.string.app_name)).apply {
+            NotificationCompat.Builder(context, "FlashTunnel").apply {
                 setSmallIcon(R.mipmap.ic_launcher_foreground)
                 setContentText(message)
                 setTicker(message)
