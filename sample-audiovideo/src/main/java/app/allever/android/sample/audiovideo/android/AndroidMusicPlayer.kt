@@ -147,17 +147,39 @@ class AndroidMusicPlayer {
     private var currentUri: Uri? = null
     private var currentHeaders: Map<String, String>? = null
     private var retryLeft: Int = 0
+    private var isAssetSource: Boolean = false
 
     // ==================== 数据源 & 播放控制 ====================
 
     /**
      * 设置音频数据源并准备（不自动播放）
      *
-     * 支持 http/https/content/file 协议
+     * 支持 http/https/content/file/android_asset 协议
      * 准备完成后回调 [IPlayerListener.onPrepared]，此时需调用 [play] 开始播放
+     *
+     * @param url 支持：
+     * - http/https URL
+     * - content:// URI
+     * - file:// 路径
+     * - file:///android_asset/filename.mp3 (assets 目录)
      */
     fun setSource(url: String) {
-        setSource(Uri.parse(url))
+        val uri = Uri.parse(url)
+        isAssetSource = uri.scheme == "file" && uri.path?.startsWith("/android_asset/") == true
+        setSource(uri)
+    }
+
+    /**
+     * 设置 assets 目录下的音频文件并准备（不自动播放）
+     *
+     * @param assetPath assets 目录下的相对路径，如 "audio/test.mp3"
+     */
+    fun setAssetSource(assetPath: String) {
+        isAssetSource = true
+        currentUri = Uri.parse("file:///android_asset/$assetPath")
+        currentHeaders = null
+        retryLeft = retryCount
+        doPrepare()
     }
 
     /**
@@ -168,6 +190,7 @@ class AndroidMusicPlayer {
      */
     fun setSource(uri: Uri, headers: Map<String, String>? = null) {
         if (_state == PlayerState.RELEASED) return
+        isAssetSource = uri.scheme == "file" && uri.path?.startsWith("/android_asset/") == true
         currentUri = uri
         currentHeaders = headers
         retryLeft = retryCount
@@ -279,12 +302,21 @@ class AndroidMusicPlayer {
         initMediaPlayer()
 
         try {
-            val uri = currentUri ?: return
             val context = App.context
-            if (!uri.scheme.isNullOrEmpty() && uri.scheme!!.startsWith("http") && !currentHeaders.isNullOrEmpty()) {
-                mediaPlayer?.setDataSource(context, uri, HashMap(currentHeaders!!))
+            if (isAssetSource) {
+                // assets 文件
+                val assetPath = currentUri?.path?.removePrefix("/android_asset/") ?: return
+                log("MusicPlayer", "prepare asset: $assetPath")
+                val afd = context.assets.openFd(assetPath)
+                mediaPlayer?.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
+                afd.close()
             } else {
-                mediaPlayer?.setDataSource(context, uri)
+                val uri = currentUri ?: return
+                if (!uri.scheme.isNullOrEmpty() && uri.scheme!!.startsWith("http") && !currentHeaders.isNullOrEmpty()) {
+                    mediaPlayer?.setDataSource(context, uri, HashMap(currentHeaders!!))
+                } else {
+                    mediaPlayer?.setDataSource(context, uri)
+                }
             }
             mediaPlayer?.prepareAsync()
             _state = PlayerState.PREPARING

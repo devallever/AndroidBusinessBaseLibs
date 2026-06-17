@@ -234,6 +234,39 @@
             android:textSize="14sp"
             android:layout_marginBottom="16dp" />
 
+        <!-- Assets文件播放 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Assets 文件路径（相对路径，如 audio/test.mp3）"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/etAssetPath"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="audio/test.mp3"
+                android:text="output.mp3"
+                android:inputType="text"
+                android:textSize="14sp"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/btnPlayAsset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="播放Assets" />
+        </LinearLayout>
+
         <!-- 重试次数设置 -->
         <LinearLayout
             android:layout_width="match_parent"

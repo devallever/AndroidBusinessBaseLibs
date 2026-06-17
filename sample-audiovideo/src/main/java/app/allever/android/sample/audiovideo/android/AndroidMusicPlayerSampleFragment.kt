@@ -3,6 +3,7 @@ package app.allever.android.sample.audiovideo.android
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import app.allever.android.lib.common.BaseFragment
+import app.allever.android.lib.core.helper.AssetsHelper
 import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.picker.MediaPickerConfig
 import app.allever.android.lib.media.picker.MediaPickerCore
@@ -99,6 +100,18 @@ class AndroidMusicPlayerSampleFragment :
         // 选择本地音频
         mBinding.btnPickLocal.setOnClickListener {
             MediaPickerCore.launchAudio(audioPickerLauncher)
+        }
+
+        // 播放 Assets 文件
+        mBinding.btnPlayAsset.setOnClickListener {
+            val assetPath = mBinding.etAssetPath.text.toString().trim()
+            if (assetPath.isNotEmpty()) {
+                autoPlayOnPrepared = true
+                player.setAssetSource(assetPath)
+                appendLog("播放 Assets 文件: $assetPath")
+            } else {
+                appendLog("请输入 Assets 文件路径")
+            }
         }
 
         // 进度条拖动
