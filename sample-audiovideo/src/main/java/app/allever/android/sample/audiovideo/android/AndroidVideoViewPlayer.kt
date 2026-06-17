@@ -211,7 +211,8 @@ class AndroidVideoViewPlayer {
                 startProgressTracking()
             }
             PlayerState.PAUSED -> {
-                videoView?.resume()
+                // 使用 start() 恢复，比 resume() 更可靠
+                videoView?.start()
                 _state = PlayerState.PLAYING
                 startProgressTracking()
             }
