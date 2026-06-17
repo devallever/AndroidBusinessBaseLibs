@@ -19,6 +19,7 @@ class RouterPath {
         const val PATH_Z_SAMPLE_TOOLBOX = "/ztoolbox/main"
         const val PATH_Z_SAMPLE_VIDEO_EDITOR = "/zvideoeditor/main"
         const val PATH_Z_SAMPLE_MICROSOFT_SPEECH = "/zmicrosoftspeech/main"
+        const val PATH_Z_SAMPLE_AUDIO_VIDEO = "/zaudiovideo/main"
         ////////////////////////////////////////////////////////////////////////////////////////////
         const val PATH_MAIN = "/app/main"
 

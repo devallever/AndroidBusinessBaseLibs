@@ -91,6 +91,7 @@ dependencies {
     implementation(project(":z-sample-toolbox"))
     implementation(project(":z-sample-videoeditor"))
     implementation(project(":z-sample-microsoft-speech"))
+    implementation(project(":z-sample-audiovideo"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

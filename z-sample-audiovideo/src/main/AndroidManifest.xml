@@ -30,7 +30,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/FullScreenStyle" />
-        <activity android:name="app.allever.android.sample.audiovideo.SampleAudioVideoMainActivity" />
 
         <service android:name="z.app.allever.android.learning.audiovideo.ijkplayer.services.MediaPlayerService" />
     </application>

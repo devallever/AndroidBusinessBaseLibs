@@ -63,5 +63,8 @@ class SampleOldListFragment: ListFragment<FragmentListBinding, ListViewModel, Te
         TextClickItem("VideoEditor") {
             ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_VIDEO_EDITOR).navigation()
         },
+        TextClickItem("音视频") {
+            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_AUDIO_VIDEO).navigation()
+        },
     )
 }

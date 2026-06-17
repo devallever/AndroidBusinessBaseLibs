@@ -1,0 +1,81 @@
+package z.app.allever.android.learning.audiovideo.videoplayer.textureviewplayer
+
+import android.graphics.SurfaceTexture
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.view.Surface
+import android.view.TextureView
+import z.app.allever.android.learning.audiovideo.videoplayer.BasePlayerHandler
+import z.app.allever.android.learning.audiovideo.videoplayer.StatusListener
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.media.core.model.MediaItem
+
+class TextureViewHandler : BasePlayerHandler(), TextureView.SurfaceTextureListener {
+
+    private lateinit var mTextureView: TextureView
+    private lateinit var mSurface: Surface
+
+    fun initVideoView(
+        textureView: TextureView,
+        mediaBean: MediaItem,
+        statusListener: StatusListener? = null
+    ) {
+        mMediaBean = mediaBean
+        mTextureView = textureView
+        mStatusListener = statusListener
+        mMediaPlayer = MediaPlayer()
+        mTextureView.surfaceTextureListener = this
+    }
+
+    override fun play() {
+        super.play()
+        mMediaPlayer?.start()
+    }
+
+    override fun pause() {
+        super.pause()
+        mMediaPlayer?.pause()
+    }
+
+    override fun stop() {
+        super.stop()
+        mMediaPlayer?.stop()
+    }
+
+    override fun seekTo(value: Int) {
+        super.seekTo(value)
+        mMediaPlayer?.seekTo(value)
+    }
+
+    override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
+        log(TAG, "onSurfaceTextureAvailable")
+        mSurface = Surface(surface)
+        try {
+            mMediaBean.uri ?: return
+            mMediaPlayer?.reset()
+            mMediaPlayer?.setAudioStreamType(AudioManager.STREAM_MUSIC)
+            mMediaPlayer?.setDataSource(mTextureView.context, mMediaBean.uri ?: return)
+
+            mMediaPlayer?.setSurface(mSurface)//添加渲染
+            mMediaPlayer?.setOnPreparedListener(this)
+            mMediaPlayer?.setOnCompletionListener(this)
+            mMediaPlayer?.prepareAsync()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {
+        log(TAG, "onSurfaceTextureSizeChanged: width = $width, height = $height")
+    }
+
+    override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
+        mSurface
+        mMediaPlayer?.stop()
+        mSurface.release()
+        return true
+    }
+
+    override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {}
+
+}

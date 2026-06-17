@@ -105,7 +105,7 @@ class FileMainFragment : ListFragment<FragmentListBinding, ListViewModel, TextCl
                     log("appCacheDir = $appCacheDir")
                     val file = File(appCacheDir)
                     if (file.exists()) {
-                        if (it == "app.allever.android.learning.audiovideo") {
+                        if (it == "z.app.allever.android.learning.audiovideo") {
                             val result = FileUtils.delete(file)
                             if (result) {
                                 log("删除成功")
