@@ -29,11 +29,15 @@ object MediaPickerCore {
         return register(call, MediaPickerContract(), callback)
     }
 
-    fun launchVideo(launcher: ActivityResultLauncher<MediaPickerConfig>, max: Int = 1) {
-        launcher.launch(MediaPickerConfig(setOf(MediaType.Type.VIDEO), max))
+    fun launchImage(launcher: ActivityResultLauncher<MediaPickerConfig>, max: Int = 1) {
+        launcher.launch(MediaPickerConfig(setOf(MediaType.Type.IMAGE), max))
     }
 
-    fun launchImage(launcher: ActivityResultLauncher<MediaPickerConfig>, max: Int = 1) {
+    fun launchAudio(launcher: ActivityResultLauncher<MediaPickerConfig>, max: Int = 1) {
+        launcher.launch(MediaPickerConfig(setOf(MediaType.Type.AUDIO), max))
+    }
+
+    fun launchVideo(launcher: ActivityResultLauncher<MediaPickerConfig>, max: Int = 1) {
         launcher.launch(MediaPickerConfig(setOf(MediaType.Type.IMAGE), max))
     }
 

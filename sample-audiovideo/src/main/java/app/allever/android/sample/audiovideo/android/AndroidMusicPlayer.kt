@@ -1,0 +1,401 @@
+package app.allever.android.sample.audiovideo.android
+
+import android.media.AudioAttributes
+import android.media.MediaPlayer
+import android.media.PlaybackParams
+import android.net.Uri
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+
+/**
+ * 播放器状态机
+ */
+enum class PlayerState {
+    IDLE,           // 空闲
+    PREPARING,      // 准备中
+    PREPARED,       // 准备就绪（可播放）
+    PLAYING,        // 播放中
+    PAUSED,         // 已暂停
+    STOPPED,        // 已停止
+    COMPLETED,      // 播放完成
+    ERROR,          // 出错
+    RELEASED        // 已释放（终态）
+}
+
+/**
+ * 循环模式
+ */
+enum class LoopMode {
+    NONE,           // 不循环
+    SINGLE,         // 单曲循环
+    ALL             // 列表循环
+}
+
+/**
+ * 音频播放事件监听接口
+ *
+ * 所有回调均在主线程触发。
+ * onError 返回 true 表示错误已被消费，播放器不再处理。
+ */
+interface IPlayerListener {
+    /** 状态变化 */
+    fun onStateChanged(from: PlayerState, to: PlayerState) {}
+
+    /** 准备就绪（此时可获取 duration） */
+    fun onPrepared(durationMs: Long) {}
+
+    /** 进度更新（定时回调） */
+    fun onProgress(currentMs: Long, durationMs: Long) {}
+
+    /** 播放完成 */
+    fun onComplete() {}
+
+    /** 出错 */
+    fun onError(what: Int, extra: Int): Boolean = false
+
+    /** 缓冲进度 (0~100) */
+    fun onBufferingUpdate(percent: Int) {}
+}
+
+/**
+ * Android MediaPlayer 音频播放封装
+ *
+ * 职责：
+ * - 封装 MediaPlayer 完整生命周期
+ * - 管理状态机转换
+ * - 提供进度追踪、变速、音量、循环等能力
+ * - 通过 [IPlayerListener] 回调所有事件
+ *
+ * 使用示例：
+ * ```kotlin
+ * val player = AndroidMusicPlayer()
+ * player.setListener(object : IPlayerListener { ... })
+ * player.play("https://example.com/audio.mp3")
+ * // ...
+ * player.release()
+ * ```
+ */
+class AndroidMusicPlayer {
+
+    private var mediaPlayer: MediaPlayer? = null
+    private var listener: IPlayerListener? = null
+
+    // ==================== 状态 ====================
+
+    private var _state: PlayerState = PlayerState.IDLE
+        set(value) {
+            val old = field
+            if (old != value) {
+                log("MusicPlayer", "state: $old -> $value")
+                field = value
+                listener?.onStateChanged(old, value)
+            }
+        }
+
+    /** 当前状态 */
+    val state get() = _state
+
+    /** 是否正在播放 */
+    val isPlaying: Boolean
+        get() = _state == PlayerState.PLAYING && mediaPlayer?.isPlaying == true
+
+    /** 当前位置（毫秒） */
+    val currentPosition: Long
+        get() = try { mediaPlayer?.currentPosition?.toLong() ?: 0L } catch (_: Exception) { 0L }
+
+    /** 总时长（毫秒），PREPARED 后可用 */
+    val duration: Long
+        get() = try { mediaPlayer?.duration?.toLong() ?: 0L } catch (_: Exception) { 0L }
+
+    // ==================== 配置 ====================
+
+    /** 循环模式 */
+    var loopMode: LoopMode = LoopMode.NONE
+
+    /** 进度回调间隔（毫秒），默认 200ms */
+    var progressIntervalMs: Int = 200
+
+    /** 自动重试次数（出错时自动重试 prepare），默认 0 不重试 */
+    var retryCount: Int = 0
+
+    /** 变速倍率（0.5 ~ 3.0），默认 1.0 */
+    var speed: Float = 1.0f
+        set(value) {
+            field = value.coerceIn(0.5f, 3.0f)
+            applySpeed()
+        }
+
+    /** 音量（0.0 ~ 1.0），默认 1.0 */
+    var volume: Float = 1.0f
+        set(value) {
+            field = value.coerceIn(0f, 1f)
+            mediaPlayer?.setVolume(field, field)
+        }
+
+    // ==================== 内部状态 ====================
+
+    private var progressJob: Job? = null
+    private var currentUri: Uri? = null
+    private var currentHeaders: Map<String, String>? = null
+    private var retryLeft: Int = 0
+
+    // ==================== 播放控制 ====================
+
+    /**
+     * 播放音频（字符串路径）
+     *
+     * 支持 http/https/content/file 协议
+     */
+    fun play(url: String) {
+        play(Uri.parse(url))
+    }
+
+    /**
+     * 播放音频（URI）
+     *
+     * @param uri 音频 URI
+     * @param headers HTTP 请求头（仅对 http(s) 生效）
+     */
+    fun play(uri: Uri, headers: Map<String, String>? = null) {
+        if (_state == PlayerState.RELEASED) return
+        currentUri = uri
+        currentHeaders = headers
+        retryLeft = retryCount
+        doPrepare()
+    }
+
+    /**
+     * 开始 / 恢复播放
+     */
+    fun resume() {
+        safeAction(PlayerState.PREPARED, PlayerState.PAUSED, PlayerState.COMPLETED) {
+            mediaPlayer?.start()
+            _state = PlayerState.PLAYING
+            startProgressTracking()
+        }
+    }
+
+    /**
+     * 暂停
+     */
+    fun pause() {
+        safeAction(PlayerState.PLAYING) {
+            mediaPlayer?.pause()
+            _state = PlayerState.PAUSED
+            stopProgressTracking()
+        }
+    }
+
+    /**
+     * 停止（释放后需重新 prepare）
+     */
+    fun stop() {
+        safeAction(
+            PlayerState.PLAYING,
+            PlayerState.PAUSED,
+            PlayerState.PREPARED,
+            PlayerState.COMPLETED,
+        ) {
+            stopProgressTracking()
+            mediaPlayer?.stop()
+            _state = PlayerState.STOPPED
+        }
+    }
+
+    /**
+     * 跳转到指定位置
+     *
+     * @param positionMs 目标位置（毫秒）
+     */
+    fun seekTo(positionMs: Long) {
+        if (_state == PlayerState.RELEASED || _state == PlayerState.IDLE) return
+        try {
+            mediaPlayer?.seekTo(positionMs.toInt())
+        } catch (e: Exception) {
+            log("MusicPlayer", "seekTo error: ${e.message}")
+        }
+    }
+
+    // ==================== 监听器 ====================
+
+    /**
+     * 设置事件监听器
+     */
+    fun setListener(listener: IPlayerListener?) {
+        this.listener = listener
+    }
+
+    // ==================== 生命周期 ====================
+
+    /**
+     * 释放所有资源，调用后不可再使用此实例
+     */
+    fun release() {
+        stopProgressTracking()
+        try {
+            mediaPlayer?.setOnPreparedListener(null)
+            mediaPlayer?.setOnCompletionListener(null)
+            mediaPlayer?.setOnErrorListener(null)
+            mediaPlayer?.setOnBufferingUpdateListener(null)
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+        } catch (_: Exception) {}
+        mediaPlayer = null
+        currentUri = null
+        currentHeaders = null
+        _state = PlayerState.RELEASED
+    }
+
+    // ==================== 内部：准备流程 ====================
+
+    private fun doPrepare() {
+        // 如果已有实例且处于可复用状态，先 reset
+        if (mediaPlayer != null && _state != PlayerState.RELEASED && _state != PlayerState.IDLE) {
+            try { mediaPlayer?.reset() } catch (_: Exception) {}
+        }
+
+        initMediaPlayer()
+
+        try {
+            val uri = currentUri ?: return
+            val context = App.context
+            if (!uri.scheme.isNullOrEmpty() && uri.scheme!!.startsWith("http") && !currentHeaders.isNullOrEmpty()) {
+                mediaPlayer?.setDataSource(context, uri, HashMap(currentHeaders!!))
+            } else {
+                mediaPlayer?.setDataSource(context, uri)
+            }
+            mediaPlayer?.prepareAsync()
+            _state = PlayerState.PREPARING
+        } catch (e: Exception) {
+            log("MusicPlayer", "prepare error: ${e.message}")
+            handlePrepareError(e)
+        }
+    }
+
+    private fun initMediaPlayer() {
+        if (mediaPlayer == null || _state == PlayerState.IDLE || _state == PlayerState.RELEASED) {
+            mediaPlayer?.release()
+            mediaPlayer = MediaPlayer().apply {
+                setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .build()
+                )
+
+                setOnPreparedListener { mp ->
+                    _state = PlayerState.PREPARED
+                    applySpeed()
+                    listener?.onPrepared(mp.duration.toLong())
+                    // 准备就绪后自动开始播放
+                    mp.start()
+                    _state = PlayerState.PLAYING
+                    startProgressTracking()
+                }
+
+                setOnCompletionListener {
+                    stopProgressTracking()
+                    when (loopMode) {
+                        LoopMode.SINGLE -> {
+                            // 单曲循环：seek 到开头重新播放
+                            it.seekTo(0)
+                            it.start()
+                            _state = PlayerState.PLAYING
+                            startProgressTracking()
+                        }
+                        LoopMode.ALL -> {
+                            // 列表循环：通知上层切歌
+                            _state = PlayerState.COMPLETED
+                            listener?.onComplete()
+                        }
+                        LoopMode.NONE -> {
+                            _state = PlayerState.COMPLETED
+                            listener?.onComplete()
+                        }
+                    }
+                }
+
+                setOnErrorListener { _, what, extra ->
+                    stopProgressTracking()
+                    _state = PlayerState.ERROR
+                    val handled = listener?.onError(what, extra) ?: false
+                    if (!handled && retryLeft > 0) {
+                        retryLeft--
+                        log("MusicPlayer", "auto retry, left=$retryLeft")
+                        postDelayed({ doPrepare() }, 500)
+                        true  // 已通过重试处理
+                    } else {
+                        handled
+                    }
+                }
+
+                setOnBufferingUpdateListener { _, percent ->
+                    listener?.onBufferingUpdate(percent)
+                }
+            }
+        }
+    }
+
+    private fun handlePrepareError(e: Exception) {
+        _state = PlayerState.ERROR
+        val handled = listener?.onError(-1, 0) ?: false
+        if (!handled && retryLeft > 0) {
+            retryLeft--
+            log("MusicPlayer", "prepare error auto retry, left=$retryLeft")
+            postDelayed({ doPrepare() }, 500)
+        }
+    }
+
+    // ==================== 内部：进度追踪 ====================
+
+    private fun startProgressTracking() {
+        stopProgressTracking()
+        progressJob = CoroutineScope(Dispatchers.Main).launch {
+            while (isActive && _state == PlayerState.PLAYING) {
+                val pos = try { mediaPlayer?.currentPosition?.toLong() ?: 0L } catch (_: Exception) { 0L }
+                val dur = try { mediaPlayer?.duration?.toLong() ?: 0L } catch (_: Exception) { 0L }
+                listener?.onProgress(pos, dur)
+                delay(progressIntervalMs.toLong())
+            }
+        }
+    }
+
+    private fun stopProgressTracking() {
+        progressJob?.cancel()
+        progressJob = null
+    }
+
+    // ==================== 内部：辅助方法 ====================
+
+    /**
+     * 仅在指定状态下执行操作
+     */
+    private inline fun safeAction(vararg expectedStates: PlayerState, action: () -> Unit) {
+        if (_state in expectedStates) action()
+    }
+
+    /**
+     * 应用变速
+     */
+    private fun applySpeed() {
+        try {
+            mediaPlayer?.playbackParams = PlaybackParams().apply { speed = this@AndroidMusicPlayer.speed }
+        } catch (e: Exception) {
+            log("MusicPlayer", "setSpeed error: ${e.message}")
+        }
+    }
+
+    /**
+     * 主线程延迟执行
+     */
+    private fun postDelayed(action: () -> Unit, delayMs: Long) {
+        App.mainHandler.postDelayed(action, delayMs)
+    }
+}
