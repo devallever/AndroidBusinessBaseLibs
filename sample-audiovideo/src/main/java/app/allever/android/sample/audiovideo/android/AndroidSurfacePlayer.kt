@@ -6,6 +6,7 @@ import android.media.PlaybackParams
 import android.net.Uri
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.ViewGroup
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import kotlinx.coroutines.CoroutineScope
@@ -110,6 +111,12 @@ class AndroidSurfacePlayer {
 
     /** Surface 销毁前是否在播放（用于 Surface 重建后恢复） */
     private var wasPlayingBeforeDestroy: Boolean = false
+
+    /** 视频原始宽度 */
+    private var videoWidth: Int = 0
+
+    /** 视频原始高度 */
+    private var videoHeight: Int = 0
 
     /**
      * 待执行的 prepare 参数（当 Surface 未就绪时缓存 setSource 调用）
@@ -354,7 +361,10 @@ class AndroidSurfacePlayer {
 
             setOnVideoSizeChangedListener { mp, width, height ->
                 if (width > 0 && height > 0) {
+                    this@AndroidSurfacePlayer.videoWidth = width
+                    this@AndroidSurfacePlayer.videoHeight = height
                     listener?.onVideoSizeChanged(width, height)
+                    adjustSurfaceLayout()
                 }
             }
         }
@@ -407,6 +417,8 @@ class AndroidSurfacePlayer {
 
             override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
                 log("SurfacePlayer", "surfaceChanged: ${width}x${height}")
+                // Surface 尺寸变化时重新计算自适应布局
+                adjustSurfaceLayout()
             }
 
             override fun surfaceDestroyed(holder: SurfaceHolder) {
@@ -542,5 +554,53 @@ class AndroidSurfacePlayer {
      */
     private fun postDelayed(action: () -> Unit, delayMs: Long) {
         App.mainHandler.postDelayed(action, delayMs)
+    }
+
+    // ==================== 内部：自适应布局 ====================
+
+    /**
+     * 根据视频宽高比自适应调整 SurfaceView 尺寸
+     *
+     * 算法（FIT_CENTER 模式）：
+     * 1. 获取父容器可用宽高
+     * 2. 按视频宽高比计算目标尺寸，保持比例填满父容器的较小边
+     * 3. 居中显示（通过 margin 或 layout gravity）
+     */
+    private fun adjustSurfaceLayout() {
+        val sv = surfaceView ?: return
+        if (videoWidth <= 0 || videoHeight <= 0) return
+
+        val parent = sv.parent as? ViewGroup ?: return
+
+        App.mainHandler.post {
+            val containerWidth = parent.width
+            val containerHeight = parent.height
+            if (containerWidth <= 0 || containerHeight <= 0) return@post
+
+            val videoAspect = videoWidth.toFloat() / videoHeight.toFloat()
+            val containerAspect = containerWidth.toFloat() / containerHeight.toFloat()
+
+            val targetWidth: Int
+            val targetHeight: Int
+
+            if (videoAspect > containerAspect) {
+                // 视频更宽 → 以宽度为准，高度按比例缩放
+                targetWidth = containerWidth
+                targetHeight = (containerWidth / videoAspect).toInt()
+            } else {
+                // 视频更高 → 以高度为准，宽度按比例缩放
+                targetHeight = containerHeight
+                targetWidth = (containerHeight * videoAspect).toInt()
+            }
+
+            log("SurfacePlayer", "adjustLayout: video=${videoWidth}x${videoHeight} " +
+                    "container=${containerWidth}x${containerHeight} -> target=${targetWidth}x${targetHeight}")
+
+            // 更新 SurfaceView LayoutParams
+            val params = sv.layoutParams
+            params.width = targetWidth
+            params.height = targetHeight
+            sv.layoutParams = params
+        }
     }
 }
