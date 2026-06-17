@@ -213,18 +213,35 @@ class VideoPlayerView @JvmOverloads constructor(
 
     //改变视频的尺寸自适应。
     private fun changeVideoSize() {
-        val w: Float = (mMediaBean as? MediaItem.Video)?.width?.toFloat() ?: 0f
-        val h: Float = (mMediaBean as? MediaItem.Video)?.height?.toFloat() ?: 0f
-        VideoViewHelper.autoFixContainerSize(
-            binding.controlView,
-            w.toInt(),
-            h.toInt()
-        ) { displayWidth, displayHeight ->
-            //无法直接设置视频尺寸，将计算出的视频尺寸设置到surfaceView 让视频自动填充。
-            val params = binding.videoView.layoutParams
-            params.width = displayWidth
-            params.height = displayHeight
-            binding.videoView.layoutParams = params
+        binding.videoView.post {
+            val screenWidth = DisplayHelper.getScreenWidth()
+            val screenHeight = DisplayHelper.getScreenHeight()
+            val isWidthMode = screenWidth > screenHeight
+
+            if (isWidthMode) {
+                val lp = binding.videoView.layoutParams
+                lp.width = LayoutParams.WRAP_CONTENT
+                lp.height = LayoutParams.MATCH_PARENT
+                binding.videoView.layoutParams = lp
+            } else {
+                val lp = binding.videoView.layoutParams
+                lp.width = LayoutParams.MATCH_PARENT
+                lp.height = LayoutParams.WRAP_CONTENT
+                binding.videoView.layoutParams = lp
+            }
         }
+//        val w: Float = (mMediaBean as? MediaItem.Video)?.width?.toFloat() ?: 0f
+//        val h: Float = (mMediaBean as? MediaItem.Video)?.height?.toFloat() ?: 0f
+//        VideoViewHelper.autoFixContainerSize(
+//            binding.controlView,
+//            w.toInt(),
+//            h.toInt()
+//        ) { displayWidth, displayHeight ->
+//            //无法直接设置视频尺寸，将计算出的视频尺寸设置到surfaceView 让视频自动填充。
+//            val params = binding.videoView.layoutParams
+//            params.width = displayWidth
+//            params.height = displayHeight
+//            binding.videoView.layoutParams = params
+//        }
     }
 }
