@@ -1,5 +1,6 @@
 package app.allever.android.sample.audiovideo.android
 
+import android.media.MediaPlayer
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import app.allever.android.lib.common.BaseFragment
@@ -7,15 +8,16 @@ import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.picker.MediaPickerConfig
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import app.allever.android.sample.audiovideo.databinding.FragmentAndroidVideoViewPlayerSampleBinding
+import app.allever.android.sample.audiovideo.databinding.FragmentAndroidSurfaceViewPlayerSampleBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class AndroidVideoViewPlayerSampleFragment :
-    BaseFragment<FragmentAndroidVideoViewPlayerSampleBinding, BaseViewModel>() {
+class AndroidSurfacePlayerSampleFragment :
+    BaseFragment<FragmentAndroidSurfaceViewPlayerSampleBinding, BaseViewModel>() {
 
-    private lateinit var player: AndroidVideoViewPlayer
+    private lateinit var player: AndroidSurfacePlayer
+
     private val videoPickerLauncher by lazy {
         MediaPickerCore.registerPickerLauncher(this) { items ->
             items.firstOrNull()?.let { mediaItem ->
@@ -28,30 +30,32 @@ class AndroidVideoViewPlayerSampleFragment :
             }
         }
     }
+
     private var isUserSeeking = false
 
-    // 默认测试视频URL（可替换为实际可用的测试视频）
+    /** 默认测试视频URL */
     private val defaultTestUrl = "https://www.w3schools.com/html/mov_bbb.mp4"
 
     /** setSource 后是否自动调用 play() */
     private var autoPlayOnPrepared = true
 
-    override fun inflate(): FragmentAndroidVideoViewPlayerSampleBinding =
-        FragmentAndroidVideoViewPlayerSampleBinding.inflate(layoutInflater)
+    override fun inflate(): FragmentAndroidSurfaceViewPlayerSampleBinding =
+        FragmentAndroidSurfaceViewPlayerSampleBinding.inflate(layoutInflater)
 
     override fun init() {
         initVideoPicker()
         initPlayer()
         initViews()
-        initListeners()
+        updateStateUI(PlayerState.IDLE)
+        updateButtonStates()
     }
 
     private fun initVideoPicker() {
     }
 
     private fun initPlayer() {
-        player = AndroidVideoViewPlayer().apply {
-            attach(mBinding.videoView)
+        player = AndroidSurfacePlayer().apply {
+            attach(mBinding.surfaceView)
             setListener(playerListener)
             retryCount = 3
             progressIntervalMs = 200
@@ -59,11 +63,6 @@ class AndroidVideoViewPlayerSampleFragment :
     }
 
     private fun initViews() {
-        updateStateUI(PlayerState.IDLE)
-        updateButtonStates()
-    }
-
-    private fun initListeners() {
         // 播放/继续按钮
         mBinding.btnPlay.setOnClickListener {
             when (player.state) {
@@ -210,7 +209,6 @@ class AndroidVideoViewPlayerSampleFragment :
         override fun onPrepared(durationMs: Long) {
             activity?.runOnUiThread {
                 appendLog("准备就绪, 时长: ${formatTime(durationMs)}")
-                // 自动开始播放
                 if (autoPlayOnPrepared) {
                     player.play()
                     appendLog("自动开始播放")
@@ -258,10 +256,10 @@ class AndroidVideoViewPlayerSampleFragment :
         override fun onInfo(what: Int, extra: Int): Boolean {
             activity?.runOnUiThread {
                 val infoText = when (what) {
-                    android.media.MediaPlayer.MEDIA_INFO_VIDEO_TRACK_LAGGING -> "视频帧滞后"
-                    android.media.MediaPlayer.MEDIA_INFO_BUFFERING_START -> "缓冲开始"
-                    android.media.MediaPlayer.MEDIA_INFO_BUFFERING_END -> "缓冲结束"
-                    android.media.MediaPlayer.MEDIA_INFO_UNKNOWN -> "未知信息"
+                    MediaPlayer.MEDIA_INFO_VIDEO_TRACK_LAGGING -> "视频帧滞后"
+                    MediaPlayer.MEDIA_INFO_BUFFERING_START -> "缓冲开始"
+                    MediaPlayer.MEDIA_INFO_BUFFERING_END -> "缓冲结束"
+                    MediaPlayer.MEDIA_INFO_UNKNOWN -> "未知信息"
                     else -> "info($what)"
                 }
                 appendLog("播放器信息: $infoText (extra=$extra)")
@@ -290,7 +288,6 @@ class AndroidVideoViewPlayerSampleFragment :
     private fun updateButtonStates() {
         val state = player.state
 
-        // 播放按钮：可设置新数据源，或从暂停/完成状态恢复播放
         mBinding.btnPlay.isEnabled = state in listOf(
             PlayerState.IDLE,
             PlayerState.STOPPED,
@@ -300,16 +297,13 @@ class AndroidVideoViewPlayerSampleFragment :
             PlayerState.PAUSED,
         )
 
-        // 根据状态改变播放按钮文字
         mBinding.btnPlay.text = when (state) {
             PlayerState.PAUSED -> "继续"
             else -> "播放"
         }
 
-        // 暂停按钮：仅在 PLAYING 状态可用
         mBinding.btnPause.isEnabled = state == PlayerState.PLAYING
 
-        // 停止按钮：在 PLAYING/PAUSED/PREPARED/COMPLETED 状态可用
         mBinding.btnStop.isEnabled = state in listOf(
             PlayerState.PREPARED,
             PlayerState.PLAYING,
