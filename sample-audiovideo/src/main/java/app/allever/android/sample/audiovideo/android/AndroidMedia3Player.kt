@@ -346,6 +346,7 @@ class AndroidMedia3Player {
                     if (exoPlayer?.isPlaying == true) {
                         if (_state != PlayerState.PLAYING) {
                             _state = PlayerState.PLAYING
+                            startProgressTracking()
                         }
                     } else {
                         // READY 但未播放：首次 prepared 或暂停状态
