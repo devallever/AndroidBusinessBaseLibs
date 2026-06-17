@@ -16,15 +16,13 @@ class AndroidVideoViewPlayerSampleFragment :
     BaseFragment<FragmentAndroidVideoViewPlayerSampleBinding, BaseViewModel>() {
 
     private lateinit var player: AndroidVideoViewPlayer
-    private val videoPickerLauncher by lazy {
-        MediaPickerCore.registerPickerLauncher(this) { items ->
-            items.firstOrNull()?.let { mediaItem ->
-                if (mediaItem is MediaItem.Video) {
-                    mBinding.etUrl.setText(mediaItem.uri.toString())
-                    appendLog("选择本地视频: ${mediaItem.name} (${mediaItem.uri})")
-                    autoPlayOnPrepared = true
-                    player.setSource(mediaItem.uri)
-                }
+    private val videoPickerLauncher = MediaPickerCore.registerPickerLauncher(this) { items ->
+        items.firstOrNull()?.let { mediaItem ->
+            if (mediaItem is MediaItem.Video) {
+                mBinding.etUrl.setText(mediaItem.uri.toString())
+                appendLog("选择本地视频: ${mediaItem.name} (${mediaItem.uri})")
+                autoPlayOnPrepared = true
+                player.setSource(mediaItem.uri)
             }
         }
     }
