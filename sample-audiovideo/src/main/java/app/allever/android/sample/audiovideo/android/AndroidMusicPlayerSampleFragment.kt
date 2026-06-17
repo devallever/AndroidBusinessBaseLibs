@@ -17,15 +17,13 @@ class AndroidMusicPlayerSampleFragment :
     BaseFragment<FragmentAndroidMusicPlayerSampleBinding, BaseViewModel>() {
 
     private lateinit var player: AndroidMusicPlayer
-    private val audioPickerLauncher by lazy {
-        MediaPickerCore.registerPickerLauncher(this) { items ->
-            items.firstOrNull()?.let { mediaItem ->
-                if (mediaItem is MediaItem.Audio) {
-                    mBinding.etUrl.setText(mediaItem.uri.toString())
-                    appendLog("选择本地音频: ${mediaItem.name} (${mediaItem.title})")
-                    autoPlayOnPrepared = true
-                    player.setSource(mediaItem.uri)
-                }
+    private val audioPickerLauncher = MediaPickerCore.registerPickerLauncher(this) { items ->
+        items.firstOrNull()?.let { mediaItem ->
+            if (mediaItem is MediaItem.Audio) {
+                mBinding.etUrl.setText(mediaItem.uri.toString())
+                appendLog("选择本地音频: ${mediaItem.name} (${mediaItem.title})")
+                autoPlayOnPrepared = true
+                player.setSource(mediaItem.uri)
             }
         }
     }
@@ -48,7 +46,6 @@ class AndroidMusicPlayerSampleFragment :
     }
 
     private fun initAudioPicker() {
-        MediaPickerCore.launchAudio(audioPickerLauncher)
     }
 
     private fun initPlayer() {
