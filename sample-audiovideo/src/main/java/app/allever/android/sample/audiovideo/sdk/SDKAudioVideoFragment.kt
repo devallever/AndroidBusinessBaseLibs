@@ -1,5 +1,6 @@
 package app.allever.android.sample.audiovideo.sdk
 
+import app.allever.android.lib.common.FragmentActivity
 import app.allever.android.lib.common.ListFragment
 import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextClickAdapter
@@ -11,9 +12,17 @@ class SDKAudioVideoFragment: ListFragment<FragmentListBinding, ListViewModel, Te
     override fun getAdapter(): BaseQuickAdapter<TextClickItem, *> = TextClickAdapter()
 
     override fun getList(): MutableList<TextClickItem> = mutableListOf(
-        TextClickItem("ExoPlayer"),
-        TextClickItem("ijkPlayer"),
-        TextClickItem("AliPlayer"),
-        TextClickItem("JZVD"),
+        TextClickItem("ExoPlayer") {
+            FragmentActivity.start<ExoVideoPlayerSampleFragment>(it.title)
+        },
+        TextClickItem("ijkPlayer") {
+            FragmentActivity.start<IjkVideoPlayerSampleFragment>(it.title)
+        },
+        TextClickItem("AliPlayer") {
+            FragmentActivity.start<AliVideoPlayerSampleFragment>(it.title)
+        },
+        TextClickItem("JZVD") {
+            FragmentActivity.start<JzVideoPlayerSampleFragment>(it.title)
+        },
     )
 }
