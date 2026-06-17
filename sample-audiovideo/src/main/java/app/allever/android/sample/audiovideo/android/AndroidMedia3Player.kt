@@ -123,6 +123,10 @@ class AndroidMedia3Player {
     private var currentHeaders: Map<String, String>? = null
     private var retryLeft: Int = 0
 
+    /** 是否正在执行 seek 操作（用于防止 seek 过程中误停进度追踪） */
+    @Volatile
+    private var isSeeking: Boolean = false
+
     // ==================== 绑定 & 解绑 ====================
 
     /**
@@ -245,9 +249,20 @@ class AndroidMedia3Player {
     fun seekTo(positionMs: Long) {
         if (_state == PlayerState.RELEASED || _state == PlayerState.IDLE) return
         try {
+            isSeeking = true  // 标记正在 seek，防止误停进度追踪
             exoPlayer?.seekTo(positionMs)
+            // 延迟重置标志并确保进度追踪正常运行（seek 是异步操作）
+            App.mainHandler.postDelayed({
+                isSeeking = false
+                // 确保 seek 完成后进度追踪仍在运行
+                if (_state == PlayerState.PLAYING && (progressJob == null || !progressJob!!.isActive)) {
+                    log("Media3Player", "restart progress tracking after seek")
+                    startProgressTracking()
+                }
+            }, 300)
         } catch (e: Exception) {
             log("Media3Player", "seekTo error: ${e.message}")
+            isSeeking = false
         }
     }
 
@@ -371,6 +386,12 @@ class AndroidMedia3Player {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
             // 注意：此回调在 ExoPlayer 的播放线程，需切换到主线程
             App.mainHandler.post {
+                // 如果正在 seek 操作中，忽略临时的 isPlaying 变化（seek 过程中会短暂暂停）
+                if (isSeeking) {
+                    log("Media3Player", "onIsPlayingChanged ignored during seeking: isPlaying=$isPlaying")
+                    return@post
+                }
+
                 if (isPlaying) {
                     if (_state != PlayerState.PLAYING) {
                         _state = PlayerState.PLAYING
@@ -419,6 +440,9 @@ class AndroidMedia3Player {
 
     private fun doSetSource(uri: Uri, headers: Map<String, String>?) {
         if (_state == PlayerState.RELEASED) return
+
+        // 停止当前的进度追踪（重要：切换数据源前必须清理）
+        stopProgressTracking()
 
         currentUri = uri
         currentHeaders = headers
