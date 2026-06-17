@@ -18,6 +18,7 @@ class AndroidAudioVideoFragment: ListFragment<FragmentListBinding, ListViewModel
         },
         TextClickItem("MediaPlayer+VideoView播放视频") {
             //VideoViewPlayer
+            FragmentActivity.start<AndroidVideoViewPlayerSampleFragment>(it.title)
         },
         TextClickItem("MediaPlayer+SurfaceView播放视频") {
             //SurfaceViewPlayer

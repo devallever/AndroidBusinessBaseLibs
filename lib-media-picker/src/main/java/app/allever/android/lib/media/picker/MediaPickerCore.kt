@@ -38,7 +38,7 @@ object MediaPickerCore {
     }
 
     fun launchVideo(launcher: ActivityResultLauncher<MediaPickerConfig>, max: Int = 1) {
-        launcher.launch(MediaPickerConfig(setOf(MediaType.Type.IMAGE), max))
+        launcher.launch(MediaPickerConfig(setOf(MediaType.Type.VIDEO), max))
     }
 
     /**

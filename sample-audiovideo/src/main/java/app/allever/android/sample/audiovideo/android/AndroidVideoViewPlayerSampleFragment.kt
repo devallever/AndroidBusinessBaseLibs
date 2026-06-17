@@ -3,26 +3,25 @@ package app.allever.android.sample.audiovideo.android
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import app.allever.android.lib.common.BaseFragment
-import app.allever.android.lib.core.helper.AssetsHelper
 import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.picker.MediaPickerConfig
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import app.allever.android.sample.audiovideo.databinding.FragmentAndroidMusicPlayerSampleBinding
+import app.allever.android.sample.audiovideo.databinding.FragmentAndroidVideoViewPlayerSampleBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class AndroidMusicPlayerSampleFragment :
-    BaseFragment<FragmentAndroidMusicPlayerSampleBinding, BaseViewModel>() {
+class AndroidVideoViewPlayerSampleFragment :
+    BaseFragment<FragmentAndroidVideoViewPlayerSampleBinding, BaseViewModel>() {
 
-    private lateinit var player: AndroidMusicPlayer
-    private val audioPickerLauncher by lazy {
+    private lateinit var player: AndroidVideoViewPlayer
+    private val videoPickerLauncher by lazy {
         MediaPickerCore.registerPickerLauncher(this) { items ->
             items.firstOrNull()?.let { mediaItem ->
-                if (mediaItem is MediaItem.Audio) {
+                if (mediaItem is MediaItem.Video) {
                     mBinding.etUrl.setText(mediaItem.uri.toString())
-                    appendLog("选择本地音频: ${mediaItem.name} (${mediaItem.title})")
+                    appendLog("选择本地视频: ${mediaItem.name} (${mediaItem.uri})")
                     autoPlayOnPrepared = true
                     player.setSource(mediaItem.uri)
                 }
@@ -31,28 +30,29 @@ class AndroidMusicPlayerSampleFragment :
     }
     private var isUserSeeking = false
 
-    // 默认测试音频URL（可替换为实际可用的测试音频）
-    private val defaultTestUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+    // 默认测试视频URL（可替换为实际可用的测试视频）
+    private val defaultTestUrl = "https://www.w3schools.com/html/mov_bbb.mp4"
 
     /** setSource 后是否自动调用 play() */
     private var autoPlayOnPrepared = true
 
-    override fun inflate(): FragmentAndroidMusicPlayerSampleBinding =
-        FragmentAndroidMusicPlayerSampleBinding.inflate(layoutInflater)
+    override fun inflate(): FragmentAndroidVideoViewPlayerSampleBinding =
+        FragmentAndroidVideoViewPlayerSampleBinding.inflate(layoutInflater)
 
     override fun init() {
-        initAudioPicker()
+        initVideoPicker()
         initPlayer()
         initViews()
         initListeners()
     }
 
-    private fun initAudioPicker() {
-        MediaPickerCore.launchAudio(audioPickerLauncher)
+    private fun initVideoPicker() {
+        MediaPickerCore.launchVideo(videoPickerLauncher)
     }
 
     private fun initPlayer() {
-        player = AndroidMusicPlayer().apply {
+        player = AndroidVideoViewPlayer().apply {
+            attach(mBinding.videoView)
             setListener(playerListener)
             retryCount = 3
             progressIntervalMs = 200
@@ -99,9 +99,9 @@ class AndroidMusicPlayerSampleFragment :
             resetProgressUI()
         }
 
-        // 选择本地音频
+        // 选择本地视频
         mBinding.btnPickLocal.setOnClickListener {
-            MediaPickerCore.launchAudio(audioPickerLauncher)
+            MediaPickerCore.launchVideo(videoPickerLauncher)
         }
 
         // 播放 Assets 文件
@@ -199,7 +199,7 @@ class AndroidMusicPlayerSampleFragment :
 
     // ==================== 播放器监听器 ====================
 
-    private val playerListener = object : IPlayerListener {
+    private val playerListener = object : IVideoPlayerListener {
         override fun onStateChanged(from: PlayerState, to: PlayerState) {
             activity?.runOnUiThread {
                 updateStateUI(to)
@@ -245,9 +245,29 @@ class AndroidMusicPlayerSampleFragment :
 
         override fun onBufferingUpdate(percent: Int) {
             activity?.runOnUiThread {
-                // 可在此更新缓冲进度
                 appendLog("缓冲进度: $percent%")
             }
+        }
+
+        override fun onVideoSizeChanged(width: Int, height: Int) {
+            activity?.runOnUiThread {
+                mBinding.tvVideoSize.text = "${width}x${height}"
+                appendLog("视频尺寸: ${width}x${height}")
+            }
+        }
+
+        override fun onInfo(what: Int, extra: Int): Boolean {
+            activity?.runOnUiThread {
+                val infoText = when (what) {
+                    android.media.MediaPlayer.MEDIA_INFO_VIDEO_TRACK_LAGGING -> "视频帧滞后"
+                    android.media.MediaPlayer.MEDIA_INFO_BUFFERING_START -> "缓冲开始"
+                    android.media.MediaPlayer.MEDIA_INFO_BUFFERING_END -> "缓冲结束"
+                    android.media.MediaPlayer.MEDIA_INFO_UNKNOWN -> "未知信息"
+                    else -> "info($what)"
+                }
+                appendLog("播放器信息: $infoText (extra=$extra)")
+            }
+            return false
         }
     }
 
