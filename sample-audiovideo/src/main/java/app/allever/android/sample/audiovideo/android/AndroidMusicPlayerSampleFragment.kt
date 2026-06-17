@@ -22,6 +22,9 @@ class AndroidMusicPlayerSampleFragment :
     // 默认测试音频URL（可替换为实际可用的测试音频）
     private val defaultTestUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
 
+    /** setSource 后是否自动调用 play() */
+    private var autoPlayOnPrepared = true
+
     override fun inflate(): FragmentAndroidMusicPlayerSampleBinding =
         FragmentAndroidMusicPlayerSampleBinding.inflate(layoutInflater)
 
@@ -38,7 +41,8 @@ class AndroidMusicPlayerSampleFragment :
                 if (mediaItem is MediaItem.Audio) {
                     mBinding.etUrl.setText(mediaItem.uri.toString())
                     appendLog("选择本地音频: ${mediaItem.name} (${mediaItem.title})")
-                    player.play(mediaItem.uri)
+                    autoPlayOnPrepared = true
+                    player.setSource(mediaItem.uri)
                 }
             }
         }
@@ -53,33 +57,39 @@ class AndroidMusicPlayerSampleFragment :
     }
 
     private fun initViews() {
-        // 初始化UI状态
         updateStateUI(PlayerState.IDLE)
         updateButtonStates()
     }
 
     private fun initListeners() {
-        // 播放控制按钮
+        // 播放/继续按钮
         mBinding.btnPlay.setOnClickListener {
-            val url = mBinding.etUrl.text.toString().trim()
-            if (url.isNotEmpty()) {
-                player.play(url)
-            } else {
-                player.play(defaultTestUrl)
+            when (player.state) {
+                PlayerState.PAUSED -> {
+                    player.play()
+                    appendLog("继续播放")
+                }
+                else -> {
+                    val url = mBinding.etUrl.text.toString().trim()
+                    if (url.isNotEmpty()) {
+                        autoPlayOnPrepared = true
+                        player.setSource(url)
+                    } else {
+                        autoPlayOnPrepared = true
+                        player.setSource(defaultTestUrl)
+                    }
+                    appendLog("设置数据源: ${if (mBinding.etUrl.text.isNotEmpty()) mBinding.etUrl.text else defaultTestUrl}")
+                }
             }
-            appendLog("开始播放: ${if (mBinding.etUrl.text.isNotEmpty()) mBinding.etUrl.text else defaultTestUrl}")
         }
 
+        // 暂停按钮
         mBinding.btnPause.setOnClickListener {
             player.pause()
             appendLog("暂停播放")
         }
 
-        mBinding.btnResume.setOnClickListener {
-            player.resume()
-            appendLog("继续播放")
-        }
-
+        // 停止按钮
         mBinding.btnStop.setOnClickListener {
             player.stop()
             appendLog("停止播放")
@@ -105,19 +115,19 @@ class AndroidMusicPlayerSampleFragment :
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                isUserSeeking = false
-                if (player.duration > 0) {
-                    val position = (seekBar?.progress?.toFloat() ?: 0f / 100 * player.duration).toLong()
+                if (player.duration > 0 && seekBar != null) {
+                    val position = (seekBar.progress.toFloat() / 100 * player.duration).toLong()
                     player.seekTo(position)
                     appendLog("跳转到: ${formatTime(position)}")
                 }
+                // 延迟解除拖动标志，避免 seekTo 异步完成前被 onProgress 用旧位置覆盖
+                mBinding.seekBarProgress.post { isUserSeeking = false }
             }
         })
 
         // 变速控制
         mBinding.seekBarSpeed.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                // progress: 0-50, 映射到 0.5-3.0
                 val speed = 0.5f + (progress.toFloat() / 50 * 2.5f)
                 mBinding.tvSpeed.text = String.format(Locale.US, "%.1fx", speed)
                 if (fromUser) {
@@ -186,6 +196,11 @@ class AndroidMusicPlayerSampleFragment :
         override fun onPrepared(durationMs: Long) {
             activity?.runOnUiThread {
                 appendLog("准备就绪, 时长: ${formatTime(durationMs)}")
+                // 自动开始播放
+                if (autoPlayOnPrepared) {
+                    player.play()
+                    appendLog("自动开始播放")
+                }
             }
         }
 
@@ -210,13 +225,13 @@ class AndroidMusicPlayerSampleFragment :
             activity?.runOnUiThread {
                 appendLog("播放错误: what=$what, extra=$extra")
             }
-            return false // 返回false让播放器自动处理重试
+            return false
         }
 
         override fun onBufferingUpdate(percent: Int) {
             activity?.runOnUiThread {
-                // 可以在这里更新缓冲进度（如果需要的话）
-                // mBinding.tvBuffering.text = "缓冲: $percent%"
+                // 可在此更新缓冲进度
+                appendLog("缓冲进度: $percent%")
             }
         }
     }
@@ -226,7 +241,6 @@ class AndroidMusicPlayerSampleFragment :
     private fun updateStateUI(state: PlayerState) {
         mBinding.tvState.text = "状态: $state"
 
-        // 根据状态改变颜色
         val colorRes = when (state) {
             PlayerState.IDLE, PlayerState.RELEASED -> android.R.color.darker_gray
             PlayerState.PREPARING -> android.R.color.holo_orange_light
@@ -242,26 +256,31 @@ class AndroidMusicPlayerSampleFragment :
     private fun updateButtonStates() {
         val state = player.state
 
-        // 播放按钮：在 IDLE/STOPPED/COMPLETED/ERROR 状态下可用
+        // 播放按钮：可设置新数据源，或从暂停/完成状态恢复播放
         mBinding.btnPlay.isEnabled = state in listOf(
             PlayerState.IDLE,
             PlayerState.STOPPED,
             PlayerState.COMPLETED,
-            PlayerState.ERROR
+            PlayerState.ERROR,
+            PlayerState.PREPARED,
+            PlayerState.PAUSED,
         )
+
+        // 根据状态改变播放按钮文字
+        mBinding.btnPlay.text = when (state) {
+            PlayerState.PAUSED -> "继续"
+            else -> "播放"
+        }
 
         // 暂停按钮：仅在 PLAYING 状态可用
         mBinding.btnPause.isEnabled = state == PlayerState.PLAYING
 
-        // 继续按钮：仅在 PAUSED 状态可用
-        mBinding.btnResume.isEnabled = state == PlayerState.PAUSED
-
-        // 停止按钮：在 PREPARED/PLAYING/PAUSED/COMPLETED 状态可用
+        // 停止按钮：在 PLAYING/PAUSED/PREPARED/COMPLETED 状态可用
         mBinding.btnStop.isEnabled = state in listOf(
             PlayerState.PREPARED,
             PlayerState.PLAYING,
             PlayerState.PAUSED,
-            PlayerState.COMPLETED
+            PlayerState.COMPLETED,
         )
     }
 
@@ -284,7 +303,6 @@ class AndroidMusicPlayerSampleFragment :
         val logText = "[$timestamp] $message\n"
         mBinding.tvLog.append(logText)
 
-        // 自动滚动到底端
         val scrollView = mBinding.tvLog.parent as? android.widget.ScrollView
         scrollView?.post {
             scrollView.fullScroll(android.view.View.FOCUS_DOWN)
@@ -295,7 +313,6 @@ class AndroidMusicPlayerSampleFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // Fragment 销毁时释放播放器资源
         if (!requireActivity().isChangingConfigurations) {
             player.release()
             appendLog("播放器已释放")
@@ -304,7 +321,6 @@ class AndroidMusicPlayerSampleFragment :
 
     override fun onResume() {
         super.onResume()
-        // 从后台恢复时检查播放器状态
         if (player.state == PlayerState.PLAYING) {
             appendLog("恢复播放器状态: ${player.state}")
         }

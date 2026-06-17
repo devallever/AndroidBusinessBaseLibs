@@ -48,7 +48,7 @@ interface IPlayerListener {
     /** 状态变化 */
     fun onStateChanged(from: PlayerState, to: PlayerState) {}
 
-    /** 准备就绪（此时可获取 duration） */
+    /** 准备就绪（此时可获取 duration，需调用 play() 才会开始播放） */
     fun onPrepared(durationMs: Long) {}
 
     /** 进度更新（定时回调） */
@@ -77,8 +77,10 @@ interface IPlayerListener {
  * ```kotlin
  * val player = AndroidMusicPlayer()
  * player.setListener(object : IPlayerListener { ... })
- * player.play("https://example.com/audio.mp3")
- * // ...
+ * player.setSource("https://example.com/audio.mp3")  // 设置数据源并准备
+ * player.play()  // 开始播放（或从暂停恢复）
+ * player.pause()
+ * player.play()  // 继续播放
  * player.release()
  * ```
  */
@@ -146,24 +148,25 @@ class AndroidMusicPlayer {
     private var currentHeaders: Map<String, String>? = null
     private var retryLeft: Int = 0
 
-    // ==================== 播放控制 ====================
+    // ==================== 数据源 & 播放控制 ====================
 
     /**
-     * 播放音频（字符串路径）
+     * 设置音频数据源并准备（不自动播放）
      *
      * 支持 http/https/content/file 协议
+     * 准备完成后回调 [IPlayerListener.onPrepared]，此时需调用 [play] 开始播放
      */
-    fun play(url: String) {
-        play(Uri.parse(url))
+    fun setSource(url: String) {
+        setSource(Uri.parse(url))
     }
 
     /**
-     * 播放音频（URI）
+     * 设置音频数据源并准备（不自动播放）
      *
      * @param uri 音频 URI
      * @param headers HTTP 请求头（仅对 http(s) 生效）
      */
-    fun play(uri: Uri, headers: Map<String, String>? = null) {
+    fun setSource(uri: Uri, headers: Map<String, String>? = null) {
         if (_state == PlayerState.RELEASED) return
         currentUri = uri
         currentHeaders = headers
@@ -172,13 +175,25 @@ class AndroidMusicPlayer {
     }
 
     /**
-     * 开始 / 恢复播放
+     * 开始播放 或 从暂停恢复播放
+     *
+     * - PREPARED/COMPLETED → 开始播放
+     * - PAUSED → 恢复播放
+     * - 其他状态 → 忽略
      */
-    fun resume() {
-        safeAction(PlayerState.PREPARED, PlayerState.PAUSED, PlayerState.COMPLETED) {
-            mediaPlayer?.start()
-            _state = PlayerState.PLAYING
-            startProgressTracking()
+    fun play() {
+        when (_state) {
+            PlayerState.PREPARED, PlayerState.COMPLETED -> {
+                mediaPlayer?.start()
+                _state = PlayerState.PLAYING
+                startProgressTracking()
+            }
+            PlayerState.PAUSED -> {
+                mediaPlayer?.start()
+                _state = PlayerState.PLAYING
+                startProgressTracking()
+            }
+            else -> {}
         }
     }
 
@@ -194,7 +209,7 @@ class AndroidMusicPlayer {
     }
 
     /**
-     * 停止（释放后需重新 prepare）
+     * 停止（释放后需重新 setSource）
      */
     fun stop() {
         safeAction(
@@ -294,10 +309,7 @@ class AndroidMusicPlayer {
                     _state = PlayerState.PREPARED
                     applySpeed()
                     listener?.onPrepared(mp.duration.toLong())
-                    // 准备就绪后自动开始播放
-                    mp.start()
-                    _state = PlayerState.PLAYING
-                    startProgressTracking()
+                    // 注意：此处不再自动开始播放，由外部调用 play() 触发
                 }
 
                 setOnCompletionListener {

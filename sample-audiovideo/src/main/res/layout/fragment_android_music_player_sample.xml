@@ -74,15 +74,6 @@
                 android:layout_marginEnd="8dp" />
 
             <Button
-                android:id="@+id/btnResume"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="继续"
-                android:enabled="false"
-                android:layout_marginEnd="8dp" />
-
-            <Button
                 android:id="@+id/btnStop"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
