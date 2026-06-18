@@ -18,11 +18,5 @@ class SDKAudioVideoFragment: ListFragment<FragmentListBinding, ListViewModel, Te
         TextClickItem("ijkPlayer") {
             FragmentActivity.start<IjkVideoPlayerSampleFragment>(it.title)
         },
-        TextClickItem("AliPlayer") {
-            FragmentActivity.start<AliVideoPlayerSampleFragment>(it.title)
-        },
-        TextClickItem("JZVD") {
-            FragmentActivity.start<JzVideoPlayerSampleFragment>(it.title)
-        },
     )
 }
