@@ -29,6 +29,21 @@ interface IVideoPlayerListener : IPlayerListener {
 
     /** 播放器信息回调（如缓冲、渲染等），返回 true 表示已消费 */
     fun onInfo(what: Int, extra: Int): Boolean = false
+
+    /** 首帧渲染完成（视频开始显示） */
+    fun onFirstFrameRendered() {}
+
+    /** 开始缓冲 */
+    fun onBufferingStart() {}
+
+    /** 缓冲结束 */
+    fun onBufferingEnd() {}
+
+    /** 网络带宽信息（bps） */
+    fun onNetworkBandwidth(bps: Long) {}
+
+    /** 单曲循环重启 */
+    fun onLoopRestart() {}
 }
 
 /**
