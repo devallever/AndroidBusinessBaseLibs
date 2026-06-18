@@ -1,5 +1,6 @@
 [versions]
 # android sdk versions
+aliyunplayer = "7.15.0-full"
 compileSdk = "35"
 easyhttp = "12.8"
 gsonfactoryVersion = "9.6"
@@ -114,6 +115,7 @@ media3 = "1.4.1"
 
 [libraries]
 # android & kotlin & google
+aliyunplayer = { module = "com.aliyun.sdk.android:AliyunPlayer", version.ref = "aliyunplayer" }
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraX" }
 androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "cameraX" }
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraX" }

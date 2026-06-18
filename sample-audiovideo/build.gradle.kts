@@ -35,4 +35,7 @@ dependencies {
     implementation(libs.dkplayer.ijk)
     // 可选，如需要缓存或者抖音预加载功能请引入此库
 //    implementation(libs.dkplayer.videocache)
+
+    //阿里云播放器
+    implementation(libs.aliyunplayer)
 }
