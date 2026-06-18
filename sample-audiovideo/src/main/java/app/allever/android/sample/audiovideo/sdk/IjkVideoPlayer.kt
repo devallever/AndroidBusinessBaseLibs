@@ -325,7 +325,7 @@ class IjkVideoPlayer {
             setOnBufferingUpdateListener(mOnBufferingUpdateListener)
             setOnInfoListener(mOnInfoListener)
             setOnVideoSizeChangedListener(mOnVideoSizeChangedListener)
-            setOnSeekCompleteListener(mOnSeekCompleteListener)
+//            setOnSeekCompleteListener(mOnSeekCompleteListener)
         }
     }
 
@@ -477,18 +477,19 @@ class IjkVideoPlayer {
 
     private var pendingSeekPosition: Long = 0
 
-    private val mOnSeekCompleteListener = IMediaPlayer.OnSeekCompleteListener {
-        App.mainHandler.post {
-            log("IjkVideoPlayer", "onSeekComplete")
-
-            isSeeking = false
-
-            // Seek 完成后恢复进度追踪
-            if (_state == PlayerState.PLAYING) {
-                startProgressTracking()
-            }
-        }
-    }
+//    private val mOnSeekCompleteListener = IMediaPlayer.OnSeekCompleteListener {
+//        App.mainHandler.postDelayed({
+//            //没回调
+//            log("IjkVideoPlayer", "onSeekComplete")
+//
+//            isSeeking = false
+//
+//            // Seek 完成后恢复进度追踪
+//            if (_state == PlayerState.PLAYING) {
+//                startProgressTracking()
+//            }
+//        }, 300)
+//    }
 
     // ==================== Surface 绑定 ====================
 
@@ -1055,8 +1056,19 @@ class IjkVideoPlayer {
             ijkMediaPlayer?.seekTo(positionMs)
             log("IjkVideoPlayer", "seekToInternal: $positionMs ms")
 
-            // IjkMediaPlayer 会通过 OnSeekCompleteListener 通知完成
+            // IjkMediaPlayer 会通过 OnSeekCompleteListener 通知完成, 没回调OnSeekCompleteListener
             // 此时不需要立即恢复进度追踪，等待回调即可
+
+            // 延迟重置标志并确保进度追踪正常运行（seek 是异步操作）
+            //没回调OnSeekCompleteListener，加上
+            App.mainHandler.postDelayed({
+                isSeeking = false
+                // 确保 seek 完成后进度追踪仍在运行
+                if (_state == PlayerState.PLAYING && (progressJob == null || !progressJob!!.isActive)) {
+                    log("ExoVideoPlayer", "restart progress tracking after seek")
+                    startProgressTracking()
+                }
+            }, 300)
         } catch (e: Exception) {
             log("IjkVideoPlayer", "seekToInternal error: ${e.message}")
             isSeeking = false
