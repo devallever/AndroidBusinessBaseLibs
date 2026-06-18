@@ -247,13 +247,12 @@ class IjkVideoPlayer {
 
                 // 2. 配置播放选项（启用硬解码、优化缓冲等）
                 setDefaultOptions()
-
-                // 3. 设置音频流类型
-                setAudioStreamType(AudioManager.STREAM_MUSIC)
-
-                // 4. 注册监听器
-                setupListeners()
             }
+
+            // 3. 配置播放选项
+            setDefaultOptions()
+            // 4. 注册监听器
+            setupListeners()
         } catch (e: Exception) {
             log("IjkVideoPlayer", "initIjkPlayer error: ${e.message}")
             _state = PlayerState.ERROR
@@ -325,7 +324,8 @@ class IjkVideoPlayer {
             setOnBufferingUpdateListener(mOnBufferingUpdateListener)
             setOnInfoListener(mOnInfoListener)
             setOnVideoSizeChangedListener(mOnVideoSizeChangedListener)
-//            setOnSeekCompleteListener(mOnSeekCompleteListener)
+            setOnSeekCompleteListener(mOnSeekCompleteListener)
+            log("IjkVideoPlayer", "setupListeners success")
         }
     }
 
@@ -345,6 +345,20 @@ class IjkVideoPlayer {
     }
 
     // ==================== 监听器实例（避免重复创建）====================
+
+        private val mOnSeekCompleteListener = IMediaPlayer.OnSeekCompleteListener {
+        App.mainHandler.postDelayed({
+            //没回调
+            log("IjkVideoPlayer", "onSeekComplete")
+
+            isSeeking = false
+
+            // Seek 完成后恢复进度追踪
+            if (_state == PlayerState.PLAYING) {
+                startProgressTracking()
+            }
+        }, 300)
+    }
 
     private val mOnPreparedListener = IMediaPlayer.OnPreparedListener {
         App.mainHandler.post {

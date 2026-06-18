@@ -670,6 +670,6 @@ class IjkVideoPlayerSampleFragment :
     companion object {
         /** 默认测试视频 URL（可替换为实际可用的地址）*/
         private const val DEFAULT_TEST_URL =
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            "https://www.w3schools.com/html/mov_bbb.mp4"
     }
 }
