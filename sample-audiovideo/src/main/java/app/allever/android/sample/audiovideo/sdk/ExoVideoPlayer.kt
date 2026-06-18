@@ -156,6 +156,21 @@ class ExoVideoPlayer {
             exoPlayer?.volume = field
         }
 
+    /**
+     * SurfaceView/TextureView 缩放模式（默认 FIT_CENTER）
+     *
+     * 仅对 SurfaceView 和 TextureView 生效，
+     * PlayerView 有自己的缩放控制。
+     */
+    var videoScaleMode: VideoScaleMode = VideoScaleMode.FIT_CENTER
+        set(value) {
+            field = value
+            // 如果已有视频尺寸，立即重新调整布局
+            if (videoWidth > 0 && videoHeight > 0) {
+                adjustSurfaceLayout()
+            }
+        }
+
     // ==================== 内部状态 ====================
 
     /** 进度追踪协程 */
@@ -169,6 +184,12 @@ class ExoVideoPlayer {
 
     /** 剩余重试次数 */
     private var retryLeft: Int = 0
+
+    /** 视频原始宽度（像素）*/
+    private var videoWidth: Int = 0
+
+    /** 视频原始高度（像素）*/
+    private var videoHeight: Int = 0
 
     /**
      * 待执行的 prepare 参数（当 Surface 未就绪时缓存 setSource 调用）
@@ -790,8 +811,18 @@ class ExoVideoPlayer {
         override fun onVideoSizeChanged(videoSize: VideoSize) {
             App.mainHandler.post {
                 if (videoSize.width > 0 && videoSize.height > 0) {
+                    // 保存视频原始尺寸
+                    this@ExoVideoPlayer.videoWidth = videoSize.width
+                    this@ExoVideoPlayer.videoHeight = videoSize.height
+
                     listener?.onVideoSizeChanged(videoSize.width, videoSize.height)
                     log("ExoVideoPlayer", "onVideoSizeChanged: ${videoSize.width}x${videoSize.height}")
+
+                    // 对 SurfaceView 和 TextureView 进行画面自适应
+                    if (currentSurfaceType == SurfaceType.SURFACE_VIEW ||
+                        currentSurfaceType == SurfaceType.TEXTURE_VIEW) {
+                        adjustSurfaceLayout()
+                    }
                 }
             }
         }
@@ -838,4 +869,214 @@ class ExoVideoPlayer {
             progressJob = null
         }
     }
+
+    // ==================== 内部：SurfaceView/TextureView 画面自适应 ====================
+
+    /**
+     * 根据当前缩放模式调整 SurfaceView 或 TextureView 的布局尺寸
+     *
+     * 调用时机：
+     * - onVideoSizeChanged 回调中（获取到视频尺寸后）
+     * - videoScaleMode 属性改变时（切换缩放模式）
+     *
+     * 仅对 SurfaceView 和 TextureView 生效，PlayerView 有自己的缩放控制。
+     */
+    private fun adjustSurfaceLayout() {
+        when (currentSurfaceType) {
+            SurfaceType.SURFACE_VIEW -> adjustSurfaceViewLayout()
+            SurfaceType.TEXTURE_VIEW -> adjustTextureViewLayout()
+            else -> {}  // PlayerView 不需要手动调整
+        }
+    }
+
+    /**
+     * 调整 SurfaceView 布局尺寸以适应视频宽高比
+     *
+     * 算法根据 [videoScaleMode] 选择不同的适配策略：
+     * - FIT_CENTER：保持比例，完整显示视频（可能有黑边）
+     * - CROP_CENTER：保持比例，填满容器（可能裁剪边缘）
+     * - STRETCH：拉伸填满容器（可能变形）
+     */
+    private fun adjustSurfaceViewLayout() {
+        val sv = surfaceView ?: return
+        if (videoWidth <= 0 || videoHeight <= 0) return
+
+        val parent = sv.parent as? android.view.ViewGroup ?: return
+
+        // 使用 post 确保 View 已完成布局测量
+        App.mainHandler.post {
+            val containerWidth = parent.width
+            val containerHeight = parent.height
+            if (containerWidth <= 0 || containerHeight <= 0) return@post
+
+            val (targetWidth, targetHeight) = calculateTargetSize(
+                videoWidth, videoHeight,
+                containerWidth, containerHeight,
+                videoScaleMode
+            )
+
+            log("ExoVideoPlayer", "adjustSurfaceViewLayout: " +
+                    "video=${videoWidth}x${videoHeight} " +
+                    "container=${containerWidth}x${containerHeight} " +
+                    "mode=$videoScaleMode -> " +
+                    "target=${targetWidth}x${targetHeight}")
+
+            // 更新 SurfaceView LayoutParams
+            val params = sv.layoutParams
+            params.width = targetWidth
+            params.height = targetHeight
+
+            // 居中显示（通过 gravity）
+            if (params is android.widget.FrameLayout.LayoutParams) {
+                params.gravity = android.view.Gravity.CENTER
+            }
+
+            sv.layoutParams = params
+        }
+    }
+
+    /**
+     * 调整 TextureView 布局尺寸以适应视频宽高比
+     *
+     * 与 SurfaceView 类似，但 TextureView 支持矩阵变换，
+     * 此处使用 LayoutParams 方式实现基础版自适应。
+     */
+    private fun adjustTextureViewLayout() {
+        val tv = textureView ?: return
+        if (videoWidth <= 0 || videoHeight <= 0) return
+
+        val parent = tv.parent as? android.view.ViewGroup ?: return
+
+        // 使用 post 确保 View 已完成布局测量
+        App.mainHandler.post {
+            val containerWidth = parent.width
+            val containerHeight = parent.height
+            if (containerWidth <= 0 || containerHeight <= 0) return@post
+
+            val (targetWidth, targetHeight) = calculateTargetSize(
+                videoWidth, videoHeight,
+                containerWidth, containerHeight,
+                videoScaleMode
+            )
+
+            log("ExoVideoPlayer", "adjustTextureViewLayout: " +
+                    "video=${videoWidth}x${videoHeight} " +
+                    "container=${containerWidth}x${containerHeight} " +
+                    "mode=$videoScaleMode -> " +
+                    "target=${targetWidth}x${targetHeight}")
+
+            // 更新 TextureView LayoutParams
+            val params = tv.layoutParams
+            params.width = targetWidth
+            params.height = targetHeight
+
+            // 居中显示（通过 gravity）
+            if (params is android.widget.FrameLayout.LayoutParams) {
+                params.gravity = android.view.Gravity.CENTER
+            }
+
+            tv.layoutParams = params
+        }
+    }
+
+    /**
+     * 根据缩放模式计算目标尺寸
+     *
+     * @param videoWidth 视频原始宽度
+     * @param videoHeight 视频原始高度
+     * @param containerWidth 容器宽度
+     * @param containerHeight 容器高度
+     * @param scaleMode 缩放模式
+     * @return Pair<目标宽度, 目标高度>
+     */
+    private fun calculateTargetSize(
+        videoWidth: Int,
+        videoHeight: Int,
+        containerWidth: Int,
+        containerHeight: Int,
+        scaleMode: VideoScaleMode
+    ): Pair<Int, Int> {
+        val videoAspect = videoWidth.toFloat() / videoHeight.toFloat()
+        val containerAspect = containerWidth.toFloat() / containerHeight.toFloat()
+
+        return when (scaleMode) {
+            VideoScaleMode.FIT_CENTER -> {
+                // 保持比例，完整显示视频（可能有黑边）
+                if (videoAspect > containerAspect) {
+                    // 视频更宽 → 以宽度为准，高度按比例缩放
+                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
+                } else {
+                    // 视频更高 → 以高度为准，宽度按比例缩放
+                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
+                }
+            }
+            VideoScaleMode.CROP_CENTER -> {
+                // 保持比例，填满容器（可能裁剪边缘）
+                if (videoAspect > containerAspect) {
+                    // 视频更宽 → 以高度为准，宽度超出部分会被裁剪
+                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
+                } else {
+                    // 视频更高 → 以宽度为准，高度超出部分会被裁剪
+                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
+                }
+            }
+            VideoScaleMode.STRETCH -> {
+                // 拉伸填满容器（可能变形）
+                Pair(containerWidth, containerHeight)
+            }
+        }
+    }
 }
+
+/**
+ * SurfaceView/TextureView 视频缩放模式
+ *
+ * 用于控制视频在 SurfaceView 或 TextureView 中的显示方式。
+ * 注意：此枚举仅对 SurfaceView 和 TextureView 生效，
+ * PlayerView 有自己独立的缩放控制机制。
+ */
+enum class VideoScaleMode {
+    /**
+     * 保持宽高比，完整显示视频内容
+     *
+     * 特点：
+     * - 视频完全可见，不会被裁剪
+     * - 可能出现黑边（Letterbox/Pillarbox）
+     * - 适用于需要看到完整视频内容的场景
+     *
+     * 示例：
+     * - 容器 16:9 + 视频 4:3 → 左右黑边
+     * - 容器 4:3 + 视频 16:9 → 上下黑边
+     */
+    FIT_CENTER,
+
+    /**
+     * 保持宽高比，填满整个容器
+     *
+     * 特点：
+     * - 无黑边，完全填充容器
+     * - 可能裁剪视频边缘内容
+     * - 适用于背景视频或可接受裁剪的场景
+     *
+     * 示例：
+     * - 容器 16:9 + 视频 4:3 → 裁剪上下部分
+     * - 容器 4:3 + 视频 16:9 → 裁剪左右部分
+     */
+    CROP_CENTER,
+
+    /**
+     * 拉伸以填满整个容器
+     *
+     * 特点：
+     * - 无黑边，完全填充容器
+     * - 不裁剪任何内容
+     * - 但可能导致视频变形（失真）
+     * - 一般不推荐使用，除非有特殊需求
+     *
+     * 适用场景：
+     * - 某些特殊视觉效果需求
+     * - 视频与容器比例相近时影响较小
+     */
+    STRETCH
+}
+
