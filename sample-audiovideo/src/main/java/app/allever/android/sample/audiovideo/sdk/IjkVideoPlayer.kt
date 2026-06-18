@@ -206,6 +206,9 @@ class IjkVideoPlayer {
     /** 缓冲百分比（0-100）*/
     private var bufferedPercent: Int = 0
 
+    /** PREPARING 状态监控协程（防止状态不一致）*/
+    private var preparingMonitorJob: Job? = null
+
     /**
      * 待执行的 prepare 参数（当 Surface 未就绪时缓存 setSource 调用）
      */
@@ -345,13 +348,29 @@ class IjkVideoPlayer {
 
     private val mOnPreparedListener = IMediaPlayer.OnPreparedListener {
         App.mainHandler.post {
-            log("IjkVideoPlayer", "onPrepared")
+            log("IjkVideoPlayer", "onPrepared (current state: $_state)")
 
-            if (_state != PlayerState.PREPARING) return@post
+            // 停止 PREPARING 状态监控（onPrepared 已到达）
+            stopPreparingStateMonitor()
+
+            // 状态检查：只处理 PREPARING 状态（防止重复回调）
+            // 但如果已经是 PLAYING（竞态情况），也允许通过以触发 onPrepared 回调
+            if (_state != PlayerState.PREPARING && _state != PlayerState.PLAYING) {
+                log("IjkVideoPlayer", "onPrepared ignored: state=$_state")
+                return@post
+            }
 
             val dur = duration
-            _state = PlayerState.PREPARED
-            listener?.onPrepared(dur)
+
+            // 只有在非 PLAYING 状态时才更新为 PREPARED
+            if (_state != PlayerState.PLAYING) {
+                _state = PlayerState.PREPARED
+                listener?.onPrepared(dur)
+            } else {
+                // 已经在播放了（竞态），直接通知准备完成
+                log("IjkVideoPlayer", "onPrepared: 已在播放，跳过状态更新但通知监听器")
+                listener?.onPrepared(dur)
+            }
 
             // 如果有缓存的 seekTo，在 prepared 后执行
             if (pendingSeekPosition > 0) {
@@ -803,6 +822,12 @@ class IjkVideoPlayer {
             // 异步准备
             ijkMediaPlayer?.prepareAsync()
 
+            // ✨ 关键修复：启动 PREPARING 状态监控协程
+            // 防止 IJKPlayer 异步特性导致状态不一致：
+            // - IjkMediaPlayer 可能在 onPrepared 回调前就开始播放
+            //# - 此时需要主动检测并修正状态
+            startPreparingStateMonitor()
+
         } catch (e: Exception) {
             log("IjkVideoPlayer", "doPrepareInternal error: ${e.message}")
             handlePrepareError(e)
@@ -837,6 +862,7 @@ class IjkVideoPlayer {
      *
      * 行为逻辑：
      * - PREPARED/PAUSED/COMPLETED 状态：从当前位置继续播放
+     * - PREPARING 状态：尝试播放（防止异步竞态导致状态不一致）
      * - 其他状态：不执行任何操作（需先 setSource + wait for PREPARED）
      */
     fun play() {
@@ -846,17 +872,111 @@ class IjkVideoPlayer {
             PlayerState.PREPARED,
             PlayerState.PAUSED,
             PlayerState.COMPLETED -> {
+                doPlay()
+            }
+            PlayerState.PREPARING -> {
+                // 防止竞态：IjkMediaPlayer 可能已经准备好但回调还未触发
+                // 尝试直接 start()，如果成功则更新状态
                 try {
-                    ijkMediaPlayer?.start()
-                    _state = PlayerState.PLAYING
-                    startProgressTracking()
+                    val isPrepared = try {
+                        // 通过 duration > 0 判断是否已准备就绪
+                        val dur = ijkMediaPlayer?.duration ?: 0
+                        dur > 0 && dur != -1.toLong()
+                    } catch (_: Exception) { false }
+
+                    if (isPrepared) {
+                        log("IjkVideoPlayer", "play: 检测到已准备就绪，强制播放")
+                        _state = PlayerState.PREPARED  // 先修正状态
+                        doPlay()
+                    } else {
+                        log("IjkVideoPlayer", "play ignored: 正在准备中...")
+                    }
                 } catch (e: Exception) {
-                    log("IjkVideoPlayer", "play error: ${e.message}")
+                    log("IjkVideoPlayer", "play (PREPARING) error: ${e.message}")
                 }
             }
             else -> {
                 log("IjkVideoPlayer", "play ignored: state=$_state")
             }
+        }
+    }
+
+    /**
+     * 执行实际的播放操作
+     *
+     * 修复说明：
+     * - IjkMediaPlayer.start() 是异步的，调用后 isPlaying 可能不会立即返回 true
+     * - 因此不能依赖 isPlaying 的即时返回值来判断是否成功
+     * - 应该在调用 start() 后立即更新状态为 PLAYING（信任调用成功）
+     * - 如果后续发现实际未播放，由 PREPARING Monitor 或 Progress Sync 协程修正
+     *
+     * 重要修复（IJKPlayer 已知 bug）：
+     * - IJKPlayer 在 pause() 后调用 start() 可能导致播放位置重置为 0
+     * - 因此需要在 start() 前保存当前播放位置，并在 start() 后验证是否需要恢复
+     */
+    private fun doPlay() {
+        try {
+            // 记录调用前的状态（用于日志）
+            val previousState = _state
+
+            // ✨ 关键修复：保存当前播放位置（防止 IJKPlayer 重置位置 bug）
+            var savedPosition: Long = -1L
+            if (previousState == PlayerState.PAUSED) {
+                try {
+                    savedPosition = ijkMediaPlayer?.currentPosition ?: -1L
+                    log("IjkVideoPlayer", "doPlay: 保存暂停位置 = ${savedPosition}ms")
+                } catch (_: Exception) {
+                    savedPosition = -1L
+                }
+            }
+
+            // 调用 start() 开始播放
+            ijkMediaPlayer?.start()
+
+            // ✨ 关键修复：立即更新状态为 PLAYING
+            // 不要依赖 isPlaying 的即时返回值（可能是异步的）
+            _state = PlayerState.PLAYING
+            listener?.onStateChanged(previousState, PlayerState.PLAYING)
+
+            // 启动进度追踪协程
+            startProgressTracking()
+
+            log("IjkVideoPlayer", "doPlay: $previousState -> PLAYING (已调用 start())")
+
+            // ✨✨✨ 核心修复：延迟检查并恢复播放位置
+            // IJKPlayer 的 start() 是异步的，可能在几毫秒后才真正开始播放
+            // 此时 currentPosition 可能暂时返回 0 或错误值
+            // 需要延迟一小段时间后再检查并恢复位置
+            if (savedPosition > 0 && previousState == PlayerState.PAUSED) {
+                App.mainHandler.postDelayed({
+                    try {
+                        if (_state == PlayerState.PLAYING) {
+                            val currentPosition = ijkMediaPlayer?.currentPosition ?: 0L
+
+                            // 如果当前位置明显小于保存的位置（误差 > 500ms），说明位置被重置了
+                            if (currentPosition < savedPosition - 500) {
+                                log("IjkVideoPlayer", "⚠️ doPlay: 检测到位置重置！" +
+                                        " 保存=${savedPosition}ms, 当前=${currentPosition}ms, 正在恢复...")
+
+                                // seekTo 到保存的位置
+                                ijkMediaPlayer?.seekTo(savedPosition)
+
+                                log("IjkVideoPlayer", "✅ doPlay: 已恢复位置到 ${savedPosition}ms")
+                            } else {
+                                log("IjkVideoPlayer", "doPlay: 位置正常，保存=${savedPosition}ms, 当前=${currentPosition}ms")
+                            }
+                        }
+                    } catch (_: Exception) {
+                        // 忽略异常
+                    }
+                }, 100)  // 延迟 100ms 检查（给 IJKPlayer 足够时间启动）
+            }
+
+        } catch (e: Exception) {
+            log("IjkVideoPlayer", "doPlay error: ${e.message}")
+            // 如果 start() 抛出异常，回退到之前的状态或标记错误
+            _state = PlayerState.ERROR
+            listener?.onError(-1, 0)
         }
     }
 
@@ -1000,6 +1120,7 @@ class IjkVideoPlayer {
      * 启动进度追踪协程
      *
      * 定时获取 IjkMediaPlayer 的当前位置和总时长，通过监听器回调。
+     * 同时会定期同步 IjkMediaPlayer 实际播放状态，防止状态不一致。
      */
     private fun startProgressTracking() {
         // 如果已经在运行且状态正确，不需要重启
@@ -1023,6 +1144,11 @@ class IjkVideoPlayer {
                     listener?.onProgress(pos, dur)
                 }
 
+                // 定期同步状态（每5次检查一次，约1秒）
+                if ((System.currentTimeMillis() / progressIntervalMs) % 5 == 0L) {
+                    syncStateWithPlayer()
+                }
+
                 delay(progressIntervalMs.toLong())
             }
         }
@@ -1036,6 +1162,164 @@ class IjkVideoPlayer {
             log("IjkVideoPlayer", "stopping progress tracking")
             progressJob?.cancel()
             progressJob = null
+        }
+    }
+
+    // ==================== PREPARING 状态监控（核心修复）====================
+
+    /**
+     * 启动 PREPARING 状态监控协程
+     *
+     * **核心修复：解决"已经在播放了，状态还是 PREPARING"的 bug**
+     *
+     * 问题根源：
+     * IjkMediaPlayer 使用 prepareAsync() 异步准备，
+     * 某些情况下（特别是本地文件或缓存良好的在线视频），
+     * IjkMediaPlayer 可能在 onPrepared 回调到达之前就已经开始播放。
+     *
+     * 此时会出现状态不一致：
+     * - IjkMediaPlayer 内部状态：PLAYING（正在播放）
+     * - 我们的状态变量：PREPARING（还在等待 onPrepared）
+     *
+     * 此协程的作用：
+     * 在 PREPARING 状态下定期检测 IjkMediaPlayer 的实际播放状态，
+     * 如果发现已经在播放，立即修正我们的状态为 PLAYING/PAUSED/COMPLETED 等。
+     *
+     * 调用时机：doPrepareInternal() 中 prepareAsync() 之后立即启动
+     * 停止时机：状态变为非 PREPARING 时自动停止
+     */
+    private fun startPreparingStateMonitor() {
+        stopPreparingStateMonitor()
+
+        log("IjkVideoPlayer", "starting PREPARING state monitor")
+
+        preparingMonitorJob = CoroutineScope(Dispatchers.Main).launch {
+            var checkCount = 0
+            val maxCheckTime = 30000L  // 最大监控时间 30 秒
+            val startTime = System.currentTimeMillis()
+
+            while (isActive && _state == PlayerState.PREPARING) {
+                checkCount++
+
+                // 每 200ms 检查一次（与 progressIntervalMs 一致）
+                try {
+                    val actualIsPlaying = ijkMediaPlayer?.isPlaying == true
+
+                    if (actualIsPlaying) {
+                        // ✨ 检测到 IjkMediaPlayer 正在播放！
+                        log("IjkVideoPlayer", "⚡ PREPARING Monitor: 检测到正在播放！修正状态")
+
+                        // 获取视频信息
+                        val dur = try {
+                            val d = ijkMediaPlayer?.duration ?: 0
+                            if (d < 0 || d == -1L) 0L else d
+                        } catch (_: Exception) { 0L }
+
+                        val pos = try { ijkMediaPlayer?.currentPosition ?: 0L } catch (_: Exception) { 0L }
+
+                        if (dur > 0) {
+                            // 有 duration → 已准备就绪
+                            log("IjkVideoPlayer", "PREPARING Monitor: duration=$dur, position=$pos")
+
+                            // 通知准备完成（如果还没通知过）
+                            listener?.onPrepared(dur)
+
+                            // 更新为正确状态
+                            _state = PlayerState.PLAYING
+                            listener?.onStateChanged(PlayerState.PREPARING, PlayerState.PLAYING)
+
+                            // 启动进度追踪
+                            startProgressTracking()
+
+                            return@launch  // 任务完成，退出监控
+                        } else {
+                            // 还没有 duration，继续等待
+                            log("IjkVideoPlayer", "PREPARING Monitor: isPlaying=true 但 duration=0，继续等待")
+                        }
+                    } else {
+                        // 检查是否已经 prepared 但没在播放
+                        val dur = try {
+                            val d = ijkMediaPlayer?.duration ?: 0
+                            if (d < 0 || d == -1L) 0L else d
+                        } catch (_: Exception) { 0L }
+
+                        if (dur > 0 && checkCount > 5) {
+                            // duration > 0 且检查超过 1 秒 → 视为已准备好但未开始播放
+                            log("IjkVideoPlayer", "PREPARING Monitor: 检测到已准备就绪(duration=$dur)，更新状态为 PREPARED")
+                            _state = PlayerState.PREPARED
+                            listener?.onStateChanged(PlayerState.PREPARING, PlayerState.PREPARED)
+                            listener?.onPrepared(dur)
+
+                            return@launch  // 任务完成，退出监控
+                        }
+                    }
+
+                    // 超时保护：30秒后停止监控（防止无限运行）
+                    if (System.currentTimeMillis() - startTime > maxCheckTime) {
+                        log("IjkVideoPlayer", "PREPARING Monitor: 超时(30s)，停止监控")
+                        return@launch
+                    }
+
+                } catch (_: Exception) {
+                    // 忽略异常，继续监控
+                }
+
+                delay(progressIntervalMs.toLong())  // 200ms 检查一次
+            }
+
+            log("IjkVideoPlayer", "PREPARING state monitor stopped (state=$_state)")
+        }
+    }
+
+    /**
+     * 停止 PREPARING 状态监控协程
+     */
+    private fun stopPreparingStateMonitor() {
+        if (preparingMonitorJob != null) {
+            log("IjkVideoPlayer", "stopping PREPARING state monitor")
+            preparingMonitorJob?.cancel()
+            preparingMonitorJob = null
+        }
+    }
+
+    /**
+     * 同步内部状态与 IjkMediaPlayer 实际状态
+     *
+     * 防止因异步操作或竞态条件导致的状态不一致。
+     * 例如：IjkMediaPlayer 已经在播放，但我们的状态还是 PREPARING。
+     */
+    private fun syncStateWithPlayer() {
+        try {
+            val actualIsPlaying = ijkMediaPlayer?.isPlaying == true
+
+            if (actualIsPlaying && _state != PlayerState.PLAYING) {
+                // IjkMediaPlayer 正在播放但我们的状态不是 PLAYING → 修正状态
+                log("IjkVideoPlayer", "syncState: 检测到不一致，修正: $_state -> PLAYING")
+                _state = PlayerState.PLAYING
+                listener?.onStateChanged(_state, PlayerState.PLAYING)
+            } else if (!actualIsPlaying && _state == PlayerState.PLAYING) {
+                // IjkMediaPlayer 已停止播放但我们的状态还是 PLAYING → 修正状态
+                val pos = try { ijkMediaPlayer?.currentPosition ?: 0L } catch (_: Exception) { 0L }
+                val dur = try {
+                    val d = ijkMediaPlayer?.duration ?: 0
+                    if (d < 0) 0L else d
+                } catch (_: Exception) { 0L }
+
+                if (pos > 0 && dur > 0 && pos >= dur - 100) {
+                    // 接近末尾（误差100ms），视为播放完成
+                    log("IjkVideoPlayer", "syncState: 检测到播放完成")
+                    _state = PlayerState.COMPLETED
+                    listener?.onStateChanged(PlayerState.PLAYING, PlayerState.COMPLETED)
+                    listener?.onComplete()
+                } else {
+                    // 其他原因停止，视为暂停
+                    log("IjkVideoPlayer", "syncState: 检测到暂停")
+                    _state = PlayerState.PAUSED
+                    listener?.onStateChanged(PlayerState.PLAYING, PlayerState.PAUSED)
+                }
+            }
+        } catch (_: Exception) {
+            // 忽略同步过程中的异常
         }
     }
 
@@ -1223,6 +1507,9 @@ class IjkVideoPlayer {
 
         // 停止进度追踪
         stopProgressTracking()
+
+        // 停止 PREPARING 状态监控
+        stopPreparingStateMonitor()
 
         // 解绑 Surface
         detach()
