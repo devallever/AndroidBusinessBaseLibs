@@ -372,6 +372,11 @@ class IjkVideoPlayer {
                 listener?.onPrepared(dur)
             }
 
+            // ✨✨✨ 关键修复：主动获取视频尺寸（备用方案）
+            // IJKPlayer 的 OnVideoSizeChangedListener 可能不回调，
+            // 因此在 onPrepared 后立即尝试获取视频尺寸并触发自适应
+            tryFetchVideoSizeAndAdjustLayout()
+
             // 如果有缓存的 seekTo，在 prepared 后执行
             if (pendingSeekPosition > 0) {
                 val pos = pendingSeekPosition
@@ -942,6 +947,14 @@ class IjkVideoPlayer {
             // 启动进度追踪协程
             startProgressTracking()
 
+            // ✨ 关键修复：播放开始后再次尝试获取视频尺寸
+            // 某些视频格式在 onPrepared 时无法获取正确尺寸，
+            // 需要等到真正开始播放后才能获取到
+            if (videoWidth <= 0 || videoHeight <= 0) {
+                log("IjkVideoPlayer", "doPlay: 视频尺寸为空 (${videoWidth}x${videoHeight})，尝试主动获取")
+                tryFetchVideoSizeAndAdjustLayout()
+            }
+
             log("IjkVideoPlayer", "doPlay: $previousState -> PLAYING (已调用 start())")
 
             // ✨✨✨ 核心修复：延迟检查并恢复播放位置
@@ -1156,9 +1169,14 @@ class IjkVideoPlayer {
                     listener?.onProgress(pos, dur)
                 }
 
-                // 定期同步状态（每5次检查一次，约1秒）
+                // 定期同步状态和视频尺寸（每5次检查一次，约1秒）
                 if ((System.currentTimeMillis() / progressIntervalMs) % 5 == 0L) {
                     syncStateWithPlayer()
+
+                    // ✨ 定期检查视频尺寸（如果还未获取到）
+                    if (videoWidth <= 0 || videoHeight <= 0) {
+                        tryFetchVideoSizeAndAdjustLayout()
+                    }
                 }
 
                 delay(progressIntervalMs.toLong())
@@ -1332,6 +1350,76 @@ class IjkVideoPlayer {
             }
         } catch (_: Exception) {
             // 忽略同步过程中的异常
+        }
+    }
+
+    // ==================== 内部：视频尺寸获取与自适应 ====================
+
+    /**
+     * 主动获取视频尺寸并触发画面自适应（备用方案）
+     *
+     * **核心修复：解决 OnVideoSizeChangedListener 不回调的问题**
+     *
+     * IJKPlayer 的已知问题：
+     * - setOnVideoSizeChangedListener 在某些情况下不回调
+     * - 特别是对于某些视频格式或网络视频
+     *
+     * 解决方案：
+     * - 在 onPrepared 后主动调用此方法
+     * - 通过 IjkMediaPlayer.getVideoWidth()/getVideoHeight() 获取尺寸
+     * - 如果获取失败，延迟重试最多 5 次
+     */
+    private fun tryFetchVideoSizeAndAdjustLayout(retryCount: Int = 0) {
+        val maxRetries = 5
+
+        try {
+            // ✨ 主动从 IjkMediaPlayer 获取视频尺寸
+            val w = ijkMediaPlayer?.videoWidth ?: 0
+            val h = ijkMediaPlayer?.videoHeight ?: 0
+
+            log("IjkVideoPlayer", "tryFetchVideoSize: 尝试 #$retryCount, size=${w}x${h}")
+
+            if (w > 0 && h > 0) {
+                // ✅ 成功获取到有效尺寸
+
+                // 检查是否与当前记录的尺寸不同（避免重复调整）
+                if (w != videoWidth || h != videoHeight) {
+                    log("IjkVideoPlayer", "✨ 主动获取到视频尺寸: ${videoWidth}x${videoHeight} -> ${w}x${h}")
+
+                    videoWidth = w
+                    videoHeight = h
+
+                    // 通知监听器
+                    listener?.onVideoSizeChanged(w, h)
+
+                    // 触发画面自适应
+                    adjustSurfaceLayout()
+                } else {
+                    log("IjkVideoPlayer", "视频尺寸未变化: ${w}x${h}")
+                }
+
+                return  // 成功，不需要重试
+            } else {
+                // ❌ 尺寸无效，需要重试
+                if (retryCount < maxRetries) {
+                    log("IjkVideoPlayer", "视频尺寸无效 (${w}x${h})，将在 ${(retryCount + 1) * 200}ms 后重试...")
+
+                    App.mainHandler.postDelayed({
+                        tryFetchVideoSizeAndAdjustLayout(retryCount + 1)
+                    }, (retryCount + 1) * 200L)  // 渐进式延迟：200ms, 400ms, 600ms...
+                } else {
+                    log("IjkVideoPlayer", "⚠️ 已重试 $maxRetries 次仍无法获取视频尺寸")
+                }
+            }
+
+        } catch (_: Exception) {
+            // 异常时也尝试重试
+            if (retryCount < maxRetries) {
+                log("IjkVideoPlayer", "获取视频尺寸异常，重试中...")
+                App.mainHandler.postDelayed({
+                    tryFetchVideoSizeAndAdjustLayout(retryCount + 1)
+                }, (retryCount + 1) * 200L)
+            }
         }
     }
 
