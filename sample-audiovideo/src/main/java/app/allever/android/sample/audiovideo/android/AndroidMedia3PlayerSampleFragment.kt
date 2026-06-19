@@ -236,68 +236,52 @@ class AndroidMedia3PlayerSampleFragment :
 
     /**
      * 切换到 PlayerView 模式（推荐）
+     *
+     * 只控制视图显示/隐藏，不动态创建/销毁 View
      */
     private fun switchToPlayerView() {
         // 显示 PlayerView，隐藏其他视图
         mBinding.playerView.visibility = android.view.View.VISIBLE
+        mBinding.surfaceView.visibility = android.view.View.GONE
+        mBinding.textureView.visibility = android.view.View.GONE
 
         // 解绑当前 Surface，重新绑定到 PlayerView
         player.detach()
         player.attach(mBinding.playerView)
 
-        appendLog("已绑定到 PlayerView")
+        appendLog("已切换到 PlayerView 模式")
     }
 
     /**
      * 切换到 SurfaceView 模式（兼容）
      */
     private fun switchToSurfaceView() {
-        // 隐藏 PlayerView
+        // 隐藏 PlayerView 和 TextureView，显示 SurfaceView
         mBinding.playerView.visibility = android.view.View.GONE
-
-        // 创建或获取 SurfaceView（此处简化处理，实际项目中应从布局中获取）
-        val surfaceView = SurfaceView(requireContext()).apply {
-            layoutParams = android.widget.FrameLayout.LayoutParams(
-                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
-                android.widget.FrameLayout.LayoutParams.MATCH_PARENT
-            )
-        }
-
-        // 将 SurfaceView 添加到视频容器中
-        val videoContainer = mBinding.playerView.parent as? android.widget.FrameLayout
-        videoContainer?.addView(surfaceView, 0)
+        mBinding.surfaceView.visibility = android.view.View.VISIBLE
+        mBinding.textureView.visibility = android.view.View.GONE
 
         // 解绑当前 Surface，重新绑定到 SurfaceView
         player.detach()
-        player.attach(surfaceView)
+        player.attach(mBinding.surfaceView)
 
-        appendLog("已绑定到 SurfaceView（注意：SurfaceView 异步创建中）")
+        appendLog("已切换到 SurfaceView 模式")
     }
 
     /**
      * 切换到 TextureView 模式（高级）
      */
     private fun switchToTextureView() {
-        // 隐藏 PlayerView
+        // 隐藏 PlayerView 和 SurfaceView，显示 TextureView
         mBinding.playerView.visibility = android.view.View.GONE
-
-        // 创建或获取 TextureView
-        val textureView = TextureView(requireContext()).apply {
-            layoutParams = android.widget.FrameLayout.LayoutParams(
-                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
-                android.widget.FrameLayout.LayoutParams.MATCH_PARENT
-            )
-        }
-
-        // 将 TextureView 添加到视频容器中
-        val videoContainer = mBinding.playerView.parent as? android.widget.FrameLayout
-        videoContainer?.addView(textureView, 0)
+        mBinding.surfaceView.visibility = android.view.View.GONE
+        mBinding.textureView.visibility = android.view.View.VISIBLE
 
         // 解绑当前 Surface，重新绑定到 TextureView
         player.detach()
-        player.attach(textureView)
+        player.attach(mBinding.textureView)
 
-        appendLog("已绑定到 TextureView")
+        appendLog("已切换到 TextureView 模式")
     }
 
     // ==================== 播放器监听器 ====================

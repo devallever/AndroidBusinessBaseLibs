@@ -29,7 +29,7 @@
             android:textColor="#666666"
             android:layout_marginBottom="16dp" />
 
-        <!-- 视频显示区域 - 使用 FrameLayout 作为容器 -->
+        <!-- 视频显示区域 - 预定义两种 Surface 类型 -->
         <FrameLayout
             android:id="@+id/flVideoContainer"
             android:layout_width="match_parent"
@@ -37,12 +37,19 @@
             android:background="#222222"
             android:layout_marginBottom="16dp">
 
-            <!-- SurfaceView 将动态添加到此处 -->
+            <!-- SurfaceView（默认显示） -->
             <SurfaceView
                 android:id="@+id/surfaceView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="visible" />
+
+            <!-- TextureView（默认隐藏） -->
+            <TextureView
+                android:id="@+id/textureView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
 
             <!-- 视频尺寸信息覆盖层 -->
             <TextView

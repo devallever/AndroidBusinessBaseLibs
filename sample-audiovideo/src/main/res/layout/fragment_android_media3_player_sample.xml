@@ -21,19 +21,36 @@
             android:textStyle="bold"
             android:layout_marginBottom="16dp" />
 
-        <!-- 视频显示区域 - 使用 Media3 PlayerView -->
+        <!-- 视频显示区域 - 预定义三种 Surface 类型 -->
         <FrameLayout
+            android:id="@+id/videoContainer"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="#222222"
             android:layout_marginBottom="16dp">
 
+            <!-- PlayerView（默认显示） -->
             <androidx.media3.ui.PlayerView
                 android:id="@+id/playerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="visible"
                 app:use_controller="false"
                 app:resize_mode="fit" />
+
+            <!-- SurfaceView（默认隐藏） -->
+            <SurfaceView
+                android:id="@+id/surfaceView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+            <!-- TextureView（默认隐藏） -->
+            <TextureView
+                android:id="@+id/textureView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
 
             <!-- 视频尺寸信息覆盖层 -->
             <TextView

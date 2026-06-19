@@ -72,9 +72,6 @@ class IjkVideoPlayerSampleFragment :
     /** 是否在 prepared 后自动播放 */
     private var autoPlayOnPrepared: Boolean = false
 
-    /** 当前动态创建的 TextureView（用于切换时移除）*/
-    private var currentDynamicTextureView: TextureView? = null
-
     /** TCP 速度监控协程 */
     private var tcpSpeedMonitorJob: Job? = null
 
@@ -139,57 +136,40 @@ class IjkVideoPlayerSampleFragment :
 
     /**
      * 切换到 SurfaceView 模式
+     *
+     * 只控制视图显示/隐藏，不动态创建/销毁 View
      */
     private fun switchToSurfaceView() {
         appendLog("切换到 SurfaceView 模式")
 
-        // 移除动态创建的 TextureView
-        removeDynamicTextureView()
-
-        // 显示内置的 SurfaceView
+        // 显示 SurfaceView，隐藏 TextureView
         mBinding.surfaceView.visibility = android.view.View.VISIBLE
+        mBinding.textureView.visibility = android.view.View.GONE
 
         // 解绑后重新绑定 SurfaceView
         player.detach()
         player.attach(mBinding.surfaceView)
 
-        appendLog("已绑定 SurfaceView")
+        appendLog("已切换到 SurfaceView 模式")
     }
 
     /**
      * 切换到 TextureView 模式
+     *
+     * 只控制视图显示/隐藏，不动态创建/销毁 View
      */
     private fun switchToTextureView() {
         appendLog("切换到 TextureView 模式")
 
-        // 隐藏内置的 SurfaceView
+        // 隐藏 SurfaceView，显示 TextureView
         mBinding.surfaceView.visibility = android.view.View.GONE
+        mBinding.textureView.visibility = android.view.View.VISIBLE
 
-        // 创建新的 TextureView 并添加到容器中
-        val textureView = TextureView(requireContext()).apply {
-            layoutParams = android.widget.FrameLayout.LayoutParams(
-                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
-                android.widget.FrameLayout.LayoutParams.MATCH_PARENT
-            )
-        }
-        mBinding.flVideoContainer.addView(textureView, 0)  // 添加到最底层
-        currentDynamicTextureView = textureView
-
-        // 解绑后重新绑定 TextureView
+        // 解绑后重新绑定 TextureView（使用布局中预定义的）
         player.detach()
-        player.attach(textureView)
+        player.attach(mBinding.textureView)
 
-        appendLog("已绑定 TextureView（动态创建）")
-    }
-
-    /**
-     * 移除动态创建的 TextureView
-     */
-    private fun removeDynamicTextureView() {
-        currentDynamicTextureView?.let {
-            mBinding.flVideoContainer.removeView(it)
-            currentDynamicTextureView = null
-        }
+        appendLog("已切换到 TextureView 模式")
     }
 
     // ==================== 播放控制 ====================
