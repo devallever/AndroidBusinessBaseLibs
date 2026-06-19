@@ -227,6 +227,10 @@ class IjkVideoPlayer {
     /** 切换 Surface 后待恢复的播放位置（-1 表示无需恢复） */
     private var switchSurfacePendingPosition: Long = -1L
 
+    /** 是否正在执行 safeSwitchSurface（防止重复调用） */
+    @Volatile
+    private var isSafeSwitching: Boolean = false
+
     // ==================== 初始化与生命周期 ====================
 
     init {
@@ -654,38 +658,90 @@ class IjkVideoPlayer {
         targetName: String,
         delayMs: Long = 100L
     ) {
-        // 1. 记录当前状态
-        val wasPlaying = (_state == PlayerState.PLAYING || _state == PlayerState.PAUSED)
-        val savedPosition = currentPosition
-
-        log("IjkVideoPlayer", "safeSwitchSurface [方案B]: 开始切换到 $targetName" +
-                " (wasPlaying=$wasPlaying, position=${formatTime(savedPosition)})")
-
-        // 2. 完全停止 IjkMediaPlayer（清空所有缓冲区和渲染队列）
-        if (_state != PlayerState.IDLE && _state != PlayerState.STOPPED && _state != PlayerState.RELEASED) {
-            stop()
-            log("IjkVideoPlayer", "safeSwitchSurface [方案B]: 已 stop()，清空所有缓冲区")
+        // ✨ 防重入检查：如果正在切换，忽略重复调用
+        if (isSafeSwitching) {
+            log("IjkVideoPlayer", "safeSwitchSurface [方案B]: ⚠️ 忽略重复调用（正在切换到 $targetName）")
+            return
         }
 
-        // 3. 如果需要恢复播放，保存位置信息
-        if (wasPlaying && savedPosition >= 0 && currentUri != null) {
-            switchSurfacePendingPosition = savedPosition
-            log("IjkVideoPlayer", "safeSwitchSurface [方案B]: 待恢复位置 ${formatTime(savedPosition)}")
-        }
+        // 标记开始切换
+        isSafeSwitching = true
 
-        // 4. 使用 postDelayed 延迟执行切换操作
-        App.mainHandler.postDelayed({
-            try {
+        try {
+            // 1. 记录当前状态
+            val wasPlaying = (_state == PlayerState.PLAYING || _state == PlayerState.PAUSED ||
+                    _state == PlayerState.PREPARING)  // ✅ 扩展：包含 PREPARING 状态
+            val savedPosition = currentPosition
+
+            log("IjkVideoPlayer", "safeSwitchSurface [方案B]: 开始切换到 $targetName" +
+                    " (wasPlaying=$wasPlaying, position=${formatTime(savedPosition)}, state=$_state)")
+
+            // 2. 完全停止 IjkMediaPlayer（清空所有缓冲区和渲染队列）
+            if (_state != PlayerState.IDLE && _state != PlayerState.STOPPED && _state != PlayerState.RELEASED) {
+                stop()
+                log("IjkVideoPlayer", "safeSwitchSurface [方案B]: 已 stop()，清空所有缓冲区")
+            }
+
+            // 3. 如果需要恢复播放，保存位置信息（扩展条件：PREPARING 状态也保存）
+            if (wasPlaying && savedPosition >= 0 && (currentUri != null || currentAssetPath != null)) {
+                switchSurfacePendingPosition = savedPosition
+                log("IjkVideoPlayer", "safeSwitchSurface [方案B]: 待恢复位置 ${formatTime(savedPosition)}")
+            }
+
+            // 4. 使用 postDelayed 延迟执行切换操作
+            App.mainHandler.postDelayed({
+                try {
                 log("IjkVideoPlayer", "safeSwitchSurface [方案B]: 执行切换到 $targetName")
 
                 // 执行实际的切换操作（detach + attach）
                 targetAction()
 
                 // 5. 重新准备数据源（因为已经 stop()，必须 reprepare）
-                if (currentUri != null) {
+                if (currentUri != null || currentAssetPath != null) {
                     log("IjkVideoPlayer", "safeSwitchSurface [方案B]: 重新 prepare 数据源" +
                             " (autoResume=${switchSurfacePendingPosition >= 0})")
-                    doSetSource(currentUri!!, currentHeaders, currentAssetPath)
+
+                    // ✨ 关键修复：根据数据源类型选择正确的 prepare 方式
+                    // 原因：attach() 后 isSurfaceReady=false，如果走 doSetSource 会被缓存到 pendingPrepare
+                    // 而 surfaceCreated/surfaceTextureAvailable 可能不会再次回调（Surface 已存在）
+                    // 导致 onPrepared 永远不会被调用！
+                    if (currentAssetPath != null && currentAssetPath!!.isNotEmpty()) {
+                        // Assets 数据源：必须手动处理文件复制 + prepare
+                        // 不能直接调用 setAssetSource()，因为它内部会调用 doSetSource()
+                        // 而 doSetSource() 会检查 isSurfaceReady，导致 prepare 被缓存不执行
+                        log("IjkVideoPlayer", "safeSwitchSurface [方案B]: 使用 setAssetSource (assets)")
+
+                        try {
+                            val cacheFile = File(context.cacheDir, "asset_video_${currentAssetPath!!.hashCode()}")
+
+                            // 如果缓存文件不存在，从 assets 重新复制
+                            if (!cacheFile.exists()) {
+                                context.assets.open(currentAssetPath!!).use { input ->
+                                    cacheFile.outputStream().use { output ->
+                                        input.copyTo(output)
+                                    }
+                                }
+                                log("IjkVideoPlayer", "safeSwitchSurface [方案B]: 已重新复制 asset 文件")
+                            }
+
+                            // 直接使用 doPrepareInternal，跳过 isSurfaceReady 检查
+                            val cacheUri = Uri.fromFile(cacheFile)
+                            currentUri = cacheUri
+                            doPrepareInternal(cacheUri, currentHeaders)
+
+                        } catch (e: Exception) {
+                            log("IjkVideoPlayer", "safeSwitchSurface [方案B]: Asset 处理失败 - ${e.message}")
+                            switchSurfacePendingPosition = -1L
+                            _state = PlayerState.ERROR
+                            listener?.onError(-1, 0)
+                        }
+
+                    } else if (currentUri != null) {
+                        // 普通 URI（HTTP/本地文件/Content Provider）：直接 prepare
+                        // 跳过 isSurfaceReady 检查，确保立即触发 onPrepared
+                        log("IjkVideoPlayer", "safeSwitchSurface [方案B]: 使用 doPrepareInternal (uri=$currentUri)")
+                        doPrepareInternal(currentUri!!, currentHeaders)
+                    }
 
                     // 注意：
                     // - 如果 switchSurfacePendingPosition >= 0（之前在播放），
@@ -700,8 +756,21 @@ class IjkVideoPlayer {
                 switchSurfacePendingPosition = -1L  // 重置
                 _state = PlayerState.ERROR
                 listener?.onError(-1, 0)
+            } finally {
+                // ✨ 无论成功失败，都重置切换标志，允许下次切换
+                isSafeSwitching = false
+                log("IjkVideoPlayer", "safeSwitchSurface [方案B]: 切换流程结束")
             }
         }, delayMs)
+
+        } catch (e: Exception) {
+            // 外层异常：在 stop() 或保存状态时出错
+            log("IjkVideoPlayer", "safeSwitchSurface [方案B]: 准备阶段失败 - ${e.message}")
+            isSafeSwitching = false  // 重置标志
+            switchSurfacePendingPosition = -1L
+            _state = PlayerState.ERROR
+            listener?.onError(-1, 0)
+        }
     }
 
     /**
@@ -1384,8 +1453,30 @@ class IjkVideoPlayer {
                             // 有 duration → 已准备就绪
                             log("IjkVideoPlayer", "PREPARING Monitor: duration=$dur, position=$pos")
 
+                            // ✨ 关键修复：检查是否需要自动恢复播放（Surface 切换后）
+                            // 原因：IJKPlayer 可能不触发 onPrepared 回调，
+                            // 此时 PREPARING Monitor 会代替 onPrepared 完成状态转换，
+                            // 因此必须在这里也处理位置恢复逻辑！
+                            val shouldAutoResume = switchSurfacePendingPosition >= 0
+                            val savedPos = switchSurfacePendingPosition
+                            switchSurfacePendingPosition = -1L  // 重置标记
+
                             // 通知准备完成（如果还没通知过）
                             listener?.onPrepared(dur)
+
+                            log("IjkVideoPlayer", "PREPARING Monitor: autoResume=$shouldAutoResume" +
+                                    (if (shouldAutoResume) ", savedPosition=${formatTime(savedPos)}" else ""))
+
+                            // 如果是 Surface 切换后的 reprepare，自动恢复播放位置
+                            if (shouldAutoResume && savedPos >= 0) {
+                                log("IjkVideoPlayer", "PREPARING Monitor [方案B]: 自动恢复播放 " +
+                                        "(position=${formatTime(savedPos)})")
+                                // 注意：此时播放器已经在播放（isPlaying=true）
+                                // 必须立即 seekTo 到保存的位置
+                                seekToInternal(savedPos)
+                                log("IjkVideoPlayer", "PREPARING Monitor [方案B]: 已恢复播放 " +
+                                        "(${formatTime(savedPos)})")
+                            }
 
                             // 更新为正确状态
                             _state = PlayerState.PLAYING
