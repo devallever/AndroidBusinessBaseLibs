@@ -65,6 +65,7 @@ import java.io.File
  * player.release()
  * ```
  */
+@Deprecated("使用 Media3Player")
 class ExoVideoPlayer {
 
     // ==================== 内部组件 ====================

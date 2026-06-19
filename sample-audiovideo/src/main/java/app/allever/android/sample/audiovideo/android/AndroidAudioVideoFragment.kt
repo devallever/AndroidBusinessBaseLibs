@@ -28,7 +28,7 @@ class AndroidAudioVideoFragment: ListFragment<FragmentListBinding, ListViewModel
             //TextureViewPlayer
             FragmentActivity.start<AndroidTexturePlayerSampleFragment>(it.title)
         },
-        TextClickItem("Media3播放视频") {
+        TextClickItem("Media3Player(ExoPlayer)播放视频") {
             //Media3Player
             FragmentActivity.start<AndroidMedia3PlayerSampleFragment>(it.title)
         },

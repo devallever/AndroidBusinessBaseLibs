@@ -34,6 +34,7 @@ import java.util.Locale
  * - 自动重试机制
  * - 状态机变化监听
  */
+@Deprecated("请使用 Media3Player")
 class ExoVideoPlayerSampleFragment :
     BaseFragment<FragmentSdkExoVideoPlayerSampleBinding, BaseViewModel>() {
 

@@ -12,7 +12,7 @@ class SDKAudioVideoFragment: ListFragment<FragmentListBinding, ListViewModel, Te
     override fun getAdapter(): BaseQuickAdapter<TextClickItem, *> = TextClickAdapter()
 
     override fun getList(): MutableList<TextClickItem> = mutableListOf(
-        TextClickItem("ExoPlayer") {
+        TextClickItem("ExoPlayer(过时，推荐使用Media3Player)") {
             FragmentActivity.start<ExoVideoPlayerSampleFragment>(it.title)
         },
         TextClickItem("ijkPlayer") {

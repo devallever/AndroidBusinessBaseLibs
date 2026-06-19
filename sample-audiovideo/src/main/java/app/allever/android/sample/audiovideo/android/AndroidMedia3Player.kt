@@ -1,7 +1,12 @@
 package app.allever.android.sample.audiovideo.android
 
 import android.content.Context
+import android.graphics.SurfaceTexture
 import android.net.Uri
+import android.view.Surface
+import android.view.SurfaceHolder
+import android.view.SurfaceView
+import android.view.TextureView
 import androidx.annotation.OptIn
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
@@ -24,34 +29,45 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.io.File
 
 /**
  * Android Media3 (ExoPlayer) 视频播放封装
  *
  * 职责：
- * - 封装 ExoPlayer 完整生命周期
+ * - 封装 ExoPlayer 完整生命周期（创建 → 准备 → 播放 → 暂停 → 停止 → 释放）
  * - 管理 ExoPlayer 状态与 [PlayerState] 的映射
- * - 处理 PlayerView 绑定/解绑（可选）
+ * - 支持三种 Surface 绑定模式：PlayerView（推荐）/ SurfaceView / TextureView
+ * - 处理 Surface 异步就绪的 PendingPrepare 机制
  * - 提供进度追踪、变速、音量、循环等能力
  * - 通过 [IVideoPlayerListener] 回调所有事件
  *
- * PlayerView 由外部传入（可选），本类不强制创建 UI 组件。
- * 不传入 PlayerView 时可纯音频模式使用。
+ * 设计原则：
+ * - **逻辑与 UI 分离**：本类不创建 UI 组件，Surface 由外部传入
+ * - **灵活绑定**：支持多种渲染方式，对外 API 统一
+ * - **状态驱动**：所有操作基于状态机，确保线程安全
  *
  * 使用示例：
  * ```kotlin
+ * // 示例 1：使用 PlayerView（推荐）
  * val player = AndroidMedia3Player()
- *
- * // 可选：绑定 PlayerView 用于视频渲染
  * player.attach(playerView)
- *
- * player.listener = object : IVideoPlayerListener {
+ * player.setListener(object : IVideoPlayerListener {
  *     override fun onPrepared(durationMs: Long) { player.play() }
- *     override fun onVideoSizeChanged(w, h) { /* 调整视图 */ }
- * }
- *
+ * })
  * player.setSource("https://example.com/video.mp4")
- * // 或 player.setAssetSource("video/test.mp4")
+ *
+ * // 示例 2：使用 SurfaceView
+ * val player = AndroidMedia3Player()
+ * player.attach(surfaceView)
+ * player.setSource("/sdcard/video.mp4")
+ * player.play()
+ *
+ * // 示例 3：使用 TextureView
+ * val player = AndroidMedia3Player()
+ * player.attach(textureView)
+ * player.setSource("https://example.com/video.mp4")
+ * player.play()
  *
  * // 页面销毁时
  * player.release()
@@ -59,11 +75,38 @@ import kotlinx.coroutines.launch
  */
 class AndroidMedia3Player {
 
-    private var playerView: PlayerView? = null
+    // ==================== 内部组件 ====================
+
+    /** ExoPlayer 实例 */
     private var exoPlayer: ExoPlayer? = null
+
+    /** 监听器回调 */
     private var listener: IVideoPlayerListener? = null
 
-    // ==================== 状态 ====================
+    // ==================== Surface 绑定（三种模式）====================
+
+    /** PlayerView 绑定（推荐方式）*/
+    private var playerView: PlayerView? = null
+
+    /** SurfaceView 绑定（兼容方式）*/
+    private var surfaceView: SurfaceView? = null
+
+    /** TextureView 绑定（高级方式）*/
+    private var textureView: TextureView? = null
+
+    /** 当前绑定的 Surface 类型 */
+    private enum class SurfaceType { NONE, PLAYER_VIEW, SURFACE_VIEW, TEXTURE_VIEW }
+    private var currentSurfaceType: SurfaceType = SurfaceType.NONE
+
+    /** Surface 是否已就绪（可用于渲染）*/
+    @Volatile
+    private var isSurfaceReady: Boolean = false
+
+    /** 是否正在执行 seek 操作（防止 seek 过程中误停进度追踪）*/
+    @Volatile
+    private var isSeeking: Boolean = false
+
+    // ==================== 状态管理 ====================
 
     private var _state: PlayerState = PlayerState.IDLE
         set(value) {
@@ -82,20 +125,20 @@ class AndroidMedia3Player {
     val isPlaying: Boolean
         get() = _state == PlayerState.PLAYING && exoPlayer?.isPlaying == true
 
-    /** 当前位置（毫秒） */
+    /** 当前位置（毫秒）*/
     val currentPosition: Long
         get() = try { exoPlayer?.currentPosition ?: 0L } catch (_: Exception) { 0L }
 
     /** 总时长（毫秒），PREPARED 后可用 */
     val duration: Long
         get() = try {
-            val dur = exoPlayer?.duration?:0
+            val dur = exoPlayer?.duration ?: 0
             if (dur == C.TIME_UNSET || dur < 0) 0L else dur
         } catch (_: Exception) { 0L }
 
-    // ==================== 配置 ====================
+    // ==================== 配置属性 ====================
 
-    /** 循环模式 */
+    /** 循环模式，默认不循环 */
     var loopMode: LoopMode = LoopMode.NONE
         set(value) {
             field = value
@@ -123,93 +166,304 @@ class AndroidMedia3Player {
         }
 
     /**
-     * PlayerView 缩放模式（默认 FIT_CENTER）
+     * 视频缩放模式（默认 FIT_CENTER）
      *
-     * 通过 PlayerView 的 resizeMode 属性控制视频显示方式：
-     * - FIT_CENTER: 保持比例，完整显示（可能有黑边）
-     * - CROP_CENTER: 保持比例，填满容器（可能裁剪边缘）
-     * - STRETCH: 拉伸填满容器（可能变形）
+     * 对于 PlayerView：通过 resizeMode 属性控制（立即生效，无需等待视频尺寸）
+     * 对于 SurfaceView/TextureView：通过调整布局尺寸实现（需视频尺寸就绪后生效）
      */
     var videoScaleMode: VideoScaleMode = VideoScaleMode.FIT_CENTER
         set(value) {
             field = value
-            applyVideoScaleMode()
+
+            // 根据 Surface 类型选择不同的应用策略
+            when (currentSurfaceType) {
+                SurfaceType.PLAYER_VIEW -> {
+                    // PlayerView 通过 resizeMode 立即生效，不依赖视频尺寸
+                    applyVideoScaleMode()
+                }
+                SurfaceType.SURFACE_VIEW,
+                SurfaceType.TEXTURE_VIEW -> {
+                    // SurfaceView/TextureView 需要视频尺寸才能正确计算布局
+                    if (videoWidth > 0 && videoHeight > 0) {
+                        adjustSurfaceLayout()
+                    } else {
+                        // 视频尺寸未知，等 onVideoSizeChanged 回调时自动调整
+                        log("Media3Player", "videoScaleMode changed to $value, but video size unknown, will adjust later")
+                    }
+                }
+                SurfaceType.NONE -> {
+                    // 未绑定 Surface，仅保存值，等 attach 后自动应用
+                }
+            }
         }
 
     // ==================== 内部状态 ====================
 
+    /** 进度追踪协程 */
     private var progressJob: Job? = null
+
+    /** 当前数据源 URI */
     private var currentUri: Uri? = null
+
+    /** 当前数据源 HTTP 头 */
     private var currentHeaders: Map<String, String>? = null
+
+    /** 剩余重试次数 */
     private var retryLeft: Int = 0
 
-    /** 是否正在执行 seek 操作（用于防止 seek 过程中误停进度追踪） */
-    @Volatile
-    private var isSeeking: Boolean = false
+    /** 视频原始宽度（像素）*/
+    private var videoWidth: Int = 0
 
-    // ==================== 绑定 & 解绑 ====================
+    /** 视频原始高度（像素）*/
+    private var videoHeight: Int = 0
 
     /**
-     * 绑定 PlayerView（可选，不绑定则纯音频模式）
+     * 待执行的 prepare 参数（当 Surface 未就绪时缓存 setSource 调用）
      *
-     * 必须在播放前调用一次。
-     *
-     * @param view 外部创建的 PlayerView 实例
+     * 使用场景：
+     * 1. 用户调用 attach(surfaceView) → Surface 还在异步创建中
+     * 2. 用户立即调用 setSource(url)
+     * 3. 此时 Surface 未就绪 → 存入 pendingPrepare
+     * 4. surfaceCreated / onSurfaceReady 回调触发 → 自动执行缓存的 prepare
      */
-    fun attach(view: PlayerView) {
-        this.playerView = view
+    private data class PendingPrepare(
+        val uri: Uri,
+        val headers: Map<String, String>?,
+        val assetPath: String?
+    )
+
+    private var pendingPrepare: PendingPrepare? = null
+
+    // ==================== Surface 绑定 API ====================
+
+    /**
+     * 绑定 PlayerView（推荐方式）
+     *
+     * PlayerView 是 ExoPlayer 官方推荐的视图组件，
+     * 自动管理 Surface 生命周期，无需手动处理。
+     *
+     * @param playerView 外部创建的 PlayerView 实例
+     */
+    fun attach(playerView: PlayerView) {
+        detach()
+
+        this.playerView = playerView
+        this.currentSurfaceType = SurfaceType.PLAYER_VIEW
+        this.isSurfaceReady = true  // PlayerView 的 Surface 立即可用
+
+        log("Media3Player", "attach PlayerView")
+
         initExoPlayer()
+        bindToPlayerView()
+
+        // 如果有待执行的 prepare，立即执行
+        pendingPrepare?.let {
+            executePendingPrepare()
+        }
     }
 
     /**
-     * 解绑 PlayerView（页面 onPause/onDestroyView 时调用，不释放内部资源）
+     * 绑定 SurfaceView（兼容方式）
+     *
+     * 会设置 SurfaceHolder.Callback 监听 Surface 创建/销毁/变化。
+     * Surface 可能需要时间才能就绪，此时会使用 PendingPrepare 机制缓存操作。
+     *
+     * @param surfaceView 外部创建的 SurfaceView 实例
+     */
+    fun attach(surfaceView: SurfaceView) {
+        detach()
+
+        this.surfaceView = surfaceView
+        this.currentSurfaceType = SurfaceType.SURFACE_VIEW
+        this.isSurfaceReady = false  // Surface 需要异步创建
+
+        log("Media3Player", "attach SurfaceView (waiting for surface)")
+
+        initExoPlayer()
+        setupSurfaceViewCallback()
+
+        // 检查 Surface 是否已经可用（某些情况下立即可用）
+        if (surfaceView.holder.surface.isValid) {
+            onSurfaceReady(surfaceView.holder.surface)
+        }
+    }
+
+    /**
+     * 绑定 TextureView（高级方式）
+     *
+     * 会设置 SurfaceTextureListener 监听 Surface 可用/尺寸变化/销毁。
+     * TextureView 的 Surface 通常比 SurfaceView 更快可用。
+     *
+     * @param textureView 外部创建的 TextureView 实例
+     */
+    fun attach(textureView: TextureView) {
+        detach()
+
+        this.textureView = textureView
+        this.currentSurfaceType = SurfaceType.TEXTURE_VIEW
+        this.isSurfaceReady = false  // Surface 需要异步准备
+
+        log("Media3Player", "attach TextureView (waiting for surface)")
+
+        initExoPlayer()
+        setupTextureViewCallback()
+
+        // 检查 Surface 是否已经可用
+        if (textureView.isAvailable) {
+            onSurfaceReady(Surface(textureView.surfaceTexture))
+        }
+    }
+
+    /**
+     * 解绑当前 Surface（页面 onPause/onDestroyView 时调用）
      *
      * 调用后可通过 [attach] 重新绑定继续使用。
+     * 不释放内部 ExoPlayer 和其他资源。
      */
     fun detach() {
-        stopProgressTracking()
-        playerView?.player = null
-        playerView = null
+        when (currentSurfaceType) {
+            SurfaceType.PLAYER_VIEW -> {
+                playerView?.player = null
+                playerView = null
+                log("Media3Player", "detach PlayerView")
+            }
+            SurfaceType.SURFACE_VIEW -> {
+                surfaceView?.holder?.removeCallback(surfaceHolderCallback)
+                surfaceView = null
+                isSurfaceReady = false
+                log("Media3Player", "detach SurfaceView")
+            }
+            SurfaceType.TEXTURE_VIEW -> {
+                textureView?.surfaceTextureListener = null
+                textureView = null
+                isSurfaceReady = false
+                log("Media3Player", "detach TextureView")
+            }
+            SurfaceType.NONE -> {}
+        }
+
+        currentSurfaceType = SurfaceType.NONE
     }
 
-    // ==================== 数据源 & 播放控制 ====================
+    // ==================== 数据源设置 ====================
+
+    /**
+     * 设置数据源并开始准备（不自动播放）
+     *
+     * 支持的数据源类型：
+     * - HTTP/HTTPS URL：在线视频
+     * - file:// 路径：本地文件
+     * - content:// URI：Content Provider
+     * - file:///android_asset/filename.mp4：Assets 目录（自动复制到缓存）
+     *
+     * 准备完成后回调 [IVideoPlayerListener.onPrepared]，此时需调用 [play] 开始播放。
+     *
+     * @param url 数据源地址
+     */
+    fun setSource(url: String) {
+        val uri = Uri.parse(url)
+
+        // 处理 Assets 文件（需特殊处理）
+        if (uri.scheme == "file" && uri.path?.contains("/android_asset/") == true) {
+            val assetPath = uri.path?.substringAfter("/android_asset/") ?: ""
+            setAssetSource(assetPath)
+            return
+        }
+
+        doSetSource(uri, null, null)
+    }
 
     /**
      * 设置视频数据源并准备（不自动播放）
      *
-     * 支持 http/https/content/file/asset 协议
-     * 准备完成后回调 [IPlayerListener.onPrepared]，此时需调用 [play] 开始播放
+     * 支持的数据源类型：
+     * - HTTP/HTTPS URI：在线视频（支持自定义请求头，如 Cookie、Referer 等）
+     * - file:// URI：本地文件
+     * - content:// URI：Content Provider
      *
-     * @param url 支持：
-     * - http/https URL
-     * - content:// URI
-     * - file:// 路径
-     * - file:///android_asset/filename.mp4 (assets 目录)
+     * 准备完成后回调 [IVideoPlayerListener.onPrepared]，此时需调用 [play] 开始播放。
+     *
+     * @param uri 视频 URI（支持 http/https/file/content 协议）
+     * @param headers HTTP 请求头（仅对 http(s) 协议生效，可为 null）
      */
-    fun setSource(url: String) {
-        val uri = Uri.parse(url)
-        doSetSource(uri, null)
+    fun setSource(uri: Uri, headers: Map<String, String>? = null) {
+        // 处理 Assets 文件（需特殊处理）
+        if (uri.scheme == "file" && uri.path?.contains("/android_asset/") == true) {
+            val assetPath = uri.path?.substringAfter("/android_asset/") ?: ""
+            setAssetSource(assetPath)
+            return
+        }
+
+        doSetSource(uri, headers, null)
     }
 
     /**
      * 设置 assets 目录下的视频文件并准备（不自动播放）
      *
-     * @param assetPath assets 目录下的相对路径，如 "video/test.mp4"
+     * 由于 ExoPlayer 无法直接读取 Assets 中的文件，
+     * 此方法会将文件复制到内部缓存目录后再加载。
+     *
+     * @param path Assets 中的相对路径（如 "video/test.mp4"）
      */
-    fun setAssetSource(assetPath: String) {
-        doSetSource(Uri.parse("asset:///$assetPath"), null)
+    fun setAssetSource(path: String) {
+        try {
+            val context = App.context
+            val cacheFile = File(context.cacheDir, "asset_video_${path.hashCode()}")
+
+            // 如果缓存文件不存在或 Assets 文件更新了，重新复制
+            if (!cacheFile.exists()) {
+                context.assets.open(path).use { input ->
+                    cacheFile.outputStream().use { output ->
+                        input.copyTo(output)
+                    }
+                }
+                log("Media3Player", "copied asset to cache: ${cacheFile.absolutePath}")
+            }
+
+            doSetSource(Uri.fromFile(cacheFile), null, path)
+        } catch (e: Exception) {
+            log("Media3Player", "setAssetSource error: ${e.message}")
+            _state = PlayerState.ERROR
+            listener?.onError(-1, 0)
+        }
     }
 
     /**
-     * 设置视频数据源并准备（不自动播放）
-     *
-     * @param uri 视频 URI
-     * @param headers HTTP 请求头（仅对 http(s) 生效）
+     * 执行实际的 setSource 操作
      */
-    fun setSource(uri: Uri, headers: Map<String, String>? = null) {
+    private fun doSetSource(uri: Uri, headers: Map<String, String>?, assetPath: String?) {
         if (_state == PlayerState.RELEASED) return
-        doSetSource(uri, headers)
+
+        // 停止当前的进度追踪（切换数据源前必须清理）
+        stopProgressTracking()
+
+        currentUri = uri
+        currentHeaders = headers
+        retryLeft = retryCount
+
+        // 如果 Surface 未就绪，缓存待执行的 prepare
+        if (!isSurfaceReady && currentSurfaceType != SurfaceType.NONE) {
+            log("Media3Player", "Surface not ready, caching prepare request")
+            pendingPrepare = PendingPrepare(uri, headers, assetPath)
+            _state = PlayerState.PREPARING
+            return
+        }
+
+        doPrepareInternal(uri, headers)
     }
+
+    /**
+     * 执行缓存的 prepare 操作
+     */
+    private fun executePendingPrepare() {
+        pendingPrepare?.let { pending ->
+            log("Media3Player", "executing pending prepare: ${pending.uri}")
+            pendingPrepare = null
+            doPrepareInternal(pending.uri, pending.headers)
+        }
+    }
+
+    // ==================== 播放控制 ====================
 
     /**
      * 开始播放 或 从暂停恢复播放
@@ -224,41 +478,43 @@ class AndroidMedia3Player {
                 exoPlayer?.playWhenReady = true
                 _state = PlayerState.PLAYING
                 startProgressTracking()
+                log("Media3Player", "play() -> PLAYING (from ${_state})")
             }
             PlayerState.PAUSED -> {
                 exoPlayer?.playWhenReady = true
                 _state = PlayerState.PLAYING
                 startProgressTracking()
+                log("Media3Player", "play() -> PLAYING (from PAUSED)")
             }
-            else -> {}
+            else -> {
+                log("Media3Player", "play() ignored (current state: $_state)")
+            }
         }
     }
 
     /**
-     * 暂停
+     * 暂停播放
      */
     fun pause() {
-        safeAction(PlayerState.PLAYING) {
+        if (_state == PlayerState.PLAYING) {
             exoPlayer?.playWhenReady = false
             _state = PlayerState.PAUSED
             stopProgressTracking()
+            log("Media3Player", "pause() -> PAUSED")
         }
     }
 
     /**
-     * 停止（释放后需重新 setSource）
+     * 停止播放（保留资源，可重新 prepare）
      */
     fun stop() {
-        safeAction(
-            PlayerState.PLAYING,
-            PlayerState.PAUSED,
-            PlayerState.PREPARED,
-            PlayerState.COMPLETED,
-        ) {
-            stopProgressTracking()
-            exoPlayer?.stop()
-            _state = PlayerState.STOPPED
-        }
+        if (_state == PlayerState.RELEASED || _state == PlayerState.IDLE) return
+
+        stopProgressTracking()
+
+        exoPlayer?.stop()
+        _state = PlayerState.STOPPED
+        log("Media3Player", "stop() -> STOPPED")
     }
 
     /**
@@ -286,15 +542,6 @@ class AndroidMedia3Player {
         }
     }
 
-    // ==================== 监听器 ====================
-
-    /**
-     * 设置事件监听器
-     */
-    fun setListener(listener: IVideoPlayerListener?) {
-        this.listener = listener
-    }
-
     // ==================== 生命周期 ====================
 
     /**
@@ -305,110 +552,263 @@ class AndroidMedia3Player {
         releaseExoPlayer()
         currentUri = null
         currentHeaders = null
+        pendingPrepare = null
         _state = PlayerState.RELEASED
+        log("Media3Player", "release() -> RELEASED")
     }
 
-    // ==================== 内部：ExoPlayer 初始化 ====================
+    // ==================== 监听器设置 ====================
 
+    /**
+     * 设置播放事件监听器
+     */
+    fun setListener(listener: IVideoPlayerListener?) {
+        this.listener = listener
+    }
+
+    // ==================== 私有方法：初始化 ====================
+
+    /**
+     * 初始化 ExoPlayer 实例
+     */
     private fun initExoPlayer() {
-        releaseExoPlayer()
+        if (exoPlayer != null) return
 
-        val context: Context = App.context.applicationContext
+        val context = App.context.applicationContext
         exoPlayer = ExoPlayer.Builder(context).build().apply {
-            // 绑定到 PlayerView
-            playerView?.player = this@apply
-
-            // 添加监听器
             addListener(exoPlayerListener)
-
             // 应用初始配置
             applyLoopMode()
             applySpeed()
-            applyVideoScaleMode()
             this@AndroidMedia3Player.volume.let { vol ->
-                if (vol != 1.0f) this@apply.volume = vol
+                if (vol != 1.0f) this.volume = vol
             }
+        }
+
+        log("Media3Player", "ExoPlayer initialized")
+    }
+
+    /**
+     * 将 ExoPlayer 绑定到 PlayerView
+     */
+    private fun bindToPlayerView() {
+        playerView?.player = exoPlayer
+        log("Media3Player", "bound to PlayerView")
+    }
+
+    /**
+     * 设置 SurfaceView 的 SurfaceHolder 回调
+     */
+    private fun setupSurfaceViewCallback() {
+        surfaceView?.holder?.addCallback(surfaceHolderCallback)
+    }
+
+    /**
+     * SurfaceView 的 SurfaceHolder 回调
+     */
+    private val surfaceHolderCallback = object : SurfaceHolder.Callback {
+        override fun surfaceCreated(holder: SurfaceHolder) {
+            log("Media3Player", "surfaceCreated")
+            onSurfaceReady(holder.surface)
+        }
+
+        override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+            log("Media3Player", "surfaceChanged: ${width}x${height}")
+        }
+
+        override fun surfaceDestroyed(holder: SurfaceHolder) {
+            log("Media3Player", "surfaceDestroyed")
+            isSurfaceReady = false
         }
     }
 
-    private fun releaseExoPlayer() {
+    /**
+     * 设置 TextureView 的 SurfaceTextureListener 回调
+     */
+    private fun setupTextureViewCallback() {
+        textureView?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
+            override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
+                log("Media3Player", "onSurfaceTextureAvailable: ${width}x${height}")
+                onSurfaceReady(Surface(surface))
+            }
+
+            override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {
+                log("Media3Player", "onSurfaceTextureSizeChanged: ${width}x${height}")
+            }
+
+            override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
+                log("Media3Player", "onSurfaceTextureDestroyed")
+                isSurfaceReady = false
+                return true
+            }
+
+            override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {}
+        }
+    }
+
+    /**
+     * Surface 就绪处理（统一入口）
+     */
+    private fun onSurfaceReady(surface: Surface) {
+        isSurfaceReady = true
+        log("Media3Player", "Surface ready")
+
+        // 将 Surface 设置给 ExoPlayer
+        exoPlayer?.setVideoSurface(surface)
+
+        // 如果有待执行的 prepare，立即执行
+        pendingPrepare?.let {
+            executePendingPrepare()
+        }
+    }
+
+    // ==================== 私有方法：准备流程 ====================
+
+    /**
+     * 执行实际的 prepare 操作
+     */
+    private fun doPrepareInternal(uri: Uri?, headers: Map<String, String>?) {
+        val srcUri = uri ?: return
+
+        // 确保 ExoPlayer 存在
+        if (exoPlayer == null) {
+            initExoPlayer()
+        }
+
         try {
-            exoPlayer?.removeListener(exoPlayerListener)
-            exoPlayer?.release()
-        } catch (_: Exception) {}
+            val mediaItem = MediaItem.Builder().setUri(srcUri).build()
+
+            exoPlayer?.apply {
+                setMediaItem(mediaItem)
+                prepare()
+            }
+
+            // 切换到 PREPARING 状态（确保进度追踪已停止）
+            _state = PlayerState.PREPARING
+            log("Media3Player", "state -> PREPARING (prepare: $srcUri)")
+        } catch (e: Exception) {
+            log("Media3Player", "prepare error: ${e.message}")
+            handlePrepareError(e)
+        }
+    }
+
+    /**
+     * 处理准备错误（可能触发重试）
+     */
+    private fun handlePrepareError(e: Exception) {
+        if (retryLeft > 0) {
+            retryLeft--
+            log("Media3Player", "retrying... ($retryLeft left)")
+            App.mainHandler.postDelayed({
+                doPrepareInternal(currentUri, currentHeaders)
+            }, 1000)
+        } else {
+            _state = PlayerState.ERROR
+            listener?.onError(-1, 0)
+        }
+    }
+
+    // ==================== 私有方法：配置应用 ====================
+
+    /**
+     * 应用循环模式到 ExoPlayer
+     */
+    private fun applyLoopMode() {
+        val repeatMode = when (loopMode) {
+            LoopMode.SINGLE -> Player.REPEAT_MODE_ONE
+            LoopMode.ALL -> Player.REPEAT_MODE_ALL
+            else -> Player.REPEAT_MODE_OFF
+        }
+        exoPlayer?.repeatMode = repeatMode
+    }
+
+    /**
+     * 应用变速到 ExoPlayer
+     */
+    private fun applySpeed() {
+        try {
+            exoPlayer?.setPlaybackParameters(
+                androidx.media3.common.PlaybackParameters(speed)
+            )
+        } catch (e: Exception) {
+            log("Media3Player", "setSpeed error: ${e.message}")
+        }
+    }
+
+    /**
+     * 应用视频缩放模式（PlayerView 版本）
+     *
+     * 通过 PlayerView 的 resizeMode 属性控制：
+     * - FIT_CENTER → RESIZE_MODE_FIT（保持比例，完整显示）
+     * - CROP_CENTER → RESIZE_MODE_ZOOM（保持比例，填满容器）
+     * - STRETCH → RESIZE_MODE_FILL（拉伸填满）
+     */
+    @OptIn(UnstableApi::class)
+    private fun applyVideoScaleMode() {
+        playerView?.resizeMode = when (videoScaleMode) {
+            VideoScaleMode.FIT_CENTER -> androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_FIT
+            VideoScaleMode.CROP_CENTER -> androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+            VideoScaleMode.STRETCH -> androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_FILL
+        }
+    }
+
+    // ==================== 私有方法：资源释放 ====================
+
+    /**
+     * 释放 ExoPlayer 实例
+     */
+    private fun releaseExoPlayer() {
+        stopProgressTracking()
+        exoPlayer?.apply {
+            removeListener(exoPlayerListener)
+            release()
+        }
         exoPlayer = null
+        log("Media3Player", "ExoPlayer released")
     }
 
     // ==================== 内部：ExoPlayer 监听器 ====================
 
+    /**
+     * ExoPlayer 的事件监听器
+     *
+     * 注意：此监听器的回调可能在非主线程触发，
+     * 所有 UI 相关操作需切换到主线程。
+     */
     private val exoPlayerListener = object : Player.Listener {
 
         override fun onPlaybackStateChanged(playbackState: Int) {
-            when (playbackState) {
-                Player.STATE_IDLE -> {
-                    // IDLE 状态：可能是停止或错误后的状态
-                    if (_state != PlayerState.STOPPED && _state != PlayerState.ERROR && _state != PlayerState.IDLE) {
-                        _state = PlayerState.IDLE
+            App.mainHandler.post {
+                when (playbackState) {
+                    Player.STATE_READY -> {
+                        if (_state != PlayerState.PREPARING) return@post
+                        val dur = duration
+                        _state = PlayerState.PREPARED
+                        listener?.onPrepared(dur)
+                        log("Media3Player", "onPlaybackStateChanged: READY (duration=${dur}ms)")
                     }
-                }
-                Player.STATE_BUFFERING -> {
-                    when (_state) {
-                        PlayerState.IDLE, PlayerState.STOPPED -> {
-                            // 首次加载中 → PREPARING
-                            _state = PlayerState.PREPARING
-                        }
-                        else -> {
-                            // 播放过程中的缓冲，保持当前状态不变
-                            listener?.onBufferingUpdate(getBufferedPercent())
-                        }
+                    Player.STATE_BUFFERING -> {
+                        // 缓冲中，保持当前状态不变
+                        log("Media3Player", "onPlaybackStateChanged: BUFFERING")
                     }
-                }
-                Player.STATE_READY -> {
-                    if (exoPlayer?.isPlaying == true) {
-                        if (_state != PlayerState.PLAYING) {
-                            _state = PlayerState.PLAYING
-                            startProgressTracking()
-                        }
-                    } else {
-                        // READY 但未播放：首次 prepared 或暂停状态
-                        if (_state == PlayerState.PREPARING || _state == PlayerState.IDLE) {
-                            // 首次准备好
-                            val dur = duration
-                            _state = PlayerState.PREPARED
-                            listener?.onPrepared(dur)
-                        } else if (_state == PlayerState.PLAYING) {
-                            // 从 playing 变为 ready（缓冲结束），保持 playing
-                        } else if (_state != PlayerState.PAUSED && _state != PlayerState.PREPARED) {
-                            _state = PlayerState.PREPARED
+                    Player.STATE_ENDED -> {
+                        if (_state == PlayerState.PLAYING) {
+                            _state = PlayerState.COMPLETED
+                            stopProgressTracking()
+                            listener?.onComplete()
+                            log("Media3Player", "onPlaybackStateChanged: ENDED")
                         }
                     }
-                }
-                Player.STATE_ENDED -> {
-                    stopProgressTracking()
-                    when (loopMode) {
-                        LoopMode.SINGLE -> {
-                            // SINGLE 模式由 repeatMode=ONE 自动处理，不应到达这里
-                            // 兜底处理
-                            _state = PlayerState.COMPLETED
-                            listener?.onComplete()
-                        }
-                        LoopMode.ALL -> {
-                            _state = PlayerState.COMPLETED
-                            listener?.onComplete()
-                        }
-                        LoopMode.NONE -> {
-                            _state = PlayerState.COMPLETED
-                            listener?.onComplete()
-                        }
+                    Player.STATE_IDLE -> {
+                        log("Media3Player", "onPlaybackStateChanged: IDLE")
                     }
                 }
             }
         }
 
         override fun onIsPlayingChanged(isPlaying: Boolean) {
-            // 注意：此回调在 ExoPlayer 的播放线程，需切换到主线程
             App.mainHandler.post {
-                // 如果正在 seek 操作中，忽略临时的 isPlaying 变化（seek 过程中会短暂暂停）
+                // 如果正在 seek 操作中，忽略临时的 isPlaying 变化
                 if (isSeeking) {
                     log("Media3Player", "onIsPlayingChanged ignored during seeking: isPlaying=$isPlaying")
                     return@post
@@ -429,20 +829,36 @@ class AndroidMedia3Player {
         }
 
         override fun onPlayerError(error: PlaybackException) {
-            stopProgressTracking()
-            _state = PlayerState.ERROR
+            App.mainHandler.post {
+                log("Media3Player", "onPlayerError: ${error.message}")
 
-            val handled = listener?.onError(error.errorCode, 0) ?: false
-            if (!handled && retryLeft > 0) {
-                retryLeft--
-                log("Media3Player", "auto retry, left=$retryLeft")
-                postDelayed({ doPrepareInternal(currentUri, currentHeaders) }, 500)
+                if (_state == PlayerState.PREPARING) {
+                    // 准备阶段出错，尝试重试
+                    handlePrepareError(Exception(error))
+                } else {
+                    // 播放阶段出错
+                    _state = PlayerState.ERROR
+                    listener?.onError(error.errorCode, 0)
+                }
             }
         }
 
         override fun onVideoSizeChanged(videoSize: VideoSize) {
-            if (videoSize.width > 0 && videoSize.height > 0) {
-                listener?.onVideoSizeChanged(videoSize.width, videoSize.height)
+            App.mainHandler.post {
+                if (videoSize.width > 0 && videoSize.height > 0) {
+                    // 保存视频原始尺寸
+                    this@AndroidMedia3Player.videoWidth = videoSize.width
+                    this@AndroidMedia3Player.videoHeight = videoSize.height
+
+                    listener?.onVideoSizeChanged(videoSize.width, videoSize.height)
+                    log("Media3Player", "onVideoSizeChanged: ${videoSize.width}x${videoSize.height}")
+
+                    // 对 SurfaceView 和 TextureView 进行画面自适应
+                    if (currentSurfaceType == SurfaceType.SURFACE_VIEW ||
+                        currentSurfaceType == SurfaceType.TEXTURE_VIEW) {
+                        adjustSurfaceLayout()
+                    }
+                }
             }
         }
 
@@ -458,132 +874,213 @@ class AndroidMedia3Player {
         }
     }
 
-    // ==================== 内部：数据源设置 & 准备流程 ====================
-
-    private fun doSetSource(uri: Uri, headers: Map<String, String>?) {
-        if (_state == PlayerState.RELEASED) return
-
-        // 停止当前的进度追踪（重要：切换数据源前必须清理）
-        stopProgressTracking()
-
-        currentUri = uri
-        currentHeaders = headers
-        retryLeft = retryCount
-
-        doPrepareInternal(uri, headers)
-    }
-
-    private fun doPrepareInternal(uri: Uri?, headers: Map<String, String>?) {
-        val srcUri = uri ?: return
-
-        // 确保 ExoPlayer 存在
-        if (exoPlayer == null) {
-            initExoPlayer()
-        }
-
-        try {
-            val mediaItem = MediaItem.Builder().setUri(srcUri).build()
-
-            exoPlayer?.apply {
-                setMediaItem(mediaItem)
-                prepare()
-            }
-
-            _state = PlayerState.PREPARING
-        } catch (e: Exception) {
-            log("Media3Player", "prepare error: ${e.message}")
-            handlePrepareError(e)
-        }
-    }
-
-    private fun handlePrepareError(e: Exception) {
-        _state = PlayerState.ERROR
-        val handled = listener?.onError(-1, 0) ?: false
-        if (!handled && retryLeft > 0) {
-            retryLeft--
-            log("Media3Player", "prepare error auto retry, left=$retryLeft")
-            postDelayed({ doPrepareInternal(currentUri, currentHeaders) }, 500)
-        }
-    }
-
     // ==================== 内部：进度追踪 ====================
 
+    /**
+     * 启动进度追踪协程
+     *
+     * 定时获取 ExoPlayer 的当前位置和总时长，通过监听器回调。
+     */
     private fun startProgressTracking() {
+        // 如果已经在运行且状态正确，不需要重启
+        if (progressJob != null && progressJob!!.isActive && _state == PlayerState.PLAYING) {
+            log("Media3Player", "progress tracking already running")
+            return
+        }
+
         stopProgressTracking()
+        log("Media3Player", "starting progress tracking (state: $_state)")
+
         progressJob = CoroutineScope(Dispatchers.Main).launch {
             while (isActive && _state == PlayerState.PLAYING) {
                 val pos = try { exoPlayer?.currentPosition ?: 0L } catch (_: Exception) { 0L }
                 val dur = try {
-                    val d = exoPlayer?.duration?:0
+                    val d = exoPlayer?.duration ?: 0
                     if (d == C.TIME_UNSET || d < 0) 0L else d
                 } catch (_: Exception) { 0L }
                 listener?.onProgress(pos, dur)
                 delay(progressIntervalMs.toLong())
             }
+            log("Media3Player", "progress tracking stopped (loop exited, state: $_state)")
         }
     }
 
+    /**
+     * 停止进度追踪协程
+     */
     private fun stopProgressTracking() {
-        progressJob?.cancel()
-        progressJob = null
+        if (progressJob != null) {
+            log("Media3Player", "stopping progress tracking")
+            progressJob?.cancel()
+            progressJob = null
+        }
+    }
+
+    // ==================== 内部：SurfaceView/TextureView 画面自适应 ====================
+
+    /**
+     * 根据当前缩放模式调整 SurfaceView 或 TextureView 的布局尺寸
+     *
+     * 调用时机：
+     * - onVideoSizeChanged 回调中（获取到视频尺寸后）
+     * - videoScaleMode 属性改变时（切换缩放模式）
+     *
+     * 仅对 SurfaceView 和 TextureView 生效，PlayerView 有自己的缩放控制。
+     */
+    private fun adjustSurfaceLayout() {
+        when (currentSurfaceType) {
+            SurfaceType.SURFACE_VIEW -> adjustSurfaceViewLayout()
+            SurfaceType.TEXTURE_VIEW -> adjustTextureViewLayout()
+            else -> {}  // PlayerView 不需要手动调整
+        }
+    }
+
+    /**
+     * 调整 SurfaceView 布局尺寸以适应视频宽高比
+     *
+     * 算法根据 [videoScaleMode] 选择不同的适配策略：
+     * - FIT_CENTER：保持比例，完整显示视频（可能有黑边）
+     * - CROP_CENTER：保持比例，填满容器（可能裁剪边缘）
+     * - STRETCH：拉伸填满容器（可能变形）
+     */
+    private fun adjustSurfaceViewLayout() {
+        val sv = surfaceView ?: return
+        if (videoWidth <= 0 || videoHeight <= 0) return
+
+        val parent = sv.parent as? android.view.ViewGroup ?: return
+
+        // 使用 post 确保 View 已完成布局测量
+        App.mainHandler.post {
+            val containerWidth = parent.width
+            val containerHeight = parent.height
+            if (containerWidth <= 0 || containerHeight <= 0) return@post
+
+            val (targetWidth, targetHeight) = calculateTargetSize(
+                videoWidth, videoHeight,
+                containerWidth, containerHeight,
+                videoScaleMode
+            )
+
+            log("Media3Player", "adjustSurfaceViewLayout: " +
+                    "video=${videoWidth}x${videoHeight} " +
+                    "container=${containerWidth}x${containerHeight} " +
+                    "mode=$videoScaleMode -> " +
+                    "target=${targetWidth}x${targetHeight}")
+
+            // 更新 SurfaceView LayoutParams
+            val params = sv.layoutParams
+            params.width = targetWidth
+            params.height = targetHeight
+
+            // 居中显示（通过 gravity）
+            if (params is android.widget.FrameLayout.LayoutParams) {
+                params.gravity = android.view.Gravity.CENTER
+            }
+
+            sv.layoutParams = params
+        }
+    }
+
+    /**
+     * 调整 TextureView 布局尺寸以适应视频宽高比
+     *
+     * 与 SurfaceView 类似，但 TextureView 支持矩阵变换，
+     * 此处使用 LayoutParams 方式实现基础版自适应。
+     */
+    private fun adjustTextureViewLayout() {
+        val tv = textureView ?: return
+        if (videoWidth <= 0 || videoHeight <= 0) return
+
+        val parent = tv.parent as? android.view.ViewGroup ?: return
+
+        // 使用 post 确保 View 已完成布局测量
+        App.mainHandler.post {
+            val containerWidth = parent.width
+            val containerHeight = parent.height
+            if (containerWidth <= 0 || containerHeight <= 0) return@post
+
+            val (targetWidth, targetHeight) = calculateTargetSize(
+                videoWidth, videoHeight,
+                containerWidth, containerHeight,
+                videoScaleMode
+            )
+
+            log("Media3Player", "adjustTextureViewLayout: " +
+                    "video=${videoWidth}x${videoHeight} " +
+                    "container=${containerWidth}x${containerHeight} " +
+                    "mode=$videoScaleMode -> " +
+                    "target=${targetWidth}x${targetHeight}")
+
+            // 更新 TextureView LayoutParams
+            val params = tv.layoutParams
+            params.width = targetWidth
+            params.height = targetHeight
+
+            // 居中显示（通过 gravity）
+            if (params is android.widget.FrameLayout.LayoutParams) {
+                params.gravity = android.view.Gravity.CENTER
+            }
+
+            tv.layoutParams = params
+        }
+    }
+
+    /**
+     * 根据缩放模式计算目标尺寸
+     *
+     * @param videoWidth 视频原始宽度
+     * @param videoHeight 视频原始高度
+     * @param containerWidth 容器宽度
+     * @param containerHeight 容器高度
+     * @param scaleMode 缩放模式
+     * @return Pair<目标宽度, 目标高度>
+     */
+    private fun calculateTargetSize(
+        videoWidth: Int,
+        videoHeight: Int,
+        containerWidth: Int,
+        containerHeight: Int,
+        scaleMode: VideoScaleMode
+    ): Pair<Int, Int> {
+        val videoAspect = videoWidth.toFloat() / videoHeight.toFloat()
+        val containerAspect = containerWidth.toFloat() / containerHeight.toFloat()
+
+        return when (scaleMode) {
+            VideoScaleMode.FIT_CENTER -> {
+                // 保持比例，完整显示视频（可能有黑边）
+                if (videoAspect > containerAspect) {
+                    // 视频更宽 → 以宽度为准，高度按比例缩放
+                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
+                } else {
+                    // 视频更高 → 以高度为准，宽度按比例缩放
+                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
+                }
+            }
+            VideoScaleMode.CROP_CENTER -> {
+                // 保持比例，填满容器（可能裁剪边缘）
+                if (videoAspect > containerAspect) {
+                    // 视频更宽 → 以高度为准，宽度超出部分会被裁剪
+                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
+                } else {
+                    // 视频更高 → 以宽度为准，高度超出部分会被裁剪
+                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
+                }
+            }
+            VideoScaleMode.STRETCH -> {
+                // 拉伸填满容器（可能变形）
+                Pair(containerWidth, containerHeight)
+            }
+        }
     }
 
     // ==================== 内部：辅助方法 ====================
-
-    /**
-     * 仅在指定状态下执行操作
-     */
-    private inline fun safeAction(vararg expectedStates: PlayerState, action: () -> Unit) {
-        if (_state in expectedStates) action()
-    }
-
-    /**
-     * 应用循环模式
-     */
-    private fun applyLoopMode() {
-        exoPlayer?.repeatMode = when (loopMode) {
-            LoopMode.NONE -> Player.REPEAT_MODE_OFF
-            LoopMode.SINGLE -> Player.REPEAT_MODE_ONE
-            LoopMode.ALL -> Player.REPEAT_MODE_ALL
-        }
-    }
-
-    /**
-     * 应用变速
-     */
-    private fun applySpeed() {
-        try {
-            exoPlayer?.setPlaybackParameters(
-                androidx.media3.common.PlaybackParameters(speed)
-            )
-        } catch (e: Exception) {
-            log("Media3Player", "setSpeed error: ${e.message}")
-        }
-    }
-
-    /**
-     * 应用视频缩放模式
-     *
-     * 通过 PlayerView 的 resizeMode 属性控制：
-     * - FIT_CENTER → RESIZE_MODE_FIT（保持比例，完整显示）
-     * - CROP_CENTER → RESIZE_MODE_ZOOM（保持比例，填满容器）
-     * - STRETCH → RESIZE_MODE_FILL（拉伸填满）
-     */
-    @OptIn(UnstableApi::class)
-    private fun applyVideoScaleMode() {
-        playerView?.resizeMode = when (videoScaleMode) {
-            VideoScaleMode.FIT_CENTER -> androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_FIT
-            VideoScaleMode.CROP_CENTER -> androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-            VideoScaleMode.STRETCH -> androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_FILL
-        }
-    }
 
     /**
      * 计算缓冲百分比
      */
     private fun getBufferedPercent(): Int {
         val dur = try {
-            val d = exoPlayer?.duration?:0
+            val d = exoPlayer?.duration ?: 0
             if (d == C.TIME_UNSET || d <= 0) return 0 else d
         } catch (_: Exception) { return 0 }
 

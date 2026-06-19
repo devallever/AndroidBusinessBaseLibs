@@ -1,6 +1,9 @@
 package app.allever.android.sample.audiovideo.android
 
+import android.view.SurfaceView
+import android.view.TextureView
 import android.widget.SeekBar
+import androidx.media3.ui.PlayerView
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.media.core.model.MediaItem
@@ -202,6 +205,24 @@ class AndroidMedia3PlayerSampleFragment :
             appendLog("画面缩放模式: $mode")
         }
 
+        // Surface 类型切换
+        mBinding.radioGroupSurfaceType.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                mBinding.rbSurfacePlayerView.id -> {
+                    switchToPlayerView()
+                    appendLog("切换到 PlayerView 模式")
+                }
+                mBinding.rbSurfaceSurfaceView.id -> {
+                    switchToSurfaceView()
+                    appendLog("切换到 SurfaceView 模式")
+                }
+                mBinding.rbSurfaceTextureView.id -> {
+                    switchToTextureView()
+                    appendLog("切换到 TextureView 模式")
+                }
+            }
+        }
+
         // 重试次数设置
         mBinding.etRetryCount.setOnEditorActionListener { _, _, _ ->
             val count = mBinding.etRetryCount.text.toString().toIntOrNull() ?: 0
@@ -209,6 +230,74 @@ class AndroidMedia3PlayerSampleFragment :
             appendLog("重试次数设置为: $count")
             true
         }
+    }
+
+    // ==================== Surface 类型切换方法 ====================
+
+    /**
+     * 切换到 PlayerView 模式（推荐）
+     */
+    private fun switchToPlayerView() {
+        // 显示 PlayerView，隐藏其他视图
+        mBinding.playerView.visibility = android.view.View.VISIBLE
+
+        // 解绑当前 Surface，重新绑定到 PlayerView
+        player.detach()
+        player.attach(mBinding.playerView)
+
+        appendLog("已绑定到 PlayerView")
+    }
+
+    /**
+     * 切换到 SurfaceView 模式（兼容）
+     */
+    private fun switchToSurfaceView() {
+        // 隐藏 PlayerView
+        mBinding.playerView.visibility = android.view.View.GONE
+
+        // 创建或获取 SurfaceView（此处简化处理，实际项目中应从布局中获取）
+        val surfaceView = SurfaceView(requireContext()).apply {
+            layoutParams = android.widget.FrameLayout.LayoutParams(
+                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
+                android.widget.FrameLayout.LayoutParams.MATCH_PARENT
+            )
+        }
+
+        // 将 SurfaceView 添加到视频容器中
+        val videoContainer = mBinding.playerView.parent as? android.widget.FrameLayout
+        videoContainer?.addView(surfaceView, 0)
+
+        // 解绑当前 Surface，重新绑定到 SurfaceView
+        player.detach()
+        player.attach(surfaceView)
+
+        appendLog("已绑定到 SurfaceView（注意：SurfaceView 异步创建中）")
+    }
+
+    /**
+     * 切换到 TextureView 模式（高级）
+     */
+    private fun switchToTextureView() {
+        // 隐藏 PlayerView
+        mBinding.playerView.visibility = android.view.View.GONE
+
+        // 创建或获取 TextureView
+        val textureView = TextureView(requireContext()).apply {
+            layoutParams = android.widget.FrameLayout.LayoutParams(
+                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
+                android.widget.FrameLayout.LayoutParams.MATCH_PARENT
+            )
+        }
+
+        // 将 TextureView 添加到视频容器中
+        val videoContainer = mBinding.playerView.parent as? android.widget.FrameLayout
+        videoContainer?.addView(textureView, 0)
+
+        // 解绑当前 Surface，重新绑定到 TextureView
+        player.detach()
+        player.attach(textureView)
+
+        appendLog("已绑定到 TextureView")
     }
 
     // ==================== 播放器监听器 ====================
