@@ -237,7 +237,8 @@ class AndroidMedia3PlayerSampleFragment :
     /**
      * 切换到 PlayerView 模式（推荐）
      *
-     * 只控制视图显示/隐藏，不动态创建/销毁 View
+     * 使用安全切换方式：暂停 → 延迟 → 切换 → 恢复
+     * 避免 MediaCodec 状态机竞态条件导致的崩溃
      */
     private fun switchToPlayerView() {
         // 显示 PlayerView，隐藏其他视图
@@ -245,15 +246,16 @@ class AndroidMedia3PlayerSampleFragment :
         mBinding.surfaceView.visibility = android.view.View.GONE
         mBinding.textureView.visibility = android.view.View.GONE
 
-        // 解绑当前 Surface，重新绑定到 PlayerView
-        player.detach()
-        player.attach(mBinding.playerView)
+        // 使用安全切换（自动处理暂停/恢复）
+        player.safeSwitchToPlayerView(mBinding.playerView)
 
-        appendLog("已切换到 PlayerView 模式")
+        appendLog("正在切换到 PlayerView 模式...")
     }
 
     /**
      * 切换到 SurfaceView 模式（兼容）
+     *
+     * 使用安全切换方式：暂停 → 延迟 → 切换 → 恢复
      */
     private fun switchToSurfaceView() {
         // 隐藏 PlayerView 和 TextureView，显示 SurfaceView
@@ -261,15 +263,16 @@ class AndroidMedia3PlayerSampleFragment :
         mBinding.surfaceView.visibility = android.view.View.VISIBLE
         mBinding.textureView.visibility = android.view.View.GONE
 
-        // 解绑当前 Surface，重新绑定到 SurfaceView
-        player.detach()
-        player.attach(mBinding.surfaceView)
+        // 使用安全切换（自动处理暂停/恢复）
+        player.safeSwitchToSurfaceView(mBinding.surfaceView)
 
-        appendLog("已切换到 SurfaceView 模式")
+        appendLog("正在切换到 SurfaceView 模式...")
     }
 
     /**
      * 切换到 TextureView 模式（高级）
+     *
+     * 使用安全切换方式：暂停 → 延迟 → 切换 → 恢复
      */
     private fun switchToTextureView() {
         // 隐藏 PlayerView 和 SurfaceView，显示 TextureView
@@ -277,11 +280,10 @@ class AndroidMedia3PlayerSampleFragment :
         mBinding.surfaceView.visibility = android.view.View.GONE
         mBinding.textureView.visibility = android.view.View.VISIBLE
 
-        // 解绑当前 Surface，重新绑定到 TextureView
-        player.detach()
-        player.attach(mBinding.textureView)
+        // 使用安全切换（自动处理暂停/恢复）
+        player.safeSwitchToTextureView(mBinding.textureView)
 
-        appendLog("已切换到 TextureView 模式")
+        appendLog("正在切换到 TextureView 模式...")
     }
 
     // ==================== 播放器监听器 ====================

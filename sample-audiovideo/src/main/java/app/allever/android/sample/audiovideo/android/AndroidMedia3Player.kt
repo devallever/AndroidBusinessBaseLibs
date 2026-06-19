@@ -18,6 +18,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.helper.TimeHelper.formatTime
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
@@ -208,6 +209,9 @@ class AndroidMedia3Player {
     /** 当前数据源 HTTP 头 */
     private var currentHeaders: Map<String, String>? = null
 
+    /** 当前数据源 Asset 路径（如果是 Assets 文件） */
+    private var currentAssetPath: String? = null
+
     /** 剩余重试次数 */
     private var retryLeft: Int = 0
 
@@ -233,6 +237,9 @@ class AndroidMedia3Player {
     )
 
     private var pendingPrepare: PendingPrepare? = null
+
+    /** 切换 Surface 后待恢复的播放位置（-1 表示无需恢复） */
+    private var pendingSeekPosition: Long = -1L
 
     // ==================== Surface 绑定 API ====================
 
@@ -345,6 +352,180 @@ class AndroidMedia3Player {
         currentSurfaceType = SurfaceType.NONE
     }
 
+    // ==================== 安全的 Surface 切换 API ====================
+
+    /**
+     * 安全地切换 Surface（推荐使用此方法）
+     *
+     * **解决 MediaCodec 状态机竞态条件问题：**
+     *
+     * 问题背景：
+     * 在播放过程中直接调用 detach() + attach() 会导致：
+     * ```
+     * IllegalStateException: setSurface() is valid only at Executing states;
+     * currently at Released state
+     * ```
+     *
+     * 原因：
+     * - detach() 会触发 ExoPlayer 异步释放 MediaCodec
+     * - attach() 立即执行时，MediaCodec 可能还在 Released 状态
+     * - 此时调用 setSurface() 会抛出异常
+     *
+     * 解决方案（方案 A：暂停 → 切换 → 恢复）：
+     * 1. 暂停播放 → 让 MediaCodec 进入安全状态（Flushed）
+     * 2. 延迟等待 → 确保 PAUSED 状态稳定生效
+     * 3. 执行切换 → detach + attach（此时安全）
+     * 4. 恢复播放 → 从保存的位置继续播放
+     *
+     * 使用示例：
+     * ```kotlin
+     * // 切换到 SurfaceView
+     * player.safeSwitchToSurfaceView(surfaceView)
+     *
+     * // 切换到 TextureView
+     * player.safeSwitchToTextureView(textureView)
+     *
+     * // 切换到 PlayerView
+     * player.safeSwitchToPlayerView(playerView)
+     * ```
+     */
+
+    /**
+     * 安全切换到 PlayerView
+     *
+     * @param playerView 目标 PlayerView 实例
+     * @param delayMs 延迟时间（毫秒），默认 100ms，确保 MediaCodec 状态稳定
+     */
+    fun safeSwitchToPlayerView(playerView: PlayerView, delayMs: Long = 100L) {
+        safeSwitchSurface(
+            targetAction = { attach(playerView) },
+            targetName = "PlayerView",
+            delayMs = delayMs
+        )
+    }
+
+    /**
+     * 安全切换到 SurfaceView
+     *
+     * @param surfaceView 目标 SurfaceView 实例
+     * @param delayMs 延迟时间（毫秒），默认 100ms，确保 MediaCodec 状态稳定
+     */
+    fun safeSwitchToSurfaceView(surfaceView: SurfaceView, delayMs: Long = 100L) {
+        safeSwitchSurface(
+            targetAction = { attach(surfaceView) },
+            targetName = "SurfaceView",
+            delayMs = delayMs
+        )
+    }
+
+    /**
+     * 安全切换到 TextureView
+     *
+     * @param textureView 目标 TextureView 实例
+     * @param delayMs 延迟时间（毫秒），默认 100ms，确保 MediaCodec 状态稳定
+     */
+    fun safeSwitchToTextureView(textureView: TextureView, delayMs: Long = 100L) {
+        safeSwitchSurface(
+            targetAction = { attach(textureView) },
+            targetName = "TextureView",
+            delayMs = delayMs
+        )
+    }
+
+    /**
+     * 安全切换 Surface 的核心实现
+     *
+     * **解决 MediaCodec 缓冲区残留问题（方案 B：stop + reprepare）：**
+     *
+     * 问题背景：
+     * 方案 A（pause + 100ms延迟）只能解决状态机问题，但无法解决缓冲区残留问题：
+     * ```
+     * MediaCodec$CodecException: Decoder failed: c2.qti.avc.decoder
+     *     at releaseOutputBuffer(Native Method)
+     * ```
+     *
+     * 原因分析：
+     * 1. pause() 后，ExoPlayer 内部仍有未处理的帧在渲染队列中
+     * 2. 切换 Surface 后，这些帧尝试渲染到已失效的旧 Surface
+     * 3. 导致 releaseOutputBuffer() 失败，解码器崩溃
+     *
+     * 解决方案（方案 B：stop → 切换 → reprepare）：
+     * 1. stop() 完全停止 ExoPlayer（清空所有缓冲区和渲染队列）
+     * 2. detach + attach 安全切换 Surface
+     * 3. 使用保存的数据源重新 prepare
+     * 4. 在 onPrepared 回调中恢复播放位置并继续播放
+     *
+     * 流程时间线：
+     * T0: 用户点击切换
+     *    ├─ 记录状态 (wasPlaying, savedPosition)
+     *    └─ stop() → 清空所有缓冲区
+     * T0+100ms:
+     *    ├─ detach() + attach() → 安全切换 Surface
+     *    └─ doSetSource(currentUri, currentHeaders) → 重新准备
+     * T0+500ms~1s (异步):
+     *    └─ onPrepared 触发
+     *       ├─ seekTo(savedPosition) → 恢复位置
+     *       └─ play() → 继续播放
+     *
+     * @param targetAction 实际的 attach 操作
+     * @param targetName 目标名称（用于日志）
+     * @param delayMs 延迟时间（毫秒），默认 100ms
+     */
+    private fun safeSwitchSurface(
+        targetAction: () -> Unit,
+        targetName: String,
+        delayMs: Long = 100L
+    ) {
+        // 1. 记录当前状态
+        val wasPlaying = (_state == PlayerState.PLAYING || _state == PlayerState.PAUSED)
+        val savedPosition = currentPosition
+
+        log("Media3Player", "safeSwitchSurface [方案B]: 开始切换到 $targetName" +
+                " (wasPlaying=$wasPlaying, position=${formatTime(savedPosition)})")
+
+        // 2. 完全停止 ExoPlayer（清空所有缓冲区和渲染队列）
+        if (_state != PlayerState.IDLE && _state != PlayerState.STOPPED && _state != PlayerState.RELEASED) {
+            stop()
+            log("Media3Player", "safeSwitchSurface [方案B]: 已 stop()，清空所有缓冲区")
+        }
+
+        // 3. 如果需要恢复播放，保存位置信息
+        if (wasPlaying && savedPosition >= 0 && currentUri != null) {
+            pendingSeekPosition = savedPosition
+            log("Media3Player", "safeSwitchSurface [方案B]: 待恢复位置 ${formatTime(savedPosition)}")
+        }
+
+        // 4. 使用 postDelayed 延迟执行切换操作
+        App.mainHandler.postDelayed({
+            try {
+                log("Media3Player", "safeSwitchSurface [方案B]: 执行切换到 $targetName")
+
+                // 执行实际的切换操作（detach + attach）
+                targetAction()
+
+                // 5. 重新准备数据源（因为已经 stop()，必须 reprepare）
+                if (currentUri != null) {
+                    log("Media3Player", "safeSwitchSurface [方案B]: 重新 prepare 数据源" +
+                            " (autoResume=${pendingSeekPosition >= 0})")
+                    doSetSource(currentUri!!, currentHeaders, currentAssetPath)
+
+                    // 注意：
+                    // - 如果 pendingSeekPosition >= 0（之前在播放），
+                    //   onPrepared 回调会自动 seekTo + play
+                    // - 如果 pendingSeekPosition < 0（之前未播放），
+                    //   仅 reprepare，不自动播放，等待用户操作
+                } else {
+                    log("Media3Player", "safeSwitchSurface [方案B]: 切换完成（无数据源）")
+                }
+            } catch (e: Exception) {
+                log("Media3Player", "safeSwitchSurface [方案B]: 切换失败 - ${e.message}")
+                pendingSeekPosition = -1L  // 重置
+                _state = PlayerState.ERROR
+                listener?.onError(-1, 0)
+            }
+        }, delayMs)
+    }
+
     // ==================== 数据源设置 ====================
 
     /**
@@ -439,6 +620,7 @@ class AndroidMedia3Player {
 
         currentUri = uri
         currentHeaders = headers
+        currentAssetPath = assetPath
         retryLeft = retryCount
 
         // 如果 Surface 未就绪，缓存待执行的 prepare
@@ -784,8 +966,24 @@ class AndroidMedia3Player {
                         if (_state != PlayerState.PREPARING) return@post
                         val dur = duration
                         _state = PlayerState.PREPARED
+
+                        // 检查是否需要自动恢复播放（Surface 切换后）
+                        val shouldAutoResume = pendingSeekPosition >= 0
+                        val savedPos = pendingSeekPosition
+                        pendingSeekPosition = -1L  // 重置标记
+
                         listener?.onPrepared(dur)
-                        log("Media3Player", "onPlaybackStateChanged: READY (duration=${dur}ms)")
+                        log("Media3Player", "onPlaybackStateChanged: READY (duration=${dur}ms, autoResume=$shouldAutoResume)")
+
+                        // 如果是 Surface 切换后的 reprepare，自动恢复播放
+                        if (shouldAutoResume && savedPos!! >= 0) {
+                            log("Media3Player", "safeSwitchSurface [方案B]: 自动恢复播放 (position=${formatTime(savedPos)})")
+                            App.mainHandler.post {
+                                seekTo(savedPos)
+                                play()
+                                log("Media3Player", "safeSwitchSurface [方案B]: 已恢复播放 (${formatTime(savedPos)})")
+                            }
+                        }
                     }
                     Player.STATE_BUFFERING -> {
                         // 缓冲中，保持当前状态不变
