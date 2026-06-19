@@ -107,6 +107,22 @@ class AndroidTexturePlayer {
             mediaPlayer?.setVolume(field, field)
         }
 
+    /**
+     * TextureView 缩放模式（默认 FIT_CENTER）
+     *
+     * 通过调整 TextureView 的布局尺寸实现不同的显示效果：
+     * - FIT_CENTER: 保持比例，完整显示（可能有黑边）
+     * - CROP_CENTER: 保持比例，填满容器（可能裁剪边缘）
+     * - STRETCH: 拉伸填满容器（可能变形）
+     */
+    var videoScaleMode: VideoScaleMode = VideoScaleMode.FIT_CENTER
+        set(value) {
+            field = value
+            if (videoWidth > 0 && videoHeight > 0) {
+                adjustTextureLayout()
+            }
+        }
+
     // ==================== 内部状态 ====================
 
     private var progressJob: Job? = null
@@ -568,12 +584,12 @@ class AndroidTexturePlayer {
     // ==================== 内部：自适应布局 ====================
 
     /**
-     * 根据视频宽高比自适应调整 TextureView 尺寸
+     * 根据当前缩放模式调整 TextureView 的布局尺寸
      *
-     * 算法（FIT_CENTER 模式）：
-     * 1. 获取父容器可用宽高
-     * 2. 按视频宽高比计算目标尺寸，保持比例填满父容器的较小边
-     * 3. 居中显示（通过 layout gravity）
+     * 调用时机：
+     * - onVideoSizeChanged 回调中（获取到视频尺寸后）
+     * - videoScaleMode 属性改变时（切换缩放模式）
+     * - onSurfaceTextureSizeChanged 回调中（TextureView 尺寸变化时）
      */
     private fun adjustTextureLayout() {
         val tv = textureView ?: return
@@ -586,30 +602,62 @@ class AndroidTexturePlayer {
             val containerHeight = parent.height
             if (containerWidth <= 0 || containerHeight <= 0) return@post
 
-            val videoAspect = videoWidth.toFloat() / videoHeight.toFloat()
-            val containerAspect = containerWidth.toFloat() / containerHeight.toFloat()
+            val (targetWidth, targetHeight) = calculateTargetSize(
+                videoWidth, videoHeight,
+                containerWidth, containerHeight,
+                videoScaleMode
+            )
 
-            val targetWidth: Int
-            val targetHeight: Int
-
-            if (videoAspect > containerAspect) {
-                // 视频更宽 → 以宽度为准，高度按比例缩放
-                targetWidth = containerWidth
-                targetHeight = (containerWidth / videoAspect).toInt()
-            } else {
-                // 视频更高 → 以高度为准，宽度按比例缩放
-                targetHeight = containerHeight
-                targetWidth = (containerHeight * videoAspect).toInt()
-            }
-
-            log("TexturePlayer", "adjustLayout: video=${videoWidth}x${videoHeight} " +
-                    "container=${containerWidth}x${containerHeight} -> target=${targetWidth}x${targetHeight}")
+            log("TexturePlayer", "adjustLayout: " +
+                    "video=${videoWidth}x${videoHeight} " +
+                    "container=${containerWidth}x${containerHeight} " +
+                    "mode=$videoScaleMode -> " +
+                    "target=${targetWidth}x${targetHeight}")
 
             // 更新 TextureView LayoutParams
             val params = tv.layoutParams
             params.width = targetWidth
             params.height = targetHeight
+
+            if (params is android.widget.FrameLayout.LayoutParams) {
+                params.gravity = android.view.Gravity.CENTER
+            }
+
             tv.layoutParams = params
+        }
+    }
+
+    /**
+     * 根据缩放模式计算目标尺寸
+     */
+    private fun calculateTargetSize(
+        videoWidth: Int,
+        videoHeight: Int,
+        containerWidth: Int,
+        containerHeight: Int,
+        scaleMode: VideoScaleMode
+    ): Pair<Int, Int> {
+        val videoAspect = videoWidth.toFloat() / videoHeight.toFloat()
+        val containerAspect = containerWidth.toFloat() / containerHeight.toFloat()
+
+        return when (scaleMode) {
+            VideoScaleMode.FIT_CENTER -> {
+                if (videoAspect > containerAspect) {
+                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
+                } else {
+                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
+                }
+            }
+            VideoScaleMode.CROP_CENTER -> {
+                if (videoAspect > containerAspect) {
+                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
+                } else {
+                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
+                }
+            }
+            VideoScaleMode.STRETCH -> {
+                Pair(containerWidth, containerHeight)
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ import app.allever.android.lib.media.picker.MediaPickerConfig
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.audiovideo.databinding.FragmentAndroidVideoViewPlayerSampleBinding
+import app.allever.android.sample.audiovideo.android.VideoScaleMode
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -183,6 +184,18 @@ class AndroidVideoViewPlayerSampleFragment :
                     appendLog("循环模式: 列表循环")
                 }
             }
+        }
+
+        // 缩放模式切换
+        mBinding.radioGroupScaleMode.setOnCheckedChangeListener { _, checkedId ->
+            val mode = when (checkedId) {
+                mBinding.rbScaleFitCenter.id -> VideoScaleMode.FIT_CENTER
+                mBinding.rbScaleCropCenter.id -> VideoScaleMode.CROP_CENTER
+                mBinding.rbScaleStretch.id -> VideoScaleMode.STRETCH
+                else -> VideoScaleMode.FIT_CENTER
+            }
+            player.videoScaleMode = mode
+            appendLog("画面缩放模式: $mode")
         }
 
         // 重试次数设置

@@ -18,6 +18,7 @@ import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.audiovideo.android.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.android.LoopMode
 import app.allever.android.sample.audiovideo.android.PlayerState
+import app.allever.android.sample.audiovideo.android.VideoScaleMode
 import app.allever.android.sample.audiovideo.databinding.FragmentSdkIjkVideoPlayerSampleBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

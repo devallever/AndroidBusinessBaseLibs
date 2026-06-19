@@ -13,6 +13,7 @@ import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.audiovideo.android.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.android.LoopMode
 import app.allever.android.sample.audiovideo.android.PlayerState
+import app.allever.android.sample.audiovideo.android.VideoScaleMode
 import app.allever.android.sample.audiovideo.databinding.FragmentSdkExoVideoPlayerSampleBinding
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -96,6 +97,7 @@ class ExoVideoPlayerSampleFragment :
         initSpeedControlListeners()
         initVolumeControlListeners()
         initLoopControlListeners()
+        initScaleModeListeners()
         initSurfaceTypeListeners()
         initRetryCountListener()
     }
@@ -236,6 +238,29 @@ class ExoVideoPlayerSampleFragment :
                     appendLog("循环模式: 列表循环")
                 }
             }
+        }
+    }
+
+    // ==================== 缩放模式控制 ====================
+
+    /**
+     * 初始化画面缩放模式选择监听器
+     *
+     * 三种模式：
+     * - FIT_CENTER：保持比例，完整显示（可能有黑边）
+     * - CROP_CENTER：保持比例，填满容器（可能裁剪）
+     * - STRETCH：拉伸填满容器（可能变形）
+     */
+    private fun initScaleModeListeners() {
+        mBinding.radioGroupScaleMode.setOnCheckedChangeListener { _, checkedId ->
+            val mode = when (checkedId) {
+                mBinding.rbScaleFitCenter.id -> VideoScaleMode.FIT_CENTER
+                mBinding.rbScaleCropCenter.id -> VideoScaleMode.CROP_CENTER
+                mBinding.rbScaleStretch.id -> VideoScaleMode.STRETCH
+                else -> VideoScaleMode.FIT_CENTER
+            }
+            player.videoScaleMode = mode
+            appendLog("画面缩放模式: $mode")
         }
     }
 

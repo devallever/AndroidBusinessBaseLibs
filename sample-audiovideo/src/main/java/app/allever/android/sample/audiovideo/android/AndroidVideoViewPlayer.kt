@@ -128,6 +128,22 @@ class AndroidVideoViewPlayer {
             mediaPlayer?.setVolume(field, field)
         }
 
+    /**
+     * VideoView 缩放模式（默认 FIT_CENTER）
+     *
+     * 通过调整 VideoView 的布局尺寸实现不同的显示效果：
+     * - FIT_CENTER: 保持比例，完整显示（可能有黑边）
+     * - CROP_CENTER: 保持比例，填满容器（可能裁剪边缘）
+     * - STRETCH: 拉伸填满容器（可能变形）
+     */
+    var videoScaleMode: VideoScaleMode = VideoScaleMode.FIT_CENTER
+        set(value) {
+            field = value
+            if (videoWidth > 0 && videoHeight > 0) {
+                adjustVideoViewLayout()
+            }
+        }
+
     // ==================== 内部状态 ====================
 
     private var progressJob: Job? = null
@@ -137,6 +153,12 @@ class AndroidVideoViewPlayer {
     private var isAssetSource: Boolean = false
     private var pendingSpeed: Float? = null
     private var pendingVolume: Float? = null
+
+    /** 视频原始宽度 */
+    private var videoWidth: Int = 0
+
+    /** 视频原始高度 */
+    private var videoHeight: Int = 0
 
     // ==================== 绑定 & 解绑 ====================
 
@@ -309,6 +331,16 @@ class AndroidVideoViewPlayer {
         videoView?.setOnPreparedListener { mp ->
             mediaPlayer = mp
             _state = PlayerState.PREPARED
+
+            // 获取视频尺寸
+            val w = mp.videoWidth
+            val h = mp.videoHeight
+            if (w > 0 && h > 0) {
+                videoWidth = w
+                videoHeight = h
+                listener?.onVideoSizeChanged(w, h)
+                adjustVideoViewLayout()
+            }
 
             // 应用之前缓存的变速和音量设置
             pendingSpeed?.let { applySpeed(); pendingSpeed = null }
@@ -508,5 +540,84 @@ class AndroidVideoViewPlayer {
      */
     private fun postDelayed(action: () -> Unit, delayMs: Long) {
         App.mainHandler.postDelayed(action, delayMs)
+    }
+
+    // ==================== 内部：自适应布局 ====================
+
+    /**
+     * 根据当前缩放模式调整 VideoView 的布局尺寸
+     *
+     * 调用时机：
+     * - onPrepared 回调中（获取到视频尺寸后）
+     * - videoScaleMode 属性改变时（切换缩放模式）
+     */
+    private fun adjustVideoViewLayout() {
+        val vv = videoView ?: return
+        if (videoWidth <= 0 || videoHeight <= 0) return
+
+        val parent = vv.parent as? android.view.ViewGroup ?: return
+
+        App.mainHandler.post {
+            val containerWidth = parent.width
+            val containerHeight = parent.height
+            if (containerWidth <= 0 || containerHeight <= 0) return@post
+
+            val (targetWidth, targetHeight) = calculateTargetSize(
+                videoWidth, videoHeight,
+                containerWidth, containerHeight,
+                videoScaleMode
+            )
+
+            log("VideoPlayer", "adjustLayout: " +
+                    "video=${videoWidth}x${videoHeight} " +
+                    "container=${containerWidth}x${containerHeight} " +
+                    "mode=$videoScaleMode -> " +
+                    "target=${targetWidth}x${targetHeight}")
+
+            // 更新 VideoView LayoutParams
+            val params = vv.layoutParams
+            params.width = targetWidth
+            params.height = targetHeight
+
+            if (params is android.widget.FrameLayout.LayoutParams) {
+                params.gravity = android.view.Gravity.CENTER
+            }
+
+            vv.layoutParams = params
+        }
+    }
+
+    /**
+     * 根据缩放模式计算目标尺寸
+     */
+    private fun calculateTargetSize(
+        videoWidth: Int,
+        videoHeight: Int,
+        containerWidth: Int,
+        containerHeight: Int,
+        scaleMode: VideoScaleMode
+    ): Pair<Int, Int> {
+        val videoAspect = videoWidth.toFloat() / videoHeight.toFloat()
+        val containerAspect = containerWidth.toFloat() / containerHeight.toFloat()
+
+        return when (scaleMode) {
+            VideoScaleMode.FIT_CENTER -> {
+                if (videoAspect > containerAspect) {
+                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
+                } else {
+                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
+                }
+            }
+            VideoScaleMode.CROP_CENTER -> {
+                if (videoAspect > containerAspect) {
+                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
+                } else {
+                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
+                }
+            }
+            VideoScaleMode.STRETCH -> {
+                Pair(containerWidth, containerHeight)
+            }
+        }
     }
 }

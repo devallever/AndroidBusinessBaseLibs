@@ -2,11 +2,13 @@ package app.allever.android.sample.audiovideo.android
 
 import android.content.Context
 import android.net.Uri
+import androidx.annotation.OptIn
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.VideoSize
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import app.allever.android.lib.core.app.App
@@ -114,6 +116,20 @@ class AndroidMedia3Player {
         set(value) {
             field = value.coerceIn(0f, 1f)
             exoPlayer?.volume = field
+        }
+
+    /**
+     * PlayerView 缩放模式（默认 FIT_CENTER）
+     *
+     * 通过 PlayerView 的 resizeMode 属性控制视频显示方式：
+     * - FIT_CENTER: 保持比例，完整显示（可能有黑边）
+     * - CROP_CENTER: 保持比例，填满容器（可能裁剪边缘）
+     * - STRETCH: 拉伸填满容器（可能变形）
+     */
+    var videoScaleMode: VideoScaleMode = VideoScaleMode.FIT_CENTER
+        set(value) {
+            field = value
+            applyVideoScaleMode()
         }
 
     // ==================== 内部状态 ====================
@@ -304,6 +320,7 @@ class AndroidMedia3Player {
             // 应用初始配置
             applyLoopMode()
             applySpeed()
+            applyVideoScaleMode()
             this@AndroidMedia3Player.volume.let { vol ->
                 if (vol != 1.0f) this@apply.volume = vol
             }
@@ -537,6 +554,23 @@ class AndroidMedia3Player {
             )
         } catch (e: Exception) {
             log("Media3Player", "setSpeed error: ${e.message}")
+        }
+    }
+
+    /**
+     * 应用视频缩放模式
+     *
+     * 通过 PlayerView 的 resizeMode 属性控制：
+     * - FIT_CENTER → RESIZE_MODE_FIT（保持比例，完整显示）
+     * - CROP_CENTER → RESIZE_MODE_ZOOM（保持比例，填满容器）
+     * - STRETCH → RESIZE_MODE_FILL（拉伸填满）
+     */
+    @OptIn(UnstableApi::class)
+    private fun applyVideoScaleMode() {
+        playerView?.resizeMode = when (videoScaleMode) {
+            VideoScaleMode.FIT_CENTER -> androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_FIT
+            VideoScaleMode.CROP_CENTER -> androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+            VideoScaleMode.STRETCH -> androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_FILL
         }
     }
 
