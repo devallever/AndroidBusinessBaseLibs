@@ -32,5 +32,9 @@ class AndroidAudioVideoFragment: ListFragment<FragmentListBinding, ListViewModel
             //Media3Player
             FragmentActivity.start<AndroidMedia3PlayerSampleFragment>(it.title)
         },
+        TextClickItem("MediaPlayer+VideoView/SurfaceView/TextureView") {
+            //MediaPlayer
+            FragmentActivity.start<AndroidMediaPlayerSampleFragment>(it.title)
+        },
     )
 }
