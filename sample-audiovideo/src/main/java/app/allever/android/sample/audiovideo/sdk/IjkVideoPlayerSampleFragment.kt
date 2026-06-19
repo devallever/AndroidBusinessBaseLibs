@@ -137,7 +137,8 @@ class IjkVideoPlayerSampleFragment :
     /**
      * 切换到 SurfaceView 模式
      *
-     * 只控制视图显示/隐藏，不动态创建/销毁 View
+     * 使用安全切换方式：stop → 延迟 → 切换 → reprepare → 恢复
+     * 避免解码器状态机竞态条件导致的崩溃
      */
     private fun switchToSurfaceView() {
         appendLog("切换到 SurfaceView 模式")
@@ -146,17 +147,16 @@ class IjkVideoPlayerSampleFragment :
         mBinding.surfaceView.visibility = android.view.View.VISIBLE
         mBinding.textureView.visibility = android.view.View.GONE
 
-        // 解绑后重新绑定 SurfaceView
-        player.detach()
-        player.attach(mBinding.surfaceView)
+        // 使用安全切换（自动处理 stop/reprepare/恢复）
+        player.safeSwitchToSurfaceView(mBinding.surfaceView)
 
-        appendLog("已切换到 SurfaceView 模式")
+        appendLog("正在切换到 SurfaceView 模式...")
     }
 
     /**
      * 切换到 TextureView 模式
      *
-     * 只控制视图显示/隐藏，不动态创建/销毁 View
+     * 使用安全切换方式：stop → 延迟 → 切换 → reprepare → 恢复
      */
     private fun switchToTextureView() {
         appendLog("切换到 TextureView 模式")
@@ -165,11 +165,10 @@ class IjkVideoPlayerSampleFragment :
         mBinding.surfaceView.visibility = android.view.View.GONE
         mBinding.textureView.visibility = android.view.View.VISIBLE
 
-        // 解绑后重新绑定 TextureView（使用布局中预定义的）
-        player.detach()
-        player.attach(mBinding.textureView)
+        // 使用安全切换（自动处理 stop/reprepare/恢复）
+        player.safeSwitchToTextureView(mBinding.textureView)
 
-        appendLog("已切换到 TextureView 模式")
+        appendLog("正在切换到 TextureView 模式...")
     }
 
     // ==================== 播放控制 ====================
