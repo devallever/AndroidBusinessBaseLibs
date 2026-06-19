@@ -1,4 +1,4 @@
-package app.allever.android.sample.audiovideo.android
+package app.allever.android.sample.audiovideo.lib
 
 /**
  * SurfaceView/TextureView 视频缩放模式

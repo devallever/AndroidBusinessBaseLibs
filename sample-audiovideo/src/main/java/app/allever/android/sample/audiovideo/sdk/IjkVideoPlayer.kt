@@ -10,10 +10,10 @@ import android.view.SurfaceView
 import android.view.TextureView
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
-import app.allever.android.sample.audiovideo.android.IVideoPlayerListener
-import app.allever.android.sample.audiovideo.android.LoopMode
-import app.allever.android.sample.audiovideo.android.PlayerState
-import app.allever.android.sample.audiovideo.android.VideoScaleMode
+import app.allever.android.sample.audiovideo.lib.VideoScaleMode
+import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
+import app.allever.android.sample.audiovideo.lib.LoopMode
+import app.allever.android.sample.audiovideo.lib.PlayerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

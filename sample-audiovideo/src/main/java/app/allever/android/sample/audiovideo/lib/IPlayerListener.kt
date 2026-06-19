@@ -1,0 +1,27 @@
+package app.allever.android.sample.audiovideo.lib
+
+/**
+ * 音频播放事件监听接口
+ *
+ * 所有回调均在主线程触发。
+ * onError 返回 true 表示错误已被消费，播放器不再处理。
+ */
+interface IPlayerListener {
+    /** 状态变化 */
+    fun onStateChanged(from: PlayerState, to: PlayerState) {}
+
+    /** 准备就绪（此时可获取 duration，需调用 play() 才会开始播放） */
+    fun onPrepared(durationMs: Long) {}
+
+    /** 进度更新（定时回调） */
+    fun onProgress(currentMs: Long, durationMs: Long) {}
+
+    /** 播放完成 */
+    fun onComplete() {}
+
+    /** 出错 */
+    fun onError(what: Int, extra: Int): Boolean = false
+
+    /** 缓冲进度 (0~100) */
+    fun onBufferingUpdate(percent: Int) {}
+}

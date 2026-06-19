@@ -6,6 +6,9 @@ import android.media.PlaybackParams
 import android.net.Uri
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
+import app.allever.android.sample.audiovideo.lib.IPlayerListener
+import app.allever.android.sample.audiovideo.lib.LoopMode
+import app.allever.android.sample.audiovideo.lib.PlayerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -14,55 +17,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-/**
- * 播放器状态机
- */
-enum class PlayerState {
-    IDLE,           // 空闲
-    PREPARING,      // 准备中
-    PREPARED,       // 准备就绪（可播放）
-    PLAYING,        // 播放中
-    PAUSED,         // 已暂停
-    STOPPED,        // 已停止
-    COMPLETED,      // 播放完成
-    ERROR,          // 出错
-    RELEASED        // 已释放（终态）
-}
 
-/**
- * 循环模式
- */
-enum class LoopMode {
-    NONE,           // 不循环
-    SINGLE,         // 单曲循环
-    ALL             // 列表循环
-}
 
-/**
- * 音频播放事件监听接口
- *
- * 所有回调均在主线程触发。
- * onError 返回 true 表示错误已被消费，播放器不再处理。
- */
-interface IPlayerListener {
-    /** 状态变化 */
-    fun onStateChanged(from: PlayerState, to: PlayerState) {}
 
-    /** 准备就绪（此时可获取 duration，需调用 play() 才会开始播放） */
-    fun onPrepared(durationMs: Long) {}
-
-    /** 进度更新（定时回调） */
-    fun onProgress(currentMs: Long, durationMs: Long) {}
-
-    /** 播放完成 */
-    fun onComplete() {}
-
-    /** 出错 */
-    fun onError(what: Int, extra: Int): Boolean = false
-
-    /** 缓冲进度 (0~100) */
-    fun onBufferingUpdate(percent: Int) {}
-}
 
 /**
  * Android MediaPlayer 音频播放封装

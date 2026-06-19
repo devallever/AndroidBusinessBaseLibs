@@ -8,7 +8,10 @@ import app.allever.android.lib.media.picker.MediaPickerConfig
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.audiovideo.databinding.FragmentAndroidMedia3PlayerSampleBinding
-import app.allever.android.sample.audiovideo.android.VideoScaleMode
+import app.allever.android.sample.audiovideo.lib.VideoScaleMode
+import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
+import app.allever.android.sample.audiovideo.lib.LoopMode
+import app.allever.android.sample.audiovideo.lib.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
