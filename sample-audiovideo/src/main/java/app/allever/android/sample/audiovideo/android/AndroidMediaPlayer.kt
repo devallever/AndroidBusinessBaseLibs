@@ -13,6 +13,8 @@ import android.widget.VideoView
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.helper.TimeHelper.formatTime
+import app.allever.android.sample.audiovideo.android.base.IPlayerKernal
+import app.allever.android.sample.audiovideo.android.base.MediaPlayerKernal
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
@@ -75,7 +77,92 @@ class AndroidMediaPlayer {
     // ==================== 内部组件 ====================
 
     /** MediaPlayer 实例 */
-    private var mediaPlayer: MediaPlayer? = null
+//    private var mediaPlayer: MediaPlayer? = null
+    val engine: IPlayerKernal = MediaPlayerKernal(App.context).apply {
+        registerListener(object : IPlayerKernal.IListener {
+            override fun onPrepared() {
+                val dur = try { engine.getDuration() } catch (_: Exception) { 0L }
+
+                if (_state == PlayerState.PREPARING) {
+                    _state = PlayerState.PREPARED
+                }
+
+                listener?.onPrepared(dur)
+                log("AndroidMP", "onPrepared (duration=${dur}ms)")
+
+                // 检查是否需要自动恢复播放（Surface 切换后）
+                val shouldAutoResume = pendingSeekPosition >= 0
+                val savedPos = pendingSeekPosition
+                pendingSeekPosition = -1L  // 重置标记
+
+                log("AndroidMP", "onPrepared: autoResume=$shouldAutoResume" +
+                        (if (shouldAutoResume) ", savedPosition=${formatTime(savedPos)}" else ""))
+
+                // 如果是 Surface 切换后的 reprepare，自动恢复播放
+                if (shouldAutoResume && savedPos!! >= 0) {
+                    log("AndroidMP", "safeSwitchSurface [方案B]: 自动恢复播放 (position=${formatTime(savedPos)})")
+
+                    // ✨ 关键：MediaPlayer 必须先 start 再 seekTo
+                    play()
+                    seekTo(savedPos)
+
+                    log("AndroidMP", "safeSwitchSurface [方案B]: 已恢复播放 (${formatTime(savedPos)})")
+                }
+            }
+
+            override fun onCompletion() {
+                if (_state == PlayerState.PLAYING) {
+                    _state = PlayerState.COMPLETED
+                    stopProgressTracking()
+                    stopPreparingMonitor()
+                    listener?.onComplete()
+                    log("AndroidMP", "onComplete")
+                }
+            }
+
+            override fun onError(code: Int, msg: String) {
+                //log
+                log("AndroidMP", "onError: $code, $msg")
+
+                if (_state == PlayerState.PREPARING) {
+                    // 准备阶段出错，尝试重试
+                    handlePrepareError(Exception(msg))
+                } else {
+                    // 播放阶段出错
+                    _state = PlayerState.ERROR
+                    listener?.onError(code, msg)
+                }
+            }
+
+            override fun onBufferingUpdate(percent: Int) {
+                if (percent > 0) {
+                    listener?.onBufferingUpdate(percent)
+                }
+            }
+
+            override fun onVideoSizeChanged(width: Int, height: Int) {
+                if (width > 0 && height > 0) {
+                    videoWidth = width
+                    videoHeight = height
+
+                    listener?.onVideoSizeChanged(width, height)
+                    log("AndroidMP", "onVideoSizeChanged: ${width}x${height}")
+
+                    // 对非 VideoView 进行画面自适应
+                    if (currentSurfaceType == SurfaceType.SURFACE_VIEW ||
+                        currentSurfaceType == SurfaceType.TEXTURE_VIEW ||
+                        currentSurfaceType == SurfaceType.VIDEO_VIEW) {
+                        adjustSurfaceLayout()
+                    }
+                }
+            }
+
+            override fun onInfo() {
+                log("AndroidMP", "onInfo")
+            }
+
+        })
+    }
 
     /** 监听器回调 */
     private var listener: IVideoPlayerListener? = null
@@ -127,7 +214,7 @@ class AndroidMediaPlayer {
     /** 是否正在播放 */
     val isPlaying: Boolean
         get() = _state == PlayerState.PLAYING && try {
-            mediaPlayer?.isPlaying == true
+            engine.isPlaying()
         } catch (_: Exception) {
             false
         }
@@ -135,7 +222,7 @@ class AndroidMediaPlayer {
     /** 当前位置（毫秒）*/
     val currentPosition: Long
         get() = try {
-            mediaPlayer?.currentPosition?.toLong() ?: 0L
+            engine.getCurrentPosition()
         } catch (_: Exception) {
             0L
         }
@@ -143,7 +230,7 @@ class AndroidMediaPlayer {
     /** 总时长（毫秒），PREPARED 后可用 */
     val duration: Long
         get() = try {
-            mediaPlayer?.duration?.toLong() ?: 0L
+            engine.getDuration()
         } catch (_: Exception) {
             0L
         }
@@ -154,7 +241,7 @@ class AndroidMediaPlayer {
     var loopMode: LoopMode = LoopMode.NONE
         set(value) {
             field = value
-            applyLoopMode()
+            engine.loopMode(value)
         }
 
     /** 进度回调间隔（毫秒），默认 200ms */
@@ -167,7 +254,7 @@ class AndroidMediaPlayer {
     var speed: Float = 1.0f
         set(value) {
             field = value.coerceIn(0.5f, 3.0f)
-            applySpeed()
+            engine.speed(value)
         }
 
     /** 音量（0.0 ~ 1.0），默认 1.0 */
@@ -175,7 +262,7 @@ class AndroidMediaPlayer {
         set(value) {
             field = value.coerceIn(0f, 1f)
             try {
-                mediaPlayer?.setVolume(field, field)
+                engine.volume(field)
             } catch (_: Exception) {}
         }
 
@@ -730,14 +817,14 @@ class AndroidMediaPlayer {
     fun play() {
         when (_state) {
             PlayerState.PREPARED, PlayerState.COMPLETED -> {
-                mediaPlayer?.start()
+                engine.start()
                 _state = PlayerState.PLAYING
                 startProgressTracking()
                 startPreparingStateMonitor()
                 log("AndroidMP", "play() -> PLAYING (from $_state)")
             }
             PlayerState.PAUSED -> {
-                mediaPlayer?.start()
+                engine.start()
                 _state = PlayerState.PLAYING
                 startProgressTracking()
                 log("AndroidMP", "play() -> PLAYING (from PAUSED)")
@@ -753,7 +840,7 @@ class AndroidMediaPlayer {
      */
     fun pause() {
         if (_state == PlayerState.PLAYING) {
-            mediaPlayer?.pause()
+            engine.pause()
             _state = PlayerState.PAUSED
             stopProgressTracking()
             log("AndroidMP", "pause() -> PAUSED")
@@ -770,8 +857,7 @@ class AndroidMediaPlayer {
         stopPreparingMonitor()
 
         try {
-            mediaPlayer?.stop()
-            mediaPlayer?.reset()
+            engine.stop()
         } catch (_: Exception) {}
 
         _state = PlayerState.STOPPED
@@ -787,7 +873,7 @@ class AndroidMediaPlayer {
         if (_state == PlayerState.RELEASED || _state == PlayerState.IDLE) return
         try {
             isSeeking = true
-            mediaPlayer?.seekTo(positionMs.toInt())
+            engine.seekTo(positionMs)
             // 延迟重置标志并确保进度追踪正常运行
             App.mainHandler.postDelayed({
                 isSeeking = false
@@ -834,26 +920,11 @@ class AndroidMediaPlayer {
      * 初始化 MediaPlayer 实例
      */
     private fun initMediaPlayer() {
-        if (mediaPlayer != null) return
-
-        mediaPlayer = MediaPlayer().apply {
-            // 设置各种监听器
-            setOnPreparedListener(mOnPreparedListener)
-            setOnCompletionListener(mOnCompletionListener)
-            setOnErrorListener(mOnErrorListener)
-            setOnBufferingUpdateListener(mOnBufferingUpdateListener)
-            setOnVideoSizeChangedListener(mOnVideoSizeChangedListener)
-            setOnInfoListener(mOnInfoListener)
-            
-            // 应用初始配置
-            applyLoopMode()
-            applySpeed()
-            if (volume != 1.0f) {
-                setVolume(volume, volume)
-            }
+        engine.loopMode(loopMode)
+        engine.speed(speed)
+        if (volume != 1.0f) {
+            engine.volume(volume)
         }
-
-        log("AndroidMP", "MediaPlayer initialized")
     }
 
     /**
@@ -923,145 +994,6 @@ class AndroidMediaPlayer {
         }
     }
 
-    /** OnPreparedListener：准备完成回调 */
-    private val mOnPreparedListener = MediaPlayer.OnPreparedListener {
-        App.mainHandler.post {
-            val dur = try { mediaPlayer?.duration?.toLong() ?: 0L } catch (_: Exception) { 0L }
-
-            if (_state == PlayerState.PREPARING) {
-                _state = PlayerState.PREPARED
-            }
-
-            listener?.onPrepared(dur)
-            log("AndroidMP", "onPrepared (duration=${dur}ms)")
-
-            // 检查是否需要自动恢复播放（Surface 切换后）
-            val shouldAutoResume = pendingSeekPosition >= 0
-            val savedPos = pendingSeekPosition
-            pendingSeekPosition = -1L  // 重置标记
-
-            log("AndroidMP", "onPrepared: autoResume=$shouldAutoResume" +
-                    (if (shouldAutoResume) ", savedPosition=${formatTime(savedPos)}" else ""))
-
-            // 如果是 Surface 切换后的 reprepare，自动恢复播放
-            if (shouldAutoResume && savedPos!! >= 0) {
-                log("AndroidMP", "safeSwitchSurface [方案B]: 自动恢复播放 (position=${formatTime(savedPos)})")
-                
-                // ✨ 关键：MediaPlayer 必须先 start 再 seekTo
-                play()
-                seekTo(savedPos)
-                
-                log("AndroidMP", "safeSwitchSurface [方案B]: 已恢复播放 (${formatTime(savedPos)})")
-            }
-        }
-    }
-
-    /** OnCompletionListener：播放完成回调 */
-    private val mOnCompletionListener = MediaPlayer.OnCompletionListener {
-        App.mainHandler.post {
-            if (_state == PlayerState.PLAYING) {
-                _state = PlayerState.COMPLETED
-                stopProgressTracking()
-                stopPreparingMonitor()
-                listener?.onComplete()
-                log("AndroidMP", "onComplete")
-            }
-        }
-    }
-
-    /** OnErrorListener：错误回调 */
-    private val mOnErrorListener = MediaPlayer.OnErrorListener { _, what, extra ->
-        App.mainHandler.post {
-            log("AndroidMP", "onError: what=$what, extra=$extra")
-
-            // 将 MediaPlayer 错误代码映射到 PlayerErrorCode
-            val errorCode = mapMediaPlayerError(what, extra)
-            val errorMsg = PlayerErrorCode.formatError(errorCode, "MediaPlayer error: what=$what, extra=$extra")
-
-            if (_state == PlayerState.PREPARING) {
-                // 准备阶段出错，尝试重试
-                handlePrepareError(Exception(errorMsg))
-            } else {
-                // 播放阶段出错
-                _state = PlayerState.ERROR
-                listener?.onError(errorCode, errorMsg)
-            }
-        }
-        true  // 返回 true 表示已处理错误
-    }
-
-    /**
-     * 将 MediaPlayer 的错误代码映射到 PlayerErrorCode
-     *
-     * @param what MediaPlayer 错误类型
-     * @param extra 额外错误信息
-     * @return 对应的 PlayerErrorCode
-     */
-    private fun mapMediaPlayerError(what: Int, extra: Int): Int {
-        return when (what) {
-            MediaPlayer.MEDIA_ERROR_UNKNOWN -> PlayerErrorCode.MEDIA_PLAYER_INTERNAL_ERROR
-            MediaPlayer.MEDIA_ERROR_SERVER_DIED -> PlayerErrorCode.SERVER_ERROR
-            MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK -> PlayerErrorCode.SOURCE_FORMAT_UNSUPPORTED
-            MediaPlayer.MEDIA_ERROR_IO -> when (extra) {
-                else -> PlayerErrorCode.FILE_READ_ERROR
-            }
-            MediaPlayer.MEDIA_ERROR_MALFORMED -> PlayerErrorCode.SOURCE_FORMAT_UNSUPPORTED
-            MediaPlayer.MEDIA_ERROR_UNSUPPORTED -> PlayerErrorCode.SOURCE_FORMAT_UNSUPPORTED
-            MediaPlayer.MEDIA_ERROR_TIMED_OUT -> PlayerErrorCode.NETWORK_TIMEOUT
-            else -> PlayerErrorCode.UNKNOWN
-        }
-    }
-
-    /** OnBufferingUpdateListener：缓冲进度回调 */
-    private val mOnBufferingUpdateListener = MediaPlayer.OnBufferingUpdateListener { _, percent ->
-        App.mainHandler.post {
-            if (percent > 0) {
-                listener?.onBufferingUpdate(percent)
-            }
-        }
-    }
-
-    /** OnVideoSizeChangedListener：视频尺寸回调 */
-    private val mOnVideoSizeChangedListener = MediaPlayer.OnVideoSizeChangedListener { _, width, height ->
-        App.mainHandler.post {
-            if (width > 0 && height > 0) {
-                videoWidth = width
-                videoHeight = height
-                
-                listener?.onVideoSizeChanged(width, height)
-                log("AndroidMP", "onVideoSizeChanged: ${width}x${height}")
-
-                // 对非 VideoView 进行画面自适应
-                if (currentSurfaceType == SurfaceType.SURFACE_VIEW ||
-                    currentSurfaceType == SurfaceType.TEXTURE_VIEW ||
-                    currentSurfaceType == SurfaceType.VIDEO_VIEW) {
-                    adjustSurfaceLayout()
-                }
-            }
-        }
-    }
-
-    /** OnInfoListener：信息回调（如缓冲开始/结束） */
-    private val mOnInfoListener = MediaPlayer.OnInfoListener { mp, what, extra ->
-        App.mainHandler.post {
-            when (what) {
-                MediaPlayer.MEDIA_INFO_BUFFERING_START -> {
-                    log("AndroidMP", "MEDIA_INFO_BUFFERING_START")
-                    // 可以在这里显示缓冲指示器
-                }
-                MediaPlayer.MEDIA_INFO_BUFFERING_END -> {
-                    log("AndroidMP", "MEDIA_INFO_BUFFERING_END")
-                    // 可以在这里隐藏缓冲指示器
-                }
-                MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START -> {
-                    log("AndroidMP", "MEDIA_INFO_VIDEO_RENDERING_START")
-                    // 视频首帧渲染
-                }
-            }
-        }
-        false
-    }
-
     /**
      * Surface 就绪处理（统一入口）
      */
@@ -1071,7 +1003,7 @@ class AndroidMediaPlayer {
 
         // 将 Surface 设置给 MediaPlayer
         try {
-            mediaPlayer?.setSurface(surface)
+            engine.setSurface(surface)
         } catch (e: Exception) {
             log("AndroidMP", "setSurface error: ${e.message}")
         }
@@ -1090,45 +1022,19 @@ class AndroidMediaPlayer {
     private fun doPrepareInternal(uri: Uri?, headers: Map<String, String>?) {
         val srcUri = uri ?: return
 
-        // 确保 MediaPlayer 存在
-        if (mediaPlayer == null) {
-            initMediaPlayer()
-        }
+        initMediaPlayer()
 
         try {
             // 重置 MediaPlayer（重要：确保处于 Idle 状态）
-            mediaPlayer?.reset()
+            engine.reset()
 
-            // 设置数据源
-            when (srcUri.scheme) {
-                "http", "https" -> {
-                    // HTTP/HTTPS 数据源
-                    if (headers != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        // API 21+ 支持设置请求头
-                        mediaPlayer?.setDataSource(App.context.applicationContext, srcUri, headers)
-                    } else {
-                        mediaPlayer?.setDataSource(srcUri.toString())
-                    }
-                }
-                "content" -> {
-                    // Content Provider
-                    mediaPlayer?.setDataSource(App.context.applicationContext, srcUri)
-                }
-                "file" -> {
-                    // 本地文件
-                    mediaPlayer?.setDataSource(srcUri.toString())
-                }
-                else -> {
-                    // 其他情况尝试直接设置
-                    mediaPlayer?.setDataSource(srcUri.toString())
-                }
-            }
+            engine.setSource(srcUri, headers)
 
             // 绑定当前 Surface（必须在 reset 之后、prepareAsync 之前）
             bindCurrentSurface()
 
             // 异步准备
-            mediaPlayer?.prepareAsync()
+            engine.prepareAsync()
 
             // 切换到 PREPARING 状态
             _state = PlayerState.PREPARING
@@ -1154,7 +1060,7 @@ class AndroidMediaPlayer {
                 videoView?.holder?.let { holder ->
                     if (holder.surface.isValid) {
                         try {
-                            mediaPlayer?.setDisplay(holder)
+                            engine.setSurface(holder.surface)
                             surfaceBound = true
                             log("AndroidMP", "bindSurface: VideoView success")
                         } catch (e: Exception) {
@@ -1169,7 +1075,7 @@ class AndroidMediaPlayer {
                 surfaceView?.holder?.let { holder ->
                     if (holder.surface.isValid) {
                         try {
-                            mediaPlayer?.setDisplay(holder)
+                            engine.setSurface(holder.surface)
                             surfaceBound = true
                             log("AndroidMP", "bindSurface: SurfaceView success")
                         } catch (e: Exception) {
@@ -1187,7 +1093,7 @@ class AndroidMediaPlayer {
                         try {
                             val surface = Surface(surfaceTexture)
                             if (surface.isValid) {
-                                mediaPlayer?.setSurface(surface)
+                                engine.setSurface(surface)
                                 surfaceBound = true
                                 log("AndroidMP", "bindSurface: TextureView success")
                             } else {
@@ -1233,29 +1139,7 @@ class AndroidMediaPlayer {
      * 应用循环模式到 MediaPlayer
      */
     private fun applyLoopMode() {
-        val looping = when (loopMode) {
-            LoopMode.SINGLE -> true
-            LoopMode.ALL -> true
-            else -> false
-        }
-        try {
-            mediaPlayer?.isLooping = looping
-        } catch (_: Exception) {}
-    }
-
-    /**
-     * 应用变速到 MediaPlayer
-     */
-    private fun applySpeed() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            try {
-                mediaPlayer?.playbackParams = android.media.PlaybackParams().setSpeed(speed)
-            } catch (e: Exception) {
-                log("AndroidMP", "setSpeed error: ${e.message}")
-            }
-        } else {
-            log("AndroidMP", "setSpeed not supported below API 23")
-        }
+        engine.loopMode(loopMode)
     }
 
     // ==================== 私有方法：资源释放 ====================
@@ -1266,19 +1150,7 @@ class AndroidMediaPlayer {
     private fun releaseMediaPlayer() {
         stopProgressTracking()
         stopPreparingMonitor()
-        try {
-            mediaPlayer?.apply {
-                setOnPreparedListener(null)
-                setOnCompletionListener(null)
-                setOnErrorListener(null)
-                setOnBufferingUpdateListener(null)
-                setOnVideoSizeChangedListener(null)
-                setOnInfoListener(null)
-                release()
-            }
-        } catch (_: Exception) {}
-        mediaPlayer = null
-        log("AndroidMP", "MediaPlayer released")
+        engine.release()
     }
 
     // ==================== 内部：PREPARING State Monitor ====================
@@ -1303,14 +1175,14 @@ class AndroidMediaPlayer {
                 delay(100)
 
                 try {
-                    val actualIsPlaying = mediaPlayer?.isPlaying == true
-                    val dur = mediaPlayer?.duration ?: 0
+                    val actualIsPlaying = engine.isPlaying()
+                    val dur = engine.getDuration()
 
                     if (actualIsPlaying && dur > 0) {
                         // 有 duration 且正在播放 → 已准备就绪
                         log("AndroidMP", "⚡ PREPARING Monitor: 检测到正在播放！修正状态")
                         
-                        val pos = mediaPlayer?.currentPosition ?: 0
+                        val pos = engine.getCurrentPosition()
                         log("AndroidMP", "PREPARING Monitor: duration=$dur, position=$pos")
 
                         // ✨ 检查是否需要自动恢复播放（Surface 切换后）
@@ -1385,12 +1257,12 @@ class AndroidMediaPlayer {
         progressJob = CoroutineScope(Dispatchers.Main).launch {
             while (isActive && _state == PlayerState.PLAYING) {
                 val pos = try { 
-                    mediaPlayer?.currentPosition?.toLong() ?: 0L 
+                    engine.getCurrentPosition()
                 } catch (_: Exception) { 
                     0L 
                 }
                 val dur = try { 
-                    mediaPlayer?.duration?.toLong() ?: 0L 
+                    engine.getDuration()
                 } catch (_: Exception) { 
                     0L 
                 }
