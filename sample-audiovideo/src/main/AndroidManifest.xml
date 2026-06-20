@@ -9,29 +9,7 @@
 
 
     <application>
-        <activity
-            android:name="z.app.allever.android.learning.audiovideo.AudioVideoMainActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="z.app.allever.android.learning.audiovideo.videoplayer.videoviewplayer.VideoViewPlayerActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/FullScreenStyle" />
-        <activity
-            android:name="z.app.allever.android.learning.audiovideo.SelectMediaActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="z.app.allever.android.learning.audiovideo.videoplayer.textureviewplayer.TextureViewPlayerActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/FullScreenStyle" />
-        <activity
-            android:name="z.app.allever.android.learning.audiovideo.videoplayer.surfaceviewplayer.SurfaceViewPlayerActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/FullScreenStyle" />
-        <activity android:name="app.allever.android.sample.audiovideo.SampleAudioVideoMainActivity" />
 
-        <service android:name="z.app.allever.android.learning.audiovideo.ijkplayer.services.MediaPlayerService" />
+        <activity android:name="app.allever.android.sample.audiovideo.SampleAudioVideoMainActivity" />
     </application>
 </manifest>
