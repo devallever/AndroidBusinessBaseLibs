@@ -7,7 +7,6 @@ import android.media.PlaybackParams
 import android.net.Uri
 import android.view.Surface
 import android.view.TextureView
-import android.view.ViewGroup
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
@@ -15,10 +14,10 @@ import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
 import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import app.allever.android.sample.audiovideo.lib.PlayerState
+import app.allever.android.sample.audiovideo.lib.VideoHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -123,9 +122,7 @@ class AndroidTexturePlayer {
     var videoScaleMode: VideoScaleMode = VideoScaleMode.FIT_CENTER
         set(value) {
             field = value
-            if (videoWidth > 0 && videoHeight > 0) {
-                adjustTextureLayout()
-            }
+            VideoHelper.adjustRenderViewLayout(textureView, videoWidth, videoHeight, value)
         }
 
     // ==================== 内部状态 ====================
@@ -397,7 +394,7 @@ class AndroidTexturePlayer {
                     this@AndroidTexturePlayer.videoWidth = width
                     this@AndroidTexturePlayer.videoHeight = height
                     listener?.onVideoSizeChanged(width, height)
-                    adjustTextureLayout()
+                    VideoHelper.adjustRenderViewLayout(textureView, videoWidth, videoHeight, videoScaleMode)
                 }
             }
         }
@@ -440,16 +437,12 @@ class AndroidTexturePlayer {
                     doPrepareInternal(pending.uri, pending.headers, pending.assetPath)
                 }
 
-                // 如果已有视频尺寸信息，调整布局
-                if (videoWidth > 0 && videoHeight > 0) {
-                    adjustTextureLayout()
-                }
+                VideoHelper.adjustRenderViewLayout(textureView, videoWidth, videoHeight, videoScaleMode)
             }
 
             override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {
                 log("TexturePlayer", "surfaceTextureSizeChanged: ${width}x${height}")
-                // TextureView 尺寸变化时重新计算自适应布局
-                adjustTextureLayout()
+                VideoHelper.adjustRenderViewLayout(textureView, videoWidth, videoHeight, videoScaleMode)
             }
 
             override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
@@ -589,85 +582,5 @@ class AndroidTexturePlayer {
      */
     private fun postDelayed(action: () -> Unit, delayMs: Long) {
         App.mainHandler.postDelayed(action, delayMs)
-    }
-
-    // ==================== 内部：自适应布局 ====================
-
-    /**
-     * 根据当前缩放模式调整 TextureView 的布局尺寸
-     *
-     * 调用时机：
-     * - onVideoSizeChanged 回调中（获取到视频尺寸后）
-     * - videoScaleMode 属性改变时（切换缩放模式）
-     * - onSurfaceTextureSizeChanged 回调中（TextureView 尺寸变化时）
-     */
-    private fun adjustTextureLayout() {
-        val tv = textureView ?: return
-        if (videoWidth <= 0 || videoHeight <= 0) return
-
-        val parent = tv.parent as? ViewGroup ?: return
-
-        App.mainHandler.post {
-            val containerWidth = parent.width
-            val containerHeight = parent.height
-            if (containerWidth <= 0 || containerHeight <= 0) return@post
-
-            val (targetWidth, targetHeight) = calculateTargetSize(
-                videoWidth, videoHeight,
-                containerWidth, containerHeight,
-                videoScaleMode
-            )
-
-            log("TexturePlayer", "adjustLayout: " +
-                    "video=${videoWidth}x${videoHeight} " +
-                    "container=${containerWidth}x${containerHeight} " +
-                    "mode=$videoScaleMode -> " +
-                    "target=${targetWidth}x${targetHeight}")
-
-            // 更新 TextureView LayoutParams
-            val params = tv.layoutParams
-            params.width = targetWidth
-            params.height = targetHeight
-
-            if (params is android.widget.FrameLayout.LayoutParams) {
-                params.gravity = android.view.Gravity.CENTER
-            }
-
-            tv.layoutParams = params
-        }
-    }
-
-    /**
-     * 根据缩放模式计算目标尺寸
-     */
-    private fun calculateTargetSize(
-        videoWidth: Int,
-        videoHeight: Int,
-        containerWidth: Int,
-        containerHeight: Int,
-        scaleMode: VideoScaleMode
-    ): Pair<Int, Int> {
-        val videoAspect = videoWidth.toFloat() / videoHeight.toFloat()
-        val containerAspect = containerWidth.toFloat() / containerHeight.toFloat()
-
-        return when (scaleMode) {
-            VideoScaleMode.FIT_CENTER -> {
-                if (videoAspect > containerAspect) {
-                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
-                } else {
-                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
-                }
-            }
-            VideoScaleMode.CROP_CENTER -> {
-                if (videoAspect > containerAspect) {
-                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
-                } else {
-                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
-                }
-            }
-            VideoScaleMode.STRETCH -> {
-                Pair(containerWidth, containerHeight)
-            }
-        }
     }
 }

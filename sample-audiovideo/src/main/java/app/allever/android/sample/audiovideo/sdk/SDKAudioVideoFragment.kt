@@ -6,6 +6,7 @@ import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
+import app.allever.android.lib.core.ext.toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 class SDKAudioVideoFragment: ListFragment<FragmentListBinding, ListViewModel, TextClickItem>() {
@@ -13,7 +14,7 @@ class SDKAudioVideoFragment: ListFragment<FragmentListBinding, ListViewModel, Te
 
     override fun getList(): MutableList<TextClickItem> = mutableListOf(
         TextClickItem("ExoPlayer(过时，推荐使用Media3Player)") {
-            FragmentActivity.start<ExoVideoPlayerSampleFragment>(it.title)
+            toast(it.title)
         },
         TextClickItem("ijkPlayer") {
             FragmentActivity.start<IjkVideoPlayerSampleFragment>(it.title)

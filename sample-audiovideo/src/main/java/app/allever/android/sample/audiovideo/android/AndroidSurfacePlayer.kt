@@ -14,6 +14,7 @@ import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
 import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import app.allever.android.sample.audiovideo.lib.PlayerState
+import app.allever.android.sample.audiovideo.lib.VideoHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -116,9 +117,7 @@ class AndroidSurfacePlayer {
     var videoScaleMode: VideoScaleMode = VideoScaleMode.FIT_CENTER
         set(value) {
             field = value
-            if (videoWidth > 0 && videoHeight > 0) {
-                adjustSurfaceLayout()
-            }
+            VideoHelper.adjustRenderViewLayout(surfaceView, videoWidth, videoHeight, value)
         }
 
     // ==================== 内部状态 ====================
@@ -390,7 +389,7 @@ class AndroidSurfacePlayer {
                     this@AndroidSurfacePlayer.videoWidth = width
                     this@AndroidSurfacePlayer.videoHeight = height
                     listener?.onVideoSizeChanged(width, height)
-                    adjustSurfaceLayout()
+                    VideoHelper.adjustRenderViewLayout(surfaceView, videoWidth, videoHeight, videoScaleMode)
                 }
             }
         }
@@ -444,7 +443,7 @@ class AndroidSurfacePlayer {
             override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
                 log("SurfacePlayer", "surfaceChanged: ${width}x${height}")
                 // Surface 尺寸变化时重新计算自适应布局
-                adjustSurfaceLayout()
+                VideoHelper.adjustRenderViewLayout(surfaceView, videoWidth, videoHeight, videoScaleMode)
             }
 
             override fun surfaceDestroyed(holder: SurfaceHolder) {
@@ -580,85 +579,5 @@ class AndroidSurfacePlayer {
      */
     private fun postDelayed(action: () -> Unit, delayMs: Long) {
         App.mainHandler.postDelayed(action, delayMs)
-    }
-
-    // ==================== 内部：自适应布局 ====================
-
-    /**
-     * 根据当前缩放模式调整 SurfaceView 的布局尺寸
-     *
-     * 调用时机：
-     * - onVideoSizeChanged 回调中（获取到视频尺寸后）
-     * - videoScaleMode 属性改变时（切换缩放模式）
-     * - surfaceChanged 回调中（Surface 尺寸变化时）
-     */
-    private fun adjustSurfaceLayout() {
-        val sv = surfaceView ?: return
-        if (videoWidth <= 0 || videoHeight <= 0) return
-
-        val parent = sv.parent as? ViewGroup ?: return
-
-        App.mainHandler.post {
-            val containerWidth = parent.width
-            val containerHeight = parent.height
-            if (containerWidth <= 0 || containerHeight <= 0) return@post
-
-            val (targetWidth, targetHeight) = calculateTargetSize(
-                videoWidth, videoHeight,
-                containerWidth, containerHeight,
-                videoScaleMode
-            )
-
-            log("SurfacePlayer", "adjustLayout: " +
-                    "video=${videoWidth}x${videoHeight} " +
-                    "container=${containerWidth}x${containerHeight} " +
-                    "mode=$videoScaleMode -> " +
-                    "target=${targetWidth}x${targetHeight}")
-
-            // 更新 SurfaceView LayoutParams
-            val params = sv.layoutParams
-            params.width = targetWidth
-            params.height = targetHeight
-
-            if (params is android.widget.FrameLayout.LayoutParams) {
-                params.gravity = android.view.Gravity.CENTER
-            }
-
-            sv.layoutParams = params
-        }
-    }
-
-    /**
-     * 根据缩放模式计算目标尺寸
-     */
-    private fun calculateTargetSize(
-        videoWidth: Int,
-        videoHeight: Int,
-        containerWidth: Int,
-        containerHeight: Int,
-        scaleMode: VideoScaleMode
-    ): Pair<Int, Int> {
-        val videoAspect = videoWidth.toFloat() / videoHeight.toFloat()
-        val containerAspect = containerWidth.toFloat() / containerHeight.toFloat()
-
-        return when (scaleMode) {
-            VideoScaleMode.FIT_CENTER -> {
-                if (videoAspect > containerAspect) {
-                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
-                } else {
-                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
-                }
-            }
-            VideoScaleMode.CROP_CENTER -> {
-                if (videoAspect > containerAspect) {
-                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
-                } else {
-                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
-                }
-            }
-            VideoScaleMode.STRETCH -> {
-                Pair(containerWidth, containerHeight)
-            }
-        }
     }
 }

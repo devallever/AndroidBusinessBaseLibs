@@ -16,6 +16,7 @@ import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
 import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import app.allever.android.sample.audiovideo.lib.PlayerState
+import app.allever.android.sample.audiovideo.lib.VideoHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -169,9 +170,7 @@ class IjkVideoPlayer {
     var videoScaleMode: VideoScaleMode = VideoScaleMode.FIT_CENTER
         set(value) {
             field = value
-            if (videoWidth > 0 && videoHeight > 0) {
-                adjustSurfaceLayout()
-            }
+            adjustSurfaceLayout()
         }
 
     /**
@@ -516,11 +515,7 @@ class IjkVideoPlayer {
                 listener?.onVideoSizeChanged(width, height)
                 log("IjkVideoPlayer", "onVideoSizeChanged: ${width}x${height}")
 
-                // 对 SurfaceView 和 TextureView 进行画面自适应
-                if (currentSurfaceType == SurfaceType.SURFACE_VIEW ||
-                    currentSurfaceType == SurfaceType.TEXTURE_VIEW) {
-                    adjustSurfaceLayout()
-                }
+                adjustSurfaceLayout()
             }
         }
     }
@@ -1666,126 +1661,9 @@ class IjkVideoPlayer {
      */
     private fun adjustSurfaceLayout() {
         when (currentSurfaceType) {
-            SurfaceType.SURFACE_VIEW -> adjustSurfaceViewLayout()
-            SurfaceType.TEXTURE_VIEW -> adjustTextureViewLayout()
+            SurfaceType.SURFACE_VIEW -> VideoHelper.adjustRenderViewLayout(surfaceView, videoWidth, videoHeight, videoScaleMode)
+            SurfaceType.TEXTURE_VIEW -> VideoHelper.adjustRenderViewLayout(textureView, videoWidth, videoHeight, videoScaleMode)
             else -> {}
-        }
-    }
-
-    /**
-     * 调整 SurfaceView 布局尺寸以适应视频宽高比
-     *
-     * 算法根据 [videoScaleMode] 选择不同的适配策略：
-     * - FIT_CENTER：保持比例，完整显示视频（可能有黑边）
-     * - CROP_CENTER：保持比例，填满容器（可能裁剪边缘）
-     * - STRETCH：拉伸填满容器（可能变形）
-     */
-    private fun adjustSurfaceViewLayout() {
-        val sv = surfaceView ?: return
-        if (videoWidth <= 0 || videoHeight <= 0) return
-
-        val parent = sv.parent as? android.view.ViewGroup ?: return
-
-        App.mainHandler.post {
-            val containerWidth = parent.width
-            val containerHeight = parent.height
-            if (containerWidth <= 0 || containerHeight <= 0) return@post
-
-            val (targetWidth, targetHeight) = calculateTargetSize(
-                videoWidth, videoHeight,
-                containerWidth, containerHeight,
-                videoScaleMode
-            )
-
-            log("IjkVideoPlayer", "adjustSurfaceViewLayout: " +
-                    "video=${videoWidth}x${videoHeight} " +
-                    "container=${containerWidth}x${containerHeight} " +
-                    "mode=$videoScaleMode -> " +
-                    "target=${targetWidth}x${targetHeight}")
-
-            val params = sv.layoutParams
-            params.width = targetWidth
-            params.height = targetHeight
-
-            if (params is android.widget.FrameLayout.LayoutParams) {
-                params.gravity = android.view.Gravity.CENTER
-            }
-
-            sv.layoutParams = params
-        }
-    }
-
-    /**
-     * 调整 TextureView 布局尺寸以适应视频宽高比
-     *
-     * 与 SurfaceView 类似，但 TextureView 支持矩阵变换。
-     */
-    private fun adjustTextureViewLayout() {
-        val tv = textureView ?: return
-        if (videoWidth <= 0 || videoHeight <= 0) return
-
-        val parent = tv.parent as? android.view.ViewGroup ?: return
-
-        App.mainHandler.post {
-            val containerWidth = parent.width
-            val containerHeight = parent.height
-            if (containerWidth <= 0 || containerHeight <= 0) return@post
-
-            val (targetWidth, targetHeight) = calculateTargetSize(
-                videoWidth, videoHeight,
-                containerWidth, containerHeight,
-                videoScaleMode
-            )
-
-            log("IjkVideoPlayer", "adjustTextureViewLayout: " +
-                    "video=${videoWidth}x${videoHeight} " +
-                    "container=${containerWidth}x${containerHeight} " +
-                    "mode=$videoScaleMode -> " +
-                    "target=${targetWidth}x${targetHeight}")
-
-            val params = tv.layoutParams
-            params.width = targetWidth
-            params.height = targetHeight
-
-            if (params is android.widget.FrameLayout.LayoutParams) {
-                params.gravity = android.view.Gravity.CENTER
-            }
-
-            tv.layoutParams = params
-        }
-    }
-
-    /**
-     * 根据缩放模式计算目标尺寸
-     */
-    private fun calculateTargetSize(
-        videoWidth: Int,
-        videoHeight: Int,
-        containerWidth: Int,
-        containerHeight: Int,
-        scaleMode: VideoScaleMode
-    ): Pair<Int, Int> {
-        val videoAspect = videoWidth.toFloat() / videoHeight.toFloat()
-        val containerAspect = containerWidth.toFloat() / containerHeight.toFloat()
-
-        return when (scaleMode) {
-            VideoScaleMode.FIT_CENTER -> {
-                if (videoAspect > containerAspect) {
-                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
-                } else {
-                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
-                }
-            }
-            VideoScaleMode.CROP_CENTER -> {
-                if (videoAspect > containerAspect) {
-                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
-                } else {
-                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
-                }
-            }
-            VideoScaleMode.STRETCH -> {
-                Pair(containerWidth, containerHeight)
-            }
         }
     }
 

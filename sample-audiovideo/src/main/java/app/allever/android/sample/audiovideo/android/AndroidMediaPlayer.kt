@@ -18,6 +18,7 @@ import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
 import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import app.allever.android.sample.audiovideo.lib.PlayerState
+import app.allever.android.sample.audiovideo.lib.VideoHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -187,9 +188,7 @@ class AndroidMediaPlayer {
     var videoScaleMode: VideoScaleMode = VideoScaleMode.FIT_CENTER
         set(value) {
             field = value
-            if (videoWidth > 0 && videoHeight > 0) {
-                adjustSurfaceLayout()
-            }
+            adjustSurfaceLayout()
         }
 
     // ==================== 内部状态 ====================
@@ -1424,174 +1423,10 @@ class AndroidMediaPlayer {
      */
     private fun adjustSurfaceLayout() {
         when (currentSurfaceType) {
-            SurfaceType.VIDEO_VIEW -> adjustVideoViewLayout()
-            SurfaceType.SURFACE_VIEW -> adjustSurfaceViewLayout()
-            SurfaceType.TEXTURE_VIEW -> adjustTextureViewLayout()
+            SurfaceType.VIDEO_VIEW -> VideoHelper.adjustRenderViewLayout(videoView, videoWidth, videoHeight, videoScaleMode)
+            SurfaceType.SURFACE_VIEW -> VideoHelper.adjustRenderViewLayout(surfaceView, videoWidth, videoHeight, videoScaleMode)
+            SurfaceType.TEXTURE_VIEW -> VideoHelper.adjustRenderViewLayout(textureView, videoWidth, videoHeight, videoScaleMode)
             else -> {}
-        }
-    }
-
-    /**
-     * 调整 VideoView 布局尺寸以适应视频宽高比
-     */
-    private fun adjustVideoViewLayout() {
-        val vv = videoView ?: return
-        if (videoWidth <= 0 || videoHeight <= 0) return
-
-        val parent = vv.parent as? android.view.ViewGroup ?: return
-
-        App.mainHandler.post {
-            val containerWidth = parent.width
-            val containerHeight = parent.height
-            if (containerWidth <= 0 || containerHeight <= 0) return@post
-
-            val (targetWidth, targetHeight) = calculateTargetSize(
-                videoWidth, videoHeight,
-                containerWidth, containerHeight,
-                videoScaleMode
-            )
-
-            log("AndroidMP", "adjustVideoViewLayout: " +
-                    "video=${videoWidth}x${videoHeight} " +
-                    "container=${containerWidth}x${containerHeight} " +
-                    "mode=$videoScaleMode -> " +
-                    "target=${targetWidth}x${targetHeight}")
-
-            val params = vv.layoutParams
-            params.width = targetWidth
-            params.height = targetHeight
-            
-            if (params is android.widget.FrameLayout.LayoutParams) {
-                params.gravity = android.view.Gravity.CENTER
-            }
-            
-            vv.layoutParams = params
-        }
-    }
-
-    /**
-     * 调整 SurfaceView 布局尺寸以适应视频宽高比
-     */
-    private fun adjustSurfaceViewLayout() {
-        val sv = surfaceView ?: return
-        if (videoWidth <= 0 || videoHeight <= 0) return
-
-        val parent = sv.parent as? android.view.ViewGroup ?: return
-
-        App.mainHandler.post {
-            val containerWidth = parent.width
-            val containerHeight = parent.height
-            if (containerWidth <= 0 || containerHeight <= 0) return@post
-
-            val (targetWidth, targetHeight) = calculateTargetSize(
-                videoWidth, videoHeight,
-                containerWidth, containerHeight,
-                videoScaleMode
-            )
-
-            log("AndroidMP", "adjustSurfaceViewLayout: " +
-                    "video=${videoWidth}x${videoHeight} " +
-                    "container=${containerWidth}x${containerHeight} " +
-                    "mode=$videoScaleMode -> " +
-                    "target=${targetWidth}x${targetHeight}")
-
-            val params = sv.layoutParams
-            params.width = targetWidth
-            params.height = targetHeight
-
-            if (params is android.widget.FrameLayout.LayoutParams) {
-                params.gravity = android.view.Gravity.CENTER
-            }
-
-            sv.layoutParams = params
-        }
-    }
-
-    /**
-     * 调整 TextureView 布局尺寸以适应视频宽高比
-     */
-    private fun adjustTextureViewLayout() {
-        val tv = textureView ?: return
-        if (videoWidth <= 0 || videoHeight <= 0) return
-
-        val parent = tv.parent as? android.view.ViewGroup ?: return
-
-        App.mainHandler.post {
-            val containerWidth = parent.width
-            val containerHeight = parent.height
-            if (containerWidth <= 0 || containerHeight <= 0) return@post
-
-            val (targetWidth, targetHeight) = calculateTargetSize(
-                videoWidth, videoHeight,
-                containerWidth, containerHeight,
-                videoScaleMode
-            )
-
-            log("AndroidMP", "adjustTextureViewLayout: " +
-                    "video=${videoWidth}x${videoHeight} " +
-                    "container=${containerWidth}x${containerHeight} " +
-                    "mode=$videoScaleMode -> " +
-                    "target=${targetWidth}x${targetHeight}")
-
-            val params = tv.layoutParams
-            params.width = targetWidth
-            params.height = targetHeight
-
-            if (params is android.widget.FrameLayout.LayoutParams) {
-                params.gravity = android.view.Gravity.CENTER
-            }
-
-            tv.layoutParams = params
-        }
-    }
-
-    /**
-     * 根据缩放模式计算目标尺寸
-     *
-     * @param videoW 视频宽度
-     * @param videoH 视频高度
-     * @param containerW 容器宽度
-     * @param containerH 容器高度
-     * @param mode 缩放模式
-     * @return Pair<目标宽度, 目标高度>
-     */
-    private fun calculateTargetSize(
-        videoW: Int, videoH: Int,
-        containerW: Int, containerH: Int,
-        mode: VideoScaleMode
-    ): Pair<Int, Int> {
-        if (videoW <= 0 || videoH <= 0 || containerW <= 0 || containerH <= 0) {
-            return Pair(containerW, containerH)
-        }
-
-        val videoRatio = videoW.toFloat() / videoH.toFloat()
-        val containerRatio = containerW.toFloat() / containerH.toFloat()
-
-        return when (mode) {
-            VideoScaleMode.FIT_CENTER -> {
-                // 保持比例，完整显示（可能有黑边）
-                if (videoRatio > containerRatio) {
-                    // 视频更宽，以宽度为准
-                    Pair(containerW, (containerW / videoRatio).toInt())
-                } else {
-                    // 视频更高，以高度为准
-                    Pair((containerH * videoRatio).toInt(), containerH)
-                }
-            }
-            VideoScaleMode.CROP_CENTER -> {
-                // 保持比例，填满容器（可能裁剪边缘）
-                if (videoRatio > containerRatio) {
-                    // 视频更宽，以高度为准（裁剪左右）
-                    Pair((containerH * videoRatio).toInt(), containerH)
-                } else {
-                    // 视频更高，以宽度为准（裁剪上下）
-                    Pair(containerW, (containerW / videoRatio).toInt())
-                }
-            }
-            VideoScaleMode.STRETCH -> {
-                // 拉伸填满容器（可能变形）
-                Pair(containerW, containerH)
-            }
         }
     }
 }

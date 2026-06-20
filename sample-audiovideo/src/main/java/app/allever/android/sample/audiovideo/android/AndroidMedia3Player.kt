@@ -19,11 +19,13 @@ import androidx.media3.ui.PlayerView
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.helper.TimeHelper.formatTime
+import app.allever.android.sample.audiovideo.lib.ExoPlayerHelper
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
 import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import app.allever.android.sample.audiovideo.lib.PlayerState
+import app.allever.android.sample.audiovideo.lib.VideoHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -176,27 +178,7 @@ class AndroidMedia3Player {
     var videoScaleMode: VideoScaleMode = VideoScaleMode.FIT_CENTER
         set(value) {
             field = value
-
-            // 根据 Surface 类型选择不同的应用策略
-            when (currentSurfaceType) {
-                SurfaceType.PLAYER_VIEW -> {
-                    // PlayerView 通过 resizeMode 立即生效，不依赖视频尺寸
-                    applyVideoScaleMode()
-                }
-                SurfaceType.SURFACE_VIEW,
-                SurfaceType.TEXTURE_VIEW -> {
-                    // SurfaceView/TextureView 需要视频尺寸才能正确计算布局
-                    if (videoWidth > 0 && videoHeight > 0) {
-                        adjustSurfaceLayout()
-                    } else {
-                        // 视频尺寸未知，等 onVideoSizeChanged 回调时自动调整
-                        log("Media3Player", "videoScaleMode changed to $value, but video size unknown, will adjust later")
-                    }
-                }
-                SurfaceType.NONE -> {
-                    // 未绑定 Surface，仅保存值，等 attach 后自动应用
-                }
-            }
+            adjustSurfaceLayout()
         }
 
     // ==================== 内部状态 ====================
@@ -936,23 +918,6 @@ class AndroidMedia3Player {
         }
     }
 
-    /**
-     * 应用视频缩放模式（PlayerView 版本）
-     *
-     * 通过 PlayerView 的 resizeMode 属性控制：
-     * - FIT_CENTER → RESIZE_MODE_FIT（保持比例，完整显示）
-     * - CROP_CENTER → RESIZE_MODE_ZOOM（保持比例，填满容器）
-     * - STRETCH → RESIZE_MODE_FILL（拉伸填满）
-     */
-    @OptIn(UnstableApi::class)
-    private fun applyVideoScaleMode() {
-        playerView?.resizeMode = when (videoScaleMode) {
-            VideoScaleMode.FIT_CENTER -> androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_FIT
-            VideoScaleMode.CROP_CENTER -> androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-            VideoScaleMode.STRETCH -> androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_FILL
-        }
-    }
-
     // ==================== 私有方法：资源释放 ====================
 
     /**
@@ -1074,11 +1039,7 @@ class AndroidMedia3Player {
                     listener?.onVideoSizeChanged(videoSize.width, videoSize.height)
                     log("Media3Player", "onVideoSizeChanged: ${videoSize.width}x${videoSize.height}")
 
-                    // 对 SurfaceView 和 TextureView 进行画面自适应
-                    if (currentSurfaceType == SurfaceType.SURFACE_VIEW ||
-                        currentSurfaceType == SurfaceType.TEXTURE_VIEW) {
-                        adjustSurfaceLayout()
-                    }
+                    adjustSurfaceLayout()
                 }
             }
         }
@@ -1150,147 +1111,10 @@ class AndroidMedia3Player {
      */
     private fun adjustSurfaceLayout() {
         when (currentSurfaceType) {
-            SurfaceType.SURFACE_VIEW -> adjustSurfaceViewLayout()
-            SurfaceType.TEXTURE_VIEW -> adjustTextureViewLayout()
-            else -> {}  // PlayerView 不需要手动调整
-        }
-    }
-
-    /**
-     * 调整 SurfaceView 布局尺寸以适应视频宽高比
-     *
-     * 算法根据 [videoScaleMode] 选择不同的适配策略：
-     * - FIT_CENTER：保持比例，完整显示视频（可能有黑边）
-     * - CROP_CENTER：保持比例，填满容器（可能裁剪边缘）
-     * - STRETCH：拉伸填满容器（可能变形）
-     */
-    private fun adjustSurfaceViewLayout() {
-        val sv = surfaceView ?: return
-        if (videoWidth <= 0 || videoHeight <= 0) return
-
-        val parent = sv.parent as? android.view.ViewGroup ?: return
-
-        // 使用 post 确保 View 已完成布局测量
-        App.mainHandler.post {
-            val containerWidth = parent.width
-            val containerHeight = parent.height
-            if (containerWidth <= 0 || containerHeight <= 0) return@post
-
-            val (targetWidth, targetHeight) = calculateTargetSize(
-                videoWidth, videoHeight,
-                containerWidth, containerHeight,
-                videoScaleMode
-            )
-
-            log("Media3Player", "adjustSurfaceViewLayout: " +
-                    "video=${videoWidth}x${videoHeight} " +
-                    "container=${containerWidth}x${containerHeight} " +
-                    "mode=$videoScaleMode -> " +
-                    "target=${targetWidth}x${targetHeight}")
-
-            // 更新 SurfaceView LayoutParams
-            val params = sv.layoutParams
-            params.width = targetWidth
-            params.height = targetHeight
-
-            // 居中显示（通过 gravity）
-            if (params is android.widget.FrameLayout.LayoutParams) {
-                params.gravity = android.view.Gravity.CENTER
-            }
-
-            sv.layoutParams = params
-        }
-    }
-
-    /**
-     * 调整 TextureView 布局尺寸以适应视频宽高比
-     *
-     * 与 SurfaceView 类似，但 TextureView 支持矩阵变换，
-     * 此处使用 LayoutParams 方式实现基础版自适应。
-     */
-    private fun adjustTextureViewLayout() {
-        val tv = textureView ?: return
-        if (videoWidth <= 0 || videoHeight <= 0) return
-
-        val parent = tv.parent as? android.view.ViewGroup ?: return
-
-        // 使用 post 确保 View 已完成布局测量
-        App.mainHandler.post {
-            val containerWidth = parent.width
-            val containerHeight = parent.height
-            if (containerWidth <= 0 || containerHeight <= 0) return@post
-
-            val (targetWidth, targetHeight) = calculateTargetSize(
-                videoWidth, videoHeight,
-                containerWidth, containerHeight,
-                videoScaleMode
-            )
-
-            log("Media3Player", "adjustTextureViewLayout: " +
-                    "video=${videoWidth}x${videoHeight} " +
-                    "container=${containerWidth}x${containerHeight} " +
-                    "mode=$videoScaleMode -> " +
-                    "target=${targetWidth}x${targetHeight}")
-
-            // 更新 TextureView LayoutParams
-            val params = tv.layoutParams
-            params.width = targetWidth
-            params.height = targetHeight
-
-            // 居中显示（通过 gravity）
-            if (params is android.widget.FrameLayout.LayoutParams) {
-                params.gravity = android.view.Gravity.CENTER
-            }
-
-            tv.layoutParams = params
-        }
-    }
-
-    /**
-     * 根据缩放模式计算目标尺寸
-     *
-     * @param videoWidth 视频原始宽度
-     * @param videoHeight 视频原始高度
-     * @param containerWidth 容器宽度
-     * @param containerHeight 容器高度
-     * @param scaleMode 缩放模式
-     * @return Pair<目标宽度, 目标高度>
-     */
-    private fun calculateTargetSize(
-        videoWidth: Int,
-        videoHeight: Int,
-        containerWidth: Int,
-        containerHeight: Int,
-        scaleMode: VideoScaleMode
-    ): Pair<Int, Int> {
-        val videoAspect = videoWidth.toFloat() / videoHeight.toFloat()
-        val containerAspect = containerWidth.toFloat() / containerHeight.toFloat()
-
-        return when (scaleMode) {
-            VideoScaleMode.FIT_CENTER -> {
-                // 保持比例，完整显示视频（可能有黑边）
-                if (videoAspect > containerAspect) {
-                    // 视频更宽 → 以宽度为准，高度按比例缩放
-                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
-                } else {
-                    // 视频更高 → 以高度为准，宽度按比例缩放
-                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
-                }
-            }
-            VideoScaleMode.CROP_CENTER -> {
-                // 保持比例，填满容器（可能裁剪边缘）
-                if (videoAspect > containerAspect) {
-                    // 视频更宽 → 以高度为准，宽度超出部分会被裁剪
-                    Pair((containerHeight * videoAspect).toInt(), containerHeight)
-                } else {
-                    // 视频更高 → 以宽度为准，高度超出部分会被裁剪
-                    Pair(containerWidth, (containerWidth / videoAspect).toInt())
-                }
-            }
-            VideoScaleMode.STRETCH -> {
-                // 拉伸填满容器（可能变形）
-                Pair(containerWidth, containerHeight)
-            }
+            SurfaceType.SURFACE_VIEW -> VideoHelper.adjustRenderViewLayout(surfaceView, videoWidth, videoHeight, videoScaleMode)
+            SurfaceType.TEXTURE_VIEW -> VideoHelper.adjustRenderViewLayout(textureView, videoWidth, videoHeight, videoScaleMode)
+            SurfaceType.PLAYER_VIEW -> ExoPlayerHelper.applyVideoScaleMode(playerView, videoScaleMode)
+            else -> { }
         }
     }
 
@@ -1309,10 +1133,4 @@ class AndroidMedia3Player {
         return ((buffered.toFloat() / dur.toFloat()) * 100).toInt().coerceIn(0, 100)
     }
 
-    /**
-     * 主线程延迟执行
-     */
-    private fun postDelayed(action: () -> Unit, delayMs: Long) {
-        App.mainHandler.postDelayed(action, delayMs)
-    }
 }
