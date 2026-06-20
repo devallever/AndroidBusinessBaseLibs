@@ -13,6 +13,7 @@ import app.allever.android.lib.core.ext.log
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
+import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import app.allever.android.sample.audiovideo.lib.PlayerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -357,7 +358,12 @@ class AndroidTexturePlayer {
             setOnErrorListener { _, what, extra ->
                 stopProgressTracking()
                 _state = PlayerState.ERROR
-                val handled = listener?.onError(what, extra) ?: false
+                val errorCode = when (what) {
+                    MediaPlayer.MEDIA_ERROR_UNKNOWN -> PlayerErrorCode.MEDIA_PLAYER_INTERNAL_ERROR
+                    MediaPlayer.MEDIA_ERROR_SERVER_DIED -> PlayerErrorCode.SERVER_ERROR
+                    else -> PlayerErrorCode.UNKNOWN
+                }
+                val handled = listener?.onError(errorCode, PlayerErrorCode.formatError(errorCode, "MediaPlayer error: what=$what, extra=$extra")) ?: false
                 if (!handled && retryLeft > 0) {
                     retryLeft--
                     log("TexturePlayer", "auto retry, left=$retryLeft")
@@ -531,7 +537,7 @@ class AndroidTexturePlayer {
 
     private fun handlePrepareError(e: Exception) {
         _state = PlayerState.ERROR
-        val handled = listener?.onError(-1, 0) ?: false
+        val handled = listener?.onError(PlayerErrorCode.PREPARE_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.PREPARE_FAILED, e.message)) ?: false
         if (!handled && retryLeft > 0) {
             retryLeft--
             log("TexturePlayer", "prepare error auto retry, left=$retryLeft")

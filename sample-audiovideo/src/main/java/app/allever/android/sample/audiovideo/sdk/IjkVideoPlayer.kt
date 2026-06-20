@@ -14,6 +14,7 @@ import app.allever.android.lib.core.helper.TimeHelper.formatTime
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
+import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import app.allever.android.sample.audiovideo.lib.PlayerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -268,7 +269,7 @@ class IjkVideoPlayer {
         } catch (e: Exception) {
             log("IjkVideoPlayer", "initIjkPlayer error: ${e.message}")
             _state = PlayerState.ERROR
-            listener?.onError(-1, 0)
+            listener?.onError(PlayerErrorCode.IJK_MEDIA_PLAYER_INTERNAL_ERROR, PlayerErrorCode.formatError(PlayerErrorCode.IJK_MEDIA_PLAYER_INTERNAL_ERROR, e.message))
         }
     }
 
@@ -460,7 +461,12 @@ class IjkVideoPlayer {
                 handlePrepareError(Exception("prepare error: $what, $extra"))
             } else {
                 _state = PlayerState.ERROR
-                listener?.onError(what.toInt(), extra.toInt())
+                val errorCode = when (what.toInt()) {
+                    IjkMediaPlayer.MEDIA_ERROR_UNKNOWN -> PlayerErrorCode.IJK_MEDIA_PLAYER_INTERNAL_ERROR
+                    IjkMediaPlayer.MEDIA_ERROR_SERVER_DIED -> PlayerErrorCode.SERVER_ERROR
+                    else -> PlayerErrorCode.UNKNOWN
+                }
+                listener?.onError(errorCode, PlayerErrorCode.formatError(errorCode, "IjkMediaPlayer error: what=$what, extra=$extra"))
             }
         }
         true  // 返回 true 表示已处理错误
@@ -733,7 +739,7 @@ class IjkVideoPlayer {
                             log("IjkVideoPlayer", "safeSwitchSurface [方案B]: Asset 处理失败 - ${e.message}")
                             switchSurfacePendingPosition = -1L
                             _state = PlayerState.ERROR
-                            listener?.onError(-1, 0)
+                            listener?.onError(PlayerErrorCode.ASSET_COPY_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.ASSET_COPY_FAILED, e.message))
                         }
 
                     } else if (currentUri != null) {
@@ -755,7 +761,7 @@ class IjkVideoPlayer {
                 log("IjkVideoPlayer", "safeSwitchSurface [方案B]: 切换失败 - ${e.message}")
                 switchSurfacePendingPosition = -1L  // 重置
                 _state = PlayerState.ERROR
-                listener?.onError(-1, 0)
+                listener?.onError(PlayerErrorCode.SURFACE_SWITCH_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.SURFACE_SWITCH_FAILED, e.message))
             } finally {
                 // ✨ 无论成功失败，都重置切换标志，允许下次切换
                 isSafeSwitching = false
@@ -769,7 +775,7 @@ class IjkVideoPlayer {
             isSafeSwitching = false  // 重置标志
             switchSurfacePendingPosition = -1L
             _state = PlayerState.ERROR
-            listener?.onError(-1, 0)
+            listener?.onError(PlayerErrorCode.PREPARE_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.PREPARE_FAILED, e.message))
         }
     }
 
@@ -953,7 +959,7 @@ class IjkVideoPlayer {
         } catch (e: Exception) {
             log("IjkVideoPlayer", "setAssetSource error: ${e.message}")
             _state = PlayerState.ERROR
-            listener?.onError(-1, 0)
+            listener?.onError(PlayerErrorCode.ASSET_COPY_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.ASSET_COPY_FAILED, e.message))
         }
     }
 
@@ -1059,7 +1065,7 @@ class IjkVideoPlayer {
             }, 1000)  // 1 秒后重试
         } else {
             _state = PlayerState.ERROR
-            listener?.onError(-1, 0)
+            listener?.onError(PlayerErrorCode.RETRY_EXHAUSTED, "Retry attempts exhausted")
         }
     }
 
@@ -1192,7 +1198,7 @@ class IjkVideoPlayer {
             log("IjkVideoPlayer", "doPlay error: ${e.message}")
             // 如果 start() 抛出异常，回退到之前的状态或标记错误
             _state = PlayerState.ERROR
-            listener?.onError(-1, 0)
+            listener?.onError(PlayerErrorCode.IJK_MEDIA_PLAYER_INTERNAL_ERROR, PlayerErrorCode.formatError(PlayerErrorCode.IJK_MEDIA_PLAYER_INTERNAL_ERROR, e.message))
         }
     }
 

@@ -22,6 +22,7 @@ import app.allever.android.lib.core.helper.TimeHelper.formatTime
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
+import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import app.allever.android.sample.audiovideo.lib.PlayerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -521,7 +522,7 @@ class AndroidMedia3Player {
                 log("Media3Player", "safeSwitchSurface [方案B]: 切换失败 - ${e.message}")
                 pendingSeekPosition = -1L  // 重置
                 _state = PlayerState.ERROR
-                listener?.onError(-1, 0)
+                listener?.onError(PlayerErrorCode.SURFACE_SWITCH_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.SURFACE_SWITCH_FAILED, e.message))
             }
         }, delayMs)
     }
@@ -605,7 +606,7 @@ class AndroidMedia3Player {
         } catch (e: Exception) {
             log("Media3Player", "setAssetSource error: ${e.message}")
             _state = PlayerState.ERROR
-            listener?.onError(-1, 0)
+            listener?.onError(PlayerErrorCode.ASSET_COPY_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.ASSET_COPY_FAILED, e.message))
         }
     }
 
@@ -886,7 +887,25 @@ class AndroidMedia3Player {
             }, 1000)
         } else {
             _state = PlayerState.ERROR
-            listener?.onError(-1, 0)
+            listener?.onError(PlayerErrorCode.RETRY_EXHAUSTED, PlayerErrorCode.formatError(PlayerErrorCode.RETRY_EXHAUSTED, e.message))
+        }
+    }
+
+    /**
+     * 将 ExoPlayer 的错误映射到 PlayerErrorCode
+     *
+     * @param error ExoPlayer PlaybackException
+     * @return 对应的 PlayerErrorCode
+     */
+    private fun mapExoPlayerError(error: PlaybackException): Int {
+        // 根据异常类型判断错误代码，避免使用可能不存在的常量
+        return when {
+            error.cause is java.io.FileNotFoundException -> PlayerErrorCode.FILE_NOT_FOUND
+            error.cause is java.net.SocketTimeoutException ||
+            error.cause is java.net.ConnectException -> PlayerErrorCode.NETWORK_CONNECTION_FAILED
+            error.cause is javax.net.ssl.SSLException -> PlayerErrorCode.SSL_ERROR
+            error.cause is java.io.IOException -> PlayerErrorCode.FILE_READ_ERROR
+            else -> PlayerErrorCode.EXO_PLAYER_INTERNAL_ERROR
         }
     }
 
@@ -1030,13 +1049,17 @@ class AndroidMedia3Player {
             App.mainHandler.post {
                 log("Media3Player", "onPlayerError: ${error.message}")
 
+                // 将 ExoPlayer 错误映射到 PlayerErrorCode
+                val errorCode = mapExoPlayerError(error)
+                val errorMsg = PlayerErrorCode.formatError(errorCode, error.message)
+
                 if (_state == PlayerState.PREPARING) {
                     // 准备阶段出错，尝试重试
-                    handlePrepareError(Exception(error))
+                    handlePrepareError(Exception(errorMsg))
                 } else {
                     // 播放阶段出错
                     _state = PlayerState.ERROR
-                    listener?.onError(error.errorCode, 0)
+                    listener?.onError(errorCode, errorMsg)
                 }
             }
         }

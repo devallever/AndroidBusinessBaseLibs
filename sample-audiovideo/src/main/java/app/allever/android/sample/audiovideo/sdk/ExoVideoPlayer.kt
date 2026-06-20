@@ -20,6 +20,7 @@ import app.allever.android.lib.core.helper.TimeHelper.formatTime
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
+import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import app.allever.android.sample.audiovideo.lib.PlayerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -440,7 +441,7 @@ class ExoVideoPlayer {
                 log("ExoVideoPlayer", "safeSwitchSurface [方案B]: 切换失败 - ${e.message}")
                 pendingSeekPosition = -1L  // 重置
                 _state = PlayerState.ERROR
-                listener?.onError(-1, 0)
+                listener?.onError(PlayerErrorCode.SURFACE_SWITCH_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.SURFACE_SWITCH_FAILED, e.message))
             }
         }, delayMs)
     }
@@ -538,7 +539,7 @@ class ExoVideoPlayer {
         } catch (e: Exception) {
             log("ExoVideoPlayer", "setAssetSource error: ${e.message}")
             _state = PlayerState.ERROR
-            listener?.onError(-1, 0)
+            listener?.onError(PlayerErrorCode.ASSET_COPY_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.ASSET_COPY_FAILED, e.message))
         }
     }
 
@@ -819,7 +820,7 @@ class ExoVideoPlayer {
             }, 1000)
         } else {
             _state = PlayerState.ERROR
-            listener?.onError(-1, 0)
+            listener?.onError(PlayerErrorCode.RETRY_EXHAUSTED, "Retry attempts exhausted")
         }
     }
 
@@ -946,7 +947,13 @@ class ExoVideoPlayer {
                 } else {
                     // 播放阶段出错
                     _state = PlayerState.ERROR
-                    listener?.onError(error.errorCode, 0)
+                    val errorCode = when {
+                        error.cause is java.io.FileNotFoundException -> PlayerErrorCode.FILE_NOT_FOUND
+                        error.cause is java.net.SocketTimeoutException ||
+                        error.cause is java.net.ConnectException -> PlayerErrorCode.NETWORK_CONNECTION_FAILED
+                        else -> PlayerErrorCode.EXO_PLAYER_INTERNAL_ERROR
+                    }
+                    listener?.onError(errorCode, PlayerErrorCode.formatError(errorCode, error.errorCodeName))
                 }
             }
         }

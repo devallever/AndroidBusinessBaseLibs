@@ -16,6 +16,7 @@ import app.allever.android.lib.core.helper.TimeHelper.formatTime
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
+import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import app.allever.android.sample.audiovideo.lib.PlayerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -525,18 +526,18 @@ class AndroidMediaPlayer {
                     log("AndroidMP", "safeSwitchSurface [方案B]: 切换失败 - ${e.message}")
                     pendingSeekPosition = -1L
                     _state = PlayerState.ERROR
-                    listener?.onError(-1, 0)
+                    listener?.onError(PlayerErrorCode.SURFACE_SWITCH_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.SURFACE_SWITCH_FAILED, e.message))
                 } finally {
                     isSafeSwitching = false
                 }
             }, delayMs)
-            
+
         } catch (e: Exception) {
             log("AndroidMP", "safeSwitchSurface [方案B]: 准备阶段失败 - ${e.message}")
             isSafeSwitching = false
             pendingSeekPosition = -1L
             _state = PlayerState.ERROR
-            listener?.onError(-1, 0)
+            listener?.onError(PlayerErrorCode.PREPARE_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.PREPARE_FAILED, e.message))
         }
     }
 
@@ -596,7 +597,7 @@ class AndroidMediaPlayer {
         log("AndroidMP", "safeSwitchSurface [方案B]: prepare 失败 - ${e.message}")
         pendingSeekPosition = -1L
         _state = PlayerState.ERROR
-        listener?.onError(-1, 0)
+        listener?.onError(PlayerErrorCode.PREPARE_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.PREPARE_FAILED, e.message))
     }
 
     // ==================== 数据源设置 ====================
@@ -678,7 +679,7 @@ class AndroidMediaPlayer {
         } catch (e: Exception) {
             log("AndroidMP", "setAssetSource error: ${e.message}")
             _state = PlayerState.ERROR
-            listener?.onError(-1, 0)
+            listener?.onError(PlayerErrorCode.ASSET_COPY_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.ASSET_COPY_FAILED, e.message))
         }
     }
 
@@ -974,16 +975,42 @@ class AndroidMediaPlayer {
         App.mainHandler.post {
             log("AndroidMP", "onError: what=$what, extra=$extra")
 
+            // 将 MediaPlayer 错误代码映射到 PlayerErrorCode
+            val errorCode = mapMediaPlayerError(what, extra)
+            val errorMsg = PlayerErrorCode.formatError(errorCode, "MediaPlayer error: what=$what, extra=$extra")
+
             if (_state == PlayerState.PREPARING) {
                 // 准备阶段出错，尝试重试
-                handlePrepareError(Exception("Media Error: $what, $extra"))
+                handlePrepareError(Exception(errorMsg))
             } else {
                 // 播放阶段出错
                 _state = PlayerState.ERROR
-                listener?.onError(what, extra)
+                listener?.onError(errorCode, errorMsg)
             }
         }
         true  // 返回 true 表示已处理错误
+    }
+
+    /**
+     * 将 MediaPlayer 的错误代码映射到 PlayerErrorCode
+     *
+     * @param what MediaPlayer 错误类型
+     * @param extra 额外错误信息
+     * @return 对应的 PlayerErrorCode
+     */
+    private fun mapMediaPlayerError(what: Int, extra: Int): Int {
+        return when (what) {
+            MediaPlayer.MEDIA_ERROR_UNKNOWN -> PlayerErrorCode.MEDIA_PLAYER_INTERNAL_ERROR
+            MediaPlayer.MEDIA_ERROR_SERVER_DIED -> PlayerErrorCode.SERVER_ERROR
+            MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK -> PlayerErrorCode.SOURCE_FORMAT_UNSUPPORTED
+            MediaPlayer.MEDIA_ERROR_IO -> when (extra) {
+                else -> PlayerErrorCode.FILE_READ_ERROR
+            }
+            MediaPlayer.MEDIA_ERROR_MALFORMED -> PlayerErrorCode.SOURCE_FORMAT_UNSUPPORTED
+            MediaPlayer.MEDIA_ERROR_UNSUPPORTED -> PlayerErrorCode.SOURCE_FORMAT_UNSUPPORTED
+            MediaPlayer.MEDIA_ERROR_TIMED_OUT -> PlayerErrorCode.NETWORK_TIMEOUT
+            else -> PlayerErrorCode.UNKNOWN
+        }
     }
 
     /** OnBufferingUpdateListener：缓冲进度回调 */
@@ -1197,7 +1224,7 @@ class AndroidMediaPlayer {
             }, 1000)
         } else {
             _state = PlayerState.ERROR
-            listener?.onError(-1, 0)
+            listener?.onError(PlayerErrorCode.RETRY_EXHAUSTED, PlayerErrorCode.formatError(PlayerErrorCode.RETRY_EXHAUSTED, e.message))
         }
     }
 

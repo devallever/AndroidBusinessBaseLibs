@@ -15,6 +15,7 @@ import app.allever.android.sample.audiovideo.databinding.FragmentAndroidMediaPla
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
+import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import app.allever.android.sample.audiovideo.lib.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -407,13 +408,13 @@ class AndroidMediaPlayerSampleFragment :
         /**
          * 错误回调
          *
-         * @param what 错误类型
-         * @param extra 额外错误信息
+         * @param errorCode 错误代码（使用 PlayerErrorCode 中定义的常量）
+         * @param msg 错误消息（可读的错误描述）
          * @return 是否已处理错误
          */
-        override fun onError(what: Int, extra: Int): Boolean {
+        override fun onError(errorCode: Int, msg: String): Boolean {
             activity?.runOnUiThread {
-                appendLog("播放错误: what=$what, extra=$extra")
+                appendLog("播放错误: [${PlayerErrorCode.getMessage(errorCode)}] $msg")
             }
             return false
         }

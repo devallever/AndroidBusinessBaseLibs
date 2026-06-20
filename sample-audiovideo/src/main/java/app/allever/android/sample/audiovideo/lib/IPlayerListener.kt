@@ -19,8 +19,14 @@ interface IPlayerListener {
     /** 播放完成 */
     fun onComplete() {}
 
-    /** 出错 */
-    fun onError(what: Int, extra: Int): Boolean = false
+    /**
+     * 出错
+     *
+     * @param errorCode 错误代码（使用 [PlayerErrorCode] 中定义的常量）
+     * @param msg 错误消息（可读的错误描述）
+     * @return true 表示错误已被消费，播放器不再处理；false 表示播放器继续处理
+     */
+    fun onError(errorCode: Int, msg: String): Boolean = false
 
     /** 缓冲进度 (0~100) */
     fun onBufferingUpdate(percent: Int) {}

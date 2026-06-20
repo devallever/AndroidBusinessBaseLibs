@@ -11,6 +11,7 @@ import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.audiovideo.databinding.FragmentAndroidMusicPlayerSampleBinding
 import app.allever.android.sample.audiovideo.lib.IPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
+import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import app.allever.android.sample.audiovideo.lib.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -236,9 +237,9 @@ class AndroidMusicPlayerSampleFragment :
             }
         }
 
-        override fun onError(what: Int, extra: Int): Boolean {
+        override fun onError(errorCode: Int, msg: String): Boolean {
             activity?.runOnUiThread {
-                appendLog("播放错误: what=$what, extra=$extra")
+                appendLog("播放错误: [${PlayerErrorCode.getMessage(errorCode)}] $msg")
             }
             return false
         }

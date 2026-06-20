@@ -10,6 +10,7 @@ import app.allever.android.sample.audiovideo.databinding.FragmentAndroidTextureV
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
+import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import app.allever.android.sample.audiovideo.lib.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -245,9 +246,9 @@ class AndroidTexturePlayerSampleFragment :
             }
         }
 
-        override fun onError(what: Int, extra: Int): Boolean {
+        override fun onError(errorCode: Int, msg: String): Boolean {
             activity?.runOnUiThread {
-                appendLog("播放错误: what=$what, extra=$extra")
+                appendLog("播放错误: [${PlayerErrorCode.getMessage(errorCode)}] $msg")
             }
             return false
         }
