@@ -511,6 +511,7 @@ class VideoPlayerSampleFragment :
 
         override fun onVideoSizeChanged(width: Int, height: Int) {
             appendLog("onVideoSizeChanged: 尺寸: ${width}x${height}")
+            mBinding.tvVideoSize.text = "${width}x${height}"
         }
 
         override fun onInfo(what: Int, extra: Int): Boolean {
