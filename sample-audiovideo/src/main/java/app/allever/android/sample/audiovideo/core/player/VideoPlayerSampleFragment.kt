@@ -452,7 +452,7 @@ class VideoPlayerSampleFragment :
     private val playerListener = object : IVideoPlayerListener {
 
         override fun onPrepared(durationMs: Long) {
-            appendLog("[onPrepared] 时长: ${formatTime(durationMs)}")
+            appendLog("onPrepared: 时长: ${formatTime(durationMs)}")
 
             activity?.runOnUiThread {
                 updateStateUI(PlayerState.PREPARED)
@@ -466,7 +466,7 @@ class VideoPlayerSampleFragment :
         }
 
         override fun onComplete() {
-            appendLog("[onComplete] 播放完成")
+            appendLog("onComplete: 播放完成")
 
             activity?.runOnUiThread {
                 updateStateUI(PlayerState.COMPLETED)
@@ -475,7 +475,7 @@ class VideoPlayerSampleFragment :
         }
 
         override fun onError(code: Int, msg: String): Boolean {
-            appendLog("[onError] 错误码=$code, 消息: $msg")
+            appendLog("onError: 错误码=$code, 消息: $msg")
 
             activity?.runOnUiThread {
                 updateStateUI(PlayerState.ERROR)
@@ -501,7 +501,7 @@ class VideoPlayerSampleFragment :
         }
 
         override fun onStateChanged(oldState: PlayerState, newState: PlayerState) {
-            appendLog("[onStateChanged] $oldState -> $newState")
+            appendLog("onStateChanged: $oldState -> $newState")
 
             activity?.runOnUiThread {
                 updateStateUI(newState)
@@ -510,7 +510,7 @@ class VideoPlayerSampleFragment :
         }
 
         override fun onVideoSizeChanged(width: Int, height: Int) {
-            appendLog("[onVideoSizeChanged] 尺寸: ${width}x${height}")
+            appendLog("onVideoSizeChanged: 尺寸: ${width}x${height}")
         }
 
         override fun onInfo(what: Int, extra: Int): Boolean {
@@ -583,7 +583,7 @@ class VideoPlayerSampleFragment :
      * 追加日志文本
      */
     private fun appendLog(message: String) {
-        val time = SimpleDateFormat("HH:mm:ss.SSS", Locale.getDefault()).format(Date())
+        val time = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
         val logLine = "[$time] $message\n"
         
         mBinding.tvLog.let { tvLog ->
@@ -593,13 +593,10 @@ class VideoPlayerSampleFragment :
             }
             tvLog.append(logLine)
             
-            // 自动滚动到底部
-            val lineCount = tvLog.lineCount ?: 0
-            val height = tvLog.height ?: 0
-            val lineTop = tvLog.layout?.getLineTop(lineCount) ?: 0
-            val scrollAmount = lineTop - height
-            if (scrollAmount > 0) {
-                tvLog.scrollTo(0, scrollAmount)
+            /// 自动滚动到底部
+            val scrollView = mBinding.tvLog.parent as? android.widget.ScrollView
+            scrollView?.post {
+                scrollView.fullScroll(android.view.View.FOCUS_DOWN)
             }
         }
     }
