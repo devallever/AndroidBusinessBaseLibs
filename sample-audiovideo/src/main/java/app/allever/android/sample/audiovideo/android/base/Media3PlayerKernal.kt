@@ -106,7 +106,6 @@ class Media3PlayerKernal: BasePlayerKernal<ExoPlayer>() {
 
             mPlayer?.apply {
                 setMediaItem(mediaItem)
-                prepare()
             }
         } catch (e: Exception) {
             e.printStackTrace()

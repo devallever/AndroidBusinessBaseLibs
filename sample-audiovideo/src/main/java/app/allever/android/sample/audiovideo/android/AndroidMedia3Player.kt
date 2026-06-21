@@ -1,5 +1,6 @@
 package app.allever.android.sample.audiovideo.android
 
+import android.annotation.SuppressLint
 import androidx.media3.common.Player
 import androidx.media3.ui.PlayerView
 import app.allever.android.lib.core.ext.log
@@ -9,7 +10,6 @@ import app.allever.android.sample.audiovideo.lib.ExoPlayerHelper
 import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.PlayerState
 import app.allever.android.sample.audiovideo.lib.SurfaceType
-import app.allever.android.sample.audiovideo.lib.VideoHelper
 /**
  * Android Media3 (ExoPlayer) 视频播放封装
  *
@@ -102,18 +102,11 @@ class AndroidMedia3Player: BaseVideoPlayer() {
                 playerView?.player = null
                 playerView = null
                 log(TAG, "detach PlayerView")
+                currentSurfaceType = SurfaceType.NONE
             }
-            SurfaceType.SURFACE_VIEW -> {
-                detachSurfaceView()
-            }
-            SurfaceType.TEXTURE_VIEW -> {
-                detachTextureView()
-            }
-            SurfaceType.NONE -> {}
-            else -> {}
+            else -> { super.detach() }
         }
 
-        currentSurfaceType = SurfaceType.NONE
     }
 
     // ==================== 安全的 Surface 切换 API ====================
@@ -181,10 +174,8 @@ class AndroidMedia3Player: BaseVideoPlayer() {
      */
     override fun adjustSurfaceLayout() {
         when (currentSurfaceType) {
-            SurfaceType.SURFACE_VIEW -> VideoHelper.adjustRenderViewLayout(surfaceView, videoWidth, videoHeight, videoScaleMode)
-            SurfaceType.TEXTURE_VIEW -> VideoHelper.adjustRenderViewLayout(textureView, videoWidth, videoHeight, videoScaleMode)
             SurfaceType.PLAYER_VIEW -> ExoPlayerHelper.applyVideoScaleMode(playerView, videoScaleMode)
-            else -> { }
+            else -> { super.adjustSurfaceLayout() }
         }
     }
 }
