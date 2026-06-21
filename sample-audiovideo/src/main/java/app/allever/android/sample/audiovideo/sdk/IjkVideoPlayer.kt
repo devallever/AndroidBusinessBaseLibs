@@ -1,22 +1,19 @@
 package app.allever.android.sample.audiovideo.sdk
 
 import android.content.Context
-import android.graphics.SurfaceTexture
 import android.net.Uri
 import android.view.Surface
-import android.view.SurfaceHolder
-import android.view.SurfaceView
-import android.view.TextureView
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.helper.TimeHelper.formatTime
+import app.allever.android.sample.audiovideo.android.BaseVideoPlayer
 import app.allever.android.sample.audiovideo.android.base.IPlayerKernal
 import app.allever.android.sample.audiovideo.android.base.IjkPlayerKernal
-import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
 import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import app.allever.android.sample.audiovideo.lib.PlayerState
+import app.allever.android.sample.audiovideo.lib.SurfaceType
 import app.allever.android.sample.audiovideo.lib.VideoHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,16 +67,10 @@ import java.io.File
  * player.release()
  * ```
  */
-class IjkVideoPlayer {
-    
-    //TAG
-    private val TAG = IjkVideoPlayer::class.java.simpleName
-
-    // ==================== 内部组件 ====================
-
+class IjkVideoPlayer: BaseVideoPlayer() {
     /** IjkMediaPlayer 实例 */
 //    private var ijkMediaPlayer: IjkMediaPlayer? = null
-    private val engine: IPlayerKernal<*> = IjkPlayerKernal().apply { 
+    override var engine: IPlayerKernal<*> = IjkPlayerKernal().apply {
         registerListener(object : IPlayerKernal.IListener {
             override fun onPrepared() {
                log(TAG, "onPrepared (current state: $_state)")
@@ -194,139 +185,12 @@ class IjkVideoPlayer {
         })
     }
 
-    /** 监听器回调 */
-    private var listener: IVideoPlayerListener? = null
-
     /** Context 引用 */
     private val context: Context get() = App.context
-
-    // ==================== Surface 绑定（两种模式）====================
-
-    /** SurfaceView 绑定（推荐方式，性能好）*/
-    private var surfaceView: SurfaceView? = null
-
-    /** TextureView 绑定（高级方式，支持变换）*/
-    private var textureView: TextureView? = null
-
-    /** 当前绑定的 Surface 类型 */
-    private enum class SurfaceType { NONE, SURFACE_VIEW, TEXTURE_VIEW }
-    private var currentSurfaceType: SurfaceType = SurfaceType.NONE
-
-    /** Surface 是否已就绪（可用于渲染）*/
-    @Volatile
-    private var isSurfaceReady: Boolean = false
-
-    /** 是否正在执行 seek 操作（防止 seek 过程中误停进度追踪）*/
-    @Volatile
-    private var isSeeking: Boolean = false
-
-    // ==================== 状态管理 ====================
-
-    private var _state: PlayerState = PlayerState.IDLE
-        set(value) {
-            val old = field
-            if (old != value) {
-               log(TAG, "state: $old -> $value")
-                field = value
-                listener?.onStateChanged(old, value)
-            }
-        }
-
-    /** 当前状态 */
-    val state get() = _state
-
-    /** 是否正在播放 */
-    val isPlaying: Boolean
-        get() = _state == PlayerState.PLAYING && engine.isPlaying()
-
-    /** 当前位置（毫秒）*/
-    val currentPosition: Long
-        get() = try { engine.getCurrentPosition() } catch (_: Exception) { 0L }
-
-    /** 总时长（毫秒），PREPARED 后可用 */
-    val duration: Long
-        get() = try {
-            engine.getDuration()
-        } catch (_: Exception) { 0L }
-
-    // ==================== 配置属性 ====================
-
-    /** 循环模式，默认不循环 */
-    var loopMode: LoopMode = LoopMode.NONE
-        set(value) {
-            field = value
-            engine.loopMode(value)
-        }
-
-    /** 进度回调间隔（毫秒），默认 200ms */
-    var progressIntervalMs: Int = 200
-
-    /** 自动重试次数（出错时自动重试 prepare），默认 0 不重试 */
-    var retryCount: Int = 0
-
-    /** 变速倍率（0.5 ~ 3.0），默认 1.0 */
-    var speed: Float = 1.0f
-        set(value) {
-            field = value.coerceIn(0.5f, 3.0f)
-            engine.speed(value)
-        }
-
-    /** 音量（0.0 ~ 1.0），默认 1.0 */
-    var volume: Float = 1.0f
-        set(value) {
-            field = value.coerceIn(0f, 1f)
-            engine.volume(value)
-        }
-
-    /**
-     * SurfaceView/TextureView 缩放模式（默认 FIT_CENTER）
-     *
-     * 仅对 SurfaceView 和 TextureView 生效。
-     */
-    var videoScaleMode: VideoScaleMode = VideoScaleMode.FIT_CENTER
-        set(value) {
-            field = value
-            adjustSurfaceLayout()
-        }
-
-
-
-    // ==================== 内部状态 ====================
-
-    /** 进度追踪协程 */
-    private var progressJob: Job? = null
-
-    /** 当前数据源 URI */
-    private var currentUri: Uri? = null
-
-    /** 当前数据源 HTTP 头 */
-    private var currentHeaders: Map<String, String>? = null
-
-    /** 当前数据源 Asset 路径（如果是 Assets 文件） */
-    private var currentAssetPath: String? = null
-
-    /** 剩余重试次数 */
-    private var retryLeft: Int = 0
-
-    /** 视频原始宽度（像素）*/
-    private var videoWidth: Int = 0
-
-    /** 视频原始高度（像素）*/
-    private var videoHeight: Int = 0
 
 
     /** PREPARING 状态监控协程（防止状态不一致）*/
     private var preparingMonitorJob: Job? = null
-
-    /**
-     * 待执行的 prepare 参数（当 Surface 未就绪时缓存 setSource 调用）
-     */
-    private data class PendingPrepare(
-        val uri: Uri,
-        val headers: Map<String, String>?,
-        val assetPath: String?
-    )
-    private var pendingPrepare: PendingPrepare? = null
 
     /** 切换 Surface 后待恢复的播放位置（-1 表示无需恢复） */
     private var switchSurfacePendingPosition: Long = -1L
@@ -334,79 +198,28 @@ class IjkVideoPlayer {
     /** 是否正在执行 safeSwitchSurface（防止重复调用） */
     @Volatile
     private var isSafeSwitching: Boolean = false
-
-    // ==================== 监听器实例（避免重复创建）====================
-    
-
-    private var pendingSeekPosition: Long = 0
-    
-
-    // ==================== Surface 绑定 ====================
-
-    /**
-     * 绑定 SurfaceView 用于视频渲染（推荐方式）
-     *
-     * 特点：
-     * - 性能优异，独立窗口渲染
-     * - Surface 创建是异步的，需要等待 surfaceCreated 回调
-     * - 不支持变换（旋转/缩放/透明度）
-     * - 适用于大多数场景
-     *
-     * @param surfaceView 外部传入的 SurfaceView 实例
-     */
-    fun attach(surfaceView: SurfaceView) {
-        detach()
-
-        this.surfaceView = surfaceView
-        this.currentSurfaceType = SurfaceType.SURFACE_VIEW
-        this.isSurfaceReady = false
-
-        setupSurfaceCallback(surfaceView)
-
-       log(TAG, "attach SurfaceView")
-    }
-
-    /**
-     * 绑定 TextureView 用于视频渲染（高级方式）
-     *
-     * 特点：
-     * - 支持矩阵变换（旋转/缩放/透明度）
-     * - Surface 通常立即可用
-     * - 性能略低于 SurfaceView
-     * - 适用于需要特效或动画的场景
-     *
-     * @param textureView 外部传入的 TextureView 实例
-     */
-    fun attach(textureView: TextureView) {
-        detach()
-
-        this.textureView = textureView
-        this.currentSurfaceType = SurfaceType.TEXTURE_VIEW
-        this.isSurfaceReady = false
-
-        setupTextureCallback(textureView)
-
-       log(TAG, "attach TextureView")
-    }
-
     /**
      * 解绑当前 Surface 并清理资源
      *
      * 注意：此方法不会释放 IjkMediaPlayer，
      * 仅解绑 Surface 以便后续重新绑定或切换 Surface 类型。
      */
-    fun detach() {
+    override fun detach() {
        log(TAG, "detach")
 
-        // 移除 Surface 回调
-        surfaceView?.holder?.removeCallback(surfaceHolderCallback)
-        textureView?.surfaceTextureListener = null
+        when(currentSurfaceType) {
+            SurfaceType.SURFACE_VIEW -> {
+                detachSurfaceView()
+            }
+            SurfaceType.TEXTURE_VIEW -> {
+                detachTextureView()
+            }
+            SurfaceType.NONE -> {}
+            else -> {}
+        }
 
         // 清空绑定
-        surfaceView = null
-        textureView = null
         currentSurfaceType = SurfaceType.NONE
-        isSurfaceReady = false
 
         // 从 IjkMediaPlayer 移除 Surface
         try {
@@ -434,34 +247,12 @@ class IjkVideoPlayer {
      */
 
     /**
-     * 安全切换到 SurfaceView
-     */
-    fun safeSwitchToSurfaceView(surfaceView: SurfaceView, delayMs: Long = 100L) {
-        safeSwitchSurface(
-            targetAction = { attach(surfaceView) },
-            targetName = "SurfaceView",
-            delayMs = delayMs
-        )
-    }
-
-    /**
-     * 安全切换到 TextureView
-     */
-    fun safeSwitchToTextureView(textureView: TextureView, delayMs: Long = 100L) {
-        safeSwitchSurface(
-            targetAction = { attach(textureView) },
-            targetName = "TextureView",
-            delayMs = delayMs
-        )
-    }
-
-    /**
      * 安全切换 Surface 的核心实现
      */
-    private fun safeSwitchSurface(
+    override fun safeSwitchSurface(
         targetAction: () -> Unit,
         targetName: String,
-        delayMs: Long = 100L
+        delayMs: Long
     ) {
         // ✨ 防重入检查：如果正在切换，忽略重复调用
         if (isSafeSwitching) {
@@ -581,77 +372,22 @@ class IjkVideoPlayer {
     /**
      * 设置 SurfaceHolder 回调（用于 SurfaceView）
      */
-    private fun setupSurfaceCallback(sv: SurfaceView) {
-        sv.holder.addCallback(surfaceHolderCallback)
-
+    override fun setupSurfaceViewCallback() {
+        super.setupSurfaceViewCallback()
         // 如果 Surface 已经可用（例如复用的情况）
-        if (sv.holder.surface.isValid) {
+        if (surfaceView?.holder?.surface?.isValid == true) {
             isSurfaceReady = true
-            bindSurface(sv.holder.surface)
+            engine.setSurface(surfaceView?.holder?.surface)
             executePendingPrepare()
         }
     }
 
-    private val surfaceHolderCallback = object : SurfaceHolder.Callback {
-        override fun surfaceCreated(holder: SurfaceHolder) {
-           log(TAG, "surfaceCreated")
-            isSurfaceReady = true
-            bindSurface(holder.surface)
-            executePendingPrepare()
-        }
-
-        override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-           log(TAG, "surfaceChanged: ${width}x${height}")
-        }
-
-        override fun surfaceDestroyed(holder: SurfaceHolder) {
-           log(TAG, "surfaceDestroyed")
-            isSurfaceReady = false
-            // Surface 销毁时移除绑定，防止崩溃
-            try {
-                engine.setSurface(null)
-            } catch (e: Exception) {
-               log(TAG, "surfaceDestroyed error: ${e.message}")
-            }
-        }
-    }
-
-    /**
-     * 设置 SurfaceTexture 回调（用于 TextureView）
-     */
-    private fun setupTextureCallback(tv: TextureView) {
-        tv.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
-            override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
-               log(TAG, "surfaceTextureAvailable: ${width}x${height}")
-                isSurfaceReady = true
-                bindSurface(Surface(surface))
-                executePendingPrepare()
-            }
-
-            override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {
-               log(TAG, "onSurfaceTextureSizeChanged: ${width}x${height}")
-            }
-
-            override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
-               log(TAG, "onSurfaceTextureDestroyed")
-                isSurfaceReady = false
-                try {
-                    engine.setSurface(null)
-                } catch (e: Exception) {
-                   log(TAG, "onSurfaceTextureDestroyed error: ${e.message}")
-                }
-                return true  // 返回 true 表示我们已处理释放
-            }
-
-            override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
-                // 每帧更新时回调，通常不需要处理
-            }
-        }
-
+    override fun setupTextureViewCallback() {
+        super.setupTextureViewCallback()
         // 如果 SurfaceTexture 已经可用
-        if (tv.isAvailable && tv.surfaceTexture != null) {
+        if (textureView?.isAvailable == true && textureView?.surfaceTexture != null) {
             isSurfaceReady = true
-            bindSurface(Surface(tv.surfaceTexture))
+            engine.setSurface(Surface(textureView?.surfaceTexture))
             executePendingPrepare()
         }
     }
@@ -671,7 +407,7 @@ class IjkVideoPlayer {
     /**
      * 执行待处理的 prepare 操作（Surface 就绪后调用）
      */
-    private fun executePendingPrepare() {
+    override fun executePendingPrepare() {
         val pending = pendingPrepare ?: return
         pendingPrepare = null
 
@@ -680,117 +416,10 @@ class IjkVideoPlayer {
         doSetSource(pending.uri, pending.headers, pending.assetPath)
     }
 
-    // ==================== 数据源设置 ====================
-
-    /**
-     * 设置数据源并开始准备（不自动播放）
-     *
-     * 支持的数据源类型：
-     * - HTTP/HTTPS URL：在线视频
-     * - file:// 路径：本地文件
-     * - content:// URI：Content Provider
-     * - file:///android_asset/filename.mp4：Assets 目录（自动复制到缓存）
-     *
-     * 准备完成后回调 [IVideoPlayerListener.onPrepared]，此时需调用 [play] 开始播放。
-     *
-     * @param url 数据源地址
-     */
-    fun setSource(url: String) {
-        val uri = Uri.parse(url)
-
-        // 处理 Assets 文件（需特殊处理）
-        if (uri.scheme == "file" && uri.path?.contains("/android_asset/") == true) {
-            val assetPath = uri.path?.substringAfter("/android_asset/") ?: ""
-            setAssetSource(assetPath)
-            return
-        }
-
-        doSetSource(uri, null, null)
-    }
-
-    /**
-     * 设置视频数据源并准备（不自动播放）
-     *
-     * 支持的数据源类型：
-     * - HTTP/HTTPS URI：在线视频（支持自定义请求头，如 Cookie、Referer 等）
-     * - file:// URI：本地文件
-     * - content:// URI：Content Provider
-     *
-     * 准备完成后回调 [IVideoPlayerListener.onPrepared]，此时需调用 [play] 开始播放。
-     *
-     * @param uri 视频 URI（支持 http/https/file/content 协议）
-     * @param headers HTTP 请求头（仅对 http(s) 协议生效，可为 null）
-     */
-    fun setSource(uri: Uri, headers: Map<String, String>? = null) {
-        // 处理 Assets 文件（需特殊处理）
-        if (uri.scheme == "file" && uri.path?.contains("/android_asset/") == true) {
-            val assetPath = uri.path?.substringAfter("/android_asset/") ?: ""
-            setAssetSource(assetPath)
-            return
-        }
-
-        doSetSource(uri, headers, null)
-    }
-
-    /**
-     * 设置 assets 目录下的视频文件并准备（不自动播放）
-     *
-     * 由于 IjkMediaPlayer 无法直接读取 Assets 中的文件，
-     * 此方法会将文件复制到内部缓存目录后再加载。
-     *
-     * @param path Assets 中的相对路径（如 "video/test.mp4"）
-     */
-    fun setAssetSource(path: String) {
-        try {
-            val cacheFile = File(context.cacheDir, "asset_video_${path.hashCode()}")
-
-            // 如果缓存文件不存在或需要更新，重新复制
-            if (!cacheFile.exists()) {
-                context.assets.open(path).use { input ->
-                    cacheFile.outputStream().use { output ->
-                        input.copyTo(output)
-                    }
-                }
-               log(TAG, "copied asset to cache: ${cacheFile.absolutePath}")
-            }
-
-            doSetSource(Uri.fromFile(cacheFile), null, path)
-        } catch (e: Exception) {
-           log(TAG, "setAssetSource error: ${e.message}")
-            _state = PlayerState.ERROR
-            listener?.onError(PlayerErrorCode.ASSET_COPY_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.ASSET_COPY_FAILED, e.message))
-        }
-    }
-
-    /**
-     * 执行实际的 setSource 操作
-     */
-    private fun doSetSource(uri: Uri, headers: Map<String, String>?, assetPath: String?) {
-        if (_state == PlayerState.RELEASED) return
-
-        // 停止当前的进度追踪（切换数据源前必须清理）
-        stopProgressTracking()
-
-        currentUri = uri
-        currentHeaders = headers
-        currentAssetPath = assetPath
-        retryLeft = retryCount
-
-        // 如果 Surface 未就绪，缓存待执行的 prepare
-        if (!isSurfaceReady && currentSurfaceType != SurfaceType.NONE) {
-           log(TAG, "Surface 未就绪，缓存 prepare 操作")
-            pendingPrepare = PendingPrepare(uri, headers, assetPath)
-            return
-        }
-
-        // 执行实际的 prepare
-        doPrepareInternal(uri, headers)
-    }
-
     /**
      * 执行内部 prepare 操作
      */
-    private fun doPrepareInternal(uri: Uri, headers: Map<String, String>?) {
+    override fun doPrepareInternal(uri: Uri?, headers: Map<String, String>?) {
        log(TAG, "doPrepareInternal: $uri")
 
         try {
@@ -798,7 +427,7 @@ class IjkVideoPlayer {
 
             // 重置 IjkMediaPlayer
             engine.reset()
-            engine.setSource(uri, headers)
+            engine.setSource(uri!!, headers)
 
             // 绑定当前 Surface
             when (currentSurfaceType) {
@@ -835,7 +464,7 @@ class IjkVideoPlayer {
     /**
      * 处理 prepare 阶段的错误（可能触发重试）
      */
-    private fun handlePrepareError(error: Exception) {
+    override fun handlePrepareError(error: Exception) {
        log(TAG, "handlePrepareError: ${error.message}, retryLeft=$retryLeft")
 
         if (retryLeft > 0) {
@@ -863,7 +492,7 @@ class IjkVideoPlayer {
      * - PREPARING 状态：尝试播放（防止异步竞态导致状态不一致）
      * - 其他状态：不执行任何操作（需先 setSource + wait for PREPARED）
      */
-    fun play() {
+    override fun play() {
        log(TAG, "play (state=$_state)")
 
         when (_state) {
@@ -921,7 +550,7 @@ class IjkVideoPlayer {
             if (previousState == PlayerState.PAUSED) {
                 try {
                     savedPosition = engine.getCurrentPosition()
-                   log(TAG, "doPlay: 保存暂停位置 = ${savedPosition}ms")
+                    log(TAG, "doPlay: 保存暂停位置 = ${savedPosition}ms")
                 } catch (_: Exception) {
                     savedPosition = -1L
                 }
@@ -942,11 +571,11 @@ class IjkVideoPlayer {
             // 某些视频格式在 onPrepared 时无法获取正确尺寸，
             // 需要等到真正开始播放后才能获取到
             if (videoWidth <= 0 || videoHeight <= 0) {
-               log(TAG, "doPlay: 视频尺寸为空 (${videoWidth}x${videoHeight})，尝试主动获取")
+                log(TAG, "doPlay: 视频尺寸为空 (${videoWidth}x${videoHeight})，尝试主动获取")
                 tryFetchVideoSizeAndAdjustLayout()
             }
 
-           log(TAG, "doPlay: $previousState -> PLAYING (已调用 start())")
+            log(TAG, "doPlay: $previousState -> PLAYING (已调用 start())")
 
             // ✨✨✨ 核心修复：延迟检查并恢复播放位置
             // IJKPlayer 的 start() 是异步的，可能在几毫秒后才真正开始播放
@@ -960,15 +589,20 @@ class IjkVideoPlayer {
 
                             // 如果当前位置明显小于保存的位置（误差 > 500ms），说明位置被重置了
                             if (currentPosition < savedPosition - 500) {
-                               log(TAG, "⚠️ doPlay: 检测到位置重置！" +
-                                        " 保存=${savedPosition}ms, 当前=${currentPosition}ms, 正在恢复...")
+                                log(
+                                    TAG, "⚠️ doPlay: 检测到位置重置！" +
+                                            " 保存=${savedPosition}ms, 当前=${currentPosition}ms, 正在恢复..."
+                                )
 
                                 // seekTo 到保存的位置
                                 engine.seekTo(savedPosition)
 
-                               log(TAG, "✅ doPlay: 已恢复位置到 ${savedPosition}ms")
+                                log(TAG, "✅ doPlay: 已恢复位置到 ${savedPosition}ms")
                             } else {
-                               log(TAG, "doPlay: 位置正常，保存=${savedPosition}ms, 当前=${currentPosition}ms")
+                                log(
+                                    TAG,
+                                    "doPlay: 位置正常，保存=${savedPosition}ms, 当前=${currentPosition}ms"
+                                )
                             }
                         }
                     } catch (_: Exception) {
@@ -978,46 +612,16 @@ class IjkVideoPlayer {
             }
 
         } catch (e: Exception) {
-           log(TAG, "doPlay error: ${e.message}")
+            log(TAG, "doPlay error: ${e.message}")
             // 如果 start() 抛出异常，回退到之前的状态或标记错误
             _state = PlayerState.ERROR
-            listener?.onError(PlayerErrorCode.IJK_MEDIA_PLAYER_INTERNAL_ERROR, PlayerErrorCode.formatError(PlayerErrorCode.IJK_MEDIA_PLAYER_INTERNAL_ERROR, e.message))
-        }
-    }
-
-    /**
-     * 暂停播放
-     *
-     * 仅在 PLAYING 状态下有效。
-     */
-    fun pause() {
-       log(TAG, "pause (state=$_state)")
-
-        if (_state == PlayerState.PLAYING) {
-            try {
-                engine.pause()
-                _state = PlayerState.PAUSED
-                stopProgressTracking()
-            } catch (e: Exception) {
-               log(TAG, "pause error: ${e.message}")
-            }
-        }
-    }
-
-    /**
-     * 停止播放
-     *
-     * 停止后会回到初始状态，需要重新 setSource + play 才能再次播放。
-     */
-    fun stop() {
-       log(TAG, "stop (state=$_state)")
-
-        try {
-            stopProgressTracking()
-            engine.stop()
-            _state = PlayerState.IDLE
-        } catch (e: Exception) {
-           log(TAG, "stop error: ${e.message}")
+            listener?.onError(
+                PlayerErrorCode.IJK_MEDIA_PLAYER_INTERNAL_ERROR,
+                PlayerErrorCode.formatError(
+                    PlayerErrorCode.IJK_MEDIA_PLAYER_INTERNAL_ERROR,
+                    e.message
+                )
+            )
         }
     }
 
@@ -1026,7 +630,7 @@ class IjkVideoPlayer {
      *
      * @param positionMs 目标位置（毫秒）
      */
-    fun seekTo(positionMs: Long) {
+    override fun seekTo(positionMs: Long) {
        log(TAG, "seekTo: $positionMs ms (state=$_state)")
 
         if (_state == PlayerState.RELEASED || _state == PlayerState.IDLE) return
@@ -1081,73 +685,6 @@ class IjkVideoPlayer {
             if (_state == PlayerState.PLAYING) {
                 startProgressTracking()
             }
-        }
-    }
-
-    // ==================== 监听器设置 ====================
-
-    /**
-     * 设置播放事件监听器
-     *
-     * @param listener 监听器实现
-     */
-    fun setListener(listener: IVideoPlayerListener) {
-        this.listener = listener
-    }
-
-    // ==================== 进度追踪 ====================
-
-    /**
-     * 启动进度追踪协程
-     *
-     * 定时获取 IjkMediaPlayer 的当前位置和总时长，通过监听器回调。
-     * 同时会定期同步 IjkMediaPlayer 实际播放状态，防止状态不一致。
-     */
-    private fun startProgressTracking() {
-        // 如果已经在运行且状态正确，不需要重启
-        if (progressJob != null && progressJob!!.isActive && _state == PlayerState.PLAYING) {
-           log(TAG, "progress tracking already running")
-            return
-        }
-
-        stopProgressTracking()
-       log(TAG, "starting progress tracking (state: $_state)")
-
-        progressJob = CoroutineScope(Dispatchers.Main).launch {
-            while (isActive && _state == PlayerState.PLAYING) {
-                val pos = try { engine.getCurrentPosition() } catch (_: Exception) { 0L }
-                val dur = try {
-                    val d = engine.getDuration()
-                    if (d < 0) 0L else d
-                } catch (_: Exception) { 0L }
-
-                if (pos >= 0 && dur > 0) {
-                    listener?.onProgress(pos, dur)
-                }
-
-                // 定期同步状态和视频尺寸（每5次检查一次，约1秒）
-                if ((System.currentTimeMillis() / progressIntervalMs) % 5 == 0L) {
-                    syncStateWithPlayer()
-
-                    // ✨ 定期检查视频尺寸（如果还未获取到）
-                    if (videoWidth <= 0 || videoHeight <= 0) {
-                        tryFetchVideoSizeAndAdjustLayout()
-                    }
-                }
-
-                delay(progressIntervalMs.toLong())
-            }
-        }
-    }
-
-    /**
-     * 停止进度追踪协程
-     */
-    private fun stopProgressTracking() {
-        if (progressJob != null) {
-           log(TAG, "stopping progress tracking")
-            progressJob?.cancel()
-            progressJob = null
         }
     }
 
@@ -1409,7 +946,7 @@ class IjkVideoPlayer {
      *
      * 仅对 SurfaceView 和 TextureView 生效。
      */
-    private fun adjustSurfaceLayout() {
+    override fun adjustSurfaceLayout() {
         when (currentSurfaceType) {
             SurfaceType.SURFACE_VIEW -> VideoHelper.adjustRenderViewLayout(surfaceView, videoWidth, videoHeight, videoScaleMode)
             SurfaceType.TEXTURE_VIEW -> VideoHelper.adjustRenderViewLayout(textureView, videoWidth, videoHeight, videoScaleMode)
@@ -1437,67 +974,9 @@ class IjkVideoPlayer {
      * 必须在不再使用时调用，否则会导致内存泄漏和资源占用。
      * 调用后此对象不可再使用。
      */
-    fun release() {
-       log(TAG, "release (state=$_state)")
-
-        // 更新状态
-        _state = PlayerState.RELEASED
-
-        // 停止进度追踪
-        stopProgressTracking()
-
+    override fun releasePlayer() {
+        super.releasePlayer()
         // 停止 PREPARING 状态监控
         stopPreparingStateMonitor()
-
-        // 解绑 Surface
-        detach()
-
-        // 清除监听器
-        engine.release()
-
-        // 清空引用
-        listener = null
-        currentUri = null
-        currentHeaders = null
-        pendingPrepare = null
     }
-
-
-
-    private val mOnSeekCompleteListener = IMediaPlayer.OnSeekCompleteListener {
-        App.mainHandler.postDelayed({
-            //没回调
-           log(TAG, "onSeekComplete")
-
-            isSeeking = false
-
-            // Seek 完成后恢复进度追踪
-            if (_state == PlayerState.PLAYING) {
-                startProgressTracking()
-            }
-        }, 300)
-    }
-
-
-
-    private val mOnInfoListener = IMediaPlayer.OnInfoListener { _, what, extra ->
-        App.mainHandler.post {
-           log(TAG, "onInfo: what=$what, extra=$extra")
-
-            when (what) {
-                IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START -> {
-                    // 视频开始渲染（首帧显示）
-                   log(TAG, "视频渲染开始（首帧显示）")
-                    listener?.onFirstFrameRendered()
-                }
-                IMediaPlayer.MEDIA_INFO_NETWORK_BANDWIDTH -> {
-                    // 网络带宽信息（单位：bps）
-                   log(TAG, "网络带宽: ${extra} bps")
-                    listener?.onNetworkBandwidth(extra.toLong())
-                }
-            }
-        }
-        true
-    }
-
 }

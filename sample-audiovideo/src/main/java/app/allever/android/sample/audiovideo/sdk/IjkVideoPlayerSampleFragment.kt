@@ -93,7 +93,7 @@ class IjkVideoPlayerSampleFragment :
             attach(mBinding.surfaceView)
 
             // 设置监听器
-            setListener(playerListener)
+            setVideoPlayerListener(playerListener)
 
             // 配置参数
             retryCount = 3              // 出错自动重试 3 次

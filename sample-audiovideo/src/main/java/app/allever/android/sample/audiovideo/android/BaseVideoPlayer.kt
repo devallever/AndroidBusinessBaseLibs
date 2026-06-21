@@ -258,6 +258,7 @@ abstract class BaseVideoPlayer {
         override fun surfaceDestroyed(holder: SurfaceHolder) {
             log(TAG, "surfaceDestroyed")
             isSurfaceReady = false
+            engine.setSurface(null)
         }
     }
 
@@ -460,11 +461,15 @@ abstract class BaseVideoPlayer {
      * 暂停播放
      */
     fun pause() {
+        log(TAG, "pause (state=$_state)")
         if (_state == PlayerState.PLAYING) {
-            engine.pause()
-            _state = PlayerState.PAUSED
-            stopProgressTracking()
-            log(TAG, "pause() -> PAUSED")
+            try {
+                engine.pause()
+                _state = PlayerState.PAUSED
+                stopProgressTracking()
+            } catch (e: Exception) {
+                log(TAG, "pause error: ${e.message}")
+            }
         }
     }
 
@@ -473,12 +478,13 @@ abstract class BaseVideoPlayer {
      */
     open fun stop() {
         if (_state == PlayerState.RELEASED || _state == PlayerState.IDLE) return
-
-        stopProgressTracking()
-
-        engine.stop()
-        _state = PlayerState.STOPPED
-        log(TAG, "stop() -> STOPPED")
+        try {
+            stopProgressTracking()
+            engine.stop()
+            _state = PlayerState.IDLE
+        } catch (e: Exception) {
+            log(TAG, "stop error: ${e.message}")
+        }
     }
 
     /**
@@ -486,7 +492,7 @@ abstract class BaseVideoPlayer {
      *
      * @param positionMs 目标位置（毫秒）
      */
-    fun seekTo(positionMs: Long) {
+    open fun seekTo(positionMs: Long) {
         if (_state == PlayerState.RELEASED || _state == PlayerState.IDLE) return
         try {
             isSeeking = true  // 标记正在 seek，防止误停进度追踪
@@ -509,14 +515,14 @@ abstract class BaseVideoPlayer {
     /**
      * 设置 SurfaceView 的 SurfaceHolder 回调
      */
-    private fun setupSurfaceViewCallback() {
+    protected open fun setupSurfaceViewCallback() {
         surfaceView?.holder?.addCallback(surfaceHolderCallback)
     }
 
     /**
      * 设置 TextureView 的 SurfaceTextureListener 回调
      */
-    private fun setupTextureViewCallback() {
+    protected open fun setupTextureViewCallback() {
         textureView?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
                 log(TAG, "onSurfaceTextureAvailable: ${width}x${height}")
@@ -530,6 +536,7 @@ abstract class BaseVideoPlayer {
             override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
                 log(TAG, "onSurfaceTextureDestroyed")
                 isSurfaceReady = false
+                engine.setSurface(null)
                 return true
             }
 
@@ -581,7 +588,7 @@ abstract class BaseVideoPlayer {
     /**
      * 执行缓存的 prepare 操作
      */
-    protected fun executePendingPrepare() {
+    protected open fun executePendingPrepare() {
         pendingPrepare?.let { pending ->
             log(TAG, "executing pending prepare: ${pending.uri}")
             pendingPrepare = null
@@ -606,7 +613,7 @@ abstract class BaseVideoPlayer {
     /**
      * 处理准备错误（可能触发重试）
      */
-    protected fun handlePrepareError(e: Exception) {
+    protected open fun handlePrepareError(e: Exception) {
         if (retryLeft > 0) {
             retryLeft--
             log(TAG, "retrying... ($retryLeft left)")
@@ -625,9 +632,9 @@ abstract class BaseVideoPlayer {
      * 释放 ExoPlayer 实例
      */
     protected open fun releasePlayer() {
+        log(TAG, "released")
         stopProgressTracking()
         engine.release()
-        log(TAG, "released")
     }
 
     /**
@@ -675,6 +682,7 @@ abstract class BaseVideoPlayer {
     fun release() {
         detach()
         releasePlayer()
+        listener = null
         currentUri = null
         currentHeaders = null
         currentAssetPath = null

@@ -537,10 +537,8 @@ class AndroidMediaPlayer: BaseVideoPlayer() {
      * 释放 MediaPlayer 实例
      */
     override fun releasePlayer() {
-        log(TAG, "released")
-        stopProgressTracking()
+        super.releasePlayer()
         stopPreparingMonitor()
-        engine.release()
     }
 
     // ==================== 内部：PREPARING State Monitor ====================
