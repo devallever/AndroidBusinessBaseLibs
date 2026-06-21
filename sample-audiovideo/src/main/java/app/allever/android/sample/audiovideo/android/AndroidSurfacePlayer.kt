@@ -24,18 +24,46 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 /**
- * Android SurfaceView + MediaPlayer 视频播放封装
+ * Android SurfaceView + MediaPlayer 视频播放封装（独立实现）
  *
- * 职责：
+ * ## 职责
  * - 手动管理 MediaPlayer 完整生命周期
  * - 处理 SurfaceView 的 Surface 生命周期（创建/销毁/重建）
  * - 管理状态机转换（复用 [PlayerState]）
  * - 提供进度追踪、变速、音量、循环等能力
  * - 通过 [IVideoPlayerListener] 回调所有事件
  *
- * SurfaceView 由外部传入，本类不创建 UI 组件。
+ * ## SurfaceView 特点（与 VideoView/TextureView 的区别）
+ * **优势：**
+ * ✅ **性能优秀**：独立窗口，硬件合成，功耗低
+ * ✅ **控制精细**：可直接操作 Surface，支持自定义渲染逻辑
+ * ✅ **兼容性好**：所有 Android 版本都支持，无额外依赖
+ * ✅ **适合大多数场景**：视频播放、直播、相机预览等
  *
- * 使用示例：
+ * **劣势：**
+ * ❌ **不能做动画**：不支持旋转、缩放、透明度等变换
+ * ❌ **不能嵌套**：会覆盖在其他 View 上层（除非在同级）
+ * ❌ **Surface 创建异步**：需要处理 PendingPrepare 机制
+ *
+ * ## 适用场景
+ * - 大多数视频播放场景（推荐首选）
+ * - 直播应用（低延迟要求）
+ * - 需要自定义播放器 UI 的应用
+ * - 对性能有较高要求的场景
+ *
+ * ## 与 [BaseVideoPlayer] 的关系
+ * ⚠️ **重要：本类是独立实现，不继承 BaseVideoPlayer！**
+ *
+ * 原因：
+ * 1. 历史遗留代码（在重构 BaseVideoPlayer 之前已存在）
+ * 2. 功能完全自包含（包含完整的 MediaPlayer 管理逻辑）
+ * 3. 可作为参考实现（展示如何从零实现一个播放器）
+ *
+ * 如果新项目建议使用：
+ * - [AndroidMediaPlayer]（继承 BaseVideoPlayer，VideoView 方式）- 最简单
+ * - 或基于 BaseVideoPlayer 自定义 SurfaceView 子类（推荐）
+ *
+ * ## 使用示例
  * ```kotlin
  * val player = AndroidSurfacePlayer()
  * player.attach(surfaceView)
@@ -47,6 +75,10 @@ import kotlinx.coroutines.launch
  * player.detach()  // 页面不可见时
  * player.release()  // 不再使用时
  * ```
+ *
+ * @see AndroidMediaPlayer 继承 BaseVideoPlayer 的 VideoView 实现（推荐新手）
+ * @see AndroidTextureView TextureView 实现（需要动画/变换时）
+ * @see BaseVideoPlayer 新架构的基类（模板方法模式）
  */
 class AndroidSurfacePlayer {
 

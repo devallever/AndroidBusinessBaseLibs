@@ -5,67 +5,104 @@ import android.widget.VideoView
 import app.allever.android.lib.core.ext.log
 import app.allever.android.sample.audiovideo.android.base.IPlayerKernal
 import app.allever.android.sample.audiovideo.android.base.MediaPlayerKernal
-import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
-import app.allever.android.sample.audiovideo.lib.PlayerState
 import app.allever.android.sample.audiovideo.lib.SurfaceType
 import app.allever.android.sample.audiovideo.lib.VideoHelper
 
 /**
- * Android MediaPlayer 视频播放封装
+ * VideoView 视频播放器实现（继承自 [BaseVideoPlayer]）
  *
- * 职责：
- * - 封装 MediaPlayer 完整生命周期（创建 → 准备 → 播放 → 暂停 → 停止 → 释放）
- * - 管理 MediaPlayer 状态与 [PlayerState] 的映射
- * - 支持四种 Surface 绑定模式：VideoView / SurfaceView / TextureView
- * - 处理 Surface 异步就绪的 PendingPrepare 机制
- * - 提供进度追踪、变速、音量、循环等能力
- * - 通过 [IVideoPlayerListener] 回调所有事件
+ * ## 职责
+ * - 封装 VideoView + MediaPlayer 的完整生命周期管理
+ * - 处理 VideoView 的 SurfaceHolder 生命周期（创建/销毁/变化）
+ * - 实现 [BaseVideoPlayer] 的抽象方法以适配 VideoView 的特殊行为
  *
- * 设计原则：
- * - **逻辑与 UI 分离**：本类不创建 UI 组件，Surface 由外部传入
- * - **灵活绑定**：支持多种渲染方式，对外 API 统一
- * - **状态驱动**：所有操作基于状态机，确保线程安全
+ * ## VideoView 特点（与 SurfaceView/TextureView 的区别）
+ * **优势：**
+ * ✅ **最简单易用**：一行代码即可播放视频，无需手动管理 Surface
+ * ✅ **自动处理 Surface**：内部封装了 SurfaceView 和 MediaPlayer，开箱即用
+ * ✅ **兼容性好**：所有 Android 设备都支持，无需担心适配问题
+ * ✅ **代码量少**：本类只有 ~192 行（基类已处理大部分逻辑）
  *
- * 使用示例：
+ * **劣势：**
+ * ❌ **定制性差**：无法自定义渲染逻辑、无法获取底层 Surface 做特效
+ * ❌ **性能一般**：比直接使用 SurfaceView 略差（多了一层封装）
+ * ❌ **不支持高级功能**：
+ *    - 不支持自定义缩放模式（CROP_CENTER、STRETCH 等）
+ *    - 不支持矩阵变换（旋转、镜像等）
+ *    - 无法与其他 View 混合显示
+ * ❌ **控制粒度粗**：无法精细控制缓冲策略、解码器参数等
+ *
+ * ## 适用场景
+ * - 快速原型开发 / MVP 验证
+ * - 简单的视频播放需求（如启动页广告、帮助视频）
+ * - 不需要自定义 UI 或特效的场景
+ * - 对性能要求不高的应用
+ *
+ * ## 不适用场景
+ * - 需要自定义播放器 UI（进度条、控制按钮等）
+ * - 需要做视频特效（圆角、模糊背景、画中画等）
+ * - 需要支持多种缩放模式切换
+ * - 需要与 ExoPlayer/IjkPlayer 等高级引擎集成
+ * - 对性能有极致要求的场景（直播、4K 视频等）
+ *
+ * ## 使用示例
  * ```kotlin
- * // 示例 1：使用 VideoView
+ * // 最简单的使用方式
  * val player = AndroidMediaPlayer()
- * player.attach(videoView)
- * player.setListener(object : IVideoPlayerListener {
+ * player.attach(videoView)  // 绑定 VideoView
+ * player.setSource("https://example.com/video.mp4")
+ * player.listener = object : IVideoPlayerListener {
  *     override fun onPrepared(durationMs: Long) { player.play() }
- * })
- * player.setSource("https://example.com/video.mp4")
+ *     override fun onComplete() { log("播放完成") }
+ *     override fun onError(code: Int, msg: String) { log("错误: $msg") }
+ * }
+ * // onPrepared 回调后会自动播放
  *
- * // 示例 2：使用 SurfaceView
- * val player = AndroidMediaPlayer()
- * player.attach(surfaceView)
- * player.setSource("/sdcard/video.mp4")
- * player.play()
+ * // 页面生命周期管理
+ * override fun onPause() {
+ *     if (player.isPlaying) player.pause()
+ * }
  *
- * // 示例 3：使用 TextureView
- * val player = AndroidMediaPlayer()
- * player.attach(textureView)
- * player.setSource("https://example.com/video.mp4")
- * player.play()
- *
- * // 页面销毁时
- * player.release()
+ * override fun onDestroy() {
+ *     player.release()
+ * }
  * ```
+ *
+ * ## 架构说明
+ * 本类采用**模板方法模式**，继承 [BaseVideoPlayer] 基类：
+ * - **基类负责**：状态管理、数据源设置、播放控制、进度追踪、错误处理等通用逻辑
+ * - **本类负责**：VideoView 特有的绑定/解绑逻辑、布局调整等差异化实现
+ *
+ * 这种设计使得：
+ * - 代码复用率高（~85% 的逻辑在基类）
+ * - 易于维护（修改通用逻辑只需改基类）
+ * - 易于扩展（新增渲染方式只需写少量子类代码）
+ *
+ * @see BaseVideoPlayer 基类，包含完整的播放流程实现
+ * @see AndroidSurfacePlayer SurfaceView 实现（推荐大多数场景）
+ * @see AndroidTexturePlayer TextureView 实现（需要动画/变换时）
  */
 class AndroidMediaPlayer: BaseVideoPlayer() {
-    //TAG
 
-    // ==================== 内部组件 ====================
-
-    /** MediaPlayer 实例 */
+    /**
+     * MediaPlayer 引擎实例（使用 MediaPlayerKernal 封装）
+     *
+     * 通过依赖注入的方式在初始化时创建，
+     * 并注册 [engineListener] 以接收引擎事件回调。
+     *
+     * 为什么不直接使用 MediaPlayer？
+     * - MediaPlayerKernal 封装了 MediaPlayer 的复杂性
+     * - 提供统一的接口（IPlayerKernal），方便替换为其他引擎
+     * - 内置了线程安全、异常处理等机制
+     */
 //    private var mediaPlayer: MediaPlayer? = null
     override var engine: IPlayerKernal<*> = MediaPlayerKernal().apply {
         registerListener(engineListener)
     }
 
-    // ==================== Surface 绑定（三种模式）====================
+    // ==================== 内部组件 ====================
 
-    /** VideoView 绑定 */
+    /** VideoView 实例（外部传入，本类不创建）*/
     private var videoView: VideoView? = null
     /**
      * 绑定 VideoView

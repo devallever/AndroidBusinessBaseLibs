@@ -23,9 +23,9 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 /**
- * Android TextureView + MediaPlayer 视频播放封装
+ * Android TextureView + MediaPlayer 视频播放封装（独立实现）
  *
- * 职责：
+ * ## 职责
  * - 手动管理 MediaPlayer 完整生命周期
  * - 处理 TextureView 的 Surface 生命周期（available/sizeChanged/destroyed）
  * - 管理状态机转换（复用 [PlayerState]）
@@ -33,14 +33,56 @@ import kotlinx.coroutines.launch
  * - 自适应容器布局（FIT_CENTER 模式）
  * - 通过 [IVideoPlayerListener] 回调所有事件
  *
- * TextureView 由外部传入，本类不创建 UI 组件。
+ * ## TextureView 特点（与 SurfaceView/VideoView 的区别）
+ * **优势：**
+ * ✅ **支持动画/变换**：可做旋转、缩放、透明度、圆角等特效
+ * ✅ **可嵌套显示**：可以与其他 View 混合，不会覆盖上层
+ * ✅ **Surface 通常立即可用**：比 SurfaceView 更快进入可用状态
+ * ✅ **适合 UI 密集场景**：如短视频应用、画中画等
  *
- * 与 [AndroidSurfacePlayer] 的核心区别：
- * - TextureView 的 Surface 通过 [TextureView.SurfaceTextureListener] 获取，通常立即可用
- * - 不需要像 SurfaceView 那样处理 pendingPrepare 和 surfaceCreated 异步回调
- * - 支持矩阵变换（旋转/缩放），基础版使用 LayoutParams 方式自适应
+ * **劣势：**
+ * ❌ **性能略差**：在 View 层级中绘制，额外开销
+ * ❌ **功耗较高**：软件合成或 GPU 合成，比 SurfaceView 费电
+ * ❌ **内存占用大**：需要额外的图形缓冲区
  *
- * 使用示例：
+ * ## 适用场景
+ * - 需要做视频特效的应用（圆角视频、模糊背景等）
+ * - 短视频应用（抖音/TikTok 风格的全屏视频）
+ * - 需要视频跟随手势缩放/旋转的场景
+ * - 视频需要与其他 View 混合显示的复杂布局
+ * - 画中画（Picture-in-Picture）模式
+ *
+ * ## 与 [BaseVideoPlayer] 的关系
+ * ⚠️ **重要：本类是独立实现，不继承 BaseVideoPlayer！**
+ *
+ * 原因：
+ * 1. 历史遗留代码（在重构 BaseVideoPlayer 之前已存在）
+ * 2. 功能完全自包含（包含完整的 MediaPlayer 管理逻辑）
+ * 3. 可作为参考实现（展示如何从零实现一个播放器）
+ *
+ * 如果新项目建议使用：
+ * - [AndroidMediaPlayer]（继承 BaseVideoPlayer，VideoView 方式）- 最简单
+ * - [AndroidSurfacePlayer]（独立实现，SurfaceView 方式）- 性能最好
+ * - 或基于 BaseVideoPlayer 自定义 TextureView 子类（推荐）
+ *
+ * ## 与 [AndroidSurfacePlayer] 的核心区别
+ * 1. **Surface 获取方式不同**：
+ *    - SurfaceView：通过 SurfaceHolder.Callback（异步，需等待 surfaceCreated）
+ *    - TextureView：通过 SurfaceTextureListener（通常立即可用）
+ *
+ * 2. **PendingPrepare 使用频率不同**：
+ *    - SurfaceView：经常使用（Surface 创建慢）
+ *    - TextureView：极少使用（Surface 通常立即可用），仅为极端情况兜底
+ *
+ * 3. **绑定方式不同**：
+ *    - SurfaceView：mediaPlayer.setDisplay(holder)
+ *    - TextureView：mediaPlayer.setSurface(Surface(surfaceTexture))
+ *
+ * 4. **销毁回调返回值不同**：
+ *    - SurfaceView：surfaceDestroyed() 无返回值
+ *    - TextureView：onSurfaceTextureDestroyed() 返回 Boolean（是否允许销毁）
+ *
+ * ## 使用示例
  * ```kotlin
  * val player = AndroidTexturePlayer()
  * player.attach(textureView)
@@ -52,6 +94,10 @@ import kotlinx.coroutines.launch
  * player.detach()  // 页面不可见时
  * player.release()  // 不再使用时
  * ```
+ *
+ * @see AndroidSurfacePlayer SurfaceView 实现（推荐大多数场景，性能更好）
+ * @see AndroidMediaPlayer 继承 BaseVideoPlayer 的 VideoView 实现（最简单）
+ * @see BaseVideoPlayer 新架构的基类（模板方法模式）
  */
 class AndroidTexturePlayer {
 
