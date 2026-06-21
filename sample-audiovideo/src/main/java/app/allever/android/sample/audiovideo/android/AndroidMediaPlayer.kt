@@ -1162,6 +1162,10 @@ class AndroidMediaPlayer {
      * 在某些情况下（特别是快速 stop+reprepare），
      * MediaPlayer 可能不触发 OnPreparedListener，
      * 此时会通过轮询检测播放是否已经开始。
+     *
+     * ⚠️ 重要：PREPARING 状态下不能调用 getDuration()，
+     * 否则会触发 MediaPlayer 错误 (-38, 0)。
+     * 只使用 isPlaying() 来检测是否已准备好。
      */
     private fun startPreparingStateMonitor() {
         preparingMonitorJob?.cancel()
@@ -1175,14 +1179,24 @@ class AndroidMediaPlayer {
                 delay(100)
 
                 try {
+                    // ✅ 只检查 isPlaying()，不在 PREPARING 状态调用 getDuration()
                     val actualIsPlaying = engine.isPlaying()
-                    val dur = engine.getDuration()
 
-                    if (actualIsPlaying && dur > 0) {
-                        // 有 duration 且正在播放 → 已准备就绪
+                    if (actualIsPlaying) {
+                        // 正在播放 → 已准备就绪（延迟获取 duration 避免状态冲突）
                         log("AndroidMP", "⚡ PREPARING Monitor: 检测到正在播放！修正状态")
-                        
-                        val pos = engine.getCurrentPosition()
+
+                        // 延迟获取 duration（确保 MediaPlayer 已完全进入 PLAYING 状态）
+                        var dur = 0L
+                        try {
+                            // 小延迟后获取，避免在状态转换临界点调用
+                            delay(50)
+                            dur = engine.getDuration()
+                        } catch (_: Exception) {
+                            log("AndroidMP", "⚠️ PREPARING Monitor: 获取 duration 失败（可能还在准备中）")
+                        }
+
+                        val pos = try { engine.getCurrentPosition() } catch (_: Exception) { 0L }
                         log("AndroidMP", "PREPARING Monitor: duration=$dur, position=$pos")
 
                         // ✨ 检查是否需要自动恢复播放（Surface 切换后）
