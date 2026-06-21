@@ -64,16 +64,17 @@ class Media3PlayerKernal: BasePlayerKernal<ExoPlayer>() {
         override fun onEvents(player: Player, events: Player.Events) {
             //log
             log(TAG, "onEvents: ${events.toJson()}")
-            // 缓冲进度更新
-            if (events.contains(Player.EVENT_POSITION_DISCONTINUITY) ||
-                events.contains(Player.EVENT_TIMELINE_CHANGED)) {
-                val percent = getBufferedPercent()
-                mListener?.onBufferingUpdate(percent)
+            mMainHandler.post {
+                // 缓冲进度更新
+                if (events.contains(Player.EVENT_POSITION_DISCONTINUITY) ||
+                    events.contains(Player.EVENT_TIMELINE_CHANGED)) {
+                    val percent = getBufferedPercent()
+                    mListener?.onBufferingUpdate(percent)
+                }
             }
+
         }
     }
-
-    override var mPlayer: ExoPlayer? = null
 
     init {
         init()
@@ -88,7 +89,7 @@ class Media3PlayerKernal: BasePlayerKernal<ExoPlayer>() {
         log(TAG, "ExoPlayer initialized")
     }
 
-    override fun setSurface(surface: Surface) {
+    override fun setSurface(surface: Surface?) {
         try {
             mPlayer?.setVideoSurface(surface)
         } catch (e: Exception) {
@@ -221,6 +222,28 @@ class Media3PlayerKernal: BasePlayerKernal<ExoPlayer>() {
         return try {
             val dur = mPlayer?.duration ?: 0
             if (dur == C.TIME_UNSET || dur < 0) 0L else dur
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0
+        }
+    }
+
+    override fun getTcpSpeed(): Long {
+        return 0L
+    }
+
+    override fun getVideoWidth(): Int {
+        return try {
+            mPlayer?.videoSize?.width ?: 0
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0
+        }
+    }
+
+    override fun getVideoHeight(): Int {
+        return try {
+            mPlayer?.videoSize?.height ?: 0
         } catch (e: Exception) {
             e.printStackTrace()
             0

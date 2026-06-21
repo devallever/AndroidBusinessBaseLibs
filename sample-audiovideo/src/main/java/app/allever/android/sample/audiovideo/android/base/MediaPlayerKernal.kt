@@ -39,7 +39,7 @@ class MediaPlayerKernal(): BasePlayerKernal<MediaPlayer>() {
             mListener?.onBufferingUpdate(percent)
         }
     }
-    private val mOnVideoSizeChangedListener = MediaPlayer.OnVideoSizeChangedListener { _, width, height ->
+    private val mOnVideoSizeChangedListener = MediaPlayer.OnVideoSizeChangedListener { mp, width, height ->
         log(TAG, "onVideoSizeChanged: $width x $height")
         mMainHandler.post {
             mListener?.onVideoSizeChanged(width, height)
@@ -47,23 +47,25 @@ class MediaPlayerKernal(): BasePlayerKernal<MediaPlayer>() {
     }
     private val mOnInfoListener = MediaPlayer.OnInfoListener { _, what, _ ->
         log(TAG, "onInfo: $what")
-        when (what) {
-            MediaPlayer.MEDIA_INFO_BUFFERING_START -> {
-                log(TAG, "MEDIA_INFO_BUFFERING_START")
-                // 可以在这里显示缓冲指示器
-            }
-            MediaPlayer.MEDIA_INFO_BUFFERING_END -> {
-                log(TAG, "MEDIA_INFO_BUFFERING_END")
-                // 可以在这里隐藏缓冲指示器
-            }
-            MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START -> {
-                log(TAG, "MEDIA_INFO_VIDEO_RENDERING_START")
-                // 视频首帧渲染
-            }
-        }
         mMainHandler.post {
-            mListener?.onInfo()
+            when (what) {
+                MediaPlayer.MEDIA_INFO_BUFFERING_START -> {
+                    log(TAG, "MEDIA_INFO_BUFFERING_START")
+                    // 可以在这里显示缓冲指示器
+                    mListener?.onBufferingUpdate(0)
+                }
+                MediaPlayer.MEDIA_INFO_BUFFERING_END -> {
+                    log(TAG, "MEDIA_INFO_BUFFERING_END")
+                    // 可以在这里隐藏缓冲指示器
+                    mListener?.onBufferingUpdate(100)
+                }
+                MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START -> {
+                    log(TAG, "MEDIA_INFO_VIDEO_RENDERING_START")
+                    // 视频首帧渲染
+                }
+            }
         }
+
         true
     }
 
@@ -88,7 +90,7 @@ class MediaPlayerKernal(): BasePlayerKernal<MediaPlayer>() {
 
     }
 
-    override fun setSurface(surface: Surface) {
+    override fun setSurface(surface: Surface?) {
         mPlayer?.setSurface(surface)
     }
 
@@ -196,6 +198,28 @@ class MediaPlayerKernal(): BasePlayerKernal<MediaPlayer>() {
 
     override fun getDuration(): Long {
         return (mPlayer?.duration ?: 0).toLong()
+    }
+
+    override fun getTcpSpeed(): Long {
+        return 0L
+    }
+
+    override fun getVideoWidth(): Int {
+        return try {
+            mPlayer?.videoWidth ?: 0
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0
+        }
+    }
+
+    override fun getVideoHeight(): Int {
+        return try {
+            mPlayer?.videoHeight ?: 0
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0
+        }
     }
 
     override fun isPlaying(): Boolean {

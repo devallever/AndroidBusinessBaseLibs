@@ -127,7 +127,7 @@ class AndroidMedia3Player {
             }
 
             override fun onBufferingUpdate(percent: Int) {
-                log(TAG, "onBufferingUpdate: $percent")
+//                log(TAG, "onBufferingUpdate: $percent")
                 if (percent > 0) {
                     listener?.onBufferingUpdate(percent)
                 }

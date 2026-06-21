@@ -11,7 +11,7 @@ interface IPlayerKernal<T> {
      * 初始化播放器
      */
     fun init()
-    fun setSurface(surface: Surface)
+    fun setSurface(surface: Surface?)
 
     fun setSource(source: Uri, headers: Map<String, String>?)
     fun setAssetSource(source: String)
@@ -33,6 +33,9 @@ interface IPlayerKernal<T> {
 
     fun getCurrentPosition(): Long
     fun getDuration(): Long
+    fun getTcpSpeed(): Long
+    fun getVideoWidth(): Int
+    fun getVideoHeight(): Int
 
     fun isPlaying(): Boolean
 

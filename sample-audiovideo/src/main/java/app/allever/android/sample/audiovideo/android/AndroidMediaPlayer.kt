@@ -69,6 +69,8 @@ import java.io.File
  * ```
  */
 class AndroidMediaPlayer {
+    //TAG
+    private val TAG = AndroidMediaPlayer::class.java.simpleName
 
     // ==================== 内部组件 ====================
 
@@ -84,25 +86,25 @@ class AndroidMediaPlayer {
                 }
 
                 listener?.onPrepared(dur)
-                log("AndroidMP", "onPrepared (duration=${dur}ms)")
+                log(TAG,"onPrepared (duration=${dur}ms)")
 
                 // 检查是否需要自动恢复播放（Surface 切换后）
                 val shouldAutoResume = pendingSeekPosition >= 0
                 val savedPos = pendingSeekPosition
                 pendingSeekPosition = -1L  // 重置标记
 
-                log("AndroidMP", "onPrepared: autoResume=$shouldAutoResume" +
+                log(TAG,"onPrepared: autoResume=$shouldAutoResume" +
                         (if (shouldAutoResume) ", savedPosition=${formatTime(savedPos)}" else ""))
 
                 // 如果是 Surface 切换后的 reprepare，自动恢复播放
                 if (shouldAutoResume && savedPos!! >= 0) {
-                    log("AndroidMP", "safeSwitchSurface [方案B]: 自动恢复播放 (position=${formatTime(savedPos)})")
+                    log(TAG,"safeSwitchSurface [方案B]: 自动恢复播放 (position=${formatTime(savedPos)})")
 
                     // ✨ 关键：MediaPlayer 必须先 start 再 seekTo
                     play()
                     seekTo(savedPos)
 
-                    log("AndroidMP", "safeSwitchSurface [方案B]: 已恢复播放 (${formatTime(savedPos)})")
+                    log(TAG,"safeSwitchSurface [方案B]: 已恢复播放 (${formatTime(savedPos)})")
                 }
             }
 
@@ -112,13 +114,13 @@ class AndroidMediaPlayer {
                     stopProgressTracking()
                     stopPreparingMonitor()
                     listener?.onComplete()
-                    log("AndroidMP", "onComplete")
+                    log(TAG,"onComplete")
                 }
             }
 
             override fun onError(code: Int, msg: String) {
                 //log
-                log("AndroidMP", "onError: $code, $msg")
+                log(TAG,"onError: $code, $msg")
 
                 if (_state == PlayerState.PREPARING) {
                     // 准备阶段出错，尝试重试
@@ -131,7 +133,7 @@ class AndroidMediaPlayer {
             }
 
             override fun onBufferingUpdate(percent: Int) {
-                log("AndroidMP", "onBufferingUpdate: $percent")
+//                log(TAG,"onBufferingUpdate: $percent")
                 if (percent > 0) {
                     listener?.onBufferingUpdate(percent)
                 }
@@ -143,18 +145,18 @@ class AndroidMediaPlayer {
                     videoHeight = height
 
                     listener?.onVideoSizeChanged(width, height)
-                    log("AndroidMP", "onVideoSizeChanged: ${width}x${height}")
+                    log(TAG,"onVideoSizeChanged: ${width}x${height}")
 
                     adjustSurfaceLayout()
                 }
             }
 
             override fun onInfo() {
-                log("AndroidMP", "onInfo")
+                log(TAG,"onInfo")
             }
 
             override fun onIsPlayingChanged(isPlaying: Boolean) {
-                log("AndroidMP", "onIsPlayingChanged: $isPlaying")
+                log(TAG,"onIsPlayingChanged: $isPlaying")
                 //
             }
 
@@ -199,7 +201,7 @@ class AndroidMediaPlayer {
         set(value) {
             val old = field
             if (old != value) {
-                log("AndroidMP", "state: $old -> $value")
+                log(TAG,"state: $old -> $value")
                 field = value
                 listener?.onStateChanged(old, value)
             }
@@ -343,7 +345,7 @@ class AndroidMediaPlayer {
         this.currentSurfaceType = SurfaceType.VIDEO_VIEW
         this.isSurfaceReady = false  // 需要等待 SurfaceHolder 就绪
 
-        log("AndroidMP", "attach VideoView (waiting for surface)")
+        log(TAG,"attach VideoView (waiting for surface)")
 
         initMediaPlayer()
 
@@ -371,7 +373,7 @@ class AndroidMediaPlayer {
         this.currentSurfaceType = SurfaceType.SURFACE_VIEW
         this.isSurfaceReady = false  // Surface 需要异步创建
 
-        log("AndroidMP", "attach SurfaceView (waiting for surface)")
+        log(TAG,"attach SurfaceView (waiting for surface)")
 
         initMediaPlayer()
         setupSurfaceViewCallback()
@@ -397,7 +399,7 @@ class AndroidMediaPlayer {
         this.currentSurfaceType = SurfaceType.TEXTURE_VIEW
         this.isSurfaceReady = false  // Surface 需要异步准备
 
-        log("AndroidMP", "attach TextureView (waiting for surface)")
+        log(TAG,"attach TextureView (waiting for surface)")
 
         initMediaPlayer()
         setupTextureViewCallback()
@@ -420,19 +422,19 @@ class AndroidMediaPlayer {
                 videoView?.holder?.removeCallback(videoViewSurfaceCallback)
                 videoView = null
                 isSurfaceReady = false
-                log("AndroidMP", "detach VideoView")
+                log(TAG,"detach VideoView")
             }
             SurfaceType.SURFACE_VIEW -> {
                 surfaceView?.holder?.removeCallback(surfaceHolderCallback)
                 surfaceView = null
                 isSurfaceReady = false
-                log("AndroidMP", "detach SurfaceView")
+                log(TAG,"detach SurfaceView")
             }
             SurfaceType.TEXTURE_VIEW -> {
                 textureView?.surfaceTextureListener = null
                 textureView = null
                 isSurfaceReady = false
-                log("AndroidMP", "detach TextureView")
+                log(TAG,"detach TextureView")
             }
             SurfaceType.NONE -> {}
         }
@@ -536,7 +538,7 @@ class AndroidMediaPlayer {
     ) {
         // 防重复调用
         if (isSafeSwitching) {
-            log("AndroidMP", "safeSwitchSurface [方案B]: ⚠️ 忽略重复调用（正在切换到 $targetName）")
+            log(TAG,"safeSwitchSurface [方案B]: ⚠️ 忽略重复调用（正在切换到 $targetName）")
             return
         }
         
@@ -548,25 +550,25 @@ class AndroidMediaPlayer {
                     _state == PlayerState.PREPARING)
             val savedPosition = currentPosition
 
-            log("AndroidMP", "safeSwitchSurface [方案B]: 开始切换到 $targetName" +
+            log(TAG,"safeSwitchSurface [方案B]: 开始切换到 $targetName" +
                     " (wasPlaying=$wasPlaying, position=${formatTime(savedPosition)}, state=$_state)")
 
             // 2. 完全停止 MediaPlayer（清空所有缓冲区和渲染队列）
             if (_state != PlayerState.IDLE && _state != PlayerState.STOPPED && _state != PlayerState.RELEASED) {
                 stop()
-                log("AndroidMP", "safeSwitchSurface [方案B]: 已 stop()，清空所有缓冲区")
+                log(TAG,"safeSwitchSurface [方案B]: 已 stop()，清空所有缓冲区")
             }
 
             // 3. 如果需要恢复播放，保存位置信息
             if (wasPlaying && savedPosition >= 0 && currentUri != null) {
                 pendingSeekPosition = savedPosition
-                log("AndroidMP", "safeSwitchSurface [方案B]: 待恢复位置 ${formatTime(savedPosition)}")
+                log(TAG,"safeSwitchSurface [方案B]: 待恢复位置 ${formatTime(savedPosition)}")
             }
 
             // 4. 使用 postDelayed 延迟执行切换操作
             App.mainHandler.postDelayed({
                 try {
-                    log("AndroidMP", "safeSwitchSurface [方案B]: 执行切换到 $targetName")
+                    log(TAG,"safeSwitchSurface [方案B]: 执行切换到 $targetName")
 
                     // 执行实际的切换操作（detach + attach）
                     targetAction()
@@ -588,7 +590,7 @@ class AndroidMediaPlayer {
                     }
 
                     if (!surfaceReady && currentSurfaceType != SurfaceType.NONE) {
-                        log("AndroidMP", "safeSwitchSurface [方案B]: ⚠️ Surface 未就绪，延迟 50ms 等待...")
+                        log(TAG,"safeSwitchSurface [方案B]: ⚠️ Surface 未就绪，延迟 50ms 等待...")
                         
                         App.mainHandler.postDelayed({
                             try {
@@ -598,7 +600,7 @@ class AndroidMediaPlayer {
                             }
                         }, 50L)
                     } else {
-                        log("AndroidMP", "safeSwitchSurface [方案B]: Surface 已就绪，立即 prepare")
+                        log(TAG,"safeSwitchSurface [方案B]: Surface 已就绪，立即 prepare")
                         try {
                             performPrepareAfterSwitch()
                         } catch (e: Exception) {
@@ -606,7 +608,7 @@ class AndroidMediaPlayer {
                         }
                     }
                 } catch (e: Exception) {
-                    log("AndroidMP", "safeSwitchSurface [方案B]: 切换失败 - ${e.message}")
+                    log(TAG,"safeSwitchSurface [方案B]: 切换失败 - ${e.message}")
                     pendingSeekPosition = -1L
                     _state = PlayerState.ERROR
                     listener?.onError(PlayerErrorCode.SURFACE_SWITCH_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.SURFACE_SWITCH_FAILED, e.message))
@@ -616,7 +618,7 @@ class AndroidMediaPlayer {
             }, delayMs)
 
         } catch (e: Exception) {
-            log("AndroidMP", "safeSwitchSurface [方案B]: 准备阶段失败 - ${e.message}")
+            log(TAG,"safeSwitchSurface [方案B]: 准备阶段失败 - ${e.message}")
             isSafeSwitching = false
             pendingSeekPosition = -1L
             _state = PlayerState.ERROR
@@ -629,16 +631,16 @@ class AndroidMediaPlayer {
      */
     private fun performPrepareAfterSwitch() {
         if (currentUri == null && currentAssetPath == null) {
-            log("AndroidMP", "safeSwitchSurface [方案B]: 切换完成（无数据源）")
+            log(TAG,"safeSwitchSurface [方案B]: 切换完成（无数据源）")
             return
         }
 
-        log("AndroidMP", "safeSwitchSurface [方案B]: 重新准备数据源" +
+        log(TAG,"safeSwitchSurface [方案B]: 重新准备数据源" +
                 " (autoResume=${pendingSeekPosition >= 0})")
 
         if (currentAssetPath != null && currentAssetPath!!.isNotEmpty()) {
             // Assets 数据源：必须手动处理文件复制 + prepare
-            log("AndroidMP", "safeSwitchSurface [方案B]: 使用 setAssetSource (assets)")
+            log(TAG,"safeSwitchSurface [方案B]: 使用 setAssetSource (assets)")
 
             try {
                 val context = App.context.applicationContext
@@ -651,7 +653,7 @@ class AndroidMediaPlayer {
                             input.copyTo(output)
                         }
                     }
-                    log("AndroidMP", "safeSwitchSurface [方案B]: 已重新复制 asset 文件")
+                    log(TAG,"safeSwitchSurface [方案B]: 已重新复制 asset 文件")
                 }
 
                 // 直接使用 doPrepareInternal，跳过 isSurfaceReady 检查
@@ -660,24 +662,24 @@ class AndroidMediaPlayer {
                 doPrepareInternal(cacheUri, currentHeaders)
 
             } catch (e: Exception) {
-                log("AndroidMP", "safeSwitchSurface [方案B]: Asset 处理失败 - ${e.message}")
+                log(TAG,"safeSwitchSurface [方案B]: Asset 处理失败 - ${e.message}")
                 handlePrepareFailure(e)
             }
 
         } else if (currentUri != null) {
             // 普通 URI（HTTP/本地文件/Content Provider）：直接 prepare
-            log("AndroidMP", "safeSwitchSurface [方案B]: 使用 doPrepareInternal (uri=$currentUri)")
+            log(TAG,"safeSwitchSurface [方案B]: 使用 doPrepareInternal (uri=$currentUri)")
             doPrepareInternal(currentUri!!, currentHeaders)
         }
 
-        log("AndroidMP", "safeSwitchSurface [方案B]: prepare 完成，等待 onPrepared 或 PREPARING Monitor")
+        log(TAG,"safeSwitchSurface [方案B]: prepare 完成，等待 onPrepared 或 PREPARING Monitor")
     }
 
     /**
      * 处理 prepare 失败的情况
      */
     private fun handlePrepareFailure(e: Exception) {
-        log("AndroidMP", "safeSwitchSurface [方案B]: prepare 失败 - ${e.message}")
+        log(TAG,"safeSwitchSurface [方案B]: prepare 失败 - ${e.message}")
         pendingSeekPosition = -1L
         _state = PlayerState.ERROR
         listener?.onError(PlayerErrorCode.PREPARE_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.PREPARE_FAILED, e.message))
@@ -755,12 +757,12 @@ class AndroidMediaPlayer {
                         input.copyTo(output)
                     }
                 }
-                log("AndroidMP", "copied asset to cache: ${cacheFile.absolutePath}")
+                log(TAG,"copied asset to cache: ${cacheFile.absolutePath}")
             }
 
             doSetSource(Uri.fromFile(cacheFile), null, path)
         } catch (e: Exception) {
-            log("AndroidMP", "setAssetSource error: ${e.message}")
+            log(TAG,"setAssetSource error: ${e.message}")
             _state = PlayerState.ERROR
             listener?.onError(PlayerErrorCode.ASSET_COPY_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.ASSET_COPY_FAILED, e.message))
         }
@@ -782,7 +784,7 @@ class AndroidMediaPlayer {
 
         // 如果 Surface 未就绪，缓存待执行的 prepare
         if (!isSurfaceReady && currentSurfaceType != SurfaceType.NONE) {
-            log("AndroidMP", "Surface not ready, caching prepare request")
+            log(TAG,"Surface not ready, caching prepare request")
             pendingPrepare = PendingPrepare(uri, headers, assetPath)
             _state = PlayerState.PREPARING
             return
@@ -796,7 +798,7 @@ class AndroidMediaPlayer {
      */
     private fun executePendingPrepare() {
         pendingPrepare?.let { pending ->
-            log("AndroidMP", "executing pending prepare: ${pending.uri}")
+            log(TAG,"executing pending prepare: ${pending.uri}")
             pendingPrepare = null
             doPrepareInternal(pending.uri, pending.headers)
         }
@@ -818,16 +820,16 @@ class AndroidMediaPlayer {
                 _state = PlayerState.PLAYING
                 startProgressTracking()
                 startPreparingStateMonitor()
-                log("AndroidMP", "play() -> PLAYING (from $_state)")
+                log(TAG,"play() -> PLAYING (from $_state)")
             }
             PlayerState.PAUSED -> {
                 engine.start()
                 _state = PlayerState.PLAYING
                 startProgressTracking()
-                log("AndroidMP", "play() -> PLAYING (from PAUSED)")
+                log(TAG,"play() -> PLAYING (from PAUSED)")
             }
             else -> {
-                log("AndroidMP", "play() ignored (current state: $_state)")
+                log(TAG,"play() ignored (current state: $_state)")
             }
         }
     }
@@ -840,7 +842,7 @@ class AndroidMediaPlayer {
             engine.pause()
             _state = PlayerState.PAUSED
             stopProgressTracking()
-            log("AndroidMP", "pause() -> PAUSED")
+            log(TAG,"pause() -> PAUSED")
         }
     }
 
@@ -858,7 +860,7 @@ class AndroidMediaPlayer {
         } catch (_: Exception) {}
 
         _state = PlayerState.STOPPED
-        log("AndroidMP", "stop() -> STOPPED")
+        log(TAG,"stop() -> STOPPED")
     }
 
     /**
@@ -875,12 +877,12 @@ class AndroidMediaPlayer {
             App.mainHandler.postDelayed({
                 isSeeking = false
                 if (_state == PlayerState.PLAYING && (progressJob == null || !progressJob!!.isActive)) {
-                    log("AndroidMP", "restart progress tracking after seek")
+                    log(TAG,"restart progress tracking after seek")
                     startProgressTracking()
                 }
             }, 300)
         } catch (e: Exception) {
-            log("AndroidMP", "seekTo error: ${e.message}")
+            log(TAG,"seekTo error: ${e.message}")
             isSeeking = false
         }
     }
@@ -899,7 +901,7 @@ class AndroidMediaPlayer {
         pendingPrepare = null
         pendingSeekPosition = -1L
         _state = PlayerState.RELEASED
-        log("AndroidMP", "release() -> RELEASED")
+        log(TAG,"release() -> RELEASED")
     }
 
     // ==================== 监听器设置 ====================
@@ -937,16 +939,16 @@ class AndroidMediaPlayer {
     private fun setupTextureViewCallback() {
         textureView?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
-                log("AndroidMP", "onSurfaceTextureAvailable: ${width}x${height}")
+                log(TAG,"onSurfaceTextureAvailable: ${width}x${height}")
                 onSurfaceReady(Surface(surface))
             }
 
             override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {
-                log("AndroidMP", "onSurfaceTextureSizeChanged: ${width}x${height}")
+                log(TAG,"onSurfaceTextureSizeChanged: ${width}x${height}")
             }
 
             override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
-                log("AndroidMP", "onSurfaceTextureDestroyed")
+                log(TAG,"onSurfaceTextureDestroyed")
                 isSurfaceReady = false
                 return true
             }
@@ -960,16 +962,16 @@ class AndroidMediaPlayer {
     /** VideoView 的 SurfaceHolder 回调 */
     private val videoViewSurfaceCallback = object : SurfaceHolder.Callback {
         override fun surfaceCreated(holder: SurfaceHolder) {
-            log("AndroidMP", "VideoView surfaceCreated")
+            log(TAG,"VideoView surfaceCreated")
             onSurfaceReady(holder.surface)
         }
 
         override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-            log("AndroidMP", "VideoView surfaceChanged: ${width}x${height}")
+            log(TAG,"VideoView surfaceChanged: ${width}x${height}")
         }
 
         override fun surfaceDestroyed(holder: SurfaceHolder) {
-            log("AndroidMP", "VideoView surfaceDestroyed")
+            log(TAG,"VideoView surfaceDestroyed")
             isSurfaceReady = false
         }
     }
@@ -977,16 +979,16 @@ class AndroidMediaPlayer {
     /** SurfaceView 的 SurfaceHolder 回调 */
     private val surfaceHolderCallback = object : SurfaceHolder.Callback {
         override fun surfaceCreated(holder: SurfaceHolder) {
-            log("AndroidMP", "surfaceCreated")
+            log(TAG,"surfaceCreated")
             onSurfaceReady(holder.surface)
         }
 
         override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-            log("AndroidMP", "surfaceChanged: ${width}x${height}")
+            log(TAG,"surfaceChanged: ${width}x${height}")
         }
 
         override fun surfaceDestroyed(holder: SurfaceHolder) {
-            log("AndroidMP", "surfaceDestroyed")
+            log(TAG,"surfaceDestroyed")
             isSurfaceReady = false
         }
     }
@@ -996,13 +998,13 @@ class AndroidMediaPlayer {
      */
     private fun onSurfaceReady(surface: Surface) {
         isSurfaceReady = true
-        log("AndroidMP", "Surface ready")
+        log(TAG,"Surface ready")
 
         // 将 Surface 设置给 MediaPlayer
         try {
             engine.setSurface(surface)
         } catch (e: Exception) {
-            log("AndroidMP", "setSurface error: ${e.message}")
+            log(TAG,"setSurface error: ${e.message}")
         }
 
         // 如果有待执行的 prepare，立即执行
@@ -1035,13 +1037,13 @@ class AndroidMediaPlayer {
 
             // 切换到 PREPARING 状态
             _state = PlayerState.PREPARING
-            log("AndroidMP", "state -> PREPARING (prepare: $srcUri)")
+            log(TAG,"state -> PREPARING (prepare: $srcUri)")
 
             // 启动 PREPARING 状态监控（作为 onPrepared 的备用方案）
             startPreparingStateMonitor()
 
         } catch (e: Exception) {
-            log("AndroidMP", "prepare error: ${e.message}")
+            log(TAG,"prepare error: ${e.message}")
             handlePrepareError(e)
         }
     }
@@ -1059,12 +1061,12 @@ class AndroidMediaPlayer {
                         try {
                             engine.setSurface(holder.surface)
                             surfaceBound = true
-                            log("AndroidMP", "bindSurface: VideoView success")
+                            log(TAG,"bindSurface: VideoView success")
                         } catch (e: Exception) {
-                            log("AndroidMP", "bindSurface: VideoView error - ${e.message}")
+                            log(TAG,"bindSurface: VideoView error - ${e.message}")
                         }
                     } else {
-                        log("AndroidMP", "bindSurface: VideoView invalid")
+                        log(TAG,"bindSurface: VideoView invalid")
                     }
                 }
             }
@@ -1074,12 +1076,12 @@ class AndroidMediaPlayer {
                         try {
                             engine.setSurface(holder.surface)
                             surfaceBound = true
-                            log("AndroidMP", "bindSurface: SurfaceView success")
+                            log(TAG,"bindSurface: SurfaceView success")
                         } catch (e: Exception) {
-                            log("AndroidMP", "bindSurface: SurfaceView error - ${e.message}")
+                            log(TAG,"bindSurface: SurfaceView error - ${e.message}")
                         }
                     } else {
-                        log("AndroidMP", "bindSurface: SurfaceView invalid")
+                        log(TAG,"bindSurface: SurfaceView invalid")
                     }
                 }
             }
@@ -1092,16 +1094,16 @@ class AndroidMediaPlayer {
                             if (surface.isValid) {
                                 engine.setSurface(surface)
                                 surfaceBound = true
-                                log("AndroidMP", "bindSurface: TextureView success")
+                                log(TAG,"bindSurface: TextureView success")
                             } else {
-                                log("AndroidMP", "bindSurface: TextureView Surface invalid")
+                                log(TAG,"bindSurface: TextureView Surface invalid")
                                 surface.release()
                             }
                         } catch (e: Exception) {
-                            log("AndroidMP", "bindSurface: TextureView error - ${e.message}")
+                            log(TAG,"bindSurface: TextureView error - ${e.message}")
                         }
                     } else {
-                        log("AndroidMP", "bindSurface: TextureView not ready " +
+                        log(TAG,"bindSurface: TextureView not ready " +
                                 "(isAvailable=${tv.isAvailable}, surfaceTexture=$surfaceTexture)")
                     }
                 }
@@ -1110,7 +1112,7 @@ class AndroidMediaPlayer {
         }
 
         if (!surfaceBound && currentSurfaceType != SurfaceType.NONE) {
-            log("AndroidMP", "bindSurface: ⚠️ Surface not bound, may have no video output")
+            log(TAG,"bindSurface: ⚠️ Surface not bound, may have no video output")
         }
     }
 
@@ -1120,7 +1122,7 @@ class AndroidMediaPlayer {
     private fun handlePrepareError(e: Exception) {
         if (retryLeft > 0) {
             retryLeft--
-            log("AndroidMP", "retrying... ($retryLeft left)")
+            log(TAG,"retrying... ($retryLeft left)")
             App.mainHandler.postDelayed({
                 doPrepareInternal(currentUri, currentHeaders)
             }, 1000)
@@ -1174,7 +1176,7 @@ class AndroidMediaPlayer {
 
                     if (actualIsPlaying) {
                         // 正在播放 → 已准备就绪（延迟获取 duration 避免状态冲突）
-                        log("AndroidMP", "⚡ PREPARING Monitor: 检测到正在播放！修正状态")
+                        log(TAG,"⚡ PREPARING Monitor: 检测到正在播放！修正状态")
 
                         // 延迟获取 duration（确保 MediaPlayer 已完全进入 PLAYING 状态）
                         var dur = 0L
@@ -1183,18 +1185,18 @@ class AndroidMediaPlayer {
                             delay(50)
                             dur = engine.getDuration()
                         } catch (_: Exception) {
-                            log("AndroidMP", "⚠️ PREPARING Monitor: 获取 duration 失败（可能还在准备中）")
+                            log(TAG,"⚠️ PREPARING Monitor: 获取 duration 失败（可能还在准备中）")
                         }
 
                         val pos = try { engine.getCurrentPosition() } catch (_: Exception) { 0L }
-                        log("AndroidMP", "PREPARING Monitor: duration=$dur, position=$pos")
+                        log(TAG,"PREPARING Monitor: duration=$dur, position=$pos")
 
                         // ✨ 检查是否需要自动恢复播放（Surface 切换后）
                         val shouldAutoResume = pendingSeekPosition >= 0
                         val savedPos = pendingSeekPosition
                         pendingSeekPosition = -1L  // 重置标记
 
-                        log("AndroidMP", "PREPARING Monitor: autoResume=$shouldAutoResume" +
+                        log(TAG,"PREPARING Monitor: autoResume=$shouldAutoResume" +
                                 (if (shouldAutoResume) ", savedPosition=${formatTime(savedPos)}" else ""))
 
                         // 通知准备完成（如果还没通知过）
@@ -1202,12 +1204,12 @@ class AndroidMediaPlayer {
 
                         // 如果是 Surface 切换后的 reprepare，自动恢复播放位置
                         if (shouldAutoResume && savedPos >= 0) {
-                            log("AndroidMP", "PREPARING Monitor [方案B]: 自动恢复播放 " +
+                            log(TAG,"PREPARING Monitor [方案B]: 自动恢复播放 " +
                                     "(position=${formatTime(savedPos)})")
                             
                             // Monitor 检测到 isPlaying=true，只需 seekTo
                             seekTo(savedPos.toLong())
-                            log("AndroidMP", "PREPARING Monitor [方案B]: 已恢复播放 " +
+                            log(TAG,"PREPARING Monitor [方案B]: 已恢复播放 " +
                                     "(${formatTime(savedPos)})")
                         }
 
@@ -1225,7 +1227,7 @@ class AndroidMediaPlayer {
 
             // 超时
             if (_state == PlayerState.PREPARING) {
-                log("AndroidMP", "PREPARING Monitor: 超时，仍处于 PREPARING 状态")
+                log(TAG,"PREPARING Monitor: 超时，仍处于 PREPARING 状态")
             }
         }
     }
@@ -1235,7 +1237,7 @@ class AndroidMediaPlayer {
      */
     private fun stopPreparingMonitor() {
         if (preparingMonitorJob != null) {
-            log("AndroidMP", "stopping PREPARING state monitor")
+            log(TAG,"stopping PREPARING state monitor")
             preparingMonitorJob?.cancel()
             preparingMonitorJob = null
         }
@@ -1251,12 +1253,12 @@ class AndroidMediaPlayer {
     private fun startProgressTracking() {
         // 如果已经在运行且状态正确，不需要重启
         if (progressJob != null && progressJob!!.isActive && _state == PlayerState.PLAYING) {
-            log("AndroidMP", "progress tracking already running")
+            log(TAG,"progress tracking already running")
             return
         }
 
         stopProgressTracking()
-        log("AndroidMP", "starting progress tracking (state: $_state)")
+        log(TAG,"starting progress tracking (state: $_state)")
 
         progressJob = CoroutineScope(Dispatchers.Main).launch {
             while (isActive && _state == PlayerState.PLAYING) {
@@ -1273,7 +1275,7 @@ class AndroidMediaPlayer {
                 listener?.onProgress(pos, dur)
                 delay(progressIntervalMs.toLong())
             }
-            log("AndroidMP", "progress tracking stopped (loop exited, state: $_state)")
+            log(TAG,"progress tracking stopped (loop exited, state: $_state)")
         }
     }
 
@@ -1282,7 +1284,7 @@ class AndroidMediaPlayer {
      */
     private fun stopProgressTracking() {
         if (progressJob != null) {
-            log("AndroidMP", "stopping progress tracking")
+            log(TAG,"stopping progress tracking")
             progressJob?.cancel()
             progressJob = null
         }
