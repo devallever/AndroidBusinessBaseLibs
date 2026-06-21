@@ -1,24 +1,18 @@
 package app.allever.android.sample.audiovideo.android
 
-import android.content.Context
 import android.graphics.SurfaceTexture
 import android.net.Uri
 import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.TextureView
-import androidx.annotation.OptIn
-import androidx.media3.common.C
-import androidx.media3.common.MediaItem
-import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
-import androidx.media3.common.VideoSize
-import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.helper.TimeHelper.formatTime
+import app.allever.android.sample.audiovideo.android.base.IPlayerKernal
+import app.allever.android.sample.audiovideo.android.base.Media3PlayerKernal
 import app.allever.android.sample.audiovideo.lib.ExoPlayerHelper
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
@@ -79,10 +73,107 @@ import java.io.File
  */
 class AndroidMedia3Player {
 
+    private val TAG = AndroidMedia3Player::class.java.simpleName
+
     // ==================== 内部组件 ====================
 
     /** ExoPlayer 实例 */
-    private var exoPlayer: ExoPlayer? = null
+//    private var exoPlayer: ExoPlayer? = null
+    private val engine: IPlayerKernal<*> = Media3PlayerKernal().apply {
+        registerListener(object : IPlayerKernal.IListener {
+            override fun onPrepared() {
+                log(TAG, "onPrepared")
+                if (_state != PlayerState.PREPARING) return
+                val dur = duration
+                _state = PlayerState.PREPARED
+
+                // 检查是否需要自动恢复播放（Surface 切换后）
+                val shouldAutoResume = pendingSeekPosition >= 0
+                val savedPos = pendingSeekPosition
+                pendingSeekPosition = -1L  // 重置标记
+
+                listener?.onPrepared(dur)
+                log(TAG, "onPlaybackStateChanged: READY (duration=${dur}ms, autoResume=$shouldAutoResume)")
+
+                // 如果是 Surface 切换后的 reprepare，自动恢复播放
+                if (shouldAutoResume && savedPos!! >= 0) {
+                    log(TAG, "safeSwitchSurface [方案B]: 自动恢复播放 (position=${formatTime(savedPos)})")
+                    App.mainHandler.post {
+                        seekTo(savedPos)
+                        play()
+                        log(TAG, "safeSwitchSurface [方案B]: 已恢复播放 (${formatTime(savedPos)})")
+                    }
+                }
+            }
+
+            override fun onCompletion() {
+                log(TAG, "onCompletion")
+                if (_state == PlayerState.PLAYING) {
+                    _state = PlayerState.COMPLETED
+                    stopProgressTracking()
+                    listener?.onComplete()
+                }
+            }
+
+            override fun onError(code: Int, msg: String) {
+                log(TAG, "onError: $code, $msg")
+                if (_state == PlayerState.PREPARING) {
+                    // 准备阶段出错，尝试重试
+                    handlePrepareError(Exception(msg))
+                } else {
+                    // 播放阶段出错
+                    _state = PlayerState.ERROR
+                    listener?.onError(code, msg)
+                }
+            }
+
+            override fun onBufferingUpdate(percent: Int) {
+                log(TAG, "onBufferingUpdate: $percent")
+                if (percent > 0) {
+                    listener?.onBufferingUpdate(percent)
+                }
+            }
+
+            override fun onVideoSizeChanged(width: Int, height: Int) {
+                //log
+                log(TAG, "onVideoSizeChanged: $width x $height")
+                if (width > 0 && height > 0) {
+                    // 保存视频原始尺寸
+                    this@AndroidMedia3Player.videoWidth = width
+                    this@AndroidMedia3Player.videoHeight = height
+
+                    listener?.onVideoSizeChanged(width, height)
+
+                    adjustSurfaceLayout()
+                }
+            }
+
+            override fun onInfo() {
+                log(TAG, "onInfo")
+            }
+
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                // 如果正在 seek 操作中，忽略临时的 isPlaying 变化
+                if (isSeeking) {
+                    log("Media3Player", "onIsPlayingChanged ignored during seeking: isPlaying=$isPlaying")
+                    return
+                }
+
+                if (isPlaying) {
+                    if (_state != PlayerState.PLAYING) {
+                        _state = PlayerState.PLAYING
+                        startProgressTracking()
+                    }
+                } else {
+                    if (_state == PlayerState.PLAYING) {
+                        _state = PlayerState.PAUSED
+                        stopProgressTracking()
+                    }
+                }
+            }
+
+        })
+    }
 
     /** 监听器回调 */
     private var listener: IVideoPlayerListener? = null
@@ -127,17 +218,16 @@ class AndroidMedia3Player {
 
     /** 是否正在播放 */
     val isPlaying: Boolean
-        get() = _state == PlayerState.PLAYING && exoPlayer?.isPlaying == true
+        get() = _state == PlayerState.PLAYING && engine.isPlaying()
 
     /** 当前位置（毫秒）*/
     val currentPosition: Long
-        get() = try { exoPlayer?.currentPosition ?: 0L } catch (_: Exception) { 0L }
+        get() = try { engine.getCurrentPosition() } catch (_: Exception) { 0L }
 
     /** 总时长（毫秒），PREPARED 后可用 */
     val duration: Long
         get() = try {
-            val dur = exoPlayer?.duration ?: 0
-            if (dur == C.TIME_UNSET || dur < 0) 0L else dur
+            engine.getDuration()
         } catch (_: Exception) { 0L }
 
     // ==================== 配置属性 ====================
@@ -146,7 +236,7 @@ class AndroidMedia3Player {
     var loopMode: LoopMode = LoopMode.NONE
         set(value) {
             field = value
-            applyLoopMode()
+            engine.loopMode(value)
         }
 
     /** 进度回调间隔（毫秒），默认 200ms */
@@ -166,7 +256,7 @@ class AndroidMedia3Player {
     var volume: Float = 1.0f
         set(value) {
             field = value.coerceIn(0f, 1f)
-            exoPlayer?.volume = field
+            engine.volume(field)
         }
 
     /**
@@ -640,13 +730,13 @@ class AndroidMedia3Player {
     fun play() {
         when (_state) {
             PlayerState.PREPARED, PlayerState.COMPLETED -> {
-                exoPlayer?.playWhenReady = true
+                engine.start()
                 _state = PlayerState.PLAYING
                 startProgressTracking()
                 log("Media3Player", "play() -> PLAYING (from ${_state})")
             }
             PlayerState.PAUSED -> {
-                exoPlayer?.playWhenReady = true
+                engine.start()
                 _state = PlayerState.PLAYING
                 startProgressTracking()
                 log("Media3Player", "play() -> PLAYING (from PAUSED)")
@@ -662,7 +752,7 @@ class AndroidMedia3Player {
      */
     fun pause() {
         if (_state == PlayerState.PLAYING) {
-            exoPlayer?.playWhenReady = false
+            engine.pause()
             _state = PlayerState.PAUSED
             stopProgressTracking()
             log("Media3Player", "pause() -> PAUSED")
@@ -677,7 +767,7 @@ class AndroidMedia3Player {
 
         stopProgressTracking()
 
-        exoPlayer?.stop()
+        engine.stop()
         _state = PlayerState.STOPPED
         log("Media3Player", "stop() -> STOPPED")
     }
@@ -691,7 +781,7 @@ class AndroidMedia3Player {
         if (_state == PlayerState.RELEASED || _state == PlayerState.IDLE) return
         try {
             isSeeking = true  // 标记正在 seek，防止误停进度追踪
-            exoPlayer?.seekTo(positionMs)
+            engine.seekTo(positionMs)
             // 延迟重置标志并确保进度追踪正常运行（seek 是异步操作）
             App.mainHandler.postDelayed({
                 isSeeking = false
@@ -737,27 +827,18 @@ class AndroidMedia3Player {
      * 初始化 ExoPlayer 实例
      */
     private fun initExoPlayer() {
-        if (exoPlayer != null) return
-
-        val context = App.context.applicationContext
-        exoPlayer = ExoPlayer.Builder(context).build().apply {
-            addListener(exoPlayerListener)
-            // 应用初始配置
-            applyLoopMode()
-            applySpeed()
-            this@AndroidMedia3Player.volume.let { vol ->
-                if (vol != 1.0f) this.volume = vol
-            }
+        engine.loopMode(loopMode)
+        engine.speed(speed)
+        if (volume != 1.0f) {
+            engine.volume(volume)
         }
-
-        log("Media3Player", "ExoPlayer initialized")
     }
 
     /**
      * 将 ExoPlayer 绑定到 PlayerView
      */
     private fun bindToPlayerView() {
-        playerView?.player = exoPlayer
+        playerView?.player =  engine.getEnginePlayer() as? Player?
         log("Media3Player", "bound to PlayerView")
     }
 
@@ -819,7 +900,7 @@ class AndroidMedia3Player {
         log("Media3Player", "Surface ready")
 
         // 将 Surface 设置给 ExoPlayer
-        exoPlayer?.setVideoSurface(surface)
+        engine.setSurface(surface)
 
         // 如果有待执行的 prepare，立即执行
         pendingPrepare?.let {
@@ -836,17 +917,10 @@ class AndroidMedia3Player {
         val srcUri = uri ?: return
 
         // 确保 ExoPlayer 存在
-        if (exoPlayer == null) {
-            initExoPlayer()
-        }
+        initExoPlayer()
 
         try {
-            val mediaItem = MediaItem.Builder().setUri(srcUri).build()
-
-            exoPlayer?.apply {
-                setMediaItem(mediaItem)
-                prepare()
-            }
+            engine.setSource(srcUri, headers)
 
             // 切换到 PREPARING 状态（确保进度追踪已停止）
             _state = PlayerState.PREPARING
@@ -873,49 +947,13 @@ class AndroidMedia3Player {
         }
     }
 
-    /**
-     * 将 ExoPlayer 的错误映射到 PlayerErrorCode
-     *
-     * @param error ExoPlayer PlaybackException
-     * @return 对应的 PlayerErrorCode
-     */
-    private fun mapExoPlayerError(error: PlaybackException): Int {
-        // 根据异常类型判断错误代码，避免使用可能不存在的常量
-        return when {
-            error.cause is java.io.FileNotFoundException -> PlayerErrorCode.FILE_NOT_FOUND
-            error.cause is java.net.SocketTimeoutException ||
-            error.cause is java.net.ConnectException -> PlayerErrorCode.NETWORK_CONNECTION_FAILED
-            error.cause is javax.net.ssl.SSLException -> PlayerErrorCode.SSL_ERROR
-            error.cause is java.io.IOException -> PlayerErrorCode.FILE_READ_ERROR
-            else -> PlayerErrorCode.EXO_PLAYER_INTERNAL_ERROR
-        }
-    }
-
     // ==================== 私有方法：配置应用 ====================
-
-    /**
-     * 应用循环模式到 ExoPlayer
-     */
-    private fun applyLoopMode() {
-        val repeatMode = when (loopMode) {
-            LoopMode.SINGLE -> Player.REPEAT_MODE_ONE
-            LoopMode.ALL -> Player.REPEAT_MODE_ALL
-            else -> Player.REPEAT_MODE_OFF
-        }
-        exoPlayer?.repeatMode = repeatMode
-    }
 
     /**
      * 应用变速到 ExoPlayer
      */
     private fun applySpeed() {
-        try {
-            exoPlayer?.setPlaybackParameters(
-                androidx.media3.common.PlaybackParameters(speed)
-            )
-        } catch (e: Exception) {
-            log("Media3Player", "setSpeed error: ${e.message}")
-        }
+        engine.speed(speed)
     }
 
     // ==================== 私有方法：资源释放 ====================
@@ -925,135 +963,8 @@ class AndroidMedia3Player {
      */
     private fun releaseExoPlayer() {
         stopProgressTracking()
-        exoPlayer?.apply {
-            removeListener(exoPlayerListener)
-            release()
-        }
-        exoPlayer = null
+        engine.release()
         log("Media3Player", "ExoPlayer released")
-    }
-
-    // ==================== 内部：ExoPlayer 监听器 ====================
-
-    /**
-     * ExoPlayer 的事件监听器
-     *
-     * 注意：此监听器的回调可能在非主线程触发，
-     * 所有 UI 相关操作需切换到主线程。
-     */
-    private val exoPlayerListener = object : Player.Listener {
-
-        override fun onPlaybackStateChanged(playbackState: Int) {
-            App.mainHandler.post {
-                when (playbackState) {
-                    Player.STATE_READY -> {
-                        if (_state != PlayerState.PREPARING) return@post
-                        val dur = duration
-                        _state = PlayerState.PREPARED
-
-                        // 检查是否需要自动恢复播放（Surface 切换后）
-                        val shouldAutoResume = pendingSeekPosition >= 0
-                        val savedPos = pendingSeekPosition
-                        pendingSeekPosition = -1L  // 重置标记
-
-                        listener?.onPrepared(dur)
-                        log("Media3Player", "onPlaybackStateChanged: READY (duration=${dur}ms, autoResume=$shouldAutoResume)")
-
-                        // 如果是 Surface 切换后的 reprepare，自动恢复播放
-                        if (shouldAutoResume && savedPos!! >= 0) {
-                            log("Media3Player", "safeSwitchSurface [方案B]: 自动恢复播放 (position=${formatTime(savedPos)})")
-                            App.mainHandler.post {
-                                seekTo(savedPos)
-                                play()
-                                log("Media3Player", "safeSwitchSurface [方案B]: 已恢复播放 (${formatTime(savedPos)})")
-                            }
-                        }
-                    }
-                    Player.STATE_BUFFERING -> {
-                        // 缓冲中，保持当前状态不变
-                        log("Media3Player", "onPlaybackStateChanged: BUFFERING")
-                    }
-                    Player.STATE_ENDED -> {
-                        if (_state == PlayerState.PLAYING) {
-                            _state = PlayerState.COMPLETED
-                            stopProgressTracking()
-                            listener?.onComplete()
-                            log("Media3Player", "onPlaybackStateChanged: ENDED")
-                        }
-                    }
-                    Player.STATE_IDLE -> {
-                        log("Media3Player", "onPlaybackStateChanged: IDLE")
-                    }
-                }
-            }
-        }
-
-        override fun onIsPlayingChanged(isPlaying: Boolean) {
-            App.mainHandler.post {
-                // 如果正在 seek 操作中，忽略临时的 isPlaying 变化
-                if (isSeeking) {
-                    log("Media3Player", "onIsPlayingChanged ignored during seeking: isPlaying=$isPlaying")
-                    return@post
-                }
-
-                if (isPlaying) {
-                    if (_state != PlayerState.PLAYING) {
-                        _state = PlayerState.PLAYING
-                        startProgressTracking()
-                    }
-                } else {
-                    if (_state == PlayerState.PLAYING) {
-                        _state = PlayerState.PAUSED
-                        stopProgressTracking()
-                    }
-                }
-            }
-        }
-
-        override fun onPlayerError(error: PlaybackException) {
-            App.mainHandler.post {
-                log("Media3Player", "onPlayerError: ${error.message}")
-
-                // 将 ExoPlayer 错误映射到 PlayerErrorCode
-                val errorCode = mapExoPlayerError(error)
-                val errorMsg = PlayerErrorCode.formatError(errorCode, error.message)
-
-                if (_state == PlayerState.PREPARING) {
-                    // 准备阶段出错，尝试重试
-                    handlePrepareError(Exception(errorMsg))
-                } else {
-                    // 播放阶段出错
-                    _state = PlayerState.ERROR
-                    listener?.onError(errorCode, errorMsg)
-                }
-            }
-        }
-
-        override fun onVideoSizeChanged(videoSize: VideoSize) {
-            App.mainHandler.post {
-                if (videoSize.width > 0 && videoSize.height > 0) {
-                    // 保存视频原始尺寸
-                    this@AndroidMedia3Player.videoWidth = videoSize.width
-                    this@AndroidMedia3Player.videoHeight = videoSize.height
-
-                    listener?.onVideoSizeChanged(videoSize.width, videoSize.height)
-                    log("Media3Player", "onVideoSizeChanged: ${videoSize.width}x${videoSize.height}")
-
-                    adjustSurfaceLayout()
-                }
-            }
-        }
-
-        override fun onEvents(player: Player, events: Player.Events) {
-            // 缓冲进度更新
-            if (events.contains(Player.EVENT_POSITION_DISCONTINUITY) ||
-                events.contains(Player.EVENT_TIMELINE_CHANGED)) {
-                val percent = getBufferedPercent()
-                if (percent > 0) {
-                    listener?.onBufferingUpdate(percent)
-                }
-            }
-        }
     }
 
     // ==================== 内部：进度追踪 ====================
@@ -1075,10 +986,9 @@ class AndroidMedia3Player {
 
         progressJob = CoroutineScope(Dispatchers.Main).launch {
             while (isActive && _state == PlayerState.PLAYING) {
-                val pos = try { exoPlayer?.currentPosition ?: 0L } catch (_: Exception) { 0L }
+                val pos = try { engine.getCurrentPosition() } catch (_: Exception) { 0L }
                 val dur = try {
-                    val d = exoPlayer?.duration ?: 0
-                    if (d == C.TIME_UNSET || d < 0) 0L else d
+                    engine.getDuration()
                 } catch (_: Exception) { 0L }
                 listener?.onProgress(pos, dur)
                 delay(progressIntervalMs.toLong())
@@ -1120,17 +1030,6 @@ class AndroidMedia3Player {
 
     // ==================== 内部：辅助方法 ====================
 
-    /**
-     * 计算缓冲百分比
-     */
-    private fun getBufferedPercent(): Int {
-        val dur = try {
-            val d = exoPlayer?.duration ?: 0
-            if (d == C.TIME_UNSET || d <= 0) return 0 else d
-        } catch (_: Exception) { return 0 }
 
-        val buffered = try { exoPlayer?.totalBufferedDuration ?: 0L } catch (_: Exception) { 0L }
-        return ((buffered.toFloat() / dur.toFloat()) * 100).toInt().coerceIn(0, 100)
-    }
 
 }

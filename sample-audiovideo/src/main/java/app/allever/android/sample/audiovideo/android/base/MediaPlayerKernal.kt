@@ -3,23 +3,13 @@ package app.allever.android.sample.audiovideo.android.base
 import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
-import android.os.Handler
-import android.os.Looper
 import android.view.Surface
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.sample.audiovideo.lib.LoopMode
 import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 
-class MediaPlayerKernal(val context: Context): IPlayerKernal {
-
-    private val TAG = MediaPlayerKernal::class.java.simpleName
-
-    private var mPlayer: MediaPlayer? = null
-    private var mListener: IPlayerKernal.IListener? = null
-
-    private val mMainHandler = Handler(Looper.getMainLooper())
-
+class MediaPlayerKernal(val context: Context): BasePlayerKernal<MediaPlayer>() {
     private val mOnPreparedListener = MediaPlayer.OnPreparedListener {
         log(TAG, "onPrepared")
         mMainHandler.post {
@@ -170,6 +160,7 @@ class MediaPlayerKernal(val context: Context): IPlayerKernal {
             }
         } catch (_: Exception) {}
         mPlayer = null
+        mListener = null
         log(TAG, "released")
     }
 

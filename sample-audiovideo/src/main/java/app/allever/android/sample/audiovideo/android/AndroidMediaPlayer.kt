@@ -1,10 +1,7 @@
 package app.allever.android.sample.audiovideo.android
 
-import android.content.Context
 import android.graphics.SurfaceTexture
-import android.media.MediaPlayer
 import android.net.Uri
-import android.os.Build
 import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -24,7 +21,6 @@ import app.allever.android.sample.audiovideo.lib.VideoHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -78,7 +74,7 @@ class AndroidMediaPlayer {
 
     /** MediaPlayer 实例 */
 //    private var mediaPlayer: MediaPlayer? = null
-    val engine: IPlayerKernal = MediaPlayerKernal(App.context).apply {
+    private val engine: IPlayerKernal<*> = MediaPlayerKernal(App.context).apply {
         registerListener(object : IPlayerKernal.IListener {
             override fun onPrepared() {
                 val dur = try { engine.getDuration() } catch (_: Exception) { 0L }
@@ -159,6 +155,11 @@ class AndroidMediaPlayer {
 
             override fun onInfo() {
                 log("AndroidMP", "onInfo")
+            }
+
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                log("AndroidMP", "onIsPlayingChanged: $isPlaying")
+                //
             }
 
         })
@@ -1134,13 +1135,6 @@ class AndroidMediaPlayer {
     }
 
     // ==================== 私有方法：配置应用 ====================
-
-    /**
-     * 应用循环模式到 MediaPlayer
-     */
-    private fun applyLoopMode() {
-        engine.loopMode(loopMode)
-    }
 
     // ==================== 私有方法：资源释放 ====================
 
