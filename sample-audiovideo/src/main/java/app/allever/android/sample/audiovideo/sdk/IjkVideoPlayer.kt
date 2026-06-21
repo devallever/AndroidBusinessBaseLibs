@@ -2,7 +2,6 @@ package app.allever.android.sample.audiovideo.sdk
 
 import android.content.Context
 import android.graphics.SurfaceTexture
-import android.media.AudioManager
 import android.net.Uri
 import android.view.Surface
 import android.view.SurfaceHolder
@@ -26,7 +25,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import tv.danmaku.ijk.media.player.IMediaPlayer
-import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import java.io.File
 
 /**

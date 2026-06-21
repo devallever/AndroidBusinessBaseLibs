@@ -1,6 +1,5 @@
 package app.allever.android.sample.audiovideo.android.base
 
-import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 

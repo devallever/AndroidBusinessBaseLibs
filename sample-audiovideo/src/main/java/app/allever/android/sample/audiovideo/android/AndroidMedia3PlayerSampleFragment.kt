@@ -1,13 +1,9 @@
 package app.allever.android.sample.audiovideo.android
 
-import android.view.SurfaceView
-import android.view.TextureView
 import android.widget.SeekBar
-import androidx.media3.ui.PlayerView
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.media.core.model.MediaItem
-import app.allever.android.lib.media.picker.MediaPickerConfig
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.audiovideo.databinding.FragmentAndroidMedia3PlayerSampleBinding
@@ -59,7 +55,7 @@ class AndroidMedia3PlayerSampleFragment :
     private fun initPlayer() {
         player = AndroidMedia3Player().apply {
             attach(mBinding.playerView)
-            setListener(playerListener)
+            setVideoPlayerListener(playerListener)
             retryCount = 3
             progressIntervalMs = 200
         }
