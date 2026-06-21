@@ -1,6 +1,5 @@
 package app.allever.android.sample.audiovideo.android
 
-import android.annotation.SuppressLint
 import androidx.media3.common.Player
 import androidx.media3.ui.PlayerView
 import app.allever.android.lib.core.ext.log
@@ -235,9 +234,7 @@ class AndroidMedia3Player: BaseVideoPlayer() {
         log(TAG, "bound to PlayerView")
 
         // 如果有待执行的 prepare（在 attach 之前就调用了 setSource），现在立即执行
-        pendingPrepare?.let {
-            executePendingPrepare()
-        }
+        executePendingPrepare()
     }
     /**
      * 解绑当前 PlayerView（页面 onPause/onDestroyView 时调用）

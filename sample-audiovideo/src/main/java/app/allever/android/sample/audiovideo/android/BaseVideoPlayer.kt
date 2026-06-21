@@ -117,14 +117,6 @@ abstract class BaseVideoPlayer {
     /**
      * 播放引擎实例（策略模式）
      *
-     * 通过依赖倒置原则，本类不关心具体使用哪种引擎，
-     * 只通过 [IPlayerKernal] 接口与引擎交互。
-     *
-     * 子类负责创建具体的引擎实例：
-     * - AndroidMediaPlayer → MediaPlayerKernal
-     * - AndroidMedia3Player → ExoPlayer/Media3 引擎
-     * - 未来可扩展：IjkPlayerKernal、VLCPlayerKernal 等
-     *
      * @see IPlayerKernal 引擎接口定义
      */
     protected open lateinit var engine: IPlayerKernal<*>
@@ -627,10 +619,6 @@ abstract class BaseVideoPlayer {
     /** PREPARING 状态监控协程（作为 onPrepared 的备用检测机制）*/
     protected var preparingMonitorJob: Job? = null
 
-    /** 切换 Surface 后待恢复的播放位置（备用字段，用于不同的切换场景）*/
-    protected var switchSurfacePendingPosition: Long = -1L
-
-
     /**
      * SurfaceView 的 SurfaceHolder 回调
      *
@@ -685,7 +673,7 @@ abstract class BaseVideoPlayer {
     }
 
 
-    // ==================== 绑定渲染 ====================
+    // ==================== 对外接口 绑定渲染 ====================
 
     /**
      * 绑定 SurfaceView（兼容方式）
@@ -772,21 +760,21 @@ abstract class BaseVideoPlayer {
         }
     }
 
-    protected fun detachSurfaceView() {
+    private fun detachSurfaceView() {
         surfaceView?.holder?.removeCallback(surfaceHolderCallback)
         surfaceView = null
         isSurfaceReady = false
         log(TAG, "detach SurfaceView")
     }
 
-    protected fun detachTextureView() {
+    private fun detachTextureView() {
         textureView?.surfaceTextureListener = null
         textureView = null
         isSurfaceReady = false
         log(TAG, "detach TextureView")
     }
 
-    // ==================== 数据源设置 ====================
+    // ==================== 对外接口 数据源设置 ====================
 
     /**
      * 设置数据源并开始准备（不自动播放）
@@ -869,7 +857,7 @@ abstract class BaseVideoPlayer {
         }
     }
 
-    // ==================== 播放控制 ====================
+    // ==================== 对外接口 播放控制 ====================
 
     /**
      * 开始播放 或 从暂停恢复播放
@@ -878,7 +866,7 @@ abstract class BaseVideoPlayer {
      * - PAUSED → 恢复播放
      * - 其他状态 → 忽略
      */
-    open fun play() {
+    fun play() {
         when (_state) {
             PlayerState.PREPARED, PlayerState.COMPLETED -> {
                 engine.start()
@@ -919,7 +907,7 @@ abstract class BaseVideoPlayer {
     /**
      * 停止播放（保留资源，可重新 prepare）
      */
-    open fun stop() {
+    fun stop() {
         log(TAG, "stop (state=$_state)")
         if (_state == PlayerState.RELEASED || _state == PlayerState.IDLE) return
         try {
@@ -937,7 +925,7 @@ abstract class BaseVideoPlayer {
      *
      * @param positionMs 目标位置（毫秒）
      */
-    open fun seekTo(positionMs: Long) {
+    fun seekTo(positionMs: Long) {
         log(TAG, "seekTo $positionMs (state=$_state)")
         if (_state == PlayerState.RELEASED || _state == PlayerState.IDLE) return
         try {
@@ -959,10 +947,67 @@ abstract class BaseVideoPlayer {
         }
     }
 
+    // ===================== 对外接口 释放资源 =====================
+    /**
+     * 释放所有资源，调用后不可再使用此实例
+     */
+    fun release() {
+        detach()
+        releasePlayer()
+        listener = null
+        currentUri = null
+        currentHeaders = null
+        currentAssetPath = null
+        pendingPrepare = null
+        pendingSeekPosition = -1L
+        _state = PlayerState.RELEASED
+        log(TAG, "release() -> RELEASED")
+    }
+
+    // ==================== 对外接口 监听器设置 ====================
+
+    /**
+     * 设置播放事件监听器
+     */
+    fun setVideoPlayerListener(listener: IVideoPlayerListener?) {
+        this.listener = listener
+    }
+
+    // ==================== 对外接口：切换渲染 ====================
+    /**
+     * 安全切换到 SurfaceView
+     *
+     * @param surfaceView 目标 SurfaceView 实例
+     * @param delayMs 延迟时间（毫秒），默认 100ms，确保 MediaCodec 状态稳定
+     */
+    fun safeSwitchToSurfaceView(surfaceView: SurfaceView, delayMs: Long = 100L) {
+        safeSwitchSurface(
+            targetAction = { attach(surfaceView) },
+            targetName = "SurfaceView",
+            delayMs = delayMs
+        )
+    }
+
+    /**
+     * 安全切换到 TextureView
+     *
+     * @param textureView 目标 TextureView 实例
+     * @param delayMs 延迟时间（毫秒），默认 100ms，确保 MediaCodec 状态稳定
+     */
+    fun safeSwitchToTextureView(textureView: TextureView, delayMs: Long = 100L) {
+        safeSwitchSurface(
+            targetAction = { attach(textureView) },
+            targetName = "TextureView",
+            delayMs = delayMs
+        )
+    }
+
+
+    // ===================== 内部方法：渲染 =====================
     /**
      * 设置 SurfaceView 的 SurfaceHolder 回调
      */
-    protected open fun setupSurfaceViewCallback() {
+    private fun setupSurfaceViewCallback() {
         surfaceView?.holder?.addCallback(surfaceHolderCallback)
 
         // 如果 Surface 已经可用（例如复用的情况）
@@ -976,7 +1021,7 @@ abstract class BaseVideoPlayer {
     /**
      * 设置 TextureView 的 SurfaceTextureListener 回调
      */
-    protected open fun setupTextureViewCallback() {
+    private fun setupTextureViewCallback() {
         textureView?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
                 log(TAG, "onSurfaceTextureAvailable: ${width}x${height}")
@@ -1025,10 +1070,12 @@ abstract class BaseVideoPlayer {
         }
     }
 
+
+    // ===================== 内部方法：准备 =====================
     /**
      * 执行实际的 prepare 操作
      */
-    protected open fun doPrepareInternal(uri: Uri?, headers: Map<String, String>?) {
+    private fun doPrepareInternal(uri: Uri?, headers: Map<String, String>?) {
         log(TAG, "doPrepareInternal: $uri")
         uri?: return
 
@@ -1073,12 +1120,31 @@ abstract class BaseVideoPlayer {
      * 执行缓存的 prepare 操作
      */
     protected open fun executePendingPrepare() {
+        // 如果有待执行的 prepare（在 attach 之前就调用了 setSource），现在立即执行
         pendingPrepare?.let { pending ->
             log(TAG, "executing pending prepare: ${pending.uri}")
             pendingPrepare = null
             doPrepareInternal(pending.uri, pending.headers)
         }
     }
+
+
+    /**
+     * 处理准备错误（可能触发重试）
+     */
+    private fun handlePrepareError(e: Exception) {
+        if (retryLeft > 0) {
+            retryLeft--
+            log(TAG, "retrying... ($retryLeft left)")
+            App.mainHandler.postDelayed({
+                doPrepareInternal(currentUri, currentHeaders)
+            }, 1000)
+        } else {
+            _state = PlayerState.ERROR
+            listener?.onError(PlayerErrorCode.RETRY_EXHAUSTED, PlayerErrorCode.formatError(PlayerErrorCode.RETRY_EXHAUSTED, e.message))
+        }
+    }
+
 
     // ==================== 私有方法：初始化 ====================
 
@@ -1093,41 +1159,26 @@ abstract class BaseVideoPlayer {
         }
     }
 
-
-    /**
-     * 处理准备错误（可能触发重试）
-     */
-    protected open fun handlePrepareError(e: Exception) {
-        if (retryLeft > 0) {
-            retryLeft--
-            log(TAG, "retrying... ($retryLeft left)")
-            App.mainHandler.postDelayed({
-                doPrepareInternal(currentUri, currentHeaders)
-            }, 1000)
-        } else {
-            _state = PlayerState.ERROR
-            listener?.onError(PlayerErrorCode.RETRY_EXHAUSTED, PlayerErrorCode.formatError(PlayerErrorCode.RETRY_EXHAUSTED, e.message))
-        }
-    }
-
-    // ==================== 私有方法：资源释放 ====================
+    // ==================== 内部方法：资源释放 ====================
 
     /**
      * 释放 ExoPlayer 实例
      */
-    protected open fun releasePlayer() {
+    private fun releasePlayer() {
         log(TAG, "released")
         stopProgressTracking()
         stopPreparingMonitor()
         engine.release()
     }
 
+
+    // ==================== 内部方法：进度追踪 ====================
     /**
      * 启动进度追踪协程
      *
      * 定时获取 ExoPlayer 的当前位置和总时长，通过监听器回调。
      */
-    protected fun startProgressTracking() {
+    private fun startProgressTracking() {
         // 如果已经在运行且状态正确，不需要重启
         if (progressJob != null && progressJob!!.isActive && _state == PlayerState.PLAYING) {
             log(TAG, "progress tracking already running")
@@ -1153,7 +1204,7 @@ abstract class BaseVideoPlayer {
     /**
      * 停止进度追踪协程
      */
-    protected fun stopProgressTracking() {
+    private fun stopProgressTracking() {
         if (progressJob != null) {
             log(TAG, "stopping progress tracking")
             progressJob?.cancel()
@@ -1161,35 +1212,11 @@ abstract class BaseVideoPlayer {
         }
     }
 
-    /**
-     * 释放所有资源，调用后不可再使用此实例
-     */
-    fun release() {
-        detach()
-        releasePlayer()
-        listener = null
-        currentUri = null
-        currentHeaders = null
-        currentAssetPath = null
-        pendingPrepare = null
-        pendingSeekPosition = -1L
-        _state = PlayerState.RELEASED
-        log(TAG, "release() -> RELEASED")
-    }
-
-    // ==================== 监听器设置 ====================
-
-    /**
-     * 设置播放事件监听器
-     */
-    fun setVideoPlayerListener(listener: IVideoPlayerListener?) {
-        this.listener = listener
-    }
-
+    // ===================== 内部方法：设置数据 ====================
     /**
      * 执行实际的 setSource 操作
      */
-    protected fun doSetSource(uri: Uri, headers: Map<String, String>?, assetPath: String?) {
+    private fun doSetSource(uri: Uri, headers: Map<String, String>?, assetPath: String?) {
         if (_state == PlayerState.RELEASED) return
 
         // 停止当前的进度追踪（切换数据源前必须清理）
@@ -1211,35 +1238,7 @@ abstract class BaseVideoPlayer {
         doPrepareInternal(uri, headers)
     }
 
-
-    /**
-     * 安全切换到 SurfaceView
-     *
-     * @param surfaceView 目标 SurfaceView 实例
-     * @param delayMs 延迟时间（毫秒），默认 100ms，确保 MediaCodec 状态稳定
-     */
-    fun safeSwitchToSurfaceView(surfaceView: SurfaceView, delayMs: Long = 100L) {
-        safeSwitchSurface(
-            targetAction = { attach(surfaceView) },
-            targetName = "SurfaceView",
-            delayMs = delayMs
-        )
-    }
-
-    /**
-     * 安全切换到 TextureView
-     *
-     * @param textureView 目标 TextureView 实例
-     * @param delayMs 延迟时间（毫秒），默认 100ms，确保 MediaCodec 状态稳定
-     */
-    fun safeSwitchToTextureView(textureView: TextureView, delayMs: Long = 100L) {
-        safeSwitchSurface(
-            targetAction = { attach(textureView) },
-            targetName = "TextureView",
-            delayMs = delayMs
-        )
-    }
-
+    // ==================== 内部方法：切换渲染 ====================
     /**
      * 安全切换 Surface 的核心实现
      *
@@ -1343,7 +1342,7 @@ abstract class BaseVideoPlayer {
         }
     }
 
-    protected open fun checkSurfaceValid(): Boolean {
+    private fun checkSurfaceValid(): Boolean {
         when (currentSurfaceType) {
             SurfaceType.SURFACE_VIEW -> {
                 surfaceView?.holder?.surface?.isValid == true
@@ -1361,7 +1360,7 @@ abstract class BaseVideoPlayer {
     /**
      * 执行切换后的 prepare 操作（统一入口）
      */
-    protected fun performPrepareAfterSwitch() {
+    private fun performPrepareAfterSwitch() {
         if (currentUri == null && currentAssetPath == null) {
             log(TAG,"safeSwitchSurface [方案B]: 切换完成（无数据源）")
             return
@@ -1418,6 +1417,7 @@ abstract class BaseVideoPlayer {
     }
 
 
+    // ===================== 内部方法：状态监控 =====================
     /**
      * 启动 PREPARING 状态监控协程
      *
@@ -1430,7 +1430,7 @@ abstract class BaseVideoPlayer {
      * 否则会触发 MediaPlayer 错误 (-38, 0)。
      * 只使用 isPlaying() 来检测是否已准备好。
      */
-    protected fun startPreparingStateMonitor() {
+    private fun startPreparingStateMonitor() {
         preparingMonitorJob?.cancel()
         preparingMonitorJob = CoroutineScope(Dispatchers.Main).launch {
             val maxCheckTime = 30000L  // 最大检查时间 30 秒
@@ -1506,7 +1506,7 @@ abstract class BaseVideoPlayer {
     /**
      * 停止 PREPARING 状态监控
      */
-    protected fun stopPreparingMonitor() {
+    private fun stopPreparingMonitor() {
         if (preparingMonitorJob != null) {
             log(TAG,"stopping PREPARING state monitor")
             preparingMonitorJob?.cancel()
@@ -1514,7 +1514,7 @@ abstract class BaseVideoPlayer {
         }
     }
 
-    // ==================== 内部：视频尺寸获取与自适应 ====================
+    // ==================== 内部方法：视频尺寸获取与自适应 ====================
 
     /**
      * 主动获取视频尺寸并触发画面自适应（备用方案）
@@ -1530,7 +1530,7 @@ abstract class BaseVideoPlayer {
      * - 通过 IjkMediaPlayer.getVideoWidth()/getVideoHeight() 获取尺寸
      * - 如果获取失败，延迟重试最多 5 次
      */
-    protected fun tryFetchVideoSizeAndAdjustLayout(retryCount: Int = 0) {
+    private fun tryFetchVideoSizeAndAdjustLayout(retryCount: Int = 0) {
         val maxRetries = 5
 
         try {
