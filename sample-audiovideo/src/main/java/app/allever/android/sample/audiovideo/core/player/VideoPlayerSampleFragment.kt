@@ -7,6 +7,8 @@ import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.picker.MediaPickerConfig
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
+import app.allever.android.sample.audiovideo.core.engine.IjkPlayerEngine
+import app.allever.android.sample.audiovideo.core.engine.Media3PlayerEngine
 import app.allever.android.sample.audiovideo.core.engine.MediaPlayerEngine
 import app.allever.android.sample.audiovideo.core.render.RenderType
 import app.allever.android.sample.audiovideo.core.render.SurfaceViewRender
@@ -48,6 +50,16 @@ class VideoPlayerSampleFragment :
 
     /** 当前使用的渲染类型 */
     private var currentRenderType: RenderType = RenderType.SURFACE_VIEW
+
+    /** 当前使用的引擎类型 */
+    private enum class EngineType {
+        MEDIA_PLAYER,   // Android MediaPlayer
+        MEDIA3,         // Google Media3 (ExoPlayer)
+        IJK_PLAYER      // Bilibili IJKPlayer
+    }
+
+    /** 当前引擎类型 */
+    private var currentEngineType: EngineType = EngineType.MEDIA_PLAYER
 
     /** 视频选择器 */
     private val videoPickerLauncher = MediaPickerCore.registerPickerLauncher(this) { items ->
@@ -180,6 +192,23 @@ class VideoPlayerSampleFragment :
             switchRender(RenderType.VIDEO_VIEW)
         }
 
+        // ==================== 引擎切换按钮（新架构核心功能演示）====================
+
+        // 切换到 MediaPlayer
+        mBinding.btnSwitchMediaPlayer.setOnClickListener {
+            switchEngine(EngineType.MEDIA_PLAYER)
+        }
+
+        // 切换到 Media3 (ExoPlayer)
+        mBinding.btnSwitchMedia3.setOnClickListener {
+            switchEngine(EngineType.MEDIA3)
+        }
+
+        // 切换到 IJKPlayer
+        mBinding.btnSwitchIjkPlayer.setOnClickListener {
+            switchEngine(EngineType.IJK_PLAYER)
+        }
+
         // ==================== 进度条控制 ====================
 
         mBinding.seekBarProgress.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -307,20 +336,105 @@ class VideoPlayerSampleFragment :
     }
 
     /**
+     * 切换引擎（新架构核心功能演示）
+     *
+     * 展示运行时动态切换播放引擎的能力，
+     * 这是组合模式相比继承模式的核心优势。
+     *
+     * 注意：切换引擎需要重建整个播放器实例，
+     * 因为不同引擎的内部状态不兼容。
+     */
+    private fun switchEngine(targetType: EngineType) {
+        if (currentEngineType == targetType) {
+            appendLog("当前已是 $targetType 引擎")
+            return
+        }
+
+        val wasPlaying = player.isPlaying || player.state == PlayerState.PAUSED
+        val savedPosition = player.currentPosition
+
+        appendLog("开始切换引擎: ${currentEngineType} -> $targetType" +
+                (if (wasPlaying) " (正在播放，位置=${formatTime(savedPosition)})" else ""))
+
+        // 保存当前数据源信息
+        val currentUrl = mBinding.etUrl.text.toString().trim()
+
+        // 释放旧播放器
+        try {
+            player.release()
+            appendLog("已释放旧引擎")
+        } catch (_: Exception) {}
+
+        // 创建新引擎
+        val newEngine = when (targetType) {
+            EngineType.MEDIA_PLAYER -> MediaPlayerEngine()
+            EngineType.MEDIA3 -> Media3PlayerEngine()
+            EngineType.IJK_PLAYER -> IjkPlayerEngine()
+        }
+
+        // 重建播放器（使用当前渲染器）
+        val currentRender = when (currentRenderType) {
+            RenderType.SURFACE_VIEW -> SurfaceViewRender()
+            RenderType.TEXTURE_VIEW -> TextureViewRender()
+            RenderType.VIDEO_VIEW -> VideoViewRender()
+            else -> SurfaceViewRender()
+        }
+
+        player = VideoPlayer(
+            engine = newEngine,
+            render = currentRender
+        ).apply {
+            attach(mBinding.containerVideo)
+            setListener(playerListener)
+            retryCount = 3
+            progressIntervalMs = 200
+        }
+
+        currentEngineType = targetType
+        updateEngineButtonState()
+        updateArchInfo()
+
+        appendLog("已切换到: $targetType")
+
+        // 如果之前在播放，尝试恢复
+        if (wasPlaying && savedPosition > 0) {
+            autoPlayOnPrepared = true
+            if (currentUrl.isNotEmpty()) {
+                player.setSource(currentUrl)
+            } else {
+                player.setSource(defaultTestUrl)
+            }
+            appendLog("恢复播放: ${formatTime(savedPosition)}")
+        }
+    }
+
+    /**
      * 更新渲染器切换按钮状态
      */
     private fun updateRenderButtonState() {
-        // 高亮当前选中的渲染器
         mBinding.btnSwitchSurfaceView.isEnabled = currentRenderType != RenderType.SURFACE_VIEW
         mBinding.btnSwitchTextureView.isEnabled = currentRenderType != RenderType.TEXTURE_VIEW
         mBinding.btnSwitchVideoView.isEnabled = currentRenderType != RenderType.VIDEO_VIEW
     }
 
     /**
+     * 更新引擎切换按钮状态
+     */
+    private fun updateEngineButtonState() {
+        mBinding.btnSwitchMediaPlayer.isEnabled = currentEngineType != EngineType.MEDIA_PLAYER
+        mBinding.btnSwitchMedia3.isEnabled = currentEngineType != EngineType.MEDIA3
+        mBinding.btnSwitchIjkPlayer.isEnabled = currentEngineType != EngineType.IJK_PLAYER
+    }
+
+    /**
      * 更新架构信息显示
      */
     private fun updateArchInfo() {
-        val engineName = "MediaPlayerEngine"
+        val engineName = when (currentEngineType) {
+            EngineType.MEDIA_PLAYER -> "MediaPlayerEngine"
+            EngineType.MEDIA3 -> "Media3(ExoPlayer)"
+            EngineType.IJK_PLAYER -> "IjkPlayerEngine"
+        }
         val renderName = when (currentRenderType) {
             RenderType.SURFACE_VIEW -> "SurfaceViewRender"
             RenderType.TEXTURE_VIEW -> "TextureViewRender"

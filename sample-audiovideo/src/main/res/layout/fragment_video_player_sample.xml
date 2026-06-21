@@ -103,6 +103,54 @@
                 style="?attr/materialButtonOutlinedStyle" />
         </LinearLayout>
 
+        <!-- ==================== 引擎切换（新架构核心功能演示）==================== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="引擎切换（运行时动态切换）"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/btnSwitchMediaPlayer"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="MediaPlayer"
+                android:textSize="11sp"
+                android:enabled="false"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_marginEnd="6dp" />
+
+            <Button
+                android:id="@+id/btnSwitchMedia3"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="Media3(Exo)"
+                android:textSize="11sp"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_marginEnd="6dp" />
+
+            <Button
+                android:id="@+id/btnSwitchIjkPlayer"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="IJKPlayer"
+                android:textSize="11sp"
+                style="?attr/materialButtonOutlinedStyle" />
+        </LinearLayout>
+
         <!-- 状态显示 -->
         <TextView
             android:id="@+id/tvState"
