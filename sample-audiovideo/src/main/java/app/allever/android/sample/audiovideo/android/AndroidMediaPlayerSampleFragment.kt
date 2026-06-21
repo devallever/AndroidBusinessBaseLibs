@@ -85,7 +85,7 @@ class AndroidMediaPlayerSampleFragment :
     private fun initPlayer() {
         player = AndroidMediaPlayer().apply {
             attach(mBinding.videoView)
-            setListener(playerListener)
+            setVideoPlayerListener(playerListener)
             retryCount = 3
             progressIntervalMs = 200
         }

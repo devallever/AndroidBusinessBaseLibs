@@ -145,7 +145,7 @@ abstract class BaseVideoPlayer {
         set(value) {
             val old = field
             if (old != value) {
-                log("Media3Player", "state: $old -> $value")
+                log(TAG, "state: $old -> $value")
                 field = value
                 listener?.onStateChanged(old, value)
             }
@@ -279,7 +279,7 @@ abstract class BaseVideoPlayer {
         this.currentSurfaceType = SurfaceType.SURFACE_VIEW
         this.isSurfaceReady = false  // Surface 需要异步创建
 
-        log("Media3Player", "attach SurfaceView (waiting for surface)")
+        log(TAG, "attach SurfaceView (waiting for surface)")
 
         initPlayer()
         setupSurfaceViewCallback()
@@ -305,7 +305,7 @@ abstract class BaseVideoPlayer {
         this.currentSurfaceType = SurfaceType.TEXTURE_VIEW
         this.isSurfaceReady = false  // Surface 需要异步准备
 
-        log("Media3Player", "attach TextureView (waiting for surface)")
+        log(TAG, "attach TextureView (waiting for surface)")
 
         initPlayer()
         setupTextureViewCallback()
@@ -436,7 +436,7 @@ abstract class BaseVideoPlayer {
      * - PAUSED → 恢复播放
      * - 其他状态 → 忽略
      */
-    fun play() {
+    open fun play() {
         when (_state) {
             PlayerState.PREPARED, PlayerState.COMPLETED -> {
                 engine.start()
@@ -471,7 +471,7 @@ abstract class BaseVideoPlayer {
     /**
      * 停止播放（保留资源，可重新 prepare）
      */
-    fun stop() {
+    open fun stop() {
         if (_state == PlayerState.RELEASED || _state == PlayerState.IDLE) return
 
         stopProgressTracking()
@@ -540,12 +540,16 @@ abstract class BaseVideoPlayer {
     /**
      * Surface 就绪处理（统一入口）
      */
-    private fun onSurfaceReady(surface: Surface) {
+    protected fun onSurfaceReady(surface: Surface) {
         isSurfaceReady = true
         log(TAG, "Surface ready")
 
         // 将 Surface 设置给 ExoPlayer
-        engine.setSurface(surface)
+        try {
+            engine.setSurface(surface)
+        } catch (e: Exception) {
+            log(TAG,"setSurface error: ${e.message}")
+        }
 
         // 如果有待执行的 prepare，立即执行
         pendingPrepare?.let {
@@ -556,7 +560,7 @@ abstract class BaseVideoPlayer {
     /**
      * 执行实际的 prepare 操作
      */
-    protected fun doPrepareInternal(uri: Uri?, headers: Map<String, String>?) {
+    protected open fun doPrepareInternal(uri: Uri?, headers: Map<String, String>?) {
         val srcUri = uri ?: return
 
         // 确保 Player 存在
@@ -620,7 +624,7 @@ abstract class BaseVideoPlayer {
     /**
      * 释放 ExoPlayer 实例
      */
-    protected fun releasePlayer() {
+    protected open fun releasePlayer() {
         stopProgressTracking()
         engine.release()
         log(TAG, "released")
@@ -782,7 +786,7 @@ abstract class BaseVideoPlayer {
      * @param targetName 目标名称（用于日志）
      * @param delayMs 延迟时间（毫秒），默认 100ms
      */
-    protected fun safeSwitchSurface(
+    protected open fun safeSwitchSurface(
         targetAction: () -> Unit,
         targetName: String,
         delayMs: Long = 100L
