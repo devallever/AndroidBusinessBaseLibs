@@ -74,7 +74,7 @@ class AndroidMediaPlayer {
 
     /** MediaPlayer 实例 */
 //    private var mediaPlayer: MediaPlayer? = null
-    private val engine: IPlayerKernal<*> = MediaPlayerKernal(App.context).apply {
+    private val engine: IPlayerKernal<*> = MediaPlayerKernal().apply {
         registerListener(object : IPlayerKernal.IListener {
             override fun onPrepared() {
                 val dur = try { engine.getDuration() } catch (_: Exception) { 0L }
@@ -131,6 +131,7 @@ class AndroidMediaPlayer {
             }
 
             override fun onBufferingUpdate(percent: Int) {
+                log("AndroidMP", "onBufferingUpdate: $percent")
                 if (percent > 0) {
                     listener?.onBufferingUpdate(percent)
                 }
@@ -144,12 +145,7 @@ class AndroidMediaPlayer {
                     listener?.onVideoSizeChanged(width, height)
                     log("AndroidMP", "onVideoSizeChanged: ${width}x${height}")
 
-                    // 对非 VideoView 进行画面自适应
-                    if (currentSurfaceType == SurfaceType.SURFACE_VIEW ||
-                        currentSurfaceType == SurfaceType.TEXTURE_VIEW ||
-                        currentSurfaceType == SurfaceType.VIDEO_VIEW) {
-                        adjustSurfaceLayout()
-                    }
+                    adjustSurfaceLayout()
                 }
             }
 

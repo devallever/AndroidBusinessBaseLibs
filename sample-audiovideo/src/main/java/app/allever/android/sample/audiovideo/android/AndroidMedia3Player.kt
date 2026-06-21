@@ -23,7 +23,6 @@ import app.allever.android.sample.audiovideo.lib.VideoHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -249,7 +248,7 @@ class AndroidMedia3Player {
     var speed: Float = 1.0f
         set(value) {
             field = value.coerceIn(0.5f, 3.0f)
-            applySpeed()
+            engine.speed(value)
         }
 
     /** 音量（0.0 ~ 1.0），默认 1.0 */
@@ -807,7 +806,9 @@ class AndroidMedia3Player {
         releaseExoPlayer()
         currentUri = null
         currentHeaders = null
+        currentAssetPath = null
         pendingPrepare = null
+        pendingSeekPosition = -1L
         _state = PlayerState.RELEASED
         log("Media3Player", "release() -> RELEASED")
     }
@@ -948,14 +949,6 @@ class AndroidMedia3Player {
     }
 
     // ==================== 私有方法：配置应用 ====================
-
-    /**
-     * 应用变速到 ExoPlayer
-     */
-    private fun applySpeed() {
-        engine.speed(speed)
-    }
-
     // ==================== 私有方法：资源释放 ====================
 
     /**
