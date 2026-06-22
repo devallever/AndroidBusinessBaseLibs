@@ -1,255 +1,466 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAFAFA">
+    android:fillViewport="true">
 
-    <!-- 视频播放器 -->
-    <app.allever.android.sample.audiovideo.core.player.VideoPlayerView
-        android:id="@+id/videoPlayerView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <!-- 滚动容器 -->
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/videoPlayerView">
+        <!-- 标题 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VideoPlayerView 示例（引擎与渲染分离架构）"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#2196F3"
+            android:layout_marginBottom="12dp" />
+
+        <!-- 架构信息 -->
+        <TextView
+            android:id="@+id/tvArchInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="当前组合: MediaPlayerEngine + SurfaceViewRender"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="8dp" />
+
+        <!-- 视频显示区域（渲染器会在此容器中添加视图）-->
+        <FrameLayout
+            android:id="@+id/containerVideo"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="#222222"
+            android:layout_marginBottom="4dp">
+
+            <!-- 渲染器会动态将 SurfaceView/TextureView/VideoView 添加到此处 -->
+
+            <!-- 视频尺寸信息覆盖层 -->
+            <TextView
+                android:id="@+id/tvVideoSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:background="#80000000"
+                android:padding="4dp"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                tools:text="1920x1080" />
+        </FrameLayout>
+
+        <!-- ==================== 渲染器切换（新架构核心功能演示）==================== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="渲染器切换（运行时动态切换）"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
 
-            <!-- 标题：播放控制 -->
-            <TextView
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/btnSwitchSurfaceView"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="SurfaceView"
+                android:textSize="12sp"
+                android:enabled="false"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_marginEnd="4dp" />
+
+            <Button
+                android:id="@+id/btnSwitchTextureView"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="TextureView"
+                android:textSize="12sp"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_marginEnd="4dp" />
+
+            <Button
+                android:id="@+id/btnSwitchVideoView"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="VideoView"
+                android:textSize="12sp"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_marginEnd="4dp" />
+
+            <Button
+                android:id="@+id/btnSwitchPlayerView"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="PlayerView"
+                android:textSize="12sp"
+                style="?attr/materialButtonOutlinedStyle" />
+        </LinearLayout>
+
+        <!-- ==================== 引擎切换（新架构核心功能演示）==================== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="引擎切换（运行时动态切换）"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/btnSwitchMediaPlayer"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="MediaPlayer"
+                android:textSize="11sp"
+                android:enabled="false"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_marginEnd="6dp" />
+
+            <Button
+                android:id="@+id/btnSwitchMedia3"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="Media3(Exo)"
+                android:textSize="11sp"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_marginEnd="6dp" />
+
+            <Button
+                android:id="@+id/btnSwitchIjkPlayer"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="IJKPlayer"
+                android:textSize="11sp"
+                style="?attr/materialButtonOutlinedStyle" />
+        </LinearLayout>
+
+        <!-- 状态显示 -->
+        <TextView
+            android:id="@+id/tvState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="状态: IDLE"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- 进度信息 -->
+        <TextView
+            android:id="@+id/tvProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00 / 00:00"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <!-- 进度条 -->
+        <SeekBar
+            android:id="@+id/seekBarProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0"
+            android:layout_marginBottom="16dp" />
+
+        <!-- 播放控制按钮 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="8dp">
+
+            <Button
+                android:id="@+id/btnPlay"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="播放控制"
-                android:textColor="#333333"
+                android:layout_weight="1"
+                android:text="播放"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/btnPause"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="暂停"
+                android:enabled="false"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/btnStop"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="停止"
+                android:enabled="false" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnPickLocal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="选择本地视频"
+            android:layout_marginBottom="16dp" />
+
+        <!-- 分割线 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEEEEE"
+            android:layout_marginBottom="16dp" />
+
+        <!-- 变速控制 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="变速播放"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvSpeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1.0x"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <SeekBar
+            android:id="@+id/seekBarSpeed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="50"
+            android:progress="10"
+            android:layout_marginBottom="16dp" />
+
+        <!-- 音量控制 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="音量控制"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvVolume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100%"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <SeekBar
+            android:id="@+id/seekBarVolume"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="100"
+            android:layout_marginBottom="16dp" />
+
+        <!-- 循环模式 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="循环模式"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupLoop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <RadioButton
+                android:id="@+id/rbLoopNone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="不循环"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/rbLoopSingle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="单曲循环" />
+
+            <RadioButton
+                android:id="@+id/rbLoopAll"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="列表循环" />
+        </RadioGroup>
+
+        <!-- 缩放模式选择 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="画面缩放模式"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupScaleMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <RadioButton
+                android:id="@+id/rbScaleFitCenter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="适应屏幕"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/rbScaleCropCenter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="填满裁剪" />
+
+            <RadioButton
+                android:id="@+id/rbScaleStretch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="拉伸变形" />
+        </RadioGroup>
+
+        <!-- 分割线 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEEEEE"
+            android:layout_marginBottom="16dp" />
+
+        <!-- 日志输出区域 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="运行日志"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <!-- 网络视频 URL -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="视频 URL"
-                android:textColor="#666666"
-                android:textSize="13sp" />
-
-            <EditText
-                android:id="@+id/etUrl"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:background="@android:drawable/edit_text"
-                android:inputType="textUri"
-                android:paddingHorizontal="12dp"
-                android:textSize="14sp" />
-
             <Button
-                android:id="@+id/btnSetUrl"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                android:text="播放网络视频"
-                android:textSize="14sp" />
-
-            <!-- Assets 文件 -->
-            <TextView
+                android:id="@+id/btnClearLog"
                 android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="清空日志"
+                android:textSize="12sp"
+                style="?attr/materialButtonOutlinedStyle" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#F5F5F5"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvLog"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Assets 文件名"
-                android:textColor="#666666"
-                android:textSize="13sp" />
+                android:textSize="12sp"
+                android:fontFamily="monospace"
+                tools:text="日志输出..." />
+        </ScrollView>
+
+        <!-- 测试URL输入 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="视频URL（留空使用默认测试视频）"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/etUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="https://example.com/video.mp4"
+            android:inputType="textUri"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Assets文件播放 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Assets 文件路径（相对路径，如 video/test.mp4）"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
 
             <EditText
                 android:id="@+id/etAssetPath"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:background="@android:drawable/edit_text"
-                android:inputType="text"
-                android:paddingHorizontal="12dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="video/test.mp4"
                 android:text="output.mp4"
-                android:textSize="14sp" />
+                android:inputType="text"
+                android:textSize="14sp"
+                android:layout_marginEnd="8dp" />
 
             <Button
-                android:id="@+id/btnSetAsset"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                android:text="播放 Assets 文件"
-                android:textSize="14sp" />
-
-            <Button
-                android:id="@+id/btnSeletFile"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                android:text="选择本地文件"
-                android:textSize="14sp" />
-
-            <!-- 分割线 -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="16dp"
-                android:background="#E0E0E0" />
-
-            <!-- 标题：渲染器和引擎设置 -->
-            <TextView
+                android:id="@+id/btnPlayAsset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="渲染器和引擎设置"
-                android:textColor="#333333"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <!-- 渲染器选择 -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="当前渲染器"
-                android:textColor="#666666"
-                android:textSize="13sp" />
-
-            <RadioGroup
-                android:id="@+id/radioGroupRender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/rbSurfaceView"
-                    android:layout_width="0dp"
-                    android:layout_height="36dp"
-                    android:layout_weight="1"
-                    android:checked="true"
-                    android:text="SurfaceView"
-                    android:textSize="13sp" />
-
-                <RadioButton
-                    android:id="@+id/rbTextureView"
-                    android:layout_width="0dp"
-                    android:layout_height="36dp"
-                    android:layout_weight="1"
-                    android:text="TextureView"
-                    android:textSize="13sp" />
-
-                <RadioButton
-                    android:id="@+id/rbVideoView"
-                    android:layout_width="0dp"
-                    android:layout_height="36dp"
-                    android:layout_weight="1"
-                    android:text="VideoView"
-                    android:textSize="13sp" />
-            </RadioGroup>
-
-            <!-- 引擎选择 -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="当前引擎"
-                android:textColor="#666666"
-                android:textSize="13sp" />
-
-            <RadioGroup
-                android:id="@+id/radioGroupEngine"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/rbMediaPlayer"
-                    android:layout_width="0dp"
-                    android:layout_height="36dp"
-                    android:layout_weight="1"
-                    android:checked="true"
-                    android:text="MediaPlayer"
-                    android:textSize="13sp" />
-
-                <RadioButton
-                    android:id="@+id/rbMedia3"
-                    android:layout_width="0dp"
-                    android:layout_height="36dp"
-                    android:layout_weight="1"
-                    android:text="Media3"
-                    android:textSize="13sp" />
-
-                <RadioButton
-                    android:id="@+id/rbIjkPlayer"
-                    android:layout_width="0dp"
-                    android:layout_height="36dp"
-                    android:layout_weight="1"
-                    android:text="IJKPlayer"
-                    android:textSize="13sp" />
-            </RadioGroup>
-
-            <!-- 分割线 -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="16dp"
-                android:background="#E0E0E0" />
-
-            <!-- 日志输出区域 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="运行日志"
-                    android:textColor="#333333"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/btnClearLog"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:minWidth="60dp"
-                    android:paddingHorizontal="12dp"
-                    android:text="清空"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:layout_marginTop="8dp"
-                android:background="#F5F5F5"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/tvLog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="#444444"
-                    android:textSize="11sp"
-                    tools:text="日志输出..." />
-            </ScrollView>
-
+                android:text="播放Assets" />
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
