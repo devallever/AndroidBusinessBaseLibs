@@ -80,14 +80,11 @@ import app.allever.android.sample.audiovideo.lib.VideoScaleMode
  * @see Media3PlayerEngine 配合使用的引擎
  */
 class ExoPlayerViewRender : IVideoRender {
-
     companion object {
-        private const val TAG = "ExoPlayerViewRender"
+        val NAME = ExoPlayerViewRender::class.java.simpleName
     }
-
     // ==================== 属性 ====================
-
-    override val renderType: RenderType = RenderType.EXO_PLAYER_VIEW
+    override val renderName: String = NAME
 
     /** PlayerView 实例 */
     private var playerView: PlayerView? = null

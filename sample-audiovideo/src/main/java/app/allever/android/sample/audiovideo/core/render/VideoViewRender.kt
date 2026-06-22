@@ -58,12 +58,12 @@ import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 class VideoViewRender : IVideoRender {
 
     companion object {
-        private const val TAG = "VideoViewRender"
+        val NAME = VideoViewRender::class.java.simpleName
     }
 
     // ==================== 属性 ====================
 
-    override val renderType: RenderType = RenderType.VIDEO_VIEW
+    override val renderName: String = NAME
 
     /** VideoView 实例 */
     private var videoView: VideoView? = null

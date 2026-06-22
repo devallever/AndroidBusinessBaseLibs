@@ -53,14 +53,12 @@ import app.allever.android.sample.audiovideo.lib.VideoScaleMode
  * ```
  */
 class TextureViewRender : IVideoRender {
-
     companion object {
-        private const val TAG = "TextureViewRender"
+        val NAME = TextureViewRender::class.java.simpleName
     }
-
     // ==================== 属性 ====================
 
-    override val renderType: RenderType = RenderType.TEXTURE_VIEW
+    override val renderName: String = NAME
 
     /** TextureView 实例 */
     private var textureView: TextureView? = null

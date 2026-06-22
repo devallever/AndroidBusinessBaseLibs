@@ -17,7 +17,7 @@ import app.allever.android.sample.audiovideo.lib.VideoScaleMode
  *
  * ## 设计原则
  * **单一职责**：本接口只关注视频如何渲染到屏幕上，不关心播放逻辑。
- * 播放控制由 [app.allever.android.sample.audiovideo.core.engine.IPlayerEngine] 负责。
+ * 播放控制由 [IPlayerEngine] 负责。
  *
  * ## 实现类
  * - [SurfaceViewRender]：基于 SurfaceView 的渲染实现（性能好，推荐）
@@ -35,12 +35,17 @@ import app.allever.android.sample.audiovideo.lib.VideoScaleMode
  */
 interface IVideoRender {
 
+    val TAG: String
+        get() = this::class.java.simpleName
+
     // ==================== 基本信息 ====================
 
     /**
-     * 渲染类型标识
+     * 渲染器名称（用于识别和日志）
+     *
+     * 示例: "SurfaceView", "TextureView", "PlayerView"
      */
-    val renderType: RenderType
+    val renderName: String
 
     /**
      * 获取渲染 View 实例
@@ -120,24 +125,4 @@ interface IVideoRender {
      * 释放所有资源
      */
     fun release()
-}
-
-/**
- * 渲染类型枚举
- */
-enum class RenderType {
-    /** SurfaceView 渲染（性能好，推荐首选）*/
-    SURFACE_VIEW,
-
-    /** TextureView 渲染（支持动画和变换）*/
-    TEXTURE_VIEW,
-
-    /** VideoView 渲染（最简单，仅支持 MediaPlayer）*/
-    VIDEO_VIEW,
-
-    /** ExoPlayer PlayerView 渲染（仅支持 Media3 引擎，功能丰富）*/
-    EXO_PLAYER_VIEW,
-
-    /** 未指定 */
-    NONE
 }

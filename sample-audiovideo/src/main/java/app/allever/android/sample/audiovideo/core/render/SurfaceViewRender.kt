@@ -48,14 +48,12 @@ import app.allever.android.sample.audiovideo.lib.VideoScaleMode
  * ```
  */
 class SurfaceViewRender : IVideoRender {
-
     companion object {
-        private const val TAG = "SurfaceViewRender"
+        val NAME = SurfaceViewRender::class.java.simpleName
     }
-
     // ==================== 属性 ====================
 
-    override val renderType: RenderType = RenderType.SURFACE_VIEW
+    override val renderName: String = NAME
 
     /** SurfaceView 实例 */
     private var surfaceView: SurfaceView? = null
