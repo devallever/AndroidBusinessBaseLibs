@@ -28,42 +28,18 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-/**
- * VideoPlayer 示例 Fragment（新架构：引擎与渲染分离）
- *
- * ## 演示内容
- * 1. **组合模式**：展示 Engine + Render 的灵活组合
- * 2. **渲染器切换**：运行时切换 SurfaceView/TextureView/VideoView
- * 3. **完整功能**：播放控制、进度追踪、变速、音量等
- * 4. **多种数据源**：URL、本地文件、Assets
- *
- * ## 架构说明
- * ```
- * VideoPlayer (协调器)
- * ├── IPlayerEngine: MediaPlayerEngine (播放逻辑)
- * └── IVideoRender: SurfaceViewRender/TextureViewRender/VideoViewRender (渲染)
- * ```
- *
- * @see VideoPlayer 新架构协调器
- */
+
 class VideoPlayerViewSampleFragment :
     BaseFragment<FragmentVideoPlayerViewSampleBinding, BaseViewModel>() {
 
     /** 播放器实例（使用新架构）*/
-    private lateinit var player: VideoPlayer
+//    private lateinit var player: VideoPlayer
 
     /** 当前使用的渲染器名称 */
-    private var currentRenderName: String = "SurfaceView"
-
-    /** 当前使用的引擎类型 */
-    private enum class EngineType {
-        MEDIA_PLAYER,   // Android MediaPlayer
-        MEDIA3,         // Google Media3 (ExoPlayer)
-        IJK_PLAYER      // Bilibili IJKPlayer
-    }
+    private var currentRenderName: String = SurfaceViewRender.NAME
 
     /** 当前引擎类型 */
-    private var currentEngineType: EngineType = EngineType.MEDIA_PLAYER
+    private var currentEngineType = MediaPlayerEngine.NAME
 
     /** 视频选择器 */
     private val videoPickerLauncher = MediaPickerCore.registerPickerLauncher(this) { items ->
@@ -72,7 +48,7 @@ class VideoPlayerViewSampleFragment :
                 mBinding.etUrl.setText(mediaItem.uri.toString())
                 appendLog("选择本地视频: ${mediaItem.name} (${mediaItem.uri})")
                 autoPlayOnPrepared = true
-                player.setSource(mediaItem.uri)
+                mBinding.videoPlayerView.videoPlayer.setSource(mediaItem.uri)
             }
         }
     }
@@ -107,11 +83,11 @@ class VideoPlayerViewSampleFragment :
      */
     private fun initPlayer() {
         // 使用默认配置：MediaPlayerEngine + SurfaceViewRender
-        player = VideoPlayer(
+        mBinding.videoPlayerView.videoPlayer = VideoPlayer(
             engine = MediaPlayerEngine(),
             render = SurfaceViewRender()
         ).apply {
-            attach(mBinding.containerVideo)
+            attach(mBinding.videoPlayerView.renderContainer)
             setListener(playerListener)
             retryCount = 3
             progressIntervalMs = 200
@@ -129,19 +105,19 @@ class VideoPlayerViewSampleFragment :
 
         // 播放/继续按钮
         mBinding.btnPlay.setOnClickListener {
-            when (player.state) {
+            when (mBinding.videoPlayerView.videoPlayer.state) {
                 PlayerState.PAUSED -> {
-                    player.play()
+                    mBinding.videoPlayerView.videoPlayer.play()
                     appendLog("继续播放")
                 }
                 else -> {
                     val url = mBinding.etUrl.text.toString().trim()
                     if (url.isNotEmpty()) {
                         autoPlayOnPrepared = true
-                        player.setSource(url)
+                        mBinding.videoPlayerView.videoPlayer.setSource(url)
                     } else {
                         autoPlayOnPrepared = true
-                        player.setSource(defaultTestUrl)
+                        mBinding.videoPlayerView.videoPlayer.setSource(defaultTestUrl)
                     }
                     appendLog("设置数据源: ${if (mBinding.etUrl.text.isNotEmpty()) mBinding.etUrl.text else defaultTestUrl}")
                 }
@@ -150,13 +126,13 @@ class VideoPlayerViewSampleFragment :
 
         // 暂停按钮
         mBinding.btnPause.setOnClickListener {
-            player.pause()
+            mBinding.videoPlayerView.videoPlayer.pause()
             appendLog("暂停播放")
         }
 
         // 停止按钮
         mBinding.btnStop.setOnClickListener {
-            player.stop()
+            mBinding.videoPlayerView.videoPlayer.stop()
             appendLog("停止播放")
             resetProgressUI()
         }
@@ -171,7 +147,7 @@ class VideoPlayerViewSampleFragment :
             val assetPath = mBinding.etAssetPath.text.toString().trim()
             if (assetPath.isNotEmpty()) {
                 autoPlayOnPrepared = true
-                player.setAssetSource(assetPath)
+                mBinding.videoPlayerView.videoPlayer.setAssetSource(assetPath)
                 appendLog("播放 Assets 文件: $assetPath")
             } else {
                 appendLog("请输入 Assets 文件路径")
@@ -197,7 +173,7 @@ class VideoPlayerViewSampleFragment :
 
         // 切换到 PlayerView (ExoPlayer)
         mBinding.btnSwitchPlayerView.setOnClickListener {
-            if (currentEngineType != EngineType.MEDIA3) {
+            if (currentEngineType != Media3PlayerEngine.NAME) {
                 toast("请先切换到 ExoPlayer")
                 return@setOnClickListener
             }
@@ -212,12 +188,12 @@ class VideoPlayerViewSampleFragment :
                 toast("请先切换到其他渲染")
                 return@setOnClickListener
             }
-            switchEngine(EngineType.MEDIA_PLAYER)
+            switchEngine(MediaPlayerEngine.NAME)
         }
 
         // 切换到 Media3 (ExoPlayer)
         mBinding.btnSwitchMedia3.setOnClickListener {
-            switchEngine(EngineType.MEDIA3)
+            switchEngine(Media3PlayerEngine.NAME)
         }
 
         // 切换到 IJKPlayer
@@ -226,16 +202,17 @@ class VideoPlayerViewSampleFragment :
                 toast("请先切换到其他渲染")
                 return@setOnClickListener
             }
-            switchEngine(EngineType.IJK_PLAYER)
+            switchEngine(IjkPlayerEngine.NAME)
         }
 
         // ==================== 进度条控制 ====================
 
         mBinding.seekBarProgress.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser && player.duration > 0) {
-                    val position = (progress.toFloat() / 100 * player.duration).toLong()
-                    mBinding.tvProgress.text = "${formatTime(position)} / ${formatTime(player.duration)}"
+                if (fromUser && mBinding.videoPlayerView.videoPlayer.duration > 0) {
+                    val position = (progress.toFloat() / 100 * mBinding.videoPlayerView.videoPlayer.duration).toLong()
+                    mBinding.tvProgress.text = "${formatTime(position)} / ${formatTime(mBinding.videoPlayerView.videoPlayer.duration)}"
+                    mBinding.videoPlayerView.seekBar.progress = progress
                 }
             }
 
@@ -244,9 +221,9 @@ class VideoPlayerViewSampleFragment :
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                if (player.duration > 0 && seekBar != null) {
-                    val position = (seekBar.progress.toFloat() / 100 * player.duration).toLong()
-                    player.seekTo(position)
+                if (mBinding.videoPlayerView.videoPlayer.duration > 0 && seekBar != null) {
+                    val position = (seekBar.progress.toFloat() / 100 * mBinding.videoPlayerView.videoPlayer.duration).toLong()
+                    mBinding.videoPlayerView.videoPlayer.seekTo(position)
                     appendLog("跳转到: ${formatTime(position)}")
                 }
                 mBinding.seekBarProgress.post { isUserSeeking = false }
@@ -260,7 +237,7 @@ class VideoPlayerViewSampleFragment :
                 val speed = 0.5f + (progress.toFloat() / 50 * 2.5f)
                 mBinding.tvSpeed.text = String.format(Locale.US, "%.1fx", speed)
                 if (fromUser) {
-                    player.speed = speed
+                    mBinding.videoPlayerView.videoPlayer.speed = speed
                 }
             }
 
@@ -278,7 +255,7 @@ class VideoPlayerViewSampleFragment :
                 val volume = progress.toFloat() / 100
                 mBinding.tvVolume.text = String.format(Locale.US, "%.0f%%", volume * 100)
                 if (fromUser) {
-                    player.volume = volume
+                    mBinding.videoPlayerView.videoPlayer.volume = volume
                 }
             }
 
@@ -297,7 +274,7 @@ class VideoPlayerViewSampleFragment :
                 mBinding.rbScaleStretch.id -> VideoScaleMode.STRETCH
                 else -> VideoScaleMode.FIT_CENTER
             }
-            player.videoScaleMode = mode
+            mBinding.videoPlayerView.videoPlayer.videoScaleMode = mode
             appendLog("切换缩放模式: $mode")
         }
 
@@ -309,7 +286,7 @@ class VideoPlayerViewSampleFragment :
                 mBinding.rbLoopAll.id -> LoopMode.ALL
                 else -> LoopMode.NONE
             }
-            player.loopMode = mode
+            mBinding.videoPlayerView.videoPlayer.loopMode = mode
             appendLog("切换循环模式: $mode")
         }
 
@@ -331,8 +308,8 @@ class VideoPlayerViewSampleFragment :
             return
         }
 
-        val wasPlaying = player.isPlaying || player.state == PlayerState.PAUSED
-        val savedPosition = player.currentPosition
+        val wasPlaying = mBinding.videoPlayerView.videoPlayer.isPlaying || mBinding.videoPlayerView.videoPlayer.state == PlayerState.PAUSED
+        val savedPosition = mBinding.videoPlayerView.videoPlayer.currentPosition
 
         appendLog("开始切换渲染器: $currentRenderName -> $renderName" +
                 (if (wasPlaying) " (正在播放，位置=${formatTime(savedPosition)})" else ""))
@@ -346,7 +323,7 @@ class VideoPlayerViewSampleFragment :
         }
 
         // 执行安全切换（VideoPlayer 内部已处理 PlayerView 绑定）
-        player.safeSwitchToRender(newRender)
+        mBinding.videoPlayerView.videoPlayer.safeSwitchToRender(newRender)
 
         currentRenderName = renderName
         updateRenderButtonState()
@@ -364,14 +341,14 @@ class VideoPlayerViewSampleFragment :
      * 注意：切换引擎需要重建整个播放器实例，
      * 因为不同引擎的内部状态不兼容。
      */
-    private fun switchEngine(targetType: EngineType) {
+    private fun switchEngine(targetType: String) {
         if (currentEngineType == targetType) {
             appendLog("当前已是 $targetType 引擎")
             return
         }
 
-        val wasPlaying = player.isPlaying || player.state == PlayerState.PAUSED
-        val savedPosition = player.currentPosition
+        val wasPlaying = mBinding.videoPlayerView.videoPlayer.isPlaying || mBinding.videoPlayerView.videoPlayer.state == PlayerState.PAUSED
+        val savedPosition = mBinding.videoPlayerView.videoPlayer.currentPosition
 
         appendLog("开始切换引擎: ${currentEngineType} -> $targetType" +
                 (if (wasPlaying) " (正在播放，位置=${formatTime(savedPosition)})" else ""))
@@ -381,25 +358,26 @@ class VideoPlayerViewSampleFragment :
 
         // 释放旧播放器
         try {
-            player.release()
+            mBinding.videoPlayerView.videoPlayer.release()
             appendLog("已释放旧引擎")
         } catch (_: Exception) {}
 
         // 创建新引擎
         val newEngine = when (targetType) {
-            EngineType.MEDIA_PLAYER -> MediaPlayerEngine()
-            EngineType.MEDIA3 -> Media3PlayerEngine()
-            EngineType.IJK_PLAYER -> IjkPlayerEngine()
+            MediaPlayerEngine.NAME-> MediaPlayerEngine()
+            Media3PlayerEngine.NAME -> Media3PlayerEngine()
+            IjkPlayerEngine.NAME -> IjkPlayerEngine()
+            else -> MediaPlayerEngine()
         }
 
         // 重建播放器（使用当前渲染器）
         val currentRender = RenderRegistry.create(currentRenderName) ?: SurfaceViewRender()
 
-        player = VideoPlayer(
+        mBinding.videoPlayerView.videoPlayer = VideoPlayer(
             engine = newEngine,
             render = currentRender
         ).apply {
-            attach(mBinding.containerVideo)
+            attach(mBinding.videoPlayerView.renderContainer)
             setListener(playerListener)
             retryCount = 3
             progressIntervalMs = 200
@@ -415,9 +393,9 @@ class VideoPlayerViewSampleFragment :
         if (wasPlaying && savedPosition > 0) {
             autoPlayOnPrepared = true
             if (currentUrl.isNotEmpty()) {
-                player.setSource(currentUrl)
+                mBinding.videoPlayerView.videoPlayer.setSource(currentUrl)
             } else {
-                player.setSource(defaultTestUrl)
+                mBinding.videoPlayerView.videoPlayer.setSource(defaultTestUrl)
             }
             appendLog("恢复播放: ${formatTime(savedPosition)}")
         }
@@ -437,20 +415,16 @@ class VideoPlayerViewSampleFragment :
      * 更新引擎切换按钮状态
      */
     private fun updateEngineButtonState() {
-        mBinding.btnSwitchMediaPlayer.isEnabled = currentEngineType != EngineType.MEDIA_PLAYER
-        mBinding.btnSwitchMedia3.isEnabled = currentEngineType != EngineType.MEDIA3
-        mBinding.btnSwitchIjkPlayer.isEnabled = currentEngineType != EngineType.IJK_PLAYER
+        mBinding.btnSwitchMediaPlayer.isEnabled = currentEngineType != MediaPlayerEngine.NAME
+        mBinding.btnSwitchMedia3.isEnabled = currentEngineType != Media3PlayerEngine.NAME
+        mBinding.btnSwitchIjkPlayer.isEnabled = currentEngineType != IjkPlayerEngine.NAME
     }
 
     /**
      * 更新架构信息显示
      */
     private fun updateArchInfo() {
-        val engineName = when (currentEngineType) {
-            EngineType.MEDIA_PLAYER -> "MediaPlayerEngine"
-            EngineType.MEDIA3 -> "Media3(ExoPlayer)"
-            EngineType.IJK_PLAYER -> "IjkPlayerEngine"
-        }
+        val engineName = currentEngineType
         // 使用 RenderRegistry 获取渲染器的显示名称
         val renderDisplayName = try {
             RenderRegistry.create(currentRenderName)?.renderName ?: currentRenderName
@@ -475,7 +449,7 @@ class VideoPlayerViewSampleFragment :
                 updateButtonStates()
 
                 if (autoPlayOnPrepared) {
-                    player.play()
+                    mBinding.videoPlayerView.videoPlayer.play()
                     appendLog("自动开始播放")
                 }
             }
@@ -571,7 +545,7 @@ class VideoPlayerViewSampleFragment :
      * 更新按钮启用/禁用状态
      */
     private fun updateButtonStates() {
-        val state = player.state
+        val state = mBinding.videoPlayerView.videoPlayer.state
         val canPlay = state in listOf(
             PlayerState.IDLE,
             PlayerState.STOPPED,
@@ -632,11 +606,9 @@ class VideoPlayerViewSampleFragment :
 
     override fun onPause() {
         super.onPause()
-        if (::player.isInitialized) {
-            if (player.isPlaying) {
-                player.pause()
-                appendLog("onPause: 暂停播放")
-            }
+        if (mBinding.videoPlayerView.videoPlayer.isPlaying) {
+            mBinding.videoPlayerView.videoPlayer.pause()
+            appendLog("onPause: 暂停播放")
         }
     }
 
@@ -647,17 +619,13 @@ class VideoPlayerViewSampleFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (::player.isInitialized) {
-            player.detach()
-            appendLog("onDestroyView: 解绑视图")
-        }
+        mBinding.videoPlayerView.videoPlayer.detach()
+        appendLog("onDestroyView: 解绑视图")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (::player.isInitialized) {
-            player.release()
-            appendLog("onDestroy: 释放资源")
-        }
+        mBinding.videoPlayerView.videoPlayer.release()
+        appendLog("onDestroy: 释放资源")
     }
 }

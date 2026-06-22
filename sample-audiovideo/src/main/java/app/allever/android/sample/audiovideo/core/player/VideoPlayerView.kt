@@ -67,6 +67,8 @@ class VideoPlayerView @JvmOverloads constructor(
 
     val renderContainer = binding.renderContainer
 
-    val videoPlayer = VideoPlayer()
+    var videoPlayer = VideoPlayer()
+
+    val seekBar = binding.seekBar
 
 }

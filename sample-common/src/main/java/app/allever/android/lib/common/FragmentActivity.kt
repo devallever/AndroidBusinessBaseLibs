@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import app.allever.android.lib.common.databinding.ActivityBaseFragmentBinding
+import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.core.ui.EmptyFragment
 
@@ -76,14 +77,17 @@ class FragmentActivity :
         try {
             val clzName = intent.getStringExtra("fragmentName")
             if (TextUtils.isEmpty(clzName)) {
+                log("fragmentName: Empty")
                 return EmptyFragment()
             }
             val fragment = Class.forName(clzName!!).getConstructor().newInstance() as Fragment
             fragment.arguments = fragmentArgs
+            log("fragmentName: $clzName")
             return fragment
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        log("fragmentName: Empty final")
         return EmptyFragment()
     }
 }

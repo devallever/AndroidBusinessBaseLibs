@@ -34,13 +34,17 @@
 
         <!-- 视频显示区域（渲染器会在此容器中添加视图）-->
         <FrameLayout
-            android:id="@+id/containerVideo"
+            android:id="@+id/containerVideoOld"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="#222222"
             android:layout_marginBottom="4dp">
 
             <!-- 渲染器会动态将 SurfaceView/TextureView/VideoView 添加到此处 -->
+            <app.allever.android.sample.audiovideo.core.player.VideoPlayerView
+                android:id="@+id/videoPlayerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
             <!-- 视频尺寸信息覆盖层 -->
             <TextView
