@@ -8,9 +8,15 @@ import android.widget.SeekBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
 import app.allever.android.sample.audiovideo.R
+import app.allever.android.sample.audiovideo.core.engine.MediaPlayerEngine
+import app.allever.android.sample.audiovideo.core.render.RenderRegistry
+import app.allever.android.sample.audiovideo.core.render.SurfaceViewRender
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import app.allever.android.sample.audiovideo.databinding.VideoPlayerViewBinding
+import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
+import app.allever.android.sample.audiovideo.lib.PlayerState
 import java.util.Locale
 
 /**
@@ -78,6 +84,16 @@ class VideoPlayerView @JvmOverloads constructor(
         VideoScaleMode.STRETCH
     )
 
+
+    /** 当前使用的渲染器名称 */
+    var currentRenderName: String = SurfaceViewRender.NAME
+
+    /** 当前引擎类型 */
+    var currentEngineType = MediaPlayerEngine.NAME
+
+    /** setSource 后是否自动调用 play() */
+    private var autoPlayOnPrepared = true
+
     private var isUserSeeking = false
 
     // ui 元素
@@ -91,10 +107,147 @@ class VideoPlayerView @JvmOverloads constructor(
     
     val tvProgress = binding.tvVPProgress
 
+    private var listener: IVideoPlayerViewListener? = null
+
+    /**
+     * 播放器事件监听器
+     */
+    private val playerListener = object : IVideoPlayerListener {
+
+        override fun onPrepared(durationMs: Long) {
+            appendLog("onPrepared: 时长: ${formatTime(durationMs)}")
+
+            post {
+                updateButtonStates()
+                listener?.debugUpdateState()
+
+                if (autoPlayOnPrepared) {
+                    videoPlayer.play()
+                    appendLog("自动开始播放")
+                }
+            }
+        }
+
+        override fun onComplete() {
+            appendLog("onComplete: 播放完成")
+
+            post {
+                updateButtonStates()
+                listener?.debugUpdateState()
+            }
+        }
+
+        override fun onError(code: Int, msg: String): Boolean {
+            appendLog("onError: 错误码=$code, 消息: $msg")
+
+            post {
+                updateButtonStates()
+                listener?.debugUpdateState()
+            }
+            return true
+        }
+
+        override fun onProgress(position: Long, duration: Long) {
+            if (!isUserSeeking && duration > 0) {
+                post {
+                    val progress = (position.toFloat() / duration * 100).toInt()
+                    seekBar.progress = progress
+                    tvProgress.text = formatTime(position)
+                    tvDuration.text = formatTime(duration)
+                    listener?.onProgressChanged(position, duration)
+                }
+            }
+        }
+
+        override fun onBufferingUpdate(percent: Int) {
+            // 可在此更新缓冲进度 UI
+        }
+
+        override fun onStateChanged(oldState: PlayerState, newState: PlayerState) {
+            appendLog("onStateChanged: $oldState -> $newState")
+
+            post {
+                updateButtonStates()
+                listener?.debugUpdateState()
+            }
+        }
+
+        override fun onVideoSizeChanged(width: Int, height: Int) {
+            appendLog("onVideoSizeChanged: 尺寸: ${width}x${height}")
+//            mBinding.tvVideoSize.text = "${width}x${height}"
+        }
+
+        override fun onInfo(what: Int, extra: Int): Boolean {
+            // 信息日志，通常不需要显示给用户
+            return true
+        }
+    }
+
+    fun setListener(listener: IVideoPlayerViewListener?) {
+        this.listener = listener
+    }
+
+    /**
+     * 切换渲染器（新架构核心功能演示）
+     *
+     * 展示运行时动态切换渲染方式的能力，
+     * 这是组合模式相比继承模式的最大优势。
+     */
+    fun switchRender(renderName: String) {
+        if (currentRenderName == renderName) {
+            appendLog("当前已是 $renderName 渲染模式")
+            return
+        }
+
+        val wasPlaying = videoPlayer.isPlaying || videoPlayer.state == PlayerState.PAUSED
+        val savedPosition = videoPlayer.currentPosition
+
+        appendLog("开始切换渲染器: $currentRenderName -> $renderName" +
+                (if (wasPlaying) " (正在播放，位置=${formatTime(savedPosition)})" else ""))
+
+        // 使用 RenderRegistry 创建新的渲染器实例
+        val newRender = RenderRegistry.create(renderName)
+        if (newRender == null) {
+            appendLog("未注册的渲染器: $renderName")
+            toast("未注册的渲染器: $renderName")
+            return
+        }
+
+        // 执行安全切换（VideoPlayer 内部已处理 PlayerView 绑定）
+        videoPlayer.safeSwitchToRender(newRender)
+
+        currentRenderName = renderName
+        listener?.debugUpdateState()
+        updateButtonStates()
+        updateArchInfo()
+
+        appendLog("已切换到: $renderName")
+    }
+
     override fun onFinishInflate() {
         super.onFinishInflate()
+        initPlayer()
         initClickListener()
         initSeekBar()
+    }
+
+    /**
+     * 初始化播放器（使用新架构的组合模式）
+     */
+    private fun initPlayer() {
+        // 使用默认配置：MediaPlayerEngine + SurfaceViewRender
+        videoPlayer = VideoPlayer(
+            engine = MediaPlayerEngine(),
+            render = SurfaceViewRender()
+        ).apply {
+            attach(binding.renderContainer)
+            setListener(playerListener)
+            retryCount = 3
+            progressIntervalMs = 200
+        }
+
+        appendLog("初始化播放器: MediaPlayerEngine + SurfaceViewRender")
+        updateArchInfo()
     }
 
     private fun initClickListener() {
@@ -108,6 +261,15 @@ class VideoPlayerView @JvmOverloads constructor(
 
         binding.ivVPScaleMode.setOnClickListener {
             switchScaleMode()
+        }
+
+        binding.ivVPPlayPause.setOnClickListener {
+            if (videoPlayer.isPlaying) {
+                videoPlayer.pause()
+            } else {
+                videoPlayer.play()
+            }
+            updateButtonStates()
         }
     }
     
@@ -183,6 +345,20 @@ class VideoPlayerView @JvmOverloads constructor(
     }
 
     /**
+     * 更新架构信息显示
+     */
+    private fun updateArchInfo() {
+        val engineName = currentEngineType
+        // 使用 RenderRegistry 获取渲染器的显示名称
+        val renderDisplayName = try {
+            RenderRegistry.create(currentRenderName)?.renderName ?: currentRenderName
+        } catch (e: Exception) {
+            currentRenderName
+        }
+        appendLog("当前组合: $engineName + $renderDisplayName")
+    }
+
+    /**
      * 格式化时间显示
      */
     private fun formatTime(ms: Long): String {
@@ -191,4 +367,30 @@ class VideoPlayerView @JvmOverloads constructor(
         val seconds = totalSeconds % 60
         return String.format(Locale.US, "%02d:%02d", minutes, seconds)
     }
+
+    /**
+     * 更新按钮启用/禁用状态
+     */
+    private fun updateButtonStates() {
+        val state = videoPlayer.state
+        val canPlay = state in listOf(
+            PlayerState.IDLE,
+            PlayerState.STOPPED,
+            PlayerState.PREPARED,
+            PlayerState.PAUSED,
+            PlayerState.COMPLETED,
+            PlayerState.ERROR
+        )
+        val isPlaying = state == PlayerState.PLAYING
+        if (isPlaying) {
+            binding.ivVPPlayPause.setImageResource(R.drawable.ic_sample_video_player_view_pause)
+        } else {
+            binding.ivVPPlayPause.setImageResource(R.drawable.ic_sample_video_player_view_play)
+        }
+    }
+
+    fun appendLog(msg: String) {
+        listener?.onLog(msg)
+    }
+
 }

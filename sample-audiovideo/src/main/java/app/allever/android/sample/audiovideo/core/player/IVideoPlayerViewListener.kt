@@ -90,4 +90,10 @@ interface IVideoPlayerViewListener {
      * 触摸事件结束
      */
     fun onTouchUp() {}
+
+    fun onLog(msg: String) {}
+    fun debugUpdateState() {
+
+    }
+
 }

@@ -329,44 +329,6 @@
                 android:text="列表循环" />
         </RadioGroup>
 
-        <!-- 缩放模式选择 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="画面缩放模式"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
-        <RadioGroup
-            android:id="@+id/radioGroupScaleMode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
-
-            <RadioButton
-                android:id="@+id/rbScaleFitCenter"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="适应屏幕"
-                android:checked="true" />
-
-            <RadioButton
-                android:id="@+id/rbScaleCropCenter"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="填满裁剪" />
-
-            <RadioButton
-                android:id="@+id/rbScaleStretch"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="拉伸变形" />
-        </RadioGroup>
 
         <!-- 分割线 -->
         <View
