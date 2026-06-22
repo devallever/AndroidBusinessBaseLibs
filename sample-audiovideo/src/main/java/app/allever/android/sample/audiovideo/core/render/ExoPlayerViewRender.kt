@@ -258,6 +258,10 @@ class ExoPlayerViewRender : IVideoRender {
         unbindFromEngine()
     }
 
+    override fun needSetSurface(): Boolean {
+        return false
+    }
+
     /**
      * 解除与 Media3PlayerEngine 的绑定
      */

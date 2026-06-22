@@ -125,4 +125,6 @@ interface IVideoRender {
      * 释放所有资源
      */
     fun release()
+
+    fun needSetSurface(): Boolean = true
 }

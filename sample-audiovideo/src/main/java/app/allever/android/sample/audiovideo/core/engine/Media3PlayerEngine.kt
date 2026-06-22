@@ -311,7 +311,8 @@ class Media3PlayerEngine : IPlayerEngine {
      * 设置渲染 Surface
      */
     override fun setSurface(surface: Surface?, render: IVideoRender) {
-        if (render is ExoPlayerViewRender) {
+        if (!render.needSetSurface()) {
+            log(TAG, "setSurface: ${render.renderName} (not needed)")
             return
         }
         try {
