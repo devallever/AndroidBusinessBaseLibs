@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <app.allever.android.sample.audiovideo.core.player.VideoPlayerView
+        android:id="@+id/videoPlayerView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/videoPlayerView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/etUrl"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="3" />
+
+                <Button
+                    android:id="@+id/btnSetUrl"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="播放网络视频" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/etAssetPath"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="3"
+                    android:hint="输入文件名"
+                    android:text="output.mp4" />
+
+                <Button
+                    android:id="@+id/btnSetAsset"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="播放Asset" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/etFile"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="3"
+                    android:hint="选择文件"
+                    android:text="" />
+
+                <Button
+                    android:id="@+id/btnSeletFile"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="选择文件" />
+
+            </LinearLayout>
+
+
+            <!-- 日志输出区域 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="运行日志"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnClearLog"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="清空日志"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginBottom="16dp"
+                android:background="#F5F5F5"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/tvLog"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:textSize="12sp"
+                    tools:text="日志输出..." />
+            </ScrollView>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

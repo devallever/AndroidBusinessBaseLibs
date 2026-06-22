@@ -5,7 +5,7 @@
     android:background="@color/black">
 
 
-    <z.app.allever.android.learning.audiovideo.videoplayer.videoviewplayer.VideoPlayerView
+    <z.app.allever.android.learning.audiovideo.videoplayer.videoviewplayer.VideoViewPlayerView
         android:id="@+id/videoPlayerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

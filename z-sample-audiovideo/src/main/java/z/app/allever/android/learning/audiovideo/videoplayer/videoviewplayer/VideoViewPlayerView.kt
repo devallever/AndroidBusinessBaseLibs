@@ -7,13 +7,9 @@ import android.content.pm.ActivityInfo
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.constraintlayout.widget.ConstraintLayout
-import z.app.allever.android.learning.audiovideo.VideoViewHelper
 import z.app.allever.android.learning.audiovideo.videoplayer.StatusListener
-import z.app.allever.android.sample.audiovideo.databinding.VideoPlayerViewBinding
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast
@@ -22,9 +18,10 @@ import app.allever.android.lib.core.helper.ViewHelper
 import app.allever.android.lib.core.util.TimeUtils
 import app.allever.android.lib.media.core.model.MediaItem
 import z.app.allever.android.sample.audiovideo.R
+import z.app.allever.android.sample.audiovideo.databinding.VideoViewPlayerViewBinding
 import kotlin.math.abs
 
-class VideoPlayerView @JvmOverloads constructor(
+class VideoViewPlayerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : ConstraintLayout(context, attrs), StatusListener {
 
@@ -32,12 +29,12 @@ class VideoPlayerView @JvmOverloads constructor(
         VideoViewHandler()
     }
 
-    private var binding: VideoPlayerViewBinding
+    private var binding: VideoViewPlayerViewBinding
 
     private var mMediaBean: MediaItem? = null
 
     init {
-        binding = VideoPlayerViewBinding.inflate(LayoutInflater.from(App.context), this, true)
+        binding = VideoViewPlayerViewBinding.inflate(LayoutInflater.from(App.context), this, true)
 
         initListener()
     }

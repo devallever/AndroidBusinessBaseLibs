@@ -7,6 +7,7 @@ import app.allever.android.lib.common.adapter.TextClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
 import app.allever.android.sample.audiovideo.core.player.VideoPlayerSampleFragment
+import app.allever.android.sample.audiovideo.core.player.VideoPlayerViewSampleFragment
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 class AndroidAudioVideoFragment: ListFragment<FragmentListBinding, ListViewModel, TextClickItem>() {
@@ -40,6 +41,10 @@ class AndroidAudioVideoFragment: ListFragment<FragmentListBinding, ListViewModel
         TextClickItem("Engine+Render") {
             //AudioVideoPlayer
             FragmentActivity.start<VideoPlayerSampleFragment>(it.title)
-        }
+        },
+        TextClickItem("UI controller + Render") {
+            //Media3Player
+            FragmentActivity.start<VideoPlayerViewSampleFragment>(it.title)
+        },
     )
 }
