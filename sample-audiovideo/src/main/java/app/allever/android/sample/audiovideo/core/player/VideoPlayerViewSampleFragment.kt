@@ -207,46 +207,24 @@ class VideoPlayerViewSampleFragment :
 
         // ==================== 进度条控制 ====================
 
-        mBinding.seekBarProgress.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser && mBinding.videoPlayerView.videoPlayer.duration > 0) {
-                    val position = (progress.toFloat() / 100 * mBinding.videoPlayerView.videoPlayer.duration).toLong()
-                    mBinding.tvProgress.text = "${formatTime(position)} / ${formatTime(mBinding.videoPlayerView.videoPlayer.duration)}"
-                    mBinding.videoPlayerView.seekBar.progress = progress
-                }
-            }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                isUserSeeking = true
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                if (mBinding.videoPlayerView.videoPlayer.duration > 0 && seekBar != null) {
-                    val position = (seekBar.progress.toFloat() / 100 * mBinding.videoPlayerView.videoPlayer.duration).toLong()
-                    mBinding.videoPlayerView.videoPlayer.seekTo(position)
-                    appendLog("跳转到: ${formatTime(position)}")
-                }
-                mBinding.seekBarProgress.post { isUserSeeking = false }
-            }
-        })
-
-        // ==================== 变速控制 ====================
-
-        mBinding.seekBarSpeed.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                val speed = 0.5f + (progress.toFloat() / 50 * 2.5f)
-                mBinding.tvSpeed.text = String.format(Locale.US, "%.1fx", speed)
-                if (fromUser) {
-                    mBinding.videoPlayerView.videoPlayer.speed = speed
-                }
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        // 设置初始速度为 1.0x
-        mBinding.seekBarSpeed.progress = 10
+//        // ==================== 变速控制 ====================
+//
+//        mBinding.seekBarSpeed.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+//            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+//                val speed = 0.5f + (progress.toFloat() / 50 * 2.5f)
+//                mBinding.tvSpeed.text = String.format(Locale.US, "%.1fx", speed)
+//                if (fromUser) {
+//                    mBinding.videoPlayerView.videoPlayer.speed = speed
+//                }
+//            }
+//
+//            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+//            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+//        })
+//
+//        // 设置初始速度为 1.0x
+//        mBinding.seekBarSpeed.progress = 10
 
         // ==================== 音量控制 ====================
 
@@ -478,10 +456,11 @@ class VideoPlayerViewSampleFragment :
             if (!isUserSeeking && duration > 0) {
                 activity?.runOnUiThread {
                     val progress = (position.toFloat() / duration * 100).toInt()
-                    if (!mBinding.seekBarProgress.isPressed) {
-                        mBinding.seekBarProgress.progress = progress
+                    if (!mBinding.videoPlayerView.seekBar.isPressed) {
+                        mBinding.videoPlayerView.seekBar.progress = progress
                     }
-                    mBinding.tvProgress.text = "${formatTime(position)} / ${formatTime(duration)}"
+                    mBinding.videoPlayerView.tvProgress.text = formatTime(position)
+                    mBinding.videoPlayerView.tvDuration.text = formatTime(duration)
                 }
             }
         }
@@ -566,8 +545,8 @@ class VideoPlayerViewSampleFragment :
      * 重置进度条 UI
      */
     private fun resetProgressUI() {
-        mBinding.seekBarProgress.progress = 0
-        mBinding.tvProgress.text = "00:00 / 00:00"
+        mBinding.videoPlayerView.seekBar.progress = 0
+        mBinding.videoPlayerView.tvProgress.text = "00:00"
     }
 
     /**

@@ -27,148 +27,156 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- 顶部控制栏 -->
-    <LinearLayout
-        android:id="@+id/topBarContainer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="#80000000"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/controlPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/ivBack"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="返回"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_back"
-            android:tint="@color/white" />
-
-        <TextView
-            android:id="@+id/tvTitle"
+        <!-- 顶部控制栏 -->
+        <LinearLayout
+            android:id="@+id/topBarContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:text="视频标题" />
-    </LinearLayout>
-
-    <!-- 底部控制栏 -->
-    <LinearLayout
-        android:id="@+id/bottomControlContainer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="#80000000"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:paddingBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <!-- 进度条区域 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:background="#80000000"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="8dp">
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/tvProgress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="00:00:00"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-
-            <SeekBar
-                android:id="@+id/seekBar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="4dp"
-                android:maxHeight="3dp"
-                android:minHeight="3dp"
-                android:progressTint="#FF6B6B"
-                android:secondaryProgressTint="#80FFFFFF"
-                android:thumbTint="#FF6B6B" />
-
-            <TextView
-                android:id="@+id/tvDuration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="00:00:00"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <!-- 按钮区域 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="12dp">
-
-            <!-- 播放/暂停按钮 -->
             <ImageView
-                android:id="@+id/ivPlayPause"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:id="@+id/ivVPBack"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="播放/暂停"
-                android:padding="4dp"
-                android:src="@drawable/ic_sample_video_player_view_play"
+                android:contentDescription="返回"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_back"
                 android:tint="@color/white" />
 
-            <!-- 占位空间 -->
-            <Space
+            <TextView
+                android:id="@+id/tvVPTitle"
                 android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1" />
-
-            <!-- 缩放模式按钮 -->
-            <ImageView
-                android:id="@+id/ivScaleMode"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="缩放模式"
-                android:padding="4dp"
-                android:src="@drawable/ic_crop_free"
-                android:tint="@color/white" />
-
-            <!-- 倍速按钮 -->
-            <TextView
-                android:id="@+id/tvSpeed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:gravity="center"
-                android:minWidth="40dp"
-                android:paddingHorizontal="4dp"
-                android:paddingVertical="2dp"
-                android:text="1.0x"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:textColor="@color/white"
-                android:textSize="13sp"
-                android:textStyle="bold" />
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="视频标题" />
         </LinearLayout>
-    </LinearLayout>
+
+        <!-- 底部控制栏 -->
+        <LinearLayout
+            android:id="@+id/bottomControlContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#80000000"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <!-- 进度条区域 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp">
+
+                <TextView
+                    android:id="@+id/tvVPProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00:00"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <SeekBar
+                    android:id="@+id/seekBarVP"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="4dp"
+                    android:maxHeight="3dp"
+                    android:minHeight="3dp"
+                    android:progressTint="#FF6B6B"
+                    android:secondaryProgressTint="#80FFFFFF"
+                    android:thumbTint="#FF6B6B" />
+
+                <TextView
+                    android:id="@+id/tvVPDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00:00"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- 按钮区域 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp">
+
+                <!-- 播放/暂停按钮 -->
+                <ImageView
+                    android:id="@+id/ivVPPlayPause"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="播放/暂停"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_sample_video_player_view_play"
+                    android:tint="@color/white" />
+
+                <!-- 占位空间 -->
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <!-- 缩放模式按钮 -->
+                <ImageView
+                    android:id="@+id/ivVPScaleMode"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="缩放模式"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_crop_free"
+                    android:tint="@color/white" />
+
+                <!-- 倍速按钮 -->
+                <TextView
+                    android:id="@+id/tvVPSpeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:minWidth="40dp"
+                    android:paddingHorizontal="4dp"
+                    android:paddingVertical="2dp"
+                    android:text="1.0x"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- 手势提示浮层 - 音量 -->
     <LinearLayout
