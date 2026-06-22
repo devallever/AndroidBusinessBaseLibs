@@ -8,6 +8,7 @@ import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.picker.MediaPickerConfig
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
+import app.allever.android.sample.audiovideo.core.engine.EngineRegistry
 import app.allever.android.sample.audiovideo.core.engine.IjkPlayerEngine
 import app.allever.android.sample.audiovideo.core.engine.Media3PlayerEngine
 import app.allever.android.sample.audiovideo.core.engine.MediaPlayerEngine
@@ -105,9 +106,6 @@ class VideoPlayerSampleFragment :
      * 初始化播放器（使用新架构的组合模式）
      */
     private fun initPlayer() {
-        // 初始化渲染器注册表
-        RenderRegistry.registerBuiltInRenders()
-
         // 使用默认配置：MediaPlayerEngine + SurfaceViewRender
         player = VideoPlayer(
             engine = MediaPlayerEngine(),

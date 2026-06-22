@@ -60,7 +60,7 @@ import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 class MediaPlayerEngine : IPlayerEngine {
 
     companion object {
-        private const val TAG = "MediaPlayerEngine"
+        val NAME = MediaPlayerEngine::class.java.simpleName
     }
 
     /** 底层 MediaPlayer 实例 */

@@ -117,7 +117,8 @@ import java.io.File
  * @see PlayerState 状态枚举
  */
 class VideoPlayer(
-    private val engine: IPlayerEngine = MediaPlayerEngine(),
+    /** 引擎实例（可变，支持运行时切换）*/
+    var engine: IPlayerEngine = MediaPlayerEngine(),
     /** 渲染器实例（可变，支持运行时切换）*/
     protected var render: IVideoRender = SurfaceViewRender()
 ) {

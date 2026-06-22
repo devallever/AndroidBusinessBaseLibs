@@ -74,7 +74,7 @@ import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 class Media3PlayerEngine : IPlayerEngine {
 
     companion object {
-        private const val TAG = "Media3PlayerEngine"
+        val NAME = Media3PlayerEngine::class.java.simpleName
     }
 
     /** ExoPlayer 实例 */

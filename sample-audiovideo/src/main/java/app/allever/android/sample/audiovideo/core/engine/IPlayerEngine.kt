@@ -34,6 +34,9 @@ import app.allever.android.sample.audiovideo.lib.LoopMode
  */
 interface IPlayerEngine {
 
+    val TAG: String
+        get() = this::class.java.simpleName
+
     // ==================== 生命周期管理 ====================
 
     /**

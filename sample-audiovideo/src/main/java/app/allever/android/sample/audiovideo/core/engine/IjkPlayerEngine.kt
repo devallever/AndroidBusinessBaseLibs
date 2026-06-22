@@ -67,18 +67,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer
 class IjkPlayerEngine : IPlayerEngine {
 
     companion object {
-        private const val TAG = "IjkPlayerEngine"
-
-        init {
-            // 加载 IJKPlayer 原生库（如果尚未加载）
-            try {
-                System.loadLibrary("ijkplayer")
-                log(TAG, "IJKPlayer native library loaded")
-            } catch (_: UnsatisfiedLinkError) {
-                // 可能已经加载或使用其他方式加载
-                log(TAG, "IJKPlayer library already loaded or using different loading method")
-            }
-        }
+        val NAME = IjkPlayerEngine::class.java.simpleName
     }
 
     /** IjkMediaPlayer 实例 */

@@ -8,6 +8,8 @@ import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.ActivityListBinding
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.sample.audiovideo.android.AndroidAudioVideoFragment
+import app.allever.android.sample.audiovideo.core.engine.EngineRegistry
+import app.allever.android.sample.audiovideo.core.render.RenderRegistry
 import app.allever.android.sample.audiovideo.knowledge.AudioVideoKnowledgeFragment
 import app.allever.android.sample.audiovideo.lib.AudioVideoLibFragment
 import app.allever.android.sample.audiovideo.sdk.SDKAudioVideoFragment
@@ -34,4 +36,11 @@ class SampleAudioVideoMainActivity: ListActivity<ActivityListBinding, ListViewMo
             FragmentActivity.start<AudioVideoLibFragment>(it.title)
         }
     )
+
+    override fun init() {
+        super.init()
+        // 初始化渲染器注册表
+        RenderRegistry.registerBuiltInRenders()
+        EngineRegistry.registerBuiltInEngines()
+    }
 }
