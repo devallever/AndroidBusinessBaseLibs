@@ -2,7 +2,6 @@ package app.allever.android.sample.audiovideo.core.player
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.SeekBar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -10,6 +9,7 @@ import androidx.core.view.isVisible
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.sample.audiovideo.R
+import app.allever.android.sample.audiovideo.core.engine.EngineRegistry
 import app.allever.android.sample.audiovideo.core.engine.MediaPlayerEngine
 import app.allever.android.sample.audiovideo.core.render.RenderRegistry
 import app.allever.android.sample.audiovideo.core.render.SurfaceViewRender
@@ -188,6 +188,71 @@ class VideoPlayerView @JvmOverloads constructor(
     }
 
     /**
+     * 切换引擎（新架构核心功能演示）
+     *
+     * 展示运行时动态切换播放引擎的能力，
+     * 这是组合模式相比继承模式的核心优势。
+     *
+     * 注意：切换引擎需要重建整个播放器实例，
+     * 因为不同引擎的内部状态不兼容。
+     */
+    fun switchEngine(targetType: String) {
+        if (currentEngineType == targetType) {
+            appendLog("当前已是 $targetType 引擎")
+            return
+        }
+
+        val wasPlaying = videoPlayer.isPlaying || videoPlayer.state == PlayerState.PAUSED
+        val savedPosition = videoPlayer.currentPosition
+
+        appendLog("开始切换引擎: ${currentEngineType} -> $targetType" +
+                (if (wasPlaying) " (正在播放，位置=${formatTime(savedPosition)})" else ""))
+
+        // 保存当前数据源信息
+        val currentUri = videoPlayer.engine.getCurrentUri()
+
+        // 释放旧播放器
+        try {
+            videoPlayer.release()
+            appendLog("已释放旧引擎")
+        } catch (_: Exception) {}
+
+        // 创建新引擎
+        val newEngine = EngineRegistry.create(targetType)?: return
+
+        // 重建播放器（使用当前渲染器）
+        val currentRender = RenderRegistry.create(currentRenderName) ?: SurfaceViewRender()
+
+        videoPlayer = VideoPlayer(
+            engine = newEngine,
+            render = currentRender
+        ).apply {
+            attach(renderContainer)
+            setListener(playerListener)
+            retryCount = 3
+            progressIntervalMs = 200
+        }
+
+        currentEngineType = targetType
+        listener?.debugUpdateState()
+        updateArchInfo()
+
+        appendLog("已切换到: $targetType")
+
+        // 如果之前在播放，尝试恢复
+        if (wasPlaying && savedPosition > 0) {
+            autoPlayOnPrepared = true
+            if (currentUri == null) {
+                toast("无播放源")
+                appendLog("无播放源")
+            } else {
+                videoPlayer.setSource(currentUri)
+            }
+            appendLog("恢复播放: ${formatTime(savedPosition)} -> $currentUri")
+        }
+    }
+
+    /**
      * 切换渲染器（新架构核心功能演示）
      *
      * 展示运行时动态切换渲染方式的能力，
@@ -229,6 +294,14 @@ class VideoPlayerView @JvmOverloads constructor(
         initPlayer()
         initClickListener()
         initSeekBar()
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        videoPlayer.detach()
+        videoPlayer.release()
+        appendLog("onDetachedFromWindow: 解绑视图")
+        appendLog("onDetachedFromWindow: 释放资源")
     }
 
     /**

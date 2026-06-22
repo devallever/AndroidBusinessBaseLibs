@@ -77,6 +77,8 @@ class Media3PlayerEngine : IPlayerEngine {
         val NAME = Media3PlayerEngine::class.java.simpleName
     }
 
+    private var uri: Uri? = null
+
     /** ExoPlayer 实例 */
     private var exoPlayer: ExoPlayer? = null
 
@@ -239,6 +241,7 @@ class Media3PlayerEngine : IPlayerEngine {
      * 支持 http/https/file/content 协议。
      */
     override fun setSource(uri: Uri, headers: Map<String, String>?) {
+        this.uri = uri
         val mediaItem = MediaItem.Builder()
             .setUri(uri)
             .build()
@@ -385,6 +388,10 @@ class Media3PlayerEngine : IPlayerEngine {
      */
     override fun getTcpSpeed(): Long {
         return 0L
+    }
+
+    override fun getCurrentUri(): Uri? {
+        return uri
     }
 
     // ==================== 监听器管理 ====================

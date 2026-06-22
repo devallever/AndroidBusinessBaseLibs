@@ -174,58 +174,6 @@
             android:textSize="14sp"
             android:layout_marginBottom="8dp" />
 
-<!--        &lt;!&ndash; 进度信息 &ndash;&gt;-->
-<!--        <TextView-->
-<!--            android:id="@+id/tvProgress"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="00:00 / 00:00"-->
-<!--            android:textSize="14sp"-->
-<!--            android:layout_marginBottom="4dp" />-->
-
-<!--        &lt;!&ndash; 进度条 &ndash;&gt;-->
-<!--        <SeekBar-->
-<!--            android:id="@+id/seekBarProgress"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:max="100"-->
-<!--            android:progress="0"-->
-<!--            android:layout_marginBottom="16dp" />-->
-
-        <!-- 播放控制按钮 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="8dp">
-
-            <Button
-                android:id="@+id/btnPlay"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="播放"
-                android:layout_marginEnd="8dp" />
-
-            <Button
-                android:id="@+id/btnPause"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="暂停"
-                android:enabled="false"
-                android:layout_marginEnd="8dp" />
-
-            <Button
-                android:id="@+id/btnStop"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="停止"
-                android:enabled="false" />
-        </LinearLayout>
-
         <Button
             android:id="@+id/btnPickLocal"
             android:layout_width="match_parent"
@@ -239,31 +187,6 @@
             android:layout_height="1dp"
             android:background="#EEEEEE"
             android:layout_marginBottom="16dp" />
-
-<!--        &lt;!&ndash; 变速控制 &ndash;&gt;-->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="变速播放"-->
-<!--            android:textSize="16sp"-->
-<!--            android:textStyle="bold"-->
-<!--            android:layout_marginBottom="8dp" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/tvSpeed"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="1.0x"-->
-<!--            android:textSize="14sp"-->
-<!--            android:layout_marginBottom="4dp" />-->
-
-<!--        <SeekBar-->
-<!--            android:id="@+id/seekBarSpeed"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:max="50"-->
-<!--            android:progress="10"-->
-<!--            android:layout_marginBottom="16dp" />-->
 
         <!-- 音量控制 -->
         <TextView

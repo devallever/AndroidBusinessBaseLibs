@@ -173,6 +173,8 @@ interface IPlayerEngine {
      */
     fun getTcpSpeed(): Long
 
+    fun getCurrentUri(): Uri?
+
     // ==================== 监听器 ====================
 
     /**

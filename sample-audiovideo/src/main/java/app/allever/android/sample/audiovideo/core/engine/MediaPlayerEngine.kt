@@ -63,6 +63,8 @@ class MediaPlayerEngine : IPlayerEngine {
         val NAME = MediaPlayerEngine::class.java.simpleName
     }
 
+    private var uri: Uri? = null
+
     /** 底层 MediaPlayer 实例 */
     private var mediaPlayer: MediaPlayer? = null
 
@@ -240,6 +242,7 @@ class MediaPlayerEngine : IPlayerEngine {
      */
     override fun setSource(uri: Uri, headers: Map<String, String>?) {
         val context = App.context.applicationContext
+        this.uri = uri
         
         when (uri.scheme) {
             "http", "https" -> {
@@ -383,6 +386,8 @@ class MediaPlayerEngine : IPlayerEngine {
     override fun getTcpSpeed(): Long {
         return 0L
     }
+
+    override fun getCurrentUri(): Uri? = uri
 
     // ==================== 监听器管理 ====================
 

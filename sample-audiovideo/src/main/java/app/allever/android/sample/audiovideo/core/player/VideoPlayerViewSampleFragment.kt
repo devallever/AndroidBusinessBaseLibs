@@ -1,14 +1,11 @@
 package app.allever.android.sample.audiovideo.core.player
 
-import android.view.ViewGroup
 import android.widget.SeekBar
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.media.core.model.MediaItem
-import app.allever.android.lib.media.picker.MediaPickerConfig
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import app.allever.android.sample.audiovideo.core.engine.EngineRegistry
 import app.allever.android.sample.audiovideo.core.engine.IjkPlayerEngine
 import app.allever.android.sample.audiovideo.core.engine.Media3PlayerEngine
 import app.allever.android.sample.audiovideo.core.engine.MediaPlayerEngine
@@ -17,13 +14,9 @@ import app.allever.android.sample.audiovideo.core.render.RenderRegistry
 import app.allever.android.sample.audiovideo.core.render.SurfaceViewRender
 import app.allever.android.sample.audiovideo.core.render.TextureViewRender
 import app.allever.android.sample.audiovideo.core.render.VideoViewRender
-import app.allever.android.sample.audiovideo.databinding.FragmentVideoPlayerSampleBinding
 import app.allever.android.sample.audiovideo.databinding.FragmentVideoPlayerViewSampleBinding
-import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
-import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import app.allever.android.sample.audiovideo.lib.PlayerState
-import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -31,16 +24,6 @@ import java.util.Locale
 
 class VideoPlayerViewSampleFragment :
     BaseFragment<FragmentVideoPlayerViewSampleBinding, BaseViewModel>() {
-
-    /** 播放器实例（使用新架构）*/
-//    private lateinit var player: VideoPlayer
-
-    /** 当前使用的渲染器名称 */
-//    private var currentRenderName: String = SurfaceViewRender.NAME
-
-    /** 当前引擎类型 */
-//    private var currentEngineType = MediaPlayerEngine.NAME
-
     /** 视频选择器 */
     private val videoPickerLauncher = MediaPickerCore.registerPickerLauncher(this) { items ->
         items.firstOrNull()?.let { mediaItem ->
@@ -68,7 +51,6 @@ class VideoPlayerViewSampleFragment :
         initPlayer()
         initViews()
         updateStateUI(PlayerState.IDLE)
-        updateButtonStates()
     }
 
     /**
@@ -86,8 +68,8 @@ class VideoPlayerViewSampleFragment :
         mBinding.videoPlayerView.setListener(object : IVideoPlayerViewListener {
             override fun debugUpdateState() {
                 updateStateUI(mBinding.videoPlayerView.videoPlayer.state)
-                updateButtonStates()
                 updateRenderButtonState()
+                updateEngineButtonState()
             }
 
             override fun onLog(msg: String) {
@@ -104,40 +86,6 @@ class VideoPlayerViewSampleFragment :
      */
     private fun initViews() {
         // ==================== 播放控制按钮 ====================
-
-        // 播放/继续按钮
-        mBinding.btnPlay.setOnClickListener {
-            when (mBinding.videoPlayerView.videoPlayer.state) {
-                PlayerState.PAUSED -> {
-                    mBinding.videoPlayerView.videoPlayer.play()
-                    appendLog("继续播放")
-                }
-                else -> {
-                    val url = mBinding.etUrl.text.toString().trim()
-                    if (url.isNotEmpty()) {
-                        autoPlayOnPrepared = true
-                        mBinding.videoPlayerView.videoPlayer.setSource(url)
-                    } else {
-                        autoPlayOnPrepared = true
-                        mBinding.videoPlayerView.videoPlayer.setSource(defaultTestUrl)
-                    }
-                    appendLog("设置数据源: ${if (mBinding.etUrl.text.isNotEmpty()) mBinding.etUrl.text else defaultTestUrl}")
-                }
-            }
-        }
-
-        // 暂停按钮
-        mBinding.btnPause.setOnClickListener {
-            mBinding.videoPlayerView.videoPlayer.pause()
-            appendLog("暂停播放")
-        }
-
-        // 停止按钮
-        mBinding.btnStop.setOnClickListener {
-            mBinding.videoPlayerView.videoPlayer.stop()
-            appendLog("停止播放")
-            resetProgressUI()
-        }
 
         // 选择本地视频
         mBinding.btnPickLocal.setOnClickListener {
@@ -190,12 +138,12 @@ class VideoPlayerViewSampleFragment :
                 toast("请先切换到其他渲染")
                 return@setOnClickListener
             }
-            switchEngine(MediaPlayerEngine.NAME)
+            mBinding.videoPlayerView.switchEngine(MediaPlayerEngine.NAME)
         }
 
         // 切换到 Media3 (ExoPlayer)
         mBinding.btnSwitchMedia3.setOnClickListener {
-            switchEngine(Media3PlayerEngine.NAME)
+            mBinding.videoPlayerView.switchEngine(Media3PlayerEngine.NAME)
         }
 
         // 切换到 IJKPlayer
@@ -204,7 +152,7 @@ class VideoPlayerViewSampleFragment :
                 toast("请先切换到其他渲染")
                 return@setOnClickListener
             }
-            switchEngine(IjkPlayerEngine.NAME)
+            mBinding.videoPlayerView.switchEngine(IjkPlayerEngine.NAME)
         }
         // ==================== 音量控制 ====================
 
@@ -242,71 +190,6 @@ class VideoPlayerViewSampleFragment :
         }
     }
 
-
-    /**
-     * 切换引擎（新架构核心功能演示）
-     *
-     * 展示运行时动态切换播放引擎的能力，
-     * 这是组合模式相比继承模式的核心优势。
-     *
-     * 注意：切换引擎需要重建整个播放器实例，
-     * 因为不同引擎的内部状态不兼容。
-     */
-    private fun switchEngine(targetType: String) {
-        if (mBinding.videoPlayerView.currentEngineType == targetType) {
-            appendLog("当前已是 $targetType 引擎")
-            return
-        }
-
-        val wasPlaying = mBinding.videoPlayerView.videoPlayer.isPlaying || mBinding.videoPlayerView.videoPlayer.state == PlayerState.PAUSED
-        val savedPosition = mBinding.videoPlayerView.videoPlayer.currentPosition
-
-        appendLog("开始切换引擎: ${mBinding.videoPlayerView.currentEngineType} -> $targetType" +
-                (if (wasPlaying) " (正在播放，位置=${formatTime(savedPosition)})" else ""))
-
-        // 保存当前数据源信息
-        val currentUrl = mBinding.etUrl.text.toString().trim()
-
-        // 释放旧播放器
-        try {
-            mBinding.videoPlayerView.videoPlayer.release()
-            appendLog("已释放旧引擎")
-        } catch (_: Exception) {}
-
-        // 创建新引擎
-        val newEngine = EngineRegistry.create(targetType)?: return
-
-        // 重建播放器（使用当前渲染器）
-        val currentRender = RenderRegistry.create(mBinding.videoPlayerView.currentRenderName) ?: SurfaceViewRender()
-
-        mBinding.videoPlayerView.videoPlayer = VideoPlayer(
-            engine = newEngine,
-            render = currentRender
-        ).apply {
-            attach(mBinding.videoPlayerView.renderContainer)
-            setListener(playerListener)
-            retryCount = 3
-            progressIntervalMs = 200
-        }
-
-        mBinding.videoPlayerView.currentEngineType = targetType
-        updateEngineButtonState()
-        updateArchInfo()
-
-        appendLog("已切换到: $targetType")
-
-        // 如果之前在播放，尝试恢复
-        if (wasPlaying && savedPosition > 0) {
-            autoPlayOnPrepared = true
-            if (currentUrl.isNotEmpty()) {
-                mBinding.videoPlayerView.videoPlayer.setSource(currentUrl)
-            } else {
-                mBinding.videoPlayerView.videoPlayer.setSource(defaultTestUrl)
-            }
-            appendLog("恢复播放: ${formatTime(savedPosition)}")
-        }
-    }
-
     /**
      * 更新渲染器切换按钮状态
      */
@@ -340,83 +223,6 @@ class VideoPlayerViewSampleFragment :
         mBinding.tvArchInfo.text = "当前组合: $engineName + $renderDisplayName"
     }
 
-    // ==================== 播放器事件监听 ====================
-
-    /**
-     * 播放器事件监听器
-     */
-    private val playerListener = object : IVideoPlayerListener {
-
-        override fun onPrepared(durationMs: Long) {
-            appendLog("onPrepared: 时长: ${formatTime(durationMs)}")
-
-            activity?.runOnUiThread {
-                updateStateUI(PlayerState.PREPARED)
-                updateButtonStates()
-
-                if (autoPlayOnPrepared) {
-                    mBinding.videoPlayerView.videoPlayer.play()
-                    appendLog("自动开始播放")
-                }
-            }
-        }
-
-        override fun onComplete() {
-            appendLog("onComplete: 播放完成")
-
-            activity?.runOnUiThread {
-                updateStateUI(PlayerState.COMPLETED)
-                updateButtonStates()
-            }
-        }
-
-        override fun onError(code: Int, msg: String): Boolean {
-            appendLog("onError: 错误码=$code, 消息: $msg")
-
-            activity?.runOnUiThread {
-                updateStateUI(PlayerState.ERROR)
-                updateButtonStates()
-            }
-            return true
-        }
-
-        override fun onProgress(position: Long, duration: Long) {
-            if (!isUserSeeking && duration > 0) {
-                activity?.runOnUiThread {
-                    val progress = (position.toFloat() / duration * 100).toInt()
-                    if (!mBinding.videoPlayerView.seekBar.isPressed) {
-                        mBinding.videoPlayerView.seekBar.progress = progress
-                    }
-                    mBinding.videoPlayerView.tvProgress.text = formatTime(position)
-                    mBinding.videoPlayerView.tvDuration.text = formatTime(duration)
-                }
-            }
-        }
-
-        override fun onBufferingUpdate(percent: Int) {
-            // 可在此更新缓冲进度 UI
-        }
-
-        override fun onStateChanged(oldState: PlayerState, newState: PlayerState) {
-            appendLog("onStateChanged: $oldState -> $newState")
-
-            activity?.runOnUiThread {
-                updateStateUI(newState)
-                updateButtonStates()
-            }
-        }
-
-        override fun onVideoSizeChanged(width: Int, height: Int) {
-            appendLog("onVideoSizeChanged: 尺寸: ${width}x${height}")
-            mBinding.tvVideoSize.text = "${width}x${height}"
-        }
-
-        override fun onInfo(what: Int, extra: Int): Boolean {
-            // 信息日志，通常不需要显示给用户
-            return true
-        }
-    }
-
     // ==================== UI 更新方法 ====================
 
     /**
@@ -446,35 +252,6 @@ class VideoPlayerViewSampleFragment :
                 mBinding.tvState.setTextColor(android.graphics.Color.RED)
             }
         }
-    }
-
-    /**
-     * 更新按钮启用/禁用状态
-     */
-    private fun updateButtonStates() {
-        val state = mBinding.videoPlayerView.videoPlayer.state
-        val canPlay = state in listOf(
-            PlayerState.IDLE,
-            PlayerState.STOPPED,
-            PlayerState.PREPARED,
-            PlayerState.PAUSED,
-            PlayerState.COMPLETED,
-            PlayerState.ERROR
-        )
-        val canPause = state == PlayerState.PLAYING
-        val canStop = state !in listOf(PlayerState.IDLE, PlayerState.RELEASED, PlayerState.STOPPED)
-
-        mBinding.btnPlay.isEnabled = canPlay
-        mBinding.btnPause.isEnabled = canPause
-        mBinding.btnStop.isEnabled = canStop
-    }
-
-    /**
-     * 重置进度条 UI
-     */
-    private fun resetProgressUI() {
-        mBinding.videoPlayerView.seekBar.progress = 0
-        mBinding.videoPlayerView.tvProgress.text = "00:00"
     }
 
     /**
@@ -519,20 +296,4 @@ class VideoPlayerViewSampleFragment :
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        // 如果需要恢复播放，可以在这里处理
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        mBinding.videoPlayerView.videoPlayer.detach()
-        appendLog("onDestroyView: 解绑视图")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mBinding.videoPlayerView.videoPlayer.release()
-        appendLog("onDestroy: 释放资源")
-    }
 }

@@ -70,6 +70,8 @@ class IjkPlayerEngine : IPlayerEngine {
         val NAME = IjkPlayerEngine::class.java.simpleName
     }
 
+    private var uri: Uri? = null
+
     /** IjkMediaPlayer 实例 */
     private var ijkPlayer: IjkMediaPlayer? = null
 
@@ -283,6 +285,7 @@ class IjkPlayerEngine : IPlayerEngine {
      * 支持 http/https/file/content 协议。
      */
     override fun setSource(uri: Uri, headers: Map<String, String>?) {
+        this.uri = uri
         when (uri.scheme) {
             "http", "https" -> {
                 // 在线视频（带请求头）
@@ -433,6 +436,10 @@ class IjkPlayerEngine : IPlayerEngine {
      */
     override fun getTcpSpeed(): Long {
         return tcpSpeedValue
+    }
+
+    override fun getCurrentUri(): Uri? {
+        return uri
     }
 
     // ==================== 监听器管理 ====================
