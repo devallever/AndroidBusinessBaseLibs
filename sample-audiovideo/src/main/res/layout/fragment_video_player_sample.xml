@@ -81,7 +81,7 @@
                 android:textSize="12sp"
                 android:enabled="false"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_marginEnd="6dp" />
+                android:layout_marginEnd="4dp" />
 
             <Button
                 android:id="@+id/btnSwitchTextureView"
@@ -91,7 +91,7 @@
                 android:text="TextureView"
                 android:textSize="12sp"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_marginEnd="6dp" />
+                android:layout_marginEnd="4dp" />
 
             <Button
                 android:id="@+id/btnSwitchVideoView"
@@ -99,6 +99,16 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:text="VideoView"
+                android:textSize="12sp"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_marginEnd="4dp" />
+
+            <Button
+                android:id="@+id/btnSwitchPlayerView"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="PlayerView"
                 android:textSize="12sp"
                 style="?attr/materialButtonOutlinedStyle" />
         </LinearLayout>

@@ -11,7 +11,6 @@ import app.allever.android.sample.audiovideo.core.engine.IPlayerEngine
 import app.allever.android.sample.audiovideo.core.engine.IPlayerEngineListener
 import app.allever.android.sample.audiovideo.core.engine.MediaPlayerEngine
 import app.allever.android.sample.audiovideo.core.render.IVideoRender
-import app.allever.android.sample.audiovideo.core.render.RenderType
 import app.allever.android.sample.audiovideo.core.render.SurfaceViewRender
 import app.allever.android.sample.audiovideo.core.render.TextureViewRender
 import app.allever.android.sample.audiovideo.core.render.VideoViewRender
@@ -301,7 +300,7 @@ class VideoPlayer(
         this.container = container
         
         // 初始化并绑定渲染器
-        render.attach(container)
+        render.attach(container, engine)
         
         // 设置渲染器的 Surface 回调
         setupRenderCallbacks()
@@ -310,7 +309,7 @@ class VideoPlayer(
         initPlayer()
         
         isAttached = true
-        log(TAG, "attached to container (renderType=${render.renderType})")
+        log(TAG, "attached to container (renderName=${render.renderName})")
     }
 
     /**
@@ -321,7 +320,7 @@ class VideoPlayer(
         stopPreparingMonitor()
         
         // 从渲染器解绑 Surface
-        engine.setSurface(null)
+        engine.setSurface(null, render)
         
         // 解绑渲染器
         render.detach()
@@ -439,7 +438,7 @@ class VideoPlayer(
 
             // 绑定当前 Surface
             render.getSurface()?.let { surface ->
-                engine.setSurface(surface)
+                engine.setSurface(surface, render)
             }
 
             // 应用当前参数
@@ -653,7 +652,7 @@ class VideoPlayer(
      */
     protected fun safeSwitchRender(targetRender: IVideoRender, delayMs: Long) {
         if (isSafeSwitching) {
-            log(TAG, "safeSwitchRender: 忽略重复调用（正在切换到 ${targetRender.renderType}）")
+            log(TAG, "safeSwitchRender: 忽略重复调用（正在切换到 ${targetRender.renderName}）")
             return
         }
 
@@ -664,7 +663,7 @@ class VideoPlayer(
                     _state == PlayerState.PREPARING)
             val savedPosition = currentPosition
 
-            log(TAG, "safeSwitchRender: 开始切换到 ${targetRender.renderType}" +
+            log(TAG, "safeSwitchRender: 开始切换到 ${targetRender.renderName}" +
                     " (wasPlaying=$wasPlaying, position=${formatTime(savedPosition)}, state=$_state)")
 
             if (_state != PlayerState.IDLE && _state != PlayerState.STOPPED && _state != PlayerState.RELEASED) {
@@ -679,24 +678,24 @@ class VideoPlayer(
 
             App.mainHandler.postDelayed({
                 try {
-                    log(TAG, "safeSwitchRender: 执行切换到 ${targetRender.renderType}")
+                    log(TAG, "safeSwitchRender: 执行切换到 ${targetRender.renderName}")
 
                     // 解绑旧渲染器
                     render.detach()
-                    
+
                     // 绑定新渲染器
-                    targetRender.attach(container!!)
-                    
+                    targetRender.attach(container!!, engine)
+
                     // 【关键】更新渲染器引用！
                     render = targetRender
-                    log(TAG, "safeSwitchRender: 已更新 render 引用到 ${render.renderType}")
+                    log(TAG, "safeSwitchRender: 已更新 render 引用到 ${render.renderName}")
                     
                     // 设置新渲染器的回调
                     setupRenderCallbacks()
 
                     val surfaceReady = targetRender.isSurfaceReady()
 
-                    if (!surfaceReady && targetRender.renderType != RenderType.NONE) {
+                    if (!surfaceReady && targetRender.renderName.isNotEmpty()) {
                         log(TAG, "safeSwitchRender: Surface 未就绪，延迟 50ms 等待...")
                         App.mainHandler.postDelayed({
                             try {
@@ -746,7 +745,7 @@ class VideoPlayer(
         }
 
         log(TAG, "safeSwitchRender: 重新准备数据源" +
-                " (autoResume=${pendingSeekPosition >= 0}, renderType=${render.renderType})")
+                " (autoResume=${pendingSeekPosition >= 0}, renderName=${render.renderName})")
 
         if (currentAssetPath != null && currentAssetPath!!.isNotEmpty()) {
             try {
@@ -766,7 +765,7 @@ class VideoPlayer(
                 
                 // 绑定新 Surface（使用更新后的 render）
                 render.getSurface()?.let { surface ->
-                    engine.setSurface(surface)
+                    engine.setSurface(surface, render)
                     log(TAG, "performPrepareAfterSwitch: 已绑定 Surface 到引擎")
                 } ?: run {
                     log(TAG, "performPrepareAfterSwitch: Surface 为空！")
@@ -781,7 +780,7 @@ class VideoPlayer(
         } else if (currentUri != null) {
             // 绑定新 Surface（使用更新后的 render）
             render.getSurface()?.let { surface ->
-                engine.setSurface(surface)
+                engine.setSurface(surface, render)
                 log(TAG, "performPrepareAfterSwitch: 已绑定 Surface 到引擎")
             } ?: run {
                 log(TAG, "performPrepareAfterSwitch: Surface 为空！")
@@ -912,7 +911,7 @@ class VideoPlayer(
 
         render.setOnSurfaceDestroyedListener {
             log(TAG, "render surface destroyed")
-            engine.setSurface(null)
+            engine.setSurface(null, render)
         }
     }
 
@@ -922,7 +921,7 @@ class VideoPlayer(
     private fun onRenderSurfaceReady(surface: Surface) {
         // 将 Surface 设置给引擎
         try {
-            engine.setSurface(surface)
+            engine.setSurface(surface, render)
         } catch (e: Exception) {
             log(TAG, "setSurface error: ${e.message}")
         }
@@ -934,9 +933,9 @@ class VideoPlayer(
     }
 
     /**
-     * 获取当前渲染类型
+     * 获取当前渲染器名称
      */
-    fun getCurrentRenderType(): RenderType = render.renderType
+    fun getCurrentRenderName(): String = render.renderName
 
     /**
      * 获取当前渲染视图

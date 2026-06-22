@@ -7,6 +7,7 @@ import android.view.SurfaceView
 import android.view.View
 import android.view.ViewGroup
 import app.allever.android.lib.core.ext.log
+import app.allever.android.sample.audiovideo.core.engine.IPlayerEngine
 import app.allever.android.sample.audiovideo.lib.VideoHelper
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 
@@ -87,7 +88,7 @@ class SurfaceViewRender : IVideoRender {
      * @param container 父容器
      * @return SurfaceView 实例
      */
-    override fun attach(container: ViewGroup): View {
+    override fun attach(container: ViewGroup, engine: IPlayerEngine): View {
         detach()
 
         parentContainer = container

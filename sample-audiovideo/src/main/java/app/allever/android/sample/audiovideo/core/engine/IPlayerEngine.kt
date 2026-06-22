@@ -2,6 +2,7 @@ package app.allever.android.sample.audiovideo.core.engine
 
 import android.net.Uri
 import android.view.Surface
+import app.allever.android.sample.audiovideo.core.render.IVideoRender
 import app.allever.android.sample.audiovideo.lib.LoopMode
 
 /**
@@ -131,7 +132,7 @@ interface IPlayerEngine {
      *
      * @param surface Surface 实例，传 null 表示解绑
      */
-    fun setSurface(surface: Surface?)
+    fun setSurface(surface: Surface?, render: IVideoRender)
 
     // ==================== 状态查询 ====================
 

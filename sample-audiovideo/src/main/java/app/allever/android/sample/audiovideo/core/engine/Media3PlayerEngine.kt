@@ -11,6 +11,8 @@ import androidx.media3.common.VideoSize
 import androidx.media3.exoplayer.ExoPlayer
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
+import app.allever.android.sample.audiovideo.core.render.ExoPlayerViewRender
+import app.allever.android.sample.audiovideo.core.render.IVideoRender
 import app.allever.android.sample.audiovideo.lib.LoopMode
 import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 
@@ -308,7 +310,10 @@ class Media3PlayerEngine : IPlayerEngine {
     /**
      * 设置渲染 Surface
      */
-    override fun setSurface(surface: Surface?) {
+    override fun setSurface(surface: Surface?, render: IVideoRender) {
+        if (render is ExoPlayerViewRender) {
+            return
+        }
         try {
             exoPlayer?.setVideoSurface(surface)
         } catch (e: Exception) {
@@ -398,6 +403,18 @@ class Media3PlayerEngine : IPlayerEngine {
             this.listener = null
         }
     }
+
+    // ==================== ExoPlayer 访问 ====================
+
+    /**
+     * 获取内部 ExoPlayer 实例（用于与 PlayerView 绑定）
+     *
+     * 此方法主要用于 [ExoPlayerViewRender] 绑定 PlayerView。
+     * 一般情况下不需要直接调用此方法。
+     *
+     * @return ExoPlayer 实例，如果未初始化则返回 null
+     */
+    fun getExoPlayer(): ExoPlayer? = exoPlayer
 
     // ==================== 内部方法 ====================
 

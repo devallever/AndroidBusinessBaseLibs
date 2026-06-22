@@ -3,6 +3,7 @@ package app.allever.android.sample.audiovideo.core.render
 import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
+import app.allever.android.sample.audiovideo.core.engine.IPlayerEngine
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 
 /**
@@ -56,7 +57,7 @@ interface IVideoRender {
      * @param container 父容器（ViewGroup）
      * @return 渲染 View 实例
      */
-    fun attach(container: ViewGroup): View
+    fun attach(container: ViewGroup, engine: IPlayerEngine): View
 
     /**
      * 解绑渲染 View（从父容器移除）
@@ -125,15 +126,18 @@ interface IVideoRender {
  * 渲染类型枚举
  */
 enum class RenderType {
-    /** SurfaceView 渲染 */
+    /** SurfaceView 渲染（性能好，推荐首选）*/
     SURFACE_VIEW,
-    
-    /** TextureView 渲染 */
+
+    /** TextureView 渲染（支持动画和变换）*/
     TEXTURE_VIEW,
-    
-    /** VideoView 渲染 */
+
+    /** VideoView 渲染（最简单，仅支持 MediaPlayer）*/
     VIDEO_VIEW,
-    
+
+    /** ExoPlayer PlayerView 渲染（仅支持 Media3 引擎，功能丰富）*/
+    EXO_PLAYER_VIEW,
+
     /** 未指定 */
     NONE
 }

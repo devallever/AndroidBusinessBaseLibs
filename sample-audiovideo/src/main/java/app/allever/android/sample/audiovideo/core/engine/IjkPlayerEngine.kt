@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.Surface
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
+import app.allever.android.sample.audiovideo.core.render.IVideoRender
 import app.allever.android.sample.audiovideo.lib.LoopMode
 import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
 import kotlinx.coroutines.CoroutineScope
@@ -368,7 +369,7 @@ class IjkPlayerEngine : IPlayerEngine {
     /**
      * 设置渲染 Surface
      */
-    override fun setSurface(surface: Surface?) {
+    override fun setSurface(surface: Surface?, render: IVideoRender) {
         try {
             ijkPlayer?.setSurface(surface)
             if (surface == null) {
