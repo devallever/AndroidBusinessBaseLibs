@@ -1,5 +1,6 @@
 package app.allever.android.sample.audiovideo.core.player
 
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.provider.Settings
@@ -19,9 +20,11 @@ import app.allever.android.sample.audiovideo.core.render.RenderRegistry
 import app.allever.android.sample.audiovideo.core.render.SurfaceViewRender
 import app.allever.android.sample.audiovideo.databinding.VideoPlayerViewBinding
 import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
+import app.allever.android.sample.audiovideo.lib.LoopMode
 import app.allever.android.sample.audiovideo.lib.PlayerState
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import java.util.Locale
+import kotlin.math.abs
 
 /**
  * 视频播放器UI控制组件
@@ -63,6 +66,16 @@ class VideoPlayerView @JvmOverloads constructor(
         VideoScaleMode.CROP_CENTER,
         VideoScaleMode.STRETCH
     )
+
+    /** 循环模式图标映射 */
+    private val LOOP_MODE_LIST = arrayOf(
+        LoopMode.NONE,
+        LoopMode.SINGLE,
+        LoopMode.ALL
+    )
+
+    /** 当前循环模式 */
+    private var currentLoopModeIndex = 0 // 默认 NONE
 
     /** 当前使用的渲染器名称 */
     var currentRenderName: String = SurfaceViewRender.NAME
@@ -212,16 +225,75 @@ class VideoPlayerView @JvmOverloads constructor(
     }
 
     fun setAssetSource(path: String) {
-        tvTitle.text = path
+        // 提取标题并显示（支持 assets 路径格式）
+        tvTitle.text = extractAssetTitle(path)
         videoPlayer.setAssetSource(path)
         appendLog("setAssetSource: $path")
     }
 
     /**
-     * 从 URL 或路径中提取标题
+     * 从 Assets 路径中提取标题
+     *
+     * 支持格式：
+     * - "sample.mp4" → "sample"
+     * - "videos/test_video.mp4" → "test video"
+     *
+     * @param path Assets 文件路径
+     * @return 提取的标题
+     */
+    private fun extractAssetTitle(path: String): String {
+        // 获取路径的最后一部分作为文件名
+        val fileName = when {
+            path.contains("/") -> path.substringAfterLast("/")
+            path.contains("\\") -> path.substringAfterLast("\\")
+            else -> path
+        }
+
+        // 清理文件名：去除扩展名，美化显示
+        return fileName
+            .substringBeforeLast(".")  // 去除扩展名
+            .replace("_", " ")       // 下划线转空格
+            .replace("-", " ")       // 连字符转空格
+            .trim()
+            .ifEmpty { "视频" }      // 如果为空，使用默认标题
+    }
+
+    /**
+     * 从 Uri 或路径中提取标题（文件名）
+     *
+     * 支持的格式：
+     * - URL: https://example.com/video.mp4 → "video"
+     * - 文件路径: /sdcard/Movies/my_video.mp4 → "my video"
+     * - Assets: assets://sample.mp4 或 sample.mp4 → "sample"
+     *
+     * @param uri 视频 Uri
+     * @return 提取的标题（去除扩展名，替换下划线和连字符为空格）
      */
     private fun extractTitle(uri: Uri): String {
-        return uri.toString()
+        val source = uri.toString()
+
+        // 尝试从 Uri 的 lastPathSegment 提取
+        val fileName = uri.lastPathSegment
+
+        // 如果 lastPathSegment 为空，尝试从完整路径提取
+        val name = if (fileName.isNullOrEmpty()) {
+            // 处理各种路径格式
+            when {
+                source.contains("/") -> source.substringAfterLast("/")
+                source.contains("\\") -> source.substringAfterLast("\\")
+                else -> source
+            }
+        } else {
+            fileName
+        }
+
+        // 清理文件名：去除扩展名，美化显示
+        return name
+            .substringBeforeLast(".")  // 去除扩展名
+            .replace("_", " ")       // 下划线转空格
+            .replace("-", " ")       // 连字符转空格
+            .trim()
+            .ifEmpty { "视频" }      // 如果为空，使用默认标题
     }
 
     /**
@@ -375,6 +447,11 @@ class VideoPlayerView @JvmOverloads constructor(
             handleTouchEvent(event)
         }
 
+        // 循环模式按钮
+        binding.ivVPLoopMode.setOnClickListener {
+            switchLoopMode()
+        }
+
         binding.tvVPSpeed.setOnClickListener {
             switchSpeed()
         }
@@ -457,11 +534,40 @@ class VideoPlayerView @JvmOverloads constructor(
      */
     private fun updateScaleModeIcon(mode: VideoScaleMode) {
         val iconRes = when (mode) {
-            VideoScaleMode.FIT_CENTER -> R.drawable.ic_crop_free
-            VideoScaleMode.CROP_CENTER -> R.drawable.ic_crop_free  // 可替换为裁剪图标
-            VideoScaleMode.STRETCH -> R.drawable.ic_crop_free  // 可替换为拉伸图标
+            VideoScaleMode.FIT_CENTER -> R.drawable.ic_scale_fit
+            VideoScaleMode.CROP_CENTER -> R.drawable.ic_scale_crop
+            VideoScaleMode.STRETCH -> R.drawable.ic_scale_stretch
         }
         binding.ivVPScaleMode.setImageResource(iconRes)
+    }
+
+    /**
+     * 切换循环模式
+     *
+     * 循环切换：ALL → SINGLE → NONE → ALL
+     */
+    private fun switchLoopMode() {
+        currentLoopModeIndex = (currentLoopModeIndex + 1) % LOOP_MODE_LIST.size
+        val newMode = LOOP_MODE_LIST[currentLoopModeIndex]
+
+        videoPlayer.loopMode = newMode
+
+        // 更新图标
+        updateLoopModeIcon(newMode)
+
+        appendLog("循环模式切换为: ${newMode.name}")
+    }
+
+    /**
+     * 更新缩放模式图标
+     */
+    private fun updateLoopModeIcon(mode: LoopMode) {
+        val iconRes = when (mode) {
+            LoopMode.NONE -> R.drawable.ic_loop_none
+            LoopMode.SINGLE -> R.drawable.ic_loop_single
+            LoopMode.ALL -> R.drawable.ic_loop_all
+        }
+        binding.ivVPLoopMode.setImageResource(iconRes)
     }
 
     /**
@@ -556,8 +662,8 @@ class VideoPlayerView @JvmOverloads constructor(
     private fun onTouchMove(event: MotionEvent) {
         val deltaY = event.y - gestureLastY
         val deltaX = event.x - gestureLastX
-        val totalDeltaY = kotlin.math.abs(event.y - gestureStartY)
-        val totalDeltaX = kotlin.math.abs(event.x - gestureStartX)
+        val totalDeltaY = abs(event.y - gestureStartY)
+        val totalDeltaX = abs(event.x - gestureStartX)
 
         // 如果还未确定手势类型，根据滑动方向和位置判断
         if (!isGestureProcessing) {
@@ -698,7 +804,7 @@ class VideoPlayerView @JvmOverloads constructor(
      * 显示音量手势提示浮层
      */
     private fun showVolumeOverlay(volume: Float) {
-        binding.gestureVolumeContainer.visibility = View.VISIBLE
+        binding.gestureVolumeContainer.visibility = VISIBLE
         binding.gestureVolumeContainer.alpha = 1f
         binding.volumeProgressBar.progress = (volume * 100).toInt()
 
@@ -716,7 +822,7 @@ class VideoPlayerView @JvmOverloads constructor(
      * 显示亮度手势提示浮层
      */
     private fun showBrightnessOverlay(brightness: Float) {
-        binding.gestureBrightnessContainer.visibility = View.VISIBLE
+        binding.gestureBrightnessContainer.visibility = VISIBLE
         binding.gestureBrightnessContainer.alpha = 1f
         binding.brightnessProgressBar.progress = (brightness * 100).toInt()
     }
@@ -728,12 +834,12 @@ class VideoPlayerView @JvmOverloads constructor(
      * @param startPosition 手势开始时的位置（毫秒）
      */
     private fun showSeekOverlay(currentPosition: Long, startPosition: Long) {
-        binding.tvGestureSeekTime.visibility = View.VISIBLE
+        binding.tvGestureSeekTime.visibility = VISIBLE
         binding.tvGestureSeekTime.alpha = 1f
 
         // 计算时间差
         val diffMs = currentPosition - startPosition
-        val diffText = if (diffMs >= 0) "+${formatTime(diffMs)}" else "-${formatTime(kotlin.math.abs(diffMs))}"
+        val diffText = if (diffMs >= 0) "+${formatTime(diffMs)}" else "-${formatTime(abs(diffMs))}"
 
         // 显示格式：时间差\n当前时间
         binding.tvGestureSeekTime.text = "$diffText\n${formatTime(currentPosition)}"
@@ -744,15 +850,15 @@ class VideoPlayerView @JvmOverloads constructor(
      */
     private fun hideAllGestureOverlays() {
         binding.gestureVolumeContainer.animate().alpha(0f).withEndAction {
-            binding.gestureVolumeContainer.visibility = View.GONE
+            binding.gestureVolumeContainer.visibility = GONE
         }.start()
 
         binding.gestureBrightnessContainer.animate().alpha(0f).withEndAction {
-            binding.gestureBrightnessContainer.visibility = View.GONE
+            binding.gestureBrightnessContainer.visibility = GONE
         }.start()
 
         binding.tvGestureSeekTime.animate().alpha(0f).withEndAction {
-            binding.tvGestureSeekTime.visibility = View.GONE
+            binding.tvGestureSeekTime.visibility = GONE
         }.start()
     }
 
@@ -800,7 +906,7 @@ class VideoPlayerView @JvmOverloads constructor(
      * 设置屏幕亮度 (0.01-1.0)
      */
     private fun setScreenBrightness(brightness: Float) {
-        val window = (context as? android.app.Activity)?.window ?: return
+        val window = (context as? Activity)?.window ?: return
         window.attributes = window.attributes.apply {
             screenBrightness = brightness.coerceIn(0.01f, 1f)
         }

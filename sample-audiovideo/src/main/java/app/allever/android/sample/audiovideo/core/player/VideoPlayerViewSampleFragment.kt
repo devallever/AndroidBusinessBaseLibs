@@ -1,6 +1,5 @@
 package app.allever.android.sample.audiovideo.core.player
 
-import android.widget.SeekBar
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.media.core.model.MediaItem
@@ -15,7 +14,6 @@ import app.allever.android.sample.audiovideo.core.render.SurfaceViewRender
 import app.allever.android.sample.audiovideo.core.render.TextureViewRender
 import app.allever.android.sample.audiovideo.core.render.VideoViewRender
 import app.allever.android.sample.audiovideo.databinding.FragmentVideoPlayerViewSampleBinding
-import app.allever.android.sample.audiovideo.lib.LoopMode
 import app.allever.android.sample.audiovideo.lib.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -154,35 +152,6 @@ class VideoPlayerViewSampleFragment :
                 return@setOnClickListener
             }
             mBinding.videoPlayerView.switchEngine(IjkPlayerEngine.NAME)
-        }
-        // ==================== 音量控制 ====================
-
-        mBinding.seekBarVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                val volume = progress.toFloat() / 100
-                mBinding.tvVolume.text = String.format(Locale.US, "%.0f%%", volume * 100)
-                if (fromUser) {
-                    mBinding.videoPlayerView.videoPlayer.volume = volume
-                }
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        // 设置初始音量为 100%
-        mBinding.seekBarVolume.progress = 100
-
-        // ==================== 循环模式切换 ====================
-        mBinding.radioGroupLoop?.setOnCheckedChangeListener { _, checkedId ->
-            val mode = when (checkedId) {
-                mBinding.rbLoopNone.id -> LoopMode.NONE
-                mBinding.rbLoopSingle.id -> LoopMode.SINGLE
-                mBinding.rbLoopAll.id -> LoopMode.ALL
-                else -> LoopMode.NONE
-            }
-            mBinding.videoPlayerView.videoPlayer.loopMode = mode
-            appendLog("切换循环模式: $mode")
         }
 
         // 清空日志

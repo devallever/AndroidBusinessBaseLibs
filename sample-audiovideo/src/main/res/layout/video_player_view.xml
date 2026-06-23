@@ -79,6 +79,7 @@
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingBottom="8dp"
+            android:paddingTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -89,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
+                android:layout_marginBottom="10dp"
                 android:paddingHorizontal="8dp">
 
                 <TextView
@@ -131,11 +133,11 @@
                 <!-- 播放/暂停按钮 -->
                 <ImageView
                     android:id="@+id/ivVPPlayPause"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="播放/暂停"
-                    android:padding="4dp"
+                    android:padding="8dp"
                     android:src="@drawable/ic_sample_video_player_view_play"
                     android:tint="@color/white" />
 
@@ -145,16 +147,28 @@
                     android:layout_height="1dp"
                     android:layout_weight="1" />
 
+                <!-- 循环模式按钮 -->
+                <ImageView
+                    android:scaleType="centerInside"
+                    android:id="@+id/ivVPLoopMode"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="循环模式"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_loop_all"
+                    android:tint="@color/white" />
+
                 <!-- 缩放模式按钮 -->
                 <ImageView
+                    android:scaleType="centerInside"
                     android:id="@+id/ivVPScaleMode"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="缩放模式"
-                    android:padding="4dp"
-                    android:src="@drawable/ic_crop_free"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_scale_fit"
                     android:tint="@color/white" />
 
                 <!-- 倍速按钮 -->
@@ -162,15 +176,15 @@
                     android:id="@+id/tvVPSpeed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="8dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center"
                     android:minWidth="40dp"
                     android:paddingHorizontal="4dp"
-                    android:paddingVertical="2dp"
+                    android:paddingVertical="4dp"
                     android:text="1.0x"
                     android:textColor="@color/white"
-                    android:textSize="13sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
