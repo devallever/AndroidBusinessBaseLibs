@@ -1,8 +1,12 @@
 package app.allever.android.sample.audiovideo.core.player
 
 import android.content.Context
+import android.net.Uri
+import android.provider.Settings
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
 import android.widget.SeekBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -13,47 +17,22 @@ import app.allever.android.sample.audiovideo.core.engine.EngineRegistry
 import app.allever.android.sample.audiovideo.core.engine.MediaPlayerEngine
 import app.allever.android.sample.audiovideo.core.render.RenderRegistry
 import app.allever.android.sample.audiovideo.core.render.SurfaceViewRender
-import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import app.allever.android.sample.audiovideo.databinding.VideoPlayerViewBinding
 import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.PlayerState
+import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import java.util.Locale
 
 /**
  * 视频播放器UI控制组件
  *
  * 封装了视频播放器的完整UI交互逻辑，包括：
- * - 控制栏显示/隐藏（自动隐藏 + 点击切换）
+ * - 控制栏显示/隐藏（点击切换）
  * - 进度条实时 seekTo
- * - 手势控制（音量、亮度、进度）
+ * - 手势控制（左侧1/3音量、右侧1/3亮度、底部1/3进度）
  * - 倍速切换 (0.5x ~ 3.0x)
  * - 缩放模式切换
  * - 渲染器/引擎动态切换
- *
- * ## 设计原则
- * - **组合模式**：内部持有 VideoPlayer 实例，委托播放逻辑
- * - **开闭原则**：支持继承扩展，通过 PlayerConfig 控制可见性
- * - **单一职责**：只负责 UI 展示和用户交互，播放逻辑由 VideoPlayer 处理
- *
- * ## 使用示例
- * ```kotlin
- * // 基础使用
- * val playerView = VideoPlayerView(context).apply {
- *     setSource("https://example.com/video.mp4")
- *     play()
- * }
- *
- * // 自定义配置
- * val customView = VideoPlayerView(context).apply {
- *     updateConfig {
- *         showScaleModeButton = false
- *         showRenderSwitchButton = true
- *     }
- *     setListener(object : IVideoPlayerViewListener {
- *         override fun onBackClicked() { activity?.onBackPressed() }
- *     })
- * }
- * ```
  */
 class VideoPlayerView @JvmOverloads constructor(
     context: Context,
@@ -61,12 +40,13 @@ class VideoPlayerView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    //TAG
     private val TAG = VideoPlayerView::class.java.simpleName
+
+    /** 手势触发阈值（dp）*/
+    private val GESTURE_THRESHOLD_DP = 10f
 
     /** ViewBinding */
     protected var binding: VideoPlayerViewBinding = VideoPlayerViewBinding.inflate(LayoutInflater.from(context), this, true)
-
 
     /** 当前倍速索引 */
     protected var currentSpeedIndex: Int = 1  // 默认 1x
@@ -84,7 +64,6 @@ class VideoPlayerView @JvmOverloads constructor(
         VideoScaleMode.STRETCH
     )
 
-
     /** 当前使用的渲染器名称 */
     var currentRenderName: String = SurfaceViewRender.NAME
 
@@ -96,18 +75,45 @@ class VideoPlayerView @JvmOverloads constructor(
 
     private var isUserSeeking = false
 
+    // 手势相关变量
+    private var gestureThresholdPx = 0f
+    private var isGestureProcessing = false
+    private var gestureType: GestureType? = null
+    private var gestureStartY = 0f
+    private var gestureStartX = 0f
+    private var gestureLastY = 0f
+    private var gestureLastX = 0f
+    private var gestureStartPosition = 0L
+    private var gestureTargetPosition = 0L
+    private var initialVolume = 0f
+    private var initialBrightness = 0f
+
+    /** 手势类型枚举 */
+    enum class GestureType {
+        VOLUME,      // 音量调节
+        BRIGHTNESS,  // 亮度调节
+        SEEK         // 进度调节
+    }
+
     // ui 元素
     val renderContainer = binding.renderContainer
 
     var videoPlayer = VideoPlayer()
 
     val seekBar = binding.seekBarVP
-    
+
     val tvDuration = binding.tvVPDuration
-    
+
     val tvProgress = binding.tvVPProgress
 
+    val tvTitle = binding.tvVPTitle
+
     private var listener: IVideoPlayerViewListener? = null
+
+    init {
+        // 计算手势阈值（转换为像素）
+        gestureThresholdPx = GESTURE_THRESHOLD_DP * resources.displayMetrics.density
+    }
 
     /**
      * 播放器事件监听器
@@ -174,7 +180,6 @@ class VideoPlayerView @JvmOverloads constructor(
 
         override fun onVideoSizeChanged(width: Int, height: Int) {
             appendLog("onVideoSizeChanged: 尺寸: ${width}x${height}")
-//            mBinding.tvVideoSize.text = "${width}x${height}"
         }
 
         override fun onInfo(what: Int, extra: Int): Boolean {
@@ -188,7 +193,26 @@ class VideoPlayerView @JvmOverloads constructor(
     }
 
     /**
-     * 切换引擎（新架构核心功能演示）
+     * 设置视频源并准备播放
+     *
+     * @param uri 视频 URL 或文件路径
+     */
+    fun setSource(uri: Uri) {
+        // 提取标题并显示
+        tvTitle.text = extractTitle(uri)
+        videoPlayer.setSource(uri)
+        appendLog("setSource: $uri")
+    }
+
+    /**
+     * 从 URL 或路径中提取标题
+     */
+    private fun extractTitle(uri: Uri): String {
+        return uri.toString()
+    }
+
+    /**
+     * 切换引擎
      *
      * 展示运行时动态切换播放引擎的能力，
      * 这是组合模式相比继承模式的核心优势。
@@ -246,7 +270,7 @@ class VideoPlayerView @JvmOverloads constructor(
                 toast("无播放源")
                 appendLog("无播放源")
             } else {
-                videoPlayer.setSource(currentUri)
+                setSource(currentUri)
             }
             appendLog("恢复播放: ${formatTime(savedPosition)} -> $currentUri")
         }
@@ -324,8 +348,19 @@ class VideoPlayerView @JvmOverloads constructor(
     }
 
     private fun initClickListener() {
+        // 返回按钮
+        binding.ivVPBack.setOnClickListener {
+            listener?.onBackClicked()
+        }
+
+        // 点击画面切换控制栏
         binding.touchInterceptView.setOnClickListener {
-            binding.controlPanel.isVisible = !binding.controlPanel.isVisible
+            toggleControlVisibility()
+        }
+
+        // 设置触摸手势监听
+        binding.touchInterceptView.setOnTouchListener { _, event ->
+            handleTouchEvent(event)
         }
 
         binding.tvVPSpeed.setOnClickListener {
@@ -462,8 +497,308 @@ class VideoPlayerView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 切换控制栏可见性
+     */
+    private fun toggleControlVisibility() {
+        val isVisible = binding.controlPanel.isVisible
+        binding.controlPanel.isVisible = !isVisible
+        listener?.onControlVisibilityChanged(!isVisible)
+    }
+
+    // ==================== 手势处理系统 ====================
+
+    /**
+     * 处理触摸事件
+     */
+    private fun handleTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> onTouchDown(event)
+            MotionEvent.ACTION_MOVE -> onTouchMove(event)
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> onTouchUp()
+        }
+        return true
+    }
+
+    /**
+     * 触摸按下事件
+     */
+    private fun onTouchDown(event: MotionEvent) {
+        isGestureProcessing = false
+        gestureType = null
+        gestureStartY = event.y
+        gestureStartX = event.x
+        gestureLastY = event.y
+        gestureLastX = event.x
+        gestureStartPosition = videoPlayer.currentPosition
+        gestureTargetPosition = gestureStartPosition
+
+        // 保存初始值（使用百分比 0-1）
+        initialVolume = getVideoVolume()  // 视频音量 0-1
+        initialBrightness = getCurrentBrightness()
+
+        // 显示控制栏
+        if (!binding.controlPanel.isVisible) {
+            binding.controlPanel.isVisible = true
+        }
+    }
+
+    /**
+     * 触摸移动事件
+     */
+    private fun onTouchMove(event: MotionEvent) {
+        val deltaY = event.y - gestureLastY
+        val deltaX = event.x - gestureLastX
+        val totalDeltaY = kotlin.math.abs(event.y - gestureStartY)
+        val totalDeltaX = kotlin.math.abs(event.x - gestureStartX)
+
+        // 如果还未确定手势类型，根据滑动方向和位置判断
+        if (!isGestureProcessing) {
+            // 检查是否超过阈值
+            if (totalDeltaY < gestureThresholdPx && totalDeltaX < gestureThresholdPx) {
+                return
+            }
+
+            isGestureProcessing = true
+
+            // 判断手势类型：根据触摸位置和滑动方向
+            when {
+                // 底部1/3区域，且水平滑动为主 → 进度调节
+                event.y > height * 2 / 3f && totalDeltaX > totalDeltaY -> {
+                    gestureType = GestureType.SEEK
+                }
+                // 左侧1/3区域 → 音量调节
+                event.x < width / 3f -> {
+                    gestureType = GestureType.VOLUME
+                }
+                // 右侧1/3区域 → 亮度调节
+                else -> {
+                    gestureType = GestureType.BRIGHTNESS
+                }
+            }
+        }
+
+        // 执行对应的手势操作（基于触摸距离占容器百分比）
+        when (gestureType) {
+            GestureType.VOLUME -> handleVolumeGesture(deltaY, height.toFloat())
+            GestureType.BRIGHTNESS -> handleBrightnessGesture(deltaY, height.toFloat())
+            GestureType.SEEK -> handleSeekGesture(deltaX, width.toFloat())
+            null -> {}
+        }
+
+        gestureLastY = event.y
+        gestureLastX = event.x
+    }
+
+    /**
+     * 触摸抬起事件
+     */
+    private fun onTouchUp() {
+        if (!isGestureProcessing) {
+            // 没有执行手势操作，不处理（点击事件由 OnClickListener 处理）
+            return
+        }
+
+        // 隐藏手势提示浮层
+        hideAllGestureOverlays()
+
+        isGestureProcessing = false
+        gestureType = null
+    }
+
+    /**
+     * 处理音量手势（左侧1/3区域上下滑动）
+     *
+     * @param deltaY 垂直滑动距离（像素）
+     * @param containerHeight 容器高度（像素）
+     *
+     * 修改值基于 deltaY / containerHeight 的百分比：
+     * - 向上滑动 → 音量增加
+     * - 向下滑动 → 音量减少
+     */
+    private fun handleVolumeGesture(deltaY: Float, containerHeight: Float) {
+        // 计算变化百分比：向上滑为负值（增加），向下滑为正值（减少）
+        val deltaPercent = -deltaY / containerHeight
+
+        // 计算新音量 (0-1)，基于初始值 + 变化量
+        val newVolume = (initialVolume + deltaPercent).coerceIn(0f, 1f)
+
+        // 设置视频音量（不是系统音量）
+        setVideoVolume(newVolume)
+
+        // 更新手势提示 UI
+        showVolumeOverlay(newVolume)
+    }
+
+    /**
+     * 处理亮度手势（右侧1/3区域上下滑动）
+     *
+     * @param deltaY 垂直滑动距离（像素）
+     * @param containerHeight 容器高度（像素）
+     */
+    private fun handleBrightnessGesture(deltaY: Float, containerHeight: Float) {
+        // 计算变化百分比
+        val deltaPercent = -deltaY / containerHeight
+
+        // 计算新亮度 (0.01-1.0)
+        val newBrightness = (initialBrightness + deltaPercent).coerceIn(0.01f, 1f)
+
+        // 设置屏幕亮度
+        setScreenBrightness(newBrightness)
+
+        // 更新手势提示 UI
+        showBrightnessOverlay(newBrightness)
+    }
+
+    /**
+     * 处理进度手势（底部1/3区域左右滑动）
+     *
+     * @param deltaX 水平滑动距离（像素）
+     * @param containerWidth 容器宽度（像素）
+     *
+     * 修改值基于 deltaX / containerWidth 的百分比乘以总时长：
+     * - 向右滑动 → 快进
+     * - 向左滑动 → 快退
+     */
+    private fun handleSeekGesture(deltaX: Float, containerWidth: Float) {
+        if (videoPlayer.duration <= 0) return
+
+        // 计算变化百分比
+        val deltaPercent = deltaX / containerWidth
+
+        // 计算目标位置（毫秒）
+        val deltaTime = (deltaPercent * videoPlayer.duration).toLong()
+        gestureTargetPosition = (gestureTargetPosition + deltaTime).coerceIn(0, videoPlayer.duration)
+
+        // 实时 seekTo
+        videoPlayer.seekTo(gestureTargetPosition)
+
+        // 同步更新进度条和时间显示
+        if (videoPlayer.duration > 0) {
+            val progress = (gestureTargetPosition.toFloat() / videoPlayer.duration * 100).toInt()
+            seekBar.progress = progress
+            tvProgress.text = formatTime(gestureTargetPosition)
+        }
+
+        // 显示进度提示（显示时间差和当前位置）
+        showSeekOverlay(gestureTargetPosition, gestureStartPosition)
+    }
+
+    /**
+     * 显示音量手势提示浮层
+     */
+    private fun showVolumeOverlay(volume: Float) {
+        binding.gestureVolumeContainer.visibility = View.VISIBLE
+        binding.gestureVolumeContainer.alpha = 1f
+        binding.volumeProgressBar.progress = (volume * 100).toInt()
+
+        // 根据音量更新图标
+        val iconRes = when {
+            volume <= 0f -> R.drawable.ic_volume_mute
+            volume < 0.33f -> R.drawable.ic_volume_low
+            volume < 0.66f -> R.drawable.ic_volume_medium
+            else -> R.drawable.ic_volume_up
+        }
+        binding.ivVolumeIcon.setImageResource(iconRes)
+    }
+
+    /**
+     * 显示亮度手势提示浮层
+     */
+    private fun showBrightnessOverlay(brightness: Float) {
+        binding.gestureBrightnessContainer.visibility = View.VISIBLE
+        binding.gestureBrightnessContainer.alpha = 1f
+        binding.brightnessProgressBar.progress = (brightness * 100).toInt()
+    }
+
+    /**
+     * 显示进度手势提示浮层
+     *
+     * @param currentPosition 当前目标位置（毫秒）
+     * @param startPosition 手势开始时的位置（毫秒）
+     */
+    private fun showSeekOverlay(currentPosition: Long, startPosition: Long) {
+        binding.tvGestureSeekTime.visibility = View.VISIBLE
+        binding.tvGestureSeekTime.alpha = 1f
+
+        // 计算时间差
+        val diffMs = currentPosition - startPosition
+        val diffText = if (diffMs >= 0) "+${formatTime(diffMs)}" else "-${formatTime(kotlin.math.abs(diffMs))}"
+
+        // 显示格式：时间差\n当前时间
+        binding.tvGestureSeekTime.text = "$diffText\n${formatTime(currentPosition)}"
+    }
+
+    /**
+     * 隐藏所有手势提示浮层（带淡出动画）
+     */
+    private fun hideAllGestureOverlays() {
+        binding.gestureVolumeContainer.animate().alpha(0f).withEndAction {
+            binding.gestureVolumeContainer.visibility = View.GONE
+        }.start()
+
+        binding.gestureBrightnessContainer.animate().alpha(0f).withEndAction {
+            binding.gestureBrightnessContainer.visibility = View.GONE
+        }.start()
+
+        binding.tvGestureSeekTime.animate().alpha(0f).withEndAction {
+            binding.tvGestureSeekTime.visibility = View.GONE
+        }.start()
+    }
+
+    // ==================== 音量和亮度控制 ====================
+
+    /**
+     * 获取当前视频音量 (0-1)
+     *
+     * 注意：这里返回的是视频播放器的音量，不是系统音量。
+     * 如果 VideoPlayer 支持 volume 属性则使用它，否则返回默认值。
+     */
+    private fun getVideoVolume(): Float {
+        return try {
+            videoPlayer.volume
+        } catch (e: Exception) {
+            1f  // 默认最大音量
+        }
+    }
+
+    /**
+     * 设置视频音量 (0-1)
+     *
+     * 只影响视频播放器的音量，不影响系统音量。
+     */
+    private fun setVideoVolume(volume: Float) {
+        try {
+            videoPlayer.volume = volume.coerceIn(0f, 1f)
+        } catch (e: Exception) {
+            log(TAG, "setVideoVolume error: ${e.message}")
+        }
+    }
+
+    /**
+     * 获取当前屏幕亮度 (0-1)
+     */
+    private fun getCurrentBrightness(): Float {
+        return Settings.System.getInt(
+            context.contentResolver,
+            Settings.System.SCREEN_BRIGHTNESS,
+            128
+        ) / 255f
+    }
+
+    /**
+     * 设置屏幕亮度 (0.01-1.0)
+     */
+    private fun setScreenBrightness(brightness: Float) {
+        val window = (context as? android.app.Activity)?.window ?: return
+        window.attributes = window.attributes.apply {
+            screenBrightness = brightness.coerceIn(0.01f, 1f)
+        }
+    }
+
     fun appendLog(msg: String) {
         listener?.onLog(msg)
+        log(TAG, msg)
     }
 
 }
