@@ -85,8 +85,8 @@ class VideoPlayerView @JvmOverloads constructor(
     private var gestureLastX = 0f
     private var gestureStartPosition = 0L
     private var gestureTargetPosition = 0L
-    private var initialVolume = 0f
-    private var initialBrightness = 0f
+    private var initialVolume = getVideoVolume()
+    private var initialBrightness = getCurrentBrightness()
 
     /** 手势类型枚举 */
     enum class GestureType {
@@ -533,10 +533,6 @@ class VideoPlayerView @JvmOverloads constructor(
         gestureStartPosition = videoPlayer.currentPosition
         gestureTargetPosition = gestureStartPosition
 
-        // 保存初始值（使用百分比 0-1）
-        initialVolume = getVideoVolume()  // 视频音量 0-1
-        initialBrightness = getCurrentBrightness()
-
         // 显示控制栏
         if (!binding.controlPanel.isVisible) {
             binding.controlPanel.isVisible = true
@@ -642,6 +638,7 @@ class VideoPlayerView @JvmOverloads constructor(
 
         // 计算新亮度 (0.01-1.0)
         val newBrightness = (initialBrightness + deltaPercent).coerceIn(0.01f, 1f)
+        initialBrightness = newBrightness
 
         // 设置屏幕亮度
         setScreenBrightness(newBrightness)
