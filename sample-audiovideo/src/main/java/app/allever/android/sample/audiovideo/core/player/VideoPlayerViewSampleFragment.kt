@@ -31,7 +31,8 @@ class VideoPlayerViewSampleFragment :
                 mBinding.etUrl.setText(mediaItem.uri.toString())
                 appendLog("选择本地视频: ${mediaItem.name} (${mediaItem.uri})")
                 autoPlayOnPrepared = true
-                mBinding.videoPlayerView.videoPlayer.setSource(mediaItem.uri)
+
+                mBinding.videoPlayerView.setSource(mediaItem.uri)
             }
         }
     }
@@ -97,7 +98,7 @@ class VideoPlayerViewSampleFragment :
             val assetPath = mBinding.etAssetPath.text.toString().trim()
             if (assetPath.isNotEmpty()) {
                 autoPlayOnPrepared = true
-                mBinding.videoPlayerView.videoPlayer.setAssetSource(assetPath)
+                mBinding.videoPlayerView.setAssetSource(assetPath)
                 appendLog("播放 Assets 文件: $assetPath")
             } else {
                 appendLog("请输入 Assets 文件路径")

@@ -192,6 +192,13 @@ class VideoPlayerView @JvmOverloads constructor(
         this.listener = listener
     }
 
+    /***
+     * 设置网络资源
+     */
+    fun setSource(url: String) {
+        setSource(Uri.parse(url))
+    }
+
     /**
      * 设置视频源并准备播放
      *
@@ -202,6 +209,12 @@ class VideoPlayerView @JvmOverloads constructor(
         tvTitle.text = extractTitle(uri)
         videoPlayer.setSource(uri)
         appendLog("setSource: $uri")
+    }
+
+    fun setAssetSource(path: String) {
+        tvTitle.text = path
+        videoPlayer.setAssetSource(path)
+        appendLog("setAssetSource: $path")
     }
 
     /**
@@ -353,10 +366,9 @@ class VideoPlayerView @JvmOverloads constructor(
             listener?.onBackClicked()
         }
 
-        // 点击画面切换控制栏
-        binding.touchInterceptView.setOnClickListener {
-            toggleControlVisibility()
-        }
+        // 注意：touchInterceptView 不设置 onClickListener
+        // 因为 onClick 和 onTouch 会冲突（onTouch 返回 true 后 onClick 不会触发）
+        // 点击事件在 onTouchUp 中处理（当没有执行手势操作时）
 
         // 设置触摸手势监听
         binding.touchInterceptView.setOnTouchListener { _, event ->
@@ -533,10 +545,9 @@ class VideoPlayerView @JvmOverloads constructor(
         gestureStartPosition = videoPlayer.currentPosition
         gestureTargetPosition = gestureStartPosition
 
-        // 显示控制栏
-        if (!binding.controlPanel.isVisible) {
-            binding.controlPanel.isVisible = true
-        }
+        // 注意：不要在这里强制显示控制栏
+        // 否则会导致：按下时显示 → 抬起时 toggleControlVisibility() 又切换隐藏 → 闪烁
+        // 控制栏的显示/隐藏只由点击事件（在 onTouchUp 中处理）决定
     }
 
     /**
@@ -591,7 +602,9 @@ class VideoPlayerView @JvmOverloads constructor(
      */
     private fun onTouchUp() {
         if (!isGestureProcessing) {
-            // 没有执行手势操作，不处理（点击事件由 OnClickListener 处理）
+            // 没有执行手势操作，说明这是一个点击事件
+            // 手动切换控制栏可见性（替代 OnClickListener）
+            toggleControlVisibility()
             return
         }
 
