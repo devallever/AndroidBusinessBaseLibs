@@ -8,7 +8,7 @@ import android.widget.TextView
 import app.allever.android.sample.audiovideo.lib.PlayerState
 
 interface IVideoUiController {
-    fun inflateViews()
+    fun initView()
     fun getRootView(): View
 
     fun getTitleView(): TextView

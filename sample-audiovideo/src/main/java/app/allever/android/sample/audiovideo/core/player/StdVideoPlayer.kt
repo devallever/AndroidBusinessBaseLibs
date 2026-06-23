@@ -111,11 +111,14 @@ open class StdVideoPlayer @JvmOverloads constructor(
         initSeekBar()
 
         enableWidget()
+        uiController?.initView()
     }
 
     open fun bindUiController(): IVideoUiController = StdVideoController(mContext)
 
     open fun enableWidget() {}
+
+    open fun initView() {}
 
 
     /**
@@ -185,6 +188,8 @@ open class StdVideoPlayer @JvmOverloads constructor(
                 updateButtonStates()
 
                 uiController?.onStateChanged(oldState, newState)
+
+                uiController?.onPlayStateChanged(newState == PlayerState.PLAYING)
 
                 listener?.debugUpdateState()
             }

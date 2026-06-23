@@ -7,27 +7,25 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.TextView
-import app.allever.android.lib.core.app.App
 import app.allever.android.sample.audiovideo.R
-import app.allever.android.sample.audiovideo.databinding.StdUiControllerBinding
+import app.allever.android.sample.audiovideo.databinding.CustomStdUiControllerBinding
 import app.allever.android.sample.audiovideo.lib.PlayerState
-import java.util.Locale
 
-class StdVideoController(val context: Context) : IVideoUiController {
+class CustomStdVideoController(val context: Context, ) : IVideoUiController {
 
     private val binding =
-        StdUiControllerBinding.inflate(LayoutInflater.from(context), null, false)
-
+        CustomStdUiControllerBinding.inflate(LayoutInflater.from(context), null, false)
     override fun initView() {
+        binding.ivPlayPauseCenter.setOnClickListener {
+
+        }
 
     }
 
-    override fun getRootView(): View {
-        return binding.root
-    }
+    override fun getRootView(): View = binding.root
 
     override fun getTitleView(): TextView {
-        return binding.tvVPTitle
+        return binding.tvTitle
     }
 
     override fun getBackView(): View {
@@ -35,23 +33,23 @@ class StdVideoController(val context: Context) : IVideoUiController {
     }
 
     override fun getPlayPauseView(): ImageView {
-        return binding.ivVPPlayPause
+        return binding.ivPlayPause
     }
 
     override fun getCurrentTimeView(): TextView {
-        return binding.tvVPProgress
+        return binding.tvCurrentTime
     }
 
     override fun getDurationView(): TextView {
-        return binding.tvVPDuration
+        return binding.tvDuration
     }
 
     override fun getSeekBarView(): SeekBar {
-        return binding.seekBarVP
+        return binding.seekBar
     }
 
     override fun getSpeedView(): TextView {
-        return binding.tvVPSpeed
+        return binding.tvSpeed
     }
 
     override fun getLoopModeView(): ImageView {
@@ -71,15 +69,15 @@ class StdVideoController(val context: Context) : IVideoUiController {
     }
 
     override fun getSeekOverlayView(): View {
-        return binding.gestureSeekContainer
+        return binding.tvGestureSeekTime
     }
 
     override fun getVolumeSeekBarView(): ProgressBar {
-        return binding.volumeProgressBar
+        return binding.pbVolume
     }
 
     override fun getBrightnessSeekBarView(): ProgressBar {
-        return binding.brightnessProgressBar
+        return binding.pbBrightness
     }
 
     override fun getSeekProgressTextView(): TextView {
@@ -98,38 +96,26 @@ class StdVideoController(val context: Context) : IVideoUiController {
         return binding.controlPanel
     }
 
-    override fun onStateChanged(old: PlayerState, state: PlayerState) {
-
+    override fun onStateChanged(
+        old: PlayerState,
+        state: PlayerState
+    ) {
     }
 
     override fun onProgressChanged(
-        position: Long, duration: Long, progress: Int
+        position: Long,
+        duration: Long,
+        progress: Int
     ) {
-        binding.seekBarVP.progress = progress
-        binding.tvVPProgress.text = formatTime( position)
-        binding.tvVPDuration.text = formatTime(duration)
     }
 
     override fun onVolumeProgressChanged(progress: Int) {
-        binding.volumeProgressBar.progress = progress
     }
 
     override fun onBrightnessProgressChanged(progress: Int) {
-        binding.brightnessProgressBar.progress = progress
     }
 
     override fun onPlayStateChanged(isPlaying: Boolean) {
-        binding.ivVPPlayPause.setImageResource(if (isPlaying) R.drawable.ic_sample_video_player_view_pause else R.drawable.ic_sample_video_player_view_play)
+        binding.ivPlayPauseCenter.setImageResource(if (isPlaying) R.drawable.ic_sample_video_player_view_pause else R.drawable.ic_sample_video_player_view_play)
     }
-
-    /**
-     * 格式化时间显示
-     */
-    private fun formatTime(ms: Long): String {
-        val totalSeconds = ms / 1000
-        val minutes = totalSeconds / 60
-        val seconds = totalSeconds % 60
-        return String.format(Locale.US, "%02d:%02d", minutes, seconds)
-    }
-
 }

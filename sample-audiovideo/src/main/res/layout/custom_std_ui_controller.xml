@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 默认播放器控制层布局 -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 视频渲染容器（由外部添加） -->
+
+    <!-- 控制面板容器 -->
+    <LinearLayout
+        android:id="@+id/controlPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <!-- 顶部栏：返回按钮 + 标题 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="#80000000"
+            android:gravity="center_vertical"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
+
+            <!-- 返回按钮 -->
+            <ImageView
+                android:id="@+id/ivVPBack"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="返回"
+                android:padding="4dp"
+                android:src="@drawable/ic_back"
+                android:tint="@color/white" />
+
+            <!-- 标题文本 -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="48dp"
+                android:layout_marginEnd="48dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <!-- 中间区域：居中显示播放/暂停按钮 -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <!-- 播放/暂停大按钮（中间显示） -->
+            <ImageView
+                android:id="@+id/ivPlayPauseCenter"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="播放/暂停"
+                android:padding="12dp"
+                android:src="@drawable/ic_play"
+                android:tint="@color/white" />
+        </FrameLayout>
+
+        <!-- 底部控制栏 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#80000000"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="8dp"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp"
+            android:paddingTop="8dp">
+
+            <!-- 播放/暂停小按钮 -->
+            <ImageView
+                android:id="@+id/ivPlayPause"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="播放/暂停"
+                android:padding="2dp"
+                android:src="@drawable/ic_play"
+                android:tint="@color/white" />
+
+            <!-- 当前时间 -->
+            <TextView
+                android:id="@+id/tvCurrentTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                tools:text="00:00" />
+
+            <!-- 进度条 -->
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="100"
+                android:progressTint="@color/white"
+                android:thumbTint="@color/white" />
+
+            <!-- 总时长 -->
+            <TextView
+                android:id="@+id/tvDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                tools:text="00:00" />
+
+            <!-- 控制按钮组 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- 循环模式按钮 -->
+                <ImageView
+                    android:id="@+id/ivVPLoopMode"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="循环模式"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_loop_all"
+                    android:tint="@color/white" />
+
+                <!-- 缩放模式按钮 -->
+                <ImageView
+                    android:id="@+id/ivVPScaleMode"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="缩放模式"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_scale_fit"
+                    android:tint="@color/white" />
+
+                <!-- 倍速按钮 -->
+                <TextView
+                    android:id="@+id/tvSpeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="10dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:minWidth="40dp"
+                    android:paddingHorizontal="4dp"
+                    android:text="1.0x"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- ==================== 手势提示浮层 ==================== -->
+
+    <!-- 音量提示浮层（左侧显示） -->
+    <LinearLayout
+        android:id="@+id/gestureVolumeContainer"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_vertical"
+        android:layout_marginStart="24dp"
+        android:background="#CC000000"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:visibility="gone">
+
+        <!-- 音量图标 -->
+        <ImageView
+            android:id="@+id/ivVolumeIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_volume_up"
+            android:tint="@color/white" />
+
+        <!-- 音量进度条 -->
+        <ProgressBar
+            android:id="@+id/pbVolume"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="80dp"
+            android:layout_height="6dp"
+            android:layout_marginTop="8dp"
+            android:max="100"
+            android:progress="50"
+            android:progressTint="@color/white" />
+    </LinearLayout>
+
+    <!-- 亮度提示浮层（右侧显示） -->
+    <LinearLayout
+        android:id="@+id/gestureBrightnessContainer"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginEnd="24dp"
+        android:background="#CC000000"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:visibility="gone">
+
+        <!-- 亮度图标 -->
+        <ImageView
+            android:id="@+id/ivBrightnessIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_brightness"
+            android:tint="@color/white" />
+
+        <!-- 亮度进度条 -->
+        <ProgressBar
+            android:id="@+id/pbBrightness"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="80dp"
+            android:layout_height="6dp"
+            android:layout_marginTop="8dp"
+            android:max="100"
+            android:progress="50"
+            android:progressTint="@color/white" />
+    </LinearLayout>
+
+    <!-- 进度提示浮层（中央显示） -->
+    <TextView
+        android:id="@+id/tvGestureSeekTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#CC000000"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="12dp"
+        android:text="+00:05\n01:23"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+</FrameLayout>
