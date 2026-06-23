@@ -273,6 +273,7 @@ class VideoPlayer(
     /** 音量（0.0 ~ 1.0），默认 1.0*/
     var volume: Float = 1.0f
         set(value) {
+            log(TAG, "setVolume: $value")
             field = value.coerceIn(0f, 1f)
             engine.setVolume(field)
         }

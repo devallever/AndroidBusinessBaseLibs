@@ -621,7 +621,7 @@ class VideoPlayerView @JvmOverloads constructor(
         val deltaPercent = -deltaY / containerHeight
 
         // 计算新音量 (0-1)，基于初始值 + 变化量
-        val newVolume = (initialVolume + deltaPercent).coerceIn(0f, 1f)
+        val newVolume = (videoPlayer.volume + deltaPercent).coerceIn(0f, 1f)
 
         // 设置视频音量（不是系统音量）
         setVideoVolume(newVolume)
