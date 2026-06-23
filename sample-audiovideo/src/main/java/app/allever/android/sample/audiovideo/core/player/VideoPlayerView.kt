@@ -265,12 +265,21 @@ class VideoPlayerView @JvmOverloads constructor(
      * - URL: https://example.com/video.mp4 → "video"
      * - 文件路径: /sdcard/Movies/my_video.mp4 → "my video"
      * - Assets: assets://sample.mp4 或 sample.mp4 → "sample"
+     * - Content URI: content://media/... → 查询 MediaStore 获取原始文件名
      *
      * @param uri 视频 Uri
      * @return 提取的标题（去除扩展名，替换下划线和连字符为空格）
      */
     private fun extractTitle(uri: Uri): String {
         val source = uri.toString()
+
+        // 优先处理 Content URI（如从相册、文件选择器获取的 URI）
+        if (source.startsWith("content://")) {
+            val fileNameFromContent = queryFileNameFromContentUri(uri)
+            if (fileNameFromContent != null) {
+                return cleanFileName(fileNameFromContent)
+            }
+        }
 
         // 尝试从 Uri 的 lastPathSegment 提取
         val fileName = uri.lastPathSegment
@@ -287,8 +296,81 @@ class VideoPlayerView @JvmOverloads constructor(
             fileName
         }
 
-        // 清理文件名：去除扩展名，美化显示
-        return name
+        return cleanFileName(name)
+    }
+
+    /**
+     * 从 Content URI 查询原始文件名
+     *
+     * 通过 ContentResolver 查询 MediaStore 的 DISPLAY_NAME 字段，
+     * 获取文件的真正名称（而非 ID）。
+     *
+     * 适用于：
+     * - content://media/external/video/media/123
+     * - content://com.android.providers.media.documents/document/video%3A123
+     * - 其他 Content Provider 提供的 URI
+     *
+     * @param uri Content URI
+     * @return 文件名，如果查询失败返回 null
+     */
+    private fun queryFileNameFromContentUri(uri: Uri): String? {
+        return try {
+            var result: String? = null
+
+            // 尝试直接从 URI 获取 DISPLAY_NAME
+            context.contentResolver.query(
+                uri,
+                arrayOf(android.provider.OpenableColumns.DISPLAY_NAME),
+                null,
+                null,
+                null
+            )?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+                    if (nameIndex >= 0) {
+                        result = cursor.getString(nameIndex)
+                    }
+                }
+            }
+
+            // 如果第一次查询失败，尝试通过 MediaStore Video 查询
+            if (result == null || result!!.isEmpty()) {
+                val projection = arrayOf(
+                    android.provider.MediaStore.Video.Media.DISPLAY_NAME
+                )
+
+                context.contentResolver.query(
+                    android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                    projection,
+                    "${android.provider.MediaStore.Video.Media._ID} = ?",
+                    arrayOf(uri.lastPathSegment),
+                    null
+                )?.use { cursor ->
+                    if (cursor.moveToFirst()) {
+                        val nameIndex = cursor.getColumnIndex(android.provider.MediaStore.Video.Media.DISPLAY_NAME)
+                        if (nameIndex >= 0) {
+                            result = cursor.getString(nameIndex)
+                        }
+                    }
+                }
+            }
+
+            result
+
+        } catch (e: Exception) {
+            log(TAG, "queryFileNameFromContentUri error: ${e.message}")
+            null
+        }
+    }
+
+    /**
+     * 清理文件名：去除扩展名，美化显示
+     *
+     * @param fileName 原始文件名
+     * @return 清理后的标题
+     */
+    private fun cleanFileName(fileName: String): String {
+        return fileName
             .substringBeforeLast(".")  // 去除扩展名
             .replace("_", " ")       // 下划线转空格
             .replace("-", " ")       // 连字符转空格

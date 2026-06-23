@@ -69,6 +69,7 @@ class VideoPlayerViewSampleFragment :
                 updateStateUI(mBinding.videoPlayerView.videoPlayer.state)
                 updateRenderButtonState()
                 updateEngineButtonState()
+                updateArchInfo()
             }
 
             override fun onLog(msg: String) {
@@ -244,16 +245,6 @@ class VideoPlayerViewSampleFragment :
                 scrollView.fullScroll(android.view.View.FOCUS_DOWN)
             }
         }
-    }
-
-    /**
-     * 格式化时间显示
-     */
-    private fun formatTime(ms: Long): String {
-        val totalSeconds = ms / 1000
-        val minutes = totalSeconds / 60
-        val seconds = totalSeconds % 60
-        return String.format(Locale.US, "%02d:%02d", minutes, seconds)
     }
 
     // ==================== 生命周期管理 ====================
