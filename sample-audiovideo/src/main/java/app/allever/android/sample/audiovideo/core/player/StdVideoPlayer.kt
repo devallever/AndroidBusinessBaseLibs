@@ -176,14 +176,13 @@ open class StdVideoPlayer @JvmOverloads constructor(
             appendLog("onPrepared: 时长: ${formatTime(durationMs)}")
 
             post {
-                updateButtonStates()
-                listener?.debugUpdateState()
-
                 if (autoPlayOnPrepared) {
                     videoPlayer.play()
                     appendLog("自动开始播放")
                 }
             }
+            updateButtonStates()
+            listener?.debugUpdateState()
         }
 
         override fun onComplete() {
@@ -209,12 +208,6 @@ open class StdVideoPlayer @JvmOverloads constructor(
             if (!isUserSeeking && duration > 0) {
                 post {
                     val progress = (position.toFloat() / duration * 100).toInt()
-
-                    //方式一:内部更新
-                    uiController?.getSeekBarView()?.progress = progress
-                    uiController?.getCurrentTimeView()?.text = formatTime(position)
-                    uiController?.getDurationView()?.text = formatTime(duration)
-
                     //方式二:外部更新
                     uiController?.onProgressChanged(position, duration, progress)
 
@@ -269,14 +262,14 @@ open class StdVideoPlayer @JvmOverloads constructor(
      */
     fun setSource(uri: Uri) {
         // 提取标题并显示
-        uiController?.getTitleView()?.text = extractTitle(uri)
+        uiController?.onTitleChanged(extractTitle(uri))
         videoPlayer.setSource(uri)
         appendLog("setSource: $uri")
     }
 
     fun setAssetSource(path: String) {
         // 提取标题并显示（支持 assets 路径格式）
-        uiController?.getTitleView()?.text = extractAssetTitle(path)
+        uiController?.onTitleChanged(extractAssetTitle(path))
         videoPlayer.setAssetSource(path)
         appendLog("setAssetSource: $path")
     }
@@ -603,12 +596,6 @@ open class StdVideoPlayer @JvmOverloads constructor(
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser && videoPlayer.duration > 0) {
                     val position = (progress.toFloat() / 100 * videoPlayer.duration).toLong()
-
-                    //方式一: 内部更新
-                    uiController?.getCurrentTimeView()?.text = formatTime(position)
-                    uiController?.getDurationView()?.text = formatTime(videoPlayer.duration)
-                    uiController?.getSeekBarView()?.progress = progress
-
                     //方式二: 外部更新
                     uiController?.onProgressChanged(position, videoPlayer.duration, progress)
 
@@ -633,7 +620,7 @@ open class StdVideoPlayer @JvmOverloads constructor(
     }
 
     /**
-     * 切换播放速度
+     * 点击切换播放速度
      *
      * 循环切换：0.5x → 1.0x → 1.5x → 2.0x → 2.5x → 3.0x → 0.5x
      */
@@ -642,7 +629,7 @@ open class StdVideoPlayer @JvmOverloads constructor(
         val newSpeed = SPEED_LIST[currentSpeedIndex]
 
         videoPlayer.speed = newSpeed
-        uiController?.getSpeedView()?.text = "${newSpeed}x"
+        uiController?.onSpeedChanged(newSpeed)
 
         log(TAG, "speed changed to: ${newSpeed}x")
     }
@@ -659,21 +646,9 @@ open class StdVideoPlayer @JvmOverloads constructor(
         videoPlayer.videoScaleMode = newMode
 
         // 更新图标（根据模式切换不同图标）
-        updateScaleModeIcon(newMode)
+        uiController?.onScaleModeChanged(newMode)
 
         log(TAG, "scale mode changed to: $newMode")
-    }
-
-    /**
-     * 更新缩放模式图标
-     */
-    private fun updateScaleModeIcon(mode: VideoScaleMode) {
-        val iconRes = when (mode) {
-            VideoScaleMode.FIT_CENTER -> R.drawable.ic_scale_fit
-            VideoScaleMode.CROP_CENTER -> R.drawable.ic_scale_crop
-            VideoScaleMode.STRETCH -> R.drawable.ic_scale_stretch
-        }
-        uiController?.getScaleModeView()?.setImageResource(iconRes)
     }
 
     /**
@@ -688,21 +663,9 @@ open class StdVideoPlayer @JvmOverloads constructor(
         videoPlayer.loopMode = newMode
 
         // 更新图标
-        updateLoopModeIcon(newMode)
+        uiController?.onLoopModeChanged(newMode)
 
         appendLog("循环模式切换为: ${newMode.name}")
-    }
-
-    /**
-     * 更新缩放模式图标
-     */
-    private fun updateLoopModeIcon(mode: LoopMode) {
-        val iconRes = when (mode) {
-            LoopMode.NONE -> R.drawable.ic_loop_none
-            LoopMode.SINGLE -> R.drawable.ic_loop_single
-            LoopMode.ALL -> R.drawable.ic_loop_all
-        }
-        uiController?.getLoopModeView()?.setImageResource(iconRes)
     }
 
     /**
@@ -734,22 +697,8 @@ open class StdVideoPlayer @JvmOverloads constructor(
      */
     private fun updateButtonStates() {
         val state = videoPlayer.state
-        state in listOf(
-            PlayerState.IDLE,
-            PlayerState.STOPPED,
-            PlayerState.PREPARED,
-            PlayerState.PAUSED,
-            PlayerState.COMPLETED,
-            PlayerState.ERROR
-        )
         val isPlaying = state == PlayerState.PLAYING
-        if (isPlaying) {
-            uiController?.getPlayPauseView()
-                ?.setImageResource(R.drawable.ic_sample_video_player_view_pause)
-        } else {
-            uiController?.getPlayPauseView()
-                ?.setImageResource(R.drawable.ic_sample_video_player_view_play)
-        }
+        uiController?.onPlayStateChanged(isPlaying)
     }
 
     /**
@@ -761,7 +710,7 @@ open class StdVideoPlayer @JvmOverloads constructor(
     }
 
     private fun showOrHideControlPanel(show: Boolean) {
-        uiController?.getControlPannerView()?.isVisible = show
+        uiController?.onShowOrHideControlPanner(show)
         listener?.onControlVisibilityChanged(show)
 
         // ★ 控制层显示时启动自动隐藏计时器，5秒后无操作则自动隐藏
@@ -909,7 +858,7 @@ open class StdVideoPlayer @JvmOverloads constructor(
         }
 
         // 隐藏手势提示浮层
-        hideAllGestureOverlays()
+        uiController?.onHideAllGestureOverlays()
 
         isGestureProcessing = false
         gestureType = null
@@ -1048,7 +997,7 @@ open class StdVideoPlayer @JvmOverloads constructor(
         setVideoVolume(newVolume)
 
         // 更新手势提示 UI
-        showVolumeOverlay(newVolume)
+        uiController?.onGestureVolumeProgressChanged(newVolume, (newVolume * 100).toInt())
     }
 
     /**
@@ -1069,7 +1018,7 @@ open class StdVideoPlayer @JvmOverloads constructor(
         setScreenBrightness(newBrightness)
 
         // 更新手势提示 UI
-        showBrightnessOverlay(newBrightness)
+        uiController?.onGestureBrightnessProgressChanged((newBrightness * 100).toInt())
     }
 
     /**
@@ -1099,74 +1048,12 @@ open class StdVideoPlayer @JvmOverloads constructor(
         // 同步更新进度条和时间显示
         if (videoPlayer.duration > 0) {
             val progress = (gestureTargetPosition.toFloat() / videoPlayer.duration * 100).toInt()
-            uiController?.getSeekBarView()?.progress = progress
-            uiController?.getCurrentTimeView()?.text = formatTime(gestureTargetPosition)
+            uiController?.onProgressChanged(gestureTargetPosition, videoPlayer.duration, progress)
+
         }
 
         // 显示进度提示（显示时间差和当前位置）
-        showSeekOverlay(gestureTargetPosition, gestureStartPosition)
-    }
-
-    /**
-     * 显示音量手势提示浮层
-     */
-    private fun showVolumeOverlay(volume: Float) {
-        uiController?.getVolumeOverlayView()?.visibility = VISIBLE
-        uiController?.getVolumeOverlayView()?.alpha = 1f
-        uiController?.getVolumeSeekBarView()?.progress = (volume * 100).toInt()
-
-        // 根据音量更新图标
-        val iconRes = when {
-            volume <= 0f -> R.drawable.ic_volume_mute
-            volume < 0.33f -> R.drawable.ic_volume_low
-            volume < 0.66f -> R.drawable.ic_volume_medium
-            else -> R.drawable.ic_volume_up
-        }
-        uiController?.getVolumeIconView()?.setImageResource(iconRes)
-    }
-
-    /**
-     * 显示亮度手势提示浮层
-     */
-    private fun showBrightnessOverlay(brightness: Float) {
-        uiController?.getBrightnessOverlayView()?.visibility = VISIBLE
-        uiController?.getBrightnessOverlayView()?.alpha = 1f
-        uiController?.getBrightnessSeekBarView()?.progress = (brightness * 100).toInt()
-    }
-
-    /**
-     * 显示进度手势提示浮层
-     *
-     * @param currentPosition 当前目标位置（毫秒）
-     * @param startPosition 手势开始时的位置（毫秒）
-     */
-    private fun showSeekOverlay(currentPosition: Long, startPosition: Long) {
-        uiController?.getSeekOverlayView()?.visibility = VISIBLE
-        uiController?.getSeekOverlayView()?.alpha = 1f
-
-        // 计算时间差
-        val diffMs = currentPosition - startPosition
-        val diffText = if (diffMs >= 0) "+${formatTime(diffMs)}" else "-${formatTime(abs(diffMs))}"
-
-        // 显示格式：时间差\n当前时间
-        uiController?.getSeekProgressTextView()?.text = "$diffText\n${formatTime(currentPosition)}"
-    }
-
-    /**
-     * 隐藏所有手势提示浮层（带淡出动画）
-     */
-    private fun hideAllGestureOverlays() {
-        uiController?.getVolumeOverlayView()?.animate()?.alpha(0f)?.withEndAction {
-            uiController?.getVolumeOverlayView()?.visibility = GONE
-        }?.start()
-
-        uiController?.getBrightnessOverlayView()?.animate()?.alpha(0f)?.withEndAction {
-            uiController?.getBrightnessOverlayView()?.visibility = GONE
-        }?.start()
-
-        uiController?.getSeekOverlayView()?.animate()?.alpha(0f)?.withEndAction {
-            uiController?.getSeekOverlayView()?.visibility = GONE
-        }?.start()
+        uiController?.onGestureProgressChanged(gestureTargetPosition, gestureStartPosition)
     }
 
     // ==================== 音量和亮度控制 ====================
