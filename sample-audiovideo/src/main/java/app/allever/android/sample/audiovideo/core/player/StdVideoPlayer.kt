@@ -33,7 +33,9 @@ open class StdVideoPlayer @JvmOverloads constructor(
     private val TAG = StdVideoPlayer::class.java.simpleName
 
     private val binding = StdVideoPlayerBinding.inflate(LayoutInflater.from(mContext), this, true)
-    protected var uiController: IVideoUiController? = null
+    /** UI 控制器（公开访问）*/
+    var uiController: IVideoUiController? = null
+        private set
 
 
     /** 手势触发阈值（dp）*/
@@ -590,6 +592,12 @@ open class StdVideoPlayer @JvmOverloads constructor(
                 videoPlayer.play()
             }
             updateButtonStates()
+        }
+
+        // ★ 全屏切换按钮
+        uiController?.getFullscreenView()?.setOnClickListener {
+            appendLog("全屏按钮被点击")
+            listener?.onFullscreenClick()
         }
     }
 

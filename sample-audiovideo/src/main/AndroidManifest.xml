@@ -11,5 +11,11 @@
     <application>
 
         <activity android:name="app.allever.android.sample.audiovideo.SampleAudioVideoMainActivity" />
+
+        <activity
+            android:name="app.allever.android.sample.audiovideo.core.player.VideoPlayerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 </manifest>

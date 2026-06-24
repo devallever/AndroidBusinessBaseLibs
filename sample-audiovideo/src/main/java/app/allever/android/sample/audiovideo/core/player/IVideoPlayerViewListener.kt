@@ -82,6 +82,13 @@ interface IVideoPlayerViewListener {
     fun onControlVisibilityChanged(isVisible: Boolean) {}
 
     /**
+     * 全屏按钮被点击
+     *
+     * 用于通知外部组件切换横竖屏方向。
+     */
+    fun onFullscreenClick() {}
+
+    /**
      * 触摸事件开始（用于处理需要暂停其他逻辑的场景）
      */
     fun onTouchDown() {}

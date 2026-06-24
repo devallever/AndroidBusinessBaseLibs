@@ -67,6 +67,12 @@ class CustomStdVideoController(val context: Context, ) : IVideoUiController {
         return binding.ivVPScaleMode
     }
 
+    override fun getFullscreenView(): ImageView? {
+        // 如果自定义布局中有全屏按钮，返回它；否则返回 null
+        // 注意：自定义布局可能没有全屏按钮
+        return null  // 或者返回 binding.ivVPFullscreen（如果存在）
+    }
+
     override fun getVolumeOverlayView(): View? {
         return binding.gestureVolumeContainer
     }
@@ -142,6 +148,12 @@ class CustomStdVideoController(val context: Context, ) : IVideoUiController {
             LoopMode.ALL -> R.drawable.ic_loop_all
         }
         binding.ivVPLoopMode.setImageResource(iconRes)
+    }
+
+    override fun onFullscreenChanged(isFullscreen: Boolean) {
+        // 自定义控制器可以在这里处理全屏状态变化
+        // 如果自定义布局中有全屏按钮，更新其图标
+        // 例如：binding.ivVPFullscreen?.setImageResource(if (isFullscreen) R.drawable.ic_fullscreen_exit else R.drawable.ic_fullscreen_enter)
     }
 
     override fun onShowOrHideControlPanner(show: Boolean) {

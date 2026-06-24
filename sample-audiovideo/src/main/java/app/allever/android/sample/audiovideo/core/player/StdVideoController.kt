@@ -68,6 +68,10 @@ class StdVideoController(val context: Context) : IVideoUiController {
         return binding.ivVPScaleMode
     }
 
+    override fun getFullscreenView(): ImageView? {
+        return binding.ivVPFullscreen
+    }
+
     override fun getVolumeOverlayView(): View? {
         return binding.gestureVolumeContainer
     }
@@ -141,6 +145,15 @@ class StdVideoController(val context: Context) : IVideoUiController {
             LoopMode.ALL -> R.drawable.ic_loop_all
         }
         binding.ivVPLoopMode.setImageResource(iconRes)
+    }
+
+    override fun onFullscreenChanged(isFullscreen: Boolean) {
+        val iconRes = if (isFullscreen) {
+            R.drawable.ic_fullscreen_exit  // 横屏时显示退出全屏图标
+        } else {
+            R.drawable.ic_fullscreen_enter  // 竖屏时显示进入全屏图标
+        }
+        binding.ivVPFullscreen.setImageResource(iconRes)
     }
 
     override fun onShowOrHideControlPanner(show: Boolean) {

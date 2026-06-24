@@ -25,6 +25,9 @@ interface IVideoUiController {
     fun getLoopModeView(): ImageView?
     fun getScaleModeView(): ImageView?
 
+    // 全屏按钮
+    fun getFullscreenView(): ImageView?
+
     //触摸相关
     fun getVolumeOverlayView(): View?
     fun getBrightnessOverlayView(): View?
@@ -44,6 +47,9 @@ interface IVideoUiController {
     fun onSpeedChanged(speed: Float)
     fun onScaleModeChanged(mode: VideoScaleMode)
     fun onLoopModeChanged(mode: LoopMode)
+
+    // 全屏状态变化
+    fun onFullscreenChanged(isFullscreen: Boolean)
 
     fun onShowOrHideControlPanner(show: Boolean)
     fun onHideAllGestureOverlays()

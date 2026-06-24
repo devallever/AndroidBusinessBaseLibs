@@ -8,6 +8,7 @@ import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
 import app.allever.android.sample.audiovideo.core.player.CustomStdVideoPlayerSampleFragment
 import app.allever.android.sample.audiovideo.core.player.StdVideoPlayerSampleFragment
+import app.allever.android.sample.audiovideo.core.player.VideoPlayerActivity
 import app.allever.android.sample.audiovideo.core.player.VideoPlayerSampleFragment
 import app.allever.android.sample.audiovideo.core.player.VideoPlayerViewSampleFragment
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -54,6 +55,10 @@ class AndroidAudioVideoFragment: ListFragment<FragmentListBinding, ListViewModel
         TextClickItem("CustomStdVideoUiController") {
             //Media3Player
             FragmentActivity.start<CustomStdVideoPlayerSampleFragment>(it.title)
+        },
+        TextClickItem("VideoPlayerActivity") {
+            //Media3Player
+            VideoPlayerActivity.start(requireContext(), assetPath = "output.mp4")
         },
     )
 }
