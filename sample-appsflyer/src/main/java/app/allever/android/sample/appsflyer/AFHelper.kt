@@ -12,7 +12,16 @@ import com.appsflyer.attribution.AppsFlyerRequestListener
  * https://dev.appsflyer.com/hc/docs/android-sdk
  */
 object AFHelper {
+    private var isInit = false
+    private var isInitializing = false
     fun init(key: String) {
+        if (isInit) {
+            return
+        }
+        if (isInitializing) {
+            return
+        }
+        isInitializing = true
         val listener = object : AppsFlyerConversionListener {
             override fun onConversionDataSuccess(p0: Map<String?, Any?>?) {
 
@@ -32,10 +41,13 @@ object AFHelper {
         AppsFlyerLib.getInstance().start(App.app, key, object : AppsFlyerRequestListener {
             override fun onSuccess() {
                 log("AppsFlyer init success")
+                isInit = true
+                isInitializing = false
             }
 
             override fun onError(code: Int, message: String) {
                 logE(" AppsFlyer start error $code -> $message")
+                isInitializing = false
             }
 
         })

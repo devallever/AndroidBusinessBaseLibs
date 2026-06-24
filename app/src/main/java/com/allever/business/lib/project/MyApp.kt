@@ -2,16 +2,10 @@ package com.allever.business.lib.project
 
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.helper.ProcessHelper
-import app.allever.android.sample.adjust.AdJustHelper
-import app.allever.android.sample.appsflyer.AFHelper
 import app.flash.tunnel.vpn.TunnelApp
 import com.alibaba.android.arouter.launcher.ARouter
-import com.example.charge.ChargeApp
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.ShadowsSocksConfig
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class MyApp: App() {
 
@@ -28,11 +22,7 @@ class MyApp: App() {
 
         ProcessHelper.executeOnMain(this) {
             ARouter.init(this)
-
-            initAppsflyer()
-            initAdJust()
 //            CsjDjHelper.init()
-            ChargeApp.init()
         }
 
     }
@@ -51,16 +41,4 @@ class MyApp: App() {
         Core.init(this, MainActivity::class)
     }
 
-    private fun initAppsflyer() {
-        GlobalScope.launch(Dispatchers.IO) {
-            AFHelper.init("JJYLVQRfKZm7qgoUCYAr9V")
-
-        }
-    }
-
-    private fun initAdJust() {
-        GlobalScope.launch(Dispatchers.IO) {
-            AdJustHelper.init("appToken")
-        }
-    }
 }

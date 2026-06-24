@@ -18,7 +18,11 @@ import com.adjust.sdk.OnSessionTrackingSucceededListener
  * https://dev.adjust.com/zh/sdk/android
  */
 object AdJustHelper {
+    private var isInit = false
     fun init(appToken: String) {
+        if (isInit) {
+            return
+        }
         val environment = if (App.DEBUG) {
             AdjustConfig.ENVIRONMENT_SANDBOX
         } else {
@@ -39,6 +43,7 @@ object AdJustHelper {
             logE("Adjust event tracking failed: ${it.message}")
         }
         Adjust.initSdk(config)
+        isInit = true
     }
 
     fun trackEvent(event: String) {

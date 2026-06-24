@@ -44,15 +44,17 @@ object ChargeApp {
         }
     }
 
+    private var isInit = false
+
     fun init() {
+        if (isInit) {
+            return
+        }
         instance = App.app
         SpUtil.Companion.init(App.context)
         InitManager.init(App.app)
         App.app.registerActivityLifecycleCallbacks(AppLifecycleCallback())
         NetworkHelper.setupNetworkCallback()
+        isInit = true
     }
-
-//    override fun attachBaseContext(base: Context?) {
-//        super.attachBaseContext(base?.let { LocaleManager.wrap(it) })
-//    }
 }

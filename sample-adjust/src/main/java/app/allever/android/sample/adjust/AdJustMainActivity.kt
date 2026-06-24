@@ -1,9 +1,13 @@
 package app.allever.android.sample.adjust
 
+import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import app.allever.android.lib.common.BaseActivity
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.adjust.databinding.ActivityAdjustMainBinding
 import com.alibaba.android.arouter.facade.annotation.Route
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Route(path = "/adjust/main")
 class AdJustMainActivity : BaseActivity<ActivityAdjustMainBinding, BaseViewModel>() {
@@ -15,5 +19,12 @@ class AdJustMainActivity : BaseActivity<ActivityAdjustMainBinding, BaseViewModel
 //        AFHelper.trackEvent(AFInAppEventType.LOGIN) {
 //            MutableMap.put(AFInAppEventParameterName.CUSTOMER_USER_ID, "123")
 //        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            AdJustHelper.init("appToken")
+        }
+        super.onCreate(savedInstanceState)
     }
 }
