@@ -8,6 +8,7 @@ import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.picker.MediaPickerConfig
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
+import app.allever.android.sample.audiovideo.VideoSource
 import app.allever.android.sample.audiovideo.core.engine.EngineRegistry
 import app.allever.android.sample.audiovideo.core.engine.IjkPlayerEngine
 import app.allever.android.sample.audiovideo.core.engine.Media3PlayerEngine
@@ -135,15 +136,16 @@ class VideoPlayerSampleFragment :
                     appendLog("继续播放")
                 }
                 else -> {
-                    val url = mBinding.etUrl.text.toString().trim()
-                    if (url.isNotEmpty()) {
+                    // 播放网络视频
+                    mBinding.btnPlayNet.setOnClickListener {
+                        val url = mBinding.etUrl.text.toString().trim()
+                        val sourceUrl = url.ifEmpty {
+                            VideoSource.testUrlList.random()
+                        }
                         autoPlayOnPrepared = true
-                        player.setSource(url)
-                    } else {
-                        autoPlayOnPrepared = true
-                        player.setSource(defaultTestUrl)
+                        player.setSource(sourceUrl)
+                        appendLog("设置数据源: ${mBinding.etUrl.text.ifEmpty { sourceUrl }}")
                     }
-                    appendLog("设置数据源: ${if (mBinding.etUrl.text.isNotEmpty()) mBinding.etUrl.text else defaultTestUrl}")
                 }
             }
         }
@@ -164,6 +166,11 @@ class VideoPlayerSampleFragment :
         // 选择本地视频
         mBinding.btnPickLocal.setOnClickListener {
             MediaPickerCore.launchVideo(videoPickerLauncher)
+        }
+
+        // 播放网络视频
+        mBinding.btnPlayNet.setOnClickListener {
+            mBinding.btnPlay.performClick()
         }
 
         // 播放 Assets 文件

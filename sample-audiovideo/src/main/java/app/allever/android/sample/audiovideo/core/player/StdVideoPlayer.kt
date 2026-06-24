@@ -252,7 +252,9 @@ open class StdVideoPlayer @JvmOverloads constructor(
      * 设置网络资源
      */
     fun setSource(url: String) {
-        setSource(Uri.parse(url))
+        uiController?.onTitleChanged(extractTitle(Uri.parse(url)))
+        videoPlayer.setSource(url)
+        appendLog("setSource: $url")
     }
 
     /**

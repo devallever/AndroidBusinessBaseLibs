@@ -51,7 +51,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="VideoPlayerView 示例（引擎与渲染分离架构）"
+                android:text="StdVideoPlayer 示例（引擎/渲染/UI分离架构）"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="#2196F3"
@@ -252,14 +252,29 @@
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
 
-            <EditText
-                android:id="@+id/etUrl"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="https://example.com/video.mp4"
-                android:inputType="textUri"
-                android:textSize="14sp"
-                android:layout_marginBottom="16dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <EditText
+                    android:id="@+id/etUrl"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:hint="https://example.com/video.mp4"
+                    android:inputType="textUri"
+                    android:textSize="14sp"/>
+
+                <Button
+                    android:id="@+id/btnPlayNet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="播放网络视频" />
+            </LinearLayout>
+
 
             <!-- Assets文件播放 -->
             <TextView

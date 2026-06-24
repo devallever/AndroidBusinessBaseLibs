@@ -17,7 +17,6 @@ dependencies {
     implementation(project(":lib-media-core"))
     implementation(project(":lib-media-picker"))
 
-
     // Media3 (官方媒体播放框架)
     implementation(libs.media3.exoplayer)
     implementation(libs.media3.ui)
@@ -25,4 +24,7 @@ dependencies {
     // 可选，使用ijkplayer进行解码
     implementation(libs.dkplayer.ijk)
 
+    // 网络视频缓存库（本地HTTP代理服务器）
+//    implementation("com.danikula:videocache:2.7.1")
+    implementation(libs.dkplayer.videocache)//暂时使用这个
 }

@@ -252,9 +252,13 @@ class VideoPlayerView @JvmOverloads constructor(
 
     /***
      * 设置网络资源
+     *
+     * @param url 视频网络地址（缓存功能已在 VideoPlayer 内部自动处理）
      */
     fun setSource(url: String) {
-        setSource(Uri.parse(url))
+        tvTitle.text = extractTitle(Uri.parse(url))
+        videoPlayer.setSource(url)
+        appendLog("setSource: $url")
     }
 
     /**

@@ -8,6 +8,7 @@ import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
+import app.allever.android.sample.audiovideo.VideoSource
 import app.allever.android.sample.audiovideo.core.engine.IjkPlayerEngine
 import app.allever.android.sample.audiovideo.core.engine.Media3PlayerEngine
 import app.allever.android.sample.audiovideo.core.engine.MediaPlayerEngine
@@ -92,6 +93,17 @@ class CustomStdVideoPlayerSampleFragment :
         // 选择本地视频
         mBinding.btnPickLocal.setOnClickListener {
             MediaPickerCore.launchVideo(videoPickerLauncher)
+        }
+
+        // 播放网络视频
+        mBinding.btnPlayNet.setOnClickListener {
+            val url = mBinding.etUrl.text.toString().trim()
+            val sourceUrl = url.ifEmpty {
+                VideoSource.testUrlList.random()
+            }
+            autoPlayOnPrepared = true
+            mBinding.stdVideoPlayer.setSource(sourceUrl)
+            appendLog("设置数据源: ${mBinding.etUrl.text.ifEmpty { sourceUrl }}")
         }
 
         // 播放 Assets 文件

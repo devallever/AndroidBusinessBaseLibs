@@ -18,6 +18,7 @@ import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
 import app.allever.android.sample.audiovideo.lib.LoopMode
 import app.allever.android.sample.audiovideo.lib.PendingPrepare
 import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
+import app.allever.android.sample.audiovideo.core.player.cache.VideoCacheManager
 import app.allever.android.sample.audiovideo.lib.PlayerState
 import app.allever.android.sample.audiovideo.lib.VideoScaleMode
 import kotlinx.coroutines.CoroutineScope
@@ -349,11 +350,50 @@ class VideoPlayer(
     /**
      * 设置数据源并开始准备（不自动播放）
      *
-     * 支持 http/https/file/content/android_asset 协议。
+     * 支持多种协议：
+     * - http/https：网络视频，自动启用视频缓存功能
+     * - file：本地文件
+     * - content：Content URI
+     * - android_asset：Assets 资源
+     *
+     * 缓存机制：
+     * - 通过 VideoCacheManager 将网络URL转换为本地代理URL
+     * - 已缓存的视频直接从本地读取（快速播放）
+     * - 未缓存的视频边下载边播放，同时缓存到本地
+     * - 可通过 VideoCacheManager.isCacheEnabled 禁用缓存
+     *
+     * @param url 视频URL或路径
      */
     fun setSource(url: String) {
-        val uri = Uri.parse(url)
+        log(TAG, "setSource (原始): $url")
 
+        // ★ 处理网络视频的缓存逻辑
+        val finalUrl = if (isNetworkUrl(url)) {
+            // 通过缓存管理器获取代理URL（自动处理缓存）
+            val proxyUrl = VideoCacheManager.getProxyUrl(url)
+
+            // 输出缓存状态日志
+            if (VideoCacheManager.isCacheEnabled) {
+                val isCached = VideoCacheManager.isCached(url)
+                log(TAG, "缓存状态: ${if (isCached) "已完全缓存" else "未缓存/部分缓存"}")
+                if (!isCached) {
+                    log(TAG, "将进行边下边播并缓存...")
+                }
+            } else {
+                log(TAG, "缓存功能已禁用")
+            }
+
+            proxyUrl
+        } else {
+            // 非网络URL（本地文件、Content URI等），不进行缓存
+            url
+        }
+
+        log(TAG, "setSource (实际): $finalUrl")
+
+        val uri = Uri.parse(finalUrl)
+
+        // 检查是否为 Assets 资源（使用原始 URL 判断）
         if (uri.scheme == "file" && uri.path?.contains("/android_asset/") == true) {
             val assetPath = uri.path?.substringAfter("/android_asset/") ?: ""
             setAssetSource(assetPath)
@@ -550,6 +590,18 @@ class VideoPlayer(
             log(TAG, "seekTo error: ${e.message}")
             isSeeking = false
         }
+    }
+
+    // ==================== 10. 工具方法 ====================
+
+    /**
+     * 检查URL是否为网络地址
+     *
+     * @param url 待检查的URL
+     * @return true 如果是 http 或 https 协议
+     */
+    private fun isNetworkUrl(url: String): Boolean {
+        return url.startsWith("http://") || url.startsWith("https://")
     }
 
     /**
