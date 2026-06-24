@@ -17,7 +17,7 @@ class CustomStdVideoController(val context: Context, ) : IVideoUiController {
         CustomStdUiControllerBinding.inflate(LayoutInflater.from(context), null, false)
     override fun initView() {
         binding.ivPlayPauseCenter.setOnClickListener {
-
+            binding.ivPlayPause.performClick()
         }
 
     }

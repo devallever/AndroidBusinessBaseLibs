@@ -7,7 +7,6 @@ import android.provider.Settings
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View
 import android.widget.SeekBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -100,6 +99,22 @@ class VideoPlayerView @JvmOverloads constructor(
     private var gestureTargetPosition = 0L
     private var initialVolume = getVideoVolume()
     private var initialBrightness = getCurrentBrightness()
+
+    // 双击相关变量
+    /** 上次点击时间（毫秒）*/
+    private var lastClickTime: Long = 0
+
+    /** 双击时间阈值（毫秒）- 300ms 内的两次点击视为双击 */
+    private val DOUBLE_CLICK_TIME_THRESHOLD_MS = 300L
+
+    /** 双击位置阈值（像素）- 两次点击位置差值在此范围内视为双击 */
+    private val DOUBLE_CLICK_DISTANCE_THRESHOLD_PX = 50f
+
+    /** 上次点击的 X 坐标 */
+    private var lastClickX: Float = 0f
+
+    /** 上次点击的 Y 坐标 */
+    private var lastClickY: Float = 0f
 
     /** 手势类型枚举 */
     enum class GestureType {
@@ -702,8 +717,12 @@ class VideoPlayerView @JvmOverloads constructor(
      */
     private fun toggleControlVisibility() {
         val isVisible = binding.controlPanel.isVisible
-        binding.controlPanel.isVisible = !isVisible
-        listener?.onControlVisibilityChanged(!isVisible)
+        showOrHideControlPanel(!isVisible)
+    }
+
+    private fun showOrHideControlPanel(show: Boolean) {
+        binding.controlPanel.isVisible = show
+        listener?.onControlVisibilityChanged(show)
     }
 
     // ==================== 手势处理系统 ====================
@@ -791,7 +810,15 @@ class VideoPlayerView @JvmOverloads constructor(
     private fun onTouchUp() {
         if (!isGestureProcessing) {
             // 没有执行手势操作，说明这是一个点击事件
-            // 手动切换控制栏可见性（替代 OnClickListener）
+            // 检测是否为双击
+            if (checkDoubleClick()) {
+                // 符合双击条件
+                handleDoubleClick()
+                showOrHideControlPanel(false)
+                return
+            }
+
+            // 单击：切换控制栏可见性（替代 OnClickListener）
             toggleControlVisibility()
             return
         }
@@ -801,6 +828,63 @@ class VideoPlayerView @JvmOverloads constructor(
 
         isGestureProcessing = false
         gestureType = null
+    }
+
+    /**
+     * 检测并处理双击事件
+     *
+     * 双击判断条件：
+     * 1. 两次点击时间间隔 < DOUBLE_CLICK_TIME_THRESHOLD_MS (300ms)
+     * 2. 两次点击位置距离 < DOUBLE_CLICK_DISTANCE_THRESHOLD_PX (50px)
+     *
+     * @return true 表示是双击事件且已处理；false 表示不是双击
+     */
+    private fun checkDoubleClick(): Boolean {
+        val currentTime = System.currentTimeMillis()
+        val clickX = gestureStartX  // 使用 onTouchDown 中记录的起始位置作为点击位置
+        val clickY = gestureStartY
+
+        // 检查是否在双击时间阈值内
+        val timeDiff = currentTime - lastClickTime
+        if (timeDiff < DOUBLE_CLICK_TIME_THRESHOLD_MS && lastClickTime > 0) {
+            // 检查是否在双击位置阈值内
+            val distance = kotlin.math.sqrt(
+                (clickX - lastClickX) * (clickX - lastClickX) +
+                        (clickY - lastClickY) * (clickY - lastClickY)
+            )
+
+            if (distance < DOUBLE_CLICK_DISTANCE_THRESHOLD_PX) {
+                // 重置上次点击时间，避免三击被误判为两次双击
+                lastClickTime = 0
+                return true
+            }
+        }
+
+        // 更新上次点击信息
+        lastClickTime = currentTime
+        lastClickX = clickX
+        lastClickY = clickY
+
+        return false
+    }
+
+    /**
+     * 处理双击事件：切换播放/暂停状态
+     */
+    private fun handleDoubleClick() {
+        appendLog("双击: 切换播放/暂停")
+
+        if (videoPlayer.isPlaying) {
+            videoPlayer.pause()
+            appendLog("双击: 暂停播放")
+        } else {
+            videoPlayer.play()
+            appendLog("双击: 开始播放")
+        }
+
+        // 更新按钮状态
+        updateButtonStates()
+        listener?.onPlayPauseChanged(videoPlayer.isPlaying)
     }
 
     /**
