@@ -3,6 +3,7 @@ package app.allever.android.sample.audiovideo.core.player
 import android.app.Activity
 import android.content.Context
 import android.net.Uri
+import android.os.Looper
 import android.provider.Settings
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -115,6 +116,19 @@ open class StdVideoPlayer @JvmOverloads constructor(
 
     /** 长按是否已触发（避免重复触发）*/
     private var isLongPressTriggered: Boolean = false
+
+    // 控制层自动隐藏相关变量
+    /** 控制层自动隐藏延迟时间（毫秒）- 5秒 */
+    private val AUTO_HIDE_DELAY_MS = 5000L
+
+    /** 自动隐藏的 Handler */
+    private val autoHideHandler = android.os.Handler(Looper.getMainLooper())
+
+    /** 自动隐藏任务 */
+    private val autoHideRunnable = Runnable {
+        appendLog("控制层: 5秒无操作，自动隐藏")
+        showOrHideControlPanel(false)
+    }
 
     /** 手势类型枚举 */
     enum class GestureType {
@@ -749,6 +763,30 @@ open class StdVideoPlayer @JvmOverloads constructor(
     private fun showOrHideControlPanel(show: Boolean) {
         uiController?.getControlPannerView()?.isVisible = show
         listener?.onControlVisibilityChanged(show)
+
+        // ★ 控制层显示时启动自动隐藏计时器，5秒后无操作则自动隐藏
+        if (show) {
+            startAutoHideTimer()
+        } else {
+            stopAutoHideTimer()
+        }
+    }
+
+    /**
+     * 启动控制层自动隐藏计时器（5秒后无操作则隐藏）
+     */
+    private fun startAutoHideTimer() {
+        // 先停止之前的计时器（避免重复）
+        stopAutoHideTimer()
+        // 启动新的计时器
+        autoHideHandler.postDelayed(autoHideRunnable, AUTO_HIDE_DELAY_MS)
+    }
+
+    /**
+     * 停止控制层自动隐藏计时器
+     */
+    private fun stopAutoHideTimer() {
+        autoHideHandler.removeCallbacks(autoHideRunnable)
     }
 
     // ==================== 手势处理系统 ====================
