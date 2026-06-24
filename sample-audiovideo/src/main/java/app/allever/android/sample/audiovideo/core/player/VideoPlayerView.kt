@@ -116,6 +116,22 @@ class VideoPlayerView @JvmOverloads constructor(
     /** 上次点击的 Y 坐标 */
     private var lastClickY: Float = 0f
 
+    // 长按变速相关变量
+    /** 是否正在长按加速 */
+    private var isLongPressSpeeding: Boolean = false
+
+    /** 长按前的原始速度 */
+    private var speedBeforeLongPress: Float = 1f
+
+    /** 长按开始时间（毫秒）*/
+    private var longPressStartTime: Long = 0
+
+    /** 长按触发阈值（毫秒）- 按住 500ms 后触发长按加速 */
+    private val LONG_PRESS_TIME_THRESHOLD_MS = 500L
+
+    /** 长按是否已触发（避免重复触发）*/
+    private var isLongPressTriggered: Boolean = false
+
     /** 手势类型枚举 */
     enum class GestureType {
         VOLUME,      // 音量调节
@@ -752,6 +768,10 @@ class VideoPlayerView @JvmOverloads constructor(
         gestureStartPosition = videoPlayer.currentPosition
         gestureTargetPosition = gestureStartPosition
 
+        // 初始化长按检测状态
+        longPressStartTime = System.currentTimeMillis()
+        isLongPressTriggered = false
+
         // 注意：不要在这里强制显示控制栏
         // 否则会导致：按下时显示 → 抬起时 toggleControlVisibility() 又切换隐藏 → 闪烁
         // 控制栏的显示/隐藏只由点击事件（在 onTouchUp 中处理）决定
@@ -761,6 +781,11 @@ class VideoPlayerView @JvmOverloads constructor(
      * 触摸移动事件
      */
     private fun onTouchMove(event: MotionEvent) {
+        // ★ 如果正在长按加速，禁止所有手势操作（音量/亮度/进度）
+        if (isLongPressSpeeding) {
+            return
+        }
+
         val deltaY = event.y - gestureLastY
         val deltaX = event.x - gestureLastX
         val totalDeltaY = abs(event.y - gestureStartY)
@@ -768,8 +793,10 @@ class VideoPlayerView @JvmOverloads constructor(
 
         // 如果还未确定手势类型，根据滑动方向和位置判断
         if (!isGestureProcessing) {
-            // 检查是否超过阈值
+            // 检查是否超过手势阈值
             if (totalDeltaY < gestureThresholdPx && totalDeltaX < gestureThresholdPx) {
+                // 未超过手势阈值，检查是否触发长按加速
+                checkLongPressSpeed()
                 return
             }
 
@@ -808,6 +835,15 @@ class VideoPlayerView @JvmOverloads constructor(
      * 触摸抬起事件
      */
     private fun onTouchUp() {
+        // 检查是否正在长按加速，如果是则恢复原速度
+        if (isLongPressSpeeding) {
+            endLongPressSpeed()
+            // 长按结束后不触发其他事件
+            isGestureProcessing = false
+            gestureType = null
+            return
+        }
+
         if (!isGestureProcessing) {
             // 没有执行手势操作，说明这是一个点击事件
             // 检测是否为双击
@@ -885,6 +921,82 @@ class VideoPlayerView @JvmOverloads constructor(
         // 更新按钮状态
         updateButtonStates()
         listener?.onPlayPauseChanged(videoPlayer.isPlaying)
+    }
+
+    // ==================== 长按变速功能 ====================
+
+    /**
+     * 检测是否触发长按加速
+     *
+     * 长按加速条件：
+     * 1. 按住时间 > LONG_PRESS_TIME_THRESHOLD_MS (500ms)
+     * 2. 未触发过手势操作（手指未移动超过阈值）
+     * 3. 未触发过长按加速（避免重复触发）
+     */
+    private fun checkLongPressSpeed() {
+        // 如果已经触发过长按或正在长按加速中，不再检测
+        if (isLongPressTriggered || isLongPressSpeeding) {
+            return
+        }
+
+        val currentTime = System.currentTimeMillis()
+        val pressDuration = currentTime - longPressStartTime
+
+        // 检查是否达到长按阈值
+        if (pressDuration >= LONG_PRESS_TIME_THRESHOLD_MS) {
+            startLongPressSpeed()
+        }
+    }
+
+    /**
+     * 开始长按加速：在当前速度基础上 +1 倍速
+     *
+     * 示例：
+     * - 原速度 0.5x → 加速后 1.5x
+     * - 原速度 1.0x → 加速后 2.0x
+     * - 原速度 1.5x → 加速后 2.5x
+     * - 原速度 3.0x → 加速后 4.0x（如果支持的话）
+     */
+    private fun startLongPressSpeed() {
+        isLongPressTriggered = true
+        isLongPressSpeeding = true
+
+        // 记录当前速度作为原始速度
+        speedBeforeLongPress = videoPlayer.speed
+
+        // 计算加速后的速度（+1 倍速）
+        val acceleratedSpeed = speedBeforeLongPress + 1f
+
+        // 应用加速后的速度
+        videoPlayer.speed = acceleratedSpeed
+
+        appendLog("长按加速: ${speedBeforeLongPress}x → ${acceleratedSpeed}x")
+
+        // 更新 UI 显示当前速度（可选）
+        listener?.onSpeedChanged(acceleratedSpeed)
+    }
+
+    /**
+     * 结束长按加速：恢复到原来的速度
+     *
+     * 当用户松开手指时调用，将播放器速度恢复到长按前的值。
+     */
+    private fun endLongPressSpeed() {
+        if (!isLongPressSpeeding) {
+            return
+        }
+
+        // 恢复到原始速度
+        videoPlayer.speed = speedBeforeLongPress
+
+        appendLog("长按结束: 恢复原速度 ${speedBeforeLongPress}x")
+
+        // 更新 UI 显示原速度
+        listener?.onSpeedChanged(speedBeforeLongPress)
+
+        // 重置状态
+        isLongPressSpeeding = false
+        isLongPressTriggered = false
     }
 
     /**
