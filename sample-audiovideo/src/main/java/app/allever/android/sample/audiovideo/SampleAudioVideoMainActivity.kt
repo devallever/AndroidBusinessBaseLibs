@@ -7,9 +7,12 @@ import app.allever.android.lib.common.adapter.TextClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.ActivityListBinding
 import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.player.core.engine.EngineRegistry
+import app.allever.android.lib.player.core.engine.ijk.IjkPlayerEngine
+import app.allever.android.lib.player.core.engine.media3.ExoPlayerViewRender
+import app.allever.android.lib.player.core.engine.media3.Media3PlayerEngine
+import app.allever.android.lib.player.core.render.RenderRegistry
 import app.allever.android.sample.audiovideo.android.AndroidAudioVideoFragment
-import app.allever.android.sample.audiovideo.core.engine.EngineRegistry
-import app.allever.android.sample.audiovideo.core.render.RenderRegistry
 import app.allever.android.sample.audiovideo.knowledge.AudioVideoKnowledgeFragment
 import app.allever.android.sample.audiovideo.lib.AudioVideoLibFragment
 import app.allever.android.sample.audiovideo.sdk.SDKAudioVideoFragment
@@ -41,6 +44,9 @@ class SampleAudioVideoMainActivity: ListActivity<ActivityListBinding, ListViewMo
         super.init()
         // 初始化渲染器注册表
         RenderRegistry.registerBuiltInRenders()
+        RenderRegistry.register(ExoPlayerViewRender.NAME, { ExoPlayerViewRender() })
         EngineRegistry.registerBuiltInEngines()
+        EngineRegistry.register(Media3PlayerEngine.NAME, { Media3PlayerEngine() })
+        EngineRegistry.register(IjkPlayerEngine.NAME, { IjkPlayerEngine() })
     }
 }

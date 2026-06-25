@@ -15,11 +15,11 @@ import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import app.allever.android.sample.audiovideo.lib.VideoScaleMode
-import app.allever.android.sample.audiovideo.lib.IVideoPlayerListener
-import app.allever.android.sample.audiovideo.lib.LoopMode
-import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
-import app.allever.android.sample.audiovideo.lib.PlayerState
+import app.allever.android.lib.player.core.IVideoPlayerListener
+import app.allever.android.lib.player.core.LoopMode
+import app.allever.android.lib.player.core.PlayerErrorCode
+import app.allever.android.lib.player.core.PlayerState
+import app.allever.android.lib.player.core.VideoScaleMode
 import app.allever.android.sample.audiovideo.databinding.FragmentSdkIjkVideoPlayerSampleBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

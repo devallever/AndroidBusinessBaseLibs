@@ -16,7 +16,7 @@
         android:layout_marginBottom="4dp">
 
         <!-- 渲染器会动态将 SurfaceView/TextureView/VideoView 添加到此处 -->
-        <app.allever.android.sample.audiovideo.core.player.VideoPlayerView
+        <app.allever.android.lib.player.core.player.VideoPlayerView
             android:id="@+id/videoPlayerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

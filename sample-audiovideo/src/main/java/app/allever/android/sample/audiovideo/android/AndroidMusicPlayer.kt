@@ -6,10 +6,10 @@ import android.media.PlaybackParams
 import android.net.Uri
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
-import app.allever.android.sample.audiovideo.lib.IPlayerListener
-import app.allever.android.sample.audiovideo.lib.LoopMode
-import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
-import app.allever.android.sample.audiovideo.lib.PlayerState
+import app.allever.android.lib.player.core.IPlayerListener
+import app.allever.android.lib.player.core.LoopMode
+import app.allever.android.lib.player.core.PlayerErrorCode
+import app.allever.android.lib.player.core.PlayerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

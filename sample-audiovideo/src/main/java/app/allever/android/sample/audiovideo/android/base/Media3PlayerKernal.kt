@@ -12,8 +12,8 @@ import androidx.media3.exoplayer.ExoPlayer
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toJson
-import app.allever.android.sample.audiovideo.lib.LoopMode
-import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
+import app.allever.android.lib.player.core.LoopMode
+import app.allever.android.lib.player.core.PlayerErrorCode
 
 class Media3PlayerKernal: BasePlayerKernal<ExoPlayer>() {
 

@@ -2,7 +2,7 @@ package app.allever.android.sample.audiovideo.android.base
 
 import android.net.Uri
 import android.view.Surface
-import app.allever.android.sample.audiovideo.lib.LoopMode
+import app.allever.android.lib.player.core.LoopMode
 
 interface IPlayerKernal<T> {
 

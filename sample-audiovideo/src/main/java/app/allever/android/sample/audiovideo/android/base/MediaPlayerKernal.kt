@@ -5,8 +5,8 @@ import android.net.Uri
 import android.view.Surface
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
-import app.allever.android.sample.audiovideo.lib.LoopMode
-import app.allever.android.sample.audiovideo.lib.PlayerErrorCode
+import app.allever.android.lib.player.core.LoopMode
+import app.allever.android.lib.player.core.PlayerErrorCode
 
 class MediaPlayerKernal(): BasePlayerKernal<MediaPlayer>() {
     private val mOnPreparedListener = MediaPlayer.OnPreparedListener {

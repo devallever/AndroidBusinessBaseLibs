@@ -3,10 +3,10 @@ package app.allever.android.sample.audiovideo.android
 import android.view.SurfaceHolder
 import android.widget.VideoView
 import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.player.core.SurfaceType
+import app.allever.android.lib.player.core.VideoHelper
 import app.allever.android.sample.audiovideo.android.base.IPlayerKernal
 import app.allever.android.sample.audiovideo.android.base.MediaPlayerKernal
-import app.allever.android.sample.audiovideo.lib.SurfaceType
-import app.allever.android.sample.audiovideo.lib.VideoHelper
 
 /**
  * VideoView 视频播放器实现（继承自 [BaseVideoPlayer]）

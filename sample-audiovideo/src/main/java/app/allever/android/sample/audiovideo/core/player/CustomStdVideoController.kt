@@ -13,9 +13,15 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import app.allever.android.sample.audiovideo.R
 import app.allever.android.sample.audiovideo.databinding.CustomStdUiControllerBinding
-import app.allever.android.sample.audiovideo.lib.LoopMode
-import app.allever.android.sample.audiovideo.lib.PlayerState
-import app.allever.android.sample.audiovideo.lib.VideoScaleMode
+import app.allever.android.lib.player.core.IVideoPlayerListener
+import app.allever.android.lib.player.core.LoopMode
+import app.allever.android.lib.player.core.PendingPrepare
+import app.allever.android.lib.player.core.PlayerErrorCode
+import app.allever.android.lib.player.core.PlayerState
+import app.allever.android.lib.player.core.SurfaceType
+import app.allever.android.lib.player.core.VideoHelper
+import app.allever.android.lib.player.core.VideoScaleMode
+import app.allever.android.lib.player.core.controller.IVideoUiController
 import java.util.Locale
 
 class CustomStdVideoController(val context: Context, ) : IVideoUiController {
@@ -205,6 +211,7 @@ class CustomStdVideoController(val context: Context, ) : IVideoUiController {
 
     override fun onPlayStateChanged(isPlaying: Boolean) {
         binding.ivPlayPauseCenter.setImageResource(if (isPlaying) R.drawable.ic_sample_video_player_view_pause else R.drawable.ic_sample_video_player_view_play)
+        binding.ivPlayPause.setImageResource(if (isPlaying) R.drawable.ic_sample_video_player_view_pause else R.drawable.ic_sample_video_player_view_play)
     }
 
     private fun formatTime(ms: Long): String {

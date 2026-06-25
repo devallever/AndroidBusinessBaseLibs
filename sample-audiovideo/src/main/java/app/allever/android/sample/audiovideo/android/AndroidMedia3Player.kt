@@ -3,10 +3,10 @@ package app.allever.android.sample.audiovideo.android
 import androidx.media3.common.Player
 import androidx.media3.ui.PlayerView
 import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.player.core.SurfaceType
+import app.allever.android.lib.player.core.engine.media3.ExoPlayerHelper
 import app.allever.android.sample.audiovideo.android.base.IPlayerKernal
 import app.allever.android.sample.audiovideo.android.base.Media3PlayerKernal
-import app.allever.android.sample.audiovideo.lib.ExoPlayerHelper
-import app.allever.android.sample.audiovideo.lib.SurfaceType
 
 /**
  * Media3 (ExoPlayer) 视频播放器实现（继承自 [BaseVideoPlayer]）
