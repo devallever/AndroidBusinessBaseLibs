@@ -39,6 +39,7 @@ class BasicImageLoaderFragment: BaseFragment<FragmentBasicLoaderBinding, BaseVie
     override fun inflate(): FragmentBasicLoaderBinding = FragmentBasicLoaderBinding.inflate(layoutInflater)
 
     override fun init() {
+        ImageLoaderCore.init(requireContext(), DefaultLoader, ImageLoaderCore.Builder.create())
         mBinding.btnGlide.setOnClickListener {
             ImageLoaderCore.init(requireContext(), GlideLoader, ImageLoaderCore.Builder.create())
             loadAllImage()
