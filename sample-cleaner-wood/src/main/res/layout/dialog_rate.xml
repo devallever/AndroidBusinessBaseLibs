@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivBg"
+        android:layout_width="272dp"
+        android:layout_height="320dp"
+        android:layout_marginTop="70dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_check_permission_dialog_bg"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivClose"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="-20dp"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_check_permission_dialog_close"
+        android:visibility="visible"
+        app:layout_constraintLeft_toRightOf="@+id/ivBg"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivIcon"
+        android:layout_width="148dp"
+        android:layout_height="148dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_star"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/btnGo"
+        android:layout_width="188dp"
+        android:layout_height="76dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/ic_check_permission_dialog_ok"
+        android:gravity="center"
+        android:paddingBottom="5dp"
+        android:scaleType="fitXY"
+        android:text="@string/ok"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBg"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:numStars="5"
+        android:progressDrawable="@drawable/rate_us_drawable"
+        android:rating="5"
+        android:stepSize="1"
+        app:layout_constraintBottom_toTopOf="@+id/tvMessage"
+        app:layout_constraintLeft_toLeftOf="@+id/ivBg"
+        app:layout_constraintRight_toRightOf="@+id/ivBg"
+        app:layout_constraintTop_toBottomOf="@+id/ivIcon"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="5dp"
+        android:gravity="center"
+        android:text="@string/rate_us_message"
+        android:textColor="@color/color_04847C"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnGo"
+        app:layout_constraintLeft_toLeftOf="@+id/ivBg"
+        app:layout_constraintRight_toRightOf="@+id/ivBg"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

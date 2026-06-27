@@ -1,0 +1,60 @@
+<resources>
+    <string name="wood_app_name">Wood Files</string>
+    <string name="admob_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="meta_id"> </string>
+    <string name="meta_token">  </string>
+    <string name="ad">Ad</string>
+    <string name="loading">loading...</string>
+    <string name="smart_clean">Smart clean</string>
+    <string name="storage">STORAGE:</string>
+    <string name="ram">RAM:</string>
+    <string name="junk_cleaned">Junk cleaned</string>
+    <string name="fun_junk_clean">Junk clean</string>
+    <string name="fun_vpn">VPN</string>
+    <string name="fun_cpu_cooler">CPU cooler</string>
+    <string name="fun_battery">Battery saver</string>
+    <string name="fun_app_manage">App manage</string>
+    <string name="fun_phone_booster">Phone booster</string>
+    <string name="go">Go</string>
+    <string name="file_access_permission">File access permission</string>
+    <string name="file_access_permission_desc">Allow Max cleaner to access application data and documents</string>
+    <string name="scanning">SCANNING...</string>
+    <string name="uninstall">UNINSTALL</string>
+    <string name="please_select_app">Please select an app.</string>
+    <string name="result_optimize">OPTIMIZED!</string>
+    <string name="result_desc">Mobile phone optimization succeeded</string>
+    <string name="result_btn_junk">Clean</string>
+    <string name="result_btn_vpn">Scan</string>
+    <string name="result_btn_cpu">Cooling</string>
+    <string name="result_btn_battery">Optimize</string>
+    <string name="result_btn_app_manage">Uninstall</string>
+    <string name="result_btn_phone_booster">Booster</string>
+    <string name="fun_junk_clean_desc">Refresh your storage.</string>
+    <string name="fun_vpn_desc">Protect your network.</string>
+    <string name="fun_cpu_cooler_desc">Cool the CPU.</string>
+    <string name="fun_battery_desc">Save your battery.</string>
+    <string name="fun_app_manager_desc">Free up storage space.</string>
+    <string name="fun_phone_booster_desc">Fast your phone.</string>
+    <string name="result">Result</string>
+    <string name="optimize_battery">UNDER OPTIMIZATION...</string>
+    <string name="optimize_cpu">COOLING...</string>
+    <string name="optimize_phone_booster">ACCELERATING...</string>
+    <string name="junk_scan_desc">Residual Garbage Found</string>
+    <string name="junk_type_system_cache">System Cache</string>
+    <string name="junk_type_residual">Residual Junks</string>
+    <string name="junk_type_ad">Ad Junks</string>
+    <string name="junk_type_apk">Obsolete Apk</string>
+    <string name="junk_type_temp_file">Temp Files</string>
+    <string name="junk_type_thumb_pic">Thumb Photo</string>
+
+    <string name="clean">CLEAN</string>
+    <string name="optimize_junk">CLEANING...</string>
+    <string name="please_select_one_item">Please select junk</string>
+    <string name="privacy">Privacy policy</string>
+    <string name="setting">Setting</string>
+    <string name="rate_us_message">Please give us five-star praise,thank you!</string>
+    <string name="ok">OK</string>
+    <string name="rate_us">Rate us</string>
+
+
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="adBackground">#B3909090</color>
+    <color name="adAttr">#FFFF9000</color>
+    <color name="page_bg_color">@color/color_090A0E</color>
+
+    <color name="color_090A0E">#090A0E</color>
+    <color name="color_CCFFFFFF">#CCFFFFFF</color>
+    <color name="color_6AE846">#6AE846</color>
+    <color name="alpha">#00000000</color>
+    <color name="color_12D361">#12D361</color>
+    <color name="color_89F800">#89F800</color>
+    <color name="color_6BD122">#6BD122</color>
+    <color name="color_3C7612">#3C7612</color>
+
+    <!-- -->
+    <color name="circleProgressColorPrimary">#008577</color>
+    <color name="circleProgressColorPrimaryDark">#00574B</color>
+    <color name="circleProgressColorAccent">#D81B60</color>
+    <color name="circleProgressBlack">#000000</color>
+    <color name="circleProgressTransparent">#00000000</color>
+    <color name="circleProgressGray">#797474</color>
+    <color name="circleProgressGreen">#00ff00</color>
+    <color name="circleProgressBlue">#0000ff</color>
+    <color name="circleProgressRed">#ff0000</color>
+    <color name="circleProgressCircleBg">#07000000</color>
+    <color name="color_C5FDB5">#C5FDB5</color>
+    <color name="color_8A000000">#8A000000</color>
+    <color name="color_DE000000">#DE000000</color>
+    <color name="color_C0FF40">#FFC0FF40</color>
+    <color name="color_fun_junk">#FFC0FF40</color>
+    <color name="color_fun_vpn">#FFFFF022</color>
+    <color name="color_fun_cpu">#FF70FFB3</color>
+    <color name="color_fun_battery">#FF70ECFF</color>
+    <color name="color_fun_app">#FFD970FF</color>
+    <color name="color_fun_booster">#FFFF7070</color>
+    <color name="color_04847C">#FF04847C</color>
+    <color name="color_336AE846">#336AE846</color>
+    <color name="color_FF7070">#FFFF7070</color>
+    <color name="color_ABFCCC">#ABFCCC</color>
+</resources>
