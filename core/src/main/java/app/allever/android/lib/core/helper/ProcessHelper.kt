@@ -12,7 +12,7 @@ object ProcessHelper {
         }
     }
 
-    private fun isInMainProcess(
+    fun isInMainProcess(
         application: Application,
         processName: String = application.packageName
     ): Boolean {

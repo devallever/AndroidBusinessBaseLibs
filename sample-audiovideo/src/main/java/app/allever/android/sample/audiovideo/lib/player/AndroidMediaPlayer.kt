@@ -1,12 +1,12 @@
-package app.allever.android.sample.audiovideo.android
+package app.allever.android.sample.audiovideo.lib.player
 
 import android.view.SurfaceHolder
 import android.widget.VideoView
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.player.core.SurfaceType
 import app.allever.android.lib.player.core.VideoHelper
-import app.allever.android.sample.audiovideo.android.base.IPlayerKernal
-import app.allever.android.sample.audiovideo.android.base.MediaPlayerKernal
+import app.allever.android.sample.audiovideo.lib.kernal.IPlayerKernal
+import app.allever.android.sample.audiovideo.lib.kernal.MediaPlayerKernal
 
 /**
  * VideoView 视频播放器实现（继承自 [BaseVideoPlayer]）
@@ -79,8 +79,8 @@ import app.allever.android.sample.audiovideo.android.base.MediaPlayerKernal
  * - 易于扩展（新增渲染方式只需写少量子类代码）
  *
  * @see BaseVideoPlayer 基类，包含完整的播放流程实现
- * @see AndroidSurfacePlayer SurfaceView 实现（推荐大多数场景）
- * @see AndroidTexturePlayer TextureView 实现（需要动画/变换时）
+ * @see app.allever.android.sample.audiovideo.android.player.AndroidSurfacePlayer SurfaceView 实现（推荐大多数场景）
+ * @see app.allever.android.sample.audiovideo.android.player.AndroidTexturePlayer TextureView 实现（需要动画/变换时）
  */
 class AndroidMediaPlayer: BaseVideoPlayer() {
 
@@ -120,7 +120,7 @@ class AndroidMediaPlayer: BaseVideoPlayer() {
         this.currentSurfaceType = SurfaceType.VIDEO_VIEW
         this.isSurfaceReady = false  // 需要等待 SurfaceHolder 就绪
 
-        log(TAG,"attach VideoView (waiting for surface)")
+        log(TAG, "attach VideoView (waiting for surface)")
 
         initPlayer()
 
@@ -145,7 +145,7 @@ class AndroidMediaPlayer: BaseVideoPlayer() {
                 videoView?.holder?.removeCallback(videoViewSurfaceCallback)
                 videoView = null
                 isSurfaceReady = false
-                log(TAG,"detach VideoView")
+                log(TAG, "detach VideoView")
                 currentSurfaceType = SurfaceType.NONE
             }
             else -> { super.detach() }
@@ -197,16 +197,16 @@ class AndroidMediaPlayer: BaseVideoPlayer() {
     /** VideoView 的 SurfaceHolder 回调 */
     private val videoViewSurfaceCallback = object : SurfaceHolder.Callback {
         override fun surfaceCreated(holder: SurfaceHolder) {
-            log(TAG,"VideoView surfaceCreated")
+            log(TAG, "VideoView surfaceCreated")
             onSurfaceReady(holder.surface)
         }
 
         override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-            log(TAG,"VideoView surfaceChanged: ${width}x${height}")
+            log(TAG, "VideoView surfaceChanged: ${width}x${height}")
         }
 
         override fun surfaceDestroyed(holder: SurfaceHolder) {
-            log(TAG,"VideoView surfaceDestroyed")
+            log(TAG, "VideoView surfaceDestroyed")
             isSurfaceReady = false
         }
     }

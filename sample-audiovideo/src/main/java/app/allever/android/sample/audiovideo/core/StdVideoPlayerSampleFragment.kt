@@ -1,5 +1,8 @@
-package app.allever.android.sample.audiovideo.core.player
+package app.allever.android.sample.audiovideo.core
 
+import android.graphics.Color
+import android.view.View
+import android.widget.ScrollView
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.media.core.model.MediaItem
@@ -20,7 +23,6 @@ import app.allever.android.sample.audiovideo.databinding.FragmentStdVideoPlayerS
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
 
 class StdVideoPlayerSampleFragment :
     BaseFragment<FragmentStdVideoPlayerSampleBinding, BaseViewModel>() {
@@ -119,51 +121,51 @@ class StdVideoPlayerSampleFragment :
 
         // 切换到 SurfaceView
         mBinding.btnSwitchSurfaceView.setOnClickListener {
-            mBinding.stdVideoPlayer.switchRender(SurfaceViewRender.NAME)
+            mBinding.stdVideoPlayer.switchRender(SurfaceViewRender.Companion.NAME)
         }
 
         // 切换到 TextureView
         mBinding.btnSwitchTextureView.setOnClickListener {
-            mBinding.stdVideoPlayer.switchRender( TextureViewRender.NAME)
+            mBinding.stdVideoPlayer.switchRender( TextureViewRender.Companion.NAME)
         }
 
         // 切换到 VideoView
         mBinding.btnSwitchVideoView.setOnClickListener {
-            mBinding.stdVideoPlayer.switchRender( VideoViewRender.NAME)
+            mBinding.stdVideoPlayer.switchRender( VideoViewRender.Companion.NAME)
         }
 
         // 切换到 PlayerView (ExoPlayer)
         mBinding.btnSwitchPlayerView.setOnClickListener {
-            if (mBinding.stdVideoPlayer.currentEngineType != Media3PlayerEngine.NAME) {
+            if (mBinding.stdVideoPlayer.currentEngineType != Media3PlayerEngine.Companion.NAME) {
                 toast("请先切换到 ExoPlayer")
                 return@setOnClickListener
             }
-            mBinding.stdVideoPlayer.switchRender(ExoPlayerViewRender.NAME)
+            mBinding.stdVideoPlayer.switchRender(ExoPlayerViewRender.Companion.NAME)
         }
 
         // ==================== 引擎切换按钮（新架构核心功能演示）====================
 
         // 切换到 MediaPlayer
         mBinding.btnSwitchMediaPlayer.setOnClickListener {
-            if(mBinding.stdVideoPlayer.currentRenderName == ExoPlayerViewRender.NAME) {
+            if(mBinding.stdVideoPlayer.currentRenderName == ExoPlayerViewRender.Companion.NAME) {
                 toast("请先切换到其他渲染")
                 return@setOnClickListener
             }
-            mBinding.stdVideoPlayer.switchEngine(MediaPlayerEngine.NAME)
+            mBinding.stdVideoPlayer.switchEngine(MediaPlayerEngine.Companion.NAME)
         }
 
         // 切换到 Media3 (ExoPlayer)
         mBinding.btnSwitchMedia3.setOnClickListener {
-            mBinding.stdVideoPlayer.switchEngine(Media3PlayerEngine.NAME)
+            mBinding.stdVideoPlayer.switchEngine(Media3PlayerEngine.Companion.NAME)
         }
 
         // 切换到 IJKPlayer
         mBinding.btnSwitchIjkPlayer.setOnClickListener {
-            if(mBinding.stdVideoPlayer.currentRenderName == ExoPlayerViewRender.NAME) {
+            if(mBinding.stdVideoPlayer.currentRenderName == ExoPlayerViewRender.Companion.NAME) {
                 toast("请先切换到其他渲染")
                 return@setOnClickListener
             }
-            mBinding.stdVideoPlayer.switchEngine(IjkPlayerEngine.NAME)
+            mBinding.stdVideoPlayer.switchEngine(IjkPlayerEngine.Companion.NAME)
         }
 
         // 清空日志
@@ -176,19 +178,19 @@ class StdVideoPlayerSampleFragment :
      * 更新渲染器切换按钮状态
      */
     private fun updateRenderButtonState() {
-        mBinding.btnSwitchSurfaceView.isEnabled = mBinding.stdVideoPlayer.currentRenderName != SurfaceViewRender.NAME
-        mBinding.btnSwitchTextureView.isEnabled = mBinding.stdVideoPlayer.currentRenderName != TextureViewRender.NAME
-        mBinding.btnSwitchVideoView.isEnabled = mBinding.stdVideoPlayer.currentRenderName != VideoViewRender.NAME
-        mBinding.btnSwitchPlayerView.isEnabled = mBinding.stdVideoPlayer.currentRenderName != ExoPlayerViewRender.NAME
+        mBinding.btnSwitchSurfaceView.isEnabled = mBinding.stdVideoPlayer.currentRenderName != SurfaceViewRender.Companion.NAME
+        mBinding.btnSwitchTextureView.isEnabled = mBinding.stdVideoPlayer.currentRenderName != TextureViewRender.Companion.NAME
+        mBinding.btnSwitchVideoView.isEnabled = mBinding.stdVideoPlayer.currentRenderName != VideoViewRender.Companion.NAME
+        mBinding.btnSwitchPlayerView.isEnabled = mBinding.stdVideoPlayer.currentRenderName != ExoPlayerViewRender.Companion.NAME
     }
 
     /**
      * 更新引擎切换按钮状态
      */
     private fun updateEngineButtonState() {
-        mBinding.btnSwitchMediaPlayer.isEnabled = mBinding.stdVideoPlayer.currentEngineType != MediaPlayerEngine.NAME
-        mBinding.btnSwitchMedia3.isEnabled = mBinding.stdVideoPlayer.currentEngineType != Media3PlayerEngine.NAME
-        mBinding.btnSwitchIjkPlayer.isEnabled = mBinding.stdVideoPlayer.currentEngineType != IjkPlayerEngine.NAME
+        mBinding.btnSwitchMediaPlayer.isEnabled = mBinding.stdVideoPlayer.currentEngineType != MediaPlayerEngine.Companion.NAME
+        mBinding.btnSwitchMedia3.isEnabled = mBinding.stdVideoPlayer.currentEngineType != Media3PlayerEngine.Companion.NAME
+        mBinding.btnSwitchIjkPlayer.isEnabled = mBinding.stdVideoPlayer.currentEngineType != IjkPlayerEngine.Companion.NAME
     }
 
     /**
@@ -216,22 +218,22 @@ class StdVideoPlayerSampleFragment :
         // 根据状态更新 UI 颜色或图标
         when (state) {
             PlayerState.IDLE, PlayerState.STOPPED -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.GRAY)
+                mBinding.tvState.setTextColor(Color.GRAY)
             }
             PlayerState.PREPARING -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.YELLOW)
+                mBinding.tvState.setTextColor(Color.YELLOW)
             }
             PlayerState.PREPARED, PlayerState.PAUSED -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.BLUE)
+                mBinding.tvState.setTextColor(Color.BLUE)
             }
             PlayerState.PLAYING -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.GREEN)
+                mBinding.tvState.setTextColor(Color.GREEN)
             }
             PlayerState.COMPLETED -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.CYAN)
+                mBinding.tvState.setTextColor(Color.CYAN)
             }
             PlayerState.ERROR, PlayerState.RELEASED -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.RED)
+                mBinding.tvState.setTextColor(Color.RED)
             }
         }
     }
@@ -251,9 +253,9 @@ class StdVideoPlayerSampleFragment :
             tvLog.append(logLine)
 
             /// 自动滚动到底部
-            val scrollView = mBinding.tvLog.parent as? android.widget.ScrollView
+            val scrollView = mBinding.tvLog.parent as? ScrollView
             scrollView?.post {
-                scrollView.fullScroll(android.view.View.FOCUS_DOWN)
+                scrollView.fullScroll(View.FOCUS_DOWN)
             }
         }
     }

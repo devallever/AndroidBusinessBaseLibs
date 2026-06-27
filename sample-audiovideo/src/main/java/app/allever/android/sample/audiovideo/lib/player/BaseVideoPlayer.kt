@@ -1,4 +1,4 @@
-package app.allever.android.sample.audiovideo.android
+package app.allever.android.sample.audiovideo.lib.player
 
 import android.graphics.SurfaceTexture
 import android.net.Uri
@@ -8,7 +8,7 @@ import android.view.SurfaceView
 import android.view.TextureView
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
-import app.allever.android.lib.core.helper.TimeHelper.formatTime
+import app.allever.android.lib.core.helper.TimeHelper
 import app.allever.android.lib.player.core.IVideoPlayerListener
 import app.allever.android.lib.player.core.LoopMode
 import app.allever.android.lib.player.core.PendingPrepare
@@ -17,7 +17,7 @@ import app.allever.android.lib.player.core.PlayerState
 import app.allever.android.lib.player.core.SurfaceType
 import app.allever.android.lib.player.core.VideoHelper
 import app.allever.android.lib.player.core.VideoScaleMode
-import app.allever.android.sample.audiovideo.android.base.IPlayerKernal
+import app.allever.android.sample.audiovideo.lib.kernal.IPlayerKernal
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -45,8 +45,8 @@ import java.io.File
  *
  * ## 支持的渲染方式（通过子类实现）
  * - [AndroidMediaPlayer]：VideoView 渲染（最简单，适合快速集成）
- * - [AndroidSurfacePlayer]：SurfaceView 渲染（性能好，适合大多数场景）
- * - [AndroidTexturePlayer]：TextureView 渲染（支持动画和变换）
+ * - [app.allever.android.sample.audiovideo.android.player.AndroidSurfacePlayer]：SurfaceView 渲染（性能好，适合大多数场景）
+ * - [app.allever.android.sample.audiovideo.android.player.AndroidTexturePlayer]：TextureView 渲染（支持动画和变换）
  *
  * ## 支持的数据源类型
  * - HTTP/HTTPS URL：在线视频流
@@ -104,10 +104,10 @@ import java.io.File
  * 4. **release 后不可再使用**：必须创建新实例
  *
  * @see AndroidMediaPlayer VideoView 实现
- * @see AndroidSurfacePlayer SurfaceView 实现
- * @see AndroidTexturePlayer TextureView 实现
- * @see IVideoPlayerListener 事件回调接口
- * @see PlayerState 状态枚举
+ * @see app.allever.android.sample.audiovideo.android.player.AndroidSurfacePlayer SurfaceView 实现
+ * @see app.allever.android.sample.audiovideo.android.player.AndroidTexturePlayer TextureView 实现
+ * @see app.allever.android.lib.player.core.IVideoPlayerListener 事件回调接口
+ * @see app.allever.android.lib.player.core.PlayerState 状态枚举
  */
 abstract class BaseVideoPlayer {
 
@@ -117,7 +117,7 @@ abstract class BaseVideoPlayer {
     /**
      * 播放引擎实例（策略模式）
      *
-     * @see IPlayerKernal 引擎接口定义
+     * @see app.allever.android.sample.audiovideo.lib.kernal.IPlayerKernal 引擎接口定义
      */
     protected open lateinit var engine: IPlayerKernal<*>
 
@@ -169,14 +169,25 @@ abstract class BaseVideoPlayer {
 
             // 通知外部监听器（UI 可在此更新进度条最大值等）
             listener?.onPrepared(dur)
-            log(TAG, "onPlaybackStateChanged: READY (duration=${dur}ms, autoResume=$shouldAutoResume)")
+            log(
+                TAG,
+                "onPlaybackStateChanged: READY (duration=${dur}ms, autoResume=$shouldAutoResume)"
+            )
 
             // 如果是 Surface 切换后的 reprepare，自动恢复播放
             if (shouldAutoResume && savedPos!! >= 0) {
-                log(TAG, "safeSwitchSurface [方案B]: 自动恢复播放 (position=${formatTime(savedPos)})")
+                log(
+                    TAG,
+                    "safeSwitchSurface [方案B]: 自动恢复播放 (position=${
+                        TimeHelper.formatTime(savedPos)
+                    })"
+                )
                 seekTo(savedPos)  // 先跳转到保存的位置
                 play()             // 再开始播放
-                log(TAG, "safeSwitchSurface [方案B]: 已恢复播放 (${formatTime(savedPos)})")
+                log(
+                    TAG,
+                    "safeSwitchSurface [方案B]: 已恢复播放 (${TimeHelper.formatTime(savedPos)})"
+                )
             }
         }
 
@@ -216,7 +227,7 @@ abstract class BaseVideoPlayer {
          * - 处理策略：立即通知外部监听器，不重试
          * - 外部可选择显示错误 UI 或尝试恢复
          *
-         * @param code 错误代码（参考 [PlayerErrorCode]）
+         * @param code 错误代码（参考 [app.allever.android.lib.player.core.PlayerErrorCode]）
          * @param msg 错误信息描述
          */
         override fun onError(code: Int, msg: String) {
@@ -357,7 +368,7 @@ abstract class BaseVideoPlayer {
      * - 布局自适应计算
      * - Surface 切换时的行为
      *
-     * @see SurfaceType
+     * @see app.allever.android.lib.player.core.SurfaceType
      */
     protected var currentSurfaceType: SurfaceType = SurfaceType.NONE
 
@@ -467,9 +478,9 @@ abstract class BaseVideoPlayer {
      * 循环模式（默认不循环）
      *
      * 支持的模式：
-     * - [LoopMode.NONE]：不循环，播放完停止
-     * - [LoopMode.SINGLE]：单曲循环（播放完自动从头开始）
-     * - [LoopMode.ALL]：列表循环（播放完触发 onComplete，由外部决定下一个）
+     * - [app.allever.android.lib.player.core.LoopMode.NONE]：不循环，播放完停止
+     * - [app.allever.android.lib.player.core.LoopMode.SINGLE]：单曲循环（播放完自动从头开始）
+     * - [app.allever.android.lib.player.core.LoopMode.ALL]：列表循环（播放完触发 onComplete，由外部决定下一个）
      *
      * 设置时会同步应用到引擎
      */
@@ -534,9 +545,9 @@ abstract class BaseVideoPlayer {
      * 视频缩放模式（默认 FIT_CENTER）
      *
      * 控制视频如何在容器中显示：
-     * - [VideoScaleMode.FIT_CENTER]：保持比例，完整显示（可能有黑边）
-     * - [VideoScaleMode.CROP_CENTER]：保持比例，填满容器（可能裁剪边缘）
-     * - [VideoScaleMode.STRETCH]：拉伸填满容器（可能变形）
+     * - [app.allever.android.lib.player.core.VideoScaleMode.FIT_CENTER]：保持比例，完整显示（可能有黑边）
+     * - [app.allever.android.lib.player.core.VideoScaleMode.CROP_CENTER]：保持比例，填满容器（可能裁剪边缘）
+     * - [app.allever.android.lib.player.core.VideoScaleMode.STRETCH]：拉伸填满容器（可能变形）
      *
      * 设置时会立即触发布局重新计算。
      * 对于 SurfaceView/TextureView，需要等待 [onVideoSizeChanged] 获取到视频尺寸后才生效。
@@ -785,7 +796,7 @@ abstract class BaseVideoPlayer {
      * - content:// URI：Content Provider
      * - file:///android_asset/filename.mp4：Assets 目录（自动复制到缓存）
      *
-     * 准备完成后回调 [IVideoPlayerListener.onPrepared]，此时需调用 [play] 开始播放。
+     * 准备完成后回调 [app.allever.android.lib.player.core.IPlayerListener.onPrepared]，此时需调用 [play] 开始播放。
      *
      * @param url 数据源地址
      */
@@ -810,7 +821,7 @@ abstract class BaseVideoPlayer {
      * - file:// URI：本地文件
      * - content:// URI：Content Provider
      *
-     * 准备完成后回调 [IVideoPlayerListener.onPrepared]，此时需调用 [play] 开始播放。
+     * 准备完成后回调 [app.allever.android.lib.player.core.IPlayerListener.onPrepared]，此时需调用 [play] 开始播放。
      *
      * @param uri 视频 URI（支持 http/https/file/content 协议）
      * @param headers HTTP 请求头（仅对 http(s) 协议生效，可为 null）
@@ -836,7 +847,7 @@ abstract class BaseVideoPlayer {
      */
     fun setAssetSource(path: String) {
         try {
-            val context = App.context
+            val context = App.Companion.context
             val cacheFile = File(context.cacheDir, "asset_video_${path.hashCode()}")
 
             // 如果缓存文件不存在或 Assets 文件更新了，重新复制
@@ -853,7 +864,9 @@ abstract class BaseVideoPlayer {
         } catch (e: Exception) {
             log(TAG, "setAssetSource error: ${e.message}")
             _state = PlayerState.ERROR
-            listener?.onError(PlayerErrorCode.ASSET_COPY_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.ASSET_COPY_FAILED, e.message))
+            listener?.onError(
+                PlayerErrorCode.ASSET_COPY_FAILED, PlayerErrorCode.formatError(
+                    PlayerErrorCode.ASSET_COPY_FAILED, e.message))
         }
     }
 
@@ -933,7 +946,7 @@ abstract class BaseVideoPlayer {
             engine.seekTo(positionMs)
             // 延迟重置标志并确保进度追踪正常运行（seek 是异步操作）
             stopProgressTracking()
-            App.mainHandler.postDelayed({
+            App.Companion.mainHandler.postDelayed({
                 isSeeking = false
                 // 确保 seek 完成后进度追踪仍在运行
                 if (_state == PlayerState.PLAYING && (progressJob == null || !progressJob!!.isActive)) {
@@ -1061,7 +1074,7 @@ abstract class BaseVideoPlayer {
         try {
             engine.setSurface(surface)
         } catch (e: Exception) {
-            log(TAG,"setSurface error: ${e.message}")
+            log(TAG, "setSurface error: ${e.message}")
         }
 
         // 如果有待执行的 prepare，立即执行
@@ -1136,12 +1149,14 @@ abstract class BaseVideoPlayer {
         if (retryLeft > 0) {
             retryLeft--
             log(TAG, "retrying... ($retryLeft left)")
-            App.mainHandler.postDelayed({
+            App.Companion.mainHandler.postDelayed({
                 doPrepareInternal(currentUri, currentHeaders)
             }, 1000)
         } else {
             _state = PlayerState.ERROR
-            listener?.onError(PlayerErrorCode.RETRY_EXHAUSTED, PlayerErrorCode.formatError(PlayerErrorCode.RETRY_EXHAUSTED, e.message))
+            listener?.onError(
+                PlayerErrorCode.RETRY_EXHAUSTED, PlayerErrorCode.formatError(
+                    PlayerErrorCode.RETRY_EXHAUSTED, e.message))
         }
     }
 
@@ -1267,7 +1282,7 @@ abstract class BaseVideoPlayer {
     ) {
         // 防重复调用
         if (isSafeSwitching) {
-            log(TAG,"safeSwitchSurface [方案B]: ⚠️ 忽略重复调用（正在切换到 $targetName）")
+            log(TAG, "safeSwitchSurface [方案B]: ⚠️ 忽略重复调用（正在切换到 $targetName）")
             return
         }
 
@@ -1279,25 +1294,30 @@ abstract class BaseVideoPlayer {
                     _state == PlayerState.PREPARING)
             val savedPosition = currentPosition
 
-            log(TAG,"safeSwitchSurface [方案B]: 开始切换到 $targetName" +
-                    " (wasPlaying=$wasPlaying, position=${formatTime(savedPosition)}, state=$_state)")
+            log(
+                TAG, "safeSwitchSurface [方案B]: 开始切换到 $targetName" +
+                        " (wasPlaying=$wasPlaying, position=${TimeHelper.formatTime(savedPosition)}, state=$_state)"
+            )
 
             // 2. 完全停止 MediaPlayer（清空所有缓冲区和渲染队列）
             if (_state != PlayerState.IDLE && _state != PlayerState.STOPPED && _state != PlayerState.RELEASED) {
                 stop()
-                log(TAG,"safeSwitchSurface [方案B]: 已 stop()，清空所有缓冲区")
+                log(TAG, "safeSwitchSurface [方案B]: 已 stop()，清空所有缓冲区")
             }
 
             // 3. 如果需要恢复播放，保存位置信息
             if (wasPlaying && savedPosition >= 0 && currentUri != null) {
                 pendingSeekPosition = savedPosition
-                log(TAG,"safeSwitchSurface [方案B]: 待恢复位置 ${formatTime(savedPosition)}")
+                log(
+                    TAG,
+                    "safeSwitchSurface [方案B]: 待恢复位置 ${TimeHelper.formatTime(savedPosition)}"
+                )
             }
 
             // 4. 使用 postDelayed 延迟执行切换操作
-            App.mainHandler.postDelayed({
+            App.Companion.mainHandler.postDelayed({
                 try {
-                    log(TAG,"safeSwitchSurface [方案B]: 执行切换到 $targetName")
+                    log(TAG, "safeSwitchSurface [方案B]: 执行切换到 $targetName")
 
                     // 执行实际的切换操作（detach + attach）
                     targetAction()
@@ -1306,9 +1326,9 @@ abstract class BaseVideoPlayer {
                     val surfaceReady = checkSurfaceValid()
 
                     if (!surfaceReady && currentSurfaceType != SurfaceType.NONE) {
-                        log(TAG,"safeSwitchSurface [方案B]: ⚠️ Surface 未就绪，延迟 50ms 等待...")
+                        log(TAG, "safeSwitchSurface [方案B]: ⚠️ Surface 未就绪，延迟 50ms 等待...")
 
-                        App.mainHandler.postDelayed({
+                        App.Companion.mainHandler.postDelayed({
                             try {
                                 performPrepareAfterSwitch()
                             } catch (e: Exception) {
@@ -1316,7 +1336,7 @@ abstract class BaseVideoPlayer {
                             }
                         }, 50L)
                     } else {
-                        log(TAG,"safeSwitchSurface [方案B]: Surface 已就绪，立即 prepare")
+                        log(TAG, "safeSwitchSurface [方案B]: Surface 已就绪，立即 prepare")
                         try {
                             performPrepareAfterSwitch()
                         } catch (e: Exception) {
@@ -1324,21 +1344,25 @@ abstract class BaseVideoPlayer {
                         }
                     }
                 } catch (e: Exception) {
-                    log(TAG,"safeSwitchSurface [方案B]: 切换失败 - ${e.message}")
+                    log(TAG, "safeSwitchSurface [方案B]: 切换失败 - ${e.message}")
                     pendingSeekPosition = -1L
                     _state = PlayerState.ERROR
-                    listener?.onError(PlayerErrorCode.SURFACE_SWITCH_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.SURFACE_SWITCH_FAILED, e.message))
+                    listener?.onError(
+                        PlayerErrorCode.SURFACE_SWITCH_FAILED, PlayerErrorCode.formatError(
+                            PlayerErrorCode.SURFACE_SWITCH_FAILED, e.message))
                 } finally {
                     isSafeSwitching = false
                 }
             }, delayMs)
 
         } catch (e: Exception) {
-            log(TAG,"safeSwitchSurface [方案B]: 准备阶段失败 - ${e.message}")
+            log(TAG, "safeSwitchSurface [方案B]: 准备阶段失败 - ${e.message}")
             isSafeSwitching = false
             pendingSeekPosition = -1L
             _state = PlayerState.ERROR
-            listener?.onError(PlayerErrorCode.PREPARE_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.PREPARE_FAILED, e.message))
+            listener?.onError(
+                PlayerErrorCode.PREPARE_FAILED, PlayerErrorCode.formatError(
+                    PlayerErrorCode.PREPARE_FAILED, e.message))
         }
     }
 
@@ -1362,20 +1386,23 @@ abstract class BaseVideoPlayer {
      */
     private fun performPrepareAfterSwitch() {
         if (currentUri == null && currentAssetPath == null) {
-            log(TAG,"safeSwitchSurface [方案B]: 切换完成（无数据源）")
+            log(TAG, "safeSwitchSurface [方案B]: 切换完成（无数据源）")
             return
         }
 
-        log(TAG,"safeSwitchSurface [方案B]: 重新准备数据源" +
-                " (autoResume=${pendingSeekPosition >= 0})")
+        log(
+            TAG, "safeSwitchSurface [方案B]: 重新准备数据源" +
+                    " (autoResume=${pendingSeekPosition >= 0})"
+        )
 
         if (currentAssetPath != null && currentAssetPath!!.isNotEmpty()) {
             // Assets 数据源：必须手动处理文件复制 + prepare
-            log(TAG,"safeSwitchSurface [方案B]: 使用 setAssetSource (assets)")
+            log(TAG, "safeSwitchSurface [方案B]: 使用 setAssetSource (assets)")
 
             try {
-                val context = App.context.applicationContext
-                val cacheFile = File(context.cacheDir, "asset_video_${currentAssetPath!!.hashCode()}")
+                val context = App.Companion.context.applicationContext
+                val cacheFile =
+                    File(context.cacheDir, "asset_video_${currentAssetPath!!.hashCode()}")
 
                 // 如果缓存文件不存在，从 assets 重新复制
                 if (!cacheFile.exists()) {
@@ -1384,7 +1411,7 @@ abstract class BaseVideoPlayer {
                             input.copyTo(output)
                         }
                     }
-                    log(TAG,"safeSwitchSurface [方案B]: 已重新复制 asset 文件")
+                    log(TAG, "safeSwitchSurface [方案B]: 已重新复制 asset 文件")
                 }
 
                 // 直接使用 doPrepareInternal，跳过 isSurfaceReady 检查
@@ -1393,27 +1420,29 @@ abstract class BaseVideoPlayer {
                 doPrepareInternal(cacheUri, currentHeaders)
 
             } catch (e: Exception) {
-                log(TAG,"safeSwitchSurface [方案B]: Asset 处理失败 - ${e.message}")
+                log(TAG, "safeSwitchSurface [方案B]: Asset 处理失败 - ${e.message}")
                 handlePrepareFailure(e)
             }
 
         } else if (currentUri != null) {
             // 普通 URI（HTTP/本地文件/Content Provider）：直接 prepare
-            log(TAG,"safeSwitchSurface [方案B]: 使用 doPrepareInternal (uri=$currentUri)")
+            log(TAG, "safeSwitchSurface [方案B]: 使用 doPrepareInternal (uri=$currentUri)")
             doPrepareInternal(currentUri!!, currentHeaders)
         }
 
-        log(TAG,"safeSwitchSurface [方案B]: prepare 完成，等待 onPrepared 或 PREPARING Monitor")
+        log(TAG, "safeSwitchSurface [方案B]: prepare 完成，等待 onPrepared 或 PREPARING Monitor")
     }
 
     /**
      * 处理 prepare 失败的情况
      */
     private fun handlePrepareFailure(e: Exception) {
-        log(TAG,"safeSwitchSurface [方案B]: prepare 失败 - ${e.message}")
+        log(TAG, "safeSwitchSurface [方案B]: prepare 失败 - ${e.message}")
         pendingSeekPosition = -1L
         _state = PlayerState.ERROR
-        listener?.onError(PlayerErrorCode.PREPARE_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.PREPARE_FAILED, e.message))
+        listener?.onError(
+            PlayerErrorCode.PREPARE_FAILED, PlayerErrorCode.formatError(
+                PlayerErrorCode.PREPARE_FAILED, e.message))
     }
 
 
@@ -1447,7 +1476,7 @@ abstract class BaseVideoPlayer {
 
                     if (actualIsPlaying) {
                         // 正在播放 → 已准备就绪（延迟获取 duration 避免状态冲突）
-                        log(TAG,"⚡ PREPARING Monitor: 检测到正在播放！修正状态")
+                        log(TAG, "⚡ PREPARING Monitor: 检测到正在播放！修正状态")
 
                         // 延迟获取 duration（确保 MediaPlayer 已完全进入 PLAYING 状态）
                         var dur = 0L
@@ -1456,32 +1485,42 @@ abstract class BaseVideoPlayer {
                             delay(50)
                             dur = engine.getDuration()
                         } catch (_: Exception) {
-                            log(TAG,"⚠️ PREPARING Monitor: 获取 duration 失败（可能还在准备中）")
+                            log(TAG, "⚠️ PREPARING Monitor: 获取 duration 失败（可能还在准备中）")
                         }
 
                         val pos = try { engine.getCurrentPosition() } catch (_: Exception) { 0L }
-                        log(TAG,"PREPARING Monitor: duration=$dur, position=$pos")
+                        log(TAG, "PREPARING Monitor: duration=$dur, position=$pos")
 
                         // ✨ 检查是否需要自动恢复播放（Surface 切换后）
                         val shouldAutoResume = pendingSeekPosition >= 0
                         val savedPos = pendingSeekPosition
                         pendingSeekPosition = -1L  // 重置标记
 
-                        log(TAG,"PREPARING Monitor: autoResume=$shouldAutoResume" +
-                                (if (shouldAutoResume) ", savedPosition=${formatTime(savedPos)}" else ""))
+                        log(
+                            TAG, "PREPARING Monitor: autoResume=$shouldAutoResume" +
+                                    (if (shouldAutoResume) ", savedPosition=${
+                                        TimeHelper.formatTime(
+                                            savedPos
+                                        )
+                                    }" else "")
+                        )
 
                         // 通知准备完成（如果还没通知过）
                         listener?.onPrepared(dur.toLong())
 
                         // 如果是 Surface 切换后的 reprepare，自动恢复播放位置
                         if (shouldAutoResume && savedPos >= 0) {
-                            log(TAG,"PREPARING Monitor [方案B]: 自动恢复播放 " +
-                                    "(position=${formatTime(savedPos)})")
+                            log(
+                                TAG, "PREPARING Monitor [方案B]: 自动恢复播放 " +
+                                        "(position=${TimeHelper.formatTime(savedPos)})"
+                            )
 
                             // Monitor 检测到 isPlaying=true，只需 seekTo
                             seekTo(savedPos.toLong())
-                            log(TAG,"PREPARING Monitor [方案B]: 已恢复播放 " +
-                                    "(${formatTime(savedPos)})")
+                            log(
+                                TAG, "PREPARING Monitor [方案B]: 已恢复播放 " +
+                                        "(${TimeHelper.formatTime(savedPos)})"
+                            )
                         }
 
                         // 更新为正确状态
@@ -1498,7 +1537,7 @@ abstract class BaseVideoPlayer {
 
             // 超时
             if (_state == PlayerState.PREPARING) {
-                log(TAG,"PREPARING Monitor: 超时，仍处于 PREPARING 状态")
+                log(TAG, "PREPARING Monitor: 超时，仍处于 PREPARING 状态")
             }
         }
     }
@@ -1508,7 +1547,7 @@ abstract class BaseVideoPlayer {
      */
     private fun stopPreparingMonitor() {
         if (preparingMonitorJob != null) {
-            log(TAG,"stopping PREPARING state monitor")
+            log(TAG, "stopping PREPARING state monitor")
             preparingMonitorJob?.cancel()
             preparingMonitorJob = null
         }
@@ -1565,7 +1604,7 @@ abstract class BaseVideoPlayer {
                 if (retryCount < maxRetries) {
                     log(TAG, "视频尺寸无效 (${w}x${h})，将在 ${(retryCount + 1) * 200}ms 后重试...")
 
-                    App.mainHandler.postDelayed({
+                    App.Companion.mainHandler.postDelayed({
                         tryFetchVideoSizeAndAdjustLayout(retryCount + 1)
                     }, (retryCount + 1) * 200L)  // 渐进式延迟：200ms, 400ms, 600ms...
                 } else {
@@ -1577,7 +1616,7 @@ abstract class BaseVideoPlayer {
             // 异常时也尝试重试
             if (retryCount < maxRetries) {
                 log(TAG, "获取视频尺寸异常，重试中...")
-                App.mainHandler.postDelayed({
+                App.Companion.mainHandler.postDelayed({
                     tryFetchVideoSizeAndAdjustLayout(retryCount + 1)
                 }, (retryCount + 1) * 200L)
             }

@@ -1,4 +1,4 @@
-package app.allever.android.sample.audiovideo.android
+package app.allever.android.sample.audiovideo.android.player
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer
@@ -13,14 +13,9 @@ import app.allever.android.lib.player.core.PlayerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-
-
-
-
 
 /**
  * Android MediaPlayer 音频播放封装
@@ -29,7 +24,7 @@ import kotlinx.coroutines.launch
  * - 封装 MediaPlayer 完整生命周期
  * - 管理状态机转换
  * - 提供进度追踪、变速、音量、循环等能力
- * - 通过 [IPlayerListener] 回调所有事件
+ * - 通过 [app.allever.android.lib.player.core.IPlayerListener] 回调所有事件
  *
  * 使用示例：
  * ```kotlin
@@ -260,7 +255,7 @@ class AndroidMusicPlayer {
         initMediaPlayer()
 
         try {
-            val context = App.context
+            val context = App.Companion.context
             if (isAssetSource) {
                 // assets 文件
                 val assetPath = currentUri?.path?.removePrefix("/android_asset/") ?: return
@@ -352,7 +347,9 @@ class AndroidMusicPlayer {
 
     private fun handlePrepareError(e: Exception) {
         _state = PlayerState.ERROR
-        val handled = listener?.onError(PlayerErrorCode.PREPARE_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.PREPARE_FAILED, e.message)) ?: false
+        val handled = listener?.onError(
+            PlayerErrorCode.PREPARE_FAILED, PlayerErrorCode.formatError(
+                PlayerErrorCode.PREPARE_FAILED, e.message)) ?: false
         if (!handled && retryLeft > 0) {
             retryLeft--
             log("MusicPlayer", "prepare error auto retry, left=$retryLeft")
@@ -403,6 +400,6 @@ class AndroidMusicPlayer {
      * 主线程延迟执行
      */
     private fun postDelayed(action: () -> Unit, delayMs: Long) {
-        App.mainHandler.postDelayed(action, delayMs)
+        App.Companion.mainHandler.postDelayed(action, delayMs)
     }
 }

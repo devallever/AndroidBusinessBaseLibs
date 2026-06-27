@@ -1,12 +1,13 @@
-package app.allever.android.sample.audiovideo.core.player
+package app.allever.android.sample.audiovideo.core
 
+import android.graphics.Color
+import android.view.View
+import android.widget.ScrollView
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.media.core.model.MediaItem
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import app.allever.android.sample.audiovideo.VideoSource
-import app.allever.android.sample.audiovideo.databinding.FragmentVideoPlayerViewSampleBinding
 import app.allever.android.lib.player.core.PlayerState
 import app.allever.android.lib.player.core.engine.MediaPlayerEngine
 import app.allever.android.lib.player.core.engine.ijk.IjkPlayerEngine
@@ -17,13 +18,14 @@ import app.allever.android.lib.player.core.render.RenderRegistry
 import app.allever.android.lib.player.core.render.SurfaceViewRender
 import app.allever.android.lib.player.core.render.TextureViewRender
 import app.allever.android.lib.player.core.render.VideoViewRender
+import app.allever.android.sample.audiovideo.VideoSource
+import app.allever.android.sample.audiovideo.databinding.FragmentCustomStdUiControllerSmapleBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-
-class VideoPlayerViewSampleFragment :
-    BaseFragment<FragmentVideoPlayerViewSampleBinding, BaseViewModel>() {
+class CustomStdVideoPlayerSampleFragment :
+    BaseFragment<FragmentCustomStdUiControllerSmapleBinding, BaseViewModel>() {
     /** 视频选择器 */
     private val videoPickerLauncher = MediaPickerCore.registerPickerLauncher(this) { items ->
         items.firstOrNull()?.let { mediaItem ->
@@ -32,7 +34,7 @@ class VideoPlayerViewSampleFragment :
                 appendLog("选择本地视频: ${mediaItem.name} (${mediaItem.uri})")
                 autoPlayOnPrepared = true
 
-                mBinding.videoPlayerView.setSource(mediaItem.uri)
+                mBinding.stdVideoPlayer.setSource(mediaItem.uri)
             }
         }
     }
@@ -43,7 +45,7 @@ class VideoPlayerViewSampleFragment :
     /** setSource 后是否自动调用 play() */
     private var autoPlayOnPrepared = true
 
-    override fun inflate() = FragmentVideoPlayerViewSampleBinding.inflate(layoutInflater)
+    override fun inflate() = FragmentCustomStdUiControllerSmapleBinding.inflate(layoutInflater)
 
     override fun init() {
         initVideoPicker()
@@ -64,9 +66,9 @@ class VideoPlayerViewSampleFragment :
      */
     private fun initPlayer() {
         // 使用默认配置：MediaPlayerEngine + SurfaceViewRender
-        mBinding.videoPlayerView.setListener(object : IVideoPlayerViewListener {
+        mBinding.stdVideoPlayer.setListener(object : IVideoPlayerViewListener {
             override fun debugUpdateState() {
-                updateStateUI(mBinding.videoPlayerView.videoPlayer.state)
+                updateStateUI(mBinding.stdVideoPlayer.videoPlayer.state)
                 updateRenderButtonState()
                 updateEngineButtonState()
                 updateArchInfo()
@@ -99,7 +101,7 @@ class VideoPlayerViewSampleFragment :
                 VideoSource.testUrlList.random()
             }
             autoPlayOnPrepared = true
-            mBinding.videoPlayerView.setSource(sourceUrl)
+            mBinding.stdVideoPlayer.setSource(sourceUrl)
             appendLog("设置数据源: ${mBinding.etUrl.text.ifEmpty { sourceUrl }}")
         }
 
@@ -108,7 +110,7 @@ class VideoPlayerViewSampleFragment :
             val assetPath = mBinding.etAssetPath.text.toString().trim()
             if (assetPath.isNotEmpty()) {
                 autoPlayOnPrepared = true
-                mBinding.videoPlayerView.setAssetSource(assetPath)
+                mBinding.stdVideoPlayer.setAssetSource(assetPath)
                 appendLog("播放 Assets 文件: $assetPath")
             } else {
                 appendLog("请输入 Assets 文件路径")
@@ -119,51 +121,51 @@ class VideoPlayerViewSampleFragment :
 
         // 切换到 SurfaceView
         mBinding.btnSwitchSurfaceView.setOnClickListener {
-            mBinding.videoPlayerView.switchRender(SurfaceViewRender.NAME)
+            mBinding.stdVideoPlayer.switchRender(SurfaceViewRender.Companion.NAME)
         }
 
         // 切换到 TextureView
         mBinding.btnSwitchTextureView.setOnClickListener {
-            mBinding.videoPlayerView.switchRender( TextureViewRender.NAME)
+            mBinding.stdVideoPlayer.switchRender( TextureViewRender.Companion.NAME)
         }
 
         // 切换到 VideoView
         mBinding.btnSwitchVideoView.setOnClickListener {
-            mBinding.videoPlayerView.switchRender( VideoViewRender.NAME)
+            mBinding.stdVideoPlayer.switchRender( VideoViewRender.Companion.NAME)
         }
 
         // 切换到 PlayerView (ExoPlayer)
         mBinding.btnSwitchPlayerView.setOnClickListener {
-            if (mBinding.videoPlayerView.currentEngineType != Media3PlayerEngine.NAME) {
+            if (mBinding.stdVideoPlayer.currentEngineType != Media3PlayerEngine.Companion.NAME) {
                 toast("请先切换到 ExoPlayer")
                 return@setOnClickListener
             }
-            mBinding.videoPlayerView.switchRender(ExoPlayerViewRender.NAME)
+            mBinding.stdVideoPlayer.switchRender(ExoPlayerViewRender.Companion.NAME)
         }
 
         // ==================== 引擎切换按钮（新架构核心功能演示）====================
 
         // 切换到 MediaPlayer
         mBinding.btnSwitchMediaPlayer.setOnClickListener {
-            if(mBinding.videoPlayerView.currentRenderName == ExoPlayerViewRender.NAME) {
+            if(mBinding.stdVideoPlayer.currentRenderName == ExoPlayerViewRender.Companion.NAME) {
                 toast("请先切换到其他渲染")
                 return@setOnClickListener
             }
-            mBinding.videoPlayerView.switchEngine(MediaPlayerEngine.NAME)
+            mBinding.stdVideoPlayer.switchEngine(MediaPlayerEngine.Companion.NAME)
         }
 
         // 切换到 Media3 (ExoPlayer)
         mBinding.btnSwitchMedia3.setOnClickListener {
-            mBinding.videoPlayerView.switchEngine(Media3PlayerEngine.NAME)
+            mBinding.stdVideoPlayer.switchEngine(Media3PlayerEngine.Companion.NAME)
         }
 
         // 切换到 IJKPlayer
         mBinding.btnSwitchIjkPlayer.setOnClickListener {
-            if(mBinding.videoPlayerView.currentRenderName == ExoPlayerViewRender.NAME) {
+            if(mBinding.stdVideoPlayer.currentRenderName == ExoPlayerViewRender.Companion.NAME) {
                 toast("请先切换到其他渲染")
                 return@setOnClickListener
             }
-            mBinding.videoPlayerView.switchEngine(IjkPlayerEngine.NAME)
+            mBinding.stdVideoPlayer.switchEngine(IjkPlayerEngine.Companion.NAME)
         }
 
         // 清空日志
@@ -176,31 +178,31 @@ class VideoPlayerViewSampleFragment :
      * 更新渲染器切换按钮状态
      */
     private fun updateRenderButtonState() {
-        mBinding.btnSwitchSurfaceView.isEnabled = mBinding.videoPlayerView.currentRenderName != SurfaceViewRender.NAME
-        mBinding.btnSwitchTextureView.isEnabled = mBinding.videoPlayerView.currentRenderName != TextureViewRender.NAME
-        mBinding.btnSwitchVideoView.isEnabled = mBinding.videoPlayerView.currentRenderName != VideoViewRender.NAME
-        mBinding.btnSwitchPlayerView.isEnabled = mBinding.videoPlayerView.currentRenderName != ExoPlayerViewRender.NAME
+        mBinding.btnSwitchSurfaceView.isEnabled = mBinding.stdVideoPlayer.currentRenderName != SurfaceViewRender.Companion.NAME
+        mBinding.btnSwitchTextureView.isEnabled = mBinding.stdVideoPlayer.currentRenderName != TextureViewRender.Companion.NAME
+        mBinding.btnSwitchVideoView.isEnabled = mBinding.stdVideoPlayer.currentRenderName != VideoViewRender.Companion.NAME
+        mBinding.btnSwitchPlayerView.isEnabled = mBinding.stdVideoPlayer.currentRenderName != ExoPlayerViewRender.Companion.NAME
     }
 
     /**
      * 更新引擎切换按钮状态
      */
     private fun updateEngineButtonState() {
-        mBinding.btnSwitchMediaPlayer.isEnabled = mBinding.videoPlayerView.currentEngineType != MediaPlayerEngine.NAME
-        mBinding.btnSwitchMedia3.isEnabled = mBinding.videoPlayerView.currentEngineType != Media3PlayerEngine.NAME
-        mBinding.btnSwitchIjkPlayer.isEnabled = mBinding.videoPlayerView.currentEngineType != IjkPlayerEngine.NAME
+        mBinding.btnSwitchMediaPlayer.isEnabled = mBinding.stdVideoPlayer.currentEngineType != MediaPlayerEngine.Companion.NAME
+        mBinding.btnSwitchMedia3.isEnabled = mBinding.stdVideoPlayer.currentEngineType != Media3PlayerEngine.Companion.NAME
+        mBinding.btnSwitchIjkPlayer.isEnabled = mBinding.stdVideoPlayer.currentEngineType != IjkPlayerEngine.Companion.NAME
     }
 
     /**
      * 更新架构信息显示
      */
     private fun updateArchInfo() {
-        val engineName = mBinding.videoPlayerView.currentEngineType
+        val engineName = mBinding.stdVideoPlayer.currentEngineType
         // 使用 RenderRegistry 获取渲染器的显示名称
         val renderDisplayName = try {
-            RenderRegistry.create(mBinding.videoPlayerView.currentRenderName)?.renderName ?: mBinding.videoPlayerView.currentRenderName
+            RenderRegistry.create(mBinding.stdVideoPlayer.currentRenderName)?.renderName ?: mBinding.stdVideoPlayer.currentRenderName
         } catch (e: Exception) {
-            mBinding.videoPlayerView.currentRenderName
+            mBinding.stdVideoPlayer.currentRenderName
         }
         mBinding.tvArchInfo.text = "当前组合: $engineName + $renderDisplayName"
     }
@@ -216,22 +218,22 @@ class VideoPlayerViewSampleFragment :
         // 根据状态更新 UI 颜色或图标
         when (state) {
             PlayerState.IDLE, PlayerState.STOPPED -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.GRAY)
+                mBinding.tvState.setTextColor(Color.GRAY)
             }
             PlayerState.PREPARING -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.YELLOW)
+                mBinding.tvState.setTextColor(Color.YELLOW)
             }
             PlayerState.PREPARED, PlayerState.PAUSED -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.BLUE)
+                mBinding.tvState.setTextColor(Color.BLUE)
             }
             PlayerState.PLAYING -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.GREEN)
+                mBinding.tvState.setTextColor(Color.GREEN)
             }
             PlayerState.COMPLETED -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.CYAN)
+                mBinding.tvState.setTextColor(Color.CYAN)
             }
             PlayerState.ERROR, PlayerState.RELEASED -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.RED)
+                mBinding.tvState.setTextColor(Color.RED)
             }
         }
     }
@@ -251,9 +253,9 @@ class VideoPlayerViewSampleFragment :
             tvLog.append(logLine)
 
             /// 自动滚动到底部
-            val scrollView = mBinding.tvLog.parent as? android.widget.ScrollView
+            val scrollView = mBinding.tvLog.parent as? ScrollView
             scrollView?.post {
-                scrollView.fullScroll(android.view.View.FOCUS_DOWN)
+                scrollView.fullScroll(View.FOCUS_DOWN)
             }
         }
     }
@@ -262,8 +264,8 @@ class VideoPlayerViewSampleFragment :
 
     override fun onPause() {
         super.onPause()
-        if (mBinding.videoPlayerView.videoPlayer.isPlaying) {
-            mBinding.videoPlayerView.videoPlayer.pause()
+        if (mBinding.stdVideoPlayer.videoPlayer.isPlaying) {
+            mBinding.stdVideoPlayer.videoPlayer.pause()
             appendLog("onPause: 暂停播放")
         }
     }

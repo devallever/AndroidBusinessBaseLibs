@@ -1,4 +1,4 @@
-package app.allever.android.sample.audiovideo.android
+package app.allever.android.sample.audiovideo.android.player
 
 import android.media.MediaPlayer
 import android.media.PlaybackParams
@@ -22,15 +22,14 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 
-
 /**
  * Android VideoView 视频播放封装
  *
  * 职责：
  * - 封装 VideoView + MediaPlayer 完整生命周期
- * - 管理状态机转换（复用 [PlayerState]）
+ * - 管理状态机转换（复用 [app.allever.android.lib.player.core.PlayerState]）
  * - 提供进度追踪、变速、音量、循环等能力
- * - 通过 [IVideoPlayerListener] 回调所有事件
+ * - 通过 [app.allever.android.lib.player.core.IVideoPlayerListener] 回调所有事件
  *
  * VideoView 由外部传入，本类不创建 UI 组件。
  *
@@ -444,7 +443,9 @@ class AndroidVideoViewPlayer {
 
     private fun handlePrepareError(e: Exception) {
         _state = PlayerState.ERROR
-        val handled = listener?.onError(PlayerErrorCode.PREPARE_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.PREPARE_FAILED, e.message)) ?: false
+        val handled = listener?.onError(
+            PlayerErrorCode.PREPARE_FAILED, PlayerErrorCode.formatError(
+                PlayerErrorCode.PREPARE_FAILED, e.message)) ?: false
         if (!handled && retryLeft > 0) {
             retryLeft--
             log("VideoPlayer", "prepare error auto retry, left=$retryLeft")

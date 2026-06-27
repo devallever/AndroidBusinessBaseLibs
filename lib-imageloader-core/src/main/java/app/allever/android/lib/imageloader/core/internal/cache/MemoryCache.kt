@@ -31,7 +31,7 @@ class MemoryCache(maxSize: Int = defaultSize()) {
 
     /** 获取缓存的 Bitmap */
     operator fun get(key: String): Bitmap? = cache.get(key).also { result ->
-        if (result != null) Log.d(TAG, "get() 命中 | key=$key")
+        if (result != null && !result.isRecycled) Log.d(TAG, "get() 命中 | key=$key")
     }
 
     /** 存入缓存 */

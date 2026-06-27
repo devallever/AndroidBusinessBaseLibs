@@ -1,12 +1,14 @@
-package app.allever.android.sample.audiovideo.android.base
+package app.allever.android.sample.audiovideo.lib.kernal
 
 import android.media.MediaPlayer
+import android.media.PlaybackParams
 import android.net.Uri
 import android.view.Surface
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.player.core.LoopMode
 import app.allever.android.lib.player.core.PlayerErrorCode
+import app.allever.android.sample.audiovideo.lib.kernal.BasePlayerKernal
 
 class MediaPlayerKernal(): BasePlayerKernal<MediaPlayer>() {
     private val mOnPreparedListener = MediaPlayer.OnPreparedListener {
@@ -104,14 +106,14 @@ class MediaPlayerKernal(): BasePlayerKernal<MediaPlayer>() {
                 // HTTP/HTTPS 数据源
                 if (headers != null) {
                     // API 21+ 支持设置请求头
-                    mPlayer?.setDataSource(App.context.applicationContext, source, headers)
+                    mPlayer?.setDataSource(App.Companion.context.applicationContext, source, headers)
                 } else {
                     mPlayer?.setDataSource(source.toString())
                 }
             }
             "content" -> {
                 // Content Provider
-                mPlayer?.setDataSource(App.context.applicationContext, source)
+                mPlayer?.setDataSource(App.Companion.context.applicationContext, source)
             }
             "file" -> {
                 // 本地文件
@@ -186,7 +188,7 @@ class MediaPlayerKernal(): BasePlayerKernal<MediaPlayer>() {
 
     override fun speed(speed: Float) {
         try {
-            mPlayer?.playbackParams = android.media.PlaybackParams().setSpeed(speed)
+            mPlayer?.playbackParams = PlaybackParams().setSpeed(speed)
         } catch (e: Exception) {
             log(TAG, "setSpeed error: ${e.message}")
         }

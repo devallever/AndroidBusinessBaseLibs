@@ -13,9 +13,15 @@ import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toastDebug
 import app.allever.android.lib.core.function.crash.Cockroach
 import app.allever.android.lib.core.function.crash.ExceptionHandler
+import app.allever.android.lib.core.helper.ProcessHelper
 import app.allever.android.lib.core.widget.swipebacklayout.BGASwipeBackHelper
 
 abstract class App : Application() {
+    private var startTime = System.currentTimeMillis()
+    override fun attachBaseContext(base: Context?) {
+        startTime = System.currentTimeMillis()
+        super.attachBaseContext(base)
+    }
     override fun onCreate() {
         super.onCreate()
 
@@ -28,6 +34,9 @@ abstract class App : Application() {
         initCrashHandler()
 
         registerActivityLifecycleCallback()
+
+        val endTime = System.currentTimeMillis()
+        log("init time: ${endTime - startTime} , isMain = ${ProcessHelper.isInMainProcess(this)}")
     }
 
     abstract fun init()

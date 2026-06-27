@@ -2,7 +2,6 @@ package app.allever.android.lib.imageloader.core
 
 import android.graphics.Color
 import android.widget.ImageView
-import java.io.File
 
 fun ImageView.load(
     resource: Any,
@@ -40,8 +39,4 @@ fun ImageView.loadRound(
 
 fun ImageView.loadBlur(any: Any, radius: Float = 10f, loadOrigin: Boolean = true) {
     ImageLoaderCore.loadBlur(any, this, radius, loadOrigin)
-}
-
-suspend fun downloadImg(any: String, block: (success: Boolean, file: File?) -> Unit) {
-    ImageLoaderCore.download(any, block)
 }

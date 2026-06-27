@@ -1,12 +1,11 @@
-package app.allever.android.sample.audiovideo.android
+package app.allever.android.sample.audiovideo.android.player
 
-import android.graphics.SurfaceTexture
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.PlaybackParams
 import android.net.Uri
-import android.view.Surface
-import android.view.TextureView
+import android.view.SurfaceHolder
+import android.view.SurfaceView
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.player.core.IVideoPlayerListener
@@ -23,36 +22,34 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 /**
- * Android TextureView + MediaPlayer 视频播放封装（独立实现）
+ * Android SurfaceView + MediaPlayer 视频播放封装（独立实现）
  *
  * ## 职责
  * - 手动管理 MediaPlayer 完整生命周期
- * - 处理 TextureView 的 Surface 生命周期（available/sizeChanged/destroyed）
- * - 管理状态机转换（复用 [PlayerState]）
+ * - 处理 SurfaceView 的 Surface 生命周期（创建/销毁/重建）
+ * - 管理状态机转换（复用 [app.allever.android.lib.player.core.PlayerState]）
  * - 提供进度追踪、变速、音量、循环等能力
- * - 自适应容器布局（FIT_CENTER 模式）
- * - 通过 [IVideoPlayerListener] 回调所有事件
+ * - 通过 [app.allever.android.lib.player.core.IVideoPlayerListener] 回调所有事件
  *
- * ## TextureView 特点（与 SurfaceView/VideoView 的区别）
+ * ## SurfaceView 特点（与 VideoView/TextureView 的区别）
  * **优势：**
- * ✅ **支持动画/变换**：可做旋转、缩放、透明度、圆角等特效
- * ✅ **可嵌套显示**：可以与其他 View 混合，不会覆盖上层
- * ✅ **Surface 通常立即可用**：比 SurfaceView 更快进入可用状态
- * ✅ **适合 UI 密集场景**：如短视频应用、画中画等
+ * ✅ **性能优秀**：独立窗口，硬件合成，功耗低
+ * ✅ **控制精细**：可直接操作 Surface，支持自定义渲染逻辑
+ * ✅ **兼容性好**：所有 Android 版本都支持，无额外依赖
+ * ✅ **适合大多数场景**：视频播放、直播、相机预览等
  *
  * **劣势：**
- * ❌ **性能略差**：在 View 层级中绘制，额外开销
- * ❌ **功耗较高**：软件合成或 GPU 合成，比 SurfaceView 费电
- * ❌ **内存占用大**：需要额外的图形缓冲区
+ * ❌ **不能做动画**：不支持旋转、缩放、透明度等变换
+ * ❌ **不能嵌套**：会覆盖在其他 View 上层（除非在同级）
+ * ❌ **Surface 创建异步**：需要处理 PendingPrepare 机制
  *
  * ## 适用场景
- * - 需要做视频特效的应用（圆角视频、模糊背景等）
- * - 短视频应用（抖音/TikTok 风格的全屏视频）
- * - 需要视频跟随手势缩放/旋转的场景
- * - 视频需要与其他 View 混合显示的复杂布局
- * - 画中画（Picture-in-Picture）模式
+ * - 大多数视频播放场景（推荐首选）
+ * - 直播应用（低延迟要求）
+ * - 需要自定义播放器 UI 的应用
+ * - 对性能有较高要求的场景
  *
- * ## 与 [BaseVideoPlayer] 的关系
+ * ## 与 [app.allever.android.sample.audiovideo.lib.player.BaseVideoPlayer] 的关系
  * ⚠️ **重要：本类是独立实现，不继承 BaseVideoPlayer！**
  *
  * 原因：
@@ -61,31 +58,13 @@ import kotlinx.coroutines.launch
  * 3. 可作为参考实现（展示如何从零实现一个播放器）
  *
  * 如果新项目建议使用：
- * - [AndroidMediaPlayer]（继承 BaseVideoPlayer，VideoView 方式）- 最简单
- * - [AndroidSurfacePlayer]（独立实现，SurfaceView 方式）- 性能最好
- * - 或基于 BaseVideoPlayer 自定义 TextureView 子类（推荐）
- *
- * ## 与 [AndroidSurfacePlayer] 的核心区别
- * 1. **Surface 获取方式不同**：
- *    - SurfaceView：通过 SurfaceHolder.Callback（异步，需等待 surfaceCreated）
- *    - TextureView：通过 SurfaceTextureListener（通常立即可用）
- *
- * 2. **PendingPrepare 使用频率不同**：
- *    - SurfaceView：经常使用（Surface 创建慢）
- *    - TextureView：极少使用（Surface 通常立即可用），仅为极端情况兜底
- *
- * 3. **绑定方式不同**：
- *    - SurfaceView：mediaPlayer.setDisplay(holder)
- *    - TextureView：mediaPlayer.setSurface(Surface(surfaceTexture))
- *
- * 4. **销毁回调返回值不同**：
- *    - SurfaceView：surfaceDestroyed() 无返回值
- *    - TextureView：onSurfaceTextureDestroyed() 返回 Boolean（是否允许销毁）
+ * - [app.allever.android.sample.audiovideo.lib.player.AndroidMediaPlayer]（继承 BaseVideoPlayer，VideoView 方式）- 最简单
+ * - 或基于 BaseVideoPlayer 自定义 SurfaceView 子类（推荐）
  *
  * ## 使用示例
  * ```kotlin
- * val player = AndroidTexturePlayer()
- * player.attach(textureView)
+ * val player = AndroidSurfacePlayer()
+ * player.attach(surfaceView)
  * player.listener = object : IVideoPlayerListener { ... }
  * player.setSource("https://example.com/video.mp4")
  * // onPrepared 后调用 player.play()
@@ -95,13 +74,13 @@ import kotlinx.coroutines.launch
  * player.release()  // 不再使用时
  * ```
  *
- * @see AndroidSurfacePlayer SurfaceView 实现（推荐大多数场景，性能更好）
- * @see AndroidMediaPlayer 继承 BaseVideoPlayer 的 VideoView 实现（最简单）
- * @see BaseVideoPlayer 新架构的基类（模板方法模式）
+ * @see app.allever.android.sample.audiovideo.lib.player.AndroidMediaPlayer 继承 BaseVideoPlayer 的 VideoView 实现（推荐新手）
+ * @see AndroidTextureView TextureView 实现（需要动画/变换时）
+ * @see app.allever.android.sample.audiovideo.lib.player.BaseVideoPlayer 新架构的基类（模板方法模式）
  */
-class AndroidTexturePlayer {
+class AndroidSurfacePlayer {
 
-    private var textureView: TextureView? = null
+    private var surfaceView: SurfaceView? = null
     private var mediaPlayer: MediaPlayer? = null
     private var listener: IVideoPlayerListener? = null
 
@@ -111,7 +90,7 @@ class AndroidTexturePlayer {
         set(value) {
             val old = field
             if (old != value) {
-                log("TexturePlayer", "state: $old -> $value")
+                log("SurfacePlayer", "state: $old -> $value")
                 field = value
                 listener?.onStateChanged(old, value)
             }
@@ -158,9 +137,9 @@ class AndroidTexturePlayer {
         }
 
     /**
-     * TextureView 缩放模式（默认 FIT_CENTER）
+     * SurfaceView 缩放模式（默认 FIT_CENTER）
      *
-     * 通过调整 TextureView 的布局尺寸实现不同的显示效果：
+     * 通过调整 SurfaceView 的布局尺寸实现不同的显示效果：
      * - FIT_CENTER: 保持比例，完整显示（可能有黑边）
      * - CROP_CENTER: 保持比例，填满容器（可能裁剪边缘）
      * - STRETCH: 拉伸填满容器（可能变形）
@@ -168,7 +147,7 @@ class AndroidTexturePlayer {
     var videoScaleMode: VideoScaleMode = VideoScaleMode.FIT_CENTER
         set(value) {
             field = value
-            VideoHelper.adjustRenderViewLayout(textureView, videoWidth, videoHeight, value)
+            VideoHelper.adjustRenderViewLayout(surfaceView, videoWidth, videoHeight, value)
         }
 
     // ==================== 内部状态 ====================
@@ -178,9 +157,10 @@ class AndroidTexturePlayer {
     private var currentHeaders: Map<String, String>? = null
     private var retryLeft: Int = 0
     private var isAssetSource: Boolean = false
-
-    /** Surface 是否可用 */
     private var isSurfaceReady: Boolean = false
+
+    /** Surface 销毁前是否在播放（用于 Surface 重建后恢复） */
+    private var wasPlayingBeforeDestroy: Boolean = false
 
     /** 视频原始宽度 */
     private var videoWidth: Int = 0
@@ -189,10 +169,7 @@ class AndroidTexturePlayer {
     private var videoHeight: Int = 0
 
     /**
-     * 待执行的 setSource 参数（当 Surface 未就绪时缓存）
-     *
-     * 注意：TextureView 的 Surface 通常立即可用，
-     * 此机制仅为极端情况（如 View 尚未 attach 到 Window）兜底。
+     * 待执行的 prepare 参数（当 Surface 未就绪时缓存 setSource 调用）
      */
     private data class PendingPrepare(
         val uri: Uri,
@@ -205,27 +182,27 @@ class AndroidTexturePlayer {
     // ==================== 绑定 & 解绑 ====================
 
     /**
-     * 绑定 TextureView（必须在播放前调用一次）
+     * 绑定 SurfaceView（必须在播放前调用一次）
      *
-     * 会立即创建 MediaPlayer 并设置 SurfaceTextureListener 监听 Surface 生命周期。
+     * 会立即创建 MediaPlayer 并设置 SurfaceHolder.Callback 监听 Surface 生命周期。
      *
-     * @param textureView 外部创建的 TextureView 实例
+     * @param surfaceView 外部创建的 SurfaceView 实例
      */
-    fun attach(textureView: TextureView) {
-        this.textureView = textureView
+    fun attach(surfaceView: SurfaceView) {
+        this.surfaceView = surfaceView
         initMediaPlayer()
-        setupSurfaceTextureCallback()
+        setupSurfaceCallback()
     }
 
     /**
-     * 解绑 TextureView（页面 onPause/onDestroyView 时调用，不释放内部资源）
+     * 解绑 SurfaceView（页面 onPause/onDestroyView 时调用，不释放内部资源）
      *
      * 调用后可通过 [attach] 重新绑定继续使用。
      */
     fun detach() {
         stopProgressTracking()
-        removeSurfaceTextureCallback()
-        textureView = null
+        removeSurfaceCallback()
+        surfaceView = null
         isSurfaceReady = false
     }
 
@@ -333,7 +310,7 @@ class AndroidTexturePlayer {
         try {
             mediaPlayer?.seekTo(positionMs.toInt())
         } catch (e: Exception) {
-            log("TexturePlayer", "seekTo error: ${e.message}")
+            log("SurfacePlayer", "seekTo error: ${e.message}")
         }
     }
 
@@ -409,7 +386,7 @@ class AndroidTexturePlayer {
                 val handled = listener?.onError(errorCode, PlayerErrorCode.formatError(errorCode, "MediaPlayer error: what=$what, extra=$extra")) ?: false
                 if (!handled && retryLeft > 0) {
                     retryLeft--
-                    log("TexturePlayer", "auto retry, left=$retryLeft")
+                    log("SurfacePlayer", "auto retry, left=$retryLeft")
                     postDelayed({ doPrepareInternal(currentUri, currentHeaders, if (isAssetSource) currentUri?.path?.removePrefix("/android_asset/") else null) }, 500)
                     true
                 } else {
@@ -424,23 +401,25 @@ class AndroidTexturePlayer {
             setOnInfoListener { _, what, extra ->
                 when (what) {
                     MediaPlayer.MEDIA_INFO_VIDEO_TRACK_LAGGING ->
-                        log("TexturePlayer", "info: video track lagging")
+                        log("SurfacePlayer", "info: video track lagging")
                     MediaPlayer.MEDIA_INFO_BUFFERING_START ->
-                        log("TexturePlayer", "info: buffering start")
+                        log("SurfacePlayer", "info: buffering start")
                     MediaPlayer.MEDIA_INFO_BUFFERING_END ->
-                        log("TexturePlayer", "info: buffering end")
-                    MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START ->
-                        log("TexturePlayer", "info: video rendering start")
+                        log("SurfacePlayer", "info: buffering end")
+                    MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START -> {
+                        log("SurfacePlayer", "info: video rendering start")
+                        // 视频首帧渲染完成，可在此回调中做 UI 更新
+                    }
                 }
                 listener?.onInfo(what, extra) ?: false
             }
 
             setOnVideoSizeChangedListener { mp, width, height ->
                 if (width > 0 && height > 0) {
-                    this@AndroidTexturePlayer.videoWidth = width
-                    this@AndroidTexturePlayer.videoHeight = height
+                    this@AndroidSurfacePlayer.videoWidth = width
+                    this@AndroidSurfacePlayer.videoHeight = height
                     listener?.onVideoSizeChanged(width, height)
-                    VideoHelper.adjustRenderViewLayout(textureView, videoWidth, videoHeight, videoScaleMode)
+                    VideoHelper.adjustRenderViewLayout(surfaceView, videoWidth, videoHeight, videoScaleMode)
                 }
             }
         }
@@ -460,65 +439,67 @@ class AndroidTexturePlayer {
         mediaPlayer = null
     }
 
-    // ==================== 内部：SurfaceTexture 回调 ====================
+    // ==================== 内部：Surface 回调 ====================
 
-    private fun setupSurfaceTextureCallback() {
-        textureView?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
-
-            override fun onSurfaceTextureAvailable(surfaceTexture: SurfaceTexture, width: Int, height: Int) {
-                log("TexturePlayer", "surfaceTextureAvailable: ${width}x${height}")
+    private fun setupSurfaceCallback() {
+        surfaceView?.holder?.addCallback(object : SurfaceHolder.Callback {
+            override fun surfaceCreated(holder: SurfaceHolder) {
+                log("SurfacePlayer", "surfaceCreated")
                 isSurfaceReady = true
-
                 // 将 Surface 绑定到 MediaPlayer
                 try {
-                    mediaPlayer?.setSurface(Surface(surfaceTexture))
+                    mediaPlayer?.setDisplay(holder)
                 } catch (e: Exception) {
-                    log("TexturePlayer", "setSurface error: ${e.message}")
+                    log("SurfacePlayer", "setDisplay error: ${e.message}")
                 }
 
                 // 如果有待执行的 prepare，现在执行
                 pendingPrepare?.let { pending ->
-                    log("TexturePlayer", "execute pending prepare")
+                    log("SurfacePlayer", "execute pending prepare")
                     pendingPrepare = null
                     doPrepareInternal(pending.uri, pending.headers, pending.assetPath)
                 }
 
-                VideoHelper.adjustRenderViewLayout(textureView, videoWidth, videoHeight, videoScaleMode)
+                // 如果之前在播放且 Surface 是重建（非首次），恢复播放
+                if (wasPlayingBeforeDestroy && _state in listOf(PlayerState.PAUSED, PlayerState.PLAYING)) {
+                    wasPlayingBeforeDestroy = false
+                    mediaPlayer?.start()
+                    _state = PlayerState.PLAYING
+                    startProgressTracking()
+                    log("SurfacePlayer", "resumed after surface recreated")
+                }
             }
 
-            override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {
-                log("TexturePlayer", "surfaceTextureSizeChanged: ${width}x${height}")
-                VideoHelper.adjustRenderViewLayout(textureView, videoWidth, videoHeight, videoScaleMode)
+            override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+                log("SurfacePlayer", "surfaceChanged: ${width}x${height}")
+                // Surface 尺寸变化时重新计算自适应布局
+                VideoHelper.adjustRenderViewLayout(surfaceView, videoWidth, videoHeight, videoScaleMode)
             }
 
-            override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
-                log("TexturePlayer", "surfaceTextureDestroyed")
+            override fun surfaceDestroyed(holder: SurfaceHolder) {
+                log("SurfacePlayer", "surfaceDestroyed")
                 isSurfaceReady = false
 
                 // 记录当前播放状态
-                val wasPlaying = _state == PlayerState.PLAYING
+                wasPlayingBeforeDestroy = _state == PlayerState.PLAYING
 
-                // Surface 即将销毁，暂停播放
-                if (wasPlaying) {
+                // Surface 即将销毁，必须先移除 display 防止崩溃
+                // 注意：不能在这里调 mediaPlayer.setDisplay(null)，某些机型会 crash
+                // 安全做法是暂停播放即可
+                if (wasPlayingBeforeDestroy) {
                     try {
                         mediaPlayer?.pause()
                         _state = PlayerState.PAUSED
                     } catch (_: Exception) {}
                 }
                 stopProgressTracking()
-
-                // 返回 true 表示已处理销毁，false 则会由系统再次尝试销毁
-                return true
             }
-
-            override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
-                // 每帧渲染回调，一般不需要处理
-            }
-        }
+        })
     }
 
-    private fun removeSurfaceTextureCallback() {
-        textureView?.surfaceTextureListener = null
+    private fun removeSurfaceCallback() {
+        // 移除 callback 通过重新设置一个空实现来避免 ConcurrentModificationException
+        // SurfaceHolder 不提供 removeCallback 方法
     }
 
     // ==================== 内部：数据源设置 & 准备流程 ====================
@@ -533,8 +514,8 @@ class AndroidTexturePlayer {
             // Surface 已就绪，直接执行 prepare
             doPrepareInternal(uri, headers, assetPath)
         } else {
-            // Surface 未就绪（极少情况），缓存参数等待 onSurfaceTextureAvailable
-            log("TexturePlayer", "surface not ready, cache prepare params")
+            // Surface 未就绪，缓存参数等待 surfaceCreated
+            log("SurfacePlayer", "surface not ready, cache prepare params")
             pendingPrepare = PendingPrepare(uri, headers, assetPath)
         }
     }
@@ -554,7 +535,7 @@ class AndroidTexturePlayer {
             val context = App.context
             if (!assetPath.isNullOrEmpty()) {
                 // assets 文件：直接使用 AssetFileDescriptor
-                log("TexturePlayer", "prepare asset: $assetPath")
+                log("SurfacePlayer", "prepare asset: $assetPath")
                 val afd = context.assets.openFd(assetPath)
                 mediaPlayer?.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
                 afd.close()
@@ -569,17 +550,19 @@ class AndroidTexturePlayer {
             mediaPlayer?.prepareAsync()
             _state = PlayerState.PREPARING
         } catch (e: Exception) {
-            log("TexturePlayer", "prepare error: ${e.message}")
+            log("SurfacePlayer", "prepare error: ${e.message}")
             handlePrepareError(e)
         }
     }
 
     private fun handlePrepareError(e: Exception) {
         _state = PlayerState.ERROR
-        val handled = listener?.onError(PlayerErrorCode.PREPARE_FAILED, PlayerErrorCode.formatError(PlayerErrorCode.PREPARE_FAILED, e.message)) ?: false
+        val handled = listener?.onError(
+            PlayerErrorCode.PREPARE_FAILED, PlayerErrorCode.formatError(
+                PlayerErrorCode.PREPARE_FAILED, e.message)) ?: false
         if (!handled && retryLeft > 0) {
             retryLeft--
-            log("TexturePlayer", "prepare error auto retry, left=$retryLeft")
+            log("SurfacePlayer", "prepare error auto retry, left=$retryLeft")
             postDelayed({ doPrepareInternal(currentUri, currentHeaders, if (isAssetSource) currentUri?.path?.removePrefix("/android_asset/") else null) }, 500)
         }
     }
@@ -617,9 +600,9 @@ class AndroidTexturePlayer {
      */
     private fun applySpeed() {
         try {
-            mediaPlayer?.playbackParams = PlaybackParams().apply { speed = this@AndroidTexturePlayer.speed }
+            mediaPlayer?.playbackParams = PlaybackParams().apply { speed = this@AndroidSurfacePlayer.speed }
         } catch (e: Exception) {
-            log("TexturePlayer", "setSpeed error: ${e.message}")
+            log("SurfacePlayer", "setSpeed error: ${e.message}")
         }
     }
 

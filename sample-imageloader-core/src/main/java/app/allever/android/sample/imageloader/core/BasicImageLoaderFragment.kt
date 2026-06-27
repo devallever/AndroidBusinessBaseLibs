@@ -39,7 +39,7 @@ class BasicImageLoaderFragment: BaseFragment<FragmentBasicLoaderBinding, BaseVie
     override fun inflate(): FragmentBasicLoaderBinding = FragmentBasicLoaderBinding.inflate(layoutInflater)
 
     override fun init() {
-        ImageLoaderCore.init(requireContext(), DefaultLoader, ImageLoaderCore.Builder.create())
+        ImageLoaderCore.init(requireContext(), GlideLoader, ImageLoaderCore.Builder.create())
         mBinding.btnGlide.setOnClickListener {
             ImageLoaderCore.init(requireContext(), GlideLoader, ImageLoaderCore.Builder.create())
             loadAllImage()
@@ -48,10 +48,10 @@ class BasicImageLoaderFragment: BaseFragment<FragmentBasicLoaderBinding, BaseVie
             ImageLoaderCore.init(requireContext(), CoilLoader, ImageLoaderCore.Builder.create())
             loadAllImage()
         }
-        mBinding.btnDefault.setOnClickListener {
-            ImageLoaderCore.init(requireContext(), DefaultLoader, ImageLoaderCore.Builder.create())
-            loadAllImage()
-        }
+//        mBinding.btnDefault.setOnClickListener {
+//            ImageLoaderCore.init(requireContext(), DefaultLoader, ImageLoaderCore.Builder.create())
+//            loadAllImage()
+//        }
 
         mBinding.btnSelectFile.setOnClickListener {
             MediaPickerCore.launchImage(imageLauncher)

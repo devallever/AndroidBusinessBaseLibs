@@ -1,4 +1,4 @@
-package app.allever.android.sample.audiovideo.android.base
+package app.allever.android.sample.audiovideo.lib.kernal
 
 import android.os.Handler
 import android.os.Looper

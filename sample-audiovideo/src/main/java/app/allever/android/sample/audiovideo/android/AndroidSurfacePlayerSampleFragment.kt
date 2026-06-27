@@ -17,6 +17,7 @@ import app.allever.android.lib.player.core.PlayerState
 import app.allever.android.lib.player.core.SurfaceType
 import app.allever.android.lib.player.core.VideoHelper
 import app.allever.android.lib.player.core.VideoScaleMode
+import app.allever.android.sample.audiovideo.android.player.AndroidSurfacePlayer
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

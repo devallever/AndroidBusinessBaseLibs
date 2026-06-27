@@ -1,12 +1,12 @@
-package app.allever.android.sample.audiovideo.android
+package app.allever.android.sample.audiovideo.lib.player
 
 import androidx.media3.common.Player
 import androidx.media3.ui.PlayerView
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.player.core.SurfaceType
 import app.allever.android.lib.player.core.engine.media3.ExoPlayerHelper
-import app.allever.android.sample.audiovideo.android.base.IPlayerKernal
-import app.allever.android.sample.audiovideo.android.base.Media3PlayerKernal
+import app.allever.android.sample.audiovideo.lib.kernal.IPlayerKernal
+import app.allever.android.sample.audiovideo.lib.kernal.Media3PlayerKernal
 
 /**
  * Media3 (ExoPlayer) 视频播放器实现（继承自 [BaseVideoPlayer]）
@@ -76,7 +76,7 @@ import app.allever.android.sample.audiovideo.android.base.Media3PlayerKernal
  *   - ExoPlayer 特有的缩放模式调整（通过 ExoPlayerHelper）
  *   - 安全的 Surface 切换方案（使用"暂停→切换→恢复"策略）
  *
- * **引擎实现**：使用 [Media3PlayerKernal] 封装 ExoPlayer API
+ * **引擎实现**：使用 [app.allever.android.sample.audiovideo.lib.kernal.Media3PlayerKernal] 封装 ExoPlayer API
  * - 提供统一的 IPlayerKernal 接口
  * - 内置线程安全、异常处理等机制
  * - 支持 ExoPlayer 特有的配置项（如 TrackSelection、LoadControl 等）
@@ -137,17 +137,17 @@ import app.allever.android.sample.audiovideo.android.base.Media3PlayerKernal
  * | **适用场景** | 快速原型 | 大多数场景 | 特效需求 | **专业应用** |
  *
  * @see BaseVideoPlayer 基类，包含完整的播放流程实现
- * @see Media3PlayerKernal ExoPlayer 引擎封装
- * @see ExoPlayerHelper ExoPlayer 辅助工具类
- * @see PlayerView ExoPlayer 官方视图组件
+ * @see app.allever.android.sample.audiovideo.lib.kernal.Media3PlayerKernal ExoPlayer 引擎封装
+ * @see app.allever.android.lib.player.core.engine.media3.ExoPlayerHelper ExoPlayer 辅助工具类
+ * @see androidx.media3.ui.PlayerView ExoPlayer 官方视图组件
  */
 class AndroidMedia3Player: BaseVideoPlayer() {
 
     /**
      * Media3 (ExoPlayer) 引擎实例
      *
-     * 通过 [Media3PlayerKernal] 封装 ExoPlayer 的复杂性，
-     * 提供统一的 [IPlayerKernal] 接口。
+     * 通过 [app.allever.android.sample.audiovideo.lib.kernal.Media3PlayerKernal] 封装 ExoPlayer 的复杂性，
+     * 提供统一的 [app.allever.android.sample.audiovideo.lib.kernal.IPlayerKernal] 接口。
      *
      * 为什么使用 Media3PlayerKernal？
      * 1. **接口统一**：与其他引擎（MediaPlayer、IjkPlayer）保持一致
@@ -357,7 +357,7 @@ class AndroidMedia3Player: BaseVideoPlayer() {
      * - videoScaleMode 属性改变时（用户切换缩放模式）
      *
      * **不同类型的处理方式：**
-     * - **PLAYER_VIEW**：通过 [ExoPlayerHelper.applyVideoScaleMode] 调整
+     * - **PLAYER_VIEW**：通过 [app.allever.android.lib.player.core.engine.media3.ExoPlayerHelper.applyVideoScaleMode] 调整
      *   PlayerView 内置了 resizeMode 属性，支持：
      *   - RESIZE_MODE_FIT：适应容器（可能有黑边）
      *   - RESIZE_MODE_FIXED_WIDTH：固定宽度，高度自适应
@@ -370,9 +370,9 @@ class AndroidMedia3Player: BaseVideoPlayer() {
      *
      * **注意：**
      * PlayerView 的缩放模式与 VideoScaleMode 枚举的映射关系
-     * 由 [ExoPlayerHelper] 负责，本类不关心具体实现。
+     * 由 [app.allever.android.lib.player.core.engine.media3.ExoPlayerHelper] 负责，本类不关心具体实现。
      *
-     * @see ExoPlayerHelper.applyVideoScaleMode PlayerView 缩放模式设置
+     * @see app.allever.android.lib.player.core.engine.media3.ExoPlayerHelper.applyVideoScaleMode PlayerView 缩放模式设置
      * @see VideoScaleMode 缩放模式枚举定义
      */
     override fun adjustSurfaceLayout() {

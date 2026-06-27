@@ -1,10 +1,13 @@
 package app.allever.android.sample.audiovideo
 
+import android.view.Gravity
 import app.allever.android.lib.common.FragmentActivity
 import app.allever.android.lib.common.ListActivity
 import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextClickAdapter
+import app.allever.android.lib.common.adapter.TextDetailClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextClickItem
+import app.allever.android.lib.common.adapter.bean.TextDetailClickItem
 import app.allever.android.lib.common.databinding.ActivityListBinding
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.player.core.engine.EngineRegistry
@@ -13,6 +16,7 @@ import app.allever.android.lib.player.core.engine.media3.ExoPlayerViewRender
 import app.allever.android.lib.player.core.engine.media3.Media3PlayerEngine
 import app.allever.android.lib.player.core.render.RenderRegistry
 import app.allever.android.sample.audiovideo.android.AndroidAudioVideoFragment
+import app.allever.android.sample.audiovideo.core.PlayerCoreSampleFragment
 import app.allever.android.sample.audiovideo.knowledge.AudioVideoKnowledgeFragment
 import app.allever.android.sample.audiovideo.lib.AudioVideoLibFragment
 import app.allever.android.sample.audiovideo.sdk.SDKAudioVideoFragment
@@ -20,24 +24,29 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 @Route(path = "/audiovideo/main")
-class SampleAudioVideoMainActivity: ListActivity<ActivityListBinding, ListViewModel, TextClickItem>() {
+class SampleAudioVideoMainActivity: ListActivity<ActivityListBinding, ListViewModel, TextDetailClickItem>() {
     override fun getPageTitle(): String = "音视频"
 
-    override fun getAdapter(): BaseQuickAdapter<TextClickItem, *> = TextClickAdapter()
+    override fun getAdapter(): BaseQuickAdapter<TextDetailClickItem, *> = TextDetailClickAdapter(
+        Gravity.CENTER)
 
-    override fun getList(): MutableList<TextClickItem> = mutableListOf(
-        TextClickItem("音视频基础知识") {
+    override fun getList(): MutableList<TextDetailClickItem> = mutableListOf(
+        TextDetailClickItem("音视频基础知识") {
             FragmentActivity.start<AudioVideoKnowledgeFragment>(it.title)
         },
-        TextClickItem("Android音视频") {
+        TextDetailClickItem("Android音视频", "MediaPlayer + VideoView/SurfaceView/TextureView") {
             FragmentActivity.start< AndroidAudioVideoFragment>(it.title)
         },
-        TextClickItem("SDK音视频") {
+        TextDetailClickItem("音视频Lib", "BaseVideoPlayer->AndroidMediaPlayer/AndroidMedia3Player/IjkVideoPlayer\nIPlayerKernal->MediaPlayerKernal/Media3PlayerKernal/IjkPlayerKernal") {
+            FragmentActivity.start<AudioVideoLibFragment>(it.title)
+        },
+        TextDetailClickItem("Player-Core", "VideoPlayer/StdVideoPlayer/CustomVideoPlayer\nIPlayerEngine->MediaPlayerEngine/Media3PlayerEngine/IjkPlayerEngine\nIVideoRender->PlayerViewRender/TextureViewRender/SurfaceViewRender/VideoViewRender\nIVideoUiController->StdVideoController/CustomStdVideoController") {
+            FragmentActivity.start<PlayerCoreSampleFragment>(it.title)
+        },
+        TextDetailClickItem("SDK", "ExoPlayer/IjkPlayer") {
             FragmentActivity.start<SDKAudioVideoFragment>(it.title)
         },
-        TextClickItem("音视频Lib") {
-            FragmentActivity.start<AudioVideoLibFragment>(it.title)
-        }
+
     )
 
     override fun init() {

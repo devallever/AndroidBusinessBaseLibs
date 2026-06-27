@@ -20,6 +20,7 @@ import app.allever.android.lib.player.core.LoopMode
 import app.allever.android.lib.player.core.PlayerErrorCode
 import app.allever.android.lib.player.core.PlayerState
 import app.allever.android.lib.player.core.VideoScaleMode
+import app.allever.android.sample.audiovideo.lib.player.IjkVideoPlayer
 import app.allever.android.sample.audiovideo.databinding.FragmentSdkIjkVideoPlayerSampleBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

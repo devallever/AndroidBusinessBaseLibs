@@ -1,4 +1,4 @@
-package app.allever.android.sample.audiovideo.android.base
+package app.allever.android.sample.audiovideo.lib.kernal
 
 import android.net.Uri
 import android.view.Surface
@@ -14,6 +14,12 @@ import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toJson
 import app.allever.android.lib.player.core.LoopMode
 import app.allever.android.lib.player.core.PlayerErrorCode
+import app.allever.android.sample.audiovideo.lib.kernal.BasePlayerKernal
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import javax.net.ssl.SSLException
 
 class Media3PlayerKernal: BasePlayerKernal<ExoPlayer>() {
 
@@ -81,7 +87,7 @@ class Media3PlayerKernal: BasePlayerKernal<ExoPlayer>() {
     }
 
     override fun init() {
-        val context = App.context.applicationContext
+        val context = App.Companion.context.applicationContext
         mPlayer = ExoPlayer.Builder(context).build().apply {
             addListener(exoPlayerListener)
         }
@@ -292,10 +298,10 @@ class Media3PlayerKernal: BasePlayerKernal<ExoPlayer>() {
     private fun mapExoPlayerError(error: PlaybackException): Int {
         // 根据异常类型判断错误代码，避免使用可能不存在的常量
         return when (error.cause) {
-            is java.io.FileNotFoundException -> PlayerErrorCode.FILE_NOT_FOUND
-            is java.net.SocketTimeoutException, is java.net.ConnectException -> PlayerErrorCode.NETWORK_CONNECTION_FAILED
-            is javax.net.ssl.SSLException -> PlayerErrorCode.SSL_ERROR
-            is java.io.IOException -> PlayerErrorCode.FILE_READ_ERROR
+            is FileNotFoundException -> PlayerErrorCode.FILE_NOT_FOUND
+            is SocketTimeoutException, is ConnectException -> PlayerErrorCode.NETWORK_CONNECTION_FAILED
+            is SSLException -> PlayerErrorCode.SSL_ERROR
+            is IOException -> PlayerErrorCode.FILE_READ_ERROR
             else -> PlayerErrorCode.EXO_PLAYER_INTERNAL_ERROR
         }
     }

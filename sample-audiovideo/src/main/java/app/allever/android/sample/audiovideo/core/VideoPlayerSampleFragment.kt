@@ -1,30 +1,29 @@
-package app.allever.android.sample.audiovideo.core.player
+package app.allever.android.sample.audiovideo.core
 
-import android.view.ViewGroup
+import android.graphics.Color
+import android.view.View
+import android.widget.ScrollView
 import android.widget.SeekBar
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.media.core.model.MediaItem
-import app.allever.android.lib.media.picker.MediaPickerConfig
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.lib.player.core.IVideoPlayerListener
 import app.allever.android.lib.player.core.LoopMode
-import app.allever.android.sample.audiovideo.VideoSource
 import app.allever.android.lib.player.core.PlayerState
 import app.allever.android.lib.player.core.VideoScaleMode
 import app.allever.android.lib.player.core.engine.MediaPlayerEngine
 import app.allever.android.lib.player.core.engine.ijk.IjkPlayerEngine
 import app.allever.android.lib.player.core.engine.media3.ExoPlayerViewRender
 import app.allever.android.lib.player.core.engine.media3.Media3PlayerEngine
-import app.allever.android.lib.player.core.player.IVideoPlayerViewListener
 import app.allever.android.lib.player.core.player.VideoPlayer
 import app.allever.android.lib.player.core.render.RenderRegistry
 import app.allever.android.lib.player.core.render.SurfaceViewRender
 import app.allever.android.lib.player.core.render.TextureViewRender
 import app.allever.android.lib.player.core.render.VideoViewRender
+import app.allever.android.sample.audiovideo.VideoSource
 import app.allever.android.sample.audiovideo.databinding.FragmentVideoPlayerSampleBinding
-
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -45,7 +44,7 @@ import java.util.Locale
  * └── IVideoRender: SurfaceViewRender/TextureViewRender/VideoViewRender (渲染)
  * ```
  *
- * @see VideoPlayer 新架构协调器
+ * @see app.allever.android.lib.player.core.player.VideoPlayer 新架构协调器
  */
 class VideoPlayerSampleFragment :
     BaseFragment<FragmentVideoPlayerSampleBinding, BaseViewModel>() {
@@ -190,17 +189,17 @@ class VideoPlayerSampleFragment :
 
         // 切换到 SurfaceView
         mBinding.btnSwitchSurfaceView.setOnClickListener {
-            switchRender(SurfaceViewRender.NAME)
+            switchRender(SurfaceViewRender.Companion.NAME)
         }
 
         // 切换到 TextureView
         mBinding.btnSwitchTextureView.setOnClickListener {
-            switchRender( TextureViewRender.NAME)
+            switchRender( TextureViewRender.Companion.NAME)
         }
 
         // 切换到 VideoView
         mBinding.btnSwitchVideoView.setOnClickListener {
-            switchRender( VideoViewRender.NAME)
+            switchRender( VideoViewRender.Companion.NAME)
         }
 
         // 切换到 PlayerView (ExoPlayer)
@@ -209,14 +208,14 @@ class VideoPlayerSampleFragment :
                 toast("请先切换到 ExoPlayer")
                 return@setOnClickListener
             }
-            switchRender(ExoPlayerViewRender.NAME)
+            switchRender(ExoPlayerViewRender.Companion.NAME)
         }
 
         // ==================== 引擎切换按钮（新架构核心功能演示）====================
 
         // 切换到 MediaPlayer
         mBinding.btnSwitchMediaPlayer.setOnClickListener {
-            if(currentRenderName == ExoPlayerViewRender.NAME) {
+            if(currentRenderName == ExoPlayerViewRender.Companion.NAME) {
                 toast("请先切换到其他渲染")
                 return@setOnClickListener
             }
@@ -230,7 +229,7 @@ class VideoPlayerSampleFragment :
 
         // 切换到 IJKPlayer
         mBinding.btnSwitchIjkPlayer.setOnClickListener {
-            if(currentRenderName == ExoPlayerViewRender.NAME) {
+            if(currentRenderName == ExoPlayerViewRender.Companion.NAME) {
                 toast("请先切换到其他渲染")
                 return@setOnClickListener
             }
@@ -266,7 +265,7 @@ class VideoPlayerSampleFragment :
         mBinding.seekBarSpeed.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val speed = 0.5f + (progress.toFloat() / 50 * 2.5f)
-                mBinding.tvSpeed.text = String.format(Locale.US, "%.1fx", speed)
+                mBinding.tvSpeed.text = String.Companion.format(Locale.US, "%.1fx", speed)
                 if (fromUser) {
                     player.speed = speed
                 }
@@ -284,7 +283,7 @@ class VideoPlayerSampleFragment :
         mBinding.seekBarVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val volume = progress.toFloat() / 100
-                mBinding.tvVolume.text = String.format(Locale.US, "%.0f%%", volume * 100)
+                mBinding.tvVolume.text = String.Companion.format(Locale.US, "%.0f%%", volume * 100)
                 if (fromUser) {
                     player.volume = volume
                 }
@@ -435,10 +434,10 @@ class VideoPlayerSampleFragment :
      * 更新渲染器切换按钮状态
      */
     private fun updateRenderButtonState() {
-        mBinding.btnSwitchSurfaceView.isEnabled = currentRenderName != SurfaceViewRender.NAME
-        mBinding.btnSwitchTextureView.isEnabled = currentRenderName != TextureViewRender.NAME
-        mBinding.btnSwitchVideoView.isEnabled = currentRenderName != VideoViewRender.NAME
-        mBinding.btnSwitchPlayerView.isEnabled = currentRenderName != ExoPlayerViewRender.NAME
+        mBinding.btnSwitchSurfaceView.isEnabled = currentRenderName != SurfaceViewRender.Companion.NAME
+        mBinding.btnSwitchTextureView.isEnabled = currentRenderName != TextureViewRender.Companion.NAME
+        mBinding.btnSwitchVideoView.isEnabled = currentRenderName != VideoViewRender.Companion.NAME
+        mBinding.btnSwitchPlayerView.isEnabled = currentRenderName != ExoPlayerViewRender.Companion.NAME
     }
 
     /**
@@ -555,22 +554,22 @@ class VideoPlayerSampleFragment :
         // 根据状态更新 UI 颜色或图标
         when (state) {
             PlayerState.IDLE, PlayerState.STOPPED -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.GRAY)
+                mBinding.tvState.setTextColor(Color.GRAY)
             }
             PlayerState.PREPARING -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.YELLOW)
+                mBinding.tvState.setTextColor(Color.YELLOW)
             }
             PlayerState.PREPARED, PlayerState.PAUSED -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.BLUE)
+                mBinding.tvState.setTextColor(Color.BLUE)
             }
             PlayerState.PLAYING -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.GREEN)
+                mBinding.tvState.setTextColor(Color.GREEN)
             }
             PlayerState.COMPLETED -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.CYAN)
+                mBinding.tvState.setTextColor(Color.CYAN)
             }
             PlayerState.ERROR, PlayerState.RELEASED -> {
-                mBinding.tvState.setTextColor(android.graphics.Color.RED)
+                mBinding.tvState.setTextColor(Color.RED)
             }
         }
     }
@@ -610,18 +609,18 @@ class VideoPlayerSampleFragment :
     private fun appendLog(message: String) {
         val time = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
         val logLine = "[$time] $message\n"
-        
+
         mBinding.tvLog.let { tvLog ->
             val currentText = tvLog.text.toString()
             if (currentText.length > 5000) {
                 tvLog.text = currentText.takeLast(3000)
             }
             tvLog.append(logLine)
-            
+
             /// 自动滚动到底部
-            val scrollView = mBinding.tvLog.parent as? android.widget.ScrollView
+            val scrollView = mBinding.tvLog.parent as? ScrollView
             scrollView?.post {
-                scrollView.fullScroll(android.view.View.FOCUS_DOWN)
+                scrollView.fullScroll(View.FOCUS_DOWN)
             }
         }
     }
@@ -633,7 +632,7 @@ class VideoPlayerSampleFragment :
         val totalSeconds = ms / 1000
         val minutes = totalSeconds / 60
         val seconds = totalSeconds % 60
-        return String.format(Locale.US, "%02d:%02d", minutes, seconds)
+        return String.Companion.format(Locale.US, "%02d:%02d", minutes, seconds)
     }
 
     // ==================== 生命周期管理 ====================

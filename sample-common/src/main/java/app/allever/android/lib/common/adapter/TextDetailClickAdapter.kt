@@ -1,5 +1,6 @@
 package app.allever.android.lib.common.adapter
 
+import android.view.Gravity
 import android.view.ViewGroup
 import app.allever.android.lib.common.R
 import app.allever.android.lib.common.adapter.bean.TextClickItem
@@ -9,7 +10,7 @@ import app.allever.android.lib.core.helper.ViewHelper
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
-class TextDetailClickAdapter :
+class TextDetailClickAdapter(val gravity: Int = Gravity.START) :
     BaseQuickAdapter<TextDetailClickItem, BaseViewHolder>(R.layout.rv_text_detail_item) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
@@ -25,5 +26,16 @@ class TextDetailClickAdapter :
         binding.tvText.text = item.title
         binding.tvTextDetail.text = item.detail
         ViewHelper.setVisible(binding.tvTextDetail, item.detail.isNotEmpty())
+
+        when (gravity) {
+            Gravity.CENTER -> {
+                binding.tvText.gravity = Gravity.CENTER
+                binding.tvTextDetail.gravity = Gravity.CENTER
+            }
+            Gravity.START -> {
+                binding.tvText.gravity = Gravity.START
+                binding.tvTextDetail.gravity = Gravity.START
+            }
+        }
     }
 }

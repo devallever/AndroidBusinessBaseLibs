@@ -1,4 +1,4 @@
-package app.allever.android.sample.audiovideo.android.base
+package app.allever.android.sample.audiovideo.lib.kernal
 
 import android.media.AudioManager
 import android.net.Uri
@@ -7,6 +7,7 @@ import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.player.core.LoopMode
 import app.allever.android.lib.player.core.PlayerErrorCode
+import app.allever.android.sample.audiovideo.lib.kernal.BasePlayerKernal
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -136,11 +137,11 @@ class IjkPlayerKernal: BasePlayerKernal<IjkMediaPlayer>() {
         when (source.scheme) {
             "http", "https" -> {
                 // 在线视频（带请求头）
-                mPlayer?.setDataSource(App.context, source, headers)
+                mPlayer?.setDataSource(App.Companion.context, source, headers)
             }
             "content" -> {
                 // Content Provider
-                mPlayer?.setDataSource(App.context, source)
+                mPlayer?.setDataSource(App.Companion.context, source)
             }
             else -> {
                 // 本地文件（file:// 或纯路径）
