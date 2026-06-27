@@ -14,8 +14,8 @@ android {
 
 dependencies {
     implementation(project(":sample-common"))
-    val aarList = mutableListOf("dusdk_v8.8.4.aar", "lib-debug.aar")
-    implementation(fileTree(mapOf("dir" to "libs", "include" to aarList)))
+//    val aarList = mutableListOf("dusdk_v8.8.4.aar", "lib-debug.aar")
+//    implementation(fileTree(mapOf("dir" to "libs", "include" to aarList)))
 
     //cardView
 //    implementation(libs.androidx.cardview)

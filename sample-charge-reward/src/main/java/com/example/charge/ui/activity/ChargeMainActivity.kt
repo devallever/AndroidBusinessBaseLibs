@@ -24,6 +24,8 @@ import com.example.charge.currency.CurrencyUtils
 import com.example.charge.data.FloatIconData
 import com.example.charge.databinding.ActivityChargeMainBinding
 import com.example.charge.databinding.ActivityMainBinding
+import com.example.charge.event.AdDismissEvent
+import com.example.charge.event.AdShowFailedEvent
 import com.example.charge.event.InterAdCDTimeEvent
 import com.example.charge.event.UpdateCurrencyEvent
 import com.example.charge.init.Constance
@@ -49,10 +51,6 @@ import com.example.charge.utils.visible
 import com.example.charge.vm.VMHelper
 import com.hjq.shape.view.ShapeTextView
 import com.plinkopro.wincash.utils.PopupHelper
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdDismissEvent
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdShowFailedEvent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -170,7 +168,6 @@ class ChargeMainActivity : BaseActivity<ActivityChargeMainBinding>() {
                         gone()
                     },5000)
                 }
-                SdkManager.dot("new_user_bonus")
                 CurrencyFlyAnimatorUtil.start(
                     this,
                     binding.currencyView,
@@ -576,7 +573,6 @@ class ChargeMainActivity : BaseActivity<ActivityChargeMainBinding>() {
 
     }
     private fun logClickEvent(clickId: Int) {
-        SdkManager.dot("main_click", mapOf("click_ID" to clickId))
     }
 
     private fun logFirstShowMainEvent() {
@@ -585,7 +581,6 @@ class ChargeMainActivity : BaseActivity<ActivityChargeMainBinding>() {
             SpUtil.put(SpKey.IS_FIRST_DISPLAY_MAIN, false)
         }
 
-        SdkManager.dot("app_main_show", mapOf("is_first" to if (isFirst) 1 else 0))
     }
 
     @SuppressLint("SetTextI18n")
@@ -753,15 +748,6 @@ class ChargeMainActivity : BaseActivity<ActivityChargeMainBinding>() {
         if (isShow) {
             if (App.DEBUG) {
                 log(LogTag.INTER_AD_CD, "首页展示插屏")
-            }
-            if (AdManager.showInterAd(this, AdIndex.HOME_INTER_CD)) {
-                if (App.DEBUG) {
-                    log(LogTag.INTER_AD_CD, "首页展示插屏成功")
-                }
-            } else {
-                if (App.DEBUG) {
-                    log(LogTag.INTER_AD_CD, "首页展示插屏失败")
-                }
             }
         }
     }

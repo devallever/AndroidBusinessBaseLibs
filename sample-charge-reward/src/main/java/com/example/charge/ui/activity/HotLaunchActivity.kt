@@ -6,12 +6,10 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.animation.doOnEnd
 import com.example.charge.ad.AdIndex
-import com.example.charge.ad.AdmobOpenAdUtil
 import com.example.charge.base.BaseActivity
 import com.example.charge.databinding.ActivityLaunchBinding
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdDismissEvent
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdShowFailedEvent
+import com.example.charge.event.AdDismissEvent
+import com.example.charge.event.AdShowFailedEvent
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import kotlin.math.roundToInt
@@ -73,7 +71,7 @@ class HotLaunchActivity : BaseActivity<ActivityLaunchBinding>() {
             binding.progressBar.progress = progress
         }
         animator.doOnEnd {
-            AdmobOpenAdUtil.updateShowTime()
+//            AdmobOpenAdUtil.updateShowTime()
 //            AdManager.showAdMobOpenAd(this, AdIndex.ADMOB_SPLASH_INDEX)
             finish()
         }

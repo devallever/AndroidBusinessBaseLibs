@@ -97,15 +97,19 @@ abstract class AbstractActivity : AppCompatActivity(), BGASwipeBackHelper.Delega
 
     override fun setContentView(view: View?) {
         super.setContentView(view)
-        adaptNavigationBar(view)
+        if (enableAdaptNavigationBar()) {
+            adaptNavigationBar(view)
+        }
     }
 
     override fun setContentView(layoutResID: Int) {
         super.setContentView(layoutResID)
-        val contentView = window.findViewById<ViewGroup>(android.R.id.content)
-        val childView = contentView.getChildAt(0)
-        if (childView != null) {
-            adaptNavigationBar(childView)
+        if (enableAdaptNavigationBar()) {
+            val contentView = window.findViewById<ViewGroup>(android.R.id.content)
+            val childView = contentView.getChildAt(0)
+            if (childView != null) {
+                adaptNavigationBar(childView)
+            }
         }
     }
 
@@ -257,6 +261,8 @@ abstract class AbstractActivity : AppCompatActivity(), BGASwipeBackHelper.Delega
      * 是否全屏
      */
     protected open fun isFullScreen(): Boolean = true
+
+    protected open fun enableAdaptNavigationBar(): Boolean = true
 
     /**
      * 适配状态栏

@@ -9,7 +9,6 @@ import com.example.charge.utils.SpUtil
 import com.example.charge.utils.log
 import com.example.charge.utils.moveElementsToEnd
 import com.example.charge.vm.VMHelper
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
 
 object TaskHelper {
     val chargeItemList = mutableListOf<TaskItem>().apply {
@@ -652,7 +651,6 @@ object TaskHelper {
         if (value == 0) {
             return
         }
-        SdkManager.dot("user_task_dian", mapOf("task_dian" to value))
     }
 
     fun dotHitMole(taskId: String) {
@@ -672,7 +670,6 @@ object TaskHelper {
         if (value == 0) {
             return
         }
-        SdkManager.dot("user_task_shu", mapOf("task_shu" to value))
     }
 
     fun dotReceiveCoin(taskId: String) {
@@ -692,7 +689,6 @@ object TaskHelper {
         if (value == 0) {
             return
         }
-        SdkManager.dot("user_task_jinbi", mapOf("task_jinbi" to value))
     }
 
 

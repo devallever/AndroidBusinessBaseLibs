@@ -20,7 +20,6 @@ import com.example.charge.utils.WebJsOK
 import com.example.charge.utils.getHostSafe
 import com.example.charge.utils.openIntent
 import com.example.charge.utils.setOnSingleListener
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
 import kotlin.apply
 import kotlin.jvm.javaClass
 import kotlin.let
@@ -87,11 +86,12 @@ class WebFragment : BaseFragment<FragmentWebBinding>() {
 
         binding.flLoading.isVisible = true
 
-        _url = if (url.endsWith(GAID_TAG)) {
-            url.replace(GAID_TAG, SdkManager.getGoogleAndroidId())
-        } else {
-            url
-        }
+//        _url = if (url.endsWith(GAID_TAG)) {
+//            url.replace(GAID_TAG, SdkManager.getGoogleAndroidId())
+//        } else {
+//            url
+//        }
+        _url = url
 
         _webView?.let {
             it.clearHistory()

@@ -19,7 +19,6 @@ import com.example.charge.utils.gone
 import com.example.charge.utils.setOnSingleListener
 import com.example.charge.utils.setVisible
 import com.example.charge.utils.visible
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
 
 class NativeView @JvmOverloads constructor(
     context: Context,
@@ -120,7 +119,6 @@ class NativeView @JvmOverloads constructor(
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         stopAnimation()
-        AdManager.destroyNative()
     }
 
 }

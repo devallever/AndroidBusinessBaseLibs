@@ -4,7 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import app.allever.android.lib.core.app.App
+import com.example.charge.ChargeApp
 import com.example.charge.R
 import com.example.charge.ad.AdIndex
 import com.example.charge.ad.InterAdUtil
@@ -34,7 +36,8 @@ import com.example.charge.utils.setOnSingleListener
 import com.example.charge.utils.visible
 import com.example.charge.vm.VMHelper
 import com.plinkopro.wincash.utils.PopupHelper
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -143,7 +146,10 @@ class ReceiveCoinActivity : BaseActivity<ActivityReceiveCoinBinding>(), ReceiveC
         }
 
         if (InterAdUtil.isMatchLogic(2) && InterAdUtil.isProbabilityHit()) {
-            AdManager.showInterAd(this, AdIndex.GAME_AWARE_INTER)
+            lifecycleScope.launch {
+                delay(1000)
+            }
+            ChargeApp.postAdDismissEvent(AdIndex.GAME_AWARE_INTER)
         }
     }
 
@@ -181,18 +187,18 @@ class ReceiveCoinActivity : BaseActivity<ActivityReceiveCoinBinding>(), ReceiveC
                 if (App.DEBUG) {
                     LogUtil.showInterAd("游戏结束，是第二套,游戏中cd到了,弹广告")
                 }
-                AdManager.showInterAd(this@ReceiveCoinActivity, AdIndex.GAME_AWARE_INTER)
+                ChargeApp.postAdDismissEvent(AdIndex.GAME_AWARE_INTER)
                 showInterAd = false
             }else if (InterAdUtil.isMatchLogic(2) && !showInterAd && InterAdUtil.isProbabilityHit()) {
                 if (App.DEBUG) {
                     LogUtil.showInterAd("游戏结束，是第二套,并且在游戏过程中播放cd没到，但命中概率，弹广告")
                 }
-                AdManager.showInterAd(this@ReceiveCoinActivity, AdIndex.GAME_AWARE_INTER)
+                ChargeApp.postAdDismissEvent(AdIndex.GAME_AWARE_INTER)
             }else if (InterAdUtil.isMatchLogic(1) && showInterAd){
                 if (App.DEBUG) {
                     LogUtil.showInterAd("游戏结束，是第一套,游戏中cd到了,弹广告")
                 }
-                AdManager.showInterAd(this@ReceiveCoinActivity, AdIndex.GAME_AWARE_INTER)
+                ChargeApp.postAdDismissEvent(AdIndex.GAME_AWARE_INTER)
                 showInterAd = false
             }
 
@@ -274,11 +280,6 @@ class ReceiveCoinActivity : BaseActivity<ActivityReceiveCoinBinding>(), ReceiveC
                 if (App.DEBUG) {
                     LogUtil.showInterAd("是第一套,不在游戏中，弹广告")
                 }
-                if (!AdManager.showInterAd(this, AdIndex.GAME_AWARE_INTER)) {
-                    if (App.DEBUG) {
-                        LogUtil.showInterAd("插屏广告加载失败")
-                    }
-                }
             }
         }else{
             if (inPlayGame){
@@ -289,11 +290,6 @@ class ReceiveCoinActivity : BaseActivity<ActivityReceiveCoinBinding>(), ReceiveC
             }else{
                 if (App.DEBUG) {
                     LogUtil.showInterAd("是第二套,不在游戏中 弹广告")
-                }
-                if (!AdManager.showInterAd(this, AdIndex.GAME_AWARE_INTER)) {
-                    if (App.DEBUG) {
-                        LogUtil.showInterAd("插屏广告加载失败")
-                    }
                 }
             }
         }

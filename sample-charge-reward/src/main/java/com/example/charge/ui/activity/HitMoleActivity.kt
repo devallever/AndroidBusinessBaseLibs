@@ -10,6 +10,7 @@ import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import app.allever.android.lib.core.app.App
+import com.example.charge.ChargeApp
 import com.example.charge.R
 import com.example.charge.ad.AdIndex
 import com.example.charge.ad.InterAdUtil
@@ -40,7 +41,6 @@ import com.example.charge.utils.setVisible
 import com.example.charge.utils.visible
 import com.example.charge.vm.VMHelper
 import com.plinkopro.wincash.utils.PopupHelper
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -228,18 +228,18 @@ class HitMoleActivity : BaseActivity<ActivityHitMoleBinding>() {
                 if (App.DEBUG) {
                     LogUtil.showInterAd("游戏结束，是第二套,游戏中cd到了,弹广告")
                 }
-                AdManager.showInterAd(this@HitMoleActivity, AdIndex.GAME_AWARE_INTER)
+                ChargeApp.postAdDismissEvent(AdIndex.GAME_AWARE_INTER)
                 showInterAd = false
             }else if (InterAdUtil.isMatchLogic(2) && !showInterAd && InterAdUtil.isProbabilityHit()) {
                 if (App.DEBUG) {
                     LogUtil.showInterAd("游戏结束，是第二套,并且在游戏过程中播放cd没到，但命中概率，弹广告")
                 }
-                AdManager.showInterAd(this@HitMoleActivity, AdIndex.GAME_AWARE_INTER)
+                ChargeApp.postAdDismissEvent(AdIndex.GAME_AWARE_INTER)
             }else if (InterAdUtil.isMatchLogic(1) && showInterAd){
                 if (App.DEBUG) {
                     LogUtil.showInterAd("游戏结束，是第一套,游戏中cd到了,弹广告")
                 }
-                AdManager.showInterAd(this@HitMoleActivity, AdIndex.GAME_AWARE_INTER)
+                ChargeApp.postAdDismissEvent(AdIndex.GAME_AWARE_INTER)
                 showInterAd = false
             }
 
@@ -551,11 +551,6 @@ class HitMoleActivity : BaseActivity<ActivityHitMoleBinding>() {
                 if (App.DEBUG) {
                     LogUtil.showInterAd("是第一套,不在游戏中，弹广告")
                 }
-                if (!AdManager.showInterAd(this, AdIndex.GAME_AWARE_INTER)) {
-                    if (App.DEBUG) {
-                        LogUtil.showInterAd("插屏广告加载失败")
-                    }
-                }
             }
         }else{
             if (inPlayGame){
@@ -566,11 +561,6 @@ class HitMoleActivity : BaseActivity<ActivityHitMoleBinding>() {
             }else{
                 if (App.DEBUG) {
                     LogUtil.showInterAd("是第二套,不在游戏中 弹广告")
-                }
-                if (!AdManager.showInterAd(this, AdIndex.GAME_AWARE_INTER)) {
-                    if (App.DEBUG) {
-                        LogUtil.showInterAd("插屏广告加载失败")
-                    }
                 }
             }
         }

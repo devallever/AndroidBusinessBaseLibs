@@ -3,11 +3,9 @@ package com.example.charge.ui.dialog
 import android.annotation.SuppressLint
 import android.app.Activity
 import com.example.charge.R
-import com.example.charge.ad.AdIndex
 import com.example.charge.databinding.DialogGameAwareBinding
+import com.example.charge.event.AdShowFailedEvent
 import com.example.charge.event.DismissAdEvent
-import com.example.charge.init.InitManager
-import com.example.charge.utils.CountryUtil
 import com.example.charge.utils.formThousand
 import com.example.charge.utils.gone
 import com.example.charge.utils.invisible
@@ -15,8 +13,6 @@ import com.example.charge.utils.setOnSingleListener
 import com.example.charge.utils.setVisible
 import com.example.charge.utils.showXPopup
 import com.example.charge.utils.visible
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdShowFailedEvent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode

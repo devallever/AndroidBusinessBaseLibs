@@ -11,14 +11,13 @@ import com.example.charge.ad.AdIndex
 import com.example.charge.ad.InterAdUtil
 import com.example.charge.base.BaseActivity
 import com.example.charge.databinding.ActivityLaunchBinding
+import com.example.charge.event.AdDismissEvent
+import com.example.charge.event.AdShowFailedEvent
 import com.example.charge.event.GoMainEvent
 import com.example.charge.utils.LogUtil
 import com.example.charge.utils.MusicUtil
 import com.example.charge.utils.SpKey
 import com.example.charge.utils.SpUtil
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdDismissEvent
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdShowFailedEvent
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 

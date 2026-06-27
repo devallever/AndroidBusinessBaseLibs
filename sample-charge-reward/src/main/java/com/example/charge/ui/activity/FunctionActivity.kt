@@ -5,21 +5,15 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
 import com.example.charge.base.BaseActivity
 import com.example.charge.currency.CurrencyFlyAnimatorUtil
 import com.example.charge.currency.CurrencyType
-import com.example.charge.currency.CurrencyUtils
 import com.example.charge.databinding.ActivityFunctionBinding
-import com.example.charge.init.InitManager
 import com.example.charge.utils.ChargeStatusListener
 import com.example.charge.utils.CountdownTimer
 import com.example.charge.utils.AdvancedTimer
 import com.example.charge.utils.log
 import com.example.charge.utils.setOnSingleListener
-import com.example.charge.withdraw.WalletManager
-import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
 
 class FunctionActivity : BaseActivity<ActivityFunctionBinding>() {
 

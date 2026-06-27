@@ -18,7 +18,6 @@ import com.example.charge.utils.dp2px
 import com.example.charge.utils.setOnSingleListener
 import com.example.charge.utils.showXPopup
 import com.example.charge.utils.toast
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
 import org.greenrobot.eventbus.EventBus
 
 class RedeemItemAdapter() : BaseBindingAdapter<RedeemItem, RvRedeemBinding>() {
@@ -58,7 +57,6 @@ class RedeemItemAdapter() : BaseBindingAdapter<RedeemItem, RvRedeemBinding>() {
                     EventBus.getDefault().post(UpdateCurrencyEvent(currencyType = CurrencyType.GOLD))
                     EventBus.getDefault().post(UpdateCurrencyEvent(currencyType = CurrencyType.GREEN))
                     //1:10000, 2:100000
-                    SdkManager.dot("cion_redeem", mapOf("cionredeem_level" to data.indexOf( item) + 1))
                     App.context.showXPopup(RedeemDialog(App.context,  item.greenValue), autoDismiss = true)
                     notifyDataSetChanged()
                 }

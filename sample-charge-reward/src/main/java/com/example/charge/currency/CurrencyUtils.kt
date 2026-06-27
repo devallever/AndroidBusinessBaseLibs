@@ -3,7 +3,6 @@ package com.example.charge.currency
 import com.example.charge.init.FpManger
 import com.example.charge.utils.SpKey
 import com.example.charge.utils.SpUtil
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
 import kotlin.math.ceil
 import kotlin.math.pow
 
@@ -30,32 +29,15 @@ object CurrencyUtils {
             CurrencyType.GOLD -> {
                 goldNum += num
                 SpUtil.Companion.put(SpKey.CURRENCY_GOLD_NUM, goldNum)
-
-                SdkManager.userSet(
-                    mapOf<String, Any>(
-                        "coins" to goldNum
-                    )
-                )
             }
 
             CurrencyType.GREEN -> {
                 greenNum += num
                 SpUtil.Companion.put(SpKey.CURRENCY_GREEN_NUM, greenNum)
                 dotUserCash(greenNum)
-                SdkManager.userSet(
-                    mapOf<String, Any>(
-                        "banknotes" to goldNum
-                    )
-                )
             }
         }
 
-        SdkManager.changeSuperProperties(
-            mapOf<String, Any>(
-                "coins" to goldNum,
-                "banknotes" to greenNum
-            )
-        )
     }
 
     private fun dotUserCash(greenNum: Float) {
@@ -71,7 +53,6 @@ object CurrencyUtils {
             level = 0
         }
 
-        SdkManager.dot("new_user_cash", mapOf("level" to level))
     }
 
     /**8

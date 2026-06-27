@@ -2,18 +2,18 @@ package com.example.charge
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Context
 import app.allever.android.lib.core.app.App
-import com.example.charge.base.AppLifecycleCallback
+import app.allever.android.lib.core.helper.CoroutineHelper
 import com.example.charge.constant.LogTag
+import com.example.charge.event.AdDismissEvent
 import com.example.charge.event.InterAdCDTimeEvent
 import com.example.charge.init.FpManger
-import com.example.charge.init.InitManager
 import com.example.charge.utils.CustomTimer
-import com.example.charge.utils.NetworkHelper
 import com.example.charge.utils.SpUtil
 import com.example.charge.utils.log
 import com.example.charge.withdraw.WithdrawHelper
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 
 @SuppressLint("StaticFieldLeak")
@@ -52,9 +52,13 @@ object ChargeApp {
         }
         instance = App.app
         SpUtil.Companion.init(App.context)
-        InitManager.init(App.app)
-        App.app.registerActivityLifecycleCallbacks(AppLifecycleCallback())
-        NetworkHelper.setupNetworkCallback()
         isInit = true
+    }
+
+    fun postAdDismissEvent(adIndex: Int) {
+        CoroutineHelper.MAIN.launch {
+            delay(0)
+            EventBus.getDefault().post(AdDismissEvent(adIndex))
+        }
     }
 }

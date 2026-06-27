@@ -10,6 +10,7 @@ import com.example.charge.currency.CurrencyUtils
 import com.example.charge.databinding.DialogGameAwareBinding
 import com.example.charge.databinding.DialogGameInfiniteBinding
 import com.example.charge.databinding.DialogGameSeeAdBinding
+import com.example.charge.event.AdShowFailedEvent
 import com.example.charge.event.DismissAdEvent
 import com.example.charge.init.InitManager
 import com.example.charge.utils.CountryUtil
@@ -17,10 +18,6 @@ import com.example.charge.utils.formThousand
 import com.example.charge.utils.gone
 import com.example.charge.utils.setOnSingleListener
 import com.example.charge.utils.showXPopup
-import com.example.charge.utils.visible
-import com.lxj.xpopup.core.CenterPopupView
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdShowFailedEvent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
