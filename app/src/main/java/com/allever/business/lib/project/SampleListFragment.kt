@@ -49,6 +49,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextClickItem("清理-Wood") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CLEANER_WOOD).navigation()
         },
+        TextClickItem("IPC") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_IPC).navigation()
+        },
 
     )
 }

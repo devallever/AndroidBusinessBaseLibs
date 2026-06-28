@@ -60,5 +60,6 @@ class RouterPath {
         const val PATH_SAMPLE_CHARGE_REWARD = "/chargereward/main"
         const val PATH_SAMPLE_VPN_FLASH_TUNNEL = "/flashtunnel/main"
         const val PATH_SAMPLE_CLEANER_WOOD = "/cleanerwood/main"
+        const val PATH_SAMPLE_IPC = "/ipc/main"
     }
 }

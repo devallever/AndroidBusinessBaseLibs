@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":sample-charge-reward"))
     implementation(project(":sample-vpn-flash-tunnel"))
     implementation(project(":sample-cleaner-wood"))
+    implementation(project(":sample-ipc"))
 
     implementation(project(":z-sample-billing"))
     implementation(project(":z-sample-cleaner"))

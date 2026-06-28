@@ -12,6 +12,10 @@ object ProcessHelper {
         }
     }
 
+    fun getProcessName(): String {
+        return getProcessName(Process.myPid())
+    }
+
     fun isInMainProcess(
         application: Application,
         processName: String = application.packageName

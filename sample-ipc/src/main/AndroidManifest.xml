@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity android:name="app.allever.android.sample.ipc.IPCSampleActivity" />
+        <service android:name="app.allever.android.sample.ipc.binder.service.BinderService"
+            android:process=":binderService"/>
+        <service android:name="app.allever.android.sample.ipc.aidl.AidlService"
+            android:process=":aidlService"/>
+        <service android:name="app.allever.android.sample.ipc.messenger.MessengerService"
+            android:process=":messengerService"/>
+    </application>
+</manifest>
