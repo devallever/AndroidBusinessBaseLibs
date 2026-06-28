@@ -9,7 +9,6 @@ import android.os.Process
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.helper.CoroutineHelper
 import app.flash.tunnel.vpn.helper.EventHelper
-import app.flash.tunnel.vpn.helper.FirebaseHelper
 import app.flash.tunnel.vpn.helper.ReferrerHelper
 import app.flash.tunnel.vpn.helper.TunnelHelper
 import app.flash.tunnel.vpn.helper.ad.AdHelper
@@ -65,7 +64,6 @@ object TunnelApp: androidx.work.Configuration.Provider by Core {
                 EventHelper.launchTimeStart = System.currentTimeMillis()
                 ReferrerHelper.init(App.app)
                 EventHelper.init()
-                FirebaseHelper.init()
                 registerActivityLifecycleCallback()
                 AdHelper.init()
             }

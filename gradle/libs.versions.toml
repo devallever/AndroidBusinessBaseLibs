@@ -1,6 +1,7 @@
 [versions]
 # android sdk versions
 aliyunplayer = "7.15.0-full"
+cardview = "1.0.0"
 compileSdk = "35"
 easyhttp = "12.8"
 gsonfactoryVersion = "9.6"
@@ -120,6 +121,7 @@ androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.r
 androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "cameraX" }
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraX" }
 androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraX" }
+androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-emoji2-emojipicker = { module = "androidx.emoji2:emoji2-emojipicker", version.ref = "emoji2Emojipicker" }
 androidx-preference = { module = "androidx.preference:preference", version.ref = "preference" }

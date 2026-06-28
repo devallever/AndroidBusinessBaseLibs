@@ -20,7 +20,7 @@ dependencies {
     //cardView
 //    implementation(libs.androidx.cardview)
     //cardview
-    implementation("androidx.cardview:cardview:1.0.0")
+    implementation(libs.androidx.cardview)
 
     //gson
     implementation(libs.gson)
@@ -37,9 +37,9 @@ dependencies {
     implementation(libs.shapeDrawable)
 
     //okhttp
-    implementation(libs.okhttp)
+//    implementation(libs.okhttp)
     //网络框架
-    implementation(libs.easyhttp)
+//    implementation(libs.easyhttp)
 
     // retrofit
     implementation(libs.retrofit)
@@ -48,15 +48,15 @@ dependencies {
     //lottie
     implementation(libs.airbnb.lottie)
 
-    implementation(libs.getactivity.gsonfactory)
+//    implementation(libs.getactivity.gsonfactory)
     implementation(libs.jetbrains.kotlin.reflect)
     // BouncyCastle (AESUtils / UnityLibManager 需要)
-    implementation("org.bouncycastle:bcprov-jdk15on:1.70")
+//    implementation("org.bouncycastle:bcprov-jdk15on:1.70")
     //数据分析
-    implementation("cn.thinkingdata.android:ThinkingAnalyticsSDK:3.0.2")
-    implementation("cn.thinkingdata.android:TAThirdParty:2.0.0")
+//    implementation("cn.thinkingdata.android:ThinkingAnalyticsSDK:3.0.2")
+//    implementation("cn.thinkingdata.android:TAThirdParty:2.0.0")
     //firebase统计平台
-    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-crashlytics")
+//    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
+//    implementation("com.google.firebase:firebase-analytics")
+//    implementation("com.google.firebase:firebase-crashlytics")
 }

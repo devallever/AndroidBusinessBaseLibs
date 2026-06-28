@@ -33,9 +33,11 @@ class SampleVpnFlashTunnelMainActivity: ListActivity<ActivityListBinding, ListVi
     )
 
     override fun init() {
+        TunnelApp.initTunnelApp()
         super.init()
         lifecycleScope.launch {
             TunnelHelper.init(App.context)
         }
     }
+
 }

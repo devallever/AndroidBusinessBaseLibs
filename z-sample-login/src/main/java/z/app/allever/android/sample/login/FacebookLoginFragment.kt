@@ -15,7 +15,7 @@ class FacebookLoginFragment : ListFragment<FragmentListBinding, ListViewModel, S
     )
 
     private fun initFacebook() {
-        FacebookHelper.init(requireContext(), "1350542608624681", "", "")
+//        FacebookHelper.init(requireContext(), "1350542608624681", "", "")
     }
 
     override fun onItemClick(position: Int, item: String) {
@@ -24,11 +24,11 @@ class FacebookLoginFragment : ListFragment<FragmentListBinding, ListViewModel, S
                 initFacebook()
             }
             1 -> {
-                FacebookHelper.login(requireActivity())
+//                FacebookHelper.login(requireActivity())
             }
 
             2 -> {
-                FacebookHelper.logOut()
+//                FacebookHelper.logOut()
             }
         }
     }
