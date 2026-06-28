@@ -16,15 +16,12 @@ class MyApp: App() {
         TunnelApp.onCreate()
     }
     override fun init() {
-        if (DEBUG) {
-            CoroutineHelper.IO.launch {
-                ARouter.openLog()
-                ARouter.openDebug()
-            }
-        }
-
         ProcessHelper.executeOnMain(this) {
             CoroutineHelper.IO.launch {
+                if (DEBUG) {
+                    ARouter.openLog()
+                    ARouter.openDebug()
+                }
                 ARouter.init(this@MyApp)
             }
         }
