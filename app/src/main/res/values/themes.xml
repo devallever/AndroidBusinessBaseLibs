@@ -23,7 +23,7 @@
     </style>
 
     <!-- 全屏 -->
-    <style name="FullScreenStyle" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="FullScreenStyle" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <!--        <item name="android:windowTranslucentStatus">true</item>-->
         <!--        <item name="android:windowIsTranslucent">true</item>-->

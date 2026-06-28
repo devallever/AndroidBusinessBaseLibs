@@ -1,15 +1,21 @@
 package app.allever.android.sample.vpn.flash.tunnel
 
+import androidx.lifecycle.lifecycleScope
 import app.allever.android.lib.common.ListActivity
 import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.ActivityListBinding
+import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.helper.ActivityHelper
+import app.flash.tunnel.vpn.TunnelApp
+import app.flash.tunnel.vpn.helper.TunnelHelper
+import app.flash.tunnel.vpn.helper.ad.AdHelper
 import app.flash.tunnel.vpn.page.HomeActivity
 import app.flash.tunnel.vpn.page.SplashActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
+import kotlinx.coroutines.launch
 
 @Route(path = "/flashtunnel/main")
 class SampleVpnFlashTunnelMainActivity: ListActivity<ActivityListBinding, ListViewModel, TextClickItem>() {
@@ -25,4 +31,11 @@ class SampleVpnFlashTunnelMainActivity: ListActivity<ActivityListBinding, ListVi
             ActivityHelper.startActivity<HomeActivity>()
         }
     )
+
+    override fun init() {
+        super.init()
+        lifecycleScope.launch {
+            TunnelHelper.init(App.context)
+        }
+    }
 }

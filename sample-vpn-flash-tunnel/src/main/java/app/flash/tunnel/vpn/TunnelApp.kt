@@ -7,6 +7,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Process
 import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.helper.CoroutineHelper
 import app.flash.tunnel.vpn.helper.EventHelper
 import app.flash.tunnel.vpn.helper.FirebaseHelper
 import app.flash.tunnel.vpn.helper.ReferrerHelper
@@ -19,6 +20,7 @@ import app.flash.tunnel.vpn.page.SplashActivity
 //import com.facebook.FacebookSdk
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.ShadowsSocksConfig
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 
@@ -31,9 +33,14 @@ object TunnelApp: androidx.work.Configuration.Provider by Core {
 
     var alreadyInBackground = false
     private var activityCount = 0
+    private var initShadowsocks = false
+    private var isInit = false
     fun currentInBackground() = activityCount == 0
 
     fun onCreate() {
+        if (initShadowsocks) {
+            return
+        }
         context = App.context
         ShadowsSocksConfig.notificationMainClz = HomeActivity::class.java
         ShadowsSocksConfig.notificationIcon = R.mipmap.flash_ic_launcher_foreground
@@ -45,16 +52,24 @@ object TunnelApp: androidx.work.Configuration.Provider by Core {
         ShadowsSocksConfig.notificationSpeed = R.string.speed
         ShadowsSocksConfig.connectTime = Constants.CONNECT_TIME
         Core.init(App.app, SplashActivity::class)
+        initShadowsocks = true
+    }
 
+    fun initTunnelApp() {
+        if (isInit) {
+            return
+        }
         if (isInMainProcess(App.app)) {
-            EventHelper.launchTimeStart = System.currentTimeMillis()
-            Common.init(App.app)
-            ReferrerHelper.init(App.app)
-            EventHelper.init()
-            AdHelper.init()
-            FirebaseHelper.init()
             TunnelHelper.init(App.app)
-            registerActivityLifecycleCallback()
+            CoroutineHelper.IO.launch {
+                EventHelper.launchTimeStart = System.currentTimeMillis()
+                ReferrerHelper.init(App.app)
+                EventHelper.init()
+                FirebaseHelper.init()
+                registerActivityLifecycleCallback()
+                AdHelper.init()
+            }
+            isInit = true
         }
     }
 

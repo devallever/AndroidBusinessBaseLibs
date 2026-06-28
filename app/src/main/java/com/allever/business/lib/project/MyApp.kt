@@ -1,28 +1,32 @@
 package com.allever.business.lib.project
 
 import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.helper.CoroutineHelper
 import app.allever.android.lib.core.helper.ProcessHelper
 import app.flash.tunnel.vpn.TunnelApp
 import com.alibaba.android.arouter.launcher.ARouter
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.ShadowsSocksConfig
+import kotlinx.coroutines.launch
 
 class MyApp: App() {
 
     override fun onCreate() {
-        initShadowSocks()
         super.onCreate()
         TunnelApp.onCreate()
     }
     override fun init() {
         if (DEBUG) {
-            ARouter.openLog()
-            ARouter.openDebug()
+            CoroutineHelper.IO.launch {
+                ARouter.openLog()
+                ARouter.openDebug()
+            }
         }
 
         ProcessHelper.executeOnMain(this) {
-            ARouter.init(this)
-//            CsjDjHelper.init()
+            CoroutineHelper.IO.launch {
+                ARouter.init(this@MyApp)
+            }
         }
 
     }
