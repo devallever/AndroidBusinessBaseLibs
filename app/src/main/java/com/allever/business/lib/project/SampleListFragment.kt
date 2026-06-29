@@ -1,55 +1,53 @@
 package com.allever.business.lib.project
 
+import android.view.Gravity
 import app.allever.android.lib.common.FragmentActivity
 import app.allever.android.lib.common.ListFragment
 import app.allever.android.lib.common.ListViewModel
-import app.allever.android.lib.common.adapter.TextClickAdapter
-import app.allever.android.lib.common.adapter.bean.TextClickItem
+import app.allever.android.lib.common.adapter.TextDetailClickAdapter
+import app.allever.android.lib.common.adapter.bean.TextDetailClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
 import com.alibaba.android.arouter.launcher.ARouter
 
-class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, TextClickItem>() {
+class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, TextDetailClickItem>() {
 
-    override fun getAdapter() = TextClickAdapter()
+    override fun getAdapter() = TextDetailClickAdapter(Gravity.CENTER)
 
     override fun getList() = mutableListOf(
-        TextClickItem("Basic") {
+        TextDetailClickItem("基础组件示例代码") {
             FragmentActivity.start<BasicFragment>(it.title)
         },
-        TextClickItem("Ad") {
+        TextDetailClickItem("广告组件", "sample-ad-core") {
             FragmentActivity.start<AdFragment>(it.title)
         },
-        TextClickItem("Referrer") {
+        TextDetailClickItem("归因-Referrer", "sample-adjust/sample-appsflyer") {
             FragmentActivity.start<ReferrerFragment>(it.title)
         },
-        TextClickItem("音视频") {
+        TextDetailClickItem("音视频", "sample-audiovideo") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AUDIO_VIDEO).navigation()
         },
-        TextClickItem("CameraCore") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CAMERA_CORE).navigation()
-        },
-        TextClickItem("Unity") {
+        TextDetailClickItem("Unity", "sample-unity") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_UNITY).navigation()
         },
-        TextClickItem("VPN") {
+        TextDetailClickItem("VPN", "sample-vpn") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_VPN).navigation()
         },
-        TextClickItem("VPN-FlashTunnel") {
+        TextDetailClickItem("VPN-FlashTunnel", "sample-vpn-flashtunnel") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_VPN_FLASH_TUNNEL).navigation()
         },
-        TextClickItem("Cleaner") {
+        TextDetailClickItem("清理", "sample-cleaner") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CLEANER).navigation()
         },
-        TextClickItem("短剧-穿山甲") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_DJ_CSJ).navigation()
-        },
-        TextClickItem("ChargeReward") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CHARGE_REWARD).navigation()
-        },
-        TextClickItem("清理-Wood") {
+        TextDetailClickItem("清理-Wood", "sample-cleaner-wood") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CLEANER_WOOD).navigation()
         },
-        TextClickItem("IPC") {
+        TextDetailClickItem("短剧-穿山甲", "sample-djcsj") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_DJ_CSJ).navigation()
+        },
+        TextDetailClickItem("网赚-ChargeReward", "sample-chargereward") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CHARGE_REWARD).navigation()
+        },
+        TextDetailClickItem("多进程通信-IPC", "sample-ipc") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_IPC).navigation()
         },
 
