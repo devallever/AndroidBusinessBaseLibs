@@ -22,4 +22,5 @@ dependencies {
     api (libs.androidx.camera.lifecycle)
     // CameraX View class
     api (libs.androidx.camera.view)
+    implementation(libs.androidx.camera.video)
 }
