@@ -11,13 +11,15 @@ import app.allever.android.sample.ipc.binder.service.BinderService
  * 代理类，封装 Binder 的 transact 调用
  */
 class BinderProxy(private val binder: IBinder) {
+
+    private val TAG = "BinderProxy"
     fun add(a: Int, b: Int): Int {
         val data = Parcel.obtain()
         val reply = Parcel.obtain()
         return try {
             data.writeInt(a)
             data.writeInt(b)
-            log("BinderProxy add: $a + $b in process: ${ProcessHelper.getProcessName()}")
+            log(TAG, "add: $a + $b in process: ${ProcessHelper.getProcessName()}")
             binder.transact(BinderService.Companion.CODE_ADD, data, reply, 0)
             reply.readInt()
         } catch (e: Exception) {
@@ -34,7 +36,7 @@ class BinderProxy(private val binder: IBinder) {
         return try {
             data.writeInt(a)
             data.writeInt(b)
-            log("BinderProxy multiply: $a * $b in process: ${ProcessHelper.getProcessName()}")
+            log(TAG, "multiply: $a * $b in process: ${ProcessHelper.getProcessName()}")
             binder.transact(BinderService.Companion.CODE_MULTIPLY, data, reply, 0)
             reply.readInt()
         } catch (e: Exception) {

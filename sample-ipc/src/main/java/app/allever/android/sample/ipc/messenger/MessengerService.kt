@@ -38,12 +38,12 @@ class MessengerService : Service() {
                     if (replyMessenger != null) {
                         val replyMsg = Message.obtain(null, MSG_FROM_SERVER)
                         val bundle = Bundle().apply {
-                            val msg = "[${
+                            val msg = "${
                                 TimeUtils.formatTime(
                                     System.currentTimeMillis(),
                                     "[HH:mm:ss]"
                                 )
-                            }]服务端已收到，你好客户端！"
+                            }服务端已收到，你好客户端！"
                             log(TAG, "服务端发送消息: $msg")
                             putString("content", msg)
                         }
