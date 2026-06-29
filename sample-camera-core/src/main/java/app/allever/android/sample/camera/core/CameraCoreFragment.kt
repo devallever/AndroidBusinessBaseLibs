@@ -6,6 +6,8 @@ import app.allever.android.lib.camera.proxy.camerax.CameraXManager
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.camera.Camera1Manager
 import app.allever.android.lib.core.camera.CameraResultCallback
+import app.allever.android.lib.core.camera.FlashMode
+import app.allever.android.lib.core.camera.RecordCallback
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toast
@@ -18,6 +20,7 @@ import kotlin.getValue
 class CameraCoreFragment : BaseFragment<FragmentCameraCoreBinding, BaseViewModel>() {
 
     private val TAG = "CameraCoreFragment"
+    private var nextMode =  FlashMode.OFF
 
     private val mCameraManager by lazy {
         val engine = arguments?.getString("engine")
@@ -35,6 +38,7 @@ class CameraCoreFragment : BaseFragment<FragmentCameraCoreBinding, BaseViewModel
         mBinding.apply {
             btnOpen.setOnClickListener {
                 mCameraManager.openCamera()
+                mCameraManager.setFlashMode(nextMode)
             }
             btnClose.setOnClickListener {
                 mCameraManager.closeCamera()
@@ -75,7 +79,12 @@ class CameraCoreFragment : BaseFragment<FragmentCameraCoreBinding, BaseViewModel
                                 "yyyyMMddHHmmss"
                             )
                         }.mp4"
-                    ), object : CameraResultCallback {
+                    ), 0, object : RecordCallback {
+                        override fun onProgress(millis: Long) {
+                            val time = TimeUtils.formatTime(millis, "mm:ss")
+                            tvRecordTime.text = time
+                        }
+
                         override fun onSuccess(file: File) {
                             //log
                             log(TAG, "onSuccess: ${file.absolutePath}")
@@ -91,6 +100,13 @@ class CameraCoreFragment : BaseFragment<FragmentCameraCoreBinding, BaseViewModel
             }
             btnStopRecordVideo.setOnClickListener {
                 mCameraManager.stopRecording()
+            }
+
+            btnFlashMode.setOnClickListener {
+                val modes = FlashMode.values()
+                nextMode = modes[(modes.indexOf(nextMode) + 1) % modes.size]
+                mCameraManager.setFlashMode(nextMode)
+                btnFlashMode.text = "当前闪光灯模式: $nextMode"
             }
         }
     }
