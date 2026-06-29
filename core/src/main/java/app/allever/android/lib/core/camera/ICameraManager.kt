@@ -16,6 +16,9 @@ interface ICameraManager {
     /** 设置闪光灯模式 */
     fun setFlashMode(mode: FlashMode)
 
+    /** 设置预览比例 */
+    fun setAspectRatio(ratio: AspectRatio)
+
     /** 拍照 */
     fun takePhoto(file: File, callback: CameraResultCallback)
 

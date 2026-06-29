@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Environment
 import app.allever.android.lib.camera.proxy.camerax.CameraXManager
 import app.allever.android.lib.common.BaseFragment
+import app.allever.android.lib.core.camera.AspectRatio
 import app.allever.android.lib.core.camera.Camera1Manager
 import app.allever.android.lib.core.camera.CameraResultCallback
 import app.allever.android.lib.core.camera.FlashMode
@@ -21,6 +22,7 @@ class CameraCoreFragment : BaseFragment<FragmentCameraCoreBinding, BaseViewModel
 
     private val TAG = "CameraCoreFragment"
     private var nextMode =  FlashMode.OFF
+    private var nextAspectRatio =  AspectRatio.FULL_SCREEN
 
     private val mCameraManager by lazy {
         val engine = arguments?.getString("engine")
@@ -39,6 +41,7 @@ class CameraCoreFragment : BaseFragment<FragmentCameraCoreBinding, BaseViewModel
             btnOpen.setOnClickListener {
                 mCameraManager.openCamera()
                 mCameraManager.setFlashMode(nextMode)
+                mCameraManager.setAspectRatio(nextAspectRatio)
             }
             btnClose.setOnClickListener {
                 mCameraManager.closeCamera()
@@ -107,6 +110,12 @@ class CameraCoreFragment : BaseFragment<FragmentCameraCoreBinding, BaseViewModel
                 nextMode = modes[(modes.indexOf(nextMode) + 1) % modes.size]
                 mCameraManager.setFlashMode(nextMode)
                 btnFlashMode.text = "当前闪光灯模式: $nextMode"
+            }
+            btnAspectRatio.setOnClickListener {
+                val modes = AspectRatio.values()
+                nextAspectRatio = modes[(modes.indexOf(nextAspectRatio) + 1) % modes.size]
+                mCameraManager.setAspectRatio(nextAspectRatio)
+                btnAspectRatio.text = "当前比例: $nextAspectRatio"
             }
         }
     }

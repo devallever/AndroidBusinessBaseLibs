@@ -19,6 +19,7 @@ import android.view.TextureView
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.RequiresPermission
+import app.allever.android.lib.core.camera.AspectRatio
 import app.allever.android.lib.core.camera.BaseCameraManager
 import app.allever.android.lib.core.camera.CameraResultCallback
 import app.allever.android.lib.core.camera.FlashMode
@@ -36,7 +37,7 @@ class Camera2Manager(context: Context, container: ViewGroup) : BaseCameraManager
     private var bgThread: HandlerThread? = null
     private var bgHandler: Handler? = null
     private var cameraId = "0"
-    private val previewSize = Size(1920, 1080)
+    private var previewSize: Size = Size(1080, 1920)
     private var characteristics: CameraCharacteristics? = null
     private var zoomRect: Rect? = null
     private var recordCallback: RecordCallback? = null
@@ -48,34 +49,28 @@ class Camera2Manager(context: Context, container: ViewGroup) : BaseCameraManager
         layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
-    private val scaleDetector =
-        ScaleGestureDetector(context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-            override fun onScale(detector: ScaleGestureDetector): Boolean {
-                val maxZoom =
-                    characteristics?.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM)
-                        ?: 1f
-                val sensorRect =
-                    characteristics?.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE)
-                        ?: return false
-                val currentZoom = zoomRect?.width()?.toFloat()?.div(sensorRect.width()) ?: 1f
-                val newZoom = (currentZoom * detector.scaleFactor).coerceIn(1f, maxZoom)
-                val w = (sensorRect.width() / newZoom).toInt()
-                val h = (sensorRect.height() / newZoom).toInt()
-                val x = (sensorRect.width() - w) / 2
-                val y = (sensorRect.height() - h) / 2
-                zoomRect = Rect(x, y, x + w, y + h)
-                updatePreview()
-                return true
-            }
-        })
+    private val scaleDetector = ScaleGestureDetector(context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+            val maxZoom = characteristics?.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM) ?: 1f
+            val sensorRect = characteristics?.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE) ?: return false
+            val currentZoom = zoomRect?.width()?.toFloat()?.div(sensorRect.width()) ?: 1f
+            val newZoom = (currentZoom * detector.scaleFactor).coerceIn(1f, maxZoom)
+            val w = (sensorRect.width() / newZoom).toInt()
+            val h = (sensorRect.height() / newZoom).toInt()
+            val x = (sensorRect.width() - w) / 2
+            val y = (sensorRect.height() - h) / 2
+            zoomRect = Rect(x, y, x + w, y + h)
+            updatePreview()
+            return true
+        }
+    })
 
-    private val gestureDetector =
-        GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-            override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                focusOnPoint(e.x, e.y)
-                return true
-            }
-        })
+    private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+            focusOnPoint(e.x, e.y)
+            return true
+        }
+    })
 
     init {
         container.addView(textureView)
@@ -98,7 +93,6 @@ class Camera2Manager(context: Context, container: ViewGroup) : BaseCameraManager
         val sensorRect = characteristics?.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE) ?: return
         val focusW = sensorRect.width() / 5
         val focusH = sensorRect.height() / 5
-        // 将屏幕坐标转换为传感器坐标 (简单近似)
         val focusX = (x / textureView.width * sensorRect.width()).toInt() - focusW / 2
         val focusY = (y / textureView.height * sensorRect.height()).toInt() - focusH / 2
         val focusRect = Rect(focusX, focusY, focusX + focusW, focusY + focusH)
@@ -124,12 +118,34 @@ class Camera2Manager(context: Context, container: ViewGroup) : BaseCameraManager
     override fun doOpenCamera() {
         try {
             characteristics = cameraManager.getCameraCharacteristics(cameraId)
+            setupPreviewSize()
             cameraManager.openCamera(cameraId, object : CameraDevice.StateCallback() {
                 override fun onOpened(camera: CameraDevice) { cameraDevice = camera; startPreview() }
                 override fun onDisconnected(camera: CameraDevice) { camera.close() }
                 override fun onError(camera: CameraDevice, p1: Int) { camera.close() }
             }, bgHandler)
         } catch (e: CameraAccessException) { e.printStackTrace() }
+    }
+
+    private fun setupPreviewSize() {
+        val map = characteristics?.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: return
+        val targetRatio = when (currentAspectRatio) {
+            AspectRatio.RATIO_1_1 -> 1.0
+            AspectRatio.RATIO_3_4 -> 3.0 / 4.0
+            AspectRatio.RATIO_16_9 -> 9.0 / 16.0
+            AspectRatio.FULL_SCREEN -> {
+                // 动态获取屏幕物理比例 (高/宽)
+                val w = container.width
+                val h = container.height
+                if (w > 0 && h > 0) h.toDouble() / w.toDouble() else 9.0 / 16.0
+            }
+        }
+
+        // 筛选比例最接近且面积最大的尺寸
+        previewSize = map.getOutputSizes(SurfaceTexture::class.java)
+            .filter { Math.abs(it.width.toDouble() / it.height.toDouble() - targetRatio) < 0.15 }
+            .maxByOrNull { it.width * it.height }
+            ?: map.getOutputSizes(SurfaceTexture::class.java)[0]
     }
 
     private fun startPreview() {
@@ -158,9 +174,13 @@ class Camera2Manager(context: Context, container: ViewGroup) : BaseCameraManager
         doCloseCamera(); doOpenCamera()
     }
 
-    override fun doSetFlashMode(mode: FlashMode) {
-        // Camera2 闪光灯逻辑较复杂，需在拍照/录像的 Request 中设置 FLASH_MODE
-        // 此处省略具体 Request 构建，逻辑与 updatePreview 类似，添加 FLASH_MODE 字段
+    override fun doSetFlashMode(mode: FlashMode) { /* 同前文 */ }
+
+    override fun doSetAspectRatio(ratio: AspectRatio) {
+        setupPreviewSize()
+        textureView.surfaceTexture?.setDefaultBufferSize(previewSize.width, previewSize.height)
+        startPreview()
+        updatePreviewViewSize(textureView)
     }
 
     override fun doTakePhoto(file: File, callback: CameraResultCallback) {
@@ -214,7 +234,6 @@ class Camera2Manager(context: Context, container: ViewGroup) : BaseCameraManager
         }, bgHandler)
     }
 
-    @SuppressLint("DiscouragedApi")
     private fun startRecordTimer(maxDurationMillis: Long) {
         recordStartTime = System.currentTimeMillis()
         recordTimer = Timer()
@@ -222,9 +241,7 @@ class Camera2Manager(context: Context, container: ViewGroup) : BaseCameraManager
             override fun run() {
                 val duration = System.currentTimeMillis() - recordStartTime
                 recordCallback?.onProgress(duration)
-                if (duration >= maxDurationMillis) {
-                    stopRecording()
-                }
+                if (duration >= maxDurationMillis) stopRecording()
             }
         }, 0, 100)
     }
