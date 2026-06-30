@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/about_activity_background"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <!--- title bar -->
+    <RelativeLayout
+        android:id="@+id/rl_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_title_height"
+        android:background="@color/title_bar_color">
+
+        <com.android.absbase.ui.widget.RippleImageView
+            android:id="@+id/top_back"
+            style="@style/default_icon_style"
+            android:src="@drawable/icon_back" />
+
+        <TextView
+            style="@style/title_bar_title_style"
+            android:text="@string/about"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/about_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/rl_title_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:src="@mipmap/logo" />
+
+    <TextView
+        android:id="@+id/about_version"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_alignTop="@+id/about_icon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-24dp"
+        android:layout_toEndOf="@+id/about_icon"
+        android:background="@drawable/about_icon_v"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="1.0"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+
+    <TextView
+        android:id="@+id/about_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/about_icon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="@string/app_name"
+        android:textColor="@color/activity_about_name_color"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/about_privacy"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_above="@+id/separate"
+        android:layout_centerHorizontal="true"
+        android:background="?attr/selectableItemBackground"
+        android:drawableLeft="@drawable/ic_gp"
+        android:drawablePadding="12dp"
+        android:gravity="center"
+        android:text="@string/about_privacy"
+        android:textColor="@color/activity_about_privacy_color"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/separate"
+        android:layout_width="150dp"
+        android:layout_height="1dp"
+        android:layout_above="@+id/about_ad"
+        android:layout_centerHorizontal="true"
+        android:background="#0d000000" />
+
+    <TextView
+        android:id="@+id/about_ad"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_above="@+id/tv_copyright"
+        android:layout_alignLeft="@+id/about_privacy"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="54dp"
+        android:background="?attr/selectableItemBackground"
+        android:drawableLeft="@drawable/ic_ad"
+        android:drawablePadding="12dp"
+        android:gravity="center"
+        android:text="@string/about_ad_choice"
+        android:textColor="@color/activity_about_ad_color"
+        android:textSize="14sp" />
+
+
+    <TextView
+        android:id="@+id/tv_copyright"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="28dp"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="@string/copy_right_info"
+        android:textColor="@color/activity_about_copyright_color"
+        android:textSize="10sp" />
+
+</RelativeLayout>

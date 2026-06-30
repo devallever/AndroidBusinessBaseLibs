@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/bg_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/video_edit_saving_layout_background_color"
+        android:scaleType="centerCrop" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animator_view"
+        android:layout_width="250dp"
+        android:layout_height="140dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="90dp"
+        custom:lottie_autoPlay="false"
+        custom:lottie_fileName="video_save.json"
+        custom:lottie_loop="true" />
+
+    <TextView
+        android:id="@+id/progress_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/animator_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="@string/video_edit_saving_loading_text"
+        android:textColor="@color/video_edit_saving_layout_progress_text_color"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="66dp"
+        android:layout_marginStart="66dp"
+        android:layout_below="@id/progress_text"
+        android:gravity="center"
+        android:text="@string/video_edit_saving_tips"
+        android:textColor="@color/video_edit_saving_layout_tips_color"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/btn_cancel"
+        android:background="@color/video_edit_saving_layout_divider_color"
+        android:visibility="gone" />
+
+    <com.android.absbase.ui.widget.RippleTextView
+        android:id="@+id/btn_cancel"
+        android:layout_width="120dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="90dp"
+        android:gravity="center"
+        android:text="@string/cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/video_edit_saving_layout_btn_color"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        android:background="@drawable/video_edit_saving_btn_cancel_bg"/>
+
+    <FrameLayout
+        android:id="@+id/ad_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

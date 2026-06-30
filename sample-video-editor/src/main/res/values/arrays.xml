@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer-array name="colors">
+        <item>0xffffffff</item>
+        <item>0xfffffba0</item>
+        <item>0xffe9ec00</item>
+        <item>0xffffe500</item>
+        <item>0xffffa100</item>
+        <item>0xffef5100</item>
+        <item>0xfff4001a</item>
+        <item>0xffb61300</item>
+        <item>0xfff7888c</item>
+        <item>0xfff4005f</item>
+        <item>0xffbc0050</item>
+        <item>0xffda7bbd</item>
+        <item>0xff642a98</item>
+        <item>0xff3537a1</item>
+        <item>0xff0071c1</item>
+        <item>0xffa0d2f5</item>
+        <item>0xff00a9b7</item>
+        <item>0xff009861</item>
+        <item>0xffaddc8d</item>
+        <item>0xff00a72b</item>
+        <item>0xff004a1d</item>
+        <item>0xffa05340</item>
+        <item>0xffe27900</item>
+        <item>0xff67645a</item>
+        <item>0xffe5e3ea</item>
+        <item>0xff000000</item>
+    </integer-array>
+
+    <string-array name="sticker_emojis">
+        <item>"1f60d"</item>
+        <item>"1f618"</item>
+        <item>"1f602"</item>
+        <item>"1f60e"</item>
+        <item>"1f923"</item>
+        <item>"1f913"</item>
+        <item>"1f929"</item>
+        <item>"1f92a"</item>
+        <item>"1f642"</item>
+        <item>"1f643"</item>
+        <item>"1f9d0"</item>
+        <item>"1f92f"</item>
+        <item>"1f92c"</item>
+        <item>"1f621"</item>
+        <item>"1f633"</item>
+        <item>"1f641"</item>
+        <item>"2639"</item>
+        <item>"1f631"</item>
+        <item>"1f914"</item>
+        <item>"1f92b"</item>
+        <item>"1f917"</item>
+        <item>"1f613"</item>
+        <item>"1f607"</item>
+        <item>"1f634"</item>
+        <item>"1f925"</item>
+        <item>"1f485"</item>
+        <item>"1f933"</item>
+        <item>"1f44d"</item>
+        <item>"1f595"</item>
+        <item>"1f919"</item>
+        <item>"1f64f"</item>
+        <item>"270c"</item>
+        <item>"1f44f"</item>
+        <item>"1f91e"</item>
+        <item>"1f596"</item>
+    </string-array>
+
+</resources>

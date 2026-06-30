@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_select_album_height">
+
+    <ImageView
+        android:id="@+id/iv_image"
+        android:layout_width="@dimen/item_select_album_image_width"
+        android:layout_height="@dimen/item_select_album_image_height"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/share_icon_facebook"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/tv_album_name"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/item_select_album_title_height"
+        android:layout_toRightOf="@id/iv_image"
+        android:layout_marginStart="@dimen/item_select_album_title_margin_start"
+        android:layout_marginTop="@dimen/item_select_album_margin_top"
+        android:textSize="@dimen/item_select_album_title_text_size"
+        android:textColor="@color/item_select_album_title_text_color"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/item_select_album_count_container_height"
+        android:layout_toRightOf="@id/iv_image"
+        android:layout_marginStart="@dimen/item_select_album_count_container_margin_start"
+        android:layout_below="@+id/tv_album_name">
+
+        <ImageView
+            android:id="@+id/iv_video"
+            style="@style/item_select_album_iv_count_style"
+            android:src="@drawable/icon_album_video_s" />
+
+        <TextView
+            android:id="@+id/tv_video_count"
+            style="@style/item_select_album_tv_count_style"
+            android:layout_toEndOf="@+id/iv_video"/>
+
+        <ImageView
+            android:id="@+id/iv_photo"
+            style="@style/item_select_album_iv_count_style"
+            android:src="@drawable/icon_album_photo_s"
+            android:layout_marginLeft="@dimen/item_select_album_iv_photo_margin_start"/>
+
+        <TextView
+            android:id="@+id/tv_photo_count"
+            style="@style/item_select_album_tv_count_style"
+            android:layout_toEndOf="@id/iv_photo"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

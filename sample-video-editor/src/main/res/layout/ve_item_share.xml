@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/share_save_share_item_margin">
+    <com.android.absbase.ui.widget.RippleImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="@dimen/share_save_share_item_width"
+        android:layout_height="@dimen/share_save_share_item_height" />
+</FrameLayout>

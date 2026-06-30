@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_empty_type"
+            android:layout_width="@dimen/empty_view_img_width"
+            android:layout_height="@dimen/empty_view_img_height"
+            android:contentDescription=""
+            android:src="@drawable/icon_album_empty_all" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/empty_view_title_margin_top"
+            android:text="@string/empty_view_title"
+            android:textColor="@color/empty_view_title_color"
+            android:textSize="@dimen/empty_view_title_text_size"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/empty_view_description_margin_start"
+            android:layout_marginTop="@dimen/empty_view_description_margin_top"
+            android:layout_marginEnd="@dimen/empty_view_description_margin_end"
+            android:gravity="center"
+            android:text="@string/empty_view_description"
+            android:textColor="@color/empty_view_description_color"
+            android:textSize="@dimen/empty_view_description_text_size" />
+    </LinearLayout>
+
+</FrameLayout>

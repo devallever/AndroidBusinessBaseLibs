@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_background_color"
+    tools:context="com.videoeditor.com.allever.video.editor.ui.LocalMusicActivity">
+
+    <!-- Title -->
+    <RelativeLayout
+        android:id="@+id/top_panel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_title_height">
+
+        <com.android.absbase.ui.widget.RippleImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/default_icon_width"
+            android:layout_height="@dimen/default_icon_height"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="4dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_edit_back" />
+
+        <com.android.absbase.ui.widget.RippleTextView
+            android:id="@+id/title"
+            style="@style/title_bar_title_style"
+            android:text="@string/local_music_title"
+            android:textAllCaps="true" />
+
+        <!--<com.android.absbase.ui.widget.RippleImageView-->
+        <!--android:id="@+id/rescan"-->
+        <!--android:layout_width="@dimen/default_icon_height"-->
+        <!--android:layout_height="@dimen/default_icon_height"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:scaleType="centerInside"-->
+        <!--android:src="@drawable/icon_edit_music_local_scan"-->
+        <!--android:visibility="gone"/>-->
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/dividing_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/top_panel"
+        android:background="@color/dividing_line_color" />
+
+    <!-- 扫描进度 -->
+    <LinearLayout
+        android:id="@+id/scan_progress_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dividing_line"
+        android:background="@color/local_music_scan_progress_background_color">
+
+        <TextView
+            android:id="@+id/scan_progress"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="@color/local_music_scan_progress_text_color"
+            android:textSize="14sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/no_data_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_album_empty_all" />
+
+        <TextView
+            android:id="@+id/no_data_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/local_music_no_data"
+            android:textColor="@color/local_music_no_data_text_color"
+            android:textSize="20sp"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+
+    <!-- 扫描按钮 -->
+    <FrameLayout
+        android:id="@+id/fl_scan_container"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/local_music_scan_btn_container_background"
+        android:visibility="visible">
+
+        <com.android.absbase.ui.widget.RippleTextView
+            android:id="@+id/tv_scan"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/default_button_bg"
+            android:gravity="center"
+            android:text="@string/local_music_scan_btn_text"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/fl_scan_container"
+        android:layout_below="@+id/scan_progress_layout" />
+
+    <RelativeLayout
+        android:id="@+id/scaning_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/fl_scan_container"
+        android:layout_below="@+id/top_panel"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/local_music_scaning_mask_background">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_edit_music_scan_1" />
+
+        <ImageView
+            android:id="@+id/no_music_locus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_edit_music_scan_2" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

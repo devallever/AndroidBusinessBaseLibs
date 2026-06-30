@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.allever.video.editor.ui.widget.TimeLineView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_root"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:orientation="horizontal"
+    android:splitMotionEvents="false">
+
+    <ImageView
+        android:id="@+id/id_iv_start"
+        android:layout_width="@dimen/time_line_view_item_fun_width"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:scaleType="centerInside"
+        android:src="@drawable/arrow_left"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/id_content_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/effect_edit_timeline_padding"
+        android:paddingBottom="@dimen/effect_edit_timeline_padding">
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/id_iv_end"
+        android:layout_width="@dimen/time_line_view_item_fun_width"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:scaleType="centerInside"
+        android:src="@drawable/arrow_right"
+        android:visibility="visible" />
+
+
+</com.allever.video.editor.ui.widget.TimeLineView>

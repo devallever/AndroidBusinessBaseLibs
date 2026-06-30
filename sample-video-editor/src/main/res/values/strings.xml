@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<string name="app_name">Photo Editor Pro</string>-->
+
+    <string name="media_save_file_name_prefix">PhotoEditor</string>
+
+    <!-- 编辑界面 -->
+    <!-- 设置界面 -->
+    <string name="setting_title">SETTING</string>
+    <string name="setting_feedback">Feedback &amp; Support</string>
+    <!-- 反馈 -->
+    <!-- 图片预览界面 -->
+    <string name="not_install">Sorry, you have not yet installed the program!</string>
+    <string name="no_suitable_player">No suitable video player !</string>
+    <string name="more">MORE</string>
+    <!-- 文件夹选择界面 -->
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <!--  更多设置popup  -->
+    <!--  关于界面  -->
+    <!-- 闪光灯 -->
+    <!-- 异常提示 -->
+    <string name="storage_not_ready">Cannot take photo. Please insert a storage card or change the storage path of photos.</string>
+    <string name="little_sdcard_tips">Not Enough Storage. Photo/video may not be saved.</string>
+    <!--点击滤镜图片进入详情-->
+    <!-- 滤镜商店 -->
+    <!-- 评分引导 -->
+    <!-- 美颜界面 -->
+    <!-- 图片和成文字 -->
+    <!-- 相册部分 -->
+    <!-- 拍照达人分享发送内容 -->
+    <!-- 没有拍照描述 -->
+    <!-- 拍照用户分享描述 -->
+    <!-- 拍照达人分享界面显示内容 -->
+    <!-- 忘记密码相关 -->
+    <!-- 滤镜商店引导 -->
+    <!-- UC的应用墙相关 -->
+    <!-- facebook sdk 分享-->
+    <!--社区facebook分享-->
+    <!-- PRYYNT-->
+    <!-- 预览界面弹出菜单-->
+    <!-- 预览界面更多信息-->
+    <!-- Gallery界面广告相关 -->
+    <!-- 相册支持多个Intent部分 -->
+    <!-- vip购买 -->
+    <!-- emoji -->
+    <!-- 推广Next桌面 -->
+    <!-- 推广AppLock -->
+    <!--分享相关-->
+    <string name="whatsapp">WhatsApp</string>
+    <string name="facebook">Facebook</string>
+    <string name="instagram">Instagram</string>
+    <!-- 创建Widget -->
+    <!-- 备份恢复 -->
+    <!-- 私密箱提示 -->
+    <!-- 抽奖 -->
+    <!-- 忘记密码相关 -->
+
+
+    <!-- 拼接相关 -->
+    <string name="start_collage">Start</string>
+    <!-- Emoji下载 广告相关 -->
+    <!-- 解锁提示 -->
+    <!-- 充电提示 -->
+    <!-- 商店改版 -->
+    <string name="request_ext_sdcard_permission_tip">SD Write Permission</string>
+    <string name="request_ext_sdcard_permission_msg1">In order to write to the SD card, App needs you to explicitly grant permission through Android. After you press CONFIRM, the Android document selection dialog will be displayed.</string>
+    <string name="request_ext_sdcard_permission_msg2">Please navigate to your external SD card and select the top level folder.</string>
+    <string name="request_ext_sdcard_permission_msg3">You may need to use a menu option to show the SD card.</string>
+    <!-- 积分墙相关 -->
+    <!-- 新增设置 -->
+    <!-- 相册提示 -->
+    <!-- 新增功能镜像 -->
+    <!-- 商店改版 -->
+    <!-- 美颜优化相关 -->
+    <!--杂志相框-->
+    <!-- 贴纸推荐 -->
+    <string name="about">About</string>
+    <string name="about_ad_choice">AD Choice</string>
+    <string name="about_privacy">Privacy Policy</string>
+    <string name="copy_right_info" translatable="false">Copyright ©2018-2019 VideoEditor All Rights Reserved</string>
+    <string name="dialog_rate_title">Rate on Google Play to support us!</string>
+    <string name="dialog_rate_content">Your 5 stars rating are the best of our work for sure!</string>
+    <string name="dialog_rate_ok">Give 5 stars</string>
+    <string name="dialog_rate_cancel">suggestions</string>
+
+    <string name="rate_note">Rate this app</string>
+    <string name="rate_start_1">Hated it</string>
+    <string name="rate_start_2">Disliked it</string>
+    <string name="rate_start_3">It\'s OK</string>
+    <string name="rate_start_4">Liked it</string>
+    <string name="rate_start_5">Loved it</string>
+
+
+    <!-- 分享界面 -->
+
+    <string name="privacy_start">START</string>
+    <string name="privacy_message_pre">Understand and agree to the&#160;</string>
+    <string name="privacy_message">Terms and Privacy</string>
+
+    <string name="save">Save</string>
+
+
+    <!--私密相册-->
+
+    <string name="tips_ration_storate">We need storage permission to read image</string>
+
+    <string name="preferences_premium">Premium</string>
+    <!--premium-->
+    <string name="premium_title">PREMIUM</string>
+    <string name="premium_unlimited">Unlimited scanning and generation times.</string>
+    <string name="premium_support">Support over 300+ types and scenarios.</string>
+    <string name="premium_custom">Custom your own QR Code for share.</string>
+    <string name="premium_no">No Ads forever.</string>
+    <string name="purchase_state">purchase_success</string>
+
+    <!--vip-->
+    <string name="vip_tip">Your Social &amp; Safest Photo Editor</string>
+    <string name="vip_month_tip">1 Month: %s/Month.</string>
+    <string name="vip_month_tip2">3-days free trial, then %s/Month. Cancel anytime</string>
+    <string name="vip_year_tip">12 Month: %s/Month</string>
+    <string name="vip_year_tip2">3-days free trial, save %s/Year. Cancel anytime</string>
+
+    <string name="premium_start_buy">START FOR FREE</string>
+    <string name="premium_start_upgrade">Upgrade</string>
+    <string name="premium_start_renew">Renew</string>
+
+    <!--<string name="sticker_panel_btn_retry">Retry</string>-->
+    <!--<string name="sticker_panel_btn_continue">Continue</string>-->
+    <!--续订提示-->
+
+    <!--filter-->
+
+</resources>

@@ -1,0 +1,131 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <!-- 图像编辑界面 -->
+    <dimen name="image_edit_bottom_bar_height">80dp</dimen>
+
+    <dimen name="image_eidt_select_bar_height">56dp</dimen>
+
+    <!-- 照片尺寸对话框的listview的item项目高度 -->
+
+    <!-- 照片尺寸对话框的除去listview的高度(顶部、底部、title、cancel) -->
+
+    <!-- 评分对话框大小 -->
+
+    <!-- 滤镜商店tab字体 -->
+
+    <!-- 编辑界面滤镜红点的margin top / right -->
+
+    <!-- 加载错误margin top / right -->
+    <!-- 加载错误上移位置 -->
+
+    <!-- 主界面外边的margin -->
+
+    <!-- 主界面外边的margin -->
+
+    <!-- 分享界面横屏时的左右margin -->
+
+    <!-- 相册分组的separator -->
+    <!-- 两张图片间的间隔 -->
+    <!-- 相册底部空白的高度 -->
+    <!-- 键盘单个按钮的高度 -->
+
+    <!-- 相册快速滑动栏相关 -->
+
+    <!-- 相册separator相关 -->
+
+    <!-- 相册播放视频按钮大小 -->
+
+    <!-- Gif 和 dynamic 的标志大小 -->
+
+    <!-- Gif 和 dynamic 的边距的大小 -->
+
+    <!-- 编辑界面底部可选择的watermark的宽度 -->
+
+    <!-- 图像编辑界面Emoji panel -->
+    <!-- 图像编辑界面Emoji单个的实际大小 -->
+
+    <!-- 上面 image_edit_emoji_item_padding * 2 + image_edit_emoji_item_size == 48 dp -->
+
+    <!-- 图像编辑界面Emoji panel -->
+
+    <!-- 图像编辑界面Emoji 两行之间的间距 -->
+
+    <!-- 图像编辑界面Emoji 两行之间的间距 -->
+
+    <!-- 图像编辑界面Emoji indicator margin -->
+
+    <!-- 图像编辑界面Emoji 默认的大小 -->
+    <!-- 图像编辑界面操作按钮默认的大小 -->
+
+    <!-- 预览界面更多信息 -->
+
+    <!-- 相册广告相关 -->
+
+    <!-- 编辑广告相关 -->
+
+    <!-- 编辑相关 -->
+    <dimen name="image_edit_seekbar_touch_height">20dp</dimen>
+    <dimen name="image_edit_seekbar_num_background_width">12dp</dimen>
+
+    <dimen name="image_edit_seekbar_num_height">60dp</dimen>
+
+    <dimen name="image_edit_seekbar_num_size">12sp</dimen>
+
+    <dimen name="image_edit_seekbar_height">1dp</dimen>
+
+    <dimen name="default_button_size">48dp</dimen>
+
+    <!-- 滤镜商店弹出框宽度 -->
+
+    <!-- 主界面-->
+
+    <!-- 添加文字界面 -->
+
+    <!-- 分享合成图片部分 -->
+
+    <!--share_logo_size 是和图片对应的-->
+
+
+    <!-- vip分享合成图片部分 -->
+
+
+    <!-- 微调整相关 -->
+
+    <!-- 编辑-emoji 第二层的高度 -->
+
+    <!-- 广告样式 -->
+    <!-- icon样式需要的dp -->
+
+    <!-- 相册提示 -->
+
+    <!-- 通知栏广告 -->
+
+    <!-- 新的分享页面 -->
+
+
+    <!--社区-->
+
+    <!-- 新商店 -->
+
+    <!-- 商店新按钮margin -->
+
+    <!-- 图像编辑界面Emoji 面板的顶部Padding -->
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+
+    <dimen name="default_margin">20dp</dimen>
+
+    <dimen name="album_margin_left">@dimen/default_margin</dimen>
+    <dimen name="album_margin_item_time_bottom">10dp</dimen>
+
+    <dimen name="setting_margin_left">@dimen/default_margin</dimen>
+    <dimen name="setting_item_height">56dp</dimen>
+
+    <!--filter-->
+
+    <!-- 按钮默认宽高 -->
+    <dimen name="default_icon_width">48dp</dimen>
+    <dimen name="default_icon_height">48dp</dimen>
+</resources>

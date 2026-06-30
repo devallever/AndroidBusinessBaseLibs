@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <com.android.absbase.ui.widget.RippleImageView
+        android:id="@+id/iv_close"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="centerInside"
+        android:layout_gravity="right"
+        android:alpha="0.3"
+        android:src="@drawable/icon_premium_close"
+        tools:ignore="RtlHardcoded" />
+
+    <LinearLayout
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        tools:ignore="UselessParent"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_retain_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:text="@string/gp_retain_title"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_retain_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:gravity="center"
+            android:text="@string/gp_retain_descript"
+            android:textColor="@color/custom_retain_desp_color"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp">
+
+            <FrameLayout
+                android:id="@+id/fl_premium_dialog_01"
+                style="@style/premium_dialog_item">
+
+                <include layout="@layout/view_premiu_dialog_item_background" />
+
+                <FrameLayout
+                    android:id="@+id/iv_premium_dialog_item_iv_container_01"
+                    style="@style/premium_dialog_item_iv_container">
+
+                    <ImageView
+                        android:id="@+id/iv_premium_dialog_01"
+                        style="@style/premium_dialog_item_iv"
+                        android:src="@drawable/premium_dialog_card_01" />
+
+                    <TextView
+                        style="@style/premium_dialog_item_tv"
+                        android:text="@string/premium_dialog_item_text_1" />
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_premium_dialog_02"
+                style="@style/premium_dialog_item"
+                android:layout_marginStart="12dp">
+
+                <include layout="@layout/view_premiu_dialog_item_background" />
+
+                <FrameLayout
+                    android:id="@+id/iv_premium_dialog_item_iv_container_02"
+                    style="@style/premium_dialog_item_iv_container">
+
+                    <ImageView
+                        android:id="@+id/iv_premium_dialog_02"
+                        style="@style/premium_dialog_item_iv"
+                        android:src="@drawable/premium_dialog_card_02" />
+
+                    <TextView
+                        style="@style/premium_dialog_item_tv"
+                        android:text="@string/premium_dialog_item_text_2" />
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_premium_dialog_03"
+                style="@style/premium_dialog_item"
+                android:layout_marginStart="12dp">
+
+                <include layout="@layout/view_premiu_dialog_item_background" />
+
+                <FrameLayout
+                    android:id="@+id/iv_premium_dialog_item_iv_container_03"
+                    style="@style/premium_dialog_item_iv_container">
+
+                    <ImageView
+                        android:id="@+id/iv_premium_dialog_03"
+                        style="@style/premium_dialog_item_iv"
+                        android:src="@drawable/premium_dialog_card_03" />
+
+                    <TextView
+                        style="@style/premium_dialog_item_tv"
+                        android:text="@string/premium_dialog_item_text_3" />
+                </FrameLayout>
+
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
+
+            <FrameLayout
+                android:id="@+id/fl_premium_dialog_04"
+                style="@style/premium_dialog_item">
+
+                <include layout="@layout/view_premiu_dialog_item_background" />
+
+                <FrameLayout
+                    android:id="@+id/iv_premium_dialog_item_iv_container_04"
+                    style="@style/premium_dialog_item_iv_container">
+
+                    <ImageView
+                        android:id="@+id/iv_premium_dialog_04"
+                        style="@style/premium_dialog_item_iv"
+                        android:src="@drawable/premium_dialog_card_04" />
+
+                    <TextView
+                        style="@style/premium_dialog_item_tv"
+                        android:text="@string/premium_dialog_item_text_4" />
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_premium_dialog_05"
+                style="@style/premium_dialog_item"
+                android:layout_marginStart="12dp">
+
+                <include layout="@layout/view_premiu_dialog_item_background" />
+
+                <FrameLayout
+                    android:id="@+id/iv_premium_dialog_item_iv_container_05"
+                    style="@style/premium_dialog_item_iv_container">
+
+                    <ImageView
+                        android:id="@+id/iv_premium_dialog_05"
+                        style="@style/premium_dialog_item_iv"
+                        android:src="@drawable/premium_dialog_card_05" />
+
+                    <TextView
+                        style="@style/premium_dialog_item_tv"
+                        android:text="@string/premium_dialog_item_text_5" />
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_premium_dialog_06"
+                style="@style/premium_dialog_item"
+                android:layout_marginStart="12dp">
+
+                <include layout="@layout/view_premiu_dialog_item_background" />
+
+                <FrameLayout
+                    android:id="@+id/iv_premium_dialog_item_iv_container_06"
+                    style="@style/premium_dialog_item_iv_container">
+
+                    <ImageView
+                        android:id="@+id/iv_premium_dialog_06"
+                        style="@style/premium_dialog_item_iv"
+                        android:src="@drawable/premium_dialog_card_06" />
+
+                    <TextView
+                        style="@style/premium_dialog_item_tv"
+                        android:text="@string/premium_dialog_item_text_6" />
+                </FrameLayout>
+
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
+
+            <FrameLayout
+                android:id="@+id/fl_premium_dialog_07"
+                style="@style/premium_dialog_item">
+
+                <include layout="@layout/view_premiu_dialog_item_background" />
+
+                <FrameLayout
+                    android:id="@+id/iv_premium_dialog_item_iv_container_07"
+                    style="@style/premium_dialog_item_iv_container">
+
+                    <ImageView
+                        android:id="@+id/iv_premium_dialog_07"
+                        style="@style/premium_dialog_item_iv"
+                        android:src="@drawable/premium_dialog_card_07" />
+
+                    <TextView
+                        style="@style/premium_dialog_item_tv"
+                        android:text="@string/premium_dialog_item_text_7" />
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_premium_dialog_08"
+                style="@style/premium_dialog_item"
+                android:layout_marginStart="12dp">
+
+                <include layout="@layout/view_premiu_dialog_item_background" />
+
+                <FrameLayout
+                    android:id="@+id/iv_premium_dialog_item_iv_container_08"
+                    style="@style/premium_dialog_item_iv_container">
+
+                    <ImageView
+                        android:id="@+id/iv_premium_dialog_08"
+                        style="@style/premium_dialog_item_iv"
+                        android:src="@drawable/premium_dialog_card_08" />
+
+                    <TextView
+                        style="@style/premium_dialog_item_tv"
+                        android:text="@string/premium_dialog_item_text_8" />
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_premium_dialog_09"
+                style="@style/premium_dialog_item"
+                android:layout_marginStart="12dp">
+
+                <include layout="@layout/view_premiu_dialog_item_background" />
+
+                <FrameLayout
+                    android:id="@+id/iv_premium_dialog_item_iv_container_09"
+                    style="@style/premium_dialog_item_iv_container">
+
+                    <ImageView
+                        android:id="@+id/iv_premium_dialog_09"
+                        style="@style/premium_dialog_item_iv"
+                        android:src="@drawable/premium_dialog_card_09" />
+
+                    <TextView
+                        style="@style/premium_dialog_item_tv"
+                        android:text="@string/premium_dialog_item_text_9" />
+                </FrameLayout>
+
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="24dp"
+            android:orientation="vertical">
+
+            <com.android.absbase.ui.widget.RippleButton
+                android:id="@+id/btn_try_for_free"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="232dp"
+                android:layout_height="40dp"
+                android:background="@drawable/shape_round_retrain_select_bg"
+                android:text="@string/gp_retain_try_for_free"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:visibility="visible"
+                android:textAllCaps="false"/>
+
+            <!--<com.android.absbase.ui.widget.RippleButton-->
+                <!--android:id="@+id/btn_quit"-->
+                <!--android:layout_width="232dp"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:background="@drawable/shape_round_retrain_normal_bg"-->
+                <!--android:text="@string/gp_retain_quit"-->
+                <!--android:textColor="#7f40435b"-->
+                <!--android:textSize="14sp"-->
+                <!--android:textAllCaps="false"/>-->
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

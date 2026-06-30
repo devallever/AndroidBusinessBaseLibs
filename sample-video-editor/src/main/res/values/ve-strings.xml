@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">My Video Editor</string>
+
+    <!-- 编辑主页面 -->
+
+    <!-- 底部工具栏标题 -->
+    <string name="video_edit_bottom_item_back">Back</string>
+    <string name="video_edit_bottom_item_del">Remove</string>
+    <string name="video_edit_bottom_item_music">Music</string>
+    <string name="video_edit_bottom_item_format">Format</string>
+    <string name="video_edit_bottom_item_text">Text</string>
+    <string name="video_edit_bottom_item_sticker">Sticker</string>
+    <string name="video_edit_bottom_item_trim">Trim</string>
+
+    <string name="video_edit_bottom_item_music_volume">Volume</string>
+    <string name="video_edit_bottom_item_music_local">My Music</string>
+    <string name="video_edit_bottom_item_music_original_volume">Original Sound</string>
+    <string name="video_edit_bottom_item_music_soundtrack">Soundtrack</string>
+
+    <string name="video_edit_bottom_item_font_edit">Edit</string>
+    <string name="video_edit_bottom_item_font_font">Font</string>
+    <string name="video_edit_bottom_item_font_color">Color</string>
+    <string name="video_edit_bottom_item_font_opacity">Opacity</string>
+    <string name="video_edit_bottom_item_font_align">Align</string>
+    <string name="video_edit_bottom_item_font_background">Background</string>
+    <string name="video_edit_bottom_item_font_opacity_text">Opacity %s</string>
+
+    <!-- 保存视频 -->
+    <string name="video_edit_saving_tips">TIPS: Waiting for something you like is wonderful</string>
+    <string name="video_edit_saving_loading_text">LOADING…</string>
+    <string name="video_edit_saving_loading_cancel">Cancel</string>
+
+    <string name="local_music_title">Local</string>
+<!--    <string name="local_music_no_data">No local musics&amp;#xD83D;&amp;#xDE02;</string>-->
+    <string name="local_music_no_data">No local musics</string>
+    <string name="local_music_no_data_btn">Scan</string>
+    <string name="music_info_unknown_artist">Unknown artist</string>
+    <string name="local_music_scan_btn_text">Scan</string>
+    <string name="local_music_scan_result_toast">%s new music found.</string>
+
+    <!-- dialog -->
+    <string name="video_edit_dialog_btn_yes">Yes</string>
+    <string name="video_edit_dialog_btn_cancel">Cancel</string>
+    <string name="video_edit_dialog_del_effect_desc">Delete this clip</string>
+
+    <string name="video_edit_dialog_exit_editor_tips">Tips</string>
+    <string name="video_edit_dialog_exit_editor_desc">Discard unsaved changes?</string>
+    <string name="video_edit_dialog_exit_editor_discard">DISCARD</string>
+    <string name="video_edit_dialog_exit_editor_cancel">CANCEL</string>
+
+
+    <!-- Tabs -->
+    <string name="tab_all_album">All</string>
+    <string name="tab_vidoe">Video</string>
+    <string name="tab_photo">Photo</string>
+
+    <!-- album -->
+    <string name="album_default_album_name">All Album</string>
+    <string name="album_activity_bottom_selected_tips_text_no_select">Clip</string>
+    <string name="album_activity_bottom_selected_tips_text_selected">Clips</string>
+    <string name="album_activity_bottom_add">Add</string>
+    <string name="album_activity_click_start_no_select">Select at least one clip.</string>
+
+    <!-- empty view  -->
+    <string name="empty_view_title">EMPTY</string>
+    <string name="empty_view_description">You can move photo and videos onto this album for starting your video edit</string>
+
+
+    <!--续订提示-->
+    <string name="grace_period_expiring_tip">Grace Period is Expiring </string>
+    <string name="grace_period_expiring_tip2">Okay! Okay! You defeated me</string>
+    <string name="grace_period_expiring_day_tip">Your Grace Period is %d days to expire. Please update your Google payment info.</string>
+    <string name="grace_period_expiring_discount_eighty_percent_tip">20% discount for Update your info to complete Google payment.</string>
+    <string name="grace_period_expiring_discount_seventy_percent_tip">I will give you the lowest discount. 30% discount only for you! Bargaining Master</string>
+    <!--retain-->
+    <string name="gp_retain_title">Really wanna quit Free Trail ?</string>
+    <string name="gp_retain_title_watch_noad">Premium features below are Free to Try now!</string>
+    <string name="gp_retain_descript">Premium features below are FREE to TRY now. You can CANCEL ANYTIME.</string>
+    <string name="gp_retain_try_for_free">Continue</string>
+    <string name="gp_retain_quit">Quit</string>
+    <string name="gp_retain_i_know">I Know</string>
+
+    <!-- Premium Other -->
+    <string name="premium_other_title">Free Premium Trial</string>
+    <string name="premium_other_description">Make videos easily and access advanced features. Cancel anytime.</string>
+    <string name="gp_month_title">TRY FOR FREE</string>
+    <string name="gp_month_desp">Cancel Anytime.</string>
+    <string name="gp_year_title">Yearly</string>
+    <string name="gp_year_desp">%s/month for 12 months.Cancel Anytime.</string>
+    <string name="gp_bottom_tip">Cancel anytime during 3 days. Will automatically extend to one month for %s/month.</string>
+    <string name="gp_bottom_tip2" formatted="false" >Cancel anytime during 3 days. Will automatically extend to one %s for %s/%s</string>
+
+    <string name="dialog_rewarded_video_or_vip_title">Watch videos to unlock 3 times scan? </string>
+    <string name="dialog_rewarded_video_or_vip_button_watch">WATCH</string>
+    <string name="dialog_rewarded_video_or_vip_button_getvip">GET VIP</string>
+
+    <!-- share & save -->
+    <string name="share_save_title">SAVE &amp; SHARE</string>
+    <string name="share_save_share_to">Share to</string>
+    <string name="share_save_tips">SAVED TO ALBUM</string>
+
+    <!-- Save Video Dialog -->
+    <string name="save_video_dialog_title">Choose a resolution</string>
+    <string name="save_video_dialog_title_tip">Please Choose a resolution</string>
+    <string name="save_video_dialog_item_480_p">Normal 480P</string>
+    <string name="save_video_dialog_item_720_p">HD 720P</string>
+    <string name="save_video_dialog_item_1080_p">Full HD 1080P</string>
+    <string name="save_video_dialog_tv_previous">PREVIOUS</string>
+    <string name="save_video_dialog_tv_sure">SURE</string>
+
+    <!-- effect text bean-->
+    <string name="effect_text_bean_default_content">Tap to input</string>
+    <string name="effect_text_bean_default_content_tip">Tap to input</string>
+
+    <!-- Premium -->
+    <string name="premium_description_1">Cinematic Magic Effects</string>
+    <string name="premium_description_2">Powerful Editing Features</string>
+    <string name="premium_description_3">Free Music Library</string>
+    <string name="premium_description_4">Unique Slideshow Style</string>
+    <string name="premium_description_5">Amazing Stickers &amp; Texts</string>
+    <string name="premium_description_6">Crop Video for every format</string>
+    <string name="premium_description_7">Share on YouTube, TikTok, Instagram, etc.</string>
+
+    <!-- 挽留弹窗 -->
+    <string name="premium_dialog_item_text_1">Colourful</string>
+    <string name="premium_dialog_item_text_2">Merge</string>
+    <string name="premium_dialog_item_text_3">Viral\nMusic</string>
+    <string name="premium_dialog_item_text_4">RGB</string>
+    <string name="premium_dialog_item_text_5">Adjust</string>
+    <string name="premium_dialog_item_text_6">Trim</string>
+    <string name="premium_dialog_item_text_7">Stickers</string>
+    <string name="premium_dialog_item_text_8">Unilmited\nLayers</string>
+    <string name="premium_dialog_item_text_9">Font</string>
+
+    <string name="click_again_to_exit">Please click again to exit</string>
+
+    <!-- 预览界面 -->
+    <string name="preview_video_unavailable_tips">Can not play this video.</string>
+    <string name="preview_boundary_error_tips">Can not display this photo or video.</string>
+
+    <string name="download_finish_tips">Download finish.</string>
+    <string name="download_error_tips">Download Error</string>
+
+
+    <!-- 动作相关提示 -->
+    <string name="action_tips_prefix_clip">"Clip: "</string>
+    <string name="action_tips_prefix_music">"Music: "</string>
+    <string name="action_tips_prefix_music_volume">"Volume: "</string>
+    <string name="action_tips_prefix_format">"Format: "</string>
+    <string name="action_tips_prefix_text">"Text: "</string>
+    <string name="action_tips_prefix_font">"Font: "</string>
+    <string name="action_tips_prefix_opacity">"Opacity: "</string>
+    <string name="action_tips_prefix_align">"Align: "</string>
+    <string name="action_tips_prefix_sticker">"Sticker: "</string>
+
+    <string name="action_tips_suffix_unknown">Unknown</string>
+    <string name="action_tips_suffix_add">Add</string>
+    <string name="action_tips_suffix_move">Move</string>
+    <string name="action_tips_suffix_rotate">Rotate</string>
+    <string name="action_tips_suffix_trim">Trim</string>
+    <string name="action_tips_suffix_remove">Remove</string>
+    <string name="action_tips_suffix_replace">Replace</string>
+    <string name="action_tips_suffix_change">Change</string>
+    <string name="action_tips_suffix_input">Input</string>
+    <string name="action_tips_suffix_color">Color</string>
+    <string name="action_tips_suffix_left">Left</string>
+    <string name="action_tips_suffix_center">Center</string>
+    <string name="action_tips_suffix_right">Right</string>
+    <string name="action_tips_suffix_background">Background</string>
+    <string name="action_tips_suffix_exchange">Exchange</string>
+
+    Clip: Exchange
+
+    <string name="guide_video_tips">You could choose up to 3 videos for collage now</string>
+</resources>

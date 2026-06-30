@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <declare-styleable name="CustomSeekBar">
+        <attr name="left_bar" format="reference" />
+        <attr name="right_bar" format="reference" />
+        <attr name="thumb" format="reference" />
+        <attr name="bar_orientation" format="enum">
+            <enum name="bar_horizontal" value="0" />
+            <enum name="bar_vertical" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CustomNumSeekBar">
+        <attr name="numColor" format="reference|color" />
+        <attr name="numSize" format="reference|dimension" />
+        <attr name="numTopHeight" format="dimension" />
+        <attr name="numBgThumb" format="reference|color" />
+        <attr name="touchThumb" format="reference|color" />
+        <attr name="progressDrawable" format="reference|color" />
+        <attr name="progressBgDrawable" format="reference|color" />
+        <attr name="progress" format="integer" />
+        <attr name="max" format="integer" />
+        <attr name="showNum" format="boolean" />
+        <attr name="showTopNum" format="boolean" />
+    </declare-styleable>
+
+    <!-- Specifies how to place the content of an object, both
+     on the x- and y-axis, within the object itself. -->
+    <attr name="gravity">
+        <!-- Push object to the top of its container, not changing its size. -->
+        <flag name="top" value="0x30" />
+        <!-- Push object to the bottom of its container, not changing its size. -->
+        <flag name="bottom" value="0x50" />
+        <!-- Push object to the left of its container, not changing its size. -->
+        <flag name="left" value="0x03" />
+        <!-- Push object to the right of its container, not changing its size. -->
+        <flag name="right" value="0x05" />
+        <!-- Place object in the vertical center of its container, not changing its size. -->
+        <flag name="center_vertical" value="0x10" />
+        <!-- Grow the vertical size of the object if needed so it completely fills its container. -->
+        <flag name="fill_vertical" value="0x70" />
+        <!-- Place object in the horizontal center of its container, not changing its size. -->
+        <flag name="center_horizontal" value="0x01" />
+        <!-- Grow the horizontal size of the object if needed so it completely fills its container. -->
+        <flag name="fill_horizontal" value="0x07" />
+        <!-- Place the object in the center of its container in both the vertical and horizontal axis, not changing its size. -->
+        <flag name="center" value="0x11" />
+        <!-- Grow the horizontal and vertical size of the object if needed so it completely fills its container. -->
+        <flag name="fill" value="0x77" />
+        <!-- Additional option that can be set to have the top and/or bottom edges of
+             the child clipped to its container's bounds.
+             The clip will be based on the vertical gravity: a top gravity will clip the bottom
+             edge, a bottom gravity will clip the top edge, and neither will clip both edges. -->
+        <flag name="clip_vertical" value="0x80" />
+        <!-- Additional option that can be set to have the left and/or right edges of
+             the child clipped to its container's bounds.
+             The clip will be based on the horizontal gravity: a left gravity will clip the right
+             edge, a right gravity will clip the left edge, and neither will clip both edges. -->
+        <flag name="clip_horizontal" value="0x08" />
+    </attr>
+
+    <declare-styleable name="CircleProgressView">
+        <attr name="curProgress" format="integer" />
+        <attr name="maxProgress" format="integer" />
+        <attr name="progressStrokeWidth" format="reference|dimension" />
+        <attr name="progressStrokeColor" format="reference|color" />
+        <attr name="progressColor" format="reference|color" />
+        <attr name="progressMode" format="enum">
+            <enum name="modeDefault" value="0" />
+            <enum name="modeReverse" value="1" />
+        </attr>
+    </declare-styleable>
+    <!--圆形头像-->
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="SettingItem">
+        <attr name="settingitemtitlecolor" format="reference" />
+        <attr name="settingitemdesccolor" format="reference" />
+        <attr name="settingitemtitle" format="reference" />
+        <attr name="desc" format="reference" />
+        <attr name="check" format="boolean" />
+        <attr name="isshowrightarrow" format="boolean" />
+        <attr name="lefticon" format="reference" />
+        <attr name="righticon" format="reference" />
+        <attr name="checkable" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="scaleStyle">
+        <attr name="scaleType">
+            <enum name="none" value="0" />
+
+            <enum name="fitXY" value="1" />
+            <enum name="fitStart" value="2" />
+            <enum name="fitCenter" value="3" />
+            <enum name="fitEnd" value="4" />
+
+            <enum name="leftTop" value="5" />
+            <enum name="leftCenter" value="6" />
+            <enum name="leftBottom" value="7" />
+            <enum name="centerTop" value="8" />
+            <enum name="center" value="9" />
+            <enum name="centerBottom" value="10" />
+            <enum name="rightTop" value="11" />
+            <enum name="rightCenter" value="12" />
+            <enum name="rightBottom" value="13" />
+
+            <enum name="leftTopCrop" value="14" />
+            <enum name="leftCenterCrop" value="15" />
+            <enum name="leftBottomCrop" value="16" />
+            <enum name="centerTopCrop" value="17" />
+            <enum name="centerCrop" value="18" />
+            <enum name="centerBottomCrop" value="19" />
+            <enum name="rightTopCrop" value="20" />
+            <enum name="rightCenterCrop" value="21" />
+            <enum name="rightBottomCrop" value="22" />
+
+            <enum name="startInside" value="23" />
+            <enum name="centerInside" value="24" />
+            <enum name="endInside" value="25" />
+        </attr>
+    </declare-styleable>
+
+    <!--GPUImageView-->
+    <declare-styleable name="GPUImageView">
+        <attr name="gpuimage_surface_type" format="enum">
+            <enum name="surface_view" value="0" />
+            <enum name="texture_view" value="1" />
+        </attr>
+        <attr name="gpuimage_show_loading" format="boolean" />
+    </declare-styleable>
+
+
+    <declare-styleable name="GestureView">
+        <attr name="gest_movementAreaWidth" format="reference|dimension" />
+        <attr name="gest_movementAreaHeight" format="reference|dimension" />
+        <attr name="gest_minZoom" format="reference|float" />
+        <attr name="gest_maxZoom" format="reference|float" />
+        <attr name="gest_doubleTapZoom" format="reference|float" />
+        <attr name="gest_overzoomFactor" format="reference|float" />
+        <attr name="gest_overscrollX" format="reference|dimension" />
+        <attr name="gest_overscrollY" format="reference|dimension" />
+        <attr name="gest_fillViewport" format="reference|boolean" />
+        <attr name="gest_gravity">
+            <!-- Values are copied from system "gravity" attribute -->
+            <flag name="top" value="0x30" />
+            <flag name="bottom" value="0x50" />
+            <flag name="left" value="0x03" />
+            <flag name="right" value="0x05" />
+            <flag name="center_vertical" value="0x10" />
+            <flag name="center_horizontal" value="0x01" />
+            <flag name="center" value="0x11" />
+            <flag name="start" value="0x00800003" />
+            <flag name="end" value="0x00800005" />
+        </attr>
+        <attr name="gest_fitMethod">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+            <enum name="inside" value="2" />
+            <enum name="outside" value="3" />
+            <enum name="none" value="4" />
+        </attr>
+        <attr name="gest_boundsType">
+            <enum name="normal" value="0" />
+            <enum name="inside" value="1" />
+            <enum name="outside" value="2" />
+            <enum name="pivot" value="3" />
+            <enum name="none" value="4" />
+        </attr>
+        <attr name="gest_panEnabled" format="reference|boolean" />
+        <attr name="gest_flingEnabled" format="reference|boolean" />
+        <attr name="gest_zoomEnabled" format="reference|boolean" />
+        <attr name="gest_rotationEnabled" format="reference|boolean" />
+        <attr name="gest_restrictRotation" format="reference|boolean" />
+        <attr name="gest_doubleTapEnabled" format="reference|boolean" />
+        <attr name="gest_exitEnabled" format="reference|boolean" />
+        <attr name="gest_animationDuration" format="reference|integer" />
+        <attr name="gest_disableGestures" format="reference|boolean" />
+        <attr name="gest_disableBounds" format="reference|boolean" />
+    </declare-styleable>
+
+    <!-- Added copy with GestureImageView name to enable autocomplete in AS -->
+    <declare-styleable name="GestureImageView">
+        <attr name="gest_movementAreaWidth" />
+        <attr name="gest_movementAreaHeight" />
+        <attr name="gest_minZoom" />
+        <attr name="gest_maxZoom" />
+        <attr name="gest_doubleTapZoom" />
+        <attr name="gest_overzoomFactor" />
+        <attr name="gest_overscrollX" />
+        <attr name="gest_overscrollY" />
+        <attr name="gest_fillViewport" />
+        <attr name="gest_gravity" />
+        <attr name="gest_fitMethod" />
+        <attr name="gest_boundsType" />
+        <attr name="gest_panEnabled" />
+        <attr name="gest_flingEnabled" />
+        <attr name="gest_zoomEnabled" />
+        <attr name="gest_rotationEnabled" />
+        <attr name="gest_restrictRotation" />
+        <attr name="gest_doubleTapEnabled" />
+        <attr name="gest_exitEnabled" />
+        <attr name="gest_animationDuration" />
+        <attr name="gest_disableGestures" />
+        <attr name="gest_disableBounds" />
+    </declare-styleable>
+
+    <!-- Added copy with GestureFrameLayout name to enable autocomplete in AS -->
+    <declare-styleable name="GestureFrameLayout">
+        <attr name="gest_movementAreaWidth" />
+        <attr name="gest_movementAreaHeight" />
+        <attr name="gest_minZoom" />
+        <attr name="gest_maxZoom" />
+        <attr name="gest_doubleTapZoom" />
+        <attr name="gest_overzoomFactor" />
+        <attr name="gest_overscrollX" />
+        <attr name="gest_overscrollY" />
+        <attr name="gest_fillViewport" />
+        <attr name="gest_gravity" />
+        <attr name="gest_fitMethod" />
+        <attr name="gest_boundsType" />
+        <attr name="gest_panEnabled" />
+        <attr name="gest_flingEnabled" />
+        <attr name="gest_zoomEnabled" />
+        <attr name="gest_rotationEnabled" />
+        <attr name="gest_restrictRotation" />
+        <attr name="gest_doubleTapEnabled" />
+        <attr name="gest_exitEnabled" />
+        <attr name="gest_animationDuration" />
+        <attr name="gest_disableGestures" />
+        <attr name="gest_disableBounds" />
+    </declare-styleable>
+
+
+    <declare-styleable name="CropAreaView">
+        <attr name="gest_backgroundColor" format="reference|color" />
+        <attr name="gest_borderColor" format="reference|color" />
+        <attr name="gest_borderWidth" format="reference|dimension" />
+        <attr name="gest_rulesHorizontal" format="reference|integer" />
+        <attr name="gest_rulesVertical" format="reference|integer" />
+        <attr name="gest_rulesWidth" format="reference|dimension" />
+        <attr name="gest_rounded" format="reference|boolean" />
+        <attr name="gest_aspect" format="reference|float" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/album_activity_background_color">
+
+    <!-- title bar -->
+    <RelativeLayout
+        android:id="@+id/rl_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/album_activity_title_bar_height"
+        android:background="@color/black">
+
+        <com.android.absbase.ui.widget.RippleImageView
+            android:id="@+id/iv_billing"
+            android:layout_width="@dimen/default_icon_width"
+            android:layout_height="@dimen/default_icon_height"
+            android:layout_centerVertical="true"
+            android:scaleType="centerInside"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/icon_setting_premium"/>
+
+        <com.android.absbase.ui.widget.RippleImageView
+            android:id="@+id/iv_back"
+            style="@style/default_icon_style"
+            android:src="@drawable/icon_back"
+            android:visibility="gone" />
+
+        <com.android.absbase.ui.widget.RippleLinearLayout
+            android:id="@+id/ll_select_album_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            tools:ignore="RelativeOverlap">
+
+            <TextView
+                android:id="@+id/tv_album_title"
+                style="@style/title_bar_title_style"
+                android:text="@string/album_default_album_name" />
+
+            <ImageView
+                android:id="@+id/iv_select_album"
+                style="@style/default_icon_style"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="@dimen/album_activity_iv_down_margin_left"
+                android:src="@drawable/icon_album_pull_down" />
+
+
+        </com.android.absbase.ui.widget.RippleLinearLayout>
+
+
+        <com.android.absbase.ui.widget.RippleImageView
+            android:id="@+id/iv_setting"
+            style="@style/default_icon_style"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_setting"
+            tools:ignore="RtlHardcoded" />
+
+    </RelativeLayout>
+
+
+    <!-- tabs -->
+    <com.allever.video.editor.ui.widget.tab.TabLayout
+        android:id="@+id/tl_tab"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/album_tab_height"
+        android:layout_below="@+id/rl_title_bar"
+        android:background="@color/album_activity_tab_bar_color" />
+
+    <FrameLayout
+        android:id="@+id/ad_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tl_tab" />
+
+    <!-- main -->
+    <com.allever.video.editor.ui.widget.GalleryViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_selected_container"
+        android:layout_below="@id/ad_container" />
+
+    <!-- selected -->
+    <LinearLayout
+        android:id="@+id/ll_selected_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/album_activity_bottom_selected_container_background"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:clipChildren="false"
+        android:clipToPadding="false">
+
+        <!-- 多选 -->
+        <RelativeLayout
+            android:id="@+id/rl_start_container"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="@dimen/album_margin_item_time_bottom"
+            android:layout_marginBottom="@dimen/album_margin_item_time_bottom"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
+            <TextView
+                android:id="@+id/select_count"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/circle_button_bg"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/album_activity_bottom_selected_count_text_size"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_select_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/album_activity_bottom_selected_count_margin_start"
+                android:layout_toEndOf="@+id/select_count"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical|left"
+                android:singleLine="false"
+                android:text="@string/album_activity_bottom_selected_tips_text_no_select"
+                android:textColor="@color/album_activity_bottom_selected_tips_text_color"
+                android:textSize="@dimen/album_activity_bottom_selected_tips_text_size" />
+
+
+            <com.android.absbase.ui.widget.RippleTextView
+                android:id="@+id/select_start"
+                android:layout_width="@dimen/album_activity_bottom_selected_btn_start_width"
+                android:layout_height="@dimen/album_activity_bottom_selected_btn_start_height"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/album_activity_bottom_btn_add_background"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/start_collage"
+                android:textColor="@color/album_activity_bottom_selected_btn_start_text"
+                android:textSize="@dimen/album_activity_bottom_selected_btn_start_text_size"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <!-- 单选模式 -->
+        <com.android.absbase.ui.widget.RippleFrameLayout
+            android:id="@+id/fl_next_container"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/album_activity_bottom_btn_add_background"
+            android:visibility="gone">
+
+            <com.android.absbase.ui.widget.RippleTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="@string/album_activity_bottom_add"
+                android:textColor="@color/white"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+
+        </com.android.absbase.ui.widget.RippleFrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_selected"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/album_activity_bottom_selected_list_container_height"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- select album -->
+    <LinearLayout
+        android:id="@+id/fl_select_album_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_title_bar"
+        android:background="@color/black"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/dividing_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dividing_line_color" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_album"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never" />
+
+    </LinearLayout>
+
+    <!--&lt;!&ndash; 单选模式 &ndash;&gt;-->
+    <!--<com.android.absbase.ui.widget.RippleFrameLayout-->
+        <!--android:id="@+id/fl_next_container"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_margin="10dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@drawable/default_button_bg"-->
+        <!--android:visibility="visible">-->
+
+        <!--<com.android.absbase.ui.widget.RippleTextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textSize="20sp"-->
+            <!--android:text="Next"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:layout_margin="10dp"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_gravity="center"/>-->
+
+    <!--</com.android.absbase.ui.widget.RippleFrameLayout>-->
+
+</RelativeLayout>

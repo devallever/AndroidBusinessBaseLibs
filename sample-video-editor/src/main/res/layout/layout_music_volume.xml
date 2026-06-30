@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.allever.video.editor.ui.widget.CircleSeekBar
+            android:id="@+id/seekbar_original"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            custom:max="255"
+            custom:numSize="14sp"
+            custom:progress="50"
+            custom:showNum="false" />
+
+        <TextView
+            android:id="@+id/textview_original"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical|start"
+            android:text="@string/video_edit_bottom_item_music_original_volume"
+            android:textColor="@color/video_edit_bottom_text_color"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.allever.video.editor.ui.widget.CircleSeekBar
+            android:id="@+id/seekbar_soundtrack"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            custom:max="255"
+            custom:numSize="14sp"
+            custom:progress="50"
+            custom:showNum="false" />
+
+        <TextView
+            android:id="@+id/textview_soundtrack"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical|start"
+            android:text="@string/video_edit_bottom_item_music_soundtrack"
+            android:textColor="@color/video_edit_bottom_text_color"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="theme_color">#ff240b</color>
+
+    <color name="default_background_color">#000000</color>
+    <color name="default_title_color">#ffffff</color>
+
+    <color name="title_bar_color">@color/black</color>
+
+    <color name="dividing_line_color">#26ffffff</color>
+
+    <!-- 编辑主页面 -->
+    <color name="video_edit_loading_layout_background_color">#99000000</color>
+    <color name="video_edit_saving_layout_background_color">#1b1b1b</color>
+    <color name="video_edit_saving_layout_progress_text_color">#fefefe</color>
+    <color name="video_edit_saving_layout_tips_color">#ccfefefe</color>
+    <color name="video_edit_saving_layout_divider_color">#0dffffff</color>
+    <color name="video_edit_saving_layout_btn_color">#33fefefe</color>
+
+    <!--编辑播放区-->
+    <color name="video_edit_frame_default_background_color">#101111</color>
+    <color name="video_edit_frame_add_effect_text_color">#ffffff</color>
+    <color name="video_edit_frame_add_effect_text_hint_color">#ffffff</color>
+    <color name="video_edit_frame_add_effect_text_cursor_color">#80ffffff</color>
+    <color name="video_edit_frame_add_effect_text_background_gray_color">#4c000000</color>
+    <color name="video_edit_frame_add_effect_label_stroke_color">#ffffff</color>
+    <color name="video_edit_frame_add_effect_default_color">#ffffff</color>
+    <color name="video_edit_frame_add_effect_music_select_time_color">#80ffffff</color>
+    <color name="video_edit_frame_color">#80ffffff</color>
+    <color name="video_edit_frame_add_effect_move_secondary_mask_color">#7f000000</color>
+    <!--底部功能区-->
+    <color name="video_edit_bottom_background_color">#000000</color>
+    <color name="video_edit_bottom_second_background_color">#000000</color>
+    <color name="video_edit_bottom_dividing_line_color">#1affffff</color>
+    <color name="video_edit_bottom_text_color">#80ffffff</color>
+    <color name="video_edit_bottom_mask_color">#B2000000</color>
+    <color name="video_edit_bottom_selected_background_color">#19FFFFFF</color>
+    <color name="video_edit_bottom_online_music_text_color">@color/white</color>
+
+    <color name="video_edit_bottom_text_font_background_normal">#33ffffff</color>
+    <color name="video_edit_bottom_text_font_background_select">#ff622e</color>
+
+    <color name="video_edit_rectangle_frame_color">#ff622e</color>
+
+    <color name="video_edit_bottom_music_online_text_color">@color/video_edit_bottom_text_color</color>
+    <color name="video_edit_bottom_music_info_title_text_color">#4dffffff</color>
+    <color name="video_edit_bottom_music_trim_time_text_color">#ffffff</color>
+    <color name="video_edit_bottom_music_trim_select_time_color">#808080</color>
+    <color name="video_edit_bottom_music_trim_noselect_time_color">#1a1a1a</color>
+
+    <color name="video_edit_bottom_trim_add_background_color">#1affffff</color>
+    <color name="video_edit_bottom_trim_single_noselect_color">#99000000</color>
+
+    <color name="video_edit_bottom_text_opacity_text_color">#ffffff</color>
+
+    <color name="video_edit_editing_area_background_color">#1a1a1a</color>
+    <color name="effect_edit_timeline_interval_dot_color">#33ffffff</color>
+    <color name="effect_edit_timeline_current_time_color">@color/theme_color</color>
+    <color name="effect_edit_timeline_text_bean_color">@color/white</color>
+
+    <color name="local_music_no_data_text_color">#80ffffff</color>
+    <color name="local_music_item_title_color">#99ffffff</color>
+    <color name="local_music_item_desc_color">#4dffffff</color>
+    <color name="local_music_scan_progress_background_color">#121212</color>
+    <color name="local_music_scan_progress_text_color">#33ffffff</color>
+    <color name="local_music_scan_btn_container_background">#f5202122</color>
+    <color name="local_music_scaning_mask_background">#E5000000</color>
+
+    <!-- tab -->
+    <color name="album_tab_selected_color">@color/theme_color</color>
+    <color name="album_tab_un_selected_color">#4dffffff</color>
+    <color name="album_tab_indicator_color">@color/theme_color</color>
+
+    <!-- empty view -->
+    <color name="empty_view_title_color">#33ffffff</color>
+    <color name="empty_view_description_color">#1affffff</color>
+
+    <!-- Album Activity-->
+    <color name="album_activity_tab_bar_color">@color/black</color>
+    <color name="album_activity_title_text_color">@color/white</color>
+    <color name="album_activity_bottom_selected_container_background">@color/black</color>
+    <color name="album_activity_bottom_selected_btn_start_text">#ffffff</color>
+    <color name="album_activity_bottom_no_selected_btn_start_text">#33ffffff</color>
+    <color name="album_activity_bottom_selected_tips_text_color">#4dffffff</color>
+    <color name="album_activity_select_album_container_bg_color">#66000000</color>
+    <color name="album_activity_select_album_recycler_view_bg_color">@color/black</color>
+    <color name="album_activity_background_color">@color/activity_bg</color>
+    <color name="album_activity_bottom_btn_add_background_color">@color/theme_color</color>
+    <color name="album_activity_bottom_btn_add_no_select_background_color">#33FFFFFF</color>
+    <color name="album_activity_bottom_btn_start_background_color">@color/theme_color</color>
+    <color name="album_activity_bottom_btn_start_unselected_background_color">#33ff240b</color>
+
+
+    <!-- 选择相册item -->
+    <color name="item_select_album_title_text_color">@color/white</color>
+    <color name="item_select_album_count_text_color">#99ffffff</color>
+
+    <!-- 相册单个item -->
+    <color name="item_cell_tv_duration_text_color">@color/white</color>
+    <color name="item_cell_mask_color">#99000000</color>
+
+    <!-- 预览 -->
+    <color name="preview_video_mark_color">#19ffffff</color>
+
+    <!--permium other-->
+    <color name="premium_other_normal_title_gray">#cc000000</color>
+    <color name="premium_other_normal_desp_gray">#7F000000</color>
+    <color name="premium_other_normal_buttom_gray">#2f000000</color>
+    <color name="premium_other_normal_arrow_color">#3352dfb2</color>
+    <color name="premium_other_background_color">#212121</color>
+    <color name="premium_other_title_color">@color/white</color>
+    <color name="premium_other_description_color">#80ffffff</color>
+    <color name="premium_other_btn_title_color">@color/white</color>
+    <color name="premium_other_btn_description_un_check_color">#66ffffff</color>
+    <color name="premium_other_btn_description_checked_color">#b2ffffff</color>
+    <color name="premium_other_bottom_description_color">#4dffffff</color>
+    <color name="premium_other_btn_background_un_select">#33ffffff</color>
+    <color name="premium_other_btn_selected_background_color">#ff330b</color>
+    <color name="premium_other_btn_un_select_background_color">#00000000</color>
+
+    <!--premium-->
+    <color name="premium_check_title_gray">@color/main_color_tone</color>
+    <color name="premium_check_desp_gray">#459a7e</color>
+
+    <!--retain-->
+    <color name="custom_retain_desp_color">#8a8b97</color>
+    <color name="custom_retain_btn_try_color">#ff330b</color>
+
+    <!-- save share -->
+    <color name="share_save_background">@color/activity_bg</color>
+    <color name="share_save_content_background_color">#ff250b</color>
+    <color name="share_save_btn_play_background">#99000000</color>
+
+    <!--- Setting -->
+    <color name="setting_item_item_text_title_color">@color/default_title_color</color>
+    <color name="setting_item_item_text_desc_color">@color/default_title_color</color>
+
+    <!-- Save Video Dialog -->
+    <color name="save_video_dialog_title_color">#cc101111</color>
+    <color name="save_video_dialog_item_title_color">@color/white</color>
+    <color name="save_video_dialog_tv_cancel_color">#99101111</color>
+    <color name="save_video_dialog_item_background">#ccff240b</color>
+    <color name="save_video_dialog_btn_container_background">#0d000000</color>
+
+    <!--渐变色-->
+    <color name="gradient_start_color">#00e4ff</color>
+    <color name="gradient_end_color">#0097fe</color>
+
+    <!-- 设置 -->
+    <color name="setting_activity_background">@color/activity_bg</color>
+    <color name="setting_activity_item_text_color">#99ffffff</color>
+
+    <!-- About -->
+    <color name="about_activity_background">@color/activity_bg</color>
+
+    <!-- 进度条 -->
+    <color name="circle_progress_bar_high_night_color">@color/theme_color</color>
+    <color name="circle_progress_bar_normal_color">#4dffffff</color>
+    <color name="circle_progress_text_color">#99ffffff</color>
+</resources>

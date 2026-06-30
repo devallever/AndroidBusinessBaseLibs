@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_view"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+
+    <ImageView
+        android:id="@+id/rate_banner"
+        android:layout_width="match_parent"
+        android:layout_height="144dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/svip_banner" />
+
+    <com.android.absbase.ui.widget.RippleImageView
+        android:id="@+id/close"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:alpha="0.7"
+        android:background="@null"
+        android:scaleType="centerInside"
+        android:src="@drawable/icon_premium_close" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rate_banner"
+        android:background="#ffffff">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="24dp"
+            android:lineSpacingExtra="6dp"
+            android:text="@string/dialog_rewarded_video_or_vip_title"
+            android:textColor="#8a8b97"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/title"
+            android:background="#0d000000" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_below="@+id/divider"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.android.absbase.ui.widget.RippleTextView
+                android:id="@+id/get_vip"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:elevation="0dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/dialog_rewarded_video_or_vip_button_getvip"
+                android:textColor="#b240435b"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <com.android.absbase.ui.widget.RippleTextView
+                android:id="@+id/watch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:elevation="0dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/dialog_rewarded_video_or_vip_button_watch"
+                android:textColor="#00cffe"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>
+

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/premium_other_btn_un_select_background_color" />
+    <stroke
+        android:width="2dp"
+        android:color="@color/premium_other_btn_background_un_select" />
+    <corners android:radius="4dp" />
+</shape>

@@ -77,6 +77,7 @@ dependencies {
     implementation(project(":sample-ipc"))
     implementation(project(":sample-net-speed-test"))
     implementation(project(":sample-step-tool"))
+    implementation(project(":sample-video-editor"))
 
     implementation(project(":z-sample-billing"))
     implementation(project(":z-sample-cleaner"))

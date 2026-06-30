@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/share_save_background">
+
+    <!--- title bar -->
+    <RelativeLayout
+        android:id="@+id/rl_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_title_height"
+        android:background="@color/title_bar_color">
+
+        <com.android.absbase.ui.widget.RippleImageView
+            android:id="@+id/iv_back"
+            style="@style/default_icon_style"
+            android:src="@drawable/icon_back" />
+
+        <TextView
+            style="@style/title_bar_title_style"
+            android:text="@string/share_save_title" />
+
+        <com.android.absbase.ui.widget.RippleImageView
+            android:id="@+id/iv_home"
+            style="@style/default_icon_style"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/icon_share_homepage" />
+
+    </RelativeLayout>
+
+    <!-- 显示 -->
+    <FrameLayout
+        android:id="@+id/fl_display_container"
+        android:layout_width="@dimen/share_save_display_content_width"
+        android:layout_height="@dimen/share_save_display_content_height"
+        android:layout_marginTop="@dimen/share_save_display_content_margin_top"
+        android:layout_below="@id/rl_title_bar"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:id="@+id/iv_display"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"/>
+
+        <ImageView
+            android:id="@+id/iv_play"
+            android:layout_width="@dimen/share_save_btn_play_width"
+            android:layout_height="@dimen/share_save_btn_play_height"
+            android:layout_gravity="center"
+            android:background="@drawable/share_save_play_btn_bg"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_album_preview_play" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/share_save_tips"
+        android:layout_below="@id/fl_display_container"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"/>
+
+    <!-- Share -->
+    <LinearLayout
+        android:id="@+id/share_list_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/tv_tips"
+        android:layout_marginTop="24dp"
+        android:layout_centerHorizontal="true">
+
+
+        <com.android.absbase.ui.widget.RippleImageView
+            android:id="@+id/iv_share_youtube"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icon_share_youtube"/>
+
+        <com.android.absbase.ui.widget.RippleImageView
+            android:id="@+id/iv_share_tiktok"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icon_share_tiktok"
+            android:layout_marginStart="20dp"/>
+
+        <com.android.absbase.ui.widget.RippleImageView
+            android:id="@+id/iv_share_ins"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icon_share_ins"
+            android:layout_marginStart="20dp"/>
+
+
+        <com.android.absbase.ui.widget.RippleImageView
+            android:id="@+id/iv_share_facebook"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icon_share_facebook"
+            android:layout_marginStart="20dp"/>
+
+        <com.android.absbase.ui.widget.RippleImageView
+            android:id="@+id/iv_share_more"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icon_share_more"
+            android:layout_marginStart="20dp"
+            android:scaleType="centerInside"/>
+
+
+
+    </LinearLayout>
+
+
+    <!-- AD -->
+    <FrameLayout
+        android:id="@+id/ad_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/share_list_layout"
+        android:layout_marginTop="20dp">
+
+    </FrameLayout>
+
+
+</RelativeLayout>

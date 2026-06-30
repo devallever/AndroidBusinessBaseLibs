@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/local_music_item_height">
+
+    <com.android.absbase.ui.widget.RippleImageView
+        android:id="@+id/play_and_pause"
+        android:layout_width="@dimen/default_icon_width"
+        android:layout_height="@dimen/default_icon_height"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/local_music_item_play_margin_start"
+        android:scaleType="centerInside"
+        android:src="@drawable/icon_edit_music_online_play" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/local_music_item_play_width"
+        android:layout_toStartOf="@+id/add"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/local_music_item_title_color"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/local_music_item_desc_color"
+            android:textSize="10sp" />
+
+    </LinearLayout>
+
+    <com.android.absbase.ui.widget.RippleImageView
+        android:id="@+id/add"
+        android:layout_width="@dimen/default_icon_width"
+        android:layout_height="@dimen/default_icon_height"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/local_music_item_play_margin_end"
+        android:scaleType="centerInside"
+        android:src="@drawable/icon_edit_music_online_add" />
+
+</RelativeLayout>

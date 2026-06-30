@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_splash"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ededf0"
+    tools:context="com.photoeditor.ui.activity.SplashActivity">
+
+    <ViewStub
+        android:id="@+id/viewstub_privacy_check"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/layout_privacy_check" />
+
+    <ViewStub
+        android:id="@+id/viewstub_splash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/layout_splash" />
+
+</RelativeLayout>

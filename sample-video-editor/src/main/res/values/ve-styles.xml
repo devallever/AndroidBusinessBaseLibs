@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- common -->
+    <style name="default_icon_style">
+        <item name="android:layout_width">@dimen/ve_default_icon_width</item>
+        <item name="android:layout_height">@dimen/ve_default_icon_height</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:tint">@color/white</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+
+    <style name="item_select_album_tv_count_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">@dimen/item_select_album_tv_count_text_size</item>
+        <item name="android:text">0</item>
+        <item name="android:textColor">@color/item_select_album_count_text_color</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginStart">@dimen/item_select_album_tv_count_text_margin_start</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="item_select_album_iv_count_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <!-- 分享item -->
+
+    <!-- Save Video Dialog -->
+    <style name="save_video_dialog_item_container_style">
+        <item name="android:layout_width">232dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@drawable/save_video_dialog_item_background</item>
+        <item name="android:clipChildren">false</item>
+        <item name="android:clipToPadding">false</item>
+    </style>
+    <style name="save_video_dialog_item_iv_selector_style">
+        <item name="android:layout_width">@dimen/save_video_dialog_item_iv_width</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:src">@drawable/icon_resolution_select_off</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+
+    <style name="save_video_dialog_item_tv_title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">@color/save_video_dialog_item_title_color</item>
+        <item name="android:textSize">@dimen/save_video_dialog_item_title_text_size</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="save_video_dialog_btn_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">@dimen/save_video_dialog_btn_text_size</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- 订阅后页面 check item -->
+    <style name="premium_item">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawableStart">@drawable/icon_checklish</item>
+        <item name="android:drawablePadding">30dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- 挽留页Item 图片 -->
+    <style name="premium_dialog_item_iv">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:scaleType">fitXY</item>
+    </style>
+
+    <!-- 挽留页Item 图片父控件 -->
+    <style name="premium_dialog_item_iv_container">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:alpha">0</item>
+    </style>
+
+    <!-- 挽留页Item 文本 -->
+    <style name="premium_dialog_item_tv">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_gravity">bottom|start</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- 挽留页Item 父控件 -->
+    <style name="premium_dialog_item">
+        <item name="android:layout_width">69dp</item>
+        <item name="android:layout_height">56dp</item>
+    </style>
+
+    <!-- 标题栏 -->
+    <style name="title_bar_title_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+</resources>

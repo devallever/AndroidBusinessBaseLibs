@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_view"
+    android:layout_width="280dp"
+    android:background="@color/white"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/save_video_dialog_title"
+        android:textColor="@color/save_video_dialog_title_color"
+        android:textSize="@dimen/save_video_dialog_title_text_size"
+        android:layout_marginStart="@dimen/save_video_dialog_title_margin_left"
+        android:layout_marginEnd="@dimen/save_video_dialog_title_margin_left"
+        android:layout_marginBottom="@dimen/save_video_dialog_title_margin_bottom"
+        android:layout_marginTop="@dimen/save_video_dialog_title_margin_top"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp"
+        android:gravity="center">
+
+        <com.android.absbase.ui.widget.RippleRelativeLayout
+            android:id="@+id/ll_1080p_container"
+            style="@style/save_video_dialog_item_container_style">
+
+            <TextView
+                style="@style/save_video_dialog_item_tv_title"
+                android:text="@string/save_video_dialog_item_1080_p"
+                android:layout_centerInParent="true"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_save_locker"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/save_video_dialog_item_premium_margin_top"
+                android:layout_marginEnd="@dimen/save_video_dialog_item_premium_margin_right"/>
+        </com.android.absbase.ui.widget.RippleRelativeLayout>
+
+        <com.android.absbase.ui.widget.RippleRelativeLayout
+            android:id="@+id/ll_720p_container"
+            style="@style/save_video_dialog_item_container_style"
+            android:layout_marginTop="15dp">
+            <TextView
+                style="@style/save_video_dialog_item_tv_title"
+                android:text="@string/save_video_dialog_item_720_p"
+                android:layout_centerInParent="true"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_save_locker"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/save_video_dialog_item_premium_margin_top"
+                android:layout_marginEnd="@dimen/save_video_dialog_item_premium_margin_right"/>
+        </com.android.absbase.ui.widget.RippleRelativeLayout>
+
+        <com.android.absbase.ui.widget.RippleRelativeLayout
+            android:id="@+id/ll_480p_container"
+            style="@style/save_video_dialog_item_container_style"
+            android:layout_marginTop="15dp">
+            <TextView
+                style="@style/save_video_dialog_item_tv_title"
+                android:text="@string/save_video_dialog_item_480_p"
+                android:layout_centerInParent="true"/>
+        </com.android.absbase.ui.widget.RippleRelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

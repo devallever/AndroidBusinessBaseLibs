@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#16b070</color>
+    <color name="colorPrimaryDark">#149d64</color>
+    <color name="colorAccent">#149d64</color>
+
+
+    <color name="default_bg_color">#202122</color>
+
+    <color name="activity_bg">@color/default_bg_color</color>
+
+    <color name="main_color_tone">#ff240b</color>
+
+    <!-- 程序主题 -->
+    <!--<color name="black_translucent">#80000000</color>-->
+
+    <!-- 所有编辑界面 -->
+
+    <!-- 拍摄界面 -->
+
+    <!-- 图像编辑界面颜色值 -->
+    <color name="transparent">#00000000</color>
+    <drawable name="transparent">#00000000</drawable>
+
+    <!-- 滤镜商店 -->
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+
+    <!-- 拍摄界面 -->
+
+    <!-- loca字体颜色 -->
+
+    <!-- 新版主题商店颜色 -->
+    <!-- 默认滤镜颜色值 -->
+    <!--主题商店切换tab选中颜色 -->
+    <!--主题商店我的界面分隔线 -->
+
+    <color name="transpant">#00ffffff</color>
+
+    <!-- 拍照达人 -->
+
+    <!-- 相册 -->
+
+    <!-- 键盘文字颜色 -->
+    <!-- 键盘背景颜色 -->
+
+    <!-- 键盘上面的线 -->
+
+    <!-- 相册分类的textcolor -->
+
+    <!-- 编辑界面水印相关 -->
+
+    <!-- 预览界面更多信息 -->
+
+    <!-- 预览界面更多信息 -->
+
+    <!-- facebook活动背景 -->
+
+    <!-- 购买vip -->
+    <!--购买vip置灰透明-->
+    <!-- 购买vip价钱颜色 -->
+
+    <!-- facebook 活动 -->
+
+    <!--圆形转动加载-->
+
+    <!-- 分享合成图片部分 -->
+
+    <!-- 微调整相关 -->
+
+
+    <!-- 主题 -->
+    <color name="accent_color">@color/main_color_tone</color>
+
+
+    <!-- 预览界面 -->
+
+    <!-- 相册界面 -->
+
+    <!-- 滤镜商店 -->
+
+    <!-- 编辑界面 -->
+
+    <!-- 拼接界面 -->
+
+    <!-- 广告样式 -->
+
+    <!-- 我的滤镜 -->
+
+    <!-- 主界面 -->
+
+    <!-- 主题END -->
+
+
+    <!-- 长按引导 -->
+
+    <!-- 通知栏广告 -->
+    <!--社区-->
+
+    <color name="indicator_line_color">#b1b9bd</color>
+    <color name="indicator_cursor_color">#474747</color>
+
+    <color name="divider_color">#0cffffff</color>
+
+    <color name="top_title_color">#cc000000</color>
+    <color name="default_btn_color_filter">#00000000</color>
+    <color name="default_button_notselect_bg_color">#cccccc</color>
+
+    <color name="background_color">#f9f9f9</color>
+
+    <color name="activity_about_name_color">@color/white</color>
+    <color name="activity_about_privacy_color">@color/white</color>
+    <color name="activity_about_ad_color">@color/white</color>
+    <color name="activity_about_copyright_color">@color/white</color>
+
+    <color name="edit_seekbar_select_color">#ffffff</color>
+    <color name="edit_seekbar_unselect_color">#38ffffff</color>
+
+    <color name="edit_font_item_bg_normal">#c4c4c4</color>
+    <color name="edit_font_item_bg_select">@color/accent_color</color>
+
+    <color name="seek_bar_bg_stroke_color">#626262</color>
+    <color name="seek_bar_bg_solid_color">#f5f5f5</color>
+
+
+    <!--premium-->
+    <color name="premium_normal_title_gray">#4d4d4d</color>
+    <color name="premium_normal_desp_gray">#2d2d2d</color>
+    <color name="premium_title">#666666</color>
+    <color name="premium_desc">#4d4d4d</color>
+
+    <!--filter-->
+    <color name="filter_original_tv_bg">#545454</color>
+</resources>

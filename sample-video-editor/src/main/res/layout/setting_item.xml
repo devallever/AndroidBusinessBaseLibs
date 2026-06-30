@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="72dip"
+    android:background="?attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/setting_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="32dp"
+        android:scaleType="centerInside" />
+
+    <RelativeLayout
+        android:id="@+id/right_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dip">
+
+        <com.allever.video.editor.ui.widget.SettingCheck
+            android:id="@+id/setting_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:enabled="true"
+            android:gravity="center_vertical"
+            tools:checked="true" />
+
+        <ImageView
+            android:id="@+id/arrow_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/setting_check"
+            android:layout_alignRight="@+id/setting_check"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/setting_item_item_text_title_color"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/setting_iv_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:scaleType="centerInside" />
+
+    <LinearLayout
+        android:id="@+id/title_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toStartOf="@+id/right_layout"
+        android:layout_toLeftOf="@id/right_layout"
+        android:layout_toEndOf="@+id/setting_iv"
+        android:layout_toRightOf="@id/setting_iv"
+        android:clipChildren="false"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/setting_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                tools:text="Hello" />
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/setting_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/top_title_color"
+            android:textSize="16sp"
+            tools:text="World" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/red_dot"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="22dp"
+        android:layout_toRightOf="@id/title_container"
+        android:background="@drawable/red_dot"
+        android:visibility="gone" />
+
+</RelativeLayout>

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_background_color">
+
+    <!-- Title -->
+    <FrameLayout
+        android:id="@+id/title_panel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_title_height"
+        android:gravity="center"
+        android:orientation="horizontal"
+        tools:ignore="UselessParent">
+
+        <com.android.absbase.ui.widget.RippleImageView
+            android:id="@+id/back"
+            style="@style/default_icon_style"
+            android:src="@drawable/icon_back" />
+
+        <com.android.absbase.ui.widget.RippleTextView
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/default_icon_height"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:text="@string/save"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textColor="@color/default_title_color"
+            android:textSize="15sp"
+            tools:ignore="RelativeOverlap" />
+
+    </FrameLayout>
+
+    <!-- Edit -->
+    <FrameLayout
+        android:id="@+id/edit_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_function_container"
+        android:layout_below="@+id/title_panel"
+        android:background="@color/black">
+
+        <com.allever.video.editor.ui.widget.gesture.CustomGestureFrameLayout
+            android:id="@+id/edit_gesture_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/video_edit_play_fun_height" />
+        <!--<VideoView-->
+        <!--android:id="@+id/video_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+
+        <!-- 时间进度，播放-暂停，全屏 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/video_edit_play_fun_height"
+            android:layout_gravity="bottom">
+
+            <LinearLayout
+                android:id="@+id/revert_and_restore"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true">
+
+                <!-- 撤销 -->
+                <com.android.absbase.ui.widget.RippleImageView
+                    android:id="@+id/iv_revert"
+                    android:layout_width="@dimen/video_edit_play_fun_width"
+                    android:layout_height="@dimen/video_edit_play_fun_height"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/icon_edit_foreward" />
+
+                <!-- 恢复 -->
+                <com.android.absbase.ui.widget.RippleImageView
+                    android:id="@+id/iv_restore"
+                    android:layout_width="@dimen/video_edit_play_fun_width"
+                    android:layout_height="@dimen/video_edit_play_fun_height"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/icon_edit_backward" />
+
+            </LinearLayout>
+
+
+            <com.android.absbase.ui.widget.RippleImageView
+                android:id="@+id/iv_play"
+                android:layout_width="@dimen/video_edit_play_fun_width"
+                android:layout_height="@dimen/video_edit_play_fun_height"
+                android:layout_centerInParent="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_edit_play" />
+
+            <com.android.absbase.ui.widget.RippleImageView
+                android:id="@+id/iv_full_screen"
+                android:layout_width="@dimen/video_edit_play_fun_width"
+                android:layout_height="@dimen/video_edit_play_fun_height"
+                android:layout_alignParentEnd="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_edit_pusher" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+    <!-- Function -->
+    <RelativeLayout
+        android:id="@+id/rl_function_container"
+        android:layout_width="match_parent"
+        android:layout_height="290dp"
+        android:layout_alignParentBottom="true">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_bar_container"
+            android:background="@color/video_edit_editing_area_background_color"
+            android:overScrollMode="never">
+
+            <include
+                android:id="@+id/effect_edit"
+                layout="@layout/layout_effect_edit"
+                android:layout_width="match_parent"
+                android:layout_height="220dp" />
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/bottom_bar_second_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/video_edit_bottom_second_layout_height"
+            android:layout_above="@+id/bottom_bar_container"
+            android:background="@color/video_edit_bottom_second_background_color">
+
+            <com.allever.video.editor.ui.widget.IndicativeHorizontalScrollView
+                android:id="@+id/bottom_fun_second_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/dividing_line"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/bottom_fun_second_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+            </com.allever.video.editor.ui.widget.IndicativeHorizontalScrollView>
+
+            <View
+                android:id="@+id/dividing_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/video_edit_bottom_dividing_line_color" />
+
+        </RelativeLayout>
+
+        <!-- BottomToolbar -->
+        <RelativeLayout
+            android:id="@+id/bottom_bar_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/video_edit_bottom_layout_height"
+            android:layout_alignParentBottom="true"
+            android:background="@color/video_edit_bottom_background_color">
+
+            <include
+                android:id="@+id/bottom_tab_item_back"
+                layout="@layout/edit_bottom_item_view"
+                android:layout_width="@dimen/video_edit_bottom_second_btn_width"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+            <!-- 容器，子工具栏 -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@+id/bottom_tab_item_back">
+
+                <!-- FunctionBar -->
+                <com.allever.video.editor.ui.widget.IndicativeHorizontalScrollView
+                    android:id="@+id/bottom_fun_scroll_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/bottom_fun_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+
+                    </LinearLayout>
+
+                </com.allever.video.editor.ui.widget.IndicativeHorizontalScrollView>
+
+            </FrameLayout>
+
+            <include
+                android:id="@+id/bottom_tab_item_right_1"
+                layout="@layout/edit_bottom_item_view"
+                android:layout_width="@dimen/video_edit_bottom_second_btn_width"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/bottom_tab_item_right_2"
+                layout="@layout/edit_bottom_item_view"
+                android:layout_width="@dimen/video_edit_bottom_second_btn_width"
+                android:layout_height="match_parent"
+                android:layout_toStartOf="@+id/bottom_tab_item_right_1"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ViewStub
+        android:id="@+id/loading_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/layout_loading" />
+
+    <ViewStub
+        android:id="@+id/saving_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/ve_layout_video_saving" />
+</RelativeLayout>

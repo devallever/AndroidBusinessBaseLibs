@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/id_vp_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:background="#66000000"
+        android:visibility="visible">
+
+        <com.android.absbase.ui.widget.RippleImageView
+            android:id="@+id/iv_back"
+            android:layout_width="@dimen/ve_default_icon_width"
+            android:layout_height="@dimen/ve_default_icon_width"
+            android:layout_centerVertical="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_back" />
+
+        <com.android.absbase.ui.widget.RippleImageView
+            android:id="@+id/iv_select"
+            android:layout_width="@dimen/ve_default_icon_width"
+            android:layout_height="@dimen/ve_default_icon_width"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_album_unselected"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

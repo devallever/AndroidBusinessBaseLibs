@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.allever.video.editor.ui.widget.EffectEditLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <com.allever.video.editor.ui.widget.EffectRecyclerView
+        android:id="@+id/id_recycler_view_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_effect_frame"
+        android:layout_marginTop="@dimen/effect_edit_video_list_normal_top"
+        android:visibility="visible" />
+
+
+    <include
+        layout="@layout/ve_time_time_line"
+        android:id="@+id/edit_effect_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="@dimen/effect_edit_select_effect_frame_top"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/btn_add"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/id_recycler_view_2"
+        android:layout_marginTop="-18dp"
+        android:background="@drawable/circle_button_white_bg"
+        android:scaleType="centerInside"
+        android:src="@drawable/icon_edit_video_add" />
+
+</com.allever.video.editor.ui.widget.EffectEditLayout>

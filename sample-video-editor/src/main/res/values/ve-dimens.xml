@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="default_title_height">56dp</dimen>
+    <!-- common -->
+    <dimen name="ve_default_icon_width">48dp</dimen>
+    <dimen name="ve_default_icon_height">@dimen/default_icon_width</dimen>
+    <dimen name="default_title_bar_title_text_size">15sp</dimen>
+
+    <dimen name="effect_frame_padding">2dp</dimen>
+    <dimen name="effect_frame_btn_width">20dp</dimen>
+
+    <dimen name="video_edit_loading_view_size">56dp</dimen>
+    <dimen name="video_edit_play_fun_width">40dp</dimen>
+    <dimen name="video_edit_play_fun_height">40dp</dimen>
+    <dimen name="video_edit_bottom_layout_height">70dp</dimen>
+    <dimen name="video_edit_bottom_second_layout_height">70dp</dimen>
+    <dimen name="video_edit_bottom_btn_width">72dp</dimen>
+    <dimen name="video_edit_bottom_second_btn_width">70dp</dimen>
+
+    <dimen name="video_edit_bottom_sticker_second_item_width">50dp</dimen>
+    <dimen name="video_edit_bottom_sticker_second_item_margin_left">20dp</dimen>
+    <dimen name="video_edit_bottom_sticker_second_item_margin_top_emoji">20dp</dimen>
+    <dimen name="video_edit_bottom_sticker_second_item_margin_top_other">15dp</dimen>
+    <dimen name="video_edit_bottom_sticker_second_item_margin_bottom">20dp</dimen>
+    <dimen name="video_edit_bottom_sticker_second_item_width_emoji">50dp</dimen>
+    <dimen name="video_edit_bottom_sticker_second_item_width_other">70dp</dimen>
+    <dimen name="video_edit_bottom_sticker_second_item_sticker_emoji_size">30dp</dimen>
+    <dimen name="video_edit_bottom_sticker_second_item_sticker_other_size">40dp</dimen>
+
+    <dimen name="video_edit_bottom_text_color_width">30dp</dimen>
+    <dimen name="video_edit_bottom_text_color_margin">10dp</dimen>
+    <dimen name="video_edit_bottom_text_font_width">40dp</dimen>
+    <dimen name="video_edit_bottom_text_font_margin">15dp</dimen>
+    <dimen name="video_edit_bottom_text_font_opacity_margin">10dp</dimen>
+
+    <dimen name="video_edit_frame_text_item_height">50dp</dimen>
+    <dimen name="video_edit_frame_text_item_padding">10dp</dimen>
+    <dimen name="video_edit_frame_text_item_font_size">15sp</dimen>
+
+    <dimen name="video_edit_bottom_item_music_online_width">50dp</dimen>
+    <dimen name="video_edit_bottom_item_music_online_margin">10dp</dimen>
+
+    <!-- 特效编辑界面 -->
+    <dimen name="effect_edit_timeline_height">20dp</dimen>
+    <dimen name="effect_edit_timeline_padding">2dp</dimen>
+    <dimen name="effect_edit_timeline_marking_width">1dp</dimen>
+    <dimen name="effect_edit_timeline_interval_dot_width">4dp</dimen>
+    <dimen name="effect_edit_add_effect_label_width">30dp</dimen>
+    <dimen name="effect_edit_add_effect_label_height">30dp</dimen>
+    <dimen name="effect_edit_add_effect_label_cable_height">12dp</dimen>
+    <dimen name="effect_edit_add_effect_label_cable_width">2dp</dimen>
+    <dimen name="effect_edit_add_effect_label_marking_dot_radius">2dp</dimen>
+    <dimen name="effect_edit_add_effect_label_marking_dot_bottom_margin">2dp</dimen>
+    <dimen name="effect_edit_add_effect_label_marking_top">80dp</dimen>
+    <dimen name="effect_edit_add_effect_label_marking_height">10dp</dimen>
+    <dimen name="effect_edit_add_effect_view_content_height">36dp</dimen>
+    <dimen name="effect_edit_select_effect_frame_top">@dimen/effect_edit_add_effect_label_marking_top</dimen>
+    <dimen name="effect_edit_video_list_normal_top">101dp</dimen>
+    <dimen name="effect_edit_video_list_selected_effect_top">1dp</dimen>
+    <dimen name="effect_edit_sticker_bitmap_size">40dp</dimen>
+    <dimen name="effect_edit_cell_width">40dp</dimen>
+    <dimen name="effect_edit_effect_label_cable_selected_interval">3dp</dimen>
+
+    <!-- 本地音乐页面 -->
+    <dimen name="local_music_item_height">60dp</dimen>
+    <dimen name="local_music_item_play_width">71dp</dimen>
+    <dimen name="local_music_item_play_margin_start">15dp</dimen>
+    <dimen name="local_music_item_play_margin_end">16dp</dimen>
+
+    <!-- BitmapContentView-->
+    <dimen name="bitmap_content_view_default_bitmap_width">40dp</dimen>
+    <dimen name="bitmap_content_view_default_bitmap_height">
+        @dimen/bitmap_content_view_default_bitmap_width
+    </dimen>
+    <dimen name="bitmap_content_view_default_padding">0dp</dimen>
+
+    <!--IconTopOffset-->
+    <dimen name="icon_top_offset">4.5dp</dimen>
+    <!-- TimeLineView -->
+    <dimen name="time_line_view_item_height">60dp</dimen>
+    <dimen name="time_line_view_item_content_padding">2dp</dimen>
+    <dimen name="time_line_view_item_fun_width">20dp</dimen>
+    <!-- TimeLineView Effect-->
+    <dimen name="time_line_view_item_fun_effect_text_padding">4dp</dimen>
+    <dimen name="time_line_view_item_fun_effect_text_size">8sp</dimen>
+
+
+    <!-- Album Activity-->
+    <dimen name="album_activity_title_bar_height">56dp</dimen>
+    <dimen name="album_activity_title_text_size">@dimen/default_title_bar_title_text_size</dimen>
+    <dimen name="album_activity_iv_down_margin_left">8dp</dimen>
+
+    <!-- Album Activity 底部-->
+    <dimen name="album_activity_bottom_selected_tips_text_size">14sp</dimen>
+    <dimen name="album_activity_bottom_selected_count_margin_start">10dp</dimen>
+    <dimen name="album_activity_bottom_selected_count_text_size">14sp</dimen>
+    <dimen name="album_activity_bottom_selected_btn_start_width">60dp</dimen>
+    <dimen name="album_activity_bottom_selected_btn_start_height">30dp</dimen>
+    <dimen name="album_activity_bottom_selected_btn_start_text_size">14sp</dimen>
+    <dimen name="album_activity_bottom_selected_list_container_height">90dp</dimen>
+
+    <!-- Tab -->
+    <dimen name="album_tab_height">48dp</dimen>
+    <dimen name="album_tab_text_size">15sp</dimen>
+    <dimen name="album_selected_tab_indicator_width">16dp</dimen>
+    <dimen name="album_selected_tab_indicator_height">3dp</dimen>
+
+
+    <!-- Empty View -->
+    <dimen name="empty_view_img_width">90dp</dimen>
+    <dimen name="empty_view_img_height">@dimen/empty_view_img_width</dimen>
+    <dimen name="empty_view_title_margin_top">30dp</dimen>
+    <dimen name="empty_view_description_margin_top">20dp</dimen>
+    <dimen name="empty_view_title_text_size">20sp</dimen>
+    <dimen name="empty_view_description_text_size">12sp</dimen>
+    <dimen name="empty_view_description_margin_start">60dp</dimen>
+    <dimen name="empty_view_description_margin_end">@dimen/empty_view_description_margin_start
+    </dimen>
+
+    <!-- 底部选中列表item -->
+    <dimen name="item_selected_width">80dp</dimen>
+    <dimen name="item_selected_height">90dp</dimen>
+    <dimen name="item_selected_image_width">60dp</dimen>
+    <dimen name="item_selected_image_height">@dimen/item_selected_image_width</dimen>
+    <dimen name="item_selected_image_margin_start">10dp</dimen>
+    <dimen name="item_selected_image_margin_end">10dp</dimen>
+    <dimen name="item_selected_image_margin_top">10dp</dimen>
+
+    <!-- 选择相册item -->
+    <dimen name="item_select_album_height">70dp</dimen>
+    <dimen name="item_select_album_image_width">@dimen/default_icon_width</dimen>
+    <dimen name="item_select_album_image_height">@dimen/default_icon_height</dimen>
+    <dimen name="item_select_album_margin_top">11dp</dimen>
+    <dimen name="item_select_album_title_height">24dp</dimen>
+    <dimen name="item_select_album_title_margin_start">15dp</dimen>
+    <dimen name="item_select_album_title_text_size">16sp</dimen>
+    <dimen name="item_select_album_tv_count_text_size">12sp</dimen>
+    <dimen name="item_select_album_tv_count_text_margin_start">10dp</dimen>
+    <dimen name="item_select_album_count_container_height">@dimen/item_select_album_title_height
+    </dimen>
+    <dimen name="item_select_album_count_container_margin_start">
+        @dimen/item_select_album_title_margin_start
+    </dimen>
+    <dimen name="item_select_album_iv_photo_margin_start">76dp</dimen>
+
+    <!-- 相册单个item -->
+    <dimen name="item_cell_image_height">85dp</dimen>
+    <dimen name="item_cell_space_width">4dp</dimen>
+    <dimen name="item_cell_space_middle">2dp</dimen>
+    <dimen name="item_cell_space_top">10dp</dimen>
+    <dimen name="item_cell_iv_select_flag_width">40dp</dimen>
+    <dimen name="item_cell_iv_select_flag_height">@dimen/item_cell_iv_select_flag_width</dimen>
+    <dimen name="item_cell_tv_duration_height">30dp</dimen>
+    <dimen name="item_cell_tv_duration_text_size">12sp</dimen>
+    <dimen name="item_cell_tv_duration_margin_end">8dp</dimen>
+
+    <!-- 保存&分享 -->
+    <dimen name="share_save_display_content_margin_top">20dp</dimen>
+    <dimen name="share_save_display_content_width">260dp</dimen>
+    <dimen name="share_save_display_content_height">164dp</dimen>
+    <dimen name="share_save_display_content_padding">3dp</dimen>
+    <dimen name="share_save_share_container_height">60dp</dimen>
+    <dimen name="share_save_share_container_margin_top">20dp</dimen>
+    <dimen name="share_save_share_item_margin">10dp</dimen>
+    <dimen name="share_save_share_item_width">40dp</dimen>
+    <dimen name="share_save_share_item_height">@dimen/share_save_share_item_width</dimen>
+    <dimen name="share_save_btn_play_width">50dp</dimen>
+    <dimen name="share_save_btn_play_height">@dimen/share_save_btn_play_width</dimen>
+
+    <!-- Save Video Dialog -->
+    <dimen name="save_video_dialog_title_text_size">20sp</dimen>
+    <dimen name="save_video_dialog_title_margin_left">24dp</dimen>
+    <dimen name="save_video_dialog_title_margin_bottom">20dp</dimen>
+    <dimen name="save_video_dialog_title_margin_top">24dp</dimen>
+    <dimen name="save_video_dialog_item_iv_width">72dp</dimen>
+    <dimen name="save_video_dialog_item_title_text_size">16sp</dimen>
+    <dimen name="save_video_dialog_btn_margin_top">20dp</dimen>
+    <dimen name="save_video_dialog_btn_container_height">48dp</dimen>
+    <dimen name="save_video_dialog_btn_text_size">14sp</dimen>
+    <dimen name="save_video_dialog_item_premium_margin_top">-2.5dp</dimen>
+    <dimen name="save_video_dialog_item_premium_margin_right">-2dp</dimen>
+
+    <!--内购点击按钮高度-->
+    <dimen name="premium_btn_height">60dp</dimen>
+</resources>
