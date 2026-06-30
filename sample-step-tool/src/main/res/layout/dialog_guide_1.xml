@@ -70,7 +70,7 @@
 <!--            android:layout_height="35dp"-->
 <!--            android:src="@drawable/ic_dialog_ad" />-->
 
-        <com.plinkopro.wincash.ui.widget.ShapeExtraWidthTextView
+        <com.step.wincash.ui.widget.ShapeExtraWidthTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
@@ -85,7 +85,7 @@
 
     </LinearLayout>
 
-    <com.plinkopro.wincash.ui.widget.FingerAnimationView
+    <com.step.wincash.ui.widget.FingerAnimationView
         android:id="@+id/fingerView"
         android:layout_width="95dp"
         android:layout_height="95dp"

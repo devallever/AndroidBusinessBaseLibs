@@ -12,7 +12,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.plinkopro.wincash.ui.widget.FingerAnimationView
+    <com.step.wincash.ui.widget.FingerAnimationView
         android:id="@+id/fingerView"
         android:layout_width="95dp"
         android:layout_height="95dp"

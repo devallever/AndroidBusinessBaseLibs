@@ -54,13 +54,13 @@
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
-        <activity android:name="com.plinkopro.wincash.ui.widget.scratchcards.DemoScratchCardsActivity"
+        <activity android:name="com.step.wincash.ui.widget.scratchcards.DemoScratchCardsActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
-        <activity android:name="com.plinkopro.wincash.ui.activity.STWithdrawActivity"
+        <activity android:name="com.step.wincash.ui.activity.STWithdrawActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
-        <activity android:name="com.plinkopro.wincash.ui.activity.WithdrawRecordActivity"
+        <activity android:name="com.step.wincash.ui.activity.WithdrawRecordActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity android:name="app.allever.android.sample.step.tool.SampleStepToolActivity" />

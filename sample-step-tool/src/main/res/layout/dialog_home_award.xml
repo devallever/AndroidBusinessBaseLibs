@@ -113,7 +113,7 @@
             app:shape_shadowSize="10dp"
             app:shape_strokeSize="2dp" />
 
-        <com.plinkopro.wincash.ui.widget.FingerAnimationView
+        <com.step.wincash.ui.widget.FingerAnimationView
             android:id="@+id/fingerView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
             app:layout_constraintTop_toBottomOf="@+id/getTv"
             tools:visibility="visible" />
 
-        <com.plinkopro.wincash.ui.widget.NativeView
+        <com.step.wincash.ui.widget.NativeView
             android:id="@+id/naviteView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

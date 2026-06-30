@@ -66,7 +66,7 @@
         tools:text="1000" />
 
     <!-- 遮罩（需要刮开的图片） -->
-    <com.plinkopro.wincash.ui.widget.ScratchCardView
+    <com.step.wincash.ui.widget.ScratchCardView
         android:id="@+id/scratch"
         tools:visibility="gone"
         android:layout_width="match_parent"

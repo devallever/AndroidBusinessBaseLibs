@@ -1,0 +1,93 @@
+package com.step.wincash.ui.activity
+
+import android.animation.ValueAnimator
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.core.animation.doOnEnd
+import com.step.wincash.base.BaseActivity
+import com.step.wincash.databinding.StActivityLaunchBinding
+import com.step.wincash.event.AdDismissEvent
+import com.step.wincash.event.AdShowFailedEvent
+import com.step.wincash.init.AdIndex
+import com.step.wincash.utils.AdmobOpenAdUtil
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import kotlin.math.roundToInt
+
+class STHotLaunchActivity: BaseActivity<StActivityLaunchBinding>() {
+
+    private val animator = ValueAnimator.ofFloat(0f, 100f)
+
+    override fun getBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): StActivityLaunchBinding {
+        return  StActivityLaunchBinding.inflate(layoutInflater)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        registerEventbus()
+        startProcessAnimation()
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                if (!animator.isRunning) {
+                    //禁止此回调，交给系统处理
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                    //处理完重新开启回调
+                    isEnabled = true
+                }
+            }
+
+        })
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        animator.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        animator.resume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        animator.cancel()
+    }
+
+
+    private fun startProcessAnimation(){
+        animator.duration = 500
+        animator.addUpdateListener { animation ->
+            val progress = (animation.animatedValue as Float).roundToInt()
+            binding.progressBar.progress = progress
+        }
+        animator.doOnEnd {
+            AdmobOpenAdUtil.updateShowTime()
+            finish()
+        }
+        animator.start()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onAdDismissEvent(event: AdDismissEvent){
+        if (event.adIndex == AdIndex.ADMOB_SPLASH_INDEX) {
+            finish()
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onAdShowFailedEvent(event: AdShowFailedEvent){
+        if (event.adIndex == AdIndex.ADMOB_SPLASH_INDEX) {
+            finish()
+        }
+    }
+
+}

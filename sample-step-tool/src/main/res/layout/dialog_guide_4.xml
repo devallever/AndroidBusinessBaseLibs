@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvTips" />
 
 
-    <com.plinkopro.wincash.ui.widget.FingerAnimationView
+    <com.step.wincash.ui.widget.FingerAnimationView
         android:id="@+id/fingerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

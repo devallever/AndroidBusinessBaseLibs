@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-val modelPkg = "com.plinkopro.wincash"
+val modelPkg = "com.step.wincash"
 
 group = modelPkg
 

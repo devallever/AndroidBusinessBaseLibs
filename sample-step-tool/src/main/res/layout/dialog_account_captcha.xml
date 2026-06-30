@@ -59,7 +59,7 @@
                     android:layout_height="64dp"
                     android:gravity="center">
 
-                    <com.plinkopro.wincash.business.withdraw.CaptchaView
+                    <com.step.wincash.business.withdraw.CaptchaView
                         android:id="@+id/captchaContent"
                         android:layout_width="0dp"
                         android:layout_height="63dp"

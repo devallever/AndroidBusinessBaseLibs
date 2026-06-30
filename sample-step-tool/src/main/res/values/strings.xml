@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Panda step</string>
+    <string name="st_app_name">Panda step</string>
     <string name="loading">Loading…</string>
 
     <string name="ad_fail_state_1">Ad Display Failed</string>

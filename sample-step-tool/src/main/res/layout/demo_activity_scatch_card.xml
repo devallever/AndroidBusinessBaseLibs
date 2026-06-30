@@ -15,7 +15,7 @@
         app:title="九宫格刮刮乐"
         app:titleTextColor="#000000" />
 
-    <com.plinkopro.wincash.ui.widget.scratchcards.ScratchCardView
+    <com.step.wincash.ui.widget.scratchcards.ScratchCardView
         android:id="@+id/scratchCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -180,7 +180,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.plinkopro.wincash.ui.widget.RoundedProgressBar
+                <com.step.wincash.ui.widget.RoundedProgressBar
                     android:id="@+id/amountProgress1"
                     android:layout_width="113dp"
                     android:layout_height="15dp"
@@ -345,7 +345,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.plinkopro.wincash.ui.widget.RoundedProgressBar
+                <com.step.wincash.ui.widget.RoundedProgressBar
                     android:id="@+id/amountProgress2"
                     android:layout_width="113dp"
                     android:layout_height="15dp"
