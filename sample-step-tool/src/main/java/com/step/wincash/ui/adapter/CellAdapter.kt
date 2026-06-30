@@ -3,6 +3,7 @@ package com.step.wincash.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.graphics.toColorInt
+import app.allever.android.lib.core.ext.log
 import com.step.wincash.R
 import com.step.wincash.base.BaseBindingAdapter
 import com.step.wincash.beans.Cell
@@ -45,6 +46,7 @@ class CellAdapter : BaseBindingAdapter<Cell, ItemCellBinding>() {
                 tvValue.text = cell.text
             }
 
+//            log("cell: isLight = ${cell.light}")
             selectImg.setVisible(cell.light)
             unselectImg.setVisible(!cell.light)
 

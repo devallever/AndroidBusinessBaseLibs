@@ -14,6 +14,7 @@ import com.step.wincash.ui.adapter.CellAdapter
 import com.step.wincash.utils.SpKey
 import com.step.wincash.utils.SpUtil
 import com.step.wincash.utils.TimeUtil.isSameDay
+import com.step.wincash.utils.log
 import com.step.wincash.utils.setOnSingleListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -233,9 +234,10 @@ class LuckyWheelView @JvmOverloads constructor(
     }
 
     fun updateAdapter(current: Int) {
+//        log("current index = $current" )
         cells.forEach { it.light = false }
         cells[ringOrder[current]].light = true
-        adapter.setNewData( cells)
+        adapter.setList( cells)
     }
 
     /** 让中心 Banner 精确覆盖 2x2 中心格，四周各留出 spacingPx 的间距 */

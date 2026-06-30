@@ -45,7 +45,7 @@
             android:exported="false"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.activity.WebActivity"
+        <activity android:name=".ui.activity.STWebActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
 
