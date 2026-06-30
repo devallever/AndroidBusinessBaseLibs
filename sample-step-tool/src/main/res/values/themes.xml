@@ -1,0 +1,73 @@
+<resources>
+
+    <style name="Theme.PlinkoWinCash" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- 状态栏 -->
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
+        <!-- 导航栏 -->
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+
+        <!-- 允许内容延伸到系统栏区域 -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
+        <!-- 浅色状态栏文字 (Android 6.0+) -->
+        <item name="android:windowLightStatusBar">false</item>
+
+        <item name="android:windowContentOverlay">@null</item>
+
+    </style>
+
+    <style name="defaultTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="ExtraBoldText" parent="defaultTextStyle">
+        <item name="android:fontFamily">@font/nunito_extrabold</item>
+    </style>
+    <style name="SemiBoldText" parent="defaultTextStyle">
+        <item name="android:fontFamily">@font/nunito_semibold</item>
+    </style>
+    <style name="BlackText" parent="defaultTextStyle">
+        <item name="android:fontFamily">@font/nunito_black</item>
+    </style>
+    <style name="BoldText" parent="defaultTextStyle">
+        <item name="android:fontFamily">@font/nunito_bold</item>
+    </style>
+    <style name="RegularText" parent="defaultTextStyle">
+        <item name="android:fontFamily">@font/nunito_regular</item>
+    </style>
+    <style name="BlackItalicText" parent="defaultTextStyle">
+        <item name="android:fontFamily">@font/nunito_blackitalic</item>
+    </style>
+
+    <style name="DialogTitleTextStyle" parent="ExtraBoldText"/>
+    <style name="DialogInputLabelTextStyle" parent="SemiBoldText"/>
+    <style name="DialogInputTextStyle" parent="SemiBoldText">
+        <item name="android:minHeight">50dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:background">@drawable/bg_withdraw_input</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="autoSizeMaxTextSize">18sp</item>
+        <item name="autoSizeMinTextSize">12sp</item>
+        <item name="autoSizeTextType">uniform</item>
+    </style>
+
+    <style name="DialogButtonTextStyle" parent="BlackItalicText">
+        <item name="android:textSize">20sp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="autoSizeMaxTextSize">18sp</item>
+        <item name="autoSizeMinTextSize">12sp</item>
+        <item name="autoSizeTextType">uniform</item>
+    </style>
+    <style name="DialogMessageTextStyle" parent="RegularText"/>
+
+</resources>

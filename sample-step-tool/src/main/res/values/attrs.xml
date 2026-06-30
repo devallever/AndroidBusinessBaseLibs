@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CaptchaView">
+        <attr name="captchaLength" format="integer" />
+        <attr name="captchaFontSize" format="dimension" />
+        <attr name="captchaCornerRadius" format="dimension" />
+        <attr name="captchaBorderWidth" format="dimension" />
+        <attr name="captchaBorderColor" format="color" />
+    </declare-styleable>
+    
+    <declare-styleable name="ExtraWidthTextView">
+        <attr name="extraWidth" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="ShapeExtraWidthTextView">
+        <attr name="shapeExtraWidth" format="dimension" />
+    </declare-styleable>
+</resources>

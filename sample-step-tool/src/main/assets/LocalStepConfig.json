@@ -1,0 +1,125 @@
+{
+  "smallRankWaiting": 30,
+  "countryList": [
+    {
+      "countryCode": "US",
+      "largeAmountLevel1": 50,
+      "largeAmountLevel2": 100,
+      "largeGoldLevel1": 5000,
+      "largeGoldLevel2": 10000,
+      "largeGreenLevel1": 50000,
+      "largeGreenLevel2": 100000,
+      "smallAmount": 0.1,
+      "smallGold": 10,
+      "smallVideoCount": 1
+    },
+    {
+      "countryCode": "BR",
+      "largeAmountLevel1": 50,
+      "largeAmountLevel2": 100,
+      "largeGoldLevel1": 5000,
+      "largeGoldLevel2": 10000,
+      "largeGreenLevel1": 50000,
+      "largeGreenLevel2": 100000,
+      "smallAmount": 0.1,
+      "smallGold": 10,
+      "smallVideoCount": 1
+    },
+    {
+      "countryCode": "PH",
+      "largeAmountLevel1": 500,
+      "largeAmountLevel2": 1000,
+      "largeGoldLevel1": 5000,
+      "largeGoldLevel2": 10000,
+      "largeGreenLevel1": 50000,
+      "largeGreenLevel2": 100000,
+      "smallAmount": 1.0,
+      "smallGold": 10,
+      "smallVideoCount": 1
+    },
+    {
+      "countryCode": "TR",
+      "largeAmountLevel1": 500,
+      "largeAmountLevel2": 1000,
+      "largeGoldLevel1": 5000,
+      "largeGoldLevel2": 10000,
+      "largeGreenLevel1": 50000,
+      "largeGreenLevel2": 100000,
+      "smallAmount": 1.0,
+      "smallGold": 10,
+      "smallVideoCount": 1
+    },
+    {
+      "countryCode": "TH",
+      "largeAmountLevel1": 1000,
+      "largeAmountLevel2": 2000,
+      "largeGoldLevel1": 5000,
+      "largeGoldLevel2": 10000,
+      "largeGreenLevel1": 50000,
+      "largeGreenLevel2": 100000,
+      "smallAmount": 2.0,
+      "smallGold": 10,
+      "smallVideoCount": 1
+    },
+    {
+      "countryCode": "BD",
+      "largeAmountLevel1": 5000,
+      "largeAmountLevel2": 10000,
+      "largeGoldLevel1": 5000,
+      "largeGoldLevel2": 10000,
+      "largeGreenLevel1": 50000,
+      "largeGreenLevel2": 100000,
+      "smallAmount": 10.0,
+      "smallGold": 10,
+      "smallVideoCount": 1
+    },
+    {
+      "countryCode": "PK",
+      "largeAmountLevel1": 5000,
+      "largeAmountLevel2": 10000,
+      "largeGoldLevel1": 5000,
+      "largeGoldLevel2": 10000,
+      "largeGreenLevel1": 50000,
+      "largeGreenLevel2": 100000,
+      "smallAmount": 10.0,
+      "smallGold": 10,
+      "smallVideoCount": 1
+    },
+    {
+      "countryCode": "ID",
+      "largeAmountLevel1": 50000,
+      "largeAmountLevel2": 100000,
+      "largeGoldLevel1": 5000,
+      "largeGoldLevel2": 10000,
+      "largeGreenLevel1": 50000,
+      "largeGreenLevel2": 100000,
+      "smallAmount": 100.0,
+      "smallGold": 10,
+      "smallVideoCount": 1
+    },
+    {
+      "countryCode": "VN",
+      "largeAmountLevel1": 50000,
+      "largeAmountLevel2": 100000,
+      "largeGoldLevel1": 5000,
+      "largeGoldLevel2": 10000,
+      "largeGreenLevel1": 50000,
+      "largeGreenLevel2": 100000,
+      "smallAmount": 100.0,
+      "smallGold": 10,
+      "smallVideoCount": 1
+    },
+    {
+      "countryCode": "KR",
+      "largeAmountLevel1": 50000,
+      "largeAmountLevel2": 100000,
+      "largeGoldLevel1": 5000,
+      "largeGoldLevel2": 10000,
+      "largeGreenLevel1": 50000,
+      "largeGreenLevel2": 100000,
+      "smallAmount": 100.0,
+      "smallGold": 10,
+      "smallVideoCount": 1
+    }
+  ]
+}

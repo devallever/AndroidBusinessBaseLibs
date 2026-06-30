@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/tvCashOut1"
+        android:layout_width="120dp"
+        android:minWidth="120dp"
+        android:maxWidth="300dp"
+        android:layout_height="58dp"
+        android:layout_marginEnd="12dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/cash_out"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shape_radius="27dp"
+        app:shape_shadowColor="@color/color_F0B885"
+        app:shape_shadowOffsetY="10dp"
+        app:shape_shadowSize="10dp"
+        app:shape_solidGradientEndColor="@color/color_FA2B04"
+        app:shape_solidGradientOrientation="topToBottom"
+        app:shape_solidGradientStartColor="@color/color_FE9D66"
+        app:shape_strokeColor="@color/white"
+        app:shape_strokeSize="2dp" />
+
+
+    <com.plinkopro.wincash.ui.widget.FingerAnimationView
+        android:id="@+id/fingerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvCashOut1"
+        android:layout_alignEnd="@+id/tvCashOut1"
+        android:layout_marginEnd="-10dp"
+        android:layout_marginTop="-30dp"/>
+
+</RelativeLayout>

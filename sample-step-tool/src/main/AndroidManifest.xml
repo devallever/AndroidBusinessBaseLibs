@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!--<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!--<uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />-->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
+    <!--Android 13及以上版本需要的通知权限-->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!--android 10需添加这个权限，读取运动信息，需要动态申请-->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+
+
+    <!-- 协处理器计步权限 -->
+    <uses-feature android:name="android.hardware.sensor.accelerometer" />
+    <uses-feature
+        android:name="android.hardware.sensor.stepcounter"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sensor.stepdetector"
+        android:required="true" />
+
+    <application
+        android:name=".base.BaseApplication"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PlinkoWinCash">
+
+        <activity
+            android:name=".ui.activity.LaunchActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.activity.HotLaunchActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.activity.WebActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.plinkopro.wincash.ui.widget.scratchcards.DemoScratchCardsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.plinkopro.wincash.ui.activity.WithdrawActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.plinkopro.wincash.ui.activity.WithdrawRecordActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+
+        <receiver
+            android:name=".base.AppNotifyReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="action_notify_bar_close" />
+            </intent-filter>
+        </receiver>
+
+
+        <!-- stepLib -->
+        <!--重构后的计步跟踪服务-->
+        <service
+            android:name=".service.StepTrackingService"
+            android:enabled="true"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:priority="1000"
+            android:process=":stepLib"
+            android:foregroundServiceType="health">
+            <intent-filter>
+                <!-- 系统启动完成后会调用 -->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.MEDIA_MOUNTED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.intent.action.ACTION_TIME_TICK" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+        </service>
+
+        <!--开机自启动-->
+        <receiver
+            android:name=".step.StepBootCompleteReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 关机广播 -->
+        <receiver
+            android:name=".step.StepShutdownReceiver"
+            android:exported="true">
+            <intent-filter>
+                <!-- 关机广播 -->
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

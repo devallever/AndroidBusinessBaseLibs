@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:clipChildren="false">
+
+    <com.hjq.shape.view.ShapeTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nunito_regular"
+        android:gravity="center"
+        android:padding="30dp"
+        android:text="@string/welcome"
+        android:textColor="#FF342C29"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/shapeView"
+        app:shape_radius="20dp"
+        app:shape_solidColor="#FFFFFAEF"
+        app:shape_strokeColor="#99FDC16B"
+        app:shape_strokeSize="2dp"
+        android:layout_marginHorizontal="24dp"/>
+
+    <com.hjq.shape.view.ShapeView
+        android:id="@+id/shapeView"
+        android:layout_width="2dp"
+        android:layout_height="57dp"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:shape_solidColor="#FFCECDBF" />
+
+    <com.hjq.shape.view.ShapeView
+        android:id="@+id/view"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView16"
+        app:layout_constraintEnd_toEndOf="@+id/imageView16"
+        app:layout_constraintStart_toStartOf="@+id/imageView16"
+        app:shape_radius="10dp"
+        app:shape_solidColor="#FFCECDBF"
+        android:layout_marginBottom="10dp"/>
+
+    <ImageView
+        android:id="@+id/imageView16"
+        android:layout_width="201dp"
+        android:layout_height="77dp"
+        android:src="@drawable/bg_home_bt_ly"
+        app:layout_constraintDimensionRatio="h,201:77"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/getCoinsLL"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="18dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView16"
+        app:layout_constraintEnd_toEndOf="@+id/imageView16"
+        app:layout_constraintStart_toStartOf="@+id/imageView16"
+        app:layout_constraintTop_toTopOf="@+id/imageView16">
+
+<!--        <ImageView-->
+<!--            android:layout_width="35dp"-->
+<!--            android:layout_height="35dp"-->
+<!--            android:src="@drawable/ic_dialog_ad" />-->
+
+        <com.plinkopro.wincash.ui.widget.ShapeExtraWidthTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="@font/nunito_blackitalic"
+            android:lines="1"
+            android:text="@string/get_coins"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:autoSizeMaxTextSize="22sp"
+            app:autoSizeMinTextSize="16sp" />
+
+    </LinearLayout>
+
+    <com.plinkopro.wincash.ui.widget.FingerAnimationView
+        android:id="@+id/fingerView"
+        android:layout_width="95dp"
+        android:layout_height="95dp"
+        android:layout_marginTop="57dp"
+        android:layout_marginEnd="-23dp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView16"
+        app:layout_constraintTop_toTopOf="@+id/imageView16" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

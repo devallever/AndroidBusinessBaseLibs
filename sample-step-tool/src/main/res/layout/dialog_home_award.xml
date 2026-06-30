@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/imageView10"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_dialog_light1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:src="@drawable/bg_dialog_star2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView10" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="26dp"
+            android:src="@drawable/bg_dialog_double_aware"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+            app:layout_constraintDimensionRatio="h,323:300"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3" />
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/shapeTextView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="93dp"
+            android:fontFamily="@font/nunito_blackitalic"
+            android:gravity="center"
+            android:text="@string/congratulations"
+            android:textColor="#FFC64001"
+            android:textSize="22sp"
+            app:autoSizeMaxTextSize="22sp"
+            app:autoSizeMinTextSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView7"
+            app:layout_constraintTop_toTopOf="@+id/imageView7"
+            app:layout_constraintVertical_bias="0.02"
+            tools:layout_editor_absoluteX="93dp" />
+
+
+        <ImageView
+            android:id="@+id/limitIcon"
+            android:layout_width="74dp"
+            android:layout_height="74dp"
+            android:src="@drawable/ic_green"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView7"
+            app:layout_constraintEnd_toEndOf="@+id/imageView7"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="@+id/imageView7"
+            app:layout_constraintTop_toTopOf="@+id/imageView7"
+            app:layout_constraintVertical_bias="0.311" />
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/awareTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_blackitalic"
+            android:includeFontPadding="false"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toTopOf="@+id/getTv"
+            app:layout_constraintEnd_toEndOf="@+id/limitIcon"
+            app:layout_constraintHorizontal_bias="0.571"
+            app:layout_constraintStart_toStartOf="@+id/limitIcon"
+            app:layout_constraintTop_toBottomOf="@+id/limitIcon"
+            app:layout_constraintVertical_bias="0.218"
+            app:shape_textEndColor="#FFC60122"
+            app:shape_textGradientOrientation="vertical"
+            app:shape_textStartColor="#FFF42646"
+            app:shape_textStrokeColor="@color/white"
+            app:shape_textStrokeSize="1dp"
+            tools:text="+1000" />
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/getTv"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginHorizontal="55dp"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView7"
+            app:layout_constraintDimensionRatio="h,265:52"
+            app:layout_constraintTop_toTopOf="@+id/imageView7"
+            app:layout_constraintVertical_bias="0.85"
+            android:text="@string/get"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:fontFamily="@font/nunito_bolditalic"
+            app:shape_radius="50dp"
+            app:shape_solidGradientEndColor="#FFFA2B04"
+            app:shape_solidGradientOrientation="topToBottom"
+            app:shape_solidGradientStartColor="#FFFE9D66"
+            app:shape_strokeGradientEndColor="#CCFFFFFF"
+            app:shape_strokeGradientOrientation="topToBottom"
+            app:shape_strokeGradientStartColor="#DBFFFFFF"
+            app:shape_shadowColor="@color/color_F0B885"
+            app:shape_shadowOffsetY="10dp"
+            app:shape_shadowSize="10dp"
+            app:shape_strokeSize="2dp" />
+
+        <com.plinkopro.wincash.ui.widget.FingerAnimationView
+            android:id="@+id/fingerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-30dp"
+            android:layout_marginEnd="-10dp"
+            android:clipToPadding="false"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/getTv"
+            app:layout_constraintTop_toBottomOf="@+id/getTv"
+            tools:visibility="visible" />
+
+        <com.plinkopro.wincash.ui.widget.NativeView
+            android:id="@+id/naviteView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="26dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/imageView7"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <View
+        android:id="@+id/bottomView"
+        android:layout_width="0dp"
+        android:layout_height="50dp"/>
+
+
+</LinearLayout>

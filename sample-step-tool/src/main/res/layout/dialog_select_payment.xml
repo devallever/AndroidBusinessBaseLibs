@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:background="@color/black">
+
+    <ImageView
+        android:layout_width="170dp"
+        android:layout_height="118dp"
+        android:src="@drawable/ic_dialog_select"
+        android:layout_gravity="center_horizontal"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.hjq.shape.layout.ShapeLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="61dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            app:shape_radius="30dp"
+            app:shape_solidColor="@color/white">
+
+            <com.hjq.shape.view.ShapeTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingVertical="14dp"
+                android:text="@string/withdraw_payment"
+                android:textColor="@color/color_bf6b17"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:shape_radiusInTopEnd="30dp"
+                app:shape_radiusInTopStart="30dp"
+                app:shape_solidColor="#FFF6E2" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/paymentRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23dp"
+                android:layout_marginHorizontal="40dp"
+                tools:itemCount="4"
+                tools:spanCount="2"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_payment"/>
+
+            <TextView
+                android:id="@+id/tips_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/tips_select_payment"
+                android:textColor="@color/color_333333"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/showSignUpCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="30dp">
+
+                <com.hjq.shape.view.ShapeTextView
+                    android:id="@+id/sign_up"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:paddingVertical="12dp"
+                    android:text="@string/sign_up"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="12sp"
+                    app:autoSizeMaxTextSize="18sp"
+                    android:paddingHorizontal="2dp"
+                    app:layout_constraintEnd_toStartOf="@+id/next"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shape_radius="50dp"
+                    app:shape_solidGradientEndColor="@color/color_458aff"
+                    app:shape_solidGradientStartColor="@color/color_81b0ff" />
+
+                <com.hjq.shape.view.ShapeTextView
+                    android:id="@+id/next"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:paddingVertical="12dp"
+                    android:text="@string/next"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="12sp"
+                    app:autoSizeMaxTextSize="18sp"
+                    android:paddingHorizontal="2dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/sign_up"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shape_radius="50dp"
+                    app:shape_solidGradientEndColor="@color/color_FE9B4F"
+                    app:shape_solidGradientStartColor="@color/color_FFAB37" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.hjq.shape.view.ShapeTextView
+                android:id="@+id/nextTv"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="68dp"
+                android:layout_marginVertical="30dp"
+                android:gravity="center"
+                android:paddingVertical="12dp"
+                android:text="@string/next"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="18sp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeTextType="uniform"
+                app:shape_radius="50dp"
+                app:shape_solidGradientEndColor="@color/color_FE9B4F"
+                app:shape_solidGradientStartColor="@color/color_FFAB37" />
+
+
+        </com.hjq.shape.layout.ShapeLinearLayout>
+
+        <ImageView
+            android:id="@+id/close_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/ic_close" />
+
+    </LinearLayout>
+</FrameLayout>

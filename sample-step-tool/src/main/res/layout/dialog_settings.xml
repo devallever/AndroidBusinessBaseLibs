@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hjq.shape.layout.ShapeConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:shape_radius="23dp"
+    app:shape_solidColor="#FFFFF9ED"
+    app:shape_strokeColor="#FFFDC16B"
+    app:shape_strokeSize="6dp"
+    android:paddingVertical="14dp"
+    android:paddingHorizontal="16dp"
+    android:layout_marginHorizontal="25dp">
+
+    <ImageView
+        android:id="@+id/ivClose"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:src="@drawable/ic_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/shapeTextView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        android:fontFamily="@font/nunito_extrabold"
+        android:text="@string/settings"
+        android:textColor="#FF974901"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/musicFl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="35dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/shapeTextView5">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_extrabold"
+            android:text="@string/music"
+            android:textColor="#FF342C29"
+            android:textSize="18sp" />
+
+        <CheckBox
+            android:id="@+id/cbMusic"
+            android:layout_width="46dp"
+            android:layout_height="22dp"
+            android:layout_gravity="end|center_vertical"
+            android:background="@drawable/selector_settings_switch"
+            android:button="@null"
+            tools:checked="true"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frameLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="35dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/musicFl"
+        tools:layout_editor_absoluteX="51dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_extrabold"
+            android:text="@string/sound"
+            android:textColor="#FF342C29"
+            android:textSize="18sp" />
+
+        <CheckBox
+            android:id="@+id/cbSound"
+            android:layout_width="46dp"
+            android:layout_height="22dp"
+            android:layout_gravity="end|center_vertical"
+            android:background="@drawable/selector_settings_switch"
+            android:button="@null"
+            tools:checked="false"/>
+    </FrameLayout>
+
+
+    <com.hjq.shape.layout.ShapeConstraintLayout
+        android:id="@+id/feedbackContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingVertical="11dp"
+        android:paddingHorizontal="15dp"
+        app:shape_solidColor="#FFF4E7CD"
+        app:shape_radius="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
+
+        <TextView
+            android:id="@+id/tvFeedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="@string/txt_settings_feedback"
+            android:textColor="#FF342C29"
+            android:textSize="18sp"
+            android:fontFamily="@font/nunito_bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:includeFontPadding="false"
+            android:text="@string/txt_service_email"
+            android:textColor="#FF342C29"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/tvFeedback"
+            app:layout_constraintTop_toBottomOf="@+id/tvFeedback"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_right_arrow" />
+
+
+    </com.hjq.shape.layout.ShapeConstraintLayout>
+
+    <com.hjq.shape.layout.ShapeConstraintLayout
+        android:id="@+id/tvPolicy"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="11dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/feedbackContainer"
+        app:shape_radius="16dp"
+        app:shape_solidColor="#FFF4E7CD"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:includeFontPadding="false"
+            android:text="@string/txt_settings_policy"
+            android:textColor="#FF342C29"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_right_arrow" />
+
+
+    </com.hjq.shape.layout.ShapeConstraintLayout>
+
+    <com.hjq.shape.layout.ShapeConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="11dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPolicy"
+        app:shape_radius="16dp"
+        app:shape_solidColor="#FFF4E7CD"
+        android:layout_marginBottom="40dp">
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/tvVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_regular"
+            android:text="v1.0.0"
+            android:textColor="#FF342C29"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:includeFontPadding="false"
+            android:text="@string/txt_settings_version"
+            android:textColor="#FF342C29"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </com.hjq.shape.layout.ShapeConstraintLayout>
+
+
+
+</com.hjq.shape.layout.ShapeConstraintLayout>

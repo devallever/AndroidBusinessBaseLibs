@@ -1,0 +1,10 @@
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?android:attr/colorControlHighlight"> <!-- 使用系统默认的涟漪色 -->
+
+    <!-- 添加一个背景层（可选，避免透明背景） -->
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white" /> <!-- 颜色不重要，会被涟漪覆盖 -->
+        </shape>
+    </item>
+</ripple>

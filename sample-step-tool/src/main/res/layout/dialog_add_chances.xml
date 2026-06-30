@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="60dp">
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/shapeTextView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:fontFamily="@font/nunito_blackitalic"
+        android:layout_marginTop="60dp"
+        android:gravity="center"
+        android:text="@string/get_chances"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shape_textEndColor="#FFFAFAD3"
+        app:shape_textGradientOrientation="vertical"
+        app:shape_textStartColor="#FFFDFA65" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shapeTextView2">
+
+        <com.plinkopro.wincash.ui.widget.ShapeExtraWidthTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_blackitalic"
+            android:text="@string/get2"
+            android:textSize="28sp"
+            app:shape_textEndColor="#FFFAFAD3"
+            app:shape_textGradientOrientation="vertical"
+            app:shape_textStartColor="#FFFDFA65" />
+
+        <com.plinkopro.wincash.ui.widget.ShapeExtraWidthTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:fontFamily="@font/nunito_blackitalic"
+            android:text="@string/spin"
+            android:textSize="28sp"
+            app:shape_textEndColor="#FFD466"
+            app:shape_textGradientOrientation="vertical"
+            app:shape_textStartColor="#F17609" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="match_parent"
+        android:layout_height="368dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_dialog_star1"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="66dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="74dp"
+        android:src="@drawable/ic_get_lotto_times"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <com.hjq.shape.layout.ShapeLinearLayout
+        android:id="@+id/getTv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="59dp"
+        android:gravity="center"
+        app:layout_constraintDimensionRatio="h,258:52"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5"
+        app:shape_radius="50dp"
+        app:shape_solidGradientEndColor="#FFFA2B04"
+        app:shape_solidGradientOrientation="topToBottom"
+        app:shape_solidGradientStartColor="#FFFE9D66"
+        app:shape_strokeGradientEndColor="#CCFFFFFF"
+        app:shape_strokeGradientOrientation="topToBottom"
+        app:shape_strokeGradientStartColor="#DBFFFFFF"
+        app:shape_strokeSize="2dp"
+        tools:layout_editor_absoluteX="59dp">
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_dialog_ad" />
+
+        <com.plinkopro.wincash.ui.widget.ExtraWidthTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:fontFamily="@font/nunito_blackitalic"
+            android:text="@string/get"
+            app:extraWidth="4dp"
+            android:textColor="@color/white"
+            android:textSize="22sp" />
+    </com.hjq.shape.layout.ShapeLinearLayout>
+
+    <TextView
+        android:id="@+id/notNowTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="@string/not_now"
+        android:textColor="#66FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/getTv" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

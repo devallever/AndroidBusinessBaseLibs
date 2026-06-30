@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hjq.shape.layout.ShapeRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:shape_shadowColor="#40000000"
+    app:shape_shadowSize="5dp"
+    app:shape_solidColor="@color/white"
+    app:shape_radius="8dp"
+    android:padding="13dp" />

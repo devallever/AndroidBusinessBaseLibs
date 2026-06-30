@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:layout_marginHorizontal="25dp"
+        android:background="@drawable/bg_withdraw_dialog"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_margin="4dp"
+            android:id="@+id/close_iv"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:foreground="@drawable/ripple_effect_circle"
+            android:padding="10dp"
+            android:src="@drawable/ic_withdraw_dialog_close"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/DialogTitleTextStyle"
+            android:layout_marginTop="64dp"
+            android:text="@string/withdraw_account"
+            android:textColor="@color/color_974901"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:shape_radius="30dp"
+            app:shape_solidColor="@color/white"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="18dp"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/DialogInputLabelTextStyle"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/withdraw_method"
+                    android:textColor="@color/color_342C29"
+                    android:textSize="16sp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_withdraw_input"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="22dp">
+
+                    <ImageView
+                        android:id="@+id/payment_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_pay_pix_long" />
+                </FrameLayout>
+
+                <EditText
+                    android:id="@+id/account1"
+                    style="@style/DialogInputTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:drawableEnd="@drawable/ic_arrow_down"
+                    android:focusable="false"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingHorizontal="22dp"
+                    android:singleLine="true"
+                    android:hint="@string/enter_your_account"
+                    android:textColorHint="@color/color_66342C29"
+                    android:textColor="@color/color_342C29"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/payment_icon" />
+
+                <TextView
+                    android:id="@+id/error_1_tips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="@string/txt_wd_tv_tips"
+                    android:textColor="#FF0303"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@+id/account1"
+                    app:layout_constraintTop_toBottomOf="@+id/account1"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/des2"
+                    style="@style/DialogInputLabelTextStyle"
+                    android:layout_marginTop="12sp"
+                    android:text="@string/input_confirm_pix_account_des"
+                    android:textColor="@color/color_342C29"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/account1" />
+
+                <EditText
+                    android:id="@+id/account_2"
+                    style="@style/DialogInputTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:hint="@string/txt_wd_account_email_input"
+                    android:paddingHorizontal="22dp"
+                    android:textColorHint="@color/color_66342C29"
+                    android:textColor="@color/color_342C29"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/des2"
+                    tools:drawableEnd="@drawable/vector_bingo" />
+
+                <TextView
+                    android:id="@+id/error_2_tips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/txt_wd_tv_tips"
+                    android:textColor="#FF0303"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@+id/account_2"
+                    app:layout_constraintTop_toBottomOf="@+id/account_2"
+                    tools:visibility="visible" />
+
+
+                <TextView
+                    android:id="@+id/des3"
+                    style="@style/DialogInputLabelTextStyle"
+                    android:layout_marginTop="12sp"
+                    android:text="@string/input_confirm_cpf_number"
+                    android:textColor="@color/color_342C29"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/account_2" />
+
+                <EditText
+                    android:id="@+id/account_3"
+                    style="@style/DialogInputTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:hint="@string/input_confirm_cpf_number_hint"
+                    android:inputType="number"
+                    android:paddingHorizontal="22dp"
+                    android:textColorHint="@color/color_66342C29"
+                    android:textColor="@color/color_342C29"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/des3"
+                    tools:drawableEnd="@drawable/vector_bingo" />
+
+                <TextView
+                    android:id="@+id/error_3_tips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/txt_wd_tv_tips"
+                    android:textColor="#FF0303"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@+id/account_3"
+                    app:layout_constraintTop_toBottomOf="@+id/account_3"
+                    tools:visibility="visible" />
+
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/showSignUpCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="30dp">
+
+                <com.hjq.shape.view.ShapeTextView
+                    android:visibility="gone"
+                    android:id="@+id/pre"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:paddingVertical="12dp"
+                    android:text="@string/txt_wd_btn_pre"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="12sp"
+                    app:autoSizeMaxTextSize="18sp"
+                    android:paddingHorizontal="2dp"
+                    app:layout_constraintEnd_toStartOf="@+id/next"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shape_radius="50dp"
+                    app:shape_solidGradientEndColor="@color/color_458aff"
+                    app:shape_solidGradientStartColor="@color/color_81b0ff" />
+                <com.hjq.shape.view.ShapeTextView
+                    android:id="@+id/next"
+                    style="@style/DialogButtonTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:layout_marginHorizontal="14dp"
+                    android:gravity="center"
+                    android:text="@string/confirm"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:shape_radius="27dp"
+                    app:shape_shadowColor="@color/color_F0B885"
+                    app:shape_shadowOffsetY="10dp"
+                    app:shape_shadowSize="10dp"
+                    app:shape_solidGradientEndColor="@color/color_FA2B04"
+                    app:shape_solidGradientOrientation="topToBottom"
+                    app:shape_solidGradientStartColor="@color/color_FE9D66"
+                    app:shape_strokeColor="@color/white"
+                    app:shape_strokeSize="2dp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:src="@drawable/ic_not_suficient_top_bg"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="375dp"
+        android:background="@drawable/ic_withdraw_top_bg"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/topBarBg"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="7dp"
+        android:foreground="@drawable/ripple_effect_circle"
+        android:padding="9dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintBottom_toBottomOf="@+id/topBarBg"
+        app:layout_constraintStart_toStartOf="@+id/topBarBg"
+        app:layout_constraintTop_toTopOf="@+id/topBarBg" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        style="@style/ExtraBoldText"
+        android:fontFamily="@font/nunito_extrabold"
+        android:text="@string/cash_out"
+        android:textColor="@color/color_333333"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/topBarBg"
+        app:layout_constraintEnd_toEndOf="@+id/topBarBg"
+        app:layout_constraintStart_toStartOf="@+id/topBarBg"
+        app:layout_constraintTop_toTopOf="@+id/topBarBg" />
+
+    <TextView
+        android:id="@+id/tvRecord"
+        style="@style/SemiBoldText"
+        android:foreground="@drawable/ripple_effect_circle"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="4dp"
+        android:text="@string/withdraw_record"
+        android:textColor="@color/color_333333"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/topBarBg"
+        app:layout_constraintEnd_toEndOf="@+id/topBarBg"
+        app:layout_constraintTop_toTopOf="@+id/topBarBg" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topBarBg">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/balanceContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="14dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/ic_withdraw_goal_bg"
+                android:minHeight="120dp"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tvBalance"
+                    style="@style/BlackText"
+                    android:layout_marginStart="33dp"
+                    android:layout_marginTop="20dp"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="0"
+                    android:textColor="@color/color_612D0D"
+                    android:textSize="40sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/tvMyBalanceLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+
+                <TextView
+                    android:id="@+id/tvMyBalanceLabel"
+                    style="@style/SemiBoldText"
+                    android:layout_marginBottom="20dp"
+                    android:text="@string/my_balance"
+                    android:textColor="@color/color_E0872D"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tvBalance"
+                    app:layout_constraintTop_toBottomOf="@+id/tvBalance" />
+
+                <TextView
+                    android:id="@+id/tvId"
+                    style="@style/SemiBoldText"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="17dp"
+                    android:text="ID:ABC123"
+                    android:textColor="@color/color_E0872D"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tvWalletLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="35dp"
+                android:text="@string/wallet"
+                android:textColor="@color/color_612D0D"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/balanceContainer" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvWallet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/tvWalletLabel"
+                tools:itemCount="3"
+                tools:listitem="@layout/rv_wallet"
+                app:spanCount="3"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+
+            <TextView
+                android:id="@+id/tvAmountLabel"
+                style="@style/ExtraBoldText"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/amount"
+                android:textColor="@color/color_612D0D"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rvWallet" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/levelContainer1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/bg_withdraw_amount_level_bg"
+                app:layout_constraintTop_toBottomOf="@+id/tvAmountLabel">
+
+                <TextView
+                    android:id="@+id/tvAmountSymbols1"
+                    style="@style/BlackText"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="14dp"
+                    android:text="$ 50"
+                    android:textColor="@color/color_974901"
+                    android:textSize="27sp"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    app:autoSizeMaxTextSize="27sp"
+                    app:autoSizeMinTextSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.46"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.plinkopro.wincash.ui.widget.RoundedProgressBar
+                    android:id="@+id/amountProgress1"
+                    android:layout_width="113dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="2dp"
+                    android:max="100"
+                    android:maxHeight="14dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivCoinType1"
+                    app:layout_constraintStart_toStartOf="@+id/ivCoinType1"
+                    tools:progress="50" />
+
+
+                <ImageView
+                    android:id="@+id/ivCoinType1"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="17dp"
+                    android:src="@drawable/ic_withdraw_goal_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tvAmountSymbols1"
+                    app:layout_constraintTop_toBottomOf="@+id/tvAmountSymbols1" />
+
+                <TextView
+                    android:id="@+id/tvAmountProgress1"
+                    style="@style/BoldText"
+                    android:layout_marginStart="10dp"
+                    android:text="0/5000"
+                    android:textColor="@color/color_FFF0DA"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/amountProgress1"
+                    app:layout_constraintEnd_toEndOf="@+id/amountProgress1"
+                    app:layout_constraintStart_toStartOf="@+id/amountProgress1"
+                    app:layout_constraintTop_toTopOf="@+id/amountProgress1" />
+
+                <com.hjq.shape.view.ShapeTextView
+                    android:visibility="visible"
+                    android:id="@+id/tvCashOut1"
+                    style="@style/BoldText"
+                    android:layout_width="wrap_content"
+                    android:minWidth="120dp"
+                    android:maxWidth="160dp"
+                    android:layout_height="58dp"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:layout_marginEnd="12dp"
+                    android:gravity="center"
+                    android:text="@string/cash_out"
+                    android:paddingHorizontal="17dp"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMaxTextSize="14sp"
+                    app:autoSizeMinTextSize="10sp"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shape_radius="27dp"
+                    app:shape_shadowColor="@color/color_fff58a34"
+                    app:shape_shadowOffsetY="6dp"
+                    app:shape_shadowSize="10dp"
+                    app:shape_solidGradientEndColor="@color/color_FA2B04"
+                    app:shape_solidGradientOrientation="topToBottom"
+                    app:shape_solidGradientStartColor="@color/color_FE9D66"
+                    app:shape_strokeColor="@color/white"
+                    app:shape_strokeSize="2dp" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/tvAccelerateRank1"
+                    style="@style/RegularText"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.4"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginEnd="20dp"
+                    android:gravity="center"
+                    android:text="@string/withdraw_accelerate_rank"
+                    android:textColor="@color/color_342C29"
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.hjq.shape.layout.ShapeLinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/btnExpedite1"
+                    android:layout_width="158dp"
+                    android:layout_height="58dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="12dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:text="@string/confirm"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvAccelerateRank1"
+                    app:shape_radius="27dp"
+                    app:shape_shadowColor="@color/color_F0B885"
+                    app:shape_shadowOffsetY="10dp"
+                    app:shape_shadowSize="10dp"
+                    app:shape_solidGradientEndColor="@color/color_FA2B04"
+                    app:shape_solidGradientOrientation="topToBottom"
+                    app:shape_solidGradientStartColor="@color/color_FE9D66"
+                    app:shape_strokeColor="@color/white"
+                    app:shape_strokeSize="2dp">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_marginHorizontal="4dp"
+                        android:src="@drawable/ic_withdraw_video" />
+
+                    <TextView
+                        style="@style/ExtraBoldText"
+                        android:layout_marginHorizontal="4dp"
+                        android:text="@string/expedite"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                </com.hjq.shape.layout.ShapeLinearLayout>
+
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/ivTips1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_withdraw_rank_tips"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    app:layout_constraintEnd_toEndOf="@+id/tvAccelerateRank1"
+                    app:layout_constraintStart_toStartOf="@+id/tvAccelerateRank1"
+                    app:layout_constraintTop_toBottomOf="@+id/tvAccelerateRank1" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/levelContainer2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/bg_withdraw_amount_level_bg"
+                app:layout_constraintTop_toBottomOf="@+id/levelContainer1">
+
+                <TextView
+                    android:id="@+id/tvAmountSymbols2"
+                    style="@style/BlackText"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="14dp"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:text="$ 50"
+                    android:textColor="@color/color_974901"
+                    android:textSize="27sp"
+                    app:autoSizeMaxTextSize="27sp"
+                    app:autoSizeMinTextSize="20sp"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.46"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.plinkopro.wincash.ui.widget.RoundedProgressBar
+                    android:id="@+id/amountProgress2"
+                    android:layout_width="113dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="2dp"
+                    android:max="100"
+                    android:maxHeight="14dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivCoinType2"
+                    app:layout_constraintStart_toStartOf="@+id/ivCoinType2"
+                    tools:progress="50" />
+
+
+                <ImageView
+                    android:id="@+id/ivCoinType2"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="17dp"
+                    android:src="@drawable/ic_withdraw_goal_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tvAmountSymbols2"
+                    app:layout_constraintTop_toBottomOf="@+id/tvAmountSymbols2" />
+
+                <TextView
+                    android:id="@+id/tvAmountProgress2"
+                    style="@style/BoldText"
+                    android:layout_marginStart="10dp"
+                    android:text="0/5000"
+                    android:textColor="@color/color_FFF0DA"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/amountProgress2"
+                    app:layout_constraintEnd_toEndOf="@+id/amountProgress2"
+                    app:layout_constraintStart_toStartOf="@+id/amountProgress2"
+                    app:layout_constraintTop_toTopOf="@+id/amountProgress2" />
+
+                <com.hjq.shape.view.ShapeTextView
+                    android:visibility="visible"
+                    android:id="@+id/tvCashOut2"
+                    style="@style/BoldText"
+                    android:layout_width="wrap_content"
+                    android:minWidth="120dp"
+                    android:maxWidth="160dp"
+                    android:layout_height="58dp"
+                    android:layout_marginEnd="12dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:paddingHorizontal="17dp"
+                    android:text="@string/cash_out"
+                    android:textColor="@color/white"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMaxTextSize="14sp"
+                    app:autoSizeMinTextSize="10sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shape_radius="27dp"
+                    app:shape_shadowColor="@color/color_fff58a34"
+                    app:shape_shadowOffsetY="6dp"
+                    app:shape_shadowSize="10dp"
+                    app:shape_solidGradientEndColor="@color/color_FA2B04"
+                    app:shape_solidGradientOrientation="topToBottom"
+                    app:shape_solidGradientStartColor="@color/color_FE9D66"
+                    app:shape_strokeColor="@color/white"
+                    app:shape_strokeSize="2dp" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/tvAccelerateRank2"
+                    style="@style/RegularText"
+                    android:layout_width="0dp"
+                    app:layout_constraintWidth_percent="0.4"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginEnd="20dp"
+                    android:gravity="center"
+                    android:text="@string/withdraw_accelerate_rank"
+                    android:textColor="@color/color_342C29"
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.hjq.shape.layout.ShapeLinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/btnExpedite2"
+                    android:layout_width="158dp"
+                    android:layout_height="58dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="12dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:text="@string/confirm"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvAccelerateRank2"
+                    app:shape_radius="27dp"
+                    app:shape_shadowColor="@color/color_F0B885"
+                    app:shape_shadowOffsetY="10dp"
+                    app:shape_shadowSize="10dp"
+                    app:shape_solidGradientEndColor="@color/color_FA2B04"
+                    app:shape_solidGradientOrientation="topToBottom"
+                    app:shape_solidGradientStartColor="@color/color_FE9D66"
+                    app:shape_strokeColor="@color/white"
+                    app:shape_strokeSize="2dp">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_marginHorizontal="4dp"
+                        android:src="@drawable/ic_withdraw_video" />
+
+                    <TextView
+                        style="@style/ExtraBoldText"
+                        android:layout_marginHorizontal="4dp"
+                        android:text="@string/expedite"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                </com.hjq.shape.layout.ShapeLinearLayout>
+
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/ivTips2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_withdraw_rank_tips"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    app:layout_constraintEnd_toEndOf="@+id/tvAccelerateRank2"
+                    app:layout_constraintStart_toStartOf="@+id/tvAccelerateRank2"
+                    app:layout_constraintTop_toBottomOf="@+id/tvAccelerateRank2" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- debug -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/levelContainer2">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

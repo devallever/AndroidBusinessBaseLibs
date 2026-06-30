@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="325dp"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:layout_marginTop="45dp"
+        android:background="@drawable/bg_withdraw_dialog"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivClose"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:foreground="@drawable/ripple_effect_circle"
+            android:padding="10dp"
+            android:src="@drawable/ic_withdraw_dialog_close"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/DialogTitleTextStyle"
+            android:layout_marginTop="64dp"
+            android:text="@string/not_sufficient_funds"
+            android:textColor="@color/color_974901"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvMessage"
+            style="@style/DialogMessageTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="41dp"
+            android:gravity="center"
+            android:text="@string/withdraw_not_sufficient_tips"
+            android:textColor="@color/color_342C29"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/btnConfirm"
+            style="@style/DialogButtonTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginHorizontal="14dp"
+            android:layout_marginBottom="33dp"
+            android:gravity="center"
+            android:text="@string/confirm"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:shape_radius="27dp"
+            app:shape_shadowColor="@color/color_F0B885"
+            app:shape_shadowOffsetY="10dp"
+            app:shape_shadowSize="10dp"
+            app:shape_solidGradientEndColor="@color/color_FA2B04"
+            app:shape_solidGradientOrientation="topToBottom"
+            app:shape_solidGradientStartColor="@color/color_FE9D66"
+            app:shape_strokeColor="@color/white"
+            app:shape_strokeSize="2dp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:src="@drawable/ic_not_suficient_top_bg"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

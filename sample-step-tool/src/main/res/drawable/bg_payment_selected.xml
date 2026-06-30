@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 底层：渐变边框 -->
+    <item>
+        <shape android:shape="rectangle">
+            <!-- 圆角设置为14dp -->
+            <corners android:radius="14dp" />
+            <!-- 水平渐变边框 -->
+            <gradient
+                android:angle="0"
+                android:endColor="#FA340C"
+                android:startColor="#FE9560"
+                android:type="linear" />
+        </shape>
+    </item>
+    <!-- 上层：白色填充，留出2dp边框 -->
+    <item android:bottom="2dp" android:left="2dp" android:right="2dp" android:top="2dp">
+        <shape android:shape="rectangle">
+            <!-- 圆角设置为14dp -->
+            <corners android:radius="12dp" />
+            <!-- 白色填充 -->
+            <solid android:color="#FFFFFF" />
+        </shape>
+    </item>
+</layer-list>

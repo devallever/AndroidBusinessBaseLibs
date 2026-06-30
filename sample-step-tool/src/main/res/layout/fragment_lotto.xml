@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="@drawable/bg_lotto">
+
+    <FrameLayout
+        android:id="@+id/topBarFl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/backImg"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_back_white" />
+
+        <com.plinkopro.wincash.ui.widget.CurrencyView
+            android:id="@+id/currencyView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_gravity="end|center_vertical" />
+
+    </FrameLayout>
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/shapeTextView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="23dp"
+        android:fontFamily="@font/nunito_blackitalic"
+        android:gravity="center"
+        android:text="Scratch Card"
+        android:textColor="@color/white"
+        android:textSize="48sp"
+        app:autoSizeMaxTextSize="48sp"
+        app:autoSizeMinTextSize="30sp"
+        app:autoSizeTextType="uniform"
+        android:lines="1"
+        app:layout_constraintTop_toBottomOf="@+id/topBarFl"/>
+
+
+    <ImageView
+        android:id="@+id/imageView11"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_lotto_ly"
+        app:layout_constraintTop_toBottomOf="@+id/shapeTextView4" />
+
+    <LinearLayout
+        android:id="@+id/upToFl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="46dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView11"
+        app:layout_constraintStart_toStartOf="@+id/imageView11"
+        app:layout_constraintTop_toBottomOf="@+id/shapeTextView4"
+        app:layout_constraintVertical_bias="0.067">
+
+        <com.hjq.shape.view.ShapeTextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:fontFamily="@font/nunito_blackitalic"
+            android:shadowColor="#B76517"
+            android:shadowDy="3"
+            android:shadowRadius="2"
+            android:text="@string/up_to"
+            android:textColor="#FFD36500"
+            app:autoSizeMinTextSize="20sp"
+            app:autoSizeMaxTextSize="32.5sp"
+            app:autoSizeTextType="uniform"
+            android:lines="1"
+            app:shape_textStrokeColor="@color/white"
+            app:shape_textStrokeSize="3.4dp" />
+
+        <com.hjq.shape.view.ShapeTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:fontFamily="@font/nunito_blackitalic"
+            android:shadowColor="#B76517"
+            android:shadowDy="3"
+            android:shadowRadius="2"
+            android:text="20000"
+            android:textColor="#FFD36500"
+            android:textSize="44sp"
+            android:layout_marginStart="2dp"
+            app:layout_constraintVertical_bias="0.079"
+            app:shape_textStrokeColor="@color/white"
+            app:shape_textStrokeSize="3.4dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/youWinFl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="46dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView11"
+        app:layout_constraintStart_toStartOf="@+id/imageView11"
+        app:layout_constraintTop_toBottomOf="@+id/shapeTextView4"
+        app:layout_constraintVertical_bias="0.067">
+
+        <com.hjq.shape.view.ShapeTextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/nunito_blackitalic"
+            android:shadowColor="#B76517"
+            android:shadowDy="3"
+            android:shadowRadius="2"
+            android:text="@string/you_win"
+            app:autoSizeMinTextSize="20sp"
+            app:autoSizeMaxTextSize="32.5sp"
+            app:autoSizeTextType="uniform"
+            android:lines="1"
+            app:shape_textStartColor="#FFF42646"
+            app:shape_textEndColor="#FFC60122"
+            app:shape_textStrokeColor="@color/white"
+            app:shape_textStrokeSize="3.4dp" />
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/awareTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:fontFamily="@font/nunito_blackitalic"
+            android:shadowColor="#B76517"
+            android:shadowDy="3"
+            android:shadowRadius="2"
+            android:text="20000"
+            android:textSize="44sp"
+            android:layout_marginStart="2dp"
+            app:shape_textStartColor="#FFF42646"
+            app:shape_textEndColor="#FFC60122"
+            app:layout_constraintVertical_bias="0.079"
+            app:shape_textStrokeColor="@color/white"
+            app:shape_textStrokeSize="3.4dp" />
+
+    </LinearLayout>
+
+    <com.hjq.shape.view.ShapeTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="77dp"
+        android:fontFamily="@font/nunito_blackitalic"
+        android:gravity="center"
+        android:text="@string/three_equal_victories"
+        android:textColor="#FF6F3F11"
+        android:textSize="20sp"
+        app:autoSizeMinTextSize="10sp"
+        app:autoSizeMaxTextSize="20sp"
+        app:autoSizeTextType="uniform"
+        android:lines="1"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView11"
+        app:layout_constraintTop_toTopOf="@+id/imageView11"
+        app:layout_constraintVertical_bias="0.27"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="45dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView11"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintTop_toTopOf="@+id/imageView11"
+        app:layout_constraintVertical_bias="0.68"
+        tools:layout_editor_absoluteX="43dp" />
+
+    <FrameLayout
+        android:id="@+id/noLottoFL"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/rv"
+        app:layout_constraintEnd_toEndOf="@+id/rv"
+        app:layout_constraintStart_toStartOf="@+id/rv"
+        app:layout_constraintTop_toTopOf="@+id/rv" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.93"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView11">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:gravity="center"
+            android:text="@string/opportunity"
+            android:textColor="#FF974901"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvChances"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bolditalic"
+            android:gravity="center"
+            android:textColor="#FF974901"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            tools:text=" 5 " />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:gravity="center"
+            android:text="@string/times"
+            android:textColor="#FF974901"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <com.plinkopro.wincash.ui.widget.BannerNativeView
+        android:id="@+id/bannerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

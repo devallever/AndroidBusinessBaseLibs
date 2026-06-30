@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launch_bg_2" />
+
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="178dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:visibility="invisible"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_step_people"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/tvAppName"
+        style="@style/BlackItalicText"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="80dp"
+        android:text="@string/app_name"
+        android:textSize="42sp"
+        app:shape_textStrokeColor="#1D7818"
+        app:shape_textStrokeSize="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivLogo"
+        app:shape_textEndColor="@color/color_FFEE80"
+        app:shape_textStartColor="@color/white"
+        android:shadowRadius="10"
+        android:shadowColor="@color/black"
+        android:shadowDy="9"
+        android:shadowDx="0"/>
+
+    <SeekBar
+        app:layout_constraintBottom_toTopOf="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:id="@+id/progressBarIcon"
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:layout_gravity="center"
+        android:clickable="false"
+        android:enabled="false"
+        android:focusable="false"
+        android:max="100"
+        android:progress="0"
+        android:paddingStart="32dp"
+        android:layout_marginBottom="4dp"
+        android:paddingEnd="32dp"
+        android:progressDrawable="@null"
+        android:splitTrack="false"
+        android:thumb="@drawable/ic_launch_progress_panda"
+        android:thumbOffset="0dp"/>
+
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="13dp"
+        android:layout_marginHorizontal="40dp"
+        android:maxHeight="20dp"
+        android:progressDrawable="@drawable/launch_progress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.85"
+        tools:progress="60" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/tvProgress"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nunito_bold"
+        android:text="10%"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
+        app:layout_constraintEnd_toEndOf="@+id/progress_bar"
+        app:layout_constraintStart_toStartOf="@+id/progress_bar"
+        app:layout_constraintTop_toTopOf="@id/progress_bar"
+        app:shape_textStrokeColor="@color/color_652C00"
+        app:shape_textStrokeSize="2dp" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/nunito_blackitalic"
+        android:text="@string/loading"
+        android:textColor="@color/color_DFFED1"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/progress_bar"
+        app:layout_constraintStart_toStartOf="@+id/progress_bar"
+        app:layout_constraintTop_toBottomOf="@+id/progress_bar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

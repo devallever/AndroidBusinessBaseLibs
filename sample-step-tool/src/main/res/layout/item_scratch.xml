@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/ivBg"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_item_scratch"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/awareIcon"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/ic_scratch_aware4"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/tvMultiple"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:fontFamily="@font/nunito_blackitalic"
+        android:gravity="center"
+        android:padding="8dp"
+        android:textColor="@android:color/white"
+        android:textSize="44sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBg"
+        app:layout_constraintTop_toTopOf="@+id/ivBg"
+        app:layout_constraintVertical_bias="0.4"
+        app:shape_textEndColor="#FFC60122"
+        app:shape_textStartColor="#FFF42646"
+        app:shape_textStrokeColor="@color/white"
+        app:shape_textStrokeSize="1dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:text="x4" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/tvPrize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:fontFamily="@font/nunito_blackitalic"
+        android:gravity="center"
+        android:padding="8dp"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBg"
+        app:layout_constraintTop_toTopOf="@+id/ivBg"
+        app:layout_constraintVertical_bias="0.81"
+        app:shape_textEndColor="#FFC60122"
+        app:shape_textStartColor="#FFF42646"
+        app:shape_textStrokeColor="@color/white"
+        app:shape_textStrokeSize="1dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:text="1000" />
+
+    <!-- 遮罩（需要刮开的图片） -->
+    <com.plinkopro.wincash.ui.widget.ScratchCardView
+        android:id="@+id/scratch"
+        tools:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

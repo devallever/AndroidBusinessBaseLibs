@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_marginHorizontal="15dp"
+    android:layout_marginVertical="7dp"
+    android:background="@drawable/bg_record_frame">
+
+    <ImageView
+        android:id="@+id/ivIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/ic_withdraw_record"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAmount"
+        style="@style/BoldText"
+        android:layout_marginVertical="2dp"
+        android:layout_marginStart="16dp"
+        android:text="$50"
+        android:textColor="@color/color_974901"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvTime"
+        app:layout_constraintStart_toEndOf="@+id/ivIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        style="@style/SemiBoldText"
+        android:layout_marginVertical="2dp"
+        android:text="2025-1-11"
+        android:textColor="@color/color_ADADAD"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvAmount"
+        app:layout_constraintTop_toBottomOf="@+id/tvAmount" />
+
+    <TextView
+        android:id="@+id/tvQueueUp"
+        style="@style/BoldText"
+        android:layout_marginVertical="6dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/queue_up"
+        android:textColor="@color/color_342C29"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tvRank"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tvRank"
+        style="@style/SemiBoldText"
+        android:layout_marginVertical="6dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/withdraw_rank_info"
+        android:textColor="@color/color_3CA83E"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvQueueUp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

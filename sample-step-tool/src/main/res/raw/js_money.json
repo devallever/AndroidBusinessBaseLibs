@@ -1,0 +1,317 @@
+[
+  {
+    "country": "US",
+    "currency": "$",
+    "rate": 1,
+    "dailyPrice": 1,
+    "smallBanknotePrice": "0_1",
+    "largeBanknotePrice": {
+      "50": 50,
+      "100": 100
+    },
+    "largeGoldPrice": {
+      "700000": 50,
+      "1400000": 100
+    },
+    "method": [
+      {
+        "name": "Paypal",
+        "typeId": "2,20"
+      }
+    ]
+  },
+  {
+    "country": "BR",
+    "currency": "R$",
+    "rate": 5,
+    "dailyPrice": 1,
+    "smallBanknotePrice": "0.1_1",
+    "largeBanknotePrice": {
+      "50": 50,
+      "100": 100
+    },
+    "largeGoldPrice": {
+      "700000": 50,
+      "1400000": 100
+    },
+    "method": [
+      {
+        "name": "PIX",
+        "typeId": "2,21"
+      },
+      {
+        "name": "Pagbank",
+        "typeId": "1,1"
+      }
+    ]
+  },
+  {
+    "country": "PH",
+    "currency": "₱",
+    "rate": 55,
+    "dailyPrice": 10,
+    "smallBanknotePrice": "0.34_1",
+    "largeBanknotePrice": {
+      "500": 500,
+      "1000": 1000
+    },
+    "largeGoldPrice": {
+      "700000": 500,
+      "1400000": 1000
+    },
+    "method": [
+      {
+        "name": "Lazada",
+        "typeId": "1,3"
+      }
+    ]
+  },
+  {
+    "country": "TH",
+    "currency": "฿",
+    "rate": 35,
+    "dailyPrice": 10,
+    "smallBanknotePrice": "1_1",
+    "largeBanknotePrice": {
+      "500": 500,
+      "1000": 1000
+    },
+    "largeGoldPrice": {
+      "700000": 500,
+      "1400000": 1000
+    },
+    "method": [
+      {
+        "name": "TrueMoney",
+        "typeId": "1,2"
+      }
+    ]
+  },
+  {
+    "country": "TR",
+    "currency": "₺",
+    "rate": 38,
+    "dailyPrice": 10,
+    "smallBanknotePrice": "0_1",
+    "largeBanknotePrice":{
+      "500": 500,
+      "1000": 1000
+    },
+    "largeGoldPrice": {
+      "700000": 500,
+      "1400000": 1000
+    },
+    "method": [
+      {
+        "name": "Papara",
+        "typeId": "1,13"
+      }
+    ]
+  },
+  {
+    "country": "ID",
+    "currency": "Rp",
+    "rate": 15000,
+    "dailyPrice": 1000,
+    "smallBanknotePrice": "1_1",
+    "largeBanknotePrice": {
+      "50000": 50000,
+      "100000": 100000
+    },
+    "largeGoldPrice": {
+      "700000": 50000,
+      "1400000": 100000
+    },
+    "method": [
+      {
+        "name": "DANA",
+        "typeId": "1,4"
+      },
+      {
+        "name": "Shopeepay",
+        "typeId": "1,5"
+      }
+    ]
+  },
+  {
+    "country": "VN",
+    "currency": "₫",
+    "rate": 25000,
+    "dailyPrice": 1000,
+    "smallBanknotePrice": "100_1",
+    "largeBanknotePrice": {
+      "50000": 50000,
+      "100000": 100000
+    },
+    "largeGoldPrice": {
+      "700000": 50000,
+      "1400000": 100000
+    },
+    "method": [
+      {
+        "name": "Zalopay",
+        "typeId": "1,14"
+      }
+    ]
+  },
+  {
+    "country": "BD",
+    "currency": "৳",
+    "rate": 120,
+    "dailyPrice": 100,
+    "smallBanknotePrice": "0_1",
+    "largeBanknotePrice": {
+      "5000": 5000,
+      "10000": 10000
+    },
+    "largeGoldPrice": {
+      "700000": 5000,
+      "1400000": 10000
+    },
+    "method": [
+      {
+        "name": "Bkash",
+        "typeId": "13,1"
+      },
+      {
+        "name": "Phone Fee",
+        "typeId": "7,1"
+      }
+    ]
+  },
+  {
+    "country": "PK",
+    "currency": "₨",
+    "rate": 280,
+    "dailyPrice": 100,
+    "smallBanknotePrice": "0_1",
+    "largeBanknotePrice": {
+      "5000": 5000,
+      "10000": 10000
+    },
+    "largeGoldPrice": {
+      "700000": 5000,
+      "1400000": 10000
+    },
+    "method": [
+      {
+        "name": "Easypaisa",
+        "typeId": "1,8"
+      }
+    ]
+  },
+  {
+    "country": "KR",
+    "currency": "₩",
+    "rate": 1400,
+    "dailyPrice": 1000,
+    "smallBanknotePrice": "0_1",
+    "largeBanknotePrice": {
+      "50000": 50000,
+      "100000": 100000
+    },
+    "largeGoldPrice": {
+      "700000": 50000,
+      "1400000": 100000
+    },
+    "method": [
+      {
+        "name": "Bank Card",
+        "typeId": "5,3113"
+      },
+      {
+        "name": "Clipspay",
+        "typeId": "12,1"
+      }
+    ]
+  },
+  {
+    "country": "NG",
+    "currency": "₦",
+    "rate": 1500,
+    "dailyPrice": 1000,
+    "smallBanknotePrice": "0_1",
+    "largeBanknotePrice": {
+      "50000": 50000,
+      "100000": 100000
+    },
+    "largeGoldPrice": {
+      "700000": 50000,
+      "1400000": 100000
+    },
+    "method": [
+      {
+        "name": "Phone Fee",
+        "typeId": "7,3"
+      }
+    ]
+  },
+  {
+    "country": "UZ",
+    "currency": "лв",
+    "rate": 12500,
+    "dailyPrice": 1000,
+    "smallBanknotePrice": "0_1",
+    "largeBanknotePrice": {
+      "50000": 50000,
+      "100000": 100000
+    },
+    "largeGoldPrice": {
+      "700000": 50000,
+      "1400000": 100000
+    },
+    "method": [
+      {
+        "name": "Phone Fee",
+        "typeId": "7,4"
+      }
+    ]
+  },
+  {
+    "country": "ZA",
+    "currency": "R",
+    "rate": 18,
+    "dailyPrice": 10,
+    "smallBanknotePrice": "0_1",
+    "largeBanknotePrice": {
+      "500": 500,
+      "1000": 1000
+    },
+    "largeGoldPrice": {
+      "700000": 500,
+      "1400000": 1000
+    },
+    "method": [
+      {
+        "name": "Phone Fee",
+        "typeId": "7,2"
+      }
+    ]
+  },
+
+  {
+    "country": "ALL",
+    "currency": "R$",
+    "rate": 5,
+    "dailyPrice": 1,
+    "smallBanknotePrice": "0.1_1",
+    "largeBanknotePrice": {
+      "50": 50,
+      "100": 100
+    },
+    "largeGoldPrice": {
+      "700000": 50,
+      "1400000": 100
+    },
+    "method": [
+      {
+        "name": "PIX",
+        "typeId": "2,21"
+      },
+      {
+        "name": "Pagbank",
+        "typeId": "1,1"
+      }
+    ]
+  }
+]
