@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.BATTERY_STATS"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application>
+        <activity
+            android:name=".ui.NSTHomeActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.GPWhitePkgLibProject.NoActionBar">
+        </activity>
+        <activity
+            android:name="app.android.allever.gp.quick.project.ui.DetailActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="app.android.allever.gp.quick.project.ui.NetworkCheckActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity android:name="app.android.allever.gp.quick.project.ui.PingActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity android:name="app.android.allever.gp.quick.project.ui.DeviceInfoActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity android:name="app.android.allever.gp.quick.project.ui.WifiSignalActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity android:name="app.android.allever.gp.quick.project.ui.WifiSafeActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name="app.android.allever.gp.quick.project.ui.GameSpeedActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name="app.android.allever.gp.quick.project.ui.VideoSpeedActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name="app.android.allever.gp.quick.project.ui.OnlineDeviceActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name="app.android.allever.gp.quick.project.ui.RankActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name="app.allever.android.sample.net.speed.test.SampleNetSpeedTestActivity" />
+        <activity android:name="app.android.allever.gp.quick.project.NSTLoadingActivity" />
+    </application>
+
+</manifest>

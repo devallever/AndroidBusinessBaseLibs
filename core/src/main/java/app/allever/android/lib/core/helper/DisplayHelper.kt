@@ -140,4 +140,11 @@ object DisplayHelper {
                 View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         }
     }
+
+    fun getScreenResolution(context: Context): Pair<Int, Int> {
+        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        return Pair(displayMetrics.widthPixels, displayMetrics.heightPixels)
+    }
 }

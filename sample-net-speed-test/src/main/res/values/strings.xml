@@ -1,0 +1,27 @@
+<resources>
+    <string name="nst_app_name">测网速</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="tab_speed_test">测速</string>
+    <string name="tab_history">历史</string>
+    <string name="tab_tools">工具</string>
+    <string name="tab_setting">设置</string>
+    <string name="speed_test_right_now">立即测速</string>
+    <string name="mobile_network_tips">当前使用的是移动数据网络,注意流量消耗哦</string>
+    <string name="ping_ing">正在测试ping</string>
+
+    <string name="speed">speed</string>
+    <string name="gaugeText">Speed</string>
+
+    <color name="googleRed">#EB4334</color>
+    <color name="googleGreen">#35AA53</color>
+    <color name="googleBleu">#4586F3</color>
+</resources>

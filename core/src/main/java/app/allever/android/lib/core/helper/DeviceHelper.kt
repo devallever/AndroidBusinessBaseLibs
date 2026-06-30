@@ -1,9 +1,13 @@
 package app.allever.android.lib.core.helper
 
+import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.Context
+import android.os.Build
 import android.os.Environment
 import android.os.StatFs
+import android.provider.Settings
+import android.telephony.TelephonyManager
 import android.text.format.Formatter
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
@@ -160,4 +164,56 @@ object DeviceHelper {
         }
         return result
     }
+
+    fun getDeviceMCC(context: Context): String {
+        val telManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        telManager.simOperator.apply {
+            return if (length > 3) {
+                substring(0, 3)
+            } else {
+                ""
+            }
+        }
+    }
+
+    fun getDeviceMNC(context: Context): String {
+        val telManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        telManager.simOperator.apply {
+            log("simOperator = $this")
+            return if (length > 3) {
+                substring(3)
+            } else {
+                ""
+            }
+        }
+    }
+
+    fun getMCC_MNC9(context: Context) : String{
+        val result = getDeviceMCC(context) + getDeviceMNC(context)
+        if (result.isEmpty()) {
+            return "0"
+        }
+        return result
+    }
+
+    fun getDeviceModel(): String {
+        val result = "${getDeviceBrand()}-${Build.MODEL}"
+        log("getDeviceModel: $result")
+        return result
+    }
+
+    fun getDeviceBrand(): String {
+        val result = Build.BRAND
+        log("getDeviceBrand: $result")
+        return result
+    }
+
+    @SuppressLint("HardwareIds")
+    fun getDeviceId(context: Context): String {
+        return Settings.Secure.getString(
+            context.contentResolver, Settings.Secure.ANDROID_ID
+        ) ?: ""
+    }
+
+
 }

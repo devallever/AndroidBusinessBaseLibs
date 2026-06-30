@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/page_bg">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="4dp"
+            android:padding="12dp"
+            android:src="@drawable/ic_back"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设备详情"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 基本信息 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/shape_item_bg"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="16dp">
+
+                <ImageView
+                    android:id="@+id/ivBaseInfo"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_margin="6dp"
+                    android:src="@drawable/ic_info_base"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="基本信息"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivBaseInfo"
+                    app:layout_constraintLeft_toRightOf="@+id/ivBaseInfo"
+                    app:layout_constraintTop_toTopOf="@+id/ivBaseInfo" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/text_gray_light"
+                    app:layout_constraintTop_toBottomOf="@+id/ivBaseInfo" />
+
+                <LinearLayout
+                    android:id="@+id/baseInfoContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginTop="32dp"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ivBaseInfo">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="设备厂商 : " />
+
+                        <TextView
+                            android:id="@+id/tvBrand"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="Redmi" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="型号名称 : " />
+
+                        <TextView
+                            android:id="@+id/tvModel"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="k40" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="安卓版本 : " />
+
+                        <TextView
+                            android:id="@+id/tvAndroidVersion"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="13" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="处理器架构 : " />
+
+                        <TextView
+                            android:id="@+id/tvCpu"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="arm64-v8a" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="设备开机 : " />
+
+                        <TextView
+                            android:id="@+id/tvBootTime"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="0天" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="ROM发布日期 : " />
+
+                        <TextView
+                            android:id="@+id/tvPublishDate"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="Redmi" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="@+id/baseInfoContainer"
+                    app:layout_constraintLeft_toLeftOf="@+id/ivBaseInfo"
+                    app:layout_constraintTop_toTopOf="@+id/baseInfoContainer">
+
+                    <TextView
+                        android:textColor="@color/white"
+                        android:id="@+id/tvDisplay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="1920\nx\n1080"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        style="@style/device_info_item_small_text_label"
+                        android:text="屏幕分辨率"
+                        android:textColor="@color/text_gray_light" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- 网络信息 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/shape_item_bg"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="16dp">
+
+                <ImageView
+                    android:id="@+id/ivNetInfo"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_margin="6dp"
+                    android:src="@drawable/ic_info_network"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="网络信息"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivNetInfo"
+                    app:layout_constraintLeft_toRightOf="@+id/ivNetInfo"
+                    app:layout_constraintTop_toTopOf="@+id/ivNetInfo" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/text_gray_light"
+                    app:layout_constraintTop_toBottomOf="@+id/ivNetInfo" />
+
+                <LinearLayout
+                    android:id="@+id/netInfoContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginTop="32dp"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ivNetInfo">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="下载速度 : " />
+
+                        <TextView
+                            android:id="@+id/tvDownloadSpeed"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="0 MB/s"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="上传速度 : " />
+
+                        <TextView
+                            android:id="@+id/tvUploadSpeed"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="0 MB/s" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="内外地址 : " />
+
+                        <TextView
+                            android:id="@+id/tvInternalIp"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="192.168.0.38" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="@+id/netInfoContainer"
+                    app:layout_constraintLeft_toLeftOf="@+id/ivNetInfo"
+                    app:layout_constraintTop_toTopOf="@+id/netInfoContainer">
+
+                    <TextView
+                        android:textColor="@color/white"
+                        android:id="@+id/tvNetworkType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="WIFI"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        style="@style/device_info_item_small_text_label"
+                        android:text="网络类型"
+                        android:textColor="@color/text_gray_light" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- 网络信息 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/shape_item_bg"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="16dp">
+
+                <ImageView
+                    android:id="@+id/ivRamInfo"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_margin="6dp"
+                    android:src="@drawable/ic_info_ram"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="运行内存信息"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivRamInfo"
+                    app:layout_constraintLeft_toRightOf="@+id/ivRamInfo"
+                    app:layout_constraintTop_toTopOf="@+id/ivRamInfo" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/text_gray_light"
+                    app:layout_constraintTop_toBottomOf="@+id/ivRamInfo" />
+
+                <LinearLayout
+                    android:id="@+id/ramInfoContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginTop="32dp"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ivRamInfo">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="内存容量 : " />
+
+                        <TextView
+                            android:id="@+id/tvMemoryTotal"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="12GN" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="空闲内存 : " />
+
+                        <TextView
+                            android:id="@+id/tvMemoryAvail"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="12 " />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="@+id/ramInfoContainer"
+                    app:layout_constraintLeft_toLeftOf="@+id/ivRamInfo"
+                    app:layout_constraintTop_toTopOf="@+id/ramInfoContainer">
+
+                    <TextView
+                        android:textColor="@color/white"
+                        android:id="@+id/tvMemoryUsedRate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0 %"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        style="@style/device_info_item_small_text_label"
+                        android:text="内存使用率"
+                        android:textColor="@color/text_gray_light" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- 电池信息 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/shape_item_bg"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="16dp">
+
+                <ImageView
+                    android:id="@+id/ivBatteryInfo"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_margin="6dp"
+                    android:src="@drawable/ic_info_battery"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="电池信息"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivBatteryInfo"
+                    app:layout_constraintLeft_toRightOf="@+id/ivBatteryInfo"
+                    app:layout_constraintTop_toTopOf="@+id/ivBatteryInfo" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/text_gray_light"
+                    app:layout_constraintTop_toBottomOf="@+id/ivBatteryInfo" />
+
+                <LinearLayout
+                    android:id="@+id/batteryInfoContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginTop="32dp"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ivBatteryInfo">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="电池温度 : " />
+
+                        <TextView
+                            android:id="@+id/tvBatteryTemp"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="28度" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="电池健康 : " />
+
+                        <TextView
+                            android:id="@+id/tvBatteryHealth"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="状态良好" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="电池电压 : " />
+
+                        <TextView
+                            android:id="@+id/tvBatteryMv"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="4132mV" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="电池状态 : " />
+
+                        <TextView
+                            android:id="@+id/tvBatteryCharge"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="充电状态"/>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="@+id/batteryInfoContainer"
+                    app:layout_constraintLeft_toLeftOf="@+id/ivBatteryInfo"
+                    app:layout_constraintTop_toTopOf="@+id/batteryInfoContainer">
+
+                    <TextView
+                        android:textColor="@color/white"
+                        android:id="@+id/tvBatteryLeft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="74 %"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        style="@style/device_info_item_small_text_label"
+                        android:text="剩余电量"
+                        android:textColor="@color/text_gray_light" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- 存储信息 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/shape_item_bg"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="16dp">
+
+                <ImageView
+                    android:id="@+id/ivStoreInfo"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_margin="6dp"
+                    android:src="@drawable/ic_info_strage"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="存储信息"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivStoreInfo"
+                    app:layout_constraintLeft_toRightOf="@+id/ivStoreInfo"
+                    app:layout_constraintTop_toTopOf="@+id/ivStoreInfo" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/text_gray_light"
+                    app:layout_constraintTop_toBottomOf="@+id/ivStoreInfo" />
+
+                <LinearLayout
+                    android:id="@+id/storeInfoContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginTop="32dp"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ivStoreInfo">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="存储总容量 : " />
+
+                        <TextView
+                            android:id="@+id/tvStoreTotal"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="256.00 GB" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="已使用容量 : " />
+
+                        <TextView
+                            android:id="@+id/tvStoreUsed"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="128.24 GB" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/device_info_item_small_text_label"
+                            android:text="可使用容量 : " />
+
+                        <TextView
+                            android:id="@+id/tvStoreUnUse"
+                            style="@style/device_info_item_small_text_value"
+                            android:text="127.76 GB" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="@+id/storeInfoContainer"
+                    app:layout_constraintLeft_toLeftOf="@+id/ivStoreInfo"
+                    app:layout_constraintTop_toTopOf="@+id/storeInfoContainer">
+
+                    <TextView
+                        android:textColor="@color/white"
+                        android:id="@+id/tvStoreLeft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="50 %"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        style="@style/device_info_item_small_text_label"
+                        android:text="剩余存储空间"
+                        android:textColor="@color/text_gray_light" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginHorizontal="5dp"
+    android:layout_marginVertical="5dp"
+    android:background="@drawable/shape_history_bg_item"
+    android:paddingVertical="30dp">
+
+    <ImageView
+        android:id="@+id/ivIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:src="@drawable/ic_logo_forground"
+        android:layout_width="48dp"
+        android:layout_height="48dp"/>
+
+    <TextView
+        android:id="@+id/tvTitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivIcon"
+        android:layout_marginTop="5dp"
+        android:text="WIFI 信号测试"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

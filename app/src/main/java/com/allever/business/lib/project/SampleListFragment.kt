@@ -50,6 +50,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextDetailClickItem("多进程通信-IPC", "sample-ipc") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_IPC).navigation()
         },
+        TextDetailClickItem("网络测速", "sample-net-speed-test") {
+            ARouter.getInstance().build(RouterPath.PATH_SMAPLE_NET_SPEED_TEST).navigation()
+        },
 
     )
 }
