@@ -19,6 +19,9 @@ interface ICameraManager {
     /** 设置预览比例 */
     fun setAspectRatio(ratio: AspectRatio)
 
+    /** 设置视频质量 */
+    fun setVideoQuality(quality: VideoQuality)
+
     /** 拍照 */
     fun takePhoto(file: File, callback: CameraResultCallback)
 

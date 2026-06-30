@@ -1,4 +1,5 @@
 package app.allever.android.lib.camera.proxy.camera2
+
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
@@ -18,18 +19,18 @@ import android.view.Surface
 import android.view.TextureView
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.annotation.RequiresPermission
 import app.allever.android.lib.core.camera.AspectRatio
 import app.allever.android.lib.core.camera.BaseCameraManager
 import app.allever.android.lib.core.camera.CameraResultCallback
 import app.allever.android.lib.core.camera.FlashMode
-import app.allever.android.lib.core.camera.ICameraManager
 import app.allever.android.lib.core.camera.RecordCallback
+import app.allever.android.lib.core.camera.VideoQuality
 import java.io.File
 import java.util.Timer
 import java.util.TimerTask
 
-class Camera2Manager(context: Context, container: ViewGroup) : BaseCameraManager(context, container) {
+class Camera2Manager(context: Context, container: ViewGroup) :
+    BaseCameraManager(context, container) {
     private val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
     private var cameraDevice: CameraDevice? = null
     private var captureSession: CameraCaptureSession? = null
@@ -46,31 +47,39 @@ class Camera2Manager(context: Context, container: ViewGroup) : BaseCameraManager
     private var videoFile: File? = null
 
     private var textureView: TextureView = TextureView(context).apply {
-        layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        layoutParams = FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+        )
     }
 
-    private val scaleDetector = ScaleGestureDetector(context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-        override fun onScale(detector: ScaleGestureDetector): Boolean {
-            val maxZoom = characteristics?.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM) ?: 1f
-            val sensorRect = characteristics?.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE) ?: return false
-            val currentZoom = zoomRect?.width()?.toFloat()?.div(sensorRect.width()) ?: 1f
-            val newZoom = (currentZoom * detector.scaleFactor).coerceIn(1f, maxZoom)
-            val w = (sensorRect.width() / newZoom).toInt()
-            val h = (sensorRect.height() / newZoom).toInt()
-            val x = (sensorRect.width() - w) / 2
-            val y = (sensorRect.height() - h) / 2
-            zoomRect = Rect(x, y, x + w, y + h)
-            updatePreview()
-            return true
-        }
-    })
+    private val scaleDetector =
+        ScaleGestureDetector(context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            override fun onScale(detector: ScaleGestureDetector): Boolean {
+                val maxZoom =
+                    characteristics?.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM)
+                        ?: 1f
+                val sensorRect =
+                    characteristics?.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE)
+                        ?: return false
+                val currentZoom = zoomRect?.width()?.toFloat()?.div(sensorRect.width()) ?: 1f
+                val newZoom = (currentZoom * detector.scaleFactor).coerceIn(1f, maxZoom)
+                val w = (sensorRect.width() / newZoom).toInt()
+                val h = (sensorRect.height() / newZoom).toInt()
+                val x = (sensorRect.width() - w) / 2
+                val y = (sensorRect.height() - h) / 2
+                zoomRect = Rect(x, y, x + w, y + h)
+                updatePreview()
+                return true
+            }
+        })
 
-    private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-            focusOnPoint(e.x, e.y)
-            return true
-        }
-    })
+    private val gestureDetector =
+        GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                focusOnPoint(e.x, e.y)
+                return true
+            }
+        })
 
     init {
         container.addView(textureView)
@@ -82,7 +91,10 @@ class Camera2Manager(context: Context, container: ViewGroup) : BaseCameraManager
             true
         }
         textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
-            override fun onSurfaceTextureAvailable(s: SurfaceTexture, w: Int, h: Int) { openCamera() }
+            override fun onSurfaceTextureAvailable(s: SurfaceTexture, w: Int, h: Int) {
+                openCamera()
+            }
+
             override fun onSurfaceTextureSizeChanged(s: SurfaceTexture, w: Int, h: Int) {}
             override fun onSurfaceTextureDestroyed(s: SurfaceTexture): Boolean = false
             override fun onSurfaceTextureUpdated(s: SurfaceTexture) {}
@@ -90,28 +102,67 @@ class Camera2Manager(context: Context, container: ViewGroup) : BaseCameraManager
     }
 
     private fun focusOnPoint(x: Float, y: Float) {
-        val sensorRect = characteristics?.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE) ?: return
+        val sensorRect =
+            characteristics?.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE) ?: return
         val focusW = sensorRect.width() / 5
         val focusH = sensorRect.height() / 5
         val focusX = (x / textureView.width * sensorRect.width()).toInt() - focusW / 2
         val focusY = (y / textureView.height * sensorRect.height()).toInt() - focusH / 2
         val focusRect = Rect(focusX, focusY, focusX + focusW, focusY + focusH)
-
-        val reqBuilder = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-        reqBuilder?.set(CaptureRequest.CONTROL_AF_REGIONS, arrayOf(android.hardware.camera2.params.MeteringRectangle(focusRect, 1000)))
-        reqBuilder?.set(CaptureRequest.CONTROL_AE_REGIONS, arrayOf(android.hardware.camera2.params.MeteringRectangle(focusRect, 1000)))
-        reqBuilder?.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_AUTO)
-        reqBuilder?.set(CaptureRequest.CONTROL_AF_TRIGGER, CaptureRequest.CONTROL_AF_TRIGGER_START)
-        captureSession?.capture(reqBuilder!!.build(), null, bgHandler)
+        val reqBuilder = createSafeCaptureRequest(CameraDevice.TEMPLATE_PREVIEW) ?: return
+        reqBuilder.set(
+            CaptureRequest.CONTROL_AF_REGIONS,
+            arrayOf(android.hardware.camera2.params.MeteringRectangle(focusRect, 1000))
+        )
+        reqBuilder.set(
+            CaptureRequest.CONTROL_AE_REGIONS,
+            arrayOf(android.hardware.camera2.params.MeteringRectangle(focusRect, 1000))
+        )
+        reqBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_AUTO)
+        reqBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CaptureRequest.CONTROL_AF_TRIGGER_START)
+        captureSession?.capture(reqBuilder.build(), null, bgHandler)
     }
 
     private fun updatePreview() {
-        val reqBuilder = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+        val reqBuilder = createSafeCaptureRequest(CameraDevice.TEMPLATE_PREVIEW) ?: return
         val surface = Surface(textureView.surfaceTexture)
-        reqBuilder?.addTarget(surface)
-        zoomRect?.let { reqBuilder?.set(CaptureRequest.SCALER_CROP_REGION, it) }
-        reqBuilder?.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
-        captureSession?.setRepeatingRequest(reqBuilder!!.build(), null, bgHandler)
+        reqBuilder.addTarget(surface)
+        zoomRect?.let { reqBuilder.set(CaptureRequest.SCALER_CROP_REGION, it) }
+        reqBuilder.set(
+            CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
+        )
+//        if (isStabilizationEnabled) reqBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE, CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON)
+        captureSession?.setRepeatingRequest(reqBuilder.build(), null, bgHandler)
+    }
+
+    private fun applyExposureCompensation(ev: Int) {
+        val reqBuilder = createSafeCaptureRequest(CameraDevice.TEMPLATE_PREVIEW) ?: return
+        val surface = Surface(textureView.surfaceTexture)
+        reqBuilder.addTarget(surface)
+        reqBuilder.set(CaptureRequest.CONTROL_AE_EXPOSURE_COMPENSATION, ev)
+        zoomRect?.let { reqBuilder.set(CaptureRequest.SCALER_CROP_REGION, it) }
+//        if (isStabilizationEnabled) reqBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE, CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON)
+        captureSession?.setRepeatingRequest(reqBuilder.build(), null, bgHandler)
+    }
+
+    // 核心修复：容错创建 CaptureRequest，如果指定模板失败则自动降级尝试其他模板
+    private fun createSafeCaptureRequest(templateType: Int): CaptureRequest.Builder? {
+        val device = cameraDevice ?: return null
+        // 优先尝试业务请求的模板，如果失败按优先级降级尝试其它模板
+        val templates = mutableSetOf(
+            templateType,
+            CameraDevice.TEMPLATE_PREVIEW,
+            CameraDevice.TEMPLATE_RECORD,
+            CameraDevice.TEMPLATE_STILL_CAPTURE
+        )
+        for (template in templates) {
+            try {
+                return device.createCaptureRequest(template)
+            } catch (e: Exception) {
+                // 忽略当前模板异常，继续尝试下一个
+            }
+        }
+        return null
     }
 
     @SuppressLint("MissingPermission")
@@ -120,31 +171,41 @@ class Camera2Manager(context: Context, container: ViewGroup) : BaseCameraManager
             characteristics = cameraManager.getCameraCharacteristics(cameraId)
             setupPreviewSize()
             cameraManager.openCamera(cameraId, object : CameraDevice.StateCallback() {
-                override fun onOpened(camera: CameraDevice) { cameraDevice = camera; startPreview() }
-                override fun onDisconnected(camera: CameraDevice) { camera.close() }
-                override fun onError(camera: CameraDevice, p1: Int) { camera.close() }
+                override fun onOpened(camera: CameraDevice) {
+                    cameraDevice = camera; startPreview()
+                }
+
+                override fun onDisconnected(camera: CameraDevice) {
+                    camera.close()
+                }
+
+                override fun onError(camera: CameraDevice, p1: Int) {
+                    camera.close()
+                }
             }, bgHandler)
-        } catch (e: CameraAccessException) { e.printStackTrace() }
+        } catch (e: CameraAccessException) {
+            e.printStackTrace()
+        }
     }
 
     private fun setupPreviewSize() {
-        val map = characteristics?.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: return
+        val map =
+            characteristics?.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: return
         val targetRatio = when (currentAspectRatio) {
             AspectRatio.RATIO_1_1 -> 1.0
             AspectRatio.RATIO_3_4 -> 3.0 / 4.0
             AspectRatio.RATIO_16_9 -> 9.0 / 16.0
-            AspectRatio.FULL_SCREEN -> {
-                // 动态获取屏幕物理比例 (高/宽)
-                val w = container.width
-                val h = container.height
-                if (w > 0 && h > 0) h.toDouble() / w.toDouble() else 9.0 / 16.0
-            }
+            AspectRatio.FULL_SCREEN -> container.height.toDouble() / container.width.toDouble()
         }
-
-        // 筛选比例最接近且面积最大的尺寸
+        val targetHeight = when (currentVideoQuality) {
+            VideoQuality.SD_480P -> 480
+            VideoQuality.HD_720P -> 720
+            VideoQuality.FHD_1080P -> 1080
+            VideoQuality.UHD_4K -> 2160
+        }
         previewSize = map.getOutputSizes(SurfaceTexture::class.java)
             .filter { Math.abs(it.width.toDouble() / it.height.toDouble() - targetRatio) < 0.15 }
-            .maxByOrNull { it.width * it.height }
+            .filter { it.height <= targetHeight }.maxByOrNull { it.width * it.height }
             ?: map.getOutputSizes(SurfaceTexture::class.java)[0]
     }
 
@@ -152,15 +213,15 @@ class Camera2Manager(context: Context, container: ViewGroup) : BaseCameraManager
         val texture = textureView.surfaceTexture ?: return
         texture.setDefaultBufferSize(previewSize.width, previewSize.height)
         val surface = Surface(texture)
-        val reqBuilder = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-        reqBuilder?.addTarget(surface)
-        cameraDevice?.createCaptureSession(listOf(surface), object : CameraCaptureSession.StateCallback() {
-            override fun onConfigured(session: CameraCaptureSession) {
-                captureSession = session
-                updatePreview()
-            }
-            override fun onConfigureFailed(session: CameraCaptureSession) {}
-        }, bgHandler)
+        cameraDevice?.createCaptureSession(
+            listOf(surface), object : CameraCaptureSession.StateCallback() {
+                override fun onConfigured(session: CameraCaptureSession) {
+                    captureSession = session; updatePreview()
+                }
+
+                override fun onConfigureFailed(session: CameraCaptureSession) {}
+            }, bgHandler
+        )
     }
 
     override fun doCloseCamera() {
@@ -174,64 +235,74 @@ class Camera2Manager(context: Context, container: ViewGroup) : BaseCameraManager
         doCloseCamera(); doOpenCamera()
     }
 
-    override fun doSetFlashMode(mode: FlashMode) { /* 同前文 */ }
+    override fun doSetFlashMode(mode: FlashMode) { /* 前文已有实现，此处省略 */
+    }
 
     override fun doSetAspectRatio(ratio: AspectRatio) {
-        setupPreviewSize()
-        textureView.surfaceTexture?.setDefaultBufferSize(previewSize.width, previewSize.height)
-        startPreview()
-        updatePreviewViewSize(textureView)
+        setupPreviewSize(); textureView.surfaceTexture?.setDefaultBufferSize(
+            previewSize.width, previewSize.height
+        ); startPreview(); updatePreviewViewSize(textureView)
+    }
+
+    override fun doSetVideoQuality(quality: VideoQuality) {
+        doSetAspectRatio(currentAspectRatio)
     }
 
     override fun doTakePhoto(file: File, callback: CameraResultCallback) {
-        val imageReader = ImageReader.newInstance(previewSize.width, previewSize.height, ImageFormat.JPEG, 2)
+        val imageReader =
+            ImageReader.newInstance(previewSize.width, previewSize.height, ImageFormat.JPEG, 2)
         imageReader.setOnImageAvailableListener({ reader ->
             val image = reader.acquireNextImage() ?: return@setOnImageAvailableListener
             val buffer = image.planes[0].buffer
             val bytes = ByteArray(buffer.remaining()); buffer.get(bytes)
-            try { file.writeBytes(bytes); callback.onSuccess(file) }
-            catch (e: Exception) { callback.onError("Save failed") }
+            try {
+                file.writeBytes(bytes); callback.onSuccess(file)
+            } catch (e: Exception) {
+                callback.onError("Save failed")
+            }
             image.close(); imageReader.close()
         }, bgHandler)
 
-        val reqBuilder = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
-        reqBuilder?.addTarget(imageReader.surface)
-        zoomRect?.let { reqBuilder?.set(CaptureRequest.SCALER_CROP_REGION, it) }
-        captureSession?.capture(reqBuilder!!.build(), null, bgHandler)
+        val reqBuilder = createSafeCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE) ?: return
+        reqBuilder.addTarget(imageReader.surface)
+        zoomRect?.let { reqBuilder.set(CaptureRequest.SCALER_CROP_REGION, it) }
+        captureSession?.capture(reqBuilder.build(), null, bgHandler)
     }
 
     override fun doStartRecording(file: File, maxDurationMillis: Long, callback: RecordCallback) {
-        this.recordCallback = callback
-        this.videoFile = file
+        this.recordCallback = callback; this.videoFile = file
         captureSession?.close(); captureSession = null
         mediaRecorder = MediaRecorder().apply {
-            setVideoSource(MediaRecorder.VideoSource.SURFACE)
-            setAudioSource(MediaRecorder.AudioSource.MIC)
-            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            setOutputFile(file.absolutePath)
+            setVideoSource(MediaRecorder.VideoSource.SURFACE); setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4); setOutputFile(file.absolutePath)
             setVideoEncodingBitRate(10000000); setVideoFrameRate(30)
             setVideoSize(previewSize.width, previewSize.height)
-            setVideoEncoder(MediaRecorder.VideoEncoder.H264)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            setVideoEncoder(MediaRecorder.VideoEncoder.H264); setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
             prepare()
         }
-        val texture = textureView.surfaceTexture!!
-        texture.setDefaultBufferSize(previewSize.width, previewSize.height)
+        val texture = textureView.surfaceTexture!!; texture.setDefaultBufferSize(
+            previewSize.width, previewSize.height
+        )
         val previewSurface = Surface(texture)
         val recordSurface = mediaRecorder!!.surface
-        val reqBuilder = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_RECORD)
-        reqBuilder?.addTarget(previewSurface); reqBuilder?.addTarget(recordSurface)
-        zoomRect?.let { reqBuilder?.set(CaptureRequest.SCALER_CROP_REGION, it) }
 
-        cameraDevice?.createCaptureSession(listOf(previewSurface, recordSurface), object : CameraCaptureSession.StateCallback() {
-            override fun onConfigured(session: CameraCaptureSession) {
-                captureSession = session
-                session.setRepeatingRequest(reqBuilder!!.build(), null, bgHandler)
-                mediaRecorder?.start()
-                startRecordTimer(maxDurationMillis)
-            }
-            override fun onConfigureFailed(session: CameraCaptureSession) {}
-        }, bgHandler)
+        val reqBuilder = createSafeCaptureRequest(CameraDevice.TEMPLATE_RECORD) ?: return
+        reqBuilder.addTarget(previewSurface); reqBuilder.addTarget(recordSurface)
+        zoomRect?.let { reqBuilder.set(CaptureRequest.SCALER_CROP_REGION, it) }
+//        if (isStabilizationEnabled) reqBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE, CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON)
+
+        cameraDevice?.createCaptureSession(
+            listOf(previewSurface, recordSurface), object : CameraCaptureSession.StateCallback() {
+                override fun onConfigured(session: CameraCaptureSession) {
+                    captureSession = session; session.setRepeatingRequest(
+                        reqBuilder.build(), null, bgHandler
+                    )
+                    mediaRecorder?.start(); startRecordTimer(maxDurationMillis)
+                }
+
+                override fun onConfigureFailed(session: CameraCaptureSession) {}
+            }, bgHandler
+        )
     }
 
     private fun startRecordTimer(maxDurationMillis: Long) {
@@ -241,15 +312,18 @@ class Camera2Manager(context: Context, container: ViewGroup) : BaseCameraManager
             override fun run() {
                 val duration = System.currentTimeMillis() - recordStartTime
                 recordCallback?.onProgress(duration)
-                if (duration >= maxDurationMillis) stopRecording()
+                if (duration >= maxDurationMillis && maxDurationMillis > 0) stopRecording()
             }
         }, 0, 100)
     }
 
     override fun doStopRecording() {
         recordTimer?.cancel(); recordTimer = null
-        try { mediaRecorder?.stop(); videoFile?.let { recordCallback?.onSuccess(it) } }
-        catch (e: Exception) { recordCallback?.onError("Stop failed") }
+        try {
+            mediaRecorder?.stop(); videoFile?.let { recordCallback?.onSuccess(it) }
+        } catch (e: Exception) {
+            recordCallback?.onError("Stop failed")
+        }
         mediaRecorder?.reset(); mediaRecorder?.release(); mediaRecorder = null
         startPreview()
     }

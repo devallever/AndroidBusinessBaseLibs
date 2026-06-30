@@ -147,6 +147,10 @@ class Camera1Manager(context: Context, container: ViewGroup) : BaseCameraManager
         updatePreviewViewSize(surfaceView)
     }
 
+    override fun doSetVideoQuality(quality: VideoQuality) {
+
+    }
+
     override fun doTakePhoto(file: File, callback: CameraResultCallback) {
         camera?.takePicture(null, null, { data, _ ->
             try { file.writeBytes(data); callback.onSuccess(file) }
@@ -186,7 +190,7 @@ class Camera1Manager(context: Context, container: ViewGroup) : BaseCameraManager
             override fun run() {
                 val duration = System.currentTimeMillis() - recordStartTime
                 recordCallback?.onProgress(duration)
-                if (duration >= maxDurationMillis) stopRecording()
+                if (duration >= maxDurationMillis && maxDurationMillis > 0) stopRecording()
             }
         }, 0, 100)
     }

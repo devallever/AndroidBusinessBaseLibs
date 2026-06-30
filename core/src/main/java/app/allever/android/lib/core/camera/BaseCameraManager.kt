@@ -16,6 +16,7 @@ abstract class BaseCameraManager(
     protected var state: CameraState = CameraState.IDLE
     protected var currentFlashMode: FlashMode = FlashMode.OFF
     protected var currentAspectRatio: AspectRatio = AspectRatio.RATIO_3_4
+    protected var currentVideoQuality: VideoQuality = VideoQuality.FHD_1080P
 
     /** 供子类调用的预览View尺寸更新方法 */
     protected fun updatePreviewViewSize(view: View) {
@@ -85,6 +86,12 @@ abstract class BaseCameraManager(
         doSetAspectRatio(ratio)
     }
 
+    override fun setVideoQuality(quality: VideoQuality) {
+        if (state != CameraState.OPENED) return
+        currentVideoQuality = quality
+        doSetVideoQuality(quality)
+    }
+
     override fun takePhoto(file: File, callback: CameraResultCallback) {
         if (state != CameraState.OPENED) {
             callback.onError("Camera is not ready")
@@ -117,6 +124,7 @@ abstract class BaseCameraManager(
     protected abstract fun doSwitchCamera()
     protected abstract fun doSetFlashMode(mode: FlashMode)
     protected abstract fun doSetAspectRatio(ratio: AspectRatio)
+    protected abstract fun doSetVideoQuality(quality: VideoQuality)
     protected abstract fun doTakePhoto(file: File, callback: CameraResultCallback)
     protected abstract fun doStartRecording(file: File, maxDurationMillis: Long, callback: RecordCallback)
     protected abstract fun doStopRecording()

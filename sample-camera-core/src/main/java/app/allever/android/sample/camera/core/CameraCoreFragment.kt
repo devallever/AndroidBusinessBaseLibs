@@ -2,6 +2,7 @@ package app.allever.android.sample.camera.core
 
 import android.annotation.SuppressLint
 import android.os.Environment
+import app.allever.android.lib.camera.proxy.camera2.Camera2Manager
 import app.allever.android.lib.camera.proxy.camerax.CameraXManager
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.camera.AspectRatio
@@ -9,6 +10,7 @@ import app.allever.android.lib.core.camera.Camera1Manager
 import app.allever.android.lib.core.camera.CameraResultCallback
 import app.allever.android.lib.core.camera.FlashMode
 import app.allever.android.lib.core.camera.RecordCallback
+import app.allever.android.lib.core.camera.VideoQuality
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toast
@@ -24,11 +26,13 @@ class CameraCoreFragment : BaseFragment<FragmentCameraCoreBinding, BaseViewModel
     private var nextMode =  FlashMode.OFF
     private var nextAspectRatio =  AspectRatio.FULL_SCREEN
 
+    private var nextVideoQuality =  VideoQuality.FHD_1080P
+
     private val mCameraManager by lazy {
         val engine = arguments?.getString("engine")
         when (engine) {
             "camera" -> Camera1Manager(requireContext(),  mBinding.previewContainer)
-            "camera2" -> Camera1Manager(requireContext(),  mBinding.previewContainer)
+            "camera2" -> Camera2Manager(requireContext(), mBinding.previewContainer)
             else -> CameraXManager(requireContext(), this, mBinding.previewContainer)
         }
         CameraXManager(requireContext(), this, mBinding.previewContainer)
@@ -42,6 +46,7 @@ class CameraCoreFragment : BaseFragment<FragmentCameraCoreBinding, BaseViewModel
                 mCameraManager.openCamera()
                 mCameraManager.setFlashMode(nextMode)
                 mCameraManager.setAspectRatio(nextAspectRatio)
+                mCameraManager.setVideoQuality(nextVideoQuality)
             }
             btnClose.setOnClickListener {
                 mCameraManager.closeCamera()
@@ -116,6 +121,12 @@ class CameraCoreFragment : BaseFragment<FragmentCameraCoreBinding, BaseViewModel
                 nextAspectRatio = modes[(modes.indexOf(nextAspectRatio) + 1) % modes.size]
                 mCameraManager.setAspectRatio(nextAspectRatio)
                 btnAspectRatio.text = "当前比例: $nextAspectRatio"
+            }
+            btnVideoQuality.setOnClickListener {
+                val modes = VideoQuality.values()
+                nextVideoQuality = modes[(modes.indexOf(nextVideoQuality) + 1) % modes.size]
+                mCameraManager.setVideoQuality(nextVideoQuality)
+                btnVideoQuality.text = "当前质量: $nextVideoQuality"
             }
         }
     }

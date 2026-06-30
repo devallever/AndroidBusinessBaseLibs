@@ -28,6 +28,7 @@ import app.allever.android.lib.core.camera.BaseCameraManager
 import app.allever.android.lib.core.camera.CameraResultCallback
 import app.allever.android.lib.core.camera.FlashMode
 import app.allever.android.lib.core.camera.RecordCallback
+import app.allever.android.lib.core.camera.VideoQuality
 import java.io.File
 import java.util.concurrent.Executor
 
@@ -93,7 +94,14 @@ class CameraXManager(
         }
         imageCapture = ImageCapture.Builder().setTargetAspectRatio(aspectRatio).build()
 
-        val recorder = Recorder.Builder().setQualitySelector(QualitySelector.from(Quality.HIGHEST)).build()
+        // 录像质量选择
+        val quality = when (currentVideoQuality) {
+            VideoQuality.SD_480P -> Quality.SD
+            VideoQuality.HD_720P -> Quality.HD
+            VideoQuality.FHD_1080P -> Quality.FHD
+            VideoQuality.UHD_4K -> Quality.UHD
+        }
+        val recorder = Recorder.Builder().setQualitySelector(QualitySelector.from(quality)).build()
         videoCapture = VideoCapture.withOutput(recorder)
 
         try {
@@ -105,15 +113,11 @@ class CameraXManager(
 
     override fun doOpenCamera() {
         val future = ProcessCameraProvider.getInstance(context)
-        future.addListener({
-            cameraProvider = future.get()
-            bindUseCases()
-        }, cameraExecutor)
+        future.addListener({ cameraProvider = future.get(); bindUseCases() }, cameraExecutor)
     }
 
     override fun doCloseCamera() {
-        currentRecording?.stop()
-        currentRecording = null
+        currentRecording?.stop(); currentRecording = null
         cameraProvider?.unbindAll()
     }
 
@@ -131,9 +135,8 @@ class CameraXManager(
         camera?.cameraControl?.enableTorch(mode == FlashMode.TORCH)
     }
 
-    override fun doSetAspectRatio(ratio: AspectRatio) {
-        bindUseCases()
-    }
+    override fun doSetAspectRatio(ratio: AspectRatio) { bindUseCases() }
+    override fun doSetVideoQuality(quality: VideoQuality) { bindUseCases() }
 
     override fun doTakePhoto(file: File, callback: CameraResultCallback) {
         val options = ImageCapture.OutputFileOptions.Builder(file).build()
@@ -153,10 +156,9 @@ class CameraXManager(
                 if (event is VideoRecordEvent.Status) {
                     val millis = event.recordingStats.recordedDurationNanos / 1_000_000
                     callback.onProgress(millis)
-                    if (millis >= maxDurationMillis) stopRecording()
+                    if (millis >= maxDurationMillis && maxDurationMillis > 0) stopRecording()
                 } else if (event is VideoRecordEvent.Finalize) {
-                    if (event.hasError()) callback.onError("Record failed")
-                    else callback.onSuccess(file)
+                    if (event.hasError()) callback.onError("Record failed") else callback.onSuccess(file)
                 }
             }
     }
