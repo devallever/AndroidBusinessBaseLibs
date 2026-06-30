@@ -7,25 +7,24 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.animation.doOnEnd
 import com.plinkopro.wincash.base.BaseActivity
-import com.plinkopro.wincash.databinding.ActivityLaunchBinding
+import com.plinkopro.wincash.databinding.StActivityLaunchBinding
+import com.plinkopro.wincash.event.AdDismissEvent
+import com.plinkopro.wincash.event.AdShowFailedEvent
 import com.plinkopro.wincash.init.AdIndex
 import com.plinkopro.wincash.utils.AdmobOpenAdUtil
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdDismissEvent
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdShowFailedEvent
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import kotlin.math.roundToInt
 
-class HotLaunchActivity: BaseActivity<ActivityLaunchBinding>() {
+class STHotLaunchActivity: BaseActivity<StActivityLaunchBinding>() {
 
     private val animator = ValueAnimator.ofFloat(0f, 100f)
 
     override fun getBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): ActivityLaunchBinding {
-        return  ActivityLaunchBinding.inflate(layoutInflater)
+    ): StActivityLaunchBinding {
+        return  StActivityLaunchBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +71,7 @@ class HotLaunchActivity: BaseActivity<ActivityLaunchBinding>() {
         }
         animator.doOnEnd {
             AdmobOpenAdUtil.updateShowTime()
-            AdManager.showAdMobOpenAd(this, AdIndex.ADMOB_SPLASH_INDEX)
+            finish()
         }
         animator.start()
     }

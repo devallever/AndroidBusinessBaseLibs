@@ -1,5 +1,6 @@
 package com.carefree.steplib.core
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.hardware.Sensor
 import com.carefree.steplib.common.StepConstants
@@ -9,6 +10,7 @@ import com.carefree.steplib.utils.SensorUtils
  * 计步管理器
  * 负责协调不同类型的计步器实现，根据设备支持情况选择最优计步方式
  */
+@SuppressLint("StaticFieldLeak")
 object StepManager {
     private var stepCounter: StepCounterInterface? = null
     private var stepDetector: StepDetectorInterface? = null

@@ -13,12 +13,10 @@ import com.plinkopro.wincash.R
 import com.plinkopro.wincash.databinding.ViewBannerNativeBinding
 import com.plinkopro.wincash.event.ChangeShowPage
 import com.plinkopro.wincash.init.Constance
-import com.plinkopro.wincash.ui.activity.WebActivity
 import com.plinkopro.wincash.utils.BannerNativeUtil
 import com.plinkopro.wincash.utils.gone
 import com.plinkopro.wincash.utils.setOnSingleListener
 import com.plinkopro.wincash.utils.visible
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
 import org.greenrobot.eventbus.EventBus
 
 class BannerNativeView @JvmOverloads constructor(
@@ -59,16 +57,16 @@ class BannerNativeView @JvmOverloads constructor(
                 bannerFl.visible()
                 stopAnimation()
                 if (type == ViewType.BANNER) {
-                    AdManager.showBanner(bannerFl) {
-                        AdManager.showBanner(bannerFl) {}
-                    }
+//                    AdManager.showBanner(bannerFl) {
+//                        AdManager.showBanner(bannerFl) {}
+//                    }
                 } else {
-                    val isLoad = AdManager.showNative(activity, bannerFl, R.mipmap.ic_launcher) {
-                        initView(type, activity)
-                    }
-                    if (!isLoad) {
-                        AdManager.loadNative(activity)
-                    }
+//                    val isLoad = AdManager.showNative(activity, bannerFl, R.mipmap.ic_launcher) {
+//                        initView(type, activity)
+//                    }
+//                    if (!isLoad) {
+//                        AdManager.loadNative(activity)
+//                    }
                 }
             }
         }

@@ -12,19 +12,18 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
-import com.plinkopro.wincash.BuildConfig
+import app.allever.android.lib.core.app.App
 import com.plinkopro.wincash.base.BaseFragment
 import com.plinkopro.wincash.databinding.FragmentWebBinding
 import com.plinkopro.wincash.event.ChangeShowPage
 import com.plinkopro.wincash.init.Constance
 import com.plinkopro.wincash.init.Constance.LINK_I
-import com.plinkopro.wincash.ui.activity.MainActivity
+import com.plinkopro.wincash.ui.activity.STMainActivity
 import com.plinkopro.wincash.utils.MusicUtil
 import com.plinkopro.wincash.utils.WebJsOK
 import com.plinkopro.wincash.utils.getHostSafe
 import com.plinkopro.wincash.utils.openIntent
 import com.plinkopro.wincash.utils.setOnSingleListener
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
 import org.greenrobot.eventbus.EventBus
 
 
@@ -50,7 +49,7 @@ class WebFragment : BaseFragment<FragmentWebBinding>() {
             if (_webView?.canGoBack() == true) {
                 _webView?.goBack()
             } else {
-                if (requireActivity() !is MainActivity) {
+                if (requireActivity() !is STMainActivity) {
                     requireActivity().finish()
                     return@setOnSingleListener
                 }
@@ -60,7 +59,7 @@ class WebFragment : BaseFragment<FragmentWebBinding>() {
         }
 
         binding.ivHome.setOnSingleListener {
-            if (requireActivity() !is MainActivity) {
+            if (requireActivity() !is STMainActivity) {
                 requireActivity().finish()
                 return@setOnSingleListener
             }
@@ -89,11 +88,7 @@ class WebFragment : BaseFragment<FragmentWebBinding>() {
 
         binding.flLoading.isVisible = true
 
-        _url = if (url.endsWith(GAID_TAG)) {
-            url.replace(GAID_TAG, SdkManager.getGoogleAndroidId())
-        } else {
-            url
-        }
+        _url = url
 
         _webView?.let {
             it.clearHistory()
@@ -138,7 +133,7 @@ class WebFragment : BaseFragment<FragmentWebBinding>() {
             _webView!!.addJavascriptInterface(jsHelper, Constance.OKSPINE)
         }
 
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             WebView.setWebContentsDebuggingEnabled(true)
         }
         _webView?.webChromeClient = object : WebChromeClient() {

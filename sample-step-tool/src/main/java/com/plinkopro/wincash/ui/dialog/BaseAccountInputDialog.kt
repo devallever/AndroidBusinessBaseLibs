@@ -9,9 +9,9 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import app.allever.android.lib.core.app.App
 import com.lxj.xpopup.core.CenterPopupView
 import com.lxj.xpopup.util.XPopupUtils
-import com.plinkopro.wincash.BuildConfig
 import com.plinkopro.wincash.R
 import com.plinkopro.wincash.business.withdraw.PaymentName
 import com.plinkopro.wincash.business.withdraw.PaymentParams
@@ -29,7 +29,6 @@ import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isZalopayAcc
 import com.plinkopro.wincash.utils.SimpleTextWatcher
 import com.plinkopro.wincash.utils.log
 import com.plinkopro.wincash.utils.setOnSingleListener
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
 
 abstract class BaseAccountInputDialog(context: Context, private val paymentParams: PaymentParams, val preUnit:()->Unit, val nextUnit:(account: AccountBean)->Unit) : CenterPopupView(context) {
     private var textWatcherMap: MutableMap<InputBean, SimpleTextWatcher> = HashMap()
@@ -44,7 +43,7 @@ abstract class BaseAccountInputDialog(context: Context, private val paymentParam
     }
     override fun onCreate() {
         super.onCreate()
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             log("BaseAccountInputDialog", "onCreate: ${this.javaClass.simpleName}")
         }
         findViewById<View>(R.id.close_iv).setOnSingleListener {
@@ -62,7 +61,6 @@ abstract class BaseAccountInputDialog(context: Context, private val paymentParam
 
             val accountBean = getAccountBean()
             AccountManager.saveAccountsBean(paymentParams.paymentName,accountBean)
-             SdkManager.dot("save_paymethod",mapOf("cashout_method" to paymentParams.paymentName))
             nextUnit.invoke(accountBean)
             dismiss()
         }

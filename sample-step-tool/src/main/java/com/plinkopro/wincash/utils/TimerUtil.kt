@@ -2,6 +2,7 @@ package com.plinkopro.wincash.utils
 
 import android.os.Handler
 import android.os.Looper
+import app.allever.android.lib.core.app.App
 import com.plinkopro.wincash.BuildConfig
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -43,7 +44,7 @@ class TimerUtil {
             
             // 执行回调
             tickCallback?.invoke(totalElapsedTime)
-            if (BuildConfig.LOG_OUTPUT) {
+            if (App.DEBUG) {
                 LogUtil.local("TimerUtil: $totalElapsedTime")
             }
             

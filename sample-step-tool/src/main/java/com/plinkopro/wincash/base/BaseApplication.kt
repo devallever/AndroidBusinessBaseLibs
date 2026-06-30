@@ -3,15 +3,18 @@ package com.plinkopro.wincash.base
 import android.app.ActivityManager
 import android.app.Application
 import android.content.Context
+import android.content.Context.ACTIVITY_SERVICE
 import android.net.Network
 import android.os.Build
 import android.os.Looper
 import android.os.Process
 import android.webkit.WebView
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.helper.CoroutineHelper
 import com.carefree.steplib.utils.StepTracker
-import com.plinkopro.wincash.BuildConfig
 import com.plinkopro.wincash.R
 import com.plinkopro.wincash.business.withdraw.WithdrawBusiness
+import com.plinkopro.wincash.event.AdDismissEvent
 import com.plinkopro.wincash.init.FpManger
 import com.plinkopro.wincash.utils.LanguageUtils
 import com.plinkopro.wincash.utils.SpUtil
@@ -21,47 +24,42 @@ import com.plinkopro.wincash.utils.NetworkHelper
 import com.plinkopro.wincash.utils.TimerUtil
 import com.plinkopro.wincash.utils.log
 import com.tencent.mmkv.MMKV
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
 
-class BaseApplication: Application() {
+object BaseApplication {
 
-    companion object {
-        lateinit var instance: BaseApplication
-        val timer by lazy { TimerUtil() }
+    lateinit var instance: Application
+    val timer by lazy { TimerUtil() }
+
+    fun attachBaseContext(base: Context) {
+        SpUtil.init(base)
+        // 初始化语言设置
+        val context = LanguageUtils.initLanguage(base)
+        LanguageUtils.setAppLanguage(context, LanguageUtils.SYSTEM) //手动修改语言
     }
 
-    override fun attachBaseContext(base: Context) {
-        if (BuildConfig.LOG_OUTPUT) {
-            SpUtil.init(base)
-            // 初始化语言设置
-            val context = LanguageUtils.initLanguage(base)
-            LanguageUtils.setAppLanguage(context, LanguageUtils.SYSTEM) //手动修改语言
-            return super.attachBaseContext(context)
-        } else {
-            super.attachBaseContext(base)
-        }
-    }
-
-    override fun onCreate() {
-        super.onCreate()
+    fun onCreate() {
         // 为不同进程设置不同的WebView数据目录，避免多进程冲突
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val processName = getProcessName()
-            if (processName != null && processName != applicationContext.packageName) {
+            val processName = Application.getProcessName()
+            if (processName != null && processName != App.context.packageName) {
 //                log("非主进程")
                 //设置数据目录后缀：为非主进程的WebView调用WebView.setDataDirectorySuffix(processName)，将当前进程名设置为其数据目录的后缀
                 WebView.setDataDirectorySuffix(processName.replace(":", ""))
             }
         }
 
-        MMKV.initialize(this)
-        if (isMainProcess()){
-            if (BuildConfig.LOG_OUTPUT){
+        MMKV.initialize(App.context)
+        if (isMainProcess()) {
+            if (App.DEBUG) {
                 log("主进程 初始化sdk")
             }
-            instance = this
-            SpUtil.init(this)
-            InitManager.init(this)
-            registerActivityLifecycleCallbacks(AppLifecycleCallback())
+            instance = App.app
+            SpUtil.init(App.context)
+            InitManager.init(App.app)
+            App.app.registerActivityLifecycleCallbacks(AppLifecycleCallback())
             NetworkHelper.setupNetworkCallback()
             initStepLib()
             timer.setTickCallback {
@@ -69,34 +67,45 @@ class BaseApplication: Application() {
             }
             FpManger.stepConfig
         } else {
-            initStepLibConfig ()
+            initStepLibConfig()
         }
     }
 
     private fun initStepLib() {
         StepTracker.initialize(
-            this,
-            StepTracker.Config(getString(R.string.step_notification_title), getString(R.string.step_notification_message)),
-            BuildConfig.LOG_OUTPUT
+            App.app, StepTracker.Config(
+                App.context.getString(R.string.step_notification_title),
+                App.context.getString(R.string.step_notification_message)
+            ), App.DEBUG
         )
         // 启动计步服务
         StepTracker.startTrackingService()
     }
 
     private fun initStepLibConfig() {
-        StepTracker.notificationConfig =StepTracker.Config(getString(R.string.step_notification_title), getString(R.string.step_notification_message))
+        StepTracker.notificationConfig = StepTracker.Config(
+            App.context.getString(R.string.step_notification_title),
+            App.context.getString(R.string.step_notification_message)
+        )
     }
 
     private fun isMainProcess(): Boolean {
-        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val manager = App.context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
         val info = manager.runningAppProcesses.find {
             it.pid == Process.myPid()
         }
-        val isMainProcess = info?.processName == packageName
+        val isMainProcess = info?.processName == App.context.packageName
 
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             log("进程：${info?.processName} 是否主进程，$isMainProcess")
         }
         return isMainProcess
+    }
+
+    fun postAdDismissEvent(adIndex: Int) {
+        CoroutineHelper.MAIN.launch {
+            delay(0)
+            EventBus.getDefault().post(AdDismissEvent(adIndex))
+        }
     }
 }

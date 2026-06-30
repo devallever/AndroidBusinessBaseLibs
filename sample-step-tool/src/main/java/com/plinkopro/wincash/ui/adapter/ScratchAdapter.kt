@@ -97,18 +97,18 @@ class ScratchAdapter(val resetAllCallback: (aware: Int, multiple : Int) -> Unit)
 
     /** 若需要从外部“全部重置” */
     fun resetAll() {
-        mData.forEach { it.revealed = false }
+        data.forEach { it.revealed = false }
         notifyDataSetChanged()
     }
     // 判断满足刮开所有遮挡的条件
     fun judgeState() {
-        val targetItems = mData.filter { item -> item.level == 0 || item.text < 10}
+        val targetItems = data.filter { item -> item.level == 0 || item.text < 10}
         resetAllState =  targetItems.all { it.revealed }
         if (resetAllState){
-            mData.forEach { it.revealed = true }
-            setNewData(mData)
-            val aware = mData.find { it.level == 0 }?.text?:0
-            val multiple = mData.find { it.text <10 }?.text?:0
+            data.forEach { it.revealed = true }
+            setNewData(data)
+            val aware = data.find { it.level == 0 }?.text?:0
+            val multiple = data.find { it.text <10 }?.text?:0
             resetAllCallback.invoke(aware, multiple)
         }
     }

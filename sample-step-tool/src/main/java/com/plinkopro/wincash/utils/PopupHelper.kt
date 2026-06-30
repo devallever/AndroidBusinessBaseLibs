@@ -1,8 +1,6 @@
 package com.plinkopro.wincash.utils
 
 import android.content.Context
-import android.graphics.Color
-import android.view.ViewGroup
 import androidx.core.graphics.toColorInt
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BasePopupView

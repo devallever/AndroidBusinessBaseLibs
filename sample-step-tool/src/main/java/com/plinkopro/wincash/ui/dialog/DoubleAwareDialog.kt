@@ -3,17 +3,15 @@ package com.plinkopro.wincash.ui.dialog
 import android.annotation.SuppressLint
 import android.app.Activity
 import com.plinkopro.wincash.R
+import com.plinkopro.wincash.base.BaseApplication
 import com.plinkopro.wincash.base.BaseCenterPopupView
 import com.plinkopro.wincash.databinding.DialogDoubleAwardBinding
-import com.plinkopro.wincash.ui.widget.BannerNativeView
+import com.plinkopro.wincash.event.AdDismissEvent
 import com.plinkopro.wincash.utils.InterAdUtil
 import com.plinkopro.wincash.utils.ToastUtil
 import com.plinkopro.wincash.utils.formThousand
 import com.plinkopro.wincash.utils.isNetworkAvailable
 import com.plinkopro.wincash.utils.setOnSingleListener
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdDismissEvent
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -44,13 +42,12 @@ class DoubleAwareDialog(
             doubleAwareTv.text = "+${(award * multiple).formThousand()}"
 
             seeAdTv.setOnSingleListener {
-                SdkManager.dot("add_chance", mapOf<String, Any>("activity_type" to activityType))
-                AdManager.showRewardAd(mActivity, awardAdIndex)
+                BaseApplication.postAdDismissEvent(awardAdIndex)
             }
 
             getTv.setOnSingleListener {
                 if (InterAdUtil.showAd()) {
-                    AdManager.showInterAd(activity, interAdIndex)
+                    BaseApplication.postAdDismissEvent(interAdIndex)
                 } else {
                     dismissDialog(award)
                 }

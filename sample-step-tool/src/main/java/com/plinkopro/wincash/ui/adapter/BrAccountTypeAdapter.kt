@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import com.plinkopro.wincash.base.BaseBindingAdapter
 import com.plinkopro.wincash.databinding.ItemBrTypeBinding
 import com.plinkopro.wincash.utils.setOnSingleListener
@@ -44,7 +43,7 @@ class BrAccountTypeAdapter(val listener: (String) -> Unit) : BaseBindingAdapter<
                 break
             }
         }
-        setNewData(allTypes)
+        setNewData(allTypes as MutableList<String>?)
     }
 
 }

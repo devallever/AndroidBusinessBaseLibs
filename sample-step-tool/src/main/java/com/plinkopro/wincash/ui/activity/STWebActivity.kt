@@ -7,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.plinkopro.wincash.R
 import com.plinkopro.wincash.base.BaseActivity
-import com.plinkopro.wincash.databinding.ActivityWebBinding
+import com.plinkopro.wincash.databinding.StActivityWebBinding
 import com.plinkopro.wincash.ui.fragment.WebFragment
 
 private const val PARAM_URL = "param_url"
 
-class WebActivity : BaseActivity<ActivityWebBinding>() {
+class STWebActivity : BaseActivity<StActivityWebBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
@@ -26,14 +26,14 @@ class WebActivity : BaseActivity<ActivityWebBinding>() {
     override fun getBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): ActivityWebBinding {
-        return ActivityWebBinding.inflate(inflater, container, false)
+    ): StActivityWebBinding {
+        return StActivityWebBinding.inflate(inflater, container, false)
     }
 
     companion object {
         fun start(context: Context, url: String?) {
             if (url.isNullOrEmpty()) return
-            val intent = Intent(context, WebActivity::class.java).apply {
+            val intent = Intent(context, STWebActivity::class.java).apply {
                 putExtra(PARAM_URL, url)
             }
             context.startActivity(intent)

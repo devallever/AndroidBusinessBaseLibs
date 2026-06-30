@@ -10,7 +10,6 @@ import androidx.core.view.updateLayoutParams
 import com.plinkopro.wincash.base.BaseBindingAdapter
 import com.plinkopro.wincash.business.withdraw.bean.ItemBean
 import com.plinkopro.wincash.databinding.ItemInputContentBinding
-import com.plinkopro.wincash.utils.setVisible
 import kotlin.apply
 
 class ConfirmAdapter : BaseBindingAdapter<ItemBean, ItemInputContentBinding>() {

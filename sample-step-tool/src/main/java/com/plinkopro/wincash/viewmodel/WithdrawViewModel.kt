@@ -3,7 +3,7 @@ package com.plinkopro.wincash.viewmodel
 import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.plinkopro.wincash.BuildConfig
+import app.allever.android.lib.core.app.App
 import com.plinkopro.wincash.R
 import com.plinkopro.wincash.beans.CurrencyType
 import com.plinkopro.wincash.beans.ExtraKey
@@ -19,17 +19,16 @@ import com.plinkopro.wincash.utils.SpKey
 import com.plinkopro.wincash.utils.SpUtil
 import com.plinkopro.wincash.utils.formThousand
 import com.plinkopro.wincash.utils.log
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
 
 class WithdrawViewModel : ViewModel() {
     val paymentList: List<PaymentParams> by lazy { WalletManager.getPaymentParamsList(InitManager.getCountryCode()) }
     val paymentAdapter by lazy {
         PaymentAdapter {
             selectIndex = it
-            if (BuildConfig.LOG_OUTPUT)
+            if (App.DEBUG)
                 log("WithdrawViewModel", "selectIndex: $it")
         }.apply {
-            setNewData(paymentList)
+            setNewData(paymentList as MutableList<PaymentParams>?)
         }
     }
     var selectIndex = 0
@@ -59,7 +58,7 @@ class WithdrawViewModel : ViewModel() {
 
     fun initExtra(intent: Intent) {
         val currencyType = intent.getIntExtra(ExtraKey.CURRENCY_TYPE, CurrencyType.GOLD.type)
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             log("currencyType: $currencyType")
         }
         this@WithdrawViewModel.currencyType = CurrencyType.fromValue(currencyType)
@@ -135,7 +134,7 @@ class WithdrawViewModel : ViewModel() {
             level2Progress
         }
 
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             log("levelProgress: $level1Progress")
             log("levelProgress: $level2Progress")
         }
@@ -151,12 +150,6 @@ class WithdrawViewModel : ViewModel() {
         } else {
             enough.invoke()
         }
-
-        SdkManager.dot("cashout_click", mapOf<String, Any>(
-            "cashout_money" to WithdrawBusiness.getWithdrawCurrencyLabelValue(InitManager.getCountryCode(), level), //50 & 100, 每个国家的档位
-            "cashout_enough" to if (notEnoughBalance) 2 else 1, //1: enough, 2: not enough
-            "cashout_type" to if (currencyType == CurrencyType.GOLD) "coins" else "banknotes"
-        ))
     }
 
     fun hasWithdrawRecord(level: Int): Boolean {

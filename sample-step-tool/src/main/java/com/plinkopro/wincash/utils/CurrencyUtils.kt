@@ -1,8 +1,7 @@
 package com.plinkopro.wincash.utils
 
-import com.plinkopro.wincash.BuildConfig
+import app.allever.android.lib.core.app.App
 import com.plinkopro.wincash.beans.CurrencyType
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.pow
@@ -31,30 +30,13 @@ object CurrencyUtils {
                 goldNum += num
                 SpUtil.put(SpKey.CURRENCY_GOLD_NUM, goldNum)
 
-                SdkManager.userSet(
-                    mapOf<String, Any>(
-                        "coins" to goldNum
-                    )
-                )
             }
 
             CurrencyType.GREEN -> {
                 greenNum += num
                 SpUtil.put(SpKey.CURRENCY_GREEN_NUM, greenNum)
-                SdkManager.userSet(
-                    mapOf<String, Any>(
-                        "banknotes" to goldNum
-                    )
-                )
             }
         }
-
-        SdkManager.changeSuperProperties(
-            mapOf<String, Any>(
-                "coins" to goldNum,
-                "banknotes" to greenNum
-            )
-        )
     }
 
     fun computeGoldNum(): Float {
@@ -74,7 +56,7 @@ object CurrencyUtils {
 
         //保留指定小数点位数，并向上取值
         val numF = ceilToDecimalPlaces(num,ratioTriple.third)
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             LogUtil.local(
                 "计算金币规则：距离当前提现金额门槛所差金币 * 补正系数,如果保留0位小数时金币结果为0 则取1,如果保留两位小数时结果小于0.01 则取0.01 " +
                         "\n当前金币数：$goldNum,门槛金币：$menkai, 提现达标率: $rdmRate,补正系数下限：${ratioTriple.first}," +

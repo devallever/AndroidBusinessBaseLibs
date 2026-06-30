@@ -8,16 +8,17 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.plinkopro.wincash.BuildConfig
+import app.allever.android.lib.core.app.App
 import com.plinkopro.wincash.R
 import com.plinkopro.wincash.base.BaseActivity
-import com.plinkopro.wincash.beans.CurrencyType
+import com.plinkopro.wincash.base.BaseApplication
 import com.plinkopro.wincash.beans.ExtraKey
 import com.plinkopro.wincash.beans.WithdrawRecord
 import com.plinkopro.wincash.business.withdraw.WdDialogManager
 import com.plinkopro.wincash.business.withdraw.WithdrawBusiness
 import com.plinkopro.wincash.business.withdraw.account.TipsPopupHelper
-import com.plinkopro.wincash.databinding.ActivityWithdrawBinding
+import com.plinkopro.wincash.databinding.StActivityWithdrawBinding
+import com.plinkopro.wincash.event.AdDismissEvent
 import com.plinkopro.wincash.event.ChangeShowPage
 import com.plinkopro.wincash.event.ShowInterAdEvent
 import com.plinkopro.wincash.event.UpdateCurrencyEvent
@@ -41,16 +42,12 @@ import com.plinkopro.wincash.utils.log
 import com.plinkopro.wincash.utils.setOnSingleListener
 import com.plinkopro.wincash.utils.showXPopup
 import com.plinkopro.wincash.viewmodel.WithdrawViewModel
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdDismissEvent
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class WithdrawActivity : BaseActivity<ActivityWithdrawBinding>() {
+class STWithdrawActivity : BaseActivity<StActivityWithdrawBinding>() {
 
     private val mViewModel: WithdrawViewModel by viewModels()
     lateinit var wdDialogManager: WdDialogManager
@@ -60,8 +57,8 @@ class WithdrawActivity : BaseActivity<ActivityWithdrawBinding>() {
     override fun getBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): ActivityWithdrawBinding {
-        return ActivityWithdrawBinding.inflate(layoutInflater)
+    ): StActivityWithdrawBinding {
+        return StActivityWithdrawBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -156,10 +153,10 @@ class WithdrawActivity : BaseActivity<ActivityWithdrawBinding>() {
             ivBack.setOnSingleListener {
                 finish()
             }
-            if (BuildConfig.LOG_OUTPUT) {
+            if (App.DEBUG) {
                 tvBalance.setOnLongClickListener {
                     showXPopup(
-                        DebugAddBalanceDialog(mViewModel.currencyType, this@WithdrawActivity),
+                        DebugAddBalanceDialog(mViewModel.currencyType, this@STWithdrawActivity),
                         autoDismiss = true
                     )
                     return@setOnLongClickListener true
@@ -169,7 +166,7 @@ class WithdrawActivity : BaseActivity<ActivityWithdrawBinding>() {
                         return@setOnLongClickListener true
                     }
                     showXPopup(
-                        DebugSetWIthdrawRankDialog(mViewModel.level1Record!!, mViewModel.currencyType, this@WithdrawActivity),
+                        DebugSetWIthdrawRankDialog(mViewModel.level1Record!!, mViewModel.currencyType, this@STWithdrawActivity),
                         autoDismiss = true
                     )
                     true
@@ -179,7 +176,7 @@ class WithdrawActivity : BaseActivity<ActivityWithdrawBinding>() {
                         return@setOnLongClickListener true
                     }
                     showXPopup(
-                        DebugSetWIthdrawRankDialog(mViewModel.level2Record!!, mViewModel.currencyType, this@WithdrawActivity),
+                        DebugSetWIthdrawRankDialog(mViewModel.level2Record!!, mViewModel.currencyType, this@STWithdrawActivity),
                         autoDismiss = true
                     )
                     true
@@ -198,7 +195,7 @@ class WithdrawActivity : BaseActivity<ActivityWithdrawBinding>() {
             }
 
             tvRecord.setOnSingleListener {
-                goTo<WithdrawRecordActivity>(this@WithdrawActivity) {
+                goTo<WithdrawRecordActivity>(this@STWithdrawActivity) {
                     putExtra(ExtraKey.CURRENCY_TYPE, mViewModel.currencyType.type)
                 }
             }
@@ -215,10 +212,10 @@ class WithdrawActivity : BaseActivity<ActivityWithdrawBinding>() {
                 handleExpedite(WithdrawBusiness.WITHDRAW_LEVEL_2)
             }
             ivTips1.setOnSingleListener {
-                showXPopup(WithdrawWaitingDialog(this@WithdrawActivity))
+                showXPopup(WithdrawWaitingDialog(this@STWithdrawActivity))
             }
             ivTips2.setOnSingleListener {
-                showXPopup(WithdrawWaitingDialog(this@WithdrawActivity))
+                showXPopup(WithdrawWaitingDialog(this@STWithdrawActivity))
             }
         }
 
@@ -244,7 +241,7 @@ class WithdrawActivity : BaseActivity<ActivityWithdrawBinding>() {
 
     private fun handleExpedite(level: Int) {
         mViewModel.clickRecordLevel = level
-        AdManager.showRewardAd(this, AdIndex.WITHDRAW_ACCELERATE_INDEX)
+        BaseApplication.postAdDismissEvent(AdIndex.WITHDRAW_ACCELERATE_INDEX)
     }
 
 
@@ -319,7 +316,7 @@ class WithdrawActivity : BaseActivity<ActivityWithdrawBinding>() {
         mSelectLevel = level
 
         mViewModel.handleCashOut(level, notEnough = {
-            showXPopup(WithdrawNotSufficientDialog(this@WithdrawActivity))
+            showXPopup(WithdrawNotSufficientDialog(this@STWithdrawActivity))
         }, enough = {
             wdDialogManager.show(this, WithdrawBusiness.getWithdrawCurrencyLabelValue(InitManager.getCountryCode(), level).toFloat(), mViewModel.selectPayment())
         })
@@ -368,12 +365,7 @@ class WithdrawActivity : BaseActivity<ActivityWithdrawBinding>() {
     }
 
     private fun logShowWithdrawEvent() {
-        val type = if (mViewModel.currencyType == CurrencyType.GOLD) {
-            "coins"
-        } else {
-            "banknotes"
-        }
-        SdkManager.dot("cashout_show", mapOf<String, Any>("cashout_type" to type))
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -385,7 +377,7 @@ class WithdrawActivity : BaseActivity<ActivityWithdrawBinding>() {
     fun showInterAdEvent(event: ShowInterAdEvent) {
         binding.root.postDelayed({
             if (InterAdUtil.showAd()) {
-                AdManager.showInterAd(this, AdIndex.ADMOB_INTER_INDEX)
+                BaseApplication.postAdDismissEvent(AdIndex.ADMOB_INTER_INDEX)
             }
         }, 500)
     }
@@ -412,7 +404,7 @@ class WithdrawActivity : BaseActivity<ActivityWithdrawBinding>() {
      * @param visible 键盘是否可见
      */
     private fun onKeyboardVisibilityChanged(visible: Boolean) {
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             log("WithdrawActivity", "键盘状态变化: ${if (visible) "显示" else "隐藏"}")
         }
         TipsPopupHelper.dismiss()

@@ -6,11 +6,10 @@ import android.content.Intent
 import androidx.core.net.toUri
 import com.lxj.xpopup.core.CenterPopupView
 import com.lxj.xpopup.util.XPopupUtils
-import com.plinkopro.wincash.BuildConfig
 import com.plinkopro.wincash.R
 import com.plinkopro.wincash.databinding.DialogSettingsBinding
 import com.plinkopro.wincash.init.Constance
-import com.plinkopro.wincash.ui.activity.WebActivity
+import com.plinkopro.wincash.ui.activity.STWebActivity
 import com.plinkopro.wincash.utils.MusicUtil
 import com.plinkopro.wincash.utils.SoundUtil
 import com.plinkopro.wincash.utils.SpKey
@@ -42,7 +41,7 @@ class SettingsDialog(context: Context, var onDismissCallback: (() -> Unit)? = nu
 
 
     private fun initView() {
-        binding.tvVersion.text = "v${BuildConfig.VERSION_NAME}"
+        binding.tvVersion.text = "v${1.0}"
         binding.tvEmail.text =
             String.format(context.getString(R.string.txt_service_email), Constance.EMAIL)
         binding.cbMusic.isChecked = SpUtil.get(SpKey.IS_MUSIC_OPEN, true)
@@ -63,7 +62,7 @@ class SettingsDialog(context: Context, var onDismissCallback: (() -> Unit)? = nu
         }
 
         binding.tvPolicy.setOnSingleListener {
-            WebActivity.start(context, Constance.PRIVACY_URL)
+            STWebActivity.start(context, Constance.PRIVACY_URL)
         }
 
         binding.cbMusic.setOnCheckedChangeListener { _, isChecked ->

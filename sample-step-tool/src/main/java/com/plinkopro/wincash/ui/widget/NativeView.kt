@@ -14,13 +14,12 @@ import com.plinkopro.wincash.R
 import com.plinkopro.wincash.databinding.ViewBannerNativeBinding
 import com.plinkopro.wincash.databinding.ViewNativeBinding
 import com.plinkopro.wincash.init.Constance
-import com.plinkopro.wincash.ui.activity.WebActivity
+import com.plinkopro.wincash.ui.activity.STWebActivity
 import com.plinkopro.wincash.utils.BannerNativeUtil
 import com.plinkopro.wincash.utils.gone
 import com.plinkopro.wincash.utils.setOnSingleListener
 import com.plinkopro.wincash.utils.setVisible
 import com.plinkopro.wincash.utils.visible
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
 
 class NativeView @JvmOverloads constructor(
     context: Context,
@@ -63,7 +62,7 @@ class NativeView @JvmOverloads constructor(
                 showNativeIcon(index)
                 startAnimation(nativeBtList[index])
                 iconCl.setOnSingleListener {
-                    WebActivity.start(context, Constance.OKSPIN_URL)
+                    STWebActivity.start(context, Constance.OKSPIN_URL)
                     BannerNativeUtil.addNativeClickSize()
                     initView(activity)
                 }
@@ -72,12 +71,12 @@ class NativeView @JvmOverloads constructor(
                 bannerFl.visible()
                 stopAnimation()
                 binding.root.postDelayed({
-                    val isLoad = AdManager.showNative(activity, bannerFl, R.mipmap.ic_launcher) {
-                        initView(activity)
-                    }
-                    if (!isLoad) {
-                        AdManager.loadNative(activity)
-                    }
+//                    val isLoad = AdManager.showNative(activity, bannerFl, R.mipmap.ic_launcher) {
+//                        initView(activity)
+//                    }
+//                    if (!isLoad) {
+//                        AdManager.loadNative(activity)
+//                    }
                 }
                 ,1000
                 )
@@ -120,7 +119,7 @@ class NativeView @JvmOverloads constructor(
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         stopAnimation()
-        AdManager.destroyNative()
+//        AdManager.destroyNative()
     }
 
 }

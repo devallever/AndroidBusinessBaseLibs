@@ -20,7 +20,7 @@ class PaymentAdapter(val selectUpdateListener : (Int) -> Unit): BaseBindingAdapt
 
     override fun convert(
         helper: BaseBindViewHolder<RvWalletBinding>,
-        item: PaymentParams?
+        item: PaymentParams
     ) {
 
         val binding = helper.binding

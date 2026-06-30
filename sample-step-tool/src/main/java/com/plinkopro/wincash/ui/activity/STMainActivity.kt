@@ -10,14 +10,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import app.allever.android.lib.core.app.App
 import com.carefree.steplib.utils.StepTracker
 import com.google.android.material.tabs.TabLayout.Tab
-import com.plinkopro.wincash.BuildConfig
 import com.plinkopro.wincash.R
 import com.plinkopro.wincash.base.BaseActivity
 import com.plinkopro.wincash.base.BaseApplication
 import com.plinkopro.wincash.business.step.StepBusiness
-import com.plinkopro.wincash.databinding.ActivityMainBinding
+import com.plinkopro.wincash.databinding.StActivityMainBinding
 import com.plinkopro.wincash.databinding.MainTabViewBinding
 import com.plinkopro.wincash.event.ChangeShowPage
 import com.plinkopro.wincash.event.RequestPermissionEvent
@@ -35,13 +35,11 @@ import com.plinkopro.wincash.utils.SoundRawId
 import com.plinkopro.wincash.utils.SoundUtil
 import com.plinkopro.wincash.utils.dp2px
 import com.plinkopro.wincash.utils.setVisible
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class MainActivity : BaseActivity<ActivityMainBinding>() {
+class STMainActivity : BaseActivity<StActivityMainBinding>() {
 
     companion object {
         const val TAB_HOME = 2
@@ -83,8 +81,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun getBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): ActivityMainBinding {
-        return ActivityMainBinding.inflate(inflater, container, false)
+    ): StActivityMainBinding {
+        return StActivityMainBinding.inflate(inflater, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -131,7 +129,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 currentTabIndex = pos
 
                 SoundUtil.play(SoundRawId.CLICK.id)
-                if (BuildConfig.LOG_OUTPUT) Log.d("tab", "tab position : $currentTabIndex")
+                if (App.DEBUG) Log.d("tab", "tab position : $currentTabIndex")
 
                 updateAllTabs(pos, animate = false)
                 showFragment(tabs[pos].fragmentTag)
@@ -273,7 +271,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun logBottomMenuClickEvent(index: Int  ) {
         if (!isChangeEvent) {
             currentFragment ?: return
-            SdkManager.dot("menu_click", mapOf("menu_name" to tabs[index].title))
         }else{
             isChangeEvent = false
         }
@@ -290,7 +287,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (event.position == 2) {
                 binding.root.postDelayed({
                     if (InterAdUtil.showAd()) {
-                        AdManager.showInterAd(this, AdIndex.ADMOB_INTER_INDEX)
+                        BaseApplication.postAdDismissEvent(AdIndex.ADMOB_INTER_INDEX)
                     }
                 }, 500)
             }

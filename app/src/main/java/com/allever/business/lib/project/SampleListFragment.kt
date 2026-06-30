@@ -47,12 +47,16 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextDetailClickItem("网赚-ChargeReward", "sample-chargereward") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CHARGE_REWARD).navigation()
         },
+        TextDetailClickItem("网赚-记录步数", "sample-step-tool") {
+            ARouter.getInstance().build(RouterPath.PATH_STEP_TOOL).navigation()
+        },
         TextDetailClickItem("多进程通信-IPC", "sample-ipc") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_IPC).navigation()
         },
         TextDetailClickItem("网络测速", "sample-net-speed-test") {
             ARouter.getInstance().build(RouterPath.PATH_SMAPLE_NET_SPEED_TEST).navigation()
         },
+
 
     )
 }

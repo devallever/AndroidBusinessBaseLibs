@@ -1,5 +1,6 @@
 package com.allever.business.lib.project
 
+import android.content.Context
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.helper.CoroutineHelper
 import app.allever.android.lib.core.helper.ProcessHelper
@@ -7,6 +8,7 @@ import app.flash.tunnel.vpn.TunnelApp
 import com.alibaba.android.arouter.launcher.ARouter
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.ShadowsSocksConfig
+import com.plinkopro.wincash.base.BaseApplication
 import kotlinx.coroutines.launch
 
 class MyApp: App() {
@@ -14,7 +16,14 @@ class MyApp: App() {
     override fun onCreate() {
         super.onCreate()
         TunnelApp.onCreate()
+        BaseApplication.onCreate()
     }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        base?.let { BaseApplication.attachBaseContext(it) }
+    }
+
     override fun init() {
         ProcessHelper.executeOnMain(this) {
             CoroutineHelper.IO.launch {

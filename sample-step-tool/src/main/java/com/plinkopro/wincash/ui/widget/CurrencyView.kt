@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.widget.EditText
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.addListener
+import app.allever.android.lib.core.app.App
 import com.plinkopro.wincash.BuildConfig
 import com.plinkopro.wincash.beans.CurrencyType
 import com.plinkopro.wincash.databinding.ViewCurrencyBinding
@@ -39,7 +40,7 @@ class CurrencyView @JvmOverloads constructor(context: Context, attributeSet: Att
         binding.tvBanknote.setOnSingleListener {
             onCoinClickCallback?.invoke(CurrencyType.GREEN.type)
         }
-        if(BuildConfig.LOG_OUTPUT){
+        if(App.DEBUG){
             binding.flGold.setOnLongClickListener { view ->
                 handleGoldDebug(CurrencyType.GOLD)
                 false
@@ -52,7 +53,7 @@ class CurrencyView @JvmOverloads constructor(context: Context, attributeSet: Att
     }
 
     private fun handleGoldDebug(currencyType: CurrencyType) {
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             val editText = EditText(context)
             editText.setTextColor(Color.BLACK)
             editText.hint = "Input count"

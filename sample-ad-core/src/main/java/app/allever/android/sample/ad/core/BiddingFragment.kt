@@ -7,7 +7,6 @@ import app.allever.android.lib.ad.core.AdCore.LoadMode
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.provider.admob.AdMobAdProvider
-import app.allever.android.lib.ad.provider.applovin.AppLovinAdProvider
 import app.allever.android.lib.ad.provider.bigo.BigoAdProvider
 import app.allever.android.lib.ad.provider.pangle.PangleAdProvider
 import app.allever.android.lib.common.BaseFragment
@@ -98,13 +97,13 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
         )
         appendStatus("✓ [2] BIGO - Bidding: ✅ ON")
         appendStatus("    Simulated price range: $1.00 - $5.00")
-        AdCore.registerProvider(
-            providerType = AppLovinAdProvider.PROVIDER_NAME,
-            providerClass = AppLovinAdProvider::class.java,
-            config = ProviderConfigConstants.APPLOVIN
-        )
-        appendStatus("✓ [3] APPLOVIN - Bidding: ✅ ON")
-        appendStatus("    Simulated price range: $1.00 - $5.00")
+//        AdCore.registerProvider(
+//            providerType = AppLovinAdProvider.PROVIDER_NAME,
+//            providerClass = AppLovinAdProvider::class.java,
+//            config = ProviderConfigConstants.APPLOVIN
+//        )
+//        appendStatus("✓ [3] APPLOVIN - Bidding: ✅ ON")
+//        appendStatus("    Simulated price range: $1.00 - $5.00")
 
         appendStatus("")
         appendStatus("=".repeat(60))
@@ -134,15 +133,15 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             }
         }
 
-        AdCore.init(context, AppLovinAdProvider.PROVIDER_NAME) {
-            runOnUiThread {
-                appendStatus("✓ APPLOVIN initialized & in pool")
-
-                appendStatus("")
-                appendStatus("All providers ready! Set mode to BIDDING.")
-                updateCurrentModeDisplay()
-            }
-        }
+//        AdCore.init(context, AppLovinAdProvider.PROVIDER_NAME) {
+//            runOnUiThread {
+//                appendStatus("✓ APPLOVIN initialized & in pool")
+//
+//                appendStatus("")
+//                appendStatus("All providers ready! Set mode to BIDDING.")
+//                updateCurrentModeDisplay()
+//            }
+//        }
     }
 
     private fun setMode(mode: LoadMode) {

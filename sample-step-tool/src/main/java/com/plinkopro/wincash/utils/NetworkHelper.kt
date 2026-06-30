@@ -7,7 +7,7 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Build
-import com.plinkopro.wincash.BuildConfig
+import app.allever.android.lib.core.app.App
 import com.plinkopro.wincash.base.BaseApplication
 import com.plinkopro.wincash.event.NetworkChangeEvent
 import org.greenrobot.eventbus.EventBus
@@ -30,7 +30,7 @@ object NetworkHelper {
                 }
                 isNetworkAvailable = true
                 // 网络可用
-                if (BuildConfig.LOG_OUTPUT) {
+                if (App.DEBUG) {
                     log("网络可用")
                 }
             }
@@ -42,7 +42,7 @@ object NetworkHelper {
                 }
                 isNetworkAvailable = false
                 // 网络丢失
-                if (BuildConfig.LOG_OUTPUT) {
+                if (App.DEBUG) {
                     log("网络丢失")
                 }
             }

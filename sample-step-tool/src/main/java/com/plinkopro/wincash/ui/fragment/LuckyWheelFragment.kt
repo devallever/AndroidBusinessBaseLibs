@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.plinkopro.wincash.BuildConfig
+import app.allever.android.lib.core.app.App
 import com.plinkopro.wincash.R
 import com.plinkopro.wincash.base.BaseFragment
 import com.plinkopro.wincash.beans.CurrencyType
@@ -22,7 +22,6 @@ import com.plinkopro.wincash.utils.PopupHelper
 import com.plinkopro.wincash.utils.SpKey
 import com.plinkopro.wincash.utils.SpUtil
 import com.plinkopro.wincash.utils.setOnSingleListener
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
 import org.greenrobot.eventbus.EventBus
 import kotlin.random.Random
 
@@ -62,7 +61,7 @@ class LuckyWheelFragment : BaseFragment<FragmentLuckyWheelBinding>() {
                 } else {
                     showAwardView(award)
                 }
-                if (BuildConfig.LOG_OUTPUT){
+                if (App.DEBUG){
                     LogUtil.local("抽奖结果奖励：$award 是否翻倍：$showDouble")
                 }
             }
@@ -112,24 +111,20 @@ class LuckyWheelFragment : BaseFragment<FragmentLuckyWheelBinding>() {
 
     override fun onPause() {
         super.onPause()
-        AdManager.bannerPause();
     }
 
     override fun onResume() {
         super.onResume()
-        AdManager.bannerResume();
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (!hidden) {
             initBanner()
-            AdManager.bannerResume();
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        AdManager.destroyBanner();
     }
 }

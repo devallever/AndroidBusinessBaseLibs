@@ -9,7 +9,7 @@ import android.os.Build
 import android.util.Log
 import android.webkit.JavascriptInterface
 import androidx.core.net.toUri
-import com.plinkopro.wincash.BuildConfig
+import app.allever.android.lib.core.app.App
 
 /**
  * @classDes:
@@ -36,7 +36,7 @@ class WebJsOK(val context: Context, val call:((String)->Unit) = {}) {
             }
         } catch (e: Exception) {
             e.printStackTrace() // 可选：记录日志
-            if (BuildConfig.LOG_OUTPUT){
+            if (App.DEBUG){
                 Log.d("OKSPIN_LOG","广告回调 openBrowser intent failed")
             }
             call.invoke("0")
@@ -46,7 +46,7 @@ class WebJsOK(val context: Context, val call:((String)->Unit) = {}) {
         try {
             context.startActivity(intent)
         } catch (e: Exception) {
-            if (BuildConfig.LOG_OUTPUT){
+            if (App.DEBUG){
                 Log.d("OKSPIN_LOG","广告回调 openBrowser startActivity failed")
             }
             call.invoke("0")
@@ -56,7 +56,7 @@ class WebJsOK(val context: Context, val call:((String)->Unit) = {}) {
 
     @JavascriptInterface
     fun close() {
-        if (BuildConfig.LOG_OUTPUT){
+        if (App.DEBUG){
             Log.d("OKSPIN_LOG","广告回调 close")
         }
         call.invoke("1")

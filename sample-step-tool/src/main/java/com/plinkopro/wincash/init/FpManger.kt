@@ -1,8 +1,8 @@
 package com.plinkopro.wincash.init
 
 import android.content.Context
+import app.allever.android.lib.core.app.App
 import com.google.gson.Gson
-import com.plinkopro.wincash.BuildConfig
 import com.plinkopro.wincash.base.BaseApplication
 import com.plinkopro.wincash.beans.StepConfig
 import com.plinkopro.wincash.business.withdraw.WithdrawBusiness
@@ -30,26 +30,26 @@ object FpManger {
         var settingJson = SpUtil.get(SpKey.STEP_SETTING, "")
         if (settingJson.isEmpty()) {
             settingJson = readJsonFile(BaseApplication.instance, "LocalStepConfig.json")!!
-            if (BuildConfig.LOG_OUTPUT) {
+            if (App.DEBUG) {
                 LogUtil.fp("getStepSetting 没缓存，从本地读取 = $settingJson")
             }
         } else {
-            if (BuildConfig.LOG_OUTPUT) {
+            if (App.DEBUG) {
                 LogUtil.fp("getStepSetting 缓存 = $settingJson")
             }
         }
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             LogUtil.fp("getStepSetting = $settingJson")
         }
         return settingJson
     }
 
     fun saveStepSetting(settingJson: String) {
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             LogUtil.fp("saveStepSetting = $settingJson")
         }
         if (settingJson.isStrictEmptyJsonObject()) {
-            if (BuildConfig.LOG_OUTPUT) {
+            if (App.DEBUG) {
                 LogUtil.fp("saveStepSetting 空，不保存")
             }
             return
@@ -58,7 +58,7 @@ object FpManger {
             if (it) {
                 initFromRemote = true
                 SpUtil.put(SpKey.STEP_SETTING, settingJson)
-                if (BuildConfig.LOG_OUTPUT) {
+                if (App.DEBUG) {
                     LogUtil.fp("saveStepSetting 保存成功 $settingJson")
                 }
             }
@@ -73,7 +73,7 @@ object FpManger {
             stepConfig = gson.fromJson(config, StepConfig::class.java)
             WithdrawBusiness.updateConfig()
 
-            if (BuildConfig.LOG_OUTPUT){
+            if (App.DEBUG){
                 LogUtil.fp("chargeConfig = $stepConfig")
             }
             finish.invoke(true)

@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
- 
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
+
 abstract class BaseBindingAdapter<T, VB : ViewBinding>(data: MutableList<T>? = null) :
     BaseQuickAdapter<T, BaseBindingAdapter.BaseBindViewHolder<VB>>(0, data) {
  

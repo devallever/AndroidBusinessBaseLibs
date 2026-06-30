@@ -15,7 +15,6 @@ import com.plinkopro.wincash.utils.SpKey
 import com.plinkopro.wincash.utils.SpUtil
 import com.plinkopro.wincash.utils.TimeUtil.isSameDay
 import com.plinkopro.wincash.utils.setOnSingleListener
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -165,9 +164,6 @@ class LuckyWheelView @JvmOverloads constructor(
             noChances?.invoke()
             return
         }
-
-        SdkManager.dot("wheel_click")
-
         chances--
 
         state = State.SPINNING

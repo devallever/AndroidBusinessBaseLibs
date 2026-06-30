@@ -7,7 +7,6 @@ import app.allever.android.lib.ad.core.AdCore.LoadMode
 import app.allever.android.lib.ad.core.callback.IAdCallback
 import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.provider.admob.AdMobAdProvider
-import app.allever.android.lib.ad.provider.applovin.AppLovinAdProvider
 import app.allever.android.lib.ad.provider.bigo.BigoAdProvider
 import app.allever.android.lib.ad.provider.pangle.PangleAdProvider
 import app.allever.android.lib.common.BaseFragment
@@ -62,11 +61,11 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
             providerClass = BigoAdProvider::class.java,
             config = ProviderConfigConstants.BIGO
         )
-        AdCore.registerProvider(
-            providerType = AppLovinAdProvider.PROVIDER_NAME,
-            providerClass = AppLovinAdProvider::class.java,
-            config = ProviderConfigConstants.APPLOVIN
-        )
+//        AdCore.registerProvider(
+//            providerType = AppLovinAdProvider.PROVIDER_NAME,
+//            providerClass = AppLovinAdProvider::class.java,
+//            config = ProviderConfigConstants.APPLOVIN
+//        )
 
         appendStatus("✓ Registered 3 providers:")
         appendStatus("  [0] ADMOB - Waterfall: ON (Priority 1)")
@@ -100,14 +99,14 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
             }
         }
 
-        AdCore.init(context, AppLovinAdProvider.PROVIDER_NAME) {
-            runOnUiThread {
-                appendStatus("✓ Applovin initialized & in pool")
-                appendStatus("")
-                appendStatus("All providers ready! Now select load mode.")
-                updateCurrentModeDisplay()
-            }
-        }
+//        AdCore.init(context, AppLovinAdProvider.PROVIDER_NAME) {
+//            runOnUiThread {
+//                appendStatus("✓ Applovin initialized & in pool")
+//                appendStatus("")
+//                appendStatus("All providers ready! Now select load mode.")
+//                updateCurrentModeDisplay()
+//            }
+//        }
     }
 
     private fun setMode(mode: LoadMode) {

@@ -13,29 +13,26 @@ import com.plinkopro.wincash.R
 import com.plinkopro.wincash.base.BaseActivity
 import com.plinkopro.wincash.beans.WithdrawRecord
 import com.plinkopro.wincash.business.withdraw.WithdrawBusiness
-import com.plinkopro.wincash.databinding.ActivityWithdrawRecordBinding
+import com.plinkopro.wincash.databinding.StActivityWithdrawRecordBinding
 import com.plinkopro.wincash.event.NetworkChangeEvent
 import com.plinkopro.wincash.event.ShowInterAdEvent
-import com.plinkopro.wincash.init.AdIndex
-import com.plinkopro.wincash.utils.InterAdUtil
 import com.plinkopro.wincash.utils.isNetworkAvailable
 import com.plinkopro.wincash.utils.setOnSingleListener
 import com.plinkopro.wincash.viewmodel.WithdrawRecordViewModel
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class WithdrawRecordActivity : BaseActivity<ActivityWithdrawRecordBinding>() {
+class WithdrawRecordActivity : BaseActivity<StActivityWithdrawRecordBinding>() {
     //viewModel
     private val mViewModel by viewModels<WithdrawRecordViewModel>()
     override fun getBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): ActivityWithdrawRecordBinding {
-        return ActivityWithdrawRecordBinding.inflate(inflater, container, false)
+    ): StActivityWithdrawRecordBinding {
+        return StActivityWithdrawRecordBinding.inflate(inflater, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,7 +77,6 @@ class WithdrawRecordActivity : BaseActivity<ActivityWithdrawRecordBinding>() {
             if (isPlayAnim) {
                 return@setOnSingleListener
             }
-            SdkManager.dot("network_error_retry")
             mRefreshAnimator.start()
             isPlayAnim = true
             lifecycleScope.launch {
@@ -124,9 +120,6 @@ class WithdrawRecordActivity : BaseActivity<ActivityWithdrawRecordBinding>() {
     fun onReceiveNetworkChangeEvent(event: NetworkChangeEvent) {
         binding.rvWithdrawRecord.isVisible = event.isConnected
         binding.networkErrorLayout.isVisible = !event.isConnected
-        if (!event.isConnected) {
-            SdkManager.dot("network_error")
-        }
     }
 
 }

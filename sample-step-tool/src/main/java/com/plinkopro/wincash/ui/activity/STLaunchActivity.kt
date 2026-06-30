@@ -7,37 +7,33 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.animation.doOnEnd
 import com.carefree.steplib.utils.StepTracker
-import com.plinkopro.wincash.BuildConfig
 import com.plinkopro.wincash.base.BaseActivity
-import com.plinkopro.wincash.databinding.ActivityLaunchBinding
 import com.plinkopro.wincash.event.GoMainEvent
 import com.plinkopro.wincash.init.AdIndex
 import com.plinkopro.wincash.utils.InterAdUtil
-import com.plinkopro.wincash.utils.LogUtil
 import com.plinkopro.wincash.business.step.StepBusiness
 import com.plinkopro.wincash.utils.MusicUtil
 import com.plinkopro.wincash.utils.SoundUtil
 import com.plinkopro.wincash.business.withdraw.WithdrawBusiness
+import com.plinkopro.wincash.databinding.StActivityLaunchBinding
+import com.plinkopro.wincash.event.AdDismissEvent
+import com.plinkopro.wincash.event.AdShowFailedEvent
 import com.plinkopro.wincash.utils.CurrencyUtils
 import com.plinkopro.wincash.utils.SpKey
 import com.plinkopro.wincash.utils.SpUtil
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdDismissEvent
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdShowFailedEvent
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 @SuppressLint("CustomSplashScreen")
-class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
+class STLaunchActivity : BaseActivity<StActivityLaunchBinding>() {
     private val animator = ValueAnimator.ofInt(5, 100)
     var toMain = true
 
     override fun getBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): ActivityLaunchBinding {
-        return ActivityLaunchBinding.inflate(inflater)
+    ): StActivityLaunchBinding {
+        return StActivityLaunchBinding.inflate(inflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +62,7 @@ class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
     fun goMain() {
         if (toMain) {
             toMain = false
-            goTo<MainActivity>(this)
+            goTo<STMainActivity>(this)
             finish()
         }
     }
@@ -93,7 +89,6 @@ class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
     private fun startProcessAnimation() {
         val isFirstLaunchApp = SpUtil.get(SpKey.IS_FIRST_LAUNCH_APP, true)
 
-        SdkManager.dot("app_main_show", mapOf("is_first" to isFirstLaunchApp))
         InterAdUtil.isNewUser = isFirstLaunchApp
 
         if (isFirstLaunchApp) {
@@ -111,20 +106,7 @@ class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
 
         animator.doOnEnd {
             animator.removeAllUpdateListeners()
-            if (isFirstLaunchApp) {
-                preGoMain()
-            } else {
-                //获取开屏广告缓存
-                val isShowSuccess = AdManager.isCanShowAdmobOpenAd()
-                if (isShowSuccess) {
-                    AdManager.showAdMobOpenAd(this, AdIndex.ADMOB_SPLASH_INDEX)
-                } else {
-                    preGoMain()
-                }
-                if (BuildConfig.LOG_OUTPUT) {
-                    LogUtil.ad("获取开屏广告缓存 state : $isShowSuccess")
-                }
-            }
+            preGoMain()
         }
         animator.start()
     }

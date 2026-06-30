@@ -1,8 +1,8 @@
 package com.plinkopro.wincash.business.withdraw
 
 import androidx.lifecycle.MutableLiveData
+import app.allever.android.lib.core.app.App
 
-import com.plinkopro.wincash.BuildConfig
 import com.plinkopro.wincash.beans.CountryConfig
 import com.plinkopro.wincash.beans.CurrencyType
 import com.plinkopro.wincash.beans.LocalWithdrawRecord
@@ -40,7 +40,7 @@ object WithdrawBusiness {
             countryConfigMap[countryConfig.countryCode] = countryConfig
         }
 
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             log("WithdrawBusiness", "获取国家配置列表：${countryConfigMap.toJson()}")
         }
     }
@@ -57,12 +57,12 @@ object WithdrawBusiness {
             }
         } catch (e: Exception) {
             // 如果遇到任何异常，记录日志并返回空列表
-            if (BuildConfig.LOG_OUTPUT) {
+            if (App.DEBUG) {
                 log("WithdrawBusiness", "反序列化提现记录失败: ${e.message}")
             }
             mutableListOf()
         }
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             log("WithdrawBusiness", "获取提现记录列表：$gson")
         }
     }
@@ -141,14 +141,14 @@ object WithdrawBusiness {
         }
 
         val nextRank = currentRank - reduceCount
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             log(
                 "WithdrawBusiness",
                 "当前排队人数：$currentRank，应减少人数：$reduceCount，下一级排队人数：$nextRank"
             )
         }
         if (reduceCount == 0 || nextRank == queueEndPoint) {
-            if (BuildConfig.LOG_OUTPUT) {
+            if (App.DEBUG) {
                 log(
                     "WithdrawBusiness",
                     "到达终点：$nextRank"
@@ -217,7 +217,7 @@ object WithdrawBusiness {
             }
 
             if (updated) {
-                if (BuildConfig.LOG_OUTPUT) {
+                if (App.DEBUG) {
                     log("加速排名, 当前：${newCount}")
                 }
                 saveRecordList()
@@ -253,13 +253,13 @@ object WithdrawBusiness {
                     SpUtil.put(SpKey.WITHDRAW_RECORD_LIST, updateJson)
                 }
                 _recordListLiveData.postValue(it)
-                if (BuildConfig.LOG_OUTPUT) {
+                if (App.DEBUG) {
                     log("WithdrawBusiness", "更新提现排名记录：${updateJson}")
                 }
             }
         } catch (e: Exception) {
             // 捕获所有异常，确保不会崩溃
-            if (BuildConfig.LOG_OUTPUT) {
+            if (App.DEBUG) {
                 log("WithdrawBusiness", "保存记录列表失败: ${e.message}")
             }
         }
@@ -280,7 +280,7 @@ object WithdrawBusiness {
                 }
             } catch (e: Exception) {
                 // 捕获所有异常，确保不会崩溃
-                if (BuildConfig.LOG_OUTPUT) {
+                if (App.DEBUG) {
                     log("WithdrawBusiness", "保存提现记录失败: ${e.message}")
                 }
                 finish.invoke()

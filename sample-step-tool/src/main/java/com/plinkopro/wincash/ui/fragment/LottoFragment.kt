@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
-import com.plinkopro.wincash.BuildConfig
+import app.allever.android.lib.core.app.App
 import com.plinkopro.wincash.R
 import com.plinkopro.wincash.base.BaseFragment
 import com.plinkopro.wincash.beans.CurrencyType
@@ -32,8 +32,6 @@ import com.plinkopro.wincash.utils.gone
 import com.plinkopro.wincash.utils.setOnSingleListener
 import com.plinkopro.wincash.utils.setVisible
 import com.plinkopro.wincash.utils.visible
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
 import org.greenrobot.eventbus.EventBus
 import kotlin.random.Random
 
@@ -61,7 +59,6 @@ class LottoFragment : BaseFragment<FragmentLottoBinding>() {
         }
 
         adapter = ScratchAdapter { award, multiple ->
-            SdkManager.dot("scratch_click")
             val aware = award * multiple
             val showDouble = Random.nextBoolean()
             if (showDouble) { //显示翻倍dialog
@@ -79,7 +76,7 @@ class LottoFragment : BaseFragment<FragmentLottoBinding>() {
                             binding.currencyView.context, binding.currencyView, binding.root,
                             CurrencyType.GREEN, aware.toFloat()
                         )
-                        adapter.setNewData(buildData())
+                        adapter.setNewData(buildData() as MutableList<ScratchItem>?)
                         binding.apply {
                             upToFl.visible()
                             youWinFl.gone()
@@ -89,7 +86,7 @@ class LottoFragment : BaseFragment<FragmentLottoBinding>() {
             } else {
                 showAwardView(aware)
             }
-            if (BuildConfig.LOG_OUTPUT){
+            if (App.DEBUG){
                 LogUtil.local("刮奖结果奖励：$award 是否翻倍：$showDouble")
             }
             binding.apply {
@@ -100,7 +97,7 @@ class LottoFragment : BaseFragment<FragmentLottoBinding>() {
             SpUtil.put(SpKey.LOTTO_CHANCES, chances-1)
             updateLottoChancesFL()
         }.apply {
-            setNewData(buildData())
+            setNewData(buildData() as MutableList<ScratchItem>?)
         }
 
         binding.backImg.setOnSingleListener {
@@ -132,7 +129,7 @@ class LottoFragment : BaseFragment<FragmentLottoBinding>() {
                     binding.currencyView.context, binding.currencyView, binding.root,
                     CurrencyType.GREEN, aware.toFloat()
                 )
-                adapter.setNewData(buildData())
+                adapter.setNewData(buildData() as MutableList<ScratchItem>?)
                 binding.apply {
                     upToFl.visible()
                     youWinFl.gone()
@@ -197,25 +194,21 @@ class LottoFragment : BaseFragment<FragmentLottoBinding>() {
 
     override fun onPause() {
         super.onPause()
-        AdManager.bannerPause()
     }
 
     override fun onResume() {
         super.onResume()
-        AdManager.bannerResume()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (!hidden) {
             initBanner()
-            AdManager.bannerResume()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        AdManager.destroyBanner()
         // 防止内存泄漏，移除监听器
         crossItemScratchListener?.let { binding.rv.removeOnItemTouchListener(it) }
         crossItemScratchListener = null

@@ -5,14 +5,8 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.plinkopro.wincash.BuildConfig
 import com.plinkopro.wincash.R
-import com.plinkopro.wincash.base.BaseApplication
-import com.plinkopro.wincash.business.withdraw.api.WdRecordApi
-import com.plinkopro.wincash.business.withdraw.bean.WdRecordsResult
-import com.plinkopro.wincash.utils.LogUtil
 import com.plinkopro.wincash.utils.SpKey
-import com.plinkopro.wincash.utils.SpKey.WITHDRAW_RECORD
 import com.plinkopro.wincash.utils.SpUtil
 
 object WdUtil {

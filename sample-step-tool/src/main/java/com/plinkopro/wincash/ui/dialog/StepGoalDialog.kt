@@ -3,7 +3,6 @@ import android.content.Context
 import android.os.Build
 import android.view.View
 import android.widget.SeekBar
-import com.lxj.xpopup.core.CenterPopupView
 import com.plinkopro.wincash.R
 import com.plinkopro.wincash.base.BaseCenterPopupView
 import com.plinkopro.wincash.business.step.StepBusiness

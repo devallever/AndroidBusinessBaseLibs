@@ -12,6 +12,10 @@ group = modelPkg
 
 android {
     namespace = modelPkg
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {

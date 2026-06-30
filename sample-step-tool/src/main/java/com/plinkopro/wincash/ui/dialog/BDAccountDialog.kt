@@ -12,17 +12,8 @@ import com.plinkopro.wincash.business.withdraw.PaymentParams
 import com.plinkopro.wincash.business.withdraw.account.AccountBean
 import com.plinkopro.wincash.business.withdraw.account.AccountManager
 import com.plinkopro.wincash.business.withdraw.account.PatternUtils
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isBankCardAccount
 import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isBkashAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isDadaAccount
 import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isEasyPaisaAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isLazadaAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isPaparaAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isPayaplAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isPhoneFeeAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isShoppeayAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isTrueMoneyAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isZalopayAccount
 import com.plinkopro.wincash.business.withdraw.account.TipsPopupHelper
 import com.plinkopro.wincash.databinding.DialogAccountInputBdBinding
 import com.plinkopro.wincash.utils.setOnSingleListener

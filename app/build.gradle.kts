@@ -76,6 +76,7 @@ dependencies {
     implementation(project(":sample-cleaner-wood"))
     implementation(project(":sample-ipc"))
     implementation(project(":sample-net-speed-test"))
+    implementation(project(":sample-step-tool"))
 
     implementation(project(":z-sample-billing"))
     implementation(project(":z-sample-cleaner"))

@@ -18,7 +18,6 @@ import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.plinkopro.wincash.BuildConfig
 import java.util.Locale
 import kotlin.random.Random
 
@@ -133,7 +132,7 @@ fun View.slideAcrossScreen(
         val startX = parentWidth.toFloat()
         val endX = -width.toFloat()
 
-//        if (BuildConfig.LOG_OUTPUT) {
+//        if (App.DEBUG) {
 //            log("slideAcrossScreen: startX = $startX")
 //            log("slideAcrossScreen: endX = $endX")
 //        }

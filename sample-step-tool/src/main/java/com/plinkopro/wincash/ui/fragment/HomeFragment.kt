@@ -3,9 +3,6 @@ package com.plinkopro.wincash.ui.fragment
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
-import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -15,14 +12,14 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import app.allever.android.lib.core.app.App
 import com.carefree.steplib.common.StepConstants
 import com.carefree.steplib.lib.ConstStep
 import com.carefree.steplib.utils.Mkv
 import com.carefree.steplib.utils.StepTracker
-import com.carefree.steplib.utils.StepTracker.packageName
 import com.jeremyliao.liveeventbus.LiveEventBus
-import com.plinkopro.wincash.BuildConfig
 import com.plinkopro.wincash.R
+import com.plinkopro.wincash.base.BaseApplication
 import com.plinkopro.wincash.base.BaseFragment
 import com.plinkopro.wincash.beans.CurrencyType
 import com.plinkopro.wincash.beans.ExtraKey
@@ -30,11 +27,12 @@ import com.plinkopro.wincash.business.step.StepBusiness
 import com.plinkopro.wincash.business.withdraw.WalletManager
 import com.plinkopro.wincash.business.withdraw.WithdrawBusiness
 import com.plinkopro.wincash.databinding.FragmentHomeBinding
+import com.plinkopro.wincash.event.AdDismissEvent
 import com.plinkopro.wincash.event.ChangeShowPage
 import com.plinkopro.wincash.event.TabLayoutShowEvent
 import com.plinkopro.wincash.init.AdIndex
 import com.plinkopro.wincash.init.InitManager
-import com.plinkopro.wincash.ui.activity.WithdrawActivity
+import com.plinkopro.wincash.ui.activity.STWithdrawActivity
 import com.plinkopro.wincash.ui.dialog.DoubleAwareDialog
 import com.plinkopro.wincash.ui.dialog.HomeAwareDialog
 import com.plinkopro.wincash.ui.dialog.SettingsDialog
@@ -58,14 +56,7 @@ import com.plinkopro.wincash.utils.setOnSingleListener
 import com.plinkopro.wincash.utils.showXPopup
 import com.plinkopro.wincash.utils.slideAcrossScreen
 import com.plinkopro.wincash.utils.visible
-import com.tencent.qgame.animplayer.AnimConfig
-import com.tencent.qgame.animplayer.inter.IAnimListener
-import com.tencent.qgame.animplayer.inter.IFetchResource
-import com.tencent.qgame.animplayer.mix.Resource
 import com.tencent.qgame.animplayer.util.ScaleType
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdDismissEvent
-import gjofg.frytfkrqy.hxrdk.gddrjgra.admob.AdManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -130,7 +121,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     settingDialog = null
                     root.postDelayed({
                         if (InterAdUtil.showAd()) {
-                            AdManager.showInterAd(requireActivity(), AdIndex.ADMOB_INTER_INDEX)
+                            BaseApplication.postAdDismissEvent(AdIndex.ADMOB_INTER_INDEX)
                         }
                     }, 500)
                 })
@@ -221,17 +212,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                         100..800,
                         5000L
                     )
-                    if (BuildConfig.LOG_OUTPUT) {
+                    if (App.DEBUG) {
                         log("danmu show")
                     }
                 }
                 val nextTime = Random.nextInt(1 * 60 * 1000..5 * 60 * 1000).toLong()
-//                val nextTime = if (BuildConfig.LOG_OUTPUT) {
+//                val nextTime = if (App.DEBUG) {
 //                    Random.nextInt(10 * 1000..15 * 1000).toLong()
 //                } else {
 //                    Random.nextInt(1 * 60 * 1000..5 * 60 * 1000).toLong()
 //                }
-                if (BuildConfig.LOG_OUTPUT) {
+                if (App.DEBUG) {
                     log("nextTime: $nextTime")
                 }
                 delay(nextTime)
@@ -287,7 +278,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     }
                 }
                 logClickEvent(click)
-                AdManager.showRewardAd(requireActivity(), index)
+                BaseApplication.postAdDismissEvent( index)
             }
         }
         binding.currencyView.setOnCoinClickCallback {
@@ -297,7 +288,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 2//绿钞
             }
             logClickEvent(clickId)
-            goTo<WithdrawActivity>(requireActivity()) {
+            goTo<STWithdrawActivity>(requireActivity()) {
                 putExtra(ExtraKey.CURRENCY_TYPE, it)
             }
         }
@@ -322,7 +313,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                         PopupHelper.createDialog(
                             requireContext(),
                             HomeAwareDialog(requireActivity(), 1500, CurrencyType.GOLD, true) {
-                                SdkManager.dot("new_user_bonus", mapOf<String, Any>("num" to 1500))
                                 GoldFlyAnimatorUtil.start(
                                     binding.currencyView.context,
                                     binding.currencyView,
@@ -343,15 +333,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         PopupHelper.createDialog(
             requireContext(),
             Guide2Dialog(requireContext(), binding.currencyView.getBinding().flGold) {
-                SdkManager.dot("new_user_gaide", mapOf<String, Any>("step_id" to 3))
-                goTo<WithdrawActivity>(requireActivity()) {
+                goTo<STWithdrawActivity>(requireActivity()) {
                     putExtra(ExtraKey.CURRENCY_TYPE, CurrencyType.GOLD.type)
                 }
             }).show()
     }
 
     private fun logGuideEvent(num: Int) {
-        SdkManager.dot("new_user_gaide", mapOf("step_id" to num))
     }
 
 
@@ -361,11 +349,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             SpUtil.put(SpKey.IS_FIRST_DISPLAY_MAIN, false)
         }
 
-        SdkManager.dot("app_main_show", mapOf("is_first" to if (isFirst) 1 else 0))
     }
 
     private fun logClickEvent(clickId: Int) {
-        SdkManager.dot("main_click", mapOf("click_ID" to clickId))
     }
 
     private fun updateTodayStep(step: Int) {
@@ -511,7 +497,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 } else {
                     showAwardView(aware, view)
                 }
-                if (BuildConfig.LOG_OUTPUT) {
+                if (App.DEBUG) {
                     LogUtil.local("绿钞广告关闭奖励，随机奖励：$aware 是否翻倍：$showDouble")
                 }
             }

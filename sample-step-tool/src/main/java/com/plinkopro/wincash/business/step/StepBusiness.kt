@@ -3,8 +3,8 @@ package com.plinkopro.wincash.business.step
 import android.Manifest
 import android.app.Activity
 import android.os.Build
+import app.allever.android.lib.core.app.App
 import com.carefree.steplib.utils.Mkv
-import com.plinkopro.wincash.BuildConfig
 import com.plinkopro.wincash.utils.PermissionUtil
 import com.plinkopro.wincash.utils.SpKey
 import com.plinkopro.wincash.utils.SpUtil
@@ -20,7 +20,7 @@ object StepBusiness {
         // 构建需要请求的权限列表
         val permissionsList = getRequirePermission(activity)
         val result = permissionsList.isEmpty()
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             log("hasRequirePermission: $result")
         }
         return result
@@ -49,7 +49,7 @@ object StepBusiness {
 //            permissionsList.add(Manifest.permission.POST_NOTIFICATIONS)
 //        }
 
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             log("requirePermission: ${permissionsList.size}")
         }
         return permissionsList

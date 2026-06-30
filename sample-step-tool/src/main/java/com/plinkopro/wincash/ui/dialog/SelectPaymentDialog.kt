@@ -9,32 +9,9 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.GridLayoutManager
 import com.plinkopro.wincash.R
-import com.plinkopro.wincash.business.withdraw.CountryUtil
-import com.plinkopro.wincash.business.withdraw.PaymentName
 import com.plinkopro.wincash.business.withdraw.PaymentParams
-import com.plinkopro.wincash.business.withdraw.account.AccountBean
-import com.plinkopro.wincash.business.withdraw.account.AccountManager
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isBankCardAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isBkashAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isDadaAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isEasyPaisaAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isLazadaAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isPaparaAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isPayaplAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isPhoneFeeAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isShoppeayAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isTrueMoneyAccount
-import com.plinkopro.wincash.business.withdraw.account.PatternUtils.isZalopayAccount
-import com.plinkopro.wincash.business.withdraw.account.TipsPopupHelper
-import com.plinkopro.wincash.databinding.DialogAccountInputBaseBinding
-import com.plinkopro.wincash.databinding.DialogAccountInputBdBinding
-import com.plinkopro.wincash.databinding.DialogAccountInputPhoeeFeeBinding
 import com.plinkopro.wincash.init.InitManager
-import com.plinkopro.wincash.utils.SimpleTextWatcher
-import com.plinkopro.wincash.utils.gone
 import com.plinkopro.wincash.utils.setOnSingleListener
-import com.plinkopro.wincash.utils.visible
 import com.lxj.xpopup.core.CenterPopupView
 import com.plinkopro.wincash.business.withdraw.WalletManager
 import com.plinkopro.wincash.databinding.DialogSelectPaymentBinding
@@ -65,7 +42,7 @@ class SelectPaymentDialog(context: Context, val next:(paymentParams: PaymentPara
                     selectPosition = position
                     updateViewShow()
                 }.apply {
-                    setNewData(paymentList)
+                    setNewData(paymentList as MutableList<PaymentParams>?)
                 }
             }
 

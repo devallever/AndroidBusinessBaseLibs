@@ -12,7 +12,6 @@ import com.lxj.xpopup.util.XPopupUtils
 import com.plinkopro.wincash.R
 import com.plinkopro.wincash.business.withdraw.CaptchaView
 import com.plinkopro.wincash.utils.setOnSingleListener
-import gjofg.frytfkrqy.hxrdk.gddrjgra.SdkManager
 
 class CaptchaDialog(
     context: Context,
@@ -56,7 +55,6 @@ class CaptchaDialog(
             }
 
             if (cvRes == inputRes.toString()) {
-                SdkManager.dot("verify_passed")
                 dismiss()
                 onSuccess.invoke()
             } else {
@@ -67,7 +65,6 @@ class CaptchaDialog(
         findViewById<View>(R.id.close_iv).setOnSingleListener {
             dismiss()
         }
-        SdkManager.dot("verify_show")
     }
 
     override fun getMaxWidth(): Int {

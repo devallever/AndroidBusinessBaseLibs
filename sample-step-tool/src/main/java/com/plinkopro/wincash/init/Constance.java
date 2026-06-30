@@ -1,6 +1,5 @@
 package com.plinkopro.wincash.init;
 
-import com.plinkopro.wincash.BuildConfig;
 
 public interface Constance {
     /**
@@ -36,7 +35,7 @@ public interface Constance {
     //APP部分
     String TRUE_PACKAGE_NAME = "com.pandastep.wincash";
     String APP_ID = "1981659150681194497";
-    String HOST_URL = BuildConfig.ONLINE_BAG ? "http://papsi.abutayfour.com" : "http://192.168.50.241:2888";
+    String HOST_URL = "http://192.168.50.241:2888";
     String AES_IV = "dgHLDMKfBxdDjuzd";
     String AES_KEY = "RgSUPDZEjPZLWUuW";
     String PUBLIC_KEY = "BGh1caVkDfpzuM7TBqAiM1bdoB2txJPWoLey+VfMomVS2LK7ffCnjcahH7zCGgTVK0Ucxkw+3mJ+y2Mrlvt84JQ=";

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.viewbinding.ViewBinding
+import app.allever.android.lib.core.app.App
 import com.plinkopro.wincash.BuildConfig
 import com.plinkopro.wincash.R
 import com.plinkopro.wincash.utils.LanguageUtils
@@ -67,7 +68,7 @@ abstract class BaseActivity<T : ViewBinding>: AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context) {
-        if (BuildConfig.LOG_OUTPUT) {
+        if (App.DEBUG) {
             // 应用保存的语言设置
             val context = LanguageUtils.initLanguage(newBase)
             super.attachBaseContext(context)
