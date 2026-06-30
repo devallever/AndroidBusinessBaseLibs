@@ -9,7 +9,7 @@
         android:id="@+id/imageView17"
         android:layout_width="match_parent"
         android:layout_height="375dp"
-        android:background="@drawable/ic_withdraw_top_bg"
+        android:background="@drawable/st_ic_withdraw_top_bg"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
@@ -25,7 +25,7 @@
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:padding="10dp"
-            android:src="@drawable/ic_back" />
+            android:src="@drawable/st_ic_back" />
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"

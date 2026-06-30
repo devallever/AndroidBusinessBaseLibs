@@ -8,7 +8,7 @@
     android:paddingBottom="11dp"
     android:paddingHorizontal="17dp"
     android:orientation="vertical"
-    android:background="@drawable/shape_notify_bar">
+    android:background="@drawable/st_shape_notify_bar">
     
     <FrameLayout
         android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@drawable/ic_notify_bar_btn"
+                android:background="@drawable/st_ic_notify_bar_btn"
                 android:includeFontPadding="false"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
@@ -90,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@drawable/ic_notify_bar_btn"
+                android:background="@drawable/st_ic_notify_bar_btn"
                 android:includeFontPadding="false"
                 android:layout_marginTop="10dp"
                 android:gravity="center"

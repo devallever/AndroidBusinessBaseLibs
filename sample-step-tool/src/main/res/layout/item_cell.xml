@@ -10,7 +10,7 @@
         android:id="@+id/unselectImg"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:src="@drawable/bg_wheel_item_unselect"
+        android:src="@drawable/st_bg_wheel_item_unselect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="h,69:74"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="gone"
-        android:src="@drawable/bg_wheel_item_select"
+        android:src="@drawable/st_bg_wheel_item_select"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="h,69:74"
         app:layout_constraintTop_toTopOf="parent" />

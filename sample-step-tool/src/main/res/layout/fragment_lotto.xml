@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:background="@drawable/bg_lotto">
+    android:background="@drawable/st_bg_lotto">
 
     <FrameLayout
         android:id="@+id/topBarFl"
@@ -21,7 +21,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="8dp"
-            android:src="@drawable/ic_back_white" />
+            android:src="@drawable/st_ic_back_white" />
 
         <com.step.wincash.ui.widget.CurrencyView
             android:id="@+id/currencyView"
@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scaleType="fitXY"
-        android:src="@drawable/bg_lotto_ly"
+        android:src="@drawable/st_bg_lotto_ly"
         app:layout_constraintTop_toBottomOf="@+id/shapeTextView4" />
 
     <LinearLayout

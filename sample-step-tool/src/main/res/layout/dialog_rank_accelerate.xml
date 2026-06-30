@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="133dp"
     android:layout_marginHorizontal="15dp"
-    android:background="@drawable/bg_withdraw_acc_rank">
+    android:background="@drawable/st_bg_withdraw_acc_rank">
 
     <TextView
         android:id="@+id/tvAmount"
@@ -38,7 +38,7 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginBottom="34dp"
-        android:src="@drawable/ic_withdraw_goal_icon"
+        android:src="@drawable/st_ic_withdraw_goal_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tvAmount" />
 
@@ -99,7 +99,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginHorizontal="4dp"
-            android:src="@drawable/ic_withdraw_video" />
+            android:src="@drawable/st_ic_withdraw_video" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -117,7 +117,7 @@
         android:id="@+id/ivTips"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_withdraw_rank_tips"
+        android:src="@drawable/st_ic_withdraw_rank_tips"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tvAccelerateRank"
         app:layout_constraintStart_toStartOf="@+id/tvAccelerateRank"

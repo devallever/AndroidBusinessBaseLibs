@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="61dp"
             android:orientation="vertical"
-            android:background="@drawable/bg_dialog_see_ad">
+            android:background="@drawable/st_bg_dialog_see_ad">
 
             <com.hjq.shape.view.ShapeTextView
                 android:id="@+id/titleTv"

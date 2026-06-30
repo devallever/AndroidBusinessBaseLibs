@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:background="@drawable/selector_item_payment_bg"
+        android:background="@drawable/st_selector_item_payment_bg"
         android:paddingVertical="12dp"
         android:scaleType="center"
         android:src="@drawable/ic_pay_dana_long"

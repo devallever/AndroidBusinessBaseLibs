@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/homeMain"
-    android:background="@drawable/bg_home">
+    android:background="@drawable/st_bg_home">
 
     <FrameLayout
         android:id="@+id/frameLayout"
@@ -164,7 +164,7 @@
         android:layout_height="0dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/bg_step_info_ly"
+        android:background="@drawable/st_bg_step_info_ly"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintDimensionRatio="h,355:47"
@@ -329,7 +329,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="13dp"
-        android:src="@drawable/bg_home_bt_ly"
+        android:src="@drawable/st_bg_home_bt_ly"
         app:layout_constraintDimensionRatio="h,201:77"
         app:layout_constraintEnd_toStartOf="@+id/interactAdImg2"
         app:layout_constraintStart_toEndOf="@+id/interactAdImg1"
@@ -376,7 +376,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="13dp"
-        android:src="@drawable/bg_lucky_wheel_ly"
+        android:src="@drawable/st_bg_lucky_wheel_ly"
         app:layout_constraintDimensionRatio="h,171:77"
         app:layout_constraintEnd_toStartOf="@+id/goToScratchImg"
         app:layout_constraintHorizontal_bias="0.5"
@@ -388,7 +388,7 @@
         android:id="@+id/goToScratchImg"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/bg_scratch_ly"
+        android:src="@drawable/st_bg_scratch_ly"
         android:layout_marginEnd="10dp"
         app:layout_constraintDimensionRatio="h,171:77"
         app:layout_constraintEnd_toEndOf="parent"
@@ -414,7 +414,7 @@
         android:layout_width="343dp"
         android:layout_height="46dp"
         android:layout_marginTop="100dp"
-        android:background="@drawable/bg_danmu"
+        android:background="@drawable/st_bg_danmu"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible">

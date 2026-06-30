@@ -60,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="368dp"
         android:scaleType="fitXY"
-        android:src="@drawable/bg_dialog_star1"
+        android:src="@drawable/st_bg_dialog_star1"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView

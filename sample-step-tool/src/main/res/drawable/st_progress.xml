@@ -9,7 +9,7 @@
 
 <item android:id="@android:id/progress">
         <clip>
-            <bitmap android:src="@drawable/ic_prgress" />
+            <bitmap android:src="@drawable/st_ic_prgress" />
         </clip>
 </item>
 </layer-list>

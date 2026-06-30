@@ -28,7 +28,7 @@ class HomeAwareDialog(
         super.onCreate()
         binding.apply {
             if (currencyType == CurrencyType.GOLD) {
-                limitIcon.setImageResource(R.drawable.ic_aware_gold)
+                limitIcon.setImageResource(R.drawable.st_ic_aware_gold)
             }
             awareTv.text = "+${award.formThousand()}"
             getTv.setOnSingleListener {

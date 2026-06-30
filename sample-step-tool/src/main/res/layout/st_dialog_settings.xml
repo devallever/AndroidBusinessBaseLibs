@@ -54,7 +54,7 @@
             android:layout_width="46dp"
             android:layout_height="22dp"
             android:layout_gravity="end|center_vertical"
-            android:background="@drawable/selector_settings_switch"
+            android:background="@drawable/st_selector_settings_switch"
             android:button="@null"
             tools:checked="true"/>
     </FrameLayout>
@@ -81,7 +81,7 @@
             android:layout_width="46dp"
             android:layout_height="22dp"
             android:layout_gravity="end|center_vertical"
-            android:background="@drawable/selector_settings_switch"
+            android:background="@drawable/st_selector_settings_switch"
             android:button="@null"
             tools:checked="false"/>
     </FrameLayout>

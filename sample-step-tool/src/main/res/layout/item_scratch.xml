@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/bg_item_scratch"
+        android:src="@drawable/st_bg_item_scratch"
         app:layout_constraintDimensionRatio="h,1:1"
         app:layout_constraintTop_toTopOf="parent" />
 

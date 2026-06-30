@@ -32,6 +32,6 @@
         app:tabMode="fixed"
         app:tabRippleColor="#CCCCCC"
         app:tabSelectedTextColor="#3E3A39"
-        android:background="@drawable/bg_main_tablayout"/>
+        android:background="@drawable/st_bg_main_tablayout"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

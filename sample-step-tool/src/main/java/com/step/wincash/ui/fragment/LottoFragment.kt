@@ -124,7 +124,7 @@ class LottoFragment : BaseFragment<FragmentLottoBinding>() {
         //显示奖励蒙层和飘分动画
         PopupHelper.createDialog(
             requireContext(),
-            OverlayAwareDialog(requireContext(), R.drawable.ic_aware_green, aware) {
+            OverlayAwareDialog(requireContext(), R.drawable.st_ic_aware_green, aware) {
                 GoldFlyAnimatorUtil.start(
                     binding.currencyView.context, binding.currencyView, binding.root,
                     CurrencyType.GREEN, aware.toFloat()

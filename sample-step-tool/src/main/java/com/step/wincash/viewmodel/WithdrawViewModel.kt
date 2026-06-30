@@ -80,17 +80,17 @@ class WithdrawViewModel : ViewModel() {
 
     fun getBalanceContainerBg(): Int {
         return if (currencyType == CurrencyType.GOLD) {
-            R.drawable.ic_withdraw_goal_bg
+            R.drawable.st_ic_withdraw_goal_bg
         } else {
-            R.drawable.ic_withdraw_green_bg
+            R.drawable.st_ic_withdraw_green_bg
         }
     }
 
     fun getCoinTypeIcon(): Int {
         return if (currencyType == CurrencyType.GOLD) {
-            R.drawable.ic_withdraw_goal_icon
+            R.drawable.st_ic_withdraw_goal_icon
         } else {
-            R.drawable.ic_withdraw_green_icon
+            R.drawable.st_ic_withdraw_green_icon
         }
     }
 

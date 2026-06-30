@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
         android:layout_marginHorizontal="25dp"
-        android:background="@drawable/bg_withdraw_dialog"
+        android:background="@drawable/st_bg_withdraw_dialog"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -19,7 +19,7 @@
             android:id="@+id/close_iv"
             android:layout_width="46dp"
             android:layout_height="46dp"
-            android:foreground="@drawable/ripple_effect_circle"
+            android:foreground="@drawable/st_ripple_effect_circle"
             android:padding="10dp"
             android:src="@drawable/ic_withdraw_dialog_close"
             app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/bg_withdraw_input"
+                    android:background="@drawable/st_bg_withdraw_input"
                     android:gravity="center_vertical"
                     android:paddingHorizontal="22dp">
 
@@ -83,7 +83,7 @@
                     style="@style/DialogInputTextStyle"
                     android:layout_width="match_parent"
                     android:layout_marginTop="20dp"
-                    android:drawableEnd="@drawable/ic_arrow_down"
+                    android:drawableEnd="@drawable/st_ic_arrow_down"
                     android:focusable="false"
                     android:hint="@string/input_confirm_bank_account_hint"
                     android:inputType="text"

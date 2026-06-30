@@ -11,8 +11,8 @@ object BannerNativeUtil {
     fun getMyBannerImageList(): List<Pair<Int, Int>> {
         if (bannerImageList.isEmpty()) {
             bannerImageList = mutableListOf(
-                Pair(R.drawable.ic_banner1, R.drawable.ic_banner_bt1),
-                Pair(R.drawable.ic_banner2, R.drawable.ic_banner_bt2),
+                Pair(R.drawable.st_ic_banner1, R.drawable.ic_banner_bt1),
+                Pair(R.drawable.st_ic_banner2, R.drawable.ic_banner_bt2),
                 Pair(R.drawable.ic_banner3, R.drawable.ic_banner_bt3),
                 Pair(R.drawable.ic_banner4, R.drawable.ic_banner_bt4)
             )

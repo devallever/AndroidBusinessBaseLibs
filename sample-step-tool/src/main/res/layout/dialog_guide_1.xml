@@ -46,7 +46,7 @@
         android:id="@+id/imageView16"
         android:layout_width="201dp"
         android:layout_height="77dp"
-        android:src="@drawable/bg_home_bt_ly"
+        android:src="@drawable/st_bg_home_bt_ly"
         app:layout_constraintDimensionRatio="h,201:77"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

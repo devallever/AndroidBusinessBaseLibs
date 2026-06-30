@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="62dp"
-        android:background="@drawable/bg_withdraw_dialog"
+        android:background="@drawable/st_bg_withdraw_dialog"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -99,7 +99,7 @@
                 android:max="20"
                 android:paddingStart="0dp"
                 android:paddingEnd="0dp"
-                android:progressDrawable="@drawable/progress"
+                android:progressDrawable="@drawable/st_progress"
                 android:splitTrack="false"
                 android:thumb="@null" />
 

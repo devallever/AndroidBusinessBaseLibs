@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="18dp"
-                android:background="@drawable/shape_dialog_account_input_normal_bg"
+                android:background="@drawable/st_shape_dialog_account_input_normal_bg"
                 android:overScrollMode="never"
                 android:padding="20dp"
                 app:shape_radius="8dp"

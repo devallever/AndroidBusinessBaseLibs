@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:background="@drawable/bg_lucky_wheel">
+    android:background="@drawable/st_bg_lucky_wheel">
 
     <FrameLayout
         android:id="@+id/topBarFl"
@@ -21,7 +21,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="8dp"
-            android:src="@drawable/ic_back_white" />
+            android:src="@drawable/st_ic_back_white" />
 
         <com.step.wincash.ui.widget.CurrencyView
             android:id="@+id/currencyView"

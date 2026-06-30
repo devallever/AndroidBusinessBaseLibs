@@ -29,10 +29,10 @@ class PaymentAdapter(val selectUpdateListener : (Int) -> Unit): BaseBindingAdapt
                 isSelected = mSelectPosition == helper.adapterPosition
                 if (isSelected) {
                     binding.tvWalletName.setTextColor(Color.parseColor("#000000"))
-                    binding.rootItem.setBackgroundResource(R.drawable.bg_payment_selected)
+                    binding.rootItem.setBackgroundResource(R.drawable.st_bg_payment_selected)
                 } else {
                     binding.tvWalletName.setTextColor(Color.parseColor("#aaaaaa"))
-                    binding.rootItem.setBackgroundResource(R.drawable.bg_payment_un_selected)
+                    binding.rootItem.setBackgroundResource(R.drawable.st_bg_payment_un_selected)
                 }
                 binding.ivSelect.isVisible = isSelected
                 tvWalletName.text = item?.paymentName
