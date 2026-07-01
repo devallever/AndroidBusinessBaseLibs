@@ -211,8 +211,7 @@ class EffectTextView : AppCompatEditText {
         mBackgroundRect = RectF(0f, 0f, w.toFloat(), h.toFloat())
     }
 
-    override fun onDraw(canvas: Canvas?) {
-        canvas ?: return
+    override fun onDraw(canvas: Canvas) {
         if (mBackgroundBitmap == null || mTextBitmap == null) {
             return
         }
@@ -220,7 +219,7 @@ class EffectTextView : AppCompatEditText {
             super.onDraw(canvas)
             drawBackground(canvas)
         } else {
-            super.onDraw(mTextCanvas)
+            super.onDraw(mTextCanvas!!)
             mBackgroundCanvas?.let { drawBackground(it) }
             val sc: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 canvas.saveLayer(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), null)

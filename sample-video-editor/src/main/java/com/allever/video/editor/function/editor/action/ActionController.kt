@@ -132,6 +132,8 @@ class ActionController {
                             }
                         }
                     }
+
+                    else -> {}
                 }
             }
             is MultiEffectAction -> {
@@ -162,6 +164,8 @@ class ActionController {
                                 null, prevInfo
                             )
                     }
+
+                    else -> {}
                 }
             }
             is ViewAction -> {

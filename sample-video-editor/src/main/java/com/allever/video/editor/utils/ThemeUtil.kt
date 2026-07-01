@@ -1,5 +1,6 @@
 package com.allever.video.editor.utils
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.Resources.Theme
@@ -66,112 +67,76 @@ object ThemeUtil {
         )
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     fun colorPrimary(context: Context, defaultValue: Int): Int {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getColor(
+        return getColor(
             context,
             android.R.attr.colorPrimary,
             defaultValue
-        ) else getColor(
-            context,
-            R.attr.colorPrimary,
-            defaultValue
         )
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     fun colorPrimaryDark(context: Context, defaultValue: Int): Int {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getColor(
+        return getColor(
             context,
             android.R.attr.colorPrimaryDark,
             defaultValue
-        ) else getColor(
-            context,
-            R.attr.colorPrimaryDark,
-            defaultValue
         )
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     fun colorAccent(context: Context, defaultValue: Int): Int {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getColor(
+        return getColor(
             context,
             android.R.attr.colorAccent,
             defaultValue
-        ) else getColor(
-            context,
-            R.attr.colorAccent,
-            defaultValue
         )
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     fun colorControlNormal(context: Context, defaultValue: Int): Int {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getColor(
+        return getColor(
             context,
             android.R.attr.colorControlNormal,
             defaultValue
-        ) else getColor(
-            context,
-            R.attr.colorControlNormal,
-            defaultValue
         )
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     fun colorControlActivated(context: Context, defaultValue: Int): Int {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getColor(
+        return getColor(
             context,
             android.R.attr.colorControlActivated,
             defaultValue
-        ) else getColor(
-            context,
-            R.attr.colorControlActivated,
-            defaultValue
         )
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     fun colorControlHighlight(context: Context, defaultValue: Int): Int {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getColor(
+        return getColor(
             context,
             android.R.attr.colorControlHighlight,
             defaultValue
-        ) else getColor(
-            context,
-            R.attr.colorControlHighlight,
-            defaultValue
         )
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     fun colorButtonNormal(context: Context, defaultValue: Int): Int {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getColor(
+        return getColor(
             context,
             android.R.attr.colorButtonNormal,
             defaultValue
-        ) else getColor(
-            context,
-            R.attr.colorButtonNormal,
-            defaultValue
         )
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    fun colorSwitchThumbNormal(context: Context, defaultValue: Int): Int {
-        return getColor(
-            context,
-            R.attr.colorSwitchThumbNormal,
-            defaultValue
-        )
-    }
+//    fun colorSwitchThumbNormal(context: Context, defaultValue: Int): Int {
+//        return getColor(
+//            context,
+//            R.attr.colorSwitchThumbNormal,
+//            defaultValue
+//        )
+//    }
 
     fun getType(array: TypedArray, index: Int): Int {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
@@ -187,7 +152,8 @@ object ThemeUtil {
         return result ?: defaultValue
     }
 
-    fun getString(array: TintTypedArray, index: Int, defaultValue: CharSequence): CharSequence {
+    @SuppressLint("RestrictedApi")
+    fun getString(@SuppressLint("RestrictedApi") array: TintTypedArray, index: Int, defaultValue: CharSequence): CharSequence {
         val result = array.getString(index)
         return result ?: defaultValue
     }

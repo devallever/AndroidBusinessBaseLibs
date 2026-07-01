@@ -21,6 +21,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import app.allever.android.lib.core.app.App.Companion.mainHandler
 import com.android.absbase.utils.DeviceUtils
 import com.android.absbase.utils.ResourcesUtils
 import com.android.absbase.utils.TimeUtils
@@ -327,10 +328,10 @@ class AlbumActivity : Base2Activity(), TabLayout.OnTabSelectedListener, View.OnC
         mSelectAlbumContainerAnimShow?.duration =
             ANIMATION_DURATION
         mSelectAlbumContainerAnimShow?.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) {}
-            override fun onAnimationCancel(animation: Animator?) {}
-            override fun onAnimationEnd(animation: Animator?) {}
-            override fun onAnimationStart(animation: Animator?) {
+            override fun onAnimationRepeat(animation: Animator) {}
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {}
+            override fun onAnimationStart(animation: Animator) {
                 mAlbumListContainer.visibility = View.VISIBLE
             }
         })
@@ -340,10 +341,10 @@ class AlbumActivity : Base2Activity(), TabLayout.OnTabSelectedListener, View.OnC
         mSelectAlbumContainerAnimHide?.duration =
             ANIMATION_DURATION
         mSelectAlbumContainerAnimHide?.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) {}
-            override fun onAnimationCancel(animation: Animator?) {}
-            override fun onAnimationStart(animation: Animator?) {}
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationRepeat(animation: Animator) {}
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
                 mAlbumListContainer.visibility = View.GONE
             }
         })

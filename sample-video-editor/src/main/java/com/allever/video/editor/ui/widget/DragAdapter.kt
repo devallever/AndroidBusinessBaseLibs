@@ -1,4 +1,4 @@
-package com.allever.videoeditordemo
+package com.allever.video.editor.ui.widget
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -14,10 +14,8 @@ import com.android.absbase.utils.ResourcesUtils
 import com.allever.video.editor.R
 import com.allever.video.editor.function.editor.bean.EffectBean
 import com.allever.video.editor.function.editor.bean.EffectListBean
-import com.allever.video.editor.ui.widget.BitmapContentView
-import com.allever.video.editor.ui.widget.TimeLineView
 
-class DragAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder> {
+class DragAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     companion object {
         private val TAG = DragAdapter::class.java.simpleName
@@ -35,7 +33,7 @@ class DragAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.r
     var cellHeight = cellWidth
     var cellPadding = ResourcesUtils.getDimension(R.dimen.bitmap_content_view_default_padding).toInt()
 
-    private var placeHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder? = null
+    private var placeHolder: RecyclerView.ViewHolder? = null
     constructor(context: Context, bitmapList: MutableList<MutableList<Bitmap>>, beans: EffectListBean, itemStateListener: OnItemStateListener) {
         mItemStateListener = itemStateListener
         mContext = context
@@ -69,7 +67,7 @@ class DragAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.r
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if(viewType == TYPE_LAST){
             val lastView = TextView(mContext)
             //少了一个格子的距离
@@ -83,7 +81,7 @@ class DragAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.r
 
     override fun getItemCount(): Int = mEffectListBean.beans.size + 1
 
-    override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(position == mEffectListBean.beans.size){
             placeHolder = holder
         }else{
@@ -110,7 +108,7 @@ class DragAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.r
         cellHeight = height
     }
 
-    override fun onViewRecycled(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder) {
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
         super.onViewRecycled(holder)
         if(holder is MyViewHolder){
             holder.bitmapContentView.clear()
@@ -143,7 +141,7 @@ class DragAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.r
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     inner class MyViewHolder(var timeLineView: TimeLineView, onItemStateListener: OnItemStateListener?)
-        : androidx.recyclerview.widget.RecyclerView.ViewHolder(timeLineView) {
+        : RecyclerView.ViewHolder(timeLineView) {
         private val TAG = MyViewHolder::class.java.simpleName
         var bitmapContentView: BitmapContentView =
             BitmapContentView(timeLineView.context)
@@ -219,7 +217,7 @@ class DragAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.r
         }
     }
 
-    inner class PlaceHolderHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView)
+    inner class PlaceHolderHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun getItemViewType(position: Int): Int {
         return if (mEffectListBean.beans.size  == position) {

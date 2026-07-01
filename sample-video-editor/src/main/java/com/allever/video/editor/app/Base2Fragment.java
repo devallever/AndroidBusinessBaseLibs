@@ -5,12 +5,13 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.android.absbase.ui.BaseFragment;
+import androidx.fragment.app.Fragment;
+
 
 /**
  */
 
-public class Base2Fragment extends BaseFragment {
+public class Base2Fragment extends Fragment {
 
 
     protected boolean mIsPageSelected;
@@ -78,13 +79,11 @@ public class Base2Fragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        UmengStatistics.onPageStart(this.getClass().getName());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-//        UmengStatistics.onPageEnd(this.getClass().getName());
     }
 
 }

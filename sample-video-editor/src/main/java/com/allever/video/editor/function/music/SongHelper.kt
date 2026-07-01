@@ -1,5 +1,6 @@
 package com.allever.video.editor.function.music
 
+import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
@@ -45,7 +46,7 @@ class SongInfo() : Parcelable {
         size = parcel.readLong()
     }
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
+    override fun writeToParcel(dest: Parcel, flags: Int) {
         dest?.writeLong(id)
         dest?.writeString(title)
         dest?.writeString(fileName)
@@ -182,6 +183,7 @@ class SongInfo() : Parcelable {
          * @param cursor
          * @return
          */
+        @SuppressLint("Range")
         private fun getInfoFromCursor(cursor: Cursor): SongInfo {
             val mediaEntity = SongInfo()
             val id = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID))//音乐id
@@ -368,6 +370,7 @@ object SongHelper {
         stopSearching = true
     }
 
+    @SuppressLint("Range")
     fun getAllSongInfo(
         context: Context,
         rescan: Boolean = false,

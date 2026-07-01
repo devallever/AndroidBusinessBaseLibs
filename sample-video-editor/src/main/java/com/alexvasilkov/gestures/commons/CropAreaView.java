@@ -14,7 +14,6 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 
-import com.alexvasilkov.gestures.R;
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.internal.AnimationEngine;
 import com.alexvasilkov.gestures.internal.UnitsUtils;
@@ -22,6 +21,7 @@ import com.alexvasilkov.gestures.utils.FloatScroller;
 import com.alexvasilkov.gestures.utils.GravityUtils;
 import com.alexvasilkov.gestures.utils.MathUtils;
 import com.alexvasilkov.gestures.views.GestureImageView;
+import com.allever.video.editor.R;
 
 import androidx.annotation.ColorInt;
 

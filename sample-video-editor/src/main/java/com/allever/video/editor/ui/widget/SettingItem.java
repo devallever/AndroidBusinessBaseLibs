@@ -12,31 +12,20 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import butterknife.BindView;
 import com.allever.video.editor.R;
 import com.allever.video.editor.utils.FontUtil;
 
-import butterknife.ButterKnife;
 
 public class SettingItem extends RelativeLayout {
 
-    @BindView(R.id.status)
     TextView mStatus;
-    @BindView(R.id.setting_iv)
     ImageView mSettingIv;
-    @BindView(R.id.setting_iv_right)
     ImageView mSettingIvRight;
-    @BindView(R.id.setting_check)
     SettingCheck mSettingCheck;
-    @BindView(R.id.setting_title)
     TextView mSettingTitle;
-    @BindView(R.id.setting_desc)
     TextView mSettingDesc;
-    @BindView(R.id.arrow_right)
     ImageView mArrowRight;
-    @BindView(R.id.right_layout)
     RelativeLayout mRightLayout;
-    @BindView(R.id.red_dot)
     View mRedDot;
 
     private boolean mCheckAble;
@@ -63,6 +52,7 @@ public class SettingItem extends RelativeLayout {
     }
 
     private void init(Context context, AttributeSet attrs) {
+        initView();
         if (attrs != null) {
             TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SettingItem);
             boolean isCheck = ta.getBoolean(R.styleable.SettingItem_check, false);
@@ -75,7 +65,6 @@ public class SettingItem extends RelativeLayout {
             int descColorId = ta.getResourceId(R.styleable.SettingItem_settingitemdesccolor, -1);
             mCheckAble = ta.getBoolean(R.styleable.SettingItem_checkable, false);
             inflate(getContext(), R.layout.setting_item, this);
-            ButterKnife.bind(this);
             if (iconLeft != null) {
                 mSettingIv.setImageDrawable(iconLeft);
             } else {
@@ -120,6 +109,18 @@ public class SettingItem extends RelativeLayout {
             ta.recycle();
         }
         setClickable(true);
+    }
+
+    private void initView() {
+        mStatus = (TextView) findViewById(R.id.status);
+        mSettingIv = (ImageView) findViewById(R.id.setting_iv);
+        mSettingIvRight = (ImageView) findViewById(R.id.setting_iv_right);
+        mSettingCheck = (SettingCheck) findViewById(R.id.setting_check);
+        mSettingTitle = (TextView) findViewById(R.id.setting_title);
+        mSettingDesc = (TextView) findViewById(R.id.setting_desc);
+        mArrowRight = (ImageView) findViewById(R.id.arrow_right);
+        mRightLayout = (RelativeLayout) findViewById(R.id.right_layout);
+        mRedDot = findViewById(R.id.red_dot);
     }
 
     public void setCheck(boolean check) {

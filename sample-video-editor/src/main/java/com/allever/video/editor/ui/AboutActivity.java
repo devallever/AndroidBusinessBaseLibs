@@ -1,5 +1,6 @@
 package com.allever.video.editor.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,18 +16,11 @@ import com.android.absbase.utils.AppUtils;
 import com.allever.video.editor.R;
 import com.allever.video.editor.app.Base2Activity;
 import com.allever.video.editor.utils.FontUtil;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
  */
-
+@SuppressLint("NonConstantResourceId")
 public class AboutActivity extends Base2Activity {
-    @BindView(R.id.top_back)
     ImageView mToolbarBack;
-    @BindView(R.id.about_version)
     TextView mAboutVersion;
 
     public static Intent newIntent(Context context) {
@@ -49,7 +43,11 @@ public class AboutActivity extends Base2Activity {
 
     protected void initContentView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_about);
-        ButterKnife.bind(this);
+        mAboutVersion = findViewById(R.id.about_version);
+        mToolbarBack = findViewById(R.id.top_back);
+        mToolbarBack.setOnClickListener(v -> {
+            finish();
+        });
         FontUtil.setCustomFont(mAboutVersion);
         FontUtil.setCustomFont((TextView) findViewById(R.id.about_name));
         FontUtil.setCustomFont((TextView) findViewById(R.id.about_privacy));
@@ -82,21 +80,6 @@ public class AboutActivity extends Base2Activity {
         mAboutVersion.setText(text);
     }
 
-
-    @OnClick(R.id.top_back)
-    void onClickBack() {
-        finish();
-    }
-
-
-    @OnClick(R.id.about_ad)
-    void onClickAd() {
-    }
-
-    @OnClick(R.id.about_privacy)
-    void onClickPrivacy() {
-
-    }
 
     @Override
     public void finish() {

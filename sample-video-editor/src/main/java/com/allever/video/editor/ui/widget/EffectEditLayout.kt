@@ -11,7 +11,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
-import com.allever.videoeditordemo.DragAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.android.absbase.utils.DebugUtil
 import com.android.absbase.utils.DeviceUtils
 import com.android.absbase.utils.ResourcesUtils
@@ -329,8 +329,8 @@ class EffectEditLayout : RelativeLayout,
             private var endTime = Long.MIN_VALUE
 
             private val funUpRunnable = Runnable {
-                if(mRecyclerView.scrollState !=  androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_SETTLING){
-                    currentState = androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
+                if(mRecyclerView.scrollState !=  RecyclerView.SCROLL_STATE_SETTLING){
+                    currentState = RecyclerView.SCROLL_STATE_IDLE
                     dragStateCallback.currentAllowDrag = true
                 }
             }
@@ -339,7 +339,7 @@ class EffectEditLayout : RelativeLayout,
                 removeCallbacks(funUpRunnable)
                 startTime = bean?.videoTime?.dstStartTime ?: -1L
                 endTime = bean?.videoTime?.dstEndTime ?: -1L
-                currentState = androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_DRAGGING
+                currentState = RecyclerView.SCROLL_STATE_DRAGGING
                 dragStateCallback.currentAllowDrag = false
             }
             override fun onItemFunUp(bean: EffectBean?, left: Boolean, right: Boolean) {
@@ -569,10 +569,10 @@ class EffectEditLayout : RelativeLayout,
         return mGestureDetector.onTouchEvent(event)
     }
 
-    override fun onShowPress(e: MotionEvent?) {
+    override fun onShowPress(e: MotionEvent) {
     }
 
-    override fun onSingleTapUp(e: MotionEvent?): Boolean {
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
         //这里判断点击 特效 Tag
         val effectBean = selectEffectTap(e)
         if(effectBean != null){
@@ -647,20 +647,20 @@ class EffectEditLayout : RelativeLayout,
         return null
     }
 
-    override fun onDown(e: MotionEvent?): Boolean {
+    override fun onDown(e: MotionEvent): Boolean {
         return true
     }
 
-    override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+    override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
         return true
     }
 
-    override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+    override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
         recyclerViewScrollBy(distanceX.toInt(), distanceY.toInt())
         return true
     }
 
-    override fun onLongPress(e: MotionEvent?) {
+    override fun onLongPress(e: MotionEvent) {
         val bean = selectEffectTap(e)
         if (bean?.primary == false) {
             mCurrentMoveSecondaryEffectState = true
@@ -790,7 +790,7 @@ class EffectEditLayout : RelativeLayout,
     override fun playFrameEnd() {
     }
 
-    override fun dispatchDraw(canvas: Canvas?) {
+    override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
 
         val canvas = canvas ?: return
@@ -859,7 +859,7 @@ class EffectEditLayout : RelativeLayout,
 
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val canvas = canvas ?: return
 

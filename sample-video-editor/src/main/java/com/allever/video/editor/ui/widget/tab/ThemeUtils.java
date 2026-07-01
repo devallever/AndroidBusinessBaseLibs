@@ -16,15 +16,16 @@
 
 package com.allever.video.editor.ui.widget.tab;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 
 class ThemeUtils {
 
-    private static final int[] APPCOMPAT_CHECK_ATTRS = { com.google.android.material.R.attr.colorPrimary };
+    private static final int[] APPCOMPAT_CHECK_ATTRS = { com.google.android.material.R.attr.colorOnPrimary };
 
     static void checkAppCompatTheme(Context context) {
-        TypedArray a = context.obtainStyledAttributes(APPCOMPAT_CHECK_ATTRS);
+        @SuppressLint("ResourceType") TypedArray a = context.obtainStyledAttributes(APPCOMPAT_CHECK_ATTRS);
         final boolean failed = !a.hasValue(0);
         if (a != null) {
             a.recycle();

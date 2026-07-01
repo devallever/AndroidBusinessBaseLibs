@@ -17,7 +17,6 @@ import android.text.TextUtils;
 import android.webkit.URLUtil;
 
 import com.google.gson.Gson;
-import com.allever.video.editor.BuildConfig;
 import com.allever.video.editor.utils.Base64;
 import com.allever.video.editor.utils.EncryptConstant;
 import com.allever.video.editor.utils.FileUtil;
@@ -718,102 +717,103 @@ public class OnlineDataManager {
     }
 
     private ConfigBean getVersionConfig(ConfigBean configBean) {
-        if (configBean == null) {
-            return null;
-        }
-
-        String rootVersionText = configBean.getVersion();
-        if (TextUtils.isEmpty(rootVersionText)) {
-            return null;
-        }
-
-        ConfigBean versionConfigBean = null;
-
-        // - ：表示区间
-        //1. 先解析 “,”
-        //2. 再解析 “-”
-        try {
-            //第一次遍历根的version
-            if (rootVersionText.contains(",")) {
-                //1-3，5，7-10
-                //从RootConfig解析出来
-                String[] rootVersionArr = rootVersionText.split(",");
-                for (String versionText : rootVersionArr) {
-                    //1-3     7-10
-                    if (versionText.contains("-")) {
-                        //含有“-”，继续分隔，获取区间
-                        String[] subVersionArr = versionText.split("-");
-                        //区间
-                        if (subVersionArr.length >= 2) {
-                            int startIndex = Integer.valueOf(subVersionArr[0]);
-                            int endIndex = Integer.valueOf(subVersionArr[1]);
-                            //遍历区间
-                            for (int i = startIndex; i <= endIndex; i++) {
-                                DLog.d(TAG, "versionCode = " + i);
-                                if (BuildConfig.VERSION_CODE == i) {
-                                    //versionConfigBean =  configBean;
-                                    return configBean;
-                                }
-                            }
-                        } else {
-                            //格式错误
-                            return null;
-                        }
-                    } else {
-                        //不含“-”，单个版本号 5
-                        DLog.d(TAG, "versionCode = " + versionText);
-                        if (BuildConfig.VERSION_CODE == Integer.valueOf(versionText)) {
-                            //versionConfigBean =  configBean;
-                            return configBean;
-                        }
-                    }
-                }
-            } else if (rootVersionText.contains("-")) {
-                //如果不存在“,”分隔，则只有一个区间
-                //1-10
-                String[] rootVersionArr = rootVersionText.split("-");
-                if (rootVersionArr.length >= 2) {
-                    int startIndex = Integer.valueOf(rootVersionArr[0]);
-                    int endIndex = Integer.valueOf(rootVersionArr[1]);
-                    //遍历区间
-                    for (int i = startIndex; i <= endIndex; i++) {
-                        DLog.d(TAG, "versionCode = " + i);
-                        if (BuildConfig.VERSION_CODE == i) {
-                            //versionConfigBean =  configBean;
-                            return configBean;
-                        }
-                    }
-                } else {
-                    //格式有误
-                    return null;
-                }
-            } else {
-                //都没有，只能是单个 1
-                DLog.d(TAG, "versionCode = " + configBean.getVersion());
-                if (BuildConfig.VERSION_CODE == Integer.valueOf(configBean.getVersion())) {
-                    //versionConfigBean = configBean;
-                    return configBean;
-                }
-            }
-
-            //如果versionConfigBean为空，表示当前版本不存在rootConfigBean的version中，继续遍历rootConfigBean的子Config
-            List<ConfigBean> childConfigBeanList = configBean.getChild();
-            if (childConfigBeanList == null || childConfigBeanList.size() == 0) {
-                return null;
-            }
-
-            for (ConfigBean bean : childConfigBeanList) {
-                versionConfigBean = getVersionConfig(bean);
-                if (versionConfigBean != null) {
-                    return versionConfigBean;
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return versionConfigBean;
+        return null;
+//        if (configBean == null) {
+//            return null;
+//        }
+//
+//        String rootVersionText = configBean.getVersion();
+//        if (TextUtils.isEmpty(rootVersionText)) {
+//            return null;
+//        }
+//
+//        ConfigBean versionConfigBean = null;
+//
+//        // - ：表示区间
+//        //1. 先解析 “,”
+//        //2. 再解析 “-”
+//        try {
+//            //第一次遍历根的version
+//            if (rootVersionText.contains(",")) {
+//                //1-3，5，7-10
+//                //从RootConfig解析出来
+//                String[] rootVersionArr = rootVersionText.split(",");
+//                for (String versionText : rootVersionArr) {
+//                    //1-3     7-10
+//                    if (versionText.contains("-")) {
+//                        //含有“-”，继续分隔，获取区间
+//                        String[] subVersionArr = versionText.split("-");
+//                        //区间
+//                        if (subVersionArr.length >= 2) {
+//                            int startIndex = Integer.valueOf(subVersionArr[0]);
+//                            int endIndex = Integer.valueOf(subVersionArr[1]);
+//                            //遍历区间
+//                            for (int i = startIndex; i <= endIndex; i++) {
+//                                DLog.d(TAG, "versionCode = " + i);
+//                                if (BuildConfig.VERSION_CODE == i) {
+//                                    //versionConfigBean =  configBean;
+//                                    return configBean;
+//                                }
+//                            }
+//                        } else {
+//                            //格式错误
+//                            return null;
+//                        }
+//                    } else {
+//                        //不含“-”，单个版本号 5
+//                        DLog.d(TAG, "versionCode = " + versionText);
+//                        if (BuildConfig.VERSION_CODE == Integer.valueOf(versionText)) {
+//                            //versionConfigBean =  configBean;
+//                            return configBean;
+//                        }
+//                    }
+//                }
+//            } else if (rootVersionText.contains("-")) {
+//                //如果不存在“,”分隔，则只有一个区间
+//                //1-10
+//                String[] rootVersionArr = rootVersionText.split("-");
+//                if (rootVersionArr.length >= 2) {
+//                    int startIndex = Integer.valueOf(rootVersionArr[0]);
+//                    int endIndex = Integer.valueOf(rootVersionArr[1]);
+//                    //遍历区间
+//                    for (int i = startIndex; i <= endIndex; i++) {
+//                        DLog.d(TAG, "versionCode = " + i);
+//                        if (BuildConfig.VERSION_CODE == i) {
+//                            //versionConfigBean =  configBean;
+//                            return configBean;
+//                        }
+//                    }
+//                } else {
+//                    //格式有误
+//                    return null;
+//                }
+//            } else {
+//                //都没有，只能是单个 1
+//                DLog.d(TAG, "versionCode = " + configBean.getVersion());
+//                if (BuildConfig.VERSION_CODE == Integer.valueOf(configBean.getVersion())) {
+//                    //versionConfigBean = configBean;
+//                    return configBean;
+//                }
+//            }
+//
+//            //如果versionConfigBean为空，表示当前版本不存在rootConfigBean的version中，继续遍历rootConfigBean的子Config
+//            List<ConfigBean> childConfigBeanList = configBean.getChild();
+//            if (childConfigBeanList == null || childConfigBeanList.size() == 0) {
+//                return null;
+//            }
+//
+//            for (ConfigBean bean : childConfigBeanList) {
+//                versionConfigBean = getVersionConfig(bean);
+//                if (versionConfigBean != null) {
+//                    return versionConfigBean;
+//                }
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return versionConfigBean;
     }
 
     private boolean checkConfigTimeOut() {

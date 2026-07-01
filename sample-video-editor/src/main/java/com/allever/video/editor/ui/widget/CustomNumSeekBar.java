@@ -199,18 +199,18 @@ public class CustomNumSeekBar extends View {
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomNumSeekBar);
             int numBgTumbId = typedArray.getResourceId(R.styleable.CustomNumSeekBar_numBgThumb, View.NO_ID);
-            int touchThumbId = typedArray.getResourceId(R.styleable.CustomNumSeekBar_touchThumb, View.NO_ID);
-            int progressBgTumbId = typedArray.getResourceId(R.styleable.CustomNumSeekBar_progressBgDrawable, View.NO_ID);
-            int progressTumbId = typedArray.getResourceId(R.styleable.CustomNumSeekBar_progressDrawable, View.NO_ID);
-            mShowText = typedArray.getBoolean(R.styleable.CustomNumSeekBar_showNum, true);
-            mShowTopText = typedArray.getBoolean(R.styleable.CustomNumSeekBar_showTopNum, false);
+            int touchThumbId = typedArray.getResourceId(R.styleable.CustomNumSeekBar_numtouchThumb, View.NO_ID);
+            int progressBgTumbId = typedArray.getResourceId(R.styleable.CustomNumSeekBar_numprogressBgDrawable, View.NO_ID);
+            int progressTumbId = typedArray.getResourceId(R.styleable.CustomNumSeekBar_numprogressDrawable, View.NO_ID);
+            mShowText = typedArray.getBoolean(R.styleable.CustomNumSeekBar_numshowNum, true);
+            mShowTopText = typedArray.getBoolean(R.styleable.CustomNumSeekBar_numshowTopNum, false);
 
             mTextColor = typedArray.getColor(R.styleable.CustomNumSeekBar_numColor, Color.WHITE);
             mTextSize = typedArray.getDimensionPixelSize(R.styleable.CustomNumSeekBar_numSize, res.getDimensionPixelSize(R.dimen.image_edit_seekbar_num_size));
             mNumTopHeight = typedArray.getDimensionPixelSize(R.styleable.CustomNumSeekBar_numTopHeight, 0);
 
-            mMax = typedArray.getInt(R.styleable.CustomNumSeekBar_max, 100);
-            mProgress = typedArray.getInt(R.styleable.CustomNumSeekBar_progress, 0);
+            mMax = typedArray.getInt(R.styleable.CustomNumSeekBar_nummax, 100);
+            mProgress = typedArray.getInt(R.styleable.CustomNumSeekBar_numprogress, 0);
 
             if (numBgTumbId != View.NO_ID) {
                 mNumBgTumb = res.getDrawable(numBgTumbId);
@@ -221,19 +221,19 @@ public class CustomNumSeekBar extends View {
             if (touchThumbId != View.NO_ID) {
                 mTouchTumb = res.getDrawable(touchThumbId);
             } else {
-                mTouchTumb = new ColorDrawable(typedArray.getColor(R.styleable.CustomNumSeekBar_touchThumb, Color.YELLOW));
+                mTouchTumb = new ColorDrawable(typedArray.getColor(R.styleable.CustomNumSeekBar_numtouchThumb, Color.YELLOW));
             }
 
             if (progressBgTumbId != View.NO_ID) {
                 mProgressBgTumb = res.getDrawable(progressBgTumbId);
             } else {
-                mProgressBgTumb = new ColorDrawable(typedArray.getColor(R.styleable.CustomNumSeekBar_progressBgDrawable, DEFAULT_PROGRESS_BG_COLOR));
+                mProgressBgTumb = new ColorDrawable(typedArray.getColor(R.styleable.CustomNumSeekBar_numprogressBgDrawable, DEFAULT_PROGRESS_BG_COLOR));
             }
 
             if (progressTumbId != View.NO_ID) {
                 mProgressTumb = res.getDrawable(progressTumbId);
             } else {
-                mProgressTumb = new ColorDrawable(typedArray.getColor(R.styleable.CustomNumSeekBar_progressDrawable, Color.BLUE));
+                mProgressTumb = new ColorDrawable(typedArray.getColor(R.styleable.CustomNumSeekBar_numprogressDrawable, Color.BLUE));
             }
             typedArray.recycle();
 

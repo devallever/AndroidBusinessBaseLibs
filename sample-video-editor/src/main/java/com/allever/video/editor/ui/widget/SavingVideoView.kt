@@ -2,6 +2,7 @@ package com.allever.video.editor.ui.widget
 
 import android.animation.Animator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.AttributeSet
@@ -12,7 +13,6 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.lottie.LottieAnimationView
-import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.LottieCompositionFactory
 import com.airbnb.lottie.LottieDrawable
 import com.android.absbase.App
@@ -47,6 +47,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
         }
 
+        @SuppressLint("WrongConstant")
         override fun onAnimationEnd(animation: Animator) {
             val composition = LottieCompositionFactory.fromAssetSync(App.getContext(), "anim/save_loading/save_loading_02.json").value
             composition.let {

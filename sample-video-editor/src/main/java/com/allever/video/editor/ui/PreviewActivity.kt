@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.viewpager.widget.ViewPager
 import android.view.View
 import android.widget.ImageView
+import app.allever.android.lib.core.util.UIKit.postDelayed
 import com.android.absbase.utils.ResourcesUtils
 import com.android.absbase.utils.ToastUtils
 import com.allever.video.editor.R

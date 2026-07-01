@@ -1,4 +1,4 @@
-//package com.qrcode.scanner.ad
+//package com.allever.video.editor.function.ad;
 //
 //import androidx.annotation.LayoutRes
 //import android.view.View
@@ -102,9 +102,9 @@
 //        }
 //        val allinoneAdView = AllinoneAdView.newAllinoneAdView(layoutId, null)
 //        val intent = AdDisplay.makeIntent(adCacheKey, mNativeAdBean)
-//        intent!!.putExtra(AdDisplay.KEY_DEFAULT_RES_ID, R.drawable.sc_ad_icon_default)
-//        intent.putExtra(AdDisplay.KEY_LIMIT_AD_HEIGHT, needLimitAdHeight)
-//        intent.putExtra(AdDisplay.KEY_TOUCH_TYPE, adTouchType)
+////        intent!!.putExtra(AdDisplay.KEY_DEFAULT_RES_ID, R.drawable.sc_ad_icon_default)
+//        intent?.putExtra(AdDisplay.KEY_LIMIT_AD_HEIGHT, needLimitAdHeight)
+//        intent?.putExtra(AdDisplay.KEY_TOUCH_TYPE, adTouchType)
 //        allinoneAdView.setData(intent)
 //        adView = allinoneAdView.viewAndRemoveParent
 //        baseNativeView = allinoneAdView.baseAdView

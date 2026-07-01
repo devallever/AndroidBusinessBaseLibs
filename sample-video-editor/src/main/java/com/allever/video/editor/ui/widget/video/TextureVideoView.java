@@ -122,9 +122,9 @@ public class TextureVideoView extends TextureView
     public TextureVideoView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if (attrs != null) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.scaleStyle, 0, 0);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.vescaleStyle, 0, 0);
             if (a != null) {
-                int scaleType = a.getInt(R.styleable.scaleStyle_scaleType, ScaleType.NONE.ordinal());
+                int scaleType = a.getInt(R.styleable.vescaleStyle_vescaleType, ScaleType.NONE.ordinal());
                 a.recycle();
                 mScaleType = ScaleType.values()[scaleType];
             }

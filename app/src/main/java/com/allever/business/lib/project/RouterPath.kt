@@ -61,7 +61,8 @@ class RouterPath {
         const val PATH_SAMPLE_VPN_FLASH_TUNNEL = "/flashtunnel/main"
         const val PATH_SAMPLE_CLEANER_WOOD = "/cleanerwood/main"
         const val PATH_SAMPLE_IPC = "/ipc/main"
-        const val PATH_SMAPLE_NET_SPEED_TEST = "/netspeedtest/main"
-        const val PATH_STEP_TOOL = "/steptool/main"
+        const val PATH_SAMPLE_NET_SPEED_TEST = "/netspeedtest/main"
+        const val PATH_SAMPLE_STEP_TOOL = "/steptool/main"
+        const val PATH_SAMPLE_VIDEO_EDITOR = "/sampleoldlist/main"
     }
 }

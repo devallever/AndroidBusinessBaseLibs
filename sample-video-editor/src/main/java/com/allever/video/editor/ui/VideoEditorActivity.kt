@@ -1,5 +1,6 @@
 package com.allever.video.editor.ui
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -2459,11 +2460,7 @@ class VideoEditorActivity : Base2Activity(),
             )
         }
 
-        if (isMainThread) {
-            initViewRunnable.run()
-        } else {
-            post(initViewRunnable)
-        }
+        runOnUiThread(initViewRunnable)
     }
 
     private fun addEffectBean(thumbnailBean: ThumbnailBean) {
@@ -2537,6 +2534,7 @@ class VideoEditorActivity : Base2Activity(),
         mEffectEditLayout.selectEffectBean(textBean)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_PRIVATE) {
             if (resultCode == RESULT_OK && data != null) {
@@ -2681,6 +2679,8 @@ class VideoEditorActivity : Base2Activity(),
                                 textBean.alpha = action.currentObj as Int
                             }
                         }
+
+                        else -> {}
                     }
                 }
                 is MultiEffectAction -> {
@@ -2701,6 +2701,8 @@ class VideoEditorActivity : Base2Activity(),
                                 showBottomMusicFun(true, soundBean)
                             }
                         }
+
+                        else -> {}
                     }
                 }
             }

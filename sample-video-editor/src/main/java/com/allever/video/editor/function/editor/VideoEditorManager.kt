@@ -8,7 +8,6 @@ import com.android.absbase.utils.DebugUtil
 import com.allever.video.editor.ConfigManager
 import com.allever.video.editor.function.Ratio
 import com.allever.video.editor.function.editor.action.*
-import com.allever.video.editor.function.editor.action.*
 import com.allever.video.editor.function.editor.bean.EffectBean
 import com.allever.video.editor.function.editor.bean.EffectListBean
 import com.allever.video.editor.function.editor.bean.VideoBean

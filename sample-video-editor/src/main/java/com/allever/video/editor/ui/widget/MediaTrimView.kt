@@ -277,9 +277,9 @@ class MediaTrimView : View, EffectBean.EffectListener {
         return speed * intervalTime
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas ?: return
+        canvas
 
         paint.color = mainToneColor
         // 画开始时间

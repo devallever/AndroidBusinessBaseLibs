@@ -42,13 +42,13 @@
             android:paddingRight="30dp"
             android:gravity="center">
 
-            <com.qrcode.scanner.ui.widget.BlurImageView
+            <razerdp.blur.BlurImageView
                 android:id="@+id/iv_banner1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
 
-            <com.qrcode.scanner.ui.widget.BlurImageView
+            <razerdp.blur.BlurImageView
                 android:id="@+id/iv_banner2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

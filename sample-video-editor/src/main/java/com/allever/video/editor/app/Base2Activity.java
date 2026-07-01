@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.appcompat.app.AppCompatActivity;
 import com.android.absbase.App;
-import com.android.absbase.ui.BaseActivity;
 import com.android.absbase.utils.AppUtils;
 import com.android.absbase.utils.TaskRunnable;
 
@@ -14,7 +14,7 @@ import com.android.absbase.utils.TaskRunnable;
 /**
  */
 
-public class Base2Activity extends AbsBaseActivity {
+public class Base2Activity extends AppCompatActivity {
 
     protected boolean mIsCanShowRateDialog = true;
     private boolean mIsFinishing = false;
@@ -97,11 +97,7 @@ public class Base2Activity extends AbsBaseActivity {
         if (mIsFinishing) {
             return;
         }
-//        UpdateManager.obtain().release();
         mIsFinishing = true;
-//        StatisticsUtils.statisics(StatisticsConstant.EVENT_PREFIX_FUNCTION + "_page", "out",
-//                "usertype", String.valueOf(InappAdManager.getInstance().isBuyUser()),
-//                "class", getClass().getSimpleName());
         finishInternal();
 
     }

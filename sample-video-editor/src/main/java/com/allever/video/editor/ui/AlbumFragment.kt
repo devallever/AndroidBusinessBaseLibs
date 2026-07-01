@@ -48,7 +48,7 @@ class AlbumFragment : androidx.fragment.app.Fragment(), AlbumCellAdapter.OptionL
         )
         mRecyclerView.setEmptyView(emptyView)
         mAdapter = AlbumCellAdapter(
-            this.context!!,
+            requireContext(),
             R.layout.ve_item_cell,
             mData
         )

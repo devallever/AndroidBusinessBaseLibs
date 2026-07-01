@@ -12,10 +12,10 @@
         android:id="@+id/seekbar"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        custom:max="100"
+        custom:nummax="100"
         custom:numSize="14sp"
-        custom:progress="50"
-        custom:showNum="false" />
+        custom:numprogress="50"
+        custom:numshowNum="false" />
 
     <TextView
         android:id="@+id/textview"

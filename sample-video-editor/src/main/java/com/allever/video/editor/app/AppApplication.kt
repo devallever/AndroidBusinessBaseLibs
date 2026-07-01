@@ -1,16 +1,16 @@
 package com.allever.video.editor.app
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.StrictMode
 import android.os.SystemClock
-import androidx.multidex.MultiDex
-import butterknife.ButterKnife
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.helper.ProcessHelper
 import com.allever.video.editor.function.save.VideoMaker
 import com.allever.video.editor.utils.AsyncTaskDefaultSerialExecutor
 import com.allever.video.editor.utils.ImageLoader
-import com.android.absbase.App
 import com.android.absbase.helper.ExceptionManager
 import com.android.absbase.helper.UncaughtExceptionHandler
 import com.android.absbase.helper.log.DLog
@@ -25,26 +25,20 @@ import me.xiaopan.sketch.cache.LruMemoryCache
 import java.util.concurrent.Executor
 
 
-class AppApplication : BaseApplication() {
+object AppApplication {
 
-    companion object {
-        private val TAG = AppApplication::class.java.name
-        var application: AppApplication? = null
-            private set
+    private val TAG = AppApplication::class.java.name
+    var application: Application = App.app
+        private set
 
-        /**
-         * 首次启动，数据延时初始化时间
-         */
-        private val DATA_INIT_DELAY_TIME = 2000
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        com.allever.lib.common.app.App.context = this
-        App.setContext(this)
-
+    /**
+     * 首次启动，数据延时初始化时间
+     */
+    private val DATA_INIT_DELAY_TIME = 2000
+    fun onCreate() {
         try {
-            AppUtils.getVersionCode(App.getContext())
+            com.android.absbase.App.setContext(App.context)
+            AppUtils.getVersionCode(App.context)
         } catch (e: RuntimeException) {
             return
         }
@@ -53,7 +47,6 @@ class AppApplication : BaseApplication() {
             LogUtil.setFileLogEnable(true)
             initUncaughtExceptionHandler()
         }
-        ButterKnife.setDebug(DebugUtil.isDebuggable())
 
         // 替换系统AsyncTask的Executor,editText会造成内存泄漏 使用完之后清空任务
         try {
@@ -66,7 +59,7 @@ class AppApplication : BaseApplication() {
 
         setSketchMemoryCacheSize()
 
-        if (App.isMainProcess()) {
+        if (ProcessHelper.isInMainProcess(App.app)) {
             initData()
         }
         fixedBug()
@@ -89,28 +82,20 @@ class AppApplication : BaseApplication() {
     private fun initData() {
         com.android.absbase.utils.thread.ThreadPool.runOnNonUIThread({
             try {
-                VideoMaker.init(App.getContext())
+                VideoMaker.init(App.context)
             } catch (e: Exception) {
             }
         }, DATA_INIT_DELAY_TIME.toLong())
     }
 
-    override fun attachBaseContext(base: Context) {
-        application = this
-        super.attachBaseContext(base)
-        MultiDex.install(this)
-        fixFinalizeBug()
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
+    fun onLowMemory() {
         ImageLoader.onLowMemory()
     }
 
     private fun initUncaughtExceptionHandler() {
-        ExceptionManager.getInstance().initiate(this)
-        UncaughtExceptionHandler.getInstance(this).register()
-        UncaughtExceptionHandler.getInstance(this).setInterceptor(object : UncaughtExceptionHandler.UncaughtExceptionInterceptor {
+        ExceptionManager.getInstance().initiate(App.context)
+        UncaughtExceptionHandler.getInstance(App.context).register()
+        UncaughtExceptionHandler.getInstance(App.context).setInterceptor(object : UncaughtExceptionHandler.UncaughtExceptionInterceptor {
 
             override fun onInterceptExceptionBefore(t: Thread, ex: Throwable): Boolean {
                 RLog.e("Exception", ex.message, ex)
@@ -125,7 +110,7 @@ class AppApplication : BaseApplication() {
         })
     }
 
-    override fun startActivity(intent: Intent?) {
+    fun startActivity(intent: Intent?) {
         if (null != intent) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             //处理admob广告多进程打开异常
@@ -135,22 +120,11 @@ class AppApplication : BaseApplication() {
             }
         }
         try {
-            super.startActivity(intent)
+            App.context.startActivity(intent)
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
-    }
-
-    override fun dispatchActivityStartedInner(activity: Activity) {
-        super.dispatchActivityStartedInner(activity)
-    }
-
-    override fun dispatchActivityStoppedInner(activity: Activity) {
-        super.dispatchActivityStoppedInner(activity)
-        if (App.isBackground()) {
-            ImageLoader.clearMemoryCache()
-        }
     }
 
     private fun fixFinalizeBug() {
@@ -175,16 +149,14 @@ class AppApplication : BaseApplication() {
         try {
             val screenSize = DeviceUtils.getRealScreenHeightPx() * DeviceUtils.getScreenWidthPx() * 4
             val memoryCacheMaxSize = screenSize * 2
-            Sketch.with(App.getContext()).configuration.memoryCache = LruMemoryCache(App.getContext(), memoryCacheMaxSize)
+            Sketch.with(App.context).configuration.memoryCache = LruMemoryCache(App.context, memoryCacheMaxSize)
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
     }
 
-    override fun onTrimMemory(level: Int) {
-        super.onTrimMemory(level)
+    fun onTrimMemory(level: Int) {
         ImageLoader.onTrimMemroy(level)
     }
-
 }

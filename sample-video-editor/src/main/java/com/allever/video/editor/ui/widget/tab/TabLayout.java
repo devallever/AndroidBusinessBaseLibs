@@ -17,6 +17,7 @@
  */
 package com.allever.video.editor.ui.widget.tab;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -295,10 +296,10 @@ public class TabLayout extends HorizontalScrollView {
 
         // Text colors/sizes come from the text appearance first
         final TypedArray ta = context.obtainStyledAttributes(mTabTextAppearance,
-                com.google.android.material.R.styleable.TextAppearance);
+                com.google.android.material.R.styleable.MaterialTextAppearance);
         try {
-            mTabTextSize = ta.getDimensionPixelSize(com.google.android.material.R.styleable.TextAppearance_android_textSize, 0);
-            mTabTextColors = ta.getColorStateList(com.google.android.material.R.styleable.TextAppearance_android_textColor);
+            mTabTextSize = ta.getDimensionPixelSize(com.google.android.material.R.styleable.Chip_android_textSize, 0);
+            mTabTextColors = ta.getColorStateList(com.google.android.material.R.styleable.TabLayout_tabTextColor);
         } finally {
             ta.recycle();
         }
@@ -1227,6 +1228,7 @@ public class TabLayout extends HorizontalScrollView {
          * @param resId A resource ID referring to the icon that should be displayed
          * @return The current instance for call chaining
          */
+        @SuppressLint("RestrictedApi")
         @NonNull
         public TabLayout.Tab setIcon(@DrawableRes int resId) {
             if (mParent == null) {
@@ -1358,6 +1360,7 @@ public class TabLayout extends HorizontalScrollView {
 
         private int mDefaultMaxLines = 2;
 
+        @SuppressLint("RestrictedApi")
         public TabView(Context context) {
             super(context);
             if (mTabBackgroundResId != 0) {

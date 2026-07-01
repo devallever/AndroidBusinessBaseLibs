@@ -20,9 +20,6 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.allever.video.editor.R;
-
-
 public class BaseDialog extends Dialog {
 
     protected View mRootView;
@@ -39,7 +36,7 @@ public class BaseDialog extends Dialog {
 
 
     public BaseDialog(Context context) {
-        this(context, R.style.dialog_style);
+        this(context, 0);
     }
 
     public BaseDialog(Context context, int theme) {

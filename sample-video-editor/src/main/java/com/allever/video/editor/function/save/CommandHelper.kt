@@ -1,7 +1,7 @@
 package com.allever.video.editor.function.save
 
 
-import com.allever.lib.common.util.log
+import com.allever.video.editor.utils.SystemUtils.log
 import com.android.absbase.helper.log.DLog
 import com.android.absbase.utils.DebugUtil
 import java.io.BufferedReader

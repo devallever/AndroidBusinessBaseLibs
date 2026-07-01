@@ -27,10 +27,10 @@ dependencies {
 
     val aarList = mutableListOf(
         "analytics-flurry-v1-1.0.aar",
-        "business-sdk-v1-2.1-noadw.aar",
-        "inappbilling-compat-lib-1.0.11.aar",
+//        "business-sdk-v1-2.1-noadw.aar",
+//        "inappbilling-compat-lib-1.0.11.aar",
         "permissions-compat-lib-1.1.aar",
-        "processdaemon-photoeditor.photoeditor.photoeditor.pro-1.1.aar",
+//        "processdaemon-photoeditor.photoeditor.photoeditor.pro-1.1.aar",
         "toolkit-v1-1.1.aar"
     )
     implementation(fileTree(mapOf("dir" to "libs", "include" to aarList)))
@@ -46,7 +46,7 @@ dependencies {
     implementation("pub.devrel:easypermissions:1.2.0")
     implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.12")
     implementation("org.greenrobot:greendao-generator:3.2.0")
-    implementation("com.jakewharton:butterknife:10.1.0")
+//    implementation("com.jakewharton:butterknife:10.1.0")
     annotationProcessor ("com.jakewharton:butterknife-compiler:10.1.0")
     implementation("org.greenrobot:eventbus:3.0.0")
     implementation("org.greenrobot:greendao:3.2.0")

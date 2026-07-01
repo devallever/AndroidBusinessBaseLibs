@@ -95,7 +95,7 @@ public class MediaThumbnailUtil {
         } finally {
             try {
                 retriever.release();
-            } catch (RuntimeException ex) {
+            } catch (Exception ex) {
             }
         }
 
@@ -186,7 +186,8 @@ public class MediaThumbnailUtil {
         } finally {
             try {
                 retriever.release();
-            } catch (RuntimeException ex) {
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
 
@@ -861,7 +862,7 @@ public class MediaThumbnailUtil {
         } finally {
             try {
                 retriever.release();
-            } catch (RuntimeException ex) {
+            } catch (Exception ex) {
                 // Ignore failures while cleaning up.
             }
         }

@@ -3,11 +3,8 @@ package com.allever.video.editor.ui.widget
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.View
-import com.allever.videoeditordemo.DragAdapter
 
 
 class EffectRecyclerView : androidx.recyclerview.widget.RecyclerView {

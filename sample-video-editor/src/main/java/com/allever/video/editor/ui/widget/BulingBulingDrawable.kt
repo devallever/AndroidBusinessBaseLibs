@@ -28,7 +28,7 @@ class BulingBulingDrawable : BitmapDrawable {
         backgroundDrawable.setBounds(left, top, right, bottom)
     }
 
-    override fun onBoundsChange(bounds: Rect?) {
+    override fun onBoundsChange(bounds: Rect) {
         super.onBoundsChange(bounds)
 
         valueAnimator = null
@@ -65,17 +65,17 @@ class BulingBulingDrawable : BitmapDrawable {
                 invalidateSelf()
             }
             animator.addListener(object : Animator.AnimatorListener {
-                override fun onAnimationRepeat(animation: Animator?) {
+                override fun onAnimationRepeat(animation: Animator) {
                 }
 
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     startAnimator()
                 }
 
-                override fun onAnimationCancel(animation: Animator?) {
+                override fun onAnimationCancel(animation: Animator) {
                 }
 
-                override fun onAnimationStart(animation: Animator?) {
+                override fun onAnimationStart(animation: Animator) {
                 }
 
             })

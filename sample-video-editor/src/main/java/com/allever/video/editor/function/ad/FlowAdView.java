@@ -1,4 +1,4 @@
-//package com.videoeditor.function.ad;
+//package com.allever.video.editor.function.ad;
 //
 //import android.annotation.TargetApi;
 //import android.content.Context;
@@ -19,7 +19,6 @@
 //import com.android.absbase.App;
 //import com.android.absbase.ui.view.AllinoneAdView;
 //import com.android.absbase.utils.DeviceUtils;
-//import com.qrcode.scanner.ad.AdItemBean;
 //import com.rice.balls.utils.CubicBezierInterpolator;
 //import com.allever.video.editor.ConfigManager;
 //import com.allever.video.editor.R;

@@ -15,10 +15,10 @@
             android:id="@+id/seekbar_original"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            custom:max="255"
+            custom:nummax="255"
             custom:numSize="14sp"
-            custom:progress="50"
-            custom:showNum="false" />
+            custom:numprogress="50"
+            custom:numshowNum="false" />
 
         <TextView
             android:id="@+id/textview_original"
@@ -43,10 +43,10 @@
             android:id="@+id/seekbar_soundtrack"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            custom:max="255"
+            custom:nummax="255"
             custom:numSize="14sp"
-            custom:progress="50"
-            custom:showNum="false" />
+            custom:numprogress="50"
+            custom:numshowNum="false" />
 
         <TextView
             android:id="@+id/textview_soundtrack"

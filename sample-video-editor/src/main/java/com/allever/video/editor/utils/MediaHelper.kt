@@ -1,13 +1,14 @@
 package com.allever.video.editor.utils
 
+import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
-import com.allever.lib.common.app.App
-import com.allever.lib.common.util.log
+import app.allever.android.lib.core.app.App
 import com.allever.video.editor.ui.bean.ImageFolder
 import com.allever.video.editor.ui.bean.ThumbnailBean
+import com.allever.video.editor.utils.SystemUtils.log
 import java.io.File
 import java.util.HashMap
 import java.util.HashSet
@@ -101,6 +102,7 @@ object MediaHelper {
 
     private val BUCKET_ORDER_BY = "$COLUMN_DATE_TAKEN DESC"
 
+    @SuppressLint("Range")
     fun getAlbumInfo(type: String, includeGif: Boolean): MutableList<ImageFolder> {
 
         val imageFolderList = mutableListOf<ImageFolder>()
@@ -242,6 +244,7 @@ object MediaHelper {
         return imageFolderList
     }
 
+    @SuppressLint("Range")
     private fun getUri(cursor: Cursor): Uri {
         val id = cursor.getLong(cursor.getColumnIndex(MediaStore.Files.FileColumns._ID))
         val mimeType = cursor.getString(

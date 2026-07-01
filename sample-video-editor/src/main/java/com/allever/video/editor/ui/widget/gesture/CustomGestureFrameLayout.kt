@@ -1352,6 +1352,8 @@ constructor(private val mContext: Context, attrs: AttributeSet? = null, defStyle
                         val textBean = action.effectBean as? TextBean
                         textBean?.text = action.currentObj as String
                     }
+
+                    else -> {}
                 }
 
             }
@@ -1369,6 +1371,8 @@ constructor(private val mContext: Context, attrs: AttributeSet? = null, defStyle
                                 effectBean.fontName = fontName
                             }
                         }
+
+                        else -> {}
                     }
                 }
             }

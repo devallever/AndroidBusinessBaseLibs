@@ -17,13 +17,13 @@
         <attr name="numSize" format="reference|dimension" />
         <attr name="numTopHeight" format="dimension" />
         <attr name="numBgThumb" format="reference|color" />
-        <attr name="touchThumb" format="reference|color" />
-        <attr name="progressDrawable" format="reference|color" />
-        <attr name="progressBgDrawable" format="reference|color" />
-        <attr name="progress" format="integer" />
-        <attr name="max" format="integer" />
-        <attr name="showNum" format="boolean" />
-        <attr name="showTopNum" format="boolean" />
+        <attr name="numtouchThumb" format="reference|color" />
+        <attr name="numprogressDrawable" format="reference|color" />
+        <attr name="numprogressBgDrawable" format="reference|color" />
+        <attr name="numprogress" format="integer" />
+        <attr name="nummax" format="integer" />
+        <attr name="numshowNum" format="boolean" />
+        <attr name="numshowTopNum" format="boolean" />
     </declare-styleable>
 
     <!-- Specifies how to place the content of an object, both
@@ -90,8 +90,8 @@
         <attr name="checkable" format="boolean" />
     </declare-styleable>
 
-    <declare-styleable name="scaleStyle">
-        <attr name="scaleType">
+    <declare-styleable name="vescaleStyle">
+        <attr name="vescaleType">
             <enum name="none" value="0" />
 
             <enum name="fitXY" value="1" />
