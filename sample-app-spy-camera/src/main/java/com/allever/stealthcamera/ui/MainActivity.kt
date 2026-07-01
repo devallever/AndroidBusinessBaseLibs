@@ -4,23 +4,20 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import com.allever.lib.common.util.ToastUtils
-import com.allever.lib.common.util.toast
-import com.allever.lib.permission.PermissionListener
-import com.allever.lib.permission.PermissionManager
+import app.allever.android.lib.core.base.AbstractActivity
+import app.allever.android.lib.core.ext.toast
 
 import com.allever.stealthcamera.FloatWindowService
-import com.allever.stealthcamera.R
+import org.xm.stealth.camera.R
 import com.allever.stealthcamera.function.permission.FloatWindowManager
 import com.allever.stealthcamera.function.permission.rom.RomUtils
 import com.allever.stealthcamera.function.permission.rom.VivoUtils
 import com.allever.stealthcamera.utils.CameraUtil
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AbstractActivity() {
 
     private var mIvCam: ImageView? = null
     private var mIvSetting: ImageView? = null
@@ -32,11 +29,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         initData()
         initView()
-
-        requestPermission()
     }
 
     private fun initData() {}
@@ -54,23 +48,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         mIvCam?.setOnClickListener {
-            requestPermission(Runnable {
-                if (!CameraUtil.checkCameraHardware(this@MainActivity)) {
-                    return@Runnable
-                }
-                if (FloatWindowManager.applyOrShowFloatWindow(this@MainActivity)) {
-                    val floatIntent = Intent(this@MainActivity, FloatWindowService::class.java)
-                    if (FloatWindowService.mService == null) {
-                        startService(floatIntent)
-                        mIvCam?.setImageResource(R.drawable.ic_camera_on)
-                    } else {
-                        stopService(floatIntent)
-                        mIvCam?.setImageResource(R.drawable.ic_camera_off)
-                    }
+            if (FloatWindowManager.applyOrShowFloatWindow(this@MainActivity)) {
+                val floatIntent = Intent(this@MainActivity, FloatWindowService::class.java)
+                if (FloatWindowService.mService == null) {
+                    startService(floatIntent)
+                    mIvCam?.setImageResource(R.drawable.ic_camera_on)
                 } else {
-                    showSettingDialog()
+                    stopService(floatIntent)
+                    mIvCam?.setImageResource(R.drawable.ic_camera_off)
                 }
-            })
+            } else {
+                showSettingDialog()
+            }
         }
 
         mIvSetting?.setOnClickListener {
@@ -80,63 +69,26 @@ class MainActivity : AppCompatActivity() {
         }
 
         mIvPic?.setOnClickListener {
-            if (PermissionManager.hasPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                //相册
-                val intent = Intent(this@MainActivity, PictureActivity::class.java)
-                startActivity(intent)
-
-            } else {
-                requestPermission()
-            }
+            val intent = Intent(this@MainActivity, PictureActivity::class.java)
+            startActivity(intent)
         }
 
         mIvGenCam?.setOnClickListener(View.OnClickListener {
             if (!CameraUtil.checkCameraHardware(this@MainActivity)) {
                 return@OnClickListener
             }
-            if (PermissionManager.hasPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                if (FloatWindowService.mService != null) {
-                    //停止预览
-                    val floatIntent = Intent(this@MainActivity, FloatWindowService::class.java)
-                    stopService(floatIntent)
-                    mIvCam?.setImageResource(R.drawable.ic_camera_off)
-                }
-
-                val intent = Intent(this@MainActivity, CameraActivity::class.java)
-                startActivity(intent)
-            } else {
-                requestPermission()
+            if (FloatWindowService.mService != null) {
+                //停止预览
+                val floatIntent = Intent(this@MainActivity, FloatWindowService::class.java)
+                stopService(floatIntent)
+                mIvCam?.setImageResource(R.drawable.ic_camera_off)
             }
+
+            val intent = Intent(this@MainActivity, CameraActivity::class.java)
+            startActivity(intent)
         })
 
 
-    }
-
-
-    private fun requestPermission(grantedTask: Runnable? = null) {
-        if (PermissionManager.hasPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            grantedTask?.run()
-            return
-        }
-        PermissionManager.request(object : PermissionListener {
-            override fun onGranted(grantedList: MutableList<String>) {
-                grantedTask?.run()
-            }
-
-            override fun onDenied(deniedList: MutableList<String>) {
-                super.onDenied(deniedList)
-                ToastUtils.show("拒绝权限无法使用")
-            }
-
-            override fun alwaysDenied(deniedList: MutableList<String>) {
-                super.alwaysDenied(deniedList)
-                PermissionManager.jumpPermissionSetting(this@MainActivity, 0,
-                        DialogInterface.OnClickListener { dialog, which ->
-                            dialog.dismiss()
-                        })
-            }
-
-        }, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
     private fun showSettingDialog() {

@@ -1,14 +1,14 @@
 package com.allever.stealthcamera.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
+import app.allever.android.lib.core.base.AbstractActivity
 
 import com.allever.stealthcamera.CameraManager
-import com.allever.stealthcamera.R
+import org.xm.stealth.camera.R
 import com.allever.stealthcamera.ui.view.CameraSurfaceView
 import com.allever.stealthcamera.utils.CameraUtil
 import com.allever.stealthcamera.utils.SPUtil
@@ -17,7 +17,7 @@ import com.allever.stealthcamera.utils.SPUtil
  * Created by Allever on 18/5/12.
  */
 
-class CameraActivity : AppCompatActivity() {
+class CameraActivity : AbstractActivity() {
     private lateinit var mFl: FrameLayout
     private var cameraSurfaceView: CameraSurfaceView? = null
     private var params: FrameLayout.LayoutParams? = null

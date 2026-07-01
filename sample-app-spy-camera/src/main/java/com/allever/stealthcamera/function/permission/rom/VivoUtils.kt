@@ -3,7 +3,6 @@ package com.allever.stealthcamera.function.permission.rom
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 
 /**
@@ -41,8 +40,8 @@ object VivoUtils {
             val packageManager = context.packageManager
             val packageInfo = packageManager.getPackageInfo(
                     context.packageName, 0)
-            val labelRes = packageInfo.applicationInfo.labelRes
-            return context.resources.getString(labelRes)
+            val labelRes = packageInfo.applicationInfo?.labelRes
+            return context.resources.getString(labelRes!!)
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }

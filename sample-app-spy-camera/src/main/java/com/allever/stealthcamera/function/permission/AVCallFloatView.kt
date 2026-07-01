@@ -16,7 +16,7 @@ import android.view.animation.Interpolator
 import android.widget.FrameLayout
 import android.widget.Toast
 
-import com.allever.stealthcamera.R
+import org.xm.stealth.camera.R
 
 
 /**

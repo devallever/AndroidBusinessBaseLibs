@@ -4,8 +4,9 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
+import app.allever.android.lib.core.base.AbstractActivity
 
-import com.allever.stealthcamera.R
+import org.xm.stealth.camera.R
 import com.allever.stealthcamera.ui.adapter.GalleryPagerAdapter
 import com.allever.stealthcamera.utils.FileUtil
 import com.allever.stealthcamera.ui.view.ZoomOutPageTransformer
@@ -16,7 +17,7 @@ import java.util.ArrayList
  * Created by Allever on 18/5/16.
  */
 
-class GalleryActivity : AppCompatActivity() {
+class GalleryActivity : AbstractActivity() {
     private var mVp: ViewPager? = null
     private var mAdapter: GalleryPagerAdapter? = null
     private var mFragmentList: MutableList<Fragment>? = null

@@ -4,11 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
-import com.allever.lib.common.app.BaseActivity
-import com.allever.stealthcamera.R
+import app.allever.android.lib.core.base.AbstractActivity
+import org.xm.stealth.camera.R
 
-class AboutActivity: BaseActivity(), View.OnClickListener {
+class AboutActivity: AbstractActivity(), View.OnClickListener {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

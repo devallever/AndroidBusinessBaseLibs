@@ -15,9 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.allever.stealthcamera.BuildConfig
-import com.allever.stealthcamera.R
 import com.allever.stealthcamera.RecyclerItemClickListener
+import org.xm.stealth.camera.R
 import com.allever.stealthcamera.ui.adapter.PicAdapter
 import com.allever.stealthcamera.utils.FileUtil
 import java.io.File
@@ -107,38 +106,43 @@ class PictureActivity : AppCompatActivity() {
 //            }
 //        })
 
-        mRv!!.addOnItemTouchListener(RecyclerItemClickListener(this, mRv!!, object : RecyclerItemClickListener.OnItemClickListener {
-            override fun onItemClick(view: View, position: Int) {
-                if (TextUtils.isEmpty(mPkg)) {
-                    mPkg = pkg
-                }
-                val albumIntent = Intent(Intent.ACTION_VIEW)
-                if (!TextUtils.isEmpty(mPkg)) {
-                    intent.setPackage(mPkg)
-                }
+        mRv!!.addOnItemTouchListener(
+            RecyclerItemClickListener(
+                this,
+                mRv!!,
+                object : RecyclerItemClickListener.OnItemClickListener {
+                    override fun onItemClick(view: View, position: Int) {
+                        if (TextUtils.isEmpty(mPkg)) {
+                            mPkg = pkg
+                        }
+                        val albumIntent = Intent(Intent.ACTION_VIEW)
+                        if (!TextUtils.isEmpty(mPkg)) {
+                            intent.setPackage(mPkg)
+                        }
 
-                val file = File(mFilePathList!![position])
-                val fileUri: Uri
-                fileUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    //解决调用相册不显示图片的问题
-                    albumIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    FileProvider.getUriForFile(
-                            this@PictureActivity,
-                            BuildConfig.APPLICATION_ID + ".fileprovider",
-                            file
-                    )
-                } else {
-                    Uri.fromFile(file)
-                }
+                        val file = File(mFilePathList!![position])
+                        val fileUri: Uri
+                        fileUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            //解决调用相册不显示图片的问题
+                            albumIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            FileProvider.getUriForFile(
+                                this@PictureActivity,
+                                "com.allever.business.lib.project" + ".fileprovider",
+                                file
+                            )
+                        } else {
+                            Uri.fromFile(file)
+                        }
 
-                albumIntent.setDataAndType(Uri.parse(fileUri.toString()), "image/*")
-                startActivity(albumIntent)
-            }
+                        albumIntent.setDataAndType(Uri.parse(fileUri.toString()), "image/*")
+                        startActivity(albumIntent)
+                    }
 
-            override fun onItemLongClick(view: View?, position: Int) {
+                    override fun onItemLongClick(view: View?, position: Int) {
 
-            }
-        }))
+                    }
+                })
+        )
     }
 
     companion object {

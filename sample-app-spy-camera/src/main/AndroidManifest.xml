@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.allever.stealthcamera">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.CAMERA" />
@@ -27,6 +26,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name="com.allever.stealthcamera.ui.AboutActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name="app.allever.android.sample.app.spy.camera.SampleAppSypCameraActivity" />
+
         <service android:name="com.allever.stealthcamera.FloatWindowService" />
 
         <provider

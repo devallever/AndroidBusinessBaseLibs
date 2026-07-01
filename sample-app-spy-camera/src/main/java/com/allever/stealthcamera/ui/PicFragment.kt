@@ -6,14 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.allever.stealthcamera.R
+import app.allever.android.lib.core.base.AbstractFragment
+import org.xm.stealth.camera.R
 import com.bumptech.glide.Glide
 
 /**
  * Created by Allever on 18/5/16.
  */
 
-class PicFragment : androidx.fragment.app.Fragment {
+class PicFragment : AbstractFragment {
     private var mImgPath: String? = null
 
     constructor()
@@ -25,7 +26,7 @@ class PicFragment : androidx.fragment.app.Fragment {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = LayoutInflater.from(activity).inflate(R.layout.fragment_pic, container, false)
         val iv = view.findViewById<ImageView>(R.id.id_fg_pic_iv)
-        Glide.with(activity!!).load(mImgPath).into(iv)
+        Glide.with(requireActivity()).load(mImgPath).into(iv)
         return view
     }
 

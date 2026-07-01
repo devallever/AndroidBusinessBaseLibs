@@ -3,11 +3,11 @@ package com.allever.stealthcamera.ui.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.allever.lib.common.ui.widget.recycler.BaseRecyclerViewAdapter
-import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
+import com.allever.stealthcamera.ui.recycler.BaseRecyclerViewAdapter
+import com.allever.stealthcamera.ui.recycler.BaseViewHolder
 
 import com.bumptech.glide.Glide
-import com.allever.stealthcamera.R
+import org.xm.stealth.camera.R
 import com.android.absbase.utils.DeviceUtils
 import kotlin.math.roundToInt
 

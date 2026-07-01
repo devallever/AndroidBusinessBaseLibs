@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.Toast
 
 import com.allever.stealthcamera.CameraManager
-import com.allever.stealthcamera.R
+import org.xm.stealth.camera.R
 import com.allever.stealthcamera.utils.DisplayUtil
 import com.allever.stealthcamera.utils.FloatWindowUtil
 import com.allever.stealthcamera.utils.SPUtil

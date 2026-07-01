@@ -1,12 +1,9 @@
 package com.allever.stealthcamera
 
-import com.allever.lib.common.app.App
-import com.allever.lib.umeng.UMeng
+import app.allever.android.lib.core.app.App
 
-class MyApp: App() {
-    override fun onCreate() {
-        super.onCreate()
-        com.android.absbase.App.setContext(this)
-        UMeng.init(this)
+object MyApp{
+    fun onCreate() {
+        com.android.absbase.App.setContext(App.context)
     }
 }

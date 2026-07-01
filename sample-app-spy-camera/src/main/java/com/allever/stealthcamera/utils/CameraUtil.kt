@@ -6,8 +6,7 @@ import android.hardware.Camera
 import android.util.Log
 import android.view.Surface
 import android.view.WindowManager
-import com.allever.lib.common.app.App
-import com.allever.stealthcamera.CameraManager
+import app.allever.android.lib.core.app.App
 
 /**
  * Created by Allever on 18/5/11.

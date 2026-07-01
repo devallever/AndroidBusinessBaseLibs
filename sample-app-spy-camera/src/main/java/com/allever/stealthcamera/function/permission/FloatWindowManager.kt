@@ -19,13 +19,13 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.RelativeLayout
 
-import com.allever.stealthcamera.R
 import com.allever.stealthcamera.function.permission.rom.HuaweiUtils
 import com.allever.stealthcamera.function.permission.rom.MeizuUtils
 import com.allever.stealthcamera.function.permission.rom.MiuiUtils
 import com.allever.stealthcamera.function.permission.rom.OppoUtils
 import com.allever.stealthcamera.function.permission.rom.QikuUtils
 import com.allever.stealthcamera.function.permission.rom.RomUtils
+import org.xm.stealth.camera.R
 
 import java.lang.reflect.Field
 import java.lang.reflect.Method

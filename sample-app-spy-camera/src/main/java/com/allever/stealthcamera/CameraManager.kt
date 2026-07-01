@@ -15,7 +15,7 @@ import java.io.IOException
 import android.content.Context
 import android.view.Surface
 import android.view.WindowManager
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 import android.hardware.Camera.CameraInfo
 
 

@@ -5,10 +5,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageView
-import com.allever.lib.common.util.FeedbackHelper
+import app.allever.android.lib.core.helper.FeedbackHelper
 
 import com.allever.stealthcamera.FloatWindowService
-import com.allever.stealthcamera.R
+import org.xm.stealth.camera.R
 import com.allever.stealthcamera.utils.SPUtil
 
 /**
