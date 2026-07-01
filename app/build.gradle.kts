@@ -78,6 +78,7 @@ dependencies {
     implementation(project(":sample-net-speed-test"))
     implementation(project(":sample-step-tool"))
     implementation(project(":sample-video-editor"))
+    implementation(project(":sample-app-secret-album"))
 
     implementation(project(":z-sample-billing"))
     implementation(project(":z-sample-cleaner"))

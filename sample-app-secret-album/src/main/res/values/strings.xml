@@ -1,0 +1,110 @@
+<resources>
+    <string name="app_name">Secret Photo Album</string>
+
+    <!-- Pick -->
+    <string name="pick_import">Import</string>
+    <!-- Tabs -->
+    <string name="tab_all_album">All</string>
+    <string name="tab_video">Video</string>
+    <string name="tab_photo">Photo</string>
+
+    <!-- 分割线 -->
+    <color name="dividing_line_color">#26ffffff</color>
+
+    <string name="not_install">Sorry, you have not installed the app!</string>
+    <string name="no_suitable_player">There is no suitable video player!</string>
+    <string name="more">More</string>
+    <string name="share_to">Share to</string>
+    <!--  -->
+
+    <!-- 异常提示 -->
+    <string name="storage_not_ready">Can\'t take pictures. Please insert a memory card or change the storage path of photos.</string>
+    <string name="little_sdcard_tips">not enough storage space. Photos / videos may not be saved.</string>
+    <string name="request_ext_sdcard_permission_tip">SD Write permission</string>
+    <string name="request_ext_sdcard_permission_msg1">In order to write to the SD card, the App requires you to explicitly grant permission through Android. After pressing CONFIRM, the Android document selection dialog will be displayed.</string>
+    <string name="request_ext_sdcard_permission_msg2">Please import an external SD card and select the top folder.</string>
+    <string name="request_ext_sdcard_permission_msg3">You may need to use the menu option to display the SD card.</string>
+    <!-- 文件夹选择界面 -->
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
+    <string name="ok">Ok</string>
+    <string name="save">Save</string>
+
+    <string name="media_save_file_name_prefix">KeepSecurity</string>
+
+    <!--  dialog -->
+    <string name="dialog_default_title">Title</string>
+    <string name="dialog_default_message">Message</string>
+    <string name="dialog_default_positive_text">@string/ok</string>
+    <string name="dialog_default_negative_text">@string/cancel</string>
+
+    <string name="add_album">Create Album</string>
+    <string name="input_album_name">Enter album name</string>
+    <string name="tips_please_input_album_name">Please enter the album name.</string>
+    <string name="tips_dialog_delete_album_resource">This album will be deleted. This operation cannot be undone.</string>
+    <string name="tips_dialog_delete_resource">The resource will be deleted. This operation cannot be undone.</string>
+    <string name="delete">Delete</string>
+    <string name="delete_finish">Delete Done</string>
+    <string name="set_album_cover">Set album art</string>
+    <string name="rename">Rename</string>
+    <string name="already_exist_album">The album already exists</string>
+    <string name="album_rename_failed">Album rename failed</string>
+
+    <string name="album_select_secret_vault_new_password_tip">Enter new password</string>
+    <string name="album_select_secret_vault_comfirm_password_tip">Confirm your new password</string>
+    <string name="album_select_secret_vault_password_tip">Enter your password</string>
+    <string name="enter_old_pwd">Enter your old password</string>
+    <string name="enter_new_pwd">@string/album_select_secret_vault_new_password_tip</string>
+    <string name="enter_comfirm_pwd">@string/album_select_secret_vault_comfirm_password_tip</string>
+
+    <!-- 预览界面 -->
+    <string name="preview_video_unavailable_tips">This video cannot be played.</string>
+    <string name="preview_boundary_error_tips">This photo or video cannot be displayed.</string>
+
+    <!-- 设置 -->
+    <string name="setting">Setting</string>
+	<string name="setting_modify_password">Change the password</string>
+
+    <string name="share">Share</string>
+    <string name="about">About</string>
+    <string name="support">Support us</string>
+    <string name="feedback">Feedback</string>
+    <string name="privacy">Privacy Policy</string>
+    <string name="about_right">Copyright @2018–2020 %s All rights reserved</string>
+    <string name="feed_back_subject">Your suggestion</string>
+    <string name="feed_back_content">We hope to get your suggestions:</string>
+    <string name="select_mail_app">Please select a mail application</string>
+    <string name="has_not_google_service">Google service is not installed</string>
+	<string name="export_resource">Exporting resources for you …</string>
+    <string name="import_resource">Importing resources for you …</string>
+
+    <string name="tab_guide">Guide</string>
+    <string name="tab_main">@string/app_name</string>
+    <string name="permission_setting">Setting permissions</string>
+
+    <string name="guide">
+        This is a private album browser, you can import some important private photos or videos into the app, and set a password for your app. The main content features include:
+        \n1.【Import and Export】Import pictures or videos to the app, you can export at any time
+        \n2.【Album management】Add, delete, modify your album
+        \n3.【Browse】Browse your pictures and videos
+        \n4.【Password management】Create Password Change Password
+
+        \n\n【Note】：When deleting this application, we will delete the pictures or videos you imported, please restore them in time. In order to respect user privacy, the network backup function is temporarily not provided.
+    </string>
+
+    <string name="permission_tips">we need
+        \n【Storage Permission】 Get pictures and videos of your device
+        \n【Phone State】In order to count device information and make a better user experience
+        \n Denying the corresponding permission will not be able to use some functions</string>
+    <string name="permission_accept">Accept</string>
+    <string name="permission_reject">Reject</string>
+
+    <string name="share_content">【%s】This application is very good, recommend it. Get address\n%s</string>
+
+    <string name="export_success">Export Success</string>
+    <string name="export_fail">Export Fail</string>
+
+    <string name="import_success">Import Success</string>
+    <string name="import_fail">Import Fail</string>
+</resources>
