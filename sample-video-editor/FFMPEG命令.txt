@@ -1,0 +1,80 @@
+将图片合成视频
+一张图片
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -loop 1 -t 3.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp3137980241731866697.tmp -itsoffset 0.000 -loop 1 -t 3.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp5360932979257478134.png -filter_complex [0:v][1:v]overlay='if(gte(t,0.000),0,NAN)':'if(lt(t,3.000),0,NAN)'[out1];[out1]scale=480:480[outVideoFinal] -map [outVideoFinal] -profile:v baseline -level 3.0 -preset ultrafast -crf 30 -threads auto /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp433662821389436388.mp4
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp433662821389436388.mp4 -vcodec copy -acodec copy /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp2484534565355828075.mp4
+
+ffmpeg -loop 1  循环一次
+-t 3 时长3秒
+-i 文件(什么文件) 基础的背景视频文件
+-itsoffset 0.000
+-loop 1
+-t 3.000
+-i 待合成的图片.png
+-filter_complex [0:v][1:v]overlay='if(gte(t,0.000),0,NAN)':'if(lt(t,3.000),0,NAN)'[out1];[out1]scale=852:640[outVideoFinal]
+-map [outVideoFinal]
+-profile:v baseline
+-level 3.0
+-preset ultrafast
+-crf 30
+-threads auto 输出文件.mp4
+
+两张图片
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -loop 1 -t 6.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp1083951851388162934.tmp -itsoffset 0.000 -loop 1 -t 3.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp8418166971732894730.png -itsoffset 3.001 -loop 1 -t 3.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp844734018222681883.png -filter_complex [0:v][1:v]overlay='if(gte(t,0.000),0,NAN)':'if(lt(t,3.000),0,NAN)'[out1];[out1][2:v]overlay='if(gte(t,3.001),0,NAN)':'if(lt(t,6.001),0,NAN)'[out2];[out2]scale=360:480[outVideoFinal] -map [outVideoFinal] -profile:v baseline -level 3.0 -preset ultrafast -crf 30 -threads auto /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp7233081867751629861.mp4
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp7233081867751629861.mp4 -vcodec copy -acodec copy /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp2480708035663219715.mp4
+
+ffmpeg
+-loop 1
+-t 6.000
+-i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp1083951851388162934.tmp
+-itsoffset 0.000
+-loop 1
+-t 3.000
+-i 输入图片1文件路径
+-itsoffset 3.001
+-loop 1
+-t 3.000
+-i 输入图片2文件路径
+-filter_complex [0:v][1:v]overlay='if(gte(t,0.000),0,NAN)':'if(lt(t,3.000),0,NAN)'[out1];[out1][2:v]overlay='if(gte(t,3.001),0,NAN)':'if(lt(t,6.001),0,NAN)'[out2];[out2]scale=360:480[outVideoFinal]
+-map [outVideoFinal]
+-profile:v baseline
+-level 3.0
+-preset ultrafast
+-crf 30
+-threads auto 输出文件.mp4
+
+
+
+图片+音频
+一张图片
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -loop 1 -t 3.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp7830078394827257889.tmp -itsoffset 0.000 -loop 1 -t 3.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp2135756913034087525.png -filter_complex [0:v][1:v]overlay='if(gte(t,0.000),0,NAN)':'if(lt(t,3.000),0,NAN)'[out1];[out1]scale=480:480[outVideoFinal] -map [outVideoFinal] -profile:v baseline -level 3.0 -preset ultrafast -crf 30 -threads auto /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp6893758873093573781.mp4
+一张图片+一段音频， 执行了两条命令，先图片 在音频， 再合并
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -loop 1 -t 15.411 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp2237914430261785029.tmp -itsoffset 0.000 -loop 1 -t 3.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp5936547518814322543.png -filter_complex [0:v][1:v]overlay='if(gte(t,0.000),0,NAN)':'if(lt(t,3.000),0,NAN)'[out1];[out1]scale=480:480[outVideoFinal] -map [outVideoFinal] -profile:v baseline -level 3.0 -preset ultrafast -crf 30 -threads auto /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp4542508925041985761.mp4
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -itsoffset 0.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/cache/files/music/frenzy/frenzy.mp3 -filter_complex [0:a]volume=1.0,adelay=0|0[outAudio0];[outAudio0]amix=inputs=1:duration=0[outAudioFinal] -map [outAudioFinal] -y /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp4532169408402793704.aac
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp4542508925041985761.mp4 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp4532169408402793704.aac -vcodec copy -acodec copy /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp2261314874462275332.mp4
+
+一个视频
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -loop 1 -t 6.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp683521639955588426.tmp -itsoffset 0.000 -i /storage/emulated/0/DCIM/Camera/VIDEO_20200409_003216934.mp4 -filter_complex [1:v]scale=381.0:508.0[S1];[S1]rotate='0.0:ow=381.0:oh=508.0:c=none'[inner1];[0:v][inner1]overlay='if(gte(t,0.000),0.0,NAN)':'if(lt(t,6.000),0.0,NAN)'[out1];[out1]scale=360:480[outVideoFinal] -map [outVideoFinal] -profile:v baseline -level 3.0 -preset ultrafast -crf 30 -threads auto /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp2847894827905846220.mp4
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp2847894827905846220.mp4 -vcodec copy -acodec copy /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp4171983940485166813.mp4
+
+
+两个视频
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -loop 1 -t 9.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp7004865071018630448.tmp -itsoffset 0.000 -i /storage/emulated/0/DCIM/Camera/VIDEO_20200409_003216934.mp4 -itsoffset 6.001 -i /storage/emulated/0/DCIM/Camera/VIDEO_20200409_003143526.mp4 -filter_complex [1:v]scale=381.0:508.0[S1];[S1]rotate='0.0:ow=381.0:oh=508.0:c=none'[inner1];[0:v][inner1]overlay='if(gte(t,0.000),0.0,NAN)':'if(lt(t,6.000),0.0,NAN)'[out1];[2:v]scale=381.0:381.0[S2];[S2]rotate='0.0:ow=381.0:oh=381.0:c=none'[inner2];[out1][inner2]overlay='if(gte(t,6.001),0.0,NAN)':'if(lt(t,9.001),63.5,NAN)'[out2];[out2]scale=360:480[outVideoFinal] -map [outVideoFinal] -profile:v baseline -level 3.0 -preset ultrafast -crf 30 -threads auto /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp2635641498317078919.mp4
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp2635641498317078919.mp4 -vcodec copy -acodec copy /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp3421647559484883849.mp4
+
+
+图片+视频+音频
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -loop 1 -t 15.411 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp3463056447086521828.tmp -itsoffset 0.000 -loop 1 -t 3.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp3674978923927208684.png -itsoffset 3.001 -i /storage/emulated/0/DCIM/Camera/VIDEO_20200409_003143526.mp4 -filter_complex [0:v][1:v]overlay='if(gte(t,0.000),0,NAN)':'if(lt(t,3.000),0,NAN)'[out1];[2:v]scale=381.0:381.0[S2];[S2]rotate='0.0:ow=381.0:oh=381.0:c=none'[inner2];[out1][inner2]overlay='if(gte(t,3.001),0.0,NAN)':'if(lt(t,6.001),63.5,NAN)'[out2];[out2]scale=360:480[outVideoFinal] -map [outVideoFinal] -profile:v baseline -level 3.0 -preset ultrafast -crf 30 -threads auto /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp8319248606515579479.mp4
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -itsoffset 0.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/cache/files/music/frenzy/frenzy.mp3 -filter_complex [0:a]volume=1.0,adelay=0|0[outAudio0];[outAudio0]amix=inputs=1:duration=0[outAudioFinal] -map [outAudioFinal] -y /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp4352759345193523554.aac
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp8319248606515579479.mp4 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp4352759345193523554.aac -vcodec copy -acodec copy /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp418260892363169851.mp4
+
+图片+贴纸 = 两张图片
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -loop 1 -t 3.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp7757570855970072872.tmp -itsoffset 0.000 -loop 1 -t 3.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp1673117757106735625.png -itsoffset 0.000 -loop 1 -t 3.000 -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp2332195107627769188.png -filter_complex [0:v][1:v]overlay='if(gte(t,0.000),0,NAN)':'if(lt(t,3.000),0,NAN)'[out1];[out1][2:v]overlay='if(gte(t,0.000),0,NAN)':'if(lt(t,3.000),0,NAN)'[out2];[out2]scale=360:480[outVideoFinal] -map [outVideoFinal] -profile:v baseline -level 3.0 -preset ultrafast -crf 30 -threads auto /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp3473770787390651843.mp4
+/data/data/com.allever.video.editor/files/.ffmpeg/ffmpeg -i /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp3473770787390651843.mp4 -vcodec copy -acodec copy /storage/emulated/0/Android/data/com.allever.video.editor/files/cache/.video/tmp5988554380410923250.mp4
+
+
+//一张图片转视频
+ffmpeg -loop 1 -t 3.000 -i tmp1665558608313510510.tmp -itsoffset 0.000 -loop 1 -t 3.000 -i tmp3333471370339830021.png -filter_complex [0:v][1:v]overlay='if(gte(t,0.000),0,NAN)':'if(lt(t,3.000),0,NAN)'[out1];[out1]scale=1280:1274[outVideoFinal] -map [outVideoFinal] -profile:v main -level 4.2 -preset ultrafast -crf 23 -threads auto tmp5594947110572000050.mp4
+
+
+//两张图片
+ffmpeg -loop 1 -t 6.000 -i tmp5566831128446333276.tmp -itsoffset 0.000 -loop 1 -t 3.000 -i tmp4489997383663289373.png -itsoffset 3.001 -loop 1 -t 3.000 -i tmp8032214381974769637.png -filter_complex [0:v][1:v]overlay='if(gte(t,0.000),0,NAN)':'if(lt(t,3.000),0,NAN)'[out1];[out1][2:v]overlay='if(gte(t,3.001),0,NAN)':'if(lt(t,6.001),0,NAN)'[out2];[out2]scale=1280:1274[outVideoFinal] -map [outVideoFinal] -profile:v main -level 4.2 -preset ultrafast -crf 23 -threads auto tmp3073080639297156695.mp4
