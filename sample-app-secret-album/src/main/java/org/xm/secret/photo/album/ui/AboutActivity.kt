@@ -37,7 +37,7 @@ class AboutActivity: BaseActivity<Any, BasePresenter<Any>>(), View.OnClickListen
     override fun initData() {
     }
 
-    override fun getContentView(): Any = R.layout.activity_about
+    override fun getContentView(): Any = R.layout.sa_activity_about
 
     override fun onClick(v: View?) {
         when(v?.id) {

@@ -4,14 +4,14 @@
     android:layout_height="match_parent">
 
     <VideoView
-        android:id="@+id/id_video_view"
+        android:id="@+id/sa_id_video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
     <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-        android:id="@+id/id_iv_image"
+        android:id="@+id/sa_id_iv_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
@@ -19,7 +19,7 @@
         android:visibility="visible"/>
 
     <com.github.chrisbanes.photoview.PhotoView
-        android:id="@+id/id_iv_image_gif"
+        android:id="@+id/sa_id_iv_image_gif"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
@@ -34,7 +34,7 @@
         android:visibility="gone" />
 
     <ImageView
-        android:id="@+id/id_iv_video_controller"
+        android:id="@+id/sa_id_iv_video_controller"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

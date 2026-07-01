@@ -46,15 +46,15 @@ object DialogHelper {
     ): AlertDialog {
         var builder = builder
         val editAlertDialog = AlertDialog.Builder(activity).create()
-        val view = LayoutInflater.from(activity).inflate(R.layout.layout_alert_dialog, null)
+        val view = LayoutInflater.from(activity).inflate(R.layout.sa_layout_alert_dialog, null)
         editAlertDialog.setView(view)
 //        val window = editAlertDialog.window
 //        window?.setContentView(R.layout.layout_alert_dialog)
-        val titleView = view.findViewById(R.id.title) as TextView
-        val detailView = view.findViewById(R.id.detail) as TextView
-        val cancelView = view.findViewById(R.id.btn_cancel) as RippleButton
-        val okView = view.findViewById(R.id.btn_ok) as RippleButton
-        val editText = view.findViewById(R.id.id_edit_text) as EditText
+        val titleView: TextView = view.findViewById(R.id.title)
+        val detailView: TextView = view.findViewById(R.id.detail)
+        val cancelView: RippleButton = view.findViewById(R.id.btn_cancel)
+        val okView: RippleButton = view.findViewById(R.id.btn_ok)
+        val editText: EditText = view.findViewById(R.id.sa_id_edit_text)
 
         if (builder == null) {
             builder = DialogHelper.Builder()

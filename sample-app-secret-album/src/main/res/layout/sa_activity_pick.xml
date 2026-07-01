@@ -14,7 +14,7 @@
         android:background="@drawable/top_bar_bg">
 
         <ImageView
-            android:id="@+id/iv_back"
+            android:id="@+id/sa_iv_back"
             android:layout_width="@dimen/default_icon_width"
             android:layout_height="@dimen/default_icon_height"
             android:layout_centerVertical="true"
@@ -47,7 +47,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_arrow_down"
+                android:src="@drawable/sa_ic_arrow_down"
                 android:tint="@color/default_icon_color_filter" />
         </LinearLayout>
 

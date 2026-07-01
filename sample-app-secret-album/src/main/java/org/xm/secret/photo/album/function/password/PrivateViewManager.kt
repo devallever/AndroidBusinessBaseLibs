@@ -1,5 +1,6 @@
 package org.xm.secret.photo.album.function.password
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -14,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import app.allever.android.lib.core.app.App
 import android.view.WindowManager
+import androidx.core.content.ContextCompat
 
 
 object PrivateViewManager {
@@ -83,13 +85,19 @@ class PrivateViewProxy(val activity: Activity) {
         }
     }
 
+    @SuppressLint("WrongConstant")
     private fun registerBroadcast(activity: Activity) {
         val mFilter = IntentFilter()
         mFilter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)//home键
         mFilter.addAction(Intent.ACTION_SCREEN_ON)  //开屏
         mFilter.addAction(Intent.ACTION_SCREEN_OFF)//锁屏
         mFilter.addAction(Intent.ACTION_USER_PRESENT)//解锁
-        activity.registerReceiver(mHomeBroadcastReceiver, mFilter)
+        ContextCompat.registerReceiver(
+            activity,
+            mHomeBroadcastReceiver,
+            mFilter,
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     private fun unregisterReceiver(activity: Activity) {

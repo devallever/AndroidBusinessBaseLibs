@@ -24,7 +24,7 @@ class ChangePasswordActivity : BaseActivity<ChangePasswordView, ChangePasswordPr
 
     private var mShowPasswordViewFirst: Boolean = false
 
-    override fun getContentView(): Int = R.layout.activity_modify_password
+    override fun getContentView(): Int = R.layout.sa_activity_modify_password
     override fun createPresenter(): ChangePasswordPresenter = ChangePasswordPresenter()
     override fun onCreate(savedInstanceState: Bundle?) {
         mShowPasswordViewFirst = intent?.getBooleanExtra(EXTRA_SHOW_PASSWORD_VIEW_FIRST, false) ?: false

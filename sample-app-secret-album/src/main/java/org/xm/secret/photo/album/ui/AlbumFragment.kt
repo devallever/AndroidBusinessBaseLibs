@@ -3,6 +3,7 @@ package org.xm.secret.photo.album.ui
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.xm.secret.photo.album.ui.widget.recyclerview.BaseViewHolder
 import org.xm.secret.photo.album.ui.widget.recyclerview.ItemListener
@@ -22,12 +23,12 @@ class AlbumFragment : BaseFragment<AlbumView, AlbumPresenter>(), AlbumView, View
     private var mImageFolderList = mutableListOf<ImageFolder>()
     private var mAlbumBottomDialog: AlbumDialog? = null
 
-    override fun getContentView(): Int = R.layout.fragment_album
+    override fun getContentView(): Int = R.layout.sa_fragment_album
 
     override fun createPresenter(): AlbumPresenter = AlbumPresenter()
     override fun initView(root: View) {
         mRecyclerView = root.findViewById(R.id.album_recycler_view)
-        mRecyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, 2)
+        mRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
         root.findViewById<View>(R.id.album_btn_add_album).setOnClickListener(this)
         mAlbumBottomDialog = AlbumDialog(this)

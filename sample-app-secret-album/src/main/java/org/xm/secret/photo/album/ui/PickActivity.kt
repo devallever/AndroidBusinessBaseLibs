@@ -80,7 +80,7 @@ class PickActivity : BaseActivity<PickView, PickPresenter>(),
     private lateinit var mImportLoadingDialog: AlertDialog
 
 
-    override fun getContentView(): Int = R.layout.activity_pick
+    override fun getContentView(): Int = R.layout.sa_activity_pick
     override fun createPresenter(): PickPresenter = PickPresenter()
     override fun initView() {
         NotchCompat.adaptNotchWithFullScreen(window)
@@ -96,7 +96,7 @@ class PickActivity : BaseActivity<PickView, PickPresenter>(),
         mBtnImport = findViewById(R.id.btn_import)
         mBtnImport.setOnClickListener(this)
         mTvTitle = findViewById(R.id.tv_title)
-        findViewById<View>(R.id.iv_back).setOnClickListener(this)
+        findViewById<View>(R.id.sa_iv_back).setOnClickListener(this)
         mImportLoadingDialog = DialogHelper.createLoadingDialog(this, getString(R.string.import_resource), false)
     }
 

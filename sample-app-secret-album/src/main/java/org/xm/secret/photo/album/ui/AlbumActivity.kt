@@ -33,7 +33,7 @@ class AlbumActivity : BaseActivity<AlbumView, AlbumPresenter>(), AlbumView, View
     private var mAlbumBottomDialog: AlbumDialog? = null
 
     override fun getContentView(): Int =
-        R.layout.activity_album
+        R.layout.sa_activity_album
     override fun createPresenter(): AlbumPresenter = AlbumPresenter()
     override fun initView() {
         NotchCompat.adaptNotchWithFullScreen(window)

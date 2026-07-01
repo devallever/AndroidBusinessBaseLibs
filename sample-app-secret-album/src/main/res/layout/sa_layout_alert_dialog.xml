@@ -30,7 +30,7 @@
         android:textSize="14sp" />
 
     <EditText
-        android:id="@+id/id_edit_text"
+        android:id="@+id/sa_id_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/detail"
@@ -45,7 +45,7 @@
         android:id="@+id/separate"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/id_edit_text"
+        android:layout_below="@+id/sa_id_edit_text"
         android:layout_marginTop="24dp"
         android:background="#0d000000" />
 

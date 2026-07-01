@@ -56,7 +56,7 @@ class GalleryActivity : BaseActivity<GalleryView, GalleryPresenter>(), GalleryVi
     private lateinit var mLoadingDialog: AlertDialog
 
     private var mSelectMode = false
-    override fun getContentView(): Int = R.layout.activity_gallery
+    override fun getContentView(): Int = R.layout.sa_activity_gallery
     override fun createPresenter(): GalleryPresenter = GalleryPresenter()
     override fun onCreate(savedInstanceState: Bundle?) {
         mAlbumName = intent.getStringExtra(EXTRA_ALBUM_NAME)
@@ -69,7 +69,7 @@ class GalleryActivity : BaseActivity<GalleryView, GalleryPresenter>(), GalleryVi
             addStatusBar(findViewById<ViewGroup>(R.id.rootLayout), findViewById<View>(R.id.top_bar))
         })
 
-        findViewById<View>(R.id.iv_back).setOnClickListener(this)
+        findViewById<View>(R.id.sa_iv_back).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_label).text = mAlbumName
         findViewById<View>(R.id.gallery_btn_pick).setOnClickListener(this)
         mLoadingDialog = DialogHelper.createLoadingDialog(this, getString(R.string.export_resource), false)

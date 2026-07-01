@@ -10,7 +10,7 @@ import org.xm.secret.photo.album.function.password.PasswordConfig
 class SplashActivity : AbstractActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        setContentView(R.layout.sa_activity_splash)
 
         NotchCompat.adaptNotchWithFullScreen(window)
 
@@ -18,6 +18,6 @@ class SplashActivity : AbstractActivity() {
             PasswordConfig.secretCheckPass = false
             ActivityHelper.startActivity<MainActivity>()
             finish()
-        }, 2000)
+        }, 500)
     }
 }

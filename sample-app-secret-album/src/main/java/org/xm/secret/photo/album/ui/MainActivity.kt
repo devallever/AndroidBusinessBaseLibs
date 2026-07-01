@@ -39,7 +39,7 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), MainView,
     private lateinit var mShakeAnimator: ObjectAnimator
 
     override fun getContentView(): Any =
-        R.layout.activity_main
+        R.layout.sa_activity_main
 
     override fun initView() {
         NotchCompat.adaptNotchWithFullScreen(window)

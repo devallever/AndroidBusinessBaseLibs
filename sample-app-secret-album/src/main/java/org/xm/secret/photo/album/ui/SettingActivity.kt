@@ -13,13 +13,13 @@ import org.xm.secret.photo.album.util.FeedbackHelper
 
 class SettingActivity : BaseActivity<SettingView, SettingPresenter>(), SettingView, View.OnClickListener {
 
-    override fun getContentView(): Int = R.layout.activity_setting
+    override fun getContentView(): Int = R.layout.sa_activity_setting
     override fun createPresenter(): SettingPresenter = SettingPresenter()
     override fun initView() {
         findViewById<TextView>(R.id.setting_tv_modify_password).setOnClickListener(this)
         findViewById<TextView>(R.id.setting_tv_feedback).setOnClickListener(this)
         findViewById<TextView>(R.id.setting_tv_about).setOnClickListener(this)
-        findViewById<ImageView>(R.id.iv_back).setOnClickListener(this)
+        findViewById<ImageView>(R.id.sa_iv_back).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_label).text = getString(R.string.setting)
     }
     override fun initData() {}

@@ -36,7 +36,7 @@ class PreviewActivity : BaseActivity<PreviewView, PreviewPresenter>(), PreviewVi
     private var mSourceType = TYPE_ENCODE
 
     override fun createPresenter(): PreviewPresenter = PreviewPresenter()
-    override fun getContentView(): Int = R.layout.activity_priview
+    override fun getContentView(): Int = R.layout.sa_activity_priview
     override fun initData() {
         mThumbnailBeanList.addAll(intent.getParcelableArrayListExtra(EXTRA_DATA)!!)
         mPosition = intent.getIntExtra(EXTRA_POSITION, 0)
@@ -51,7 +51,7 @@ class PreviewActivity : BaseActivity<PreviewView, PreviewPresenter>(), PreviewVi
 
     override fun initView() {
         findViewById<View>(R.id.preview_iv_export).setOnClickListener(this)
-        findViewById<View>(R.id.iv_back).setOnClickListener(this)
+        findViewById<View>(R.id.sa_iv_back).setOnClickListener(this)
         findViewById<View>(R.id.preview_iv_delete).setOnClickListener(this)
         findViewById<View>(R.id.preview_iv_share).setOnClickListener(this)
         mLoadingDialog = DialogHelper.createLoadingDialog(this, getString(R.string.export_resource), false)

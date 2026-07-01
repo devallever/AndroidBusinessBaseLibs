@@ -22,12 +22,12 @@ class PreviewFragment : AbstractFragment() {
     private var mVideoViewHolder: VideoViewHolder? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_preview, container, false)
-        val imageView = rootView?.findViewById<SubsamplingScaleImageView>(R.id.id_iv_image)
+        val rootView = inflater.inflate(R.layout.sa_fragment_preview, container, false)
+        val imageView = rootView?.findViewById<SubsamplingScaleImageView>(R.id.sa_id_iv_image)
         imageView?.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CUSTOM)
-        val gifView = rootView.findViewById<PhotoView>(R.id.id_iv_image_gif)
-        val videoView = rootView?.findViewById<VideoView>(R.id.id_video_view)
-        val ivPlayAndPause = rootView?.findViewById<ImageView>(R.id.id_iv_video_controller)
+        val gifView = rootView.findViewById<PhotoView>(R.id.sa_id_iv_image_gif)
+        val videoView = rootView?.findViewById<VideoView>(R.id.sa_id_video_view)
+        val ivPlayAndPause = rootView?.findViewById<ImageView>(R.id.sa_id_iv_video_controller)
 
         if (MediaTypeUtil.isImage(mThumbnailBean?.type ?: -1)) {
             //图片类型
