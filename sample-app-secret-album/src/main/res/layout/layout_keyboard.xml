@@ -4,7 +4,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
-	android:background="@color/password_view_key_board_bg">
+	android:background="@color/sa_password_view_key_board_bg">
 
 	<LinearLayout
 		style="@style/keyboard_line_style">
@@ -82,7 +82,7 @@
 			android:id="@+id/keyboard_key_del"
 			android:scaleType="centerInside"
 			android:src="@drawable/icon_del"
-			android:tint="@color/default_icon_color_filter"
+			android:tint="@color/sa_default_icon_color_filter"
 			style="@style/keyboard_grid_style"/>
 
 	</LinearLayout>

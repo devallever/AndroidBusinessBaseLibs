@@ -1,7 +1,6 @@
 package org.xm.secret.photo.album.ui
 
 import android.animation.ObjectAnimator
-import android.app.Dialog
 import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
@@ -17,9 +16,6 @@ import org.xm.secret.photo.album.app.BaseActivity
 import org.xm.secret.photo.album.ui.adapter.ViewPagerAdapter
 import org.xm.secret.photo.album.ui.mvp.presenter.MainPresenter
 import org.xm.secret.photo.album.ui.mvp.view.MainView
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.xm.secret.photo.album.ui.widget.ShakeHelper
 import org.xm.secret.photo.album.ui.widget.tab.TabLayout
 
@@ -53,8 +49,8 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), MainView,
         mVp = findViewById(R.id.id_main_vp)
         mTvTitle = findViewById(R.id.id_main_tv_title)
 
-        mainTabHighlight = resources.getColor(R.color.main_tab_highlight)
-        mainTabUnSelectColor = resources.getColor(R.color.main_tab_unselect_color)
+        mainTabHighlight = resources.getColor(R.color.sa_main_tab_highlight)
+        mainTabUnSelectColor = resources.getColor(R.color.sa_main_tab_unselect_color)
 
         initViewPagerData()
         initViewPager()

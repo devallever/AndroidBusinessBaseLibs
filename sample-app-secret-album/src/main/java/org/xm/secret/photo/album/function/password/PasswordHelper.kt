@@ -111,7 +111,7 @@ class PasswordHelper(val handler: Handler, val callback: PasswordCallback?) {
     private fun initView() {
 
         colorFilter = App.context.resources.getColor(R.color.default_gray)
-        defaultColorFilter = App.context.resources.getColor(R.color.default_theme_color)
+        defaultColorFilter = App.context.resources.getColor(R.color.sa_default_theme_color)
 
         mPasswordView = LayoutInflater.from(App.context).inflate(R.layout.secret_vault_password_layout, null)
         mLlBubbleContainer = mPasswordView?.findViewById(R.id.ll_bubbles)

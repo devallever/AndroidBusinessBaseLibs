@@ -6,19 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="org.xm.secret.photo.album.ui.AlbumActivity"
-    android:background="@color/default_background"
+    android:background="@color/sa_default_background"
     android:id="@+id/rootLayout">
 
     <RelativeLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/default_top_bar_height"
-        android:background="@color/default_top_bar_background_color">
+        android:background="@color/sa_default_top_bar_background_color">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textColor="@color/top_bar_tv_title_color"
+            android:textColor="@color/sa_top_bar_tv_title_color"
             android:text="@string/sa_app_name"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -31,7 +31,7 @@
             android:layout_height="48dp"
             android:layout_centerVertical="true"
             android:src="@drawable/icon_setting"
-			android:tint="@color/default_icon_color_filter"
+			android:tint="@color/sa_default_icon_color_filter"
             android:scaleType="centerInside"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
@@ -52,7 +52,7 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
         android:src="@drawable/icon_add"
-        android:tint="@color/default_icon_color_filter"
+        android:tint="@color/sa_default_icon_color_filter"
         android:scaleType="centerInside"
         android:background="@drawable/circle"/>
 

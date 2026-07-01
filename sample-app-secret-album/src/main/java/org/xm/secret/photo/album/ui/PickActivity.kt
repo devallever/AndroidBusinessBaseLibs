@@ -1,6 +1,5 @@
 package org.xm.secret.photo.album.ui
 
-import android.Manifest
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -140,7 +139,7 @@ class PickActivity : BaseActivity<PickView, PickPresenter>(),
         mTabs.setOnTabSelectedListener(this)
         mTabs.setSelectedTabIndicatorWidth(ResourcesUtils.resources.getDimension(R.dimen.album_selected_tab_indicator_width).toInt())
         mTabs.setSelectedTabIndicatorHeight(ResourcesUtils.resources.getDimension(R.dimen.album_selected_tab_indicator_height).toInt())
-        val indicatorColor = ResourcesUtils.resources.getColor(R.color.album_tab_indicator_color)
+        val indicatorColor = ResourcesUtils.resources.getColor(R.color.sa_album_tab_indicator_color)
         mTabs.setSelectedTabIndicatorColor(indicatorColor)
         mTabs.needDrawSelectedIndicator(true)
     }
@@ -242,9 +241,9 @@ class PickActivity : BaseActivity<PickView, PickPresenter>(),
             if (tabAt != null) {
                 val textView = tabAt.customView?.findViewById<TextView>(R.id.tv_tab)
                 if (tabAt == tab) {
-                    textView?.setTextColor(resources.getColor(R.color.album_tab_selected_color))
+                    textView?.setTextColor(resources.getColor(R.color.sa_album_tab_selected_color))
                 } else {
-                    textView?.setTextColor(resources.getColor(R.color.album_tab_un_selected_color))
+                    textView?.setTextColor(resources.getColor(R.color.sa_album_tab_un_selected_color))
                 }
             }
         }
@@ -393,7 +392,7 @@ class PickActivity : BaseActivity<PickView, PickPresenter>(),
         tvLabel?.text = resources.getString(tab.labelResId)
         //修改第一个Tab为选中状态
         if (position == 0) {
-            tvLabel?.setTextColor(resources.getColor(R.color.album_tab_selected_color))
+            tvLabel?.setTextColor(resources.getColor(R.color.sa_album_tab_selected_color))
         }
         return view
     }

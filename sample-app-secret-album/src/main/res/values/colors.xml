@@ -9,39 +9,39 @@
     <color name="colorDefault">#2196f3</color>
     <!-- default -->
 
-    <color name="default_theme_color">#2196f3</color>
-    <color name="default_background">@color/white</color>
-    <color name="default_top_bar_background_color">@color/default_theme_color</color>
-    <color name="default_icon_color_filter">@color/white</color>
-    <color name="default_btn_color_filter">#ff000000</color>
-    <color name="default_btn_background">@color/default_theme_color</color>
-    <color name="default_tv_color">@color/black</color>
-    <color name="fab_btn_background">#992196f3</color>
+    <color name="sa_default_theme_color">#2196f3</color>
+    <color name="sa_default_background">@color/white</color>
+    <color name="sa_default_top_bar_background_color">@color/sa_default_theme_color</color>
+    <color name="sa_default_icon_color_filter">@color/white</color>
+    <color name="sa_default_btn_color_filter">#ff000000</color>
+    <color name="sa_default_btn_background">@color/sa_default_theme_color</color>
+    <color name="sa_default_tv_color">@color/black</color>
+    <color name="sa_fab_btn_background">#992196f3</color>
     
     <!--  top_bar -->
-    <color name="top_bar_tv_title_color">@color/white</color>
+    <color name="sa_top_bar_tv_title_color">@color/white</color>
 
     <!-- common -->
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
 
     <!--  tab -->
-    <color name="tab_bar_color">@color/black</color>
-    <color name="album_tab_selected_color">@color/white</color>
-    <color name="album_tab_un_selected_color">#aaffffff</color>
-    <color name="album_tab_indicator_color">@color/white</color>
+    <color name="sa_tab_bar_color">@color/black</color>
+    <color name="sa_album_tab_selected_color">@color/white</color>
+    <color name="sa_album_tab_un_selected_color">#aaffffff</color>
+    <color name="sa_album_tab_indicator_color">@color/white</color>
 
-    <color name="keyboard_text_color">@color/white</color>
-    <color name="password_view_key_board_bg">#33000000</color>
+    <color name="sa_keyboard_text_color">@color/white</color>
+    <color name="sa_password_view_key_board_bg">#33000000</color>
 
-    <color name="divider_color">#19474747</color>
-    <color name="private_album_item_bg">#66000000</color>
+    <color name="sa_divider_color">#19474747</color>
+    <color name="sa_private_album_item_bg">#66000000</color>
 
-    <color name="main_tab_highlight">@color/default_theme_color</color>
-    <color name="main_tab_unselect_color">#8a8a8a</color>
+    <color name="sa_main_tab_highlight">@color/sa_default_theme_color</color>
+    <color name="sa_main_tab_unselect_color">#8a8a8a</color>
 
-    <color name="start_color">#0288d1</color>
-    <color name="end_color">#1976d2</color>
+    <color name="sa_start_color">#0288d1</color>
+    <color name="sa_end_color">#1976d2</color>
 
 
 </resources>
