@@ -10,8 +10,8 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
+import app.allever.android.lib.core.app.App
 import org.xm.secret.photo.album.R
-import com.allever.lib.common.app.App
 import com.android.absbase.ui.widget.RippleButton
 import java.lang.Exception
 

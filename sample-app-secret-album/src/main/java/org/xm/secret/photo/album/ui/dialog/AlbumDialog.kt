@@ -61,7 +61,7 @@ class AlbumDialog : AppCompatDialogFragment {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         mView = LayoutInflater.from(activity).inflate(R.layout.fragment_dialog_album, null)
-        val alertDialog = AlertDialog.Builder(activity!!)
+        val alertDialog = AlertDialog.Builder(requireContext())
                 .setView(mView)
                 .create()
         initView()

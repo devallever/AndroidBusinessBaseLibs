@@ -3,7 +3,7 @@ package org.xm.secret.photo.album.util
 import android.opengl.GLES20
 import android.os.Environment
 import android.text.TextUtils
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 
 import java.io.File
 import java.nio.IntBuffer

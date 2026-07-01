@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">私密相册</string>
+    <string name="sa_app_name">私密相册</string>
 
     <!-- Pick -->
     <string name="pick_import">导入</string>

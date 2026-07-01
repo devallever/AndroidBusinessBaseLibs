@@ -12,13 +12,14 @@ import android.provider.MediaStore;
 import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.allever.lib.common.util.log.LogUtils;
 import org.xm.secret.photo.album.R;
 import org.xm.secret.photo.album.bean.BitmapBean;
 import org.xm.secret.photo.album.bean.ImageFolder;
 import org.xm.secret.photo.album.bean.ThumbnailBean;
 import org.xm.secret.photo.album.media.IDeleteListener;
-import com.allever.lib.common.app.App;
+import app.allever.android.lib.core.app.App;
+import app.allever.android.lib.core.ext.LoggerKt;
+
 import com.android.absbase.helper.log.DLog;
 import com.android.absbase.utils.DeviceUtils;
 import com.android.absbase.utils.FileUtils;
@@ -1696,7 +1697,7 @@ public class ImageHelper {
      * 启动播放视频的Intent
      *
      * @param context
-     * @param u
+     * @param
      */
 //    public static void startVideoPlayer(Context context, Uri u) {
 //        try {
@@ -3743,6 +3744,6 @@ public class ImageHelper {
     }
 
     private static void log(String msg) {
-        LogUtils.INSTANCE.d(msg);
+        LoggerKt.log( msg);
     }
 }

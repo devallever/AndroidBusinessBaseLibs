@@ -8,13 +8,10 @@ import android.content.Intent
 import android.os.AsyncTask
 import androidx.appcompat.app.AlertDialog
 import android.text.TextUtils
-import com.allever.lib.common.app.App
-import com.allever.lib.common.mvp.BasePresenter
-import com.allever.lib.common.util.DLog
-import com.allever.lib.common.util.ToastUtils
-import com.allever.lib.common.util.log
-import com.allever.lib.permission.PermissionListener
-import com.allever.lib.permission.PermissionManager
+import app.allever.android.lib.core.app.App
+import org.xm.secret.photo.album.mvp.BasePresenter
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.app.GlobalData
 import org.xm.secret.photo.album.bean.ImageFolder
@@ -47,32 +44,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
     }
 
     fun requestPermission(activity: Activity?, task: Runnable? = null) {
-        PermissionManager.request(object : PermissionListener {
-            override fun onGranted(grantedList: MutableList<String>) {
-                task?.run()
-            }
-
-            override fun onDenied(deniedList: MutableList<String>) {
-
-            }
-
-            override fun alwaysDenied(deniedList: MutableList<String>) {
-                if (PermissionManager.hasPermissions(
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_PHONE_STATE)) {
-                    task?.run()
-                } else {
-                    PermissionManager.jumpPermissionSetting(activity, 0,
-                        DialogInterface.OnClickListener { dialog, which ->
-                            dialog?.dismiss()
-                        })
-                }
-            }
-
-        }, Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_PHONE_STATE)
+        task?.run()
     }
 
     fun getPrivateAlbumData() {
@@ -85,7 +57,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
 
     fun createAlbum(albumName: String) {
         if (TextUtils.isEmpty(albumName)) {
-            ToastUtils.show(App.context.getString(R.string.tips_please_input_album_name))
+            toast(App.context.getString(R.string.tips_please_input_album_name))
             return
         }
 
@@ -171,7 +143,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
                     val fileList = rootDir.listFiles() ?: return null
                     //遍历相册目录
                     for (albumDir in fileList) {
-                        DLog.d("album name = ${albumDir.name}")
+                        log("album name = ${albumDir.name}")
                         if (!albumDir.isDirectory) {
                             continue
                         }
@@ -189,7 +161,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
                         for (filepath in files) {
                             val name = filepath.name
                             val file = File(PrivateHelper.PATH_ENCODE_ORIGINAL, name)
-                            DLog.d("file name = $name")
+                            log("file name = $name")
 
                             if (!file.exists()) {
                                 continue
@@ -270,7 +242,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
             override fun onPostExecute(isSuccess: Boolean?) {
                 if (isSuccess!!) {
                     //已删除，刷新数据
-                    ToastUtils.show(App.context.getString(R.string.delete_finish))
+                    toast(App.context.getString(R.string.delete_finish))
                     mImageFolderList.removeAt(mClickMorePosition)
                     mViewRef.get()?.updateDeleteAlbum(mClickMorePosition)
                 } else {
@@ -301,7 +273,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
             object : DialogHelper.EditDialogCallback{
                 override fun onOkClick(dialog: AlertDialog, etContent: String) {
                     if (TextUtils.isEmpty(etContent)) {
-                        ToastUtils.show(App.context.getString(R.string.tips_please_input_album_name))
+                        toast(App.context.getString(R.string.tips_please_input_album_name))
                         return
                     }
 
@@ -310,7 +282,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
                     //判断相册是是否重复
                     if (FileUtil.isExistsFile(albumPath)) {
                         //已存在，
-                        ToastUtils.show(App.context.getString(R.string.already_exist_album))
+                        toast(App.context.getString(R.string.already_exist_album))
                         return
                     }
 
@@ -331,7 +303,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
                     }
 
                     if (!renameOk) {
-                        ToastUtils.show(com.android.absbase.App.getContext().getString(R.string.album_rename_failed))
+                        toast(com.android.absbase.App.getContext().getString(R.string.album_rename_failed))
                         dialog.dismiss()
                         return
                     }
@@ -358,24 +330,7 @@ class AlbumPresenter : BasePresenter<AlbumView>() {
     }
 
     fun onActivityResult(activity: Activity, requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                0 -> {
-                    ToastUtils.show("获取加密相册内容")
-                    //获取加密相册内容
-                    if (PermissionManager.hasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        getPrivateAlbumData()
-                    }
-                }
-                1 -> {
-                    //创建相册
-                    ToastUtils.show("创建相册")
-                    if (PermissionManager.hasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        handleAddAlbum(activity)
-                    }
-                }
-            }
-        }
+
     }
 
     fun setAlbumClickPosition(position: Int) {

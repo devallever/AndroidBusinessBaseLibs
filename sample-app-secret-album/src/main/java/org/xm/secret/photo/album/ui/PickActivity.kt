@@ -11,16 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.allever.lib.ad.chain.AdChainHelper
-import com.allever.lib.ad.chain.AdChainListener
-import com.allever.lib.ad.chain.IAd
-import com.allever.lib.common.util.DLog
-import com.allever.lib.common.util.toast
-import com.allever.lib.notchcompat.NotchCompat
-import com.allever.lib.permission.PermissionListener
-import com.allever.lib.permission.PermissionManager
+import androidx.fragment.app.Fragment
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.function.notchcompat.NotchCompat
 import org.xm.secret.photo.album.R
-import org.xm.secret.photo.album.ad.AdConstant
 import org.xm.secret.photo.album.app.BaseActivity
 import org.xm.secret.photo.album.app.GlobalData
 import org.xm.secret.photo.album.bean.ImageFolder
@@ -37,10 +32,6 @@ import org.xm.secret.photo.album.ui.widget.tab.TabLayout
 import org.xm.secret.photo.album.util.*
 import com.android.absbase.ui.widget.RippleTextView
 import com.android.absbase.utils.ResourcesUtils
-import kotlinx.android.synthetic.main.activity_gallery.*
-import kotlinx.android.synthetic.main.activity_gallery.bannerContainer
-import kotlinx.android.synthetic.main.activity_gallery.rootLayout
-import kotlinx.android.synthetic.main.activity_pick.*
 import org.greenrobot.eventbus.EventBus
 import java.io.File
 import java.util.*
@@ -77,7 +68,7 @@ class PickActivity : BaseActivity<PickView, PickPresenter>(),
     //相册列表数据
     private var mAlbumData = mutableListOf<ImageFolder>()
 
-    private var mFragments = mutableListOf<androidx.fragment.app.Fragment>()
+    private var mFragments = mutableListOf<Fragment>()
 
     private var mSelectAlbumContainerAnimShow: Animator? = null
     private var mSelectAlbumContainerAnimHide: Animator? = null
@@ -88,15 +79,13 @@ class PickActivity : BaseActivity<PickView, PickPresenter>(),
 
     private lateinit var mImportLoadingDialog: AlertDialog
 
-    private var mBannerAd: IAd? = null
-    private var mInsertAd: IAd? = null
 
     override fun getContentView(): Int = R.layout.activity_pick
     override fun createPresenter(): PickPresenter = PickPresenter()
     override fun initView() {
         NotchCompat.adaptNotchWithFullScreen(window)
         checkNotch(Runnable {
-            addStatusBar(rootLayout, top_bar)
+            addStatusBar(findViewById<ViewGroup>(R.id.rootLayout), findViewById<View>(R.id.top_bar))
         })
 
         initTabs()
@@ -123,16 +112,7 @@ class PickActivity : BaseActivity<PickView, PickPresenter>(),
             return
         }
 
-        PermissionManager.request( object : PermissionListener {
-            override fun onGranted(grantedList: MutableList<String>) {
-                getFolderDataTask().executeOnExecutor(AsyncTask.DATABASE_THREAD_EXECUTOR)
-            }
-            override fun onDenied(deniedList: MutableList<String>) {}
-            override fun alwaysDenied(deniedList: MutableList<String>) {}
-
-        }, Manifest.permission.READ_EXTERNAL_STORAGE)
-
-        loadBanner()
+        getFolderDataTask().executeOnExecutor(AsyncTask.DATABASE_THREAD_EXECUTOR)
     }
 
     override fun onBackPressed() {
@@ -206,10 +186,10 @@ class PickActivity : BaseActivity<PickView, PickPresenter>(),
         mSelectAlbumContainerAnimShow = ObjectAnimator.ofFloat(mFlSelectAlbumContainer, "alpha", 0f, 1f)
         mSelectAlbumContainerAnimShow?.duration = ANIMATION_DURATION
         mSelectAlbumContainerAnimShow?.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) {}
-            override fun onAnimationCancel(animation: Animator?) {}
-            override fun onAnimationEnd(animation: Animator?) {}
-            override fun onAnimationStart(animation: Animator?) {
+            override fun onAnimationRepeat(animation: Animator) {}
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {}
+            override fun onAnimationStart(animation: Animator) {
                 mFlSelectAlbumContainer.visibility = View.VISIBLE
             }
         })
@@ -218,10 +198,10 @@ class PickActivity : BaseActivity<PickView, PickPresenter>(),
         mSelectAlbumContainerAnimHide = ObjectAnimator.ofFloat(mFlSelectAlbumContainer, "alpha", 1f, 0f)
         mSelectAlbumContainerAnimHide?.duration = ANIMATION_DURATION
         mSelectAlbumContainerAnimHide?.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) {}
-            override fun onAnimationCancel(animation: Animator?) {}
-            override fun onAnimationStart(animation: Animator?) {}
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationRepeat(animation: Animator) {}
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
                 mFlSelectAlbumContainer.visibility = View.GONE
             }
         })
@@ -302,7 +282,6 @@ class PickActivity : BaseActivity<PickView, PickPresenter>(),
             }
 
             R.id.btn_import -> {
-                loadInsertAd()
                 for (index in mSelectedData.indices) {
                     val bean = mSelectedData[index]
                     bean.sourceType = ThumbnailBean.DECODE
@@ -349,22 +328,21 @@ class PickActivity : BaseActivity<PickView, PickPresenter>(),
             PrivateHelper.encodeList(mEncodeList, object : EncodeListListener {
                 override fun onStart() {
                     mBtnImport.isClickable = false
-                    DLog.d("onStart encode")
+                    log("onStart encode")
                     showImportLoading()
                 }
 
                 override fun onSuccess(successList: List<PrivateBean>, errorList: List<PrivateBean>) {
                     mHandler.postDelayed({
                         hideImportLoading()
-                        mInsertAd?.show()
                         toast(R.string.import_success)
-                        DLog.d("onSuccess encode")
+                        log("onSuccess encode")
                         mBtnImport.isClickable = true
 
                         val thumbnailBeans = mutableListOf<ThumbnailBean>()
                         successList.map {
                             val name = File(it.encodePath).name
-                            DLog.d("file name = $name")
+                            log("file name = $name")
                             val obj = SharePreferenceUtil.getObjectFromShare(applicationContext, name)
                             if (obj is LocalThumbnailBean) {
                                 val thumb = obj as LocalThumbnailBean
@@ -389,9 +367,8 @@ class PickActivity : BaseActivity<PickView, PickPresenter>(),
                 override fun onFailed(successList: List<PrivateBean>, errorList: List<PrivateBean>) {
                     mHandler.postDelayed({
                         hideImportLoading()
-                        mInsertAd?.show()
                         toast(R.string.import_fail)
-                        DLog.d("onFailed encode")
+                        log("onFailed encode")
                         mBtnImport.isClickable = true
                     }, 5000)
 
@@ -596,49 +573,11 @@ class PickActivity : BaseActivity<PickView, PickPresenter>(),
         private const val EXTRA_ALBUM_NAME = "EXTRA_ALBUM_NAME"
     }
 
-    override fun onPause() {
-        super.onPause()
-        mBannerAd?.onAdPause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mBannerAd?.onAdResume()
-    }
 
     override fun onDestroy() {
         super.onDestroy()
         mSelectedData.map {
             it.isChecked = false
         }
-        mBannerAd?.destroy()
-        mInsertAd?.destroy()
-    }
-
-    private fun loadBanner() {
-        AdChainHelper.loadAd(AdConstant.AD_NAME_PICK_BANNER, bannerContainer, object :
-            AdChainListener {
-            override fun onLoaded(ad: IAd?) {
-                mBannerAd = ad
-            }
-            override fun onFailed(msg: String) {}
-            override fun onShowed() {}
-            override fun onDismiss() {}
-
-        })
-    }
-
-    private fun loadInsertAd() {
-        AdChainHelper.loadAd(AdConstant.AD_NAME_IMPORT_INSERT, window.decorView as ViewGroup, object :
-            AdChainListener {
-            override fun onLoaded(ad: IAd?) {
-                mInsertAd = ad
-            }
-            override fun onFailed(msg: String) {}
-            override fun onShowed() {}
-            override fun onDismiss() {
-            }
-
-        })
     }
 }

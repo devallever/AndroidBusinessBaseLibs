@@ -4,12 +4,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatDialogFragment
 import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
-import com.allever.lib.common.ui.widget.recycler.ItemListener
-import com.allever.lib.notchcompat.NotchCompat
-import kotlinx.android.synthetic.main.activity_album.*
-import kotlinx.android.synthetic.main.activity_album.top_bar
+import app.allever.android.lib.core.function.notchcompat.NotchCompat
+import org.xm.secret.photo.album.ui.widget.recyclerview.BaseViewHolder
+import org.xm.secret.photo.album.ui.widget.recyclerview.ItemListener
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.app.BaseActivity
 import org.xm.secret.photo.album.bean.ImageFolder
@@ -39,7 +38,7 @@ class AlbumActivity : BaseActivity<AlbumView, AlbumPresenter>(), AlbumView, View
     override fun initView() {
         NotchCompat.adaptNotchWithFullScreen(window)
         checkNotch(Runnable {
-            addStatusBar(rootLayout, top_bar)
+            addStatusBar(findViewById<ViewGroup>(R.id.rootLayout), findViewById<View>(R.id.top_bar))
         })
         mRecyclerView = findViewById(R.id.album_recycler_view)
         mRecyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 2)

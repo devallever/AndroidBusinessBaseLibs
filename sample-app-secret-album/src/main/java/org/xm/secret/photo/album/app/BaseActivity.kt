@@ -5,15 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import com.allever.lib.common.mvp.BaseMvpActivity
-import com.allever.lib.common.mvp.BasePresenter
+import app.allever.android.lib.core.function.notchcompat.NotchCompat
+import app.allever.android.lib.core.helper.ActivityHelper
+import app.allever.android.lib.core.util.StatusBarUtil
+import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.function.password.PrivateViewManager
 import org.xm.secret.photo.album.function.password.PrivateViewProxy
-import com.allever.lib.common.util.ActivityCollector
-import com.allever.lib.common.util.SystemUiUtils
-import com.allever.lib.common.util.SystemUtils
-import com.allever.lib.notchcompat.NotchCompat
-import org.xm.secret.photo.album.R
+import org.xm.secret.photo.album.mvp.BaseMvpActivity
+import org.xm.secret.photo.album.mvp.BasePresenter
 import java.lang.RuntimeException
 
 abstract class BaseActivity<V, P: BasePresenter<V>> : BaseMvpActivity<V, P>() {
@@ -57,7 +56,7 @@ abstract class BaseActivity<V, P: BasePresenter<V>> : BaseMvpActivity<V, P>() {
 
     override fun onBackPressed() {
         if (isPasswordViewShowing()) {
-            ActivityCollector.finishAll()
+            ActivityHelper.finishAll()
         } else {
             super.onBackPressed()
         }
@@ -79,7 +78,7 @@ abstract class BaseActivity<V, P: BasePresenter<V>> : BaseMvpActivity<V, P>() {
         val statusBarView = View(this)
         statusBarView.id = statusBarView.hashCode()
         statusBarView.setBackgroundResource(R.drawable.top_bar_bg)
-        val statusBarHeight = SystemUtils.getStatusBarHeight(this)
+        val statusBarHeight = StatusBarUtil.getStatusBarHeight(this)
         val lp = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight)
 
         if (rootLayout is RelativeLayout) {

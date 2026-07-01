@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 import org.xm.secret.photo.album.R;
-import com.allever.lib.common.app.App;
+import app.allever.android.lib.core.app.App;
 import com.android.absbase.helper.log.DLog;
 import com.android.absbase.utils.FileUtils;
 

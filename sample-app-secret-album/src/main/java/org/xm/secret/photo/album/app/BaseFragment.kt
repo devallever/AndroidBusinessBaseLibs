@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.allever.lib.common.mvp.BaseMvpFragment
-import com.allever.lib.common.mvp.BasePresenter
+import org.xm.secret.photo.album.mvp.BaseMvpFragment
+import org.xm.secret.photo.album.mvp.BasePresenter
 
 abstract class BaseFragment<V, P : BasePresenter<V>> : BaseMvpFragment<V, P>() {
 

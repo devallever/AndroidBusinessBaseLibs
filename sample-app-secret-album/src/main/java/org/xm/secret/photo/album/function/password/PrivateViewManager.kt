@@ -12,7 +12,7 @@ import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 import android.view.WindowManager
 
 

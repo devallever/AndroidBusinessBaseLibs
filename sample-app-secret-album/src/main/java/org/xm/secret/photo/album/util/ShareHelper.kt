@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Build
 import androidx.core.content.FileProvider
 import android.text.TextUtils
-import org.xm.secret.photo.album.BuildConfig
 import org.xm.secret.photo.album.R
 
 import org.xm.secret.photo.album.bean.ShareData
@@ -53,7 +52,7 @@ object ShareHelper {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             FileProvider.getUriForFile(
                 context,
-                BuildConfig.APPLICATION_ID + ".fileprovider",
+                "com.allever.business.lib.project" + ".fileprovider",
                 file
             )
         } else {

@@ -6,14 +6,10 @@ import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import android.view.View
 import android.view.ViewGroup
-import com.allever.lib.ad.chain.AdChainHelper
-import com.allever.lib.ad.chain.AdChainListener
-import com.allever.lib.ad.chain.IAd
-import com.allever.lib.common.app.App
-import com.allever.lib.common.util.DLog
-import com.allever.lib.common.util.toast
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
 import org.xm.secret.photo.album.R
-import org.xm.secret.photo.album.ad.AdConstant
 import org.xm.secret.photo.album.app.BaseActivity
 import org.xm.secret.photo.album.bean.ThumbnailBean
 import org.xm.secret.photo.album.bean.event.DecodeEvent
@@ -38,8 +34,6 @@ class PreviewActivity : BaseActivity<PreviewView, PreviewPresenter>(), PreviewVi
     private lateinit var mLoadingDialog: AlertDialog
     private lateinit var mDeleteDialog: AlertDialog
     private var mSourceType = TYPE_ENCODE
-
-    private var mInsertAd: IAd? = null
 
     override fun createPresenter(): PreviewPresenter = PreviewPresenter()
     override fun getContentView(): Int = R.layout.activity_priview
@@ -93,9 +87,8 @@ class PreviewActivity : BaseActivity<PreviewView, PreviewPresenter>(), PreviewVi
                 finish()
             }
             R.id.preview_iv_export -> {
-                DLog.d("select item tempPath = ${mThumbnailBeanList[mPosition].tempPath}")
+                log("select item tempPath = ${mThumbnailBeanList[mPosition].tempPath}")
                 restoreResource(mThumbnailBeanList[mPosition])
-                loadInsertAd()
             }
             R.id.preview_iv_delete -> {
                 showDeleteDialog()
@@ -171,14 +164,13 @@ class PreviewActivity : BaseActivity<PreviewView, PreviewPresenter>(), PreviewVi
             PrivateHelper.unLockAndRestore(privateBean, object : UnLockAndRestoreListener {
                 override fun onStart() {
 //                    showVideoSavingAnim()
-                    DLog.d("export onStart")
+                    log("export onStart")
                     showLoading()
                 }
 
                 override fun onSuccess() {
                     mHandler.postDelayed({
                         hideLoading()
-                        mInsertAd?.show()
                         toast(R.string.export_success)
 
                         SharePreferenceUtil.setObjectToShare(App.context, MD5.getMD5Str(bean.path), null)
@@ -191,7 +183,7 @@ class PreviewActivity : BaseActivity<PreviewView, PreviewPresenter>(), PreviewVi
 //                    decodeEvent.index = mPosition
                         EventBus.getDefault().post(decodeEvent)
                         finish()
-                        DLog.d("export onSuccess")
+                        log("export onSuccess")
                     }, 5000)
 
                 }
@@ -199,10 +191,9 @@ class PreviewActivity : BaseActivity<PreviewView, PreviewPresenter>(), PreviewVi
                 override fun onFailed(msg: String) {
                     mHandler.postDelayed({
                         hideLoading()
-                        mInsertAd?.show()
                         toast(R.string.export_fail)
                     }, 5000)
-                    DLog.d("export onFailed")
+                    log("export onFailed")
                 }
             })
         }
@@ -246,20 +237,5 @@ class PreviewActivity : BaseActivity<PreviewView, PreviewPresenter>(), PreviewVi
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
-        mInsertAd?.destroy()
-    }
-
-    private fun loadInsertAd() {
-        AdChainHelper.loadAd(AdConstant.AD_NAME_EXPORT_INSERT, window.decorView as ViewGroup, object :
-            AdChainListener {
-            override fun onLoaded(ad: IAd?) {
-                mInsertAd = ad
-            }
-            override fun onFailed(msg: String) {}
-            override fun onShowed() {}
-            override fun onDismiss() {
-            }
-
-        })
     }
 }

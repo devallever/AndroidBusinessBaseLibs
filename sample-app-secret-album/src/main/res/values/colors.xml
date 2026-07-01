@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2196f3</color>
-    <color name="colorPrimaryDark">#2196f3</color>
-    <color name="colorAccent">#2196f3</color>
+<!--    <color name="colorPrimary">#2196f3</color>-->
+<!--    <color name="colorPrimaryDark">#2196f3</color>-->
+<!--    <color name="colorAccent">#2196f3</color>-->
     <color name="default_gray">#eeeeee</color>
     <color name="default_gray_alpha">#aaeeeeee</color>
 
     <color name="colorDefault">#2196f3</color>
     <!-- default -->
 
-    <color name="default_theme_color">@color/colorPrimary</color>
+    <color name="default_theme_color">#2196f3</color>
     <color name="default_background">@color/white</color>
     <color name="default_top_bar_background_color">@color/default_theme_color</color>
     <color name="default_icon_color_filter">@color/white</color>
@@ -37,7 +37,7 @@
     <color name="divider_color">#19474747</color>
     <color name="private_album_item_bg">#66000000</color>
 
-    <color name="main_tab_highlight">@color/colorAccent</color>
+    <color name="main_tab_highlight">@color/default_theme_color</color>
     <color name="main_tab_unselect_color">#8a8a8a</color>
 
     <color name="start_color">#0288d1</color>

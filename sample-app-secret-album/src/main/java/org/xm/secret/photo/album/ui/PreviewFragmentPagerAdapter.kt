@@ -3,7 +3,7 @@ package org.xm.secret.photo.album.ui
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import android.view.ViewGroup
-import com.allever.lib.common.util.DLog
+import app.allever.android.lib.core.ext.log
 import org.xm.secret.photo.album.bean.ThumbnailBean
 
 class PreviewFragmentPagerAdapter(fragmentManager: FragmentManager, data: MutableList<ThumbnailBean>) :
@@ -30,7 +30,7 @@ class PreviewFragmentPagerAdapter(fragmentManager: FragmentManager, data: Mutabl
                 fragment.setData(fragmentData[position])
             }
         }
-        DLog.d("currentFragment position = $position")
+        log("currentFragment position = $position")
         return fragment
     }
 

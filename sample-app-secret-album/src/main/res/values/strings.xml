@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Secret Photo Album</string>
+    <string name="sa_app_name">Secret Photo Album</string>
 
     <!-- Pick -->
     <string name="pick_import">Import</string>
@@ -80,7 +80,7 @@
     <string name="import_resource">Importing resources for you …</string>
 
     <string name="tab_guide">Guide</string>
-    <string name="tab_main">@string/app_name</string>
+    <string name="tab_main">@string/sa_app_name</string>
     <string name="permission_setting">Setting permissions</string>
 
     <string name="guide">

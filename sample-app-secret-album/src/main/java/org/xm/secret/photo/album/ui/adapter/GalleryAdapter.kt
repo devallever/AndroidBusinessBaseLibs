@@ -3,10 +3,10 @@ package org.xm.secret.photo.album.ui.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.allever.lib.common.app.App.Companion.context
-import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
-import com.allever.lib.common.ui.widget.recycler.MultiItemCommonAdapter
-import com.allever.lib.common.ui.widget.recycler.MultiItemTypeSupport
+import app.allever.android.lib.core.app.App.Companion.context
+import org.xm.secret.photo.album.ui.widget.recyclerview.BaseViewHolder
+import org.xm.secret.photo.album.ui.widget.recyclerview.MultiItemCommonAdapter
+import org.xm.secret.photo.album.ui.widget.recyclerview.MultiItemTypeSupport
 import com.android.absbase.utils.DeviceUtils
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.bean.ThumbnailBean

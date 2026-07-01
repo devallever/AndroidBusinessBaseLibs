@@ -6,16 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.allever.lib.common.app.App
-import com.allever.lib.common.app.BaseFragment
-import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
-import com.allever.lib.common.ui.widget.recycler.ItemListener
-import com.allever.lib.common.util.DLog
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.base.AbstractFragment
+import org.xm.secret.photo.album.ui.widget.recyclerview.BaseViewHolder
+import org.xm.secret.photo.album.ui.widget.recyclerview.ItemListener
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.bean.ThumbnailBean
 import org.xm.secret.photo.album.ui.adapter.PickImageAdapter
 
-class PickFragment : BaseFragment() {
+class PickFragment : AbstractFragment() {
 
     var callback: PickCallback? = null
     var type: AlbumTabModel.Tab? = null
@@ -34,7 +33,6 @@ class PickFragment : BaseFragment() {
     }
 
     private fun initView() {
-        DLog.d("initView")
         mRecyclerView = mView.findViewById(R.id.pick_recycler_view)
         mRecyclerView.layoutManager = GridLayoutManager(activity, 4)
 

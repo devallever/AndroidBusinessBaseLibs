@@ -8,18 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.allever.lib.ad.chain.AdChainHelper
-import com.allever.lib.ad.chain.AdChainListener
-import com.allever.lib.ad.chain.IAd
-import com.allever.lib.common.app.App
-import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
-import com.allever.lib.common.ui.widget.recycler.ItemListener
-import com.allever.lib.common.ui.widget.recycler.MultiItemTypeSupport
-import com.allever.lib.common.util.DLog
-import com.allever.lib.common.util.toast
-import com.allever.lib.notchcompat.NotchCompat
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.function.notchcompat.NotchCompat
+import org.xm.secret.photo.album.ui.widget.recyclerview.BaseViewHolder
+import org.xm.secret.photo.album.ui.widget.recyclerview.ItemListener
+import org.xm.secret.photo.album.ui.widget.recyclerview.MultiItemTypeSupport
 import org.xm.secret.photo.album.R
-import org.xm.secret.photo.album.ad.AdConstant
 import org.xm.secret.photo.album.app.BaseActivity
 import org.xm.secret.photo.album.bean.SeparatorBean
 import org.xm.secret.photo.album.bean.ThumbnailBean
@@ -35,9 +31,6 @@ import org.xm.secret.photo.album.ui.mvp.view.GalleryView
 import org.xm.secret.photo.album.util.DialogHelper
 import org.xm.secret.photo.album.util.MD5
 import org.xm.secret.photo.album.util.SharePreferenceUtil
-import kotlinx.android.synthetic.main.activity_gallery.*
-import kotlinx.android.synthetic.main.activity_gallery.rootLayout
-import kotlinx.android.synthetic.main.include_top_bar.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -63,10 +56,6 @@ class GalleryActivity : BaseActivity<GalleryView, GalleryPresenter>(), GalleryVi
     private lateinit var mLoadingDialog: AlertDialog
 
     private var mSelectMode = false
-
-    private var mBannerAd: IAd? = null
-    private var mInsertAd: IAd? = null
-
     override fun getContentView(): Int = R.layout.activity_gallery
     override fun createPresenter(): GalleryPresenter = GalleryPresenter()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +66,7 @@ class GalleryActivity : BaseActivity<GalleryView, GalleryPresenter>(), GalleryVi
     override fun initView() {
         NotchCompat.adaptNotchWithFullScreen(window)
         checkNotch(Runnable {
-            addStatusBar(rootLayout, top_bar)
+            addStatusBar(findViewById<ViewGroup>(R.id.rootLayout), findViewById<View>(R.id.top_bar))
         })
 
         findViewById<View>(R.id.iv_back).setOnClickListener(this)
@@ -163,7 +152,6 @@ class GalleryActivity : BaseActivity<GalleryView, GalleryPresenter>(), GalleryVi
 
         EventBus.getDefault().register(this)
 
-        loadBanner()
     }
 
     override fun onClick(v: View?) {
@@ -176,7 +164,6 @@ class GalleryActivity : BaseActivity<GalleryView, GalleryPresenter>(), GalleryVi
             }
 
             R.id.iv_right -> {
-                loadInsertAd()
                 restoreResourceList(mExportThumbnailBeanList)
                 mSelectMode = false
             }
@@ -305,7 +292,6 @@ class GalleryActivity : BaseActivity<GalleryView, GalleryPresenter>(), GalleryVi
                 mHandler.postDelayed({
                     toast(R.string.export_success)
                     hideLoading()
-                    mInsertAd?.show()
 
                     val exportIndexList = mutableListOf<Int>()
                     successList.map {
@@ -340,7 +326,6 @@ class GalleryActivity : BaseActivity<GalleryView, GalleryPresenter>(), GalleryVi
                 mHandler.postDelayed({
                     toast(R.string.export_fail)
                     hideLoading()
-                    mInsertAd?.show()
 
                     errors.map {
                         val thumbnailBean = mPrivateThumbMap[it]
@@ -366,28 +351,22 @@ class GalleryActivity : BaseActivity<GalleryView, GalleryPresenter>(), GalleryVi
         if (privateBean.resolveHead(file.absolutePath)) {
             PrivateHelper.unLockAndRestore(privateBean, object : UnLockAndRestoreListener {
                 override fun onStart() {
-                    DLog.d("export onStart")
+                    log("export onStart")
                 }
 
                 override fun onSuccess() {
                     SharePreferenceUtil.setObjectToShare(App.context, MD5.getMD5Str(bean.path), null)
                     finish()
-                    DLog.d("export onSuccess")
+                    log("export onSuccess")
                 }
 
                 override fun onFailed(msg: String) {
-                    DLog.d("export onFailed")
+                    log("export onFailed")
                 }
             })
         }
 
     }
-
-    private fun hideLoadingAndShowAd() {
-        hideLoading()
-        mInsertAd?.show()
-    }
-
     companion object {
         fun start(context: Context, albumName: String, albumPath: String, data: ArrayList<ThumbnailBean>?) {
             val intent = Intent(context, GalleryActivity::class.java)
@@ -408,45 +387,14 @@ class GalleryActivity : BaseActivity<GalleryView, GalleryPresenter>(), GalleryVi
 
     override fun onPause() {
         super.onPause()
-        mBannerAd?.onAdPause()
     }
 
     override fun onResume() {
         super.onResume()
-        mBannerAd?.onAdResume()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
-        mBannerAd?.destroy()
-        mInsertAd?.destroy()
-    }
-
-    private fun loadBanner() {
-        AdChainHelper.loadAd(AdConstant.AD_NAME_GALLERY_BANNER, bannerContainer, object :
-            AdChainListener {
-            override fun onLoaded(ad: IAd?) {
-                mBannerAd = ad
-            }
-            override fun onFailed(msg: String) {}
-            override fun onShowed() {}
-            override fun onDismiss() {}
-
-        })
-    }
-
-    private fun loadInsertAd() {
-        AdChainHelper.loadAd(AdConstant.AD_NAME_EXPORT_INSERT, window.decorView as ViewGroup, object :
-            AdChainListener {
-            override fun onLoaded(ad: IAd?) {
-                mInsertAd = ad
-            }
-            override fun onFailed(msg: String) {}
-            override fun onShowed() {}
-            override fun onDismiss() {
-            }
-
-        })
     }
 }

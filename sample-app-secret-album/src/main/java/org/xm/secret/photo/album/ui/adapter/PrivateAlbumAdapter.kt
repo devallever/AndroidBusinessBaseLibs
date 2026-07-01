@@ -3,8 +3,8 @@ package org.xm.secret.photo.album.ui.adapter
 import android.content.Context
 import android.view.View
 
-import com.allever.lib.common.ui.widget.recycler.BaseRecyclerViewAdapter
-import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
+import org.xm.secret.photo.album.ui.widget.recyclerview.BaseRecyclerViewAdapter
+import org.xm.secret.photo.album.ui.widget.recyclerview.BaseViewHolder
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.bean.ImageFolder
 import org.xm.secret.photo.album.util.ImageUtil

@@ -15,7 +15,7 @@ import android.text.style.ForegroundColorSpan
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.bean.ThumbnailBean
 import org.xm.secret.photo.album.media.IDeleteListener
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 import com.android.absbase.utils.SpUtils
 
 import java.io.File

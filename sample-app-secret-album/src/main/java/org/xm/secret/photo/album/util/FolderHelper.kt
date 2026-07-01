@@ -19,7 +19,7 @@ import android.provider.MediaStore.MediaColumns
 import android.provider.MediaStore.Video
 import android.text.TextUtils
 import android.util.Log
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 import com.android.absbase.utils.FileUtils
 
 import java.io.File

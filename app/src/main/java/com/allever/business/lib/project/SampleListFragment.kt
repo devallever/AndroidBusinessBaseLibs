@@ -59,7 +59,8 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextDetailClickItem("视频编辑", "sample-video-editor") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_VIDEO_EDITOR).navigation()
         },
-
-
+        TextDetailClickItem("私密相册", "sample-app-secret-album") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_SECRET_ALBUM).navigation()
+        },
     )
 }

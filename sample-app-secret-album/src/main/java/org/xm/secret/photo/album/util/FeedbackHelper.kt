@@ -3,7 +3,7 @@ package org.xm.secret.photo.album.util
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 import org.xm.secret.photo.album.R
 
 object FeedbackHelper {

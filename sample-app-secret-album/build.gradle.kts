@@ -41,6 +41,8 @@ dependencies {
     implementation(libs.chrisbanes.photoview)
     //glide
     implementation(libs.glide)
-    kapt(libs.eventbus)
-    implementation("com.davemorrissey.labs:subsampling-scale-image-view:3.10.0")
+//    implementation("com.davemorrissey.labs:subsampling-scale-image-view:3.10.0")
+    implementation("com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0")
+    implementation(libs.eventbus)
+
 }

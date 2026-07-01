@@ -1,11 +1,12 @@
 package org.xm.secret.photo.album.util
 
+import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
-import com.allever.lib.common.app.App
-import com.allever.lib.common.util.log
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.log
 import org.xm.secret.photo.album.bean.ImageFolder
 import org.xm.secret.photo.album.bean.ThumbnailBean
 import java.io.File
@@ -13,6 +14,8 @@ import java.util.HashMap
 import java.util.HashSet
 
 object MediaHelper {
+    
+    private val TAG = MediaHelper::class.java.simpleName
 
     val TYPE_IMAGE = "TYPE_IMAGE"
     val TYPE_VIDEO = "TYPE_VIDEO"
@@ -101,6 +104,7 @@ object MediaHelper {
 
     private val BUCKET_ORDER_BY = "$COLUMN_DATE_TAKEN DESC"
 
+    @SuppressLint("Range")
     fun getAlbumInfo(type: String, includeGif: Boolean): MutableList<ImageFolder> {
 
         val imageFolderList = mutableListOf<ImageFolder>()
@@ -144,7 +148,7 @@ object MediaHelper {
 
                     do {
                         val bucketId = cursor.getLong(cursor.getColumnIndex(COLUMN_BUCKET_ID))
-                        log("bucketId = $bucketId")
+                        log(TAG, "bucketId = $bucketId")
                         if (done.contains(bucketId)) {
                             continue
                         }
@@ -152,28 +156,28 @@ object MediaHelper {
                         val fileId = cursor.getLong(
                             cursor.getColumnIndex(MediaStore.Files.FileColumns._ID)
                         )
-                        log("id = $fileId")
+                        log(TAG, "id = $fileId")
                         val bucketDisplayName = cursor.getString(
                             cursor.getColumnIndex(COLUMN_BUCKET_DISPLAY_NAME)
                         )
-                        log("displayName = $bucketDisplayName")
+                        log(TAG, "displayName = $bucketDisplayName")
                         val mimeType = cursor.getString(
                             cursor.getColumnIndex(MediaStore.MediaColumns.MIME_TYPE)
                         )
-                        log("mimeType = $mimeType")
+                        log(TAG, "mimeType = $mimeType")
                         val uri = getUri(cursor)
-                        log("uri = $uri")
+                        log(TAG, "uri = $uri")
                         val count = countMap[bucketId]!!
-                        log("count = $count")
+                        log(TAG, "count = $count")
                         val date = cursor.getLong(
                             cursor.getColumnIndex(COLUMN_DATE_TAKEN)
                         )
-                        log("date = $date")
+                        log(TAG, "date = $date")
                         val filePath = cursor.getString(
                             cursor.getColumnIndex(COLUMN_DATA)
                         )
                         val path = filePath.substring(0, filePath.lastIndexOf(File.separatorChar))
-                        log("path = $path")
+                        log(TAG, "path = $path")
 
                         //-----------------------------------------
                         val imageFolder = ImageFolder()
@@ -228,7 +232,7 @@ object MediaHelper {
 
                         done.add(bucketId)
 
-                        log("-----------------------------------------\n\n")
+                        log(TAG, "-----------------------------------------\n\n")
                     } while (cursor.moveToNext())
                 }
             }
@@ -293,15 +297,15 @@ object MediaHelper {
                     val imageFolder = ImageFolder()
 
                     val count = cursor.getInt(numIndex)
-                    log("count = $count")
+                    log(TAG, "count = $count")
                     val name = cursor.getString(nameIndex)
-                    log("name = $name")
+                    log(TAG, "name = $name")
                     val bean = ThumbnailBean()
                     bean.date = cursor.getLong(dateIndex)
-                    log("date = ${bean.date}")
+                    log(TAG, "date = ${bean.date}")
 //                    bean.setDegree(c1.getInt(degreeIndex));
                     bean.path = cursor.getString(pathIndex)
-                    log("path = ${bean.path}")
+                    log(TAG, "path = ${bean.path}")
                     when {
                         MediaFile.isGifFileType(bean.path) -> bean.type = MediaTypeUtil.TYPE_GIF
                         MediaFile.isJPGFileType(bean.path) -> bean.type = MediaTypeUtil.TYPE_JPG
@@ -309,7 +313,7 @@ object MediaHelper {
                         else -> bean.type = MediaTypeUtil.TYPE_OTHER_IMAGE
                     }
                     val id = cursor.getInt(idIndex).toLong()
-                    log("id = $id")
+                    log(TAG, "id = $id")
                     bean.uri =
                         ContentUris.withAppendedId(
                             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -323,10 +327,10 @@ object MediaHelper {
                         imageFolder.name = name
                     }
                     val buckedId = cursor.getString(bucketIdIndex)
-                    log("buckedId = $buckedId")
+                    log(TAG, "buckedId = $buckedId")
                     imageFolder.bucketId = buckedId
 
-                    log("-----------------------------------------------------------\n\n")
+                    log(TAG, "-----------------------------------------------------------\n\n")
                 } while (cursor.moveToNext())
             }
         } catch (e: Exception) {

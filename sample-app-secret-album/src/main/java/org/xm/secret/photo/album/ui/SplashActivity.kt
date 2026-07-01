@@ -1,13 +1,13 @@
 package org.xm.secret.photo.album.ui
 
 import android.os.Bundle
-import com.allever.lib.common.app.BaseActivity
-import com.allever.lib.common.util.ActivityCollector
-import com.allever.lib.notchcompat.NotchCompat
+import app.allever.android.lib.core.base.AbstractActivity
+import app.allever.android.lib.core.function.notchcompat.NotchCompat
+import app.allever.android.lib.core.helper.ActivityHelper
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.function.password.PasswordConfig
 
-class SplashActivity : BaseActivity() {
+class SplashActivity : AbstractActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -16,7 +16,7 @@ class SplashActivity : BaseActivity() {
 
         mHandler.postDelayed({
             PasswordConfig.secretCheckPass = false
-            ActivityCollector.startActivity(this, MainActivity::class.java)
+            ActivityHelper.startActivity<MainActivity>()
             finish()
         }, 2000)
     }

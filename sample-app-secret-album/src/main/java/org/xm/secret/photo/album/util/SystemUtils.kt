@@ -278,7 +278,7 @@ object SystemUtils {
         shareIntent.type = "text/plain"
         return Intent.createChooser(
             shareIntent,
-            context.resources.getString(R.string.common_share_to)
+            "Share to"
         )
     }
 

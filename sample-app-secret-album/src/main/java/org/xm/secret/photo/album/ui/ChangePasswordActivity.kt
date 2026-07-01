@@ -8,7 +8,7 @@ import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.allever.lib.notchcompat.NotchCompat
+import app.allever.android.lib.core.function.notchcompat.NotchCompat
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.app.BaseActivity
 import org.xm.secret.photo.album.function.password.PasswordHelper

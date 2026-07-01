@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import org.xm.secret.photo.album.R
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 
 
 class KeyboardView : LinearLayout, View.OnClickListener {

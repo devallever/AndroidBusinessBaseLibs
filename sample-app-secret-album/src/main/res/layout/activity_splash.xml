@@ -23,7 +23,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:textColor="@color/white"
-            android:text="@string/app_name"
+            android:text="@string/sa_app_name"
             android:textSize="20sp"
             android:textStyle="bold"/>
 

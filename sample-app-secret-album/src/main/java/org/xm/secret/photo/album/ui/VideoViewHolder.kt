@@ -14,7 +14,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.VideoView
 import org.xm.secret.photo.album.R
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 import com.android.absbase.utils.ToastUtils
 
 class VideoViewHolder
@@ -32,18 +32,18 @@ class VideoViewHolder
     private var mAlphaAnimator: ObjectAnimator? = null
 
     private var mAnimListener = object : Animator.AnimatorListener {
-        override fun onAnimationRepeat(animation: Animator?) {
+        override fun onAnimationRepeat(animation: Animator) {
         }
 
-        override fun onAnimationEnd(animation: Animator?) {
+        override fun onAnimationEnd(animation: Animator) {
         }
 
-        override fun onAnimationCancel(animation: Animator?) {
+        override fun onAnimationCancel(animation: Animator) {
             mIvPlay?.alpha = ALPHA_VALUE_OPAQUE
             mIvPlay?.visibility = View.VISIBLE
         }
 
-        override fun onAnimationStart(animation: Animator?) {
+        override fun onAnimationStart(animation: Animator) {
             mIvPlay?.alpha = ALPHA_VALUE_OPAQUE
         }
     }

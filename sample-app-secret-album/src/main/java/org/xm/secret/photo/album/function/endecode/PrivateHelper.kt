@@ -3,10 +3,9 @@ package org.xm.secret.photo.album.function.endecode
 import android.net.Uri
 import android.os.Environment
 import android.os.Handler
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 import android.util.Log
-import com.allever.lib.common.util.DLog
-import org.xm.secret.photo.album.BuildConfig
+import app.allever.android.lib.core.ext.log
 import org.xm.secret.photo.album.bean.LocalThumbnailBean
 import org.xm.secret.photo.album.bean.ThumbnailBean
 import org.xm.secret.photo.album.util.FolderHelper
@@ -149,7 +148,7 @@ object PrivateHelper {
                     /// 指定目录中写入新的链接文件
                     val alarmFilePath = File(head.albumPath, originalMD5)
                     alarmFilePath.createNewFile()
-                    DLog.d("linkFilePath = ${alarmFilePath.absoluteFile}")
+                    log("linkFilePath = ${alarmFilePath.absoluteFile}")
 
                     mHandler?.post {
                         listener?.onEncodeSuccess(head)
@@ -433,12 +432,6 @@ object PrivateHelper {
             }
         }
         threadPool.execute(runnable)
-    }
-
-    fun log(msg: String) {
-        if (BuildConfig.DEBUG) {
-            Log.e(Tag, msg)
-        }
     }
 
     fun changeThumbnailBean2LocalThumbnailBean(bean: ThumbnailBean): LocalThumbnailBean {

@@ -4,61 +4,40 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
-import com.allever.lib.common.app.App
-import com.allever.lib.common.app.BaseActivity
-import com.allever.lib.common.util.SystemUtils
-import com.allever.lib.notchcompat.NotchCompat
-import com.allever.lib.umeng.UMeng
-import kotlinx.android.synthetic.main.activity_about.*
-import kotlinx.android.synthetic.main.activity_about.rootLayout
-import kotlinx.android.synthetic.main.include_top_bar.*
-import kotlinx.android.synthetic.main.include_top_bar.top_bar
-import org.xm.secret.photo.album.BuildConfig
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.function.notchcompat.NotchCompat
 import org.xm.secret.photo.album.R
-import org.xm.secret.photo.album.ad.AdConstant
-import org.xm.secret.photo.album.app.BaseActivity2
+import org.xm.secret.photo.album.app.BaseActivity
+import org.xm.secret.photo.album.mvp.BasePresenter
+import org.xm.secret.photo.album.util.SystemUtils
 
-class AboutActivity: BaseActivity2(), View.OnClickListener {
+class AboutActivity: BaseActivity<Any, BasePresenter<Any>>(), View.OnClickListener {
 
-    private val PRIVACY_URL = "https://secretphotoalbum.flycricket.io/privacy.html"
+    private val PRIVACY_URL = "https://baidu.com"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about)
+    override fun createPresenter(): BasePresenter<Any>? = null
 
-        initView()
-
-    }
-
-    private fun initView() {
+    override fun initView() {
         NotchCompat.adaptNotchWithFullScreen(window)
         checkNotch(Runnable {
-            addStatusBar(rootLayout, top_bar)
+            addStatusBar(findViewById<ViewGroup>(R.id.rootLayout), findViewById<View>(R.id.top_bar))
         })
 
-        about_privacy.setOnClickListener(this)
-        iv_back.setOnClickListener(this)
-        tv_label.text = getString(R.string.about)
-        val channel = UMeng.getChannel()
-        val last = if (BuildConfig.DEBUG) {
-            "(Debug)-$channel\n" +
-                    "${App.context.packageName}\n" +
-                    "AdMob-${AdConstant.ADMOB_APP_ID}"
-        } else {
-            if (channel == "ad") {
-                "(Release)-$channel\n" +
-                        "${App.context.packageName}\n" +
-                        "AdMob-${AdConstant.ADMOB_APP_ID}"
-            } else {
-                ""
-            }
-        }
-        findViewById<TextView>(R.id.about_app_version).text = "v${BuildConfig.VERSION_NAME}$last"
+        findViewById<View>(R.id.about_privacy).setOnClickListener(this)
+        findViewById<View>(R.id.iv_back).setOnClickListener(this)
+        findViewById<TextView>(R.id.tv_label).text = getString(R.string.about)
+        findViewById<TextView>(R.id.about_app_version).text = "v1.0"
         findViewById<TextView>(R.id.about_right).text =
-            String.format(getString(R.string.about_right), getString(R.string.app_name))
+            String.format(getString(R.string.about_right), getString(R.string.sa_app_name))
 
    }
+
+    override fun initData() {
+    }
+
+    override fun getContentView(): Any = R.layout.activity_about
 
     override fun onClick(v: View?) {
         when(v?.id) {

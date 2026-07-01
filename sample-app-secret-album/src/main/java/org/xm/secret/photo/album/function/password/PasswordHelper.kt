@@ -8,7 +8,7 @@ import android.os.Handler
 import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.annotation.IntDef
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -39,7 +39,7 @@ class PasswordHelper(val handler: Handler, val callback: PasswordCallback?) {
 
     // 是否验证通过
     private var mIsPasswordPass = false
-    @Status
+
     private var mSettingPassword = -1
 
     private val mBubbleSize = 4
@@ -171,7 +171,7 @@ class PasswordHelper(val handler: Handler, val callback: PasswordCallback?) {
         mObjectAnimator?.duration = duration
 
         mObjectAnimator?.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator?) {
+            override fun onAnimationStart(animation: Animator) {
                 if (mVibrator?.hasVibrator() == true) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         mVibrator?.vibrate(VibrationEffect.createOneShot(duration, 254))
@@ -181,15 +181,15 @@ class PasswordHelper(val handler: Handler, val callback: PasswordCallback?) {
                 }
             }
 
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 //动画结束后没回调???
                 mNumbers.clear()
                 invalidate()
                 mVibrator?.cancel()
             }
 
-            override fun onAnimationRepeat(animation: Animator?) {}
-            override fun onAnimationCancel(animation: Animator?) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+            override fun onAnimationCancel(animation: Animator) {}
         })
     }
 

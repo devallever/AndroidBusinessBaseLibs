@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
 import android.widget.VideoView
+import app.allever.android.lib.core.base.AbstractFragment
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.bean.ThumbnailBean
 import org.xm.secret.photo.album.util.ImageUtil
@@ -11,7 +12,7 @@ import org.xm.secret.photo.album.util.MediaTypeUtil
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.github.chrisbanes.photoview.PhotoView
 
-class PreviewFragment : androidx.fragment.app.Fragment() {
+class PreviewFragment : AbstractFragment() {
 
     companion object {
         private val TAG = PreviewFragment::class.java.simpleName
@@ -31,10 +32,10 @@ class PreviewFragment : androidx.fragment.app.Fragment() {
         if (MediaTypeUtil.isImage(mThumbnailBean?.type ?: -1)) {
             //图片类型
             if (MediaTypeUtil.isGif(mThumbnailBean?.type!!)) {
-                ImageUtil.loadEncodeImage(context!!, mThumbnailBean, gifView)
+                ImageUtil.loadEncodeImage(requireContext(), mThumbnailBean, gifView)
                 imageView?.visibility = View.GONE
             } else {
-                ImageUtil.loadBigImage(context!!, mThumbnailBean, imageView!!)
+                ImageUtil.loadBigImage(requireContext(), mThumbnailBean, imageView!!)
                 gifView.visibility = View.GONE
             }
         } else if (MediaTypeUtil.isVideo(mThumbnailBean?.type ?: -1)) {
