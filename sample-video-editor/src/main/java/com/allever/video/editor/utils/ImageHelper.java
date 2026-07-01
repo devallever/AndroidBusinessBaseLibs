@@ -50,6 +50,8 @@ import java.util.Set;
 
 import static android.provider.MediaStore.Video.Thumbnails.FULL_SCREEN_KIND;
 
+import app.allever.android.lib.core.ext.LoggerKt;
+
 
 /***
  * com.photoeditor.function.common.ImageHelper
@@ -1799,6 +1801,8 @@ public class ImageHelper {
      * @return
      */
     public static ArrayList<ImageFolder> getAllFolderData(Context context, long maxDuring) {
+        //loog
+        LoggerKt.log(TAG, "getAllFolderData");
 
         ArrayList<ImageFolder> data1 = (ArrayList<ImageFolder>) MediaHelper.INSTANCE.getAlbumInfo(MediaHelper.INSTANCE.getTYPE_IMAGE(), true);
         ArrayList<ImageFolder> data2 = (ArrayList<ImageFolder>) MediaHelper.INSTANCE.getAlbumInfo(MediaHelper.INSTANCE.getTYPE_VIDEO(), false);

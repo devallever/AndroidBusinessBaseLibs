@@ -5,17 +5,22 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.*
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.Animation
+import android.view.animation.LinearInterpolator
+import android.view.animation.RotateAnimation
+import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import android.widget.TextView
-import com.android.absbase.utils.ResourcesUtils
-import com.android.absbase.utils.ToastUtils
-import com.android.permissions.compat.PermissionCallbacks
-import com.android.permissions.compat.PermissionManager
 import com.allever.video.editor.ConfigManager
 import com.allever.video.editor.R
 import com.allever.video.editor.app.Base2Activity
@@ -23,9 +28,12 @@ import com.allever.video.editor.function.music.SongHelper
 import com.allever.video.editor.function.music.SongInfo
 import com.allever.video.editor.function.music.SongMediaPlayer
 import com.allever.video.editor.utils.TimeUtils
+import com.android.absbase.utils.ResourcesUtils
+import com.android.absbase.utils.ToastUtils
+import com.android.permissions.compat.PermissionCallbacks
+import com.android.permissions.compat.PermissionManager
 import java.io.File
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.LinkedList
 
 class LocalMusicActivity : Base2Activity(), View.OnClickListener, PermissionCallbacks {
     private lateinit var mBack: ImageView
@@ -126,6 +134,7 @@ class LocalMusicActivity : Base2Activity(), View.OnClickListener, PermissionCall
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_local_music)
+        adaptStatusBar(findViewById(R.id.top_panel))
 
         mBack = findViewById(R.id.back)
         mBack.setOnClickListener(this)

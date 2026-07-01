@@ -39,6 +39,7 @@ public class SettingsActivity extends Base2Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ve_activity_settings);
+        adaptStatusBar(findViewById(R.id.rl_top_bar));
 
         initView();
     }

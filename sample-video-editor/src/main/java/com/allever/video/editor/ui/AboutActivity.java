@@ -39,6 +39,7 @@ public class AboutActivity extends Base2Activity {
         super.onCreate(savedInstanceState);
         initContentView(savedInstanceState);
         initData(savedInstanceState);
+        adaptStatusBar(findViewById(R.id.rl_title_bar));
     }
 
     protected void initContentView(Bundle savedInstanceState) {

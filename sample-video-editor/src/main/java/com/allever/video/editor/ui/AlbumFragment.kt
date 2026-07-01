@@ -8,11 +8,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.android.absbase.utils.ResourcesUtils
 import com.allever.video.editor.R
+import com.allever.video.editor.app.Base2Fragment
 import com.allever.video.editor.ui.adapter.AlbumCellAdapter
 import com.allever.video.editor.ui.bean.ThumbnailBean
 import com.allever.video.editor.ui.widget.EmptyRecyclerView
 
-class AlbumFragment : androidx.fragment.app.Fragment(), AlbumCellAdapter.OptionListener {
+class AlbumFragment : Base2Fragment(), AlbumCellAdapter.OptionListener {
 
     companion object {
         private const val SPAN_COUNT = 4

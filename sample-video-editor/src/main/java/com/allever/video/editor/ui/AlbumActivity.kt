@@ -22,6 +22,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import app.allever.android.lib.core.app.App.Companion.mainHandler
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.permission.PermissionCore
+import app.allever.android.lib.core.permission.internal.PermissionHelper
 import com.android.absbase.utils.DeviceUtils
 import com.android.absbase.utils.ResourcesUtils
 import com.android.absbase.utils.TimeUtils
@@ -47,7 +50,7 @@ import java.io.File
 
 class AlbumActivity : Base2Activity(), TabLayout.OnTabSelectedListener, View.OnClickListener,
     AlbumFragment.Callback,
-    SelectedAdapter.OptionListener, SelectAlbumAdapter.OptionListener, PermissionCallbacks,
+    SelectedAdapter.OptionListener, SelectAlbumAdapter.OptionListener,
     DragHelper.DragStateCallback {
 
     companion object {
@@ -146,9 +149,6 @@ class AlbumActivity : Base2Activity(), TabLayout.OnTabSelectedListener, View.OnC
     private var mIsNeedRefresh = true
 
     private var mLastSingleModeData: ThumbnailBean? = null
-
-    private val mPermissionManager = PermissionManager.getProxy()
-    private val mPermissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     private var mMediaChangeObserver: ContentObserver? = null
 
@@ -371,29 +371,8 @@ class AlbumActivity : Base2Activity(), TabLayout.OnTabSelectedListener, View.OnC
             return
         }
 
-        checkSubs()
-
-        if (!mPermissionManager.hasPermissions(this, *mPermissions)) {
-            requestStoragePermission()
-        } else if (Build.VERSION.SDK_INT <= 23) {
-            // 6.0以下的版本出现用户手动设置项关掉权限, 上接口仍然判断为有权限, 而且不管有没有勾选权限,判断是否永久拒绝都为拒绝
-            val hasPermission = checkStoragePermission()
-            if (!hasPermission) {
-                mPermissionManager.jumpToSettingDialog(this)
-            } else {
-                if (mIsNeedRefresh) {
-                    getFolderDataTask().executeOnExecutor(AsyncTask.DATABASE_THREAD_EXECUTOR)
-                }
-                OnlineDataManager.getInstance().download()
-            }
-        } else {
-            if (checkStoragePermission() && mIsNeedRefresh) {
-                getFolderDataTask().executeOnExecutor(AsyncTask.DATABASE_THREAD_EXECUTOR)
-                OnlineDataManager.getInstance().download()
-            }
-        }
-
-//        checkSubs()
+        getFolderDataTask().executeOnExecutor(AsyncTask.DATABASE_THREAD_EXECUTOR)
+        OnlineDataManager.getInstance().download()
     }
 
     override fun onResume() {
@@ -409,9 +388,7 @@ class AlbumActivity : Base2Activity(), TabLayout.OnTabSelectedListener, View.OnC
         if (mMediaChangeObserver == null) {
             mMediaChangeObserver = object : ContentObserver(mainHandler) {
                 override fun onChange(selfChange: Boolean) {
-                    if (checkStoragePermission()) {
-                        getFolderDataTask().executeOnExecutor(AsyncTask.DATABASE_THREAD_EXECUTOR)
-                    }
+                    getFolderDataTask().executeOnExecutor(AsyncTask.DATABASE_THREAD_EXECUTOR)
                 }
             }
             val contentResolver = contentResolver
@@ -474,46 +451,6 @@ class AlbumActivity : Base2Activity(), TabLayout.OnTabSelectedListener, View.OnC
             }
         }
     }
-
-//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        mPermissionManager.onRequestPermissionResult(requestCode, permissions, grantResults, this)
-//    }
-
-    private fun requestStoragePermission() {
-        mPermissionManager.requestPermission(
-            this,
-            resources.getString(R.string.tips_ration_storate),
-            RC_PERMISSION,
-            *mPermissions
-        )
-    }
-
-    private fun checkStoragePermission(): Boolean {
-        try {
-            val sdcardPath = Environment.getExternalStorageDirectory().absolutePath
-            val file = File(sdcardPath)
-            return file.canRead()
-        } catch (e: Throwable) {
-
-        }
-
-        return false
-    }
-
-    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
-        if (mPermissionManager.isPermissionPermanentlyDenied(this, *mPermissions)) {
-            mPermissionManager.jumpToSettingDialog(this)
-        }
-    }
-
-    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
-        if (checkStoragePermission()) {
-            getFolderDataTask().executeOnExecutor(AsyncTask.DATABASE_THREAD_EXECUTOR)
-            OnlineDataManager.getInstance().download()
-        }
-    }
-
     private fun showSelectAlbumContainer(show: Boolean) {
         if (show) {
             mSelectAlbumContainerAnimShow?.start()
@@ -829,6 +766,7 @@ class AlbumActivity : Base2Activity(), TabLayout.OnTabSelectedListener, View.OnC
      * @return
      */
     private fun getFolderDataTask(): AsyncTask<Void, Void, java.util.ArrayList<ImageFolder>> {
+        log(TAG, "getFolderDataTask")
         mIsNeedRefresh = false
         return object : AsyncTask<Void, Void, java.util.ArrayList<ImageFolder>>() {
 
