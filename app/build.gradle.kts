@@ -79,6 +79,7 @@ dependencies {
     implementation(project(":sample-step-tool"))
     implementation(project(":sample-video-editor"))
     implementation(project(":sample-app-secret-album"))
+    implementation(project(":sample-app-spy-camera"))
 
     implementation(project(":z-sample-billing"))
     implementation(project(":z-sample-cleaner"))

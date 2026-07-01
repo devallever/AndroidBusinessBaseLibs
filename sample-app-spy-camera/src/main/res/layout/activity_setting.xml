@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/gray_50">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_title"/>
+    <RelativeLayout
+        android:id="@+id/id_setting_rl_preview_container"
+        style="@style/setting_item_container">
+        <TextView
+            android:text="显示预览"
+            style="@style/setting_item_label"/>
+
+        <ImageView
+            android:id="@+id/id_setting_iv_prieview"
+            style="@style/setting_item_right_iv"/>
+    </RelativeLayout>
+
+    <include layout="@layout/include_split_view"/>
+
+    <RelativeLayout
+        android:id="@+id/id_setting_rl_camera_container"
+        style="@style/setting_item_container">
+        <TextView
+            android:text="使用前置"
+            style="@style/setting_item_label"/>
+
+        <ImageView
+            android:id="@+id/id_setting_iv_front_camera"
+            style="@style/setting_item_right_iv"/>
+    </RelativeLayout>
+    <include layout="@layout/include_split_view"/>
+
+
+    <RelativeLayout
+        android:id="@+id/id_setting_rl_feedback_container"
+        style="@style/setting_item_container">
+        <TextView
+            android:text="反馈"
+            style="@style/setting_item_label"/>
+
+    </RelativeLayout>
+    <include layout="@layout/include_split_view"/>
+
+
+    <RelativeLayout
+        android:id="@+id/id_setting_rl_about_container"
+        style="@style/setting_item_container">
+        <TextView
+            android:text="关于"
+            style="@style/setting_item_label"/>
+
+    </RelativeLayout>
+    <include layout="@layout/include_split_view"/>
+
+</LinearLayout>

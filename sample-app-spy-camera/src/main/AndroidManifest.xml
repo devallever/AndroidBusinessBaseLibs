@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.allever.stealthcamera">
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <!-- Needed only if your app targets Android 5.0 (API level 21) or higher. -->
+    <uses-feature android:name="android.hardware.location.gps" />
+
+    <uses-feature android:name="android.hardware.camera" />
+
+    <application>
+        <activity android:name="com.allever.stealthcamera.ui.MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name="com.allever.stealthcamera.ui.SettingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.allever.stealthcamera.ui.PictureActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.allever.stealthcamera.ui.CameraActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.allever.stealthcamera.ui.GalleryActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.allever.stealthcamera.ui.AboutActivity"
+            android:screenOrientation="portrait"/>
+        <service android:name="com.allever.stealthcamera.FloatWindowService" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
+    </application>
+
+</manifest>

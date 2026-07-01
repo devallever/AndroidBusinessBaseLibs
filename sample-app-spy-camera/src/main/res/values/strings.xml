@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">隐身相机</string>
+
+    <string name="string_dialog_title">提示</string>
+    <string name="string_dialog_message">您的手机没有授予悬浮窗权限，请开启后再试</string>
+    <string name="string_dialog_setting_button">设置</string>
+    <string name="string_dialog_cancel_button">取消</string>
+
+    <string name="show_preview">显示预览</string>
+	<string name="about">关于</string>
+    <string name="privacy">隐私政策</string>
+    <string name="about_right">版权所有@2018–2019 隐身相机保留所有权利</string>
+
+</resources>
