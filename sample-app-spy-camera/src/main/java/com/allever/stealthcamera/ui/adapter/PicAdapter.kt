@@ -28,7 +28,7 @@ class PicAdapter(mContext: Context, resId: Int, mFilePathList: MutableList<Strin
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val itemView = LayoutInflater.from(mContext).inflate(
-                R.layout.item_picture, parent,
+                R.layout.spy_item_picture, parent,
                 false
         )
         val holder = BaseViewHolder(mContext, itemView)

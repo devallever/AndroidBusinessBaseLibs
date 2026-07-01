@@ -7,7 +7,6 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.net.Uri
@@ -26,9 +25,6 @@ import com.allever.stealthcamera.function.permission.rom.OppoUtils
 import com.allever.stealthcamera.function.permission.rom.QikuUtils
 import com.allever.stealthcamera.function.permission.rom.RomUtils
 import org.xm.stealth.camera.R
-
-import java.lang.reflect.Field
-import java.lang.reflect.Method
 
 @SuppressLint("StaticFieldLeak")
 /**
@@ -203,7 +199,7 @@ object FloatWindowManager {
         }
 
         if (mLayout == null) {
-            mLayout = LayoutInflater.from(context).inflate(R.layout.image_window, null) as RelativeLayout
+            mLayout = LayoutInflater.from(context).inflate(R.layout.spy_image_window, null) as RelativeLayout
         }
         //关闭硬件加速
         mLayout!!.setLayerType(View.LAYER_TYPE_SOFTWARE, null)

@@ -82,7 +82,7 @@ class PreviewView(private val mContext: Context) : FrameLayout(mContext) {
             // 不显示预览框，则用图片把预览框覆盖
             val imageView = ImageView(mContext)
             imageView
-                    .setBackgroundResource(R.drawable.ic_take_photo)
+                    .setBackgroundResource(R.drawable.spy_ic_take_photo)
             this.addView(imageView, params)
         }
     }
@@ -113,10 +113,15 @@ class PreviewView(private val mContext: Context) : FrameLayout(mContext) {
             MotionEvent.ACTION_UP ->
                 // 如果手指离开屏幕时，xDownInScreen和xInScreen相等，且yDownInScreen和yInScreen相等，则视为触发了单击事件。
                 if (abs(xDownInScreen - xInScreen) <= 20 && Math.abs(yDownInScreen - yInScreen) <= 20) {
-                    CameraManager.takePicture()
-
-                    Toast.makeText(mContext, "Done",
+                    try {
+                        CameraManager.takePicture()
+                        Toast.makeText(mContext, "Done",
                             Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+
+
                 }
             else -> {
             }

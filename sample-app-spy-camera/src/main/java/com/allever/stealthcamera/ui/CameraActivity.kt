@@ -23,7 +23,7 @@ class CameraActivity : AbstractActivity() {
     private var params: FrameLayout.LayoutParams? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_camera)
+        setContentView(R.layout.spy_activity_camera)
 
         initView()
     }

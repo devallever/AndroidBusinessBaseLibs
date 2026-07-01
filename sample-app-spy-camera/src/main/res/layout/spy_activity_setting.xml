@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_title"/>
+        android:src="@drawable/spy_ic_title"/>
     <RelativeLayout
         android:id="@+id/id_setting_rl_preview_container"
         style="@style/setting_item_container">
@@ -22,7 +22,7 @@
             style="@style/setting_item_right_iv"/>
     </RelativeLayout>
 
-    <include layout="@layout/include_split_view"/>
+    <include layout="@layout/spy_include_split_view"/>
 
     <RelativeLayout
         android:id="@+id/id_setting_rl_camera_container"
@@ -35,7 +35,7 @@
             android:id="@+id/id_setting_iv_front_camera"
             style="@style/setting_item_right_iv"/>
     </RelativeLayout>
-    <include layout="@layout/include_split_view"/>
+    <include layout="@layout/spy_include_split_view"/>
 
 
     <RelativeLayout
@@ -46,7 +46,7 @@
             style="@style/setting_item_label"/>
 
     </RelativeLayout>
-    <include layout="@layout/include_split_view"/>
+    <include layout="@layout/spy_include_split_view"/>
 
 
     <RelativeLayout
@@ -57,6 +57,6 @@
             style="@style/setting_item_label"/>
 
     </RelativeLayout>
-    <include layout="@layout/include_split_view"/>
+    <include layout="@layout/spy_include_split_view"/>
 
 </LinearLayout>

@@ -3,7 +3,6 @@ package com.allever.stealthcamera.ui
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
-import androidx.appcompat.app.AppCompatActivity
 import app.allever.android.lib.core.base.AbstractActivity
 
 import org.xm.stealth.camera.R
@@ -23,7 +22,7 @@ class GalleryActivity : AbstractActivity() {
     private var mFragmentList: MutableList<Fragment>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gallery)
+        setContentView(R.layout.spy_activity_gallery)
 
         initData()
         initView()

@@ -21,7 +21,7 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setting)
+        setContentView(R.layout.spy_activity_setting)
 
         initData()
         initView()
@@ -49,9 +49,9 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setSwitch(target: ImageView, switch: Boolean) {
         if (switch) {
-            target.setImageResource(R.drawable.ic_preview_on)
+            target.setImageResource(R.drawable.spy_ic_preview_on)
         } else {
-            target.setImageResource(R.drawable.ic_switch_off)
+            target.setImageResource(R.drawable.spy_ic_switch_off)
         }
 
     }

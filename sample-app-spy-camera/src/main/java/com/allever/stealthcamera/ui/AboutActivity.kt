@@ -12,7 +12,7 @@ class AboutActivity: AbstractActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about)
+        setContentView(R.layout.spy_activity_about)
         findViewById<View>(R.id.about_privacy).setOnClickListener(this)
     }
 

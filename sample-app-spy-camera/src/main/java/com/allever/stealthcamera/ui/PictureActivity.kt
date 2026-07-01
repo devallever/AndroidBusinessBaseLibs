@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -79,7 +78,7 @@ class PictureActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_picture)
+        setContentView(R.layout.spy_activity_picture)
 
         initData()
         initView()
@@ -91,7 +90,7 @@ class PictureActivity : AppCompatActivity() {
 
     private fun initView() {
         mRv = findViewById(R.id.id_picture_rv)
-        mAdapter = PicAdapter(this, R.layout.item_picture, mFilePathList!!)
+        mAdapter = PicAdapter(this, R.layout.spy_item_picture, mFilePathList!!)
         mRv?.layoutManager = GridLayoutManager(this, 3)
         mRv!!.adapter = mAdapter
 

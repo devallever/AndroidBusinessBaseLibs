@@ -21,21 +21,21 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:layout_marginTop="20dp"
-            android:src="@drawable/ic_camera_gen"/>
+            android:src="@drawable/spy_ic_camera_gen"/>
         <ImageView
             android:id="@+id/id_main_iv_settings"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:layout_marginTop="20dp"
-            android:src="@drawable/ic_setting"/>
+            android:src="@drawable/spy_ic_setting"/>
         <ImageView
             android:id="@+id/id_main_iv_pictures"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:layout_marginTop="20dp"
-            android:src="@drawable/ic_pic"/>
+            android:src="@drawable/spy_ic_pic"/>
 
 
     </LinearLayout>
@@ -44,7 +44,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_main_bg"
+        android:src="@drawable/spy_ic_main_bg"
         android:scaleType="centerCrop"
         android:layout_above="@id/id_main_ll_menu_container"/>
 
@@ -55,7 +55,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="100dp"
-        android:src="@drawable/ic_camera_off" />
+        android:src="@drawable/spy_ic_camera_off" />
 
 
     <!--<ImageView-->

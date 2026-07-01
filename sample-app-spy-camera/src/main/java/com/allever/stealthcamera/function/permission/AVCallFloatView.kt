@@ -8,7 +8,6 @@ import android.graphics.Point
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewConfiguration
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -69,7 +68,7 @@ class AVCallFloatView(context: Context) : FrameLayout(context) {
     private fun initView() {
         windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val inflater = LayoutInflater.from(context)
-        val floatView = inflater.inflate(R.layout.float_window_layout, null)
+        val floatView = inflater.inflate(R.layout.spy_float_window_layout, null)
 
         addView(floatView)
 

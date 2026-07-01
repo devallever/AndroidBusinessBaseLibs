@@ -1,8 +1,6 @@
 package com.allever.stealthcamera.ui
 
-import android.Manifest
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -28,7 +26,7 @@ class MainActivity : AbstractActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.spy_activity_main)
         initData()
         initView()
     }
@@ -42,9 +40,9 @@ class MainActivity : AbstractActivity() {
         mIvGenCam = findViewById(R.id.id_main_iv_general_camera)
 
         if (FloatWindowService.mService == null) {
-            mIvCam!!.setImageResource(R.drawable.ic_camera_off)
+            mIvCam!!.setImageResource(R.drawable.spy_ic_camera_off)
         } else {
-            mIvCam!!.setImageResource(R.drawable.ic_camera_on)
+            mIvCam!!.setImageResource(R.drawable.spy_ic_camera_on)
         }
 
         mIvCam?.setOnClickListener {
@@ -52,10 +50,10 @@ class MainActivity : AbstractActivity() {
                 val floatIntent = Intent(this@MainActivity, FloatWindowService::class.java)
                 if (FloatWindowService.mService == null) {
                     startService(floatIntent)
-                    mIvCam?.setImageResource(R.drawable.ic_camera_on)
+                    mIvCam?.setImageResource(R.drawable.spy_ic_camera_on)
                 } else {
                     stopService(floatIntent)
-                    mIvCam?.setImageResource(R.drawable.ic_camera_off)
+                    mIvCam?.setImageResource(R.drawable.spy_ic_camera_off)
                 }
             } else {
                 showSettingDialog()
@@ -81,7 +79,7 @@ class MainActivity : AbstractActivity() {
                 //停止预览
                 val floatIntent = Intent(this@MainActivity, FloatWindowService::class.java)
                 stopService(floatIntent)
-                mIvCam?.setImageResource(R.drawable.ic_camera_off)
+                mIvCam?.setImageResource(R.drawable.spy_ic_camera_off)
             }
 
             val intent = Intent(this@MainActivity, CameraActivity::class.java)

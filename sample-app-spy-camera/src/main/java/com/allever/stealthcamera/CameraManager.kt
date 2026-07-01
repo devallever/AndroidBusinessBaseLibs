@@ -82,9 +82,14 @@ object CameraManager {
                 }
             }
             // 一般Camera在pictureCallBack后会暂停PreView，发现三星手机在底层封装能自动重启PreView功能
-            mCamera?.startPreview()
-            isPreviewing = true
-            isCapturing = false
+            try {
+                mCamera?.startPreview()
+                isPreviewing = true
+                isCapturing = false
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
         })
     }
 

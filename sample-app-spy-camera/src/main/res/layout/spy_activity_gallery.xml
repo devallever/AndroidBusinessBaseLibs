@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/text_white">
+    android:background="@color/spy_text_white">
     <ImageView
         android:id="@+id/id_gallery_iv_title"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:src="@drawable/ic_title"
+        android:src="@drawable/spy_ic_title"
         android:scaleType="centerCrop"/>
     <FrameLayout
         android:layout_width="match_parent"
