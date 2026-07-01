@@ -32,35 +32,12 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextDetailClickItem("VPN", "sample-vpn") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_VPN).navigation()
         },
-        TextDetailClickItem("VPN-FlashTunnel", "sample-vpn-flashtunnel") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_VPN_FLASH_TUNNEL).navigation()
-        },
         TextDetailClickItem("清理", "sample-cleaner") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CLEANER).navigation()
-        },
-        TextDetailClickItem("清理-Wood", "sample-cleaner-wood") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CLEANER_WOOD).navigation()
-        },
-        TextDetailClickItem("短剧-穿山甲", "sample-djcsj") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_DJ_CSJ).navigation()
-        },
-        TextDetailClickItem("网赚-ChargeReward", "sample-chargereward") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CHARGE_REWARD).navigation()
-        },
-        TextDetailClickItem("网赚-记录步数", "sample-step-tool") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_STEP_TOOL).navigation()
         },
         TextDetailClickItem("多进程通信-IPC", "sample-ipc") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_IPC).navigation()
         },
-        TextDetailClickItem("网络测速", "sample-net-speed-test") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_NET_SPEED_TEST).navigation()
-        },
-        TextDetailClickItem("视频编辑", "sample-video-editor") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_VIDEO_EDITOR).navigation()
-        },
-        TextDetailClickItem("私密相册", "sample-app-secret-album") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_SECRET_ALBUM).navigation()
-        },
+
     )
 }
