@@ -52,7 +52,6 @@ public class SettingItem extends RelativeLayout {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        initView();
         if (attrs != null) {
             TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SettingItem);
             boolean isCheck = ta.getBoolean(R.styleable.SettingItem_check, false);
@@ -65,6 +64,7 @@ public class SettingItem extends RelativeLayout {
             int descColorId = ta.getResourceId(R.styleable.SettingItem_settingitemdesccolor, -1);
             mCheckAble = ta.getBoolean(R.styleable.SettingItem_checkable, false);
             inflate(getContext(), R.layout.setting_item, this);
+            initView();
             if (iconLeft != null) {
                 mSettingIv.setImageDrawable(iconLeft);
             } else {

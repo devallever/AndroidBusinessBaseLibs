@@ -39,7 +39,7 @@ object FpManger {
             }
         }
         if (App.DEBUG) {
-            LogUtil.fp("getStepSetting = $settingJson")
+//            LogUtil.fp("getStepSetting = $settingJson")
         }
         return settingJson
     }

@@ -63,6 +63,6 @@ class RouterPath {
         const val PATH_SAMPLE_IPC = "/ipc/main"
         const val PATH_SAMPLE_NET_SPEED_TEST = "/netspeedtest/main"
         const val PATH_SAMPLE_STEP_TOOL = "/steptool/main"
-        const val PATH_SAMPLE_VIDEO_EDITOR = "/sampleoldlist/main"
+        const val PATH_SAMPLE_VIDEO_EDITOR = "/videoeditor/main"
     }
 }

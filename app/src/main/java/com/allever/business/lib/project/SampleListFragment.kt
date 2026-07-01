@@ -57,7 +57,7 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_NET_SPEED_TEST).navigation()
         },
         TextDetailClickItem("视频编辑", "sample-video-editor") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_MVVM).navigation()
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_VIDEO_EDITOR).navigation()
         },
 
 

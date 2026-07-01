@@ -10,11 +10,13 @@ import com.android.absbase.App;
 import com.android.absbase.utils.AppUtils;
 import com.android.absbase.utils.TaskRunnable;
 
+import app.allever.android.lib.core.base.AbstractActivity;
+
 
 /**
  */
 
-public class Base2Activity extends AppCompatActivity {
+public class Base2Activity extends AbstractActivity {
 
     protected boolean mIsCanShowRateDialog = true;
     private boolean mIsFinishing = false;

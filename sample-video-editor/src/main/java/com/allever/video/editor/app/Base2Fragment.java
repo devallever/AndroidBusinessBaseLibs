@@ -5,13 +5,14 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.fragment.app.Fragment;
+
+import app.allever.android.lib.core.base.AbstractFragment;
 
 
 /**
  */
 
-public class Base2Fragment extends Fragment {
+public class Base2Fragment extends AbstractFragment {
 
 
     protected boolean mIsPageSelected;

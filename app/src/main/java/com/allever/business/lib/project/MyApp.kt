@@ -6,9 +6,11 @@ import app.allever.android.lib.core.helper.CoroutineHelper
 import app.allever.android.lib.core.helper.ProcessHelper
 import app.flash.tunnel.vpn.TunnelApp
 import com.alibaba.android.arouter.launcher.ARouter
+import com.allever.video.editor.app.AppApplication
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.ShadowsSocksConfig
 import com.step.wincash.base.BaseApplication
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class MyApp: App() {
@@ -17,6 +19,9 @@ class MyApp: App() {
         super.onCreate()
         TunnelApp.onCreate()
         BaseApplication.onCreate()
+        CoroutineHelper.DEFAULT.launch {
+            AppApplication.onCreate()
+        }
     }
 
     override fun attachBaseContext(base: Context?) {

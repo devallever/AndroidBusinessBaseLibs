@@ -1,8 +1,6 @@
 package com.allever.video.editor.app
 
-import android.app.Activity
 import android.app.Application
-import android.content.Context
 import android.content.Intent
 import android.os.StrictMode
 import android.os.SystemClock
@@ -16,7 +14,6 @@ import com.android.absbase.helper.UncaughtExceptionHandler
 import com.android.absbase.helper.log.DLog
 import com.android.absbase.helper.log.LogUtil
 import com.android.absbase.helper.log.RLog
-import com.android.absbase.ui.BaseApplication
 import com.android.absbase.utils.AppUtils
 import com.android.absbase.utils.DebugUtil
 import com.android.absbase.utils.DeviceUtils

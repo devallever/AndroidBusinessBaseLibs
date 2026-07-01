@@ -197,10 +197,10 @@ class LocalMusicActivity : Base2Activity(), View.OnClickListener, PermissionCall
                 *mPermissions)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        mPermissionManager.onRequestPermissionResult(requestCode, permissions, grantResults, this)
-    }
+//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        mPermissionManager.onRequestPermissionResult(requestCode, permissions, grantResults, this)
+//    }
 
     override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
         if (mPermissionManager.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {

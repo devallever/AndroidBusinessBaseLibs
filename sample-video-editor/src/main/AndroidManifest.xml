@@ -126,8 +126,7 @@
 
         <activity android:name="com.allever.video.editor.ui.AlbumActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
+            android:screenOrientation="portrait">
             <!--<intent-filter>-->
             <!--<action android:name="android.intent.action.MAIN" />-->
             <!--<category android:name="android.intent.category.LAUNCHER" />-->
@@ -147,6 +146,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
         </activity>
+        <activity android:name="app.allever.android.sample.video.editor.SampleVideoEditorActivity" />
 
 
         <!-- AppsFlyer start -->

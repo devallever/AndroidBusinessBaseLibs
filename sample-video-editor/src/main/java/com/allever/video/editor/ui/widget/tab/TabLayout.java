@@ -295,13 +295,13 @@ public class TabLayout extends HorizontalScrollView {
                 com.google.android.material.R.style.TextAppearance_Design_Tab);
 
         // Text colors/sizes come from the text appearance first
-        final TypedArray ta = context.obtainStyledAttributes(mTabTextAppearance,
-                com.google.android.material.R.styleable.MaterialTextAppearance);
+//        final TypedArray ta = context.obtainStyledAttributes(mTabTextAppearance,
+//                com.google.android.material.R.styleable.TextAppearance);
         try {
-            mTabTextSize = ta.getDimensionPixelSize(com.google.android.material.R.styleable.Chip_android_textSize, 0);
-            mTabTextColors = ta.getColorStateList(com.google.android.material.R.styleable.TabLayout_tabTextColor);
+//            mTabTextSize = ta.getDimensionPixelSize(com.google.android.material.R.styleable.TextAppearance_android_textSize, 0);
+//            mTabTextColors = ta.getColorStateList(com.google.android.material.R.styleable.TextAppearance_android_textColor);
         } finally {
-            ta.recycle();
+//            ta.recycle();
         }
 
         if (a.hasValue(com.google.android.material.R.styleable.TabLayout_tabTextColor)) {
@@ -1360,7 +1360,6 @@ public class TabLayout extends HorizontalScrollView {
 
         private int mDefaultMaxLines = 2;
 
-        @SuppressLint("RestrictedApi")
         public TabView(Context context) {
             super(context);
             if (mTabBackgroundResId != 0) {

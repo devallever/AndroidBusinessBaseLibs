@@ -42,7 +42,7 @@ public class AboutActivity extends Base2Activity {
     }
 
     protected void initContentView(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_about);
+        setContentView(R.layout.ve_activity_about);
         mAboutVersion = findViewById(R.id.about_version);
         mToolbarBack = findViewById(R.id.top_back);
         mToolbarBack.setOnClickListener(v -> {
@@ -75,8 +75,7 @@ public class AboutActivity extends Base2Activity {
     }
 
     protected void initData(Bundle savedInstanceState) {
-        String version = AppUtils.getVersionNameByPkgName(this, getPackageName());
-        String text = String.format("V%s", version);
+        String text = String.format("V%s", "1.0");
         mAboutVersion.setText(text);
     }
 

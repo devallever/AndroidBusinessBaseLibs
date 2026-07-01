@@ -53,7 +53,7 @@ class PreviewActivity : Base2Activity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_preview)
+        setContentView(R.layout.ve_activity_preview)
 
         getIntentData()
 

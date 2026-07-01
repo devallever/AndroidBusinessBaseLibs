@@ -158,6 +158,7 @@ class AlbumActivity : Base2Activity(), TabLayout.OnTabSelectedListener, View.OnC
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ve_activity_album)
+        adaptStatusBar(findViewById(R.id.rl_title_bar))
 
         val key = intent?.getStringExtra(EXTRA_KEY)
 //        mSingleMode = key == KEY_PICK
@@ -474,10 +475,10 @@ class AlbumActivity : Base2Activity(), TabLayout.OnTabSelectedListener, View.OnC
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        mPermissionManager.onRequestPermissionResult(requestCode, permissions, grantResults, this)
-    }
+//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        mPermissionManager.onRequestPermissionResult(requestCode, permissions, grantResults, this)
+//    }
 
     private fun requestStoragePermission() {
         mPermissionManager.requestPermission(
