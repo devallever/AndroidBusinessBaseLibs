@@ -20,26 +20,26 @@ class AppListFragment: ListFragment<FragmentListBinding, ListViewModel, TextDeta
         TextDetailClickItem("私密相册", "sample-app-secret-album") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_SECRET_ALBUM).navigation()
         },
-        TextDetailClickItem("视频编辑", "sample-video-editor") {
+        TextDetailClickItem("视频编辑", "sample-app-video-editor") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_VIDEO_EDITOR).navigation()
         },
-        TextDetailClickItem("网络测速", "sample-net-speed-test") {
+        TextDetailClickItem("网络测速", "sample-app-net-speed-test") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_NET_SPEED_TEST).navigation()
         },
 
-        TextDetailClickItem("清理-Wood", "sample-cleaner-wood") {
+        TextDetailClickItem("清理-Wood", "sample-app-cleaner-wood") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CLEANER_WOOD).navigation()
         },
-        TextDetailClickItem("网赚-ChargeReward", "sample-chargereward") {
+        TextDetailClickItem("网赚-ChargeReward", "sample-app-chargereward") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CHARGE_REWARD).navigation()
         },
-        TextDetailClickItem("网赚-记录步数", "sample-step-tool") {
+        TextDetailClickItem("网赚-记录步数", "sample-app-step-tool") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_STEP_TOOL).navigation()
         },
         TextDetailClickItem("短剧-穿山甲", "sample-djcsj") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_DJ_CSJ).navigation()
         },
-        TextDetailClickItem("VPN-FlashTunnel", "sample-vpn-flashtunnel") {
+        TextDetailClickItem("VPN-FlashTunnel", "sample-app-vpn-flashtunnel") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_VPN_FLASH_TUNNEL).navigation()
         },
     )
