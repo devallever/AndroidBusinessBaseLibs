@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">Gif Memes</string>
+
+    <string name="recommend">推荐</string>
+
+    <!-- 设置 -->
+    <string name="setting">设置</string>
+    <string name="tab_guide">使用说明</string>
+    <string name="tab_trend">推荐</string>
+    <string name="tab_search">搜索</string>
+    <string name="tab_liked">收藏</string>
+
+    <string name="share">分享</string>
+    <string name="feedback">反馈</string>
+    <string name="about">关于</string>
+    <string name="support">支持我们</string>
+    <string name="version">使用国际版</string>
+    <string name="privacy">隐私政策</string>
+    <string name="permission_setting">设置权限</string>
+    <string name="about_right">版权所有@2018–%s 保留所有权利</string>
+
+    <string name="share_content">【%s】这个应用很不错，推荐一下。获取地址\n%s</string>
+
+    <string name="mamual_permission">Manually set permissions</string>
+    <string name="permission_tips">我们需要
+        \n【存储权限】用于保存一些缓存数据
+        \n【手机信息】以便统计设备信息，做出更好的用户体验
+        \n 拒绝相应的权限将无法使用部分功能</string>
+    <string name="permission_accept">同意</string>
+    <string name="permission_reject">拒绝</string>
+    <string name="reject_permission_tips">拒绝权限将不能使用某些功能</string>
+    <string name="no_wire_store_permission_tips">没有写入存储权限</string>
+    <string name="no_read_store_permission_tips">没有读取存储权限</string>
+
+    <string name="loading">正在加载</string>
+    <string name="searching">正在搜索</string>
+    <string name="please_input_search_content">请输入搜索内容</string>
+    <string name="file_not_found">文件不存在</string>
+    <string name="already_download">已下载</string>
+    <string name="already_save_to">已保存到： </string>
+
+    <string name="loading_ad_tips">精彩内容正在加载，请稍后</string>
+
+    <string name="backup_restore">数据备份和恢复</string>
+    <string name="backup">备份</string>
+    <string name="restore">恢复</string>
+    <string name="del_backup">删除备份</string>
+    <string name="warm_tips">温馨提示</string>
+    <string name="backup_tips">这操作会将之前的备份覆盖，是否需要备份?</string>
+    <string name="del_backup_tips">这操作会将您的备份文件删除，是否需要删除?</string>
+    <string name="cancle">取消</string>
+    <string name="ok">确定</string>
+    <string name="please_input_content">请输入您要翻译的内容</string>
+    <string name="remove_tips">是否移除?</string>
+    <string name="added_to_words">已添加到单词本</string>
+    <string name="removed_from_words">已从单词本中移除</string>
+    <string name="un_slelectd">未选中</string>
+    <string name="no_backup_data">无备份数据</string>
+    <string name="backup_success">备份成功</string>
+    <string name="backup_fail">备份失败</string>
+    <string name="restore_success">恢复成功</string>
+    <string name="restore_fail">恢复失败</string>
+    <string name="del_backup_success">删除备份成功</string>
+    <string name="fetchVCode">获取验证码</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="logout">退出</string>
+    <string name="mine">我的</string>
+    <string name="choose_video">Choose Video</string>
+
+    <string name="preview_video_unavailable_tips">Can not play this video.</string>
+    <string name="search">搜索</string>
+    <string name="creating">正在转换</string>
+    <string name="convert">转换</string>
+
+    <string name="search_view_app_name">searchview</string>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- default -->
+	<dimen name="default_top_bar_height">56dp</dimen>
+	<dimen name="default_image_button_size">48dp</dimen>
+	<dimen name="default_icon_width">48dp</dimen>
+	<dimen name="default_icon_height">48dp</dimen>
+
+	<!-- 相册单个item -->
+	<dimen name="item_cell_image_height">85dp</dimen>
+	<dimen name="item_cell_space_width">2dp</dimen>
+	<dimen name="item_cell_space_middle">2dp</dimen>
+	<dimen name="item_cell_space_top">2dp</dimen>
+	<dimen name="item_cell_iv_select_flag_width">40dp</dimen>
+	<dimen name="item_cell_iv_select_flag_height">@dimen/item_cell_iv_select_flag_width</dimen>
+	<dimen name="item_cell_tv_duration_height">30dp</dimen>
+	<dimen name="item_cell_tv_duration_text_size">12sp</dimen>
+	<dimen name="item_cell_tv_duration_margin_end">8dp</dimen>
+</resources>

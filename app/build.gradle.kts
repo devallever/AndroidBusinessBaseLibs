@@ -81,6 +81,7 @@ dependencies {
     implementation(project(":sample-app-secret-album"))
     implementation(project(":sample-app-spy-camera"))
     implementation(project(":sample-app-sticker-camera"))
+    implementation(project(":sample-app-gif-search"))
 
     implementation(project(":z-sample-billing"))
     implementation(project(":z-sample-cleaner"))
