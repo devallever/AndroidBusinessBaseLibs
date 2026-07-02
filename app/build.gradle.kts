@@ -80,6 +80,7 @@ dependencies {
     implementation(project(":sample-app-video-editor"))
     implementation(project(":sample-app-secret-album"))
     implementation(project(":sample-app-spy-camera"))
+    implementation(project(":sample-app-sticker-camera"))
 
     implementation(project(":z-sample-billing"))
     implementation(project(":z-sample-cleaner"))
