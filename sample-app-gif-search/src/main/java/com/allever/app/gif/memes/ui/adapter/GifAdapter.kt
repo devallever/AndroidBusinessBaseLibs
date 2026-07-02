@@ -11,13 +11,17 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.getString
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.helper.ShareHelper
+import app.allever.android.lib.core.util.FileUtils
 import com.allever.app.gif.memes.R
 import com.allever.app.gif.memes.ui.adapter.bean.GifItem
 import com.allever.app.gif.memes.ui.search.SearchActivity
-import com.allever.lib.common.app.App
-import com.allever.lib.common.ui.widget.recycler.BaseRecyclerViewAdapter
-import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
-import com.allever.lib.common.util.*
+import com.allever.app.gif.memes.ui.widget.recycler.BaseRecyclerViewAdapter
+import com.allever.app.gif.memes.ui.widget.recycler.BaseViewHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.funny.gif.memes.app.Global
@@ -28,8 +32,6 @@ import com.funny.gif.memes.func.download.TaskInfo
 import com.funny.gif.memes.util.DBHelper
 import com.funny.gif.memes.util.MD5
 import com.funny.gif.memes.util.copyToAlbum
-import com.xm.lib.permission.PermissionCompat
-import com.xm.netmodel.helder.ExceptionHandle.getStringRes
 import org.greenrobot.eventbus.EventBus
 import pl.droidsonroids.gif.GifDrawable
 import pl.droidsonroids.gif.GifImageView
@@ -241,33 +243,23 @@ class GifAdapter(context: Context, resId: Int, data: MutableList<GifItem>) :
 
         ivDownload?.setOnClickListener {
 
-            PermissionCompat.with(mContext as FragmentActivity)
-                .permission(/*Manifest.permission.READ_PHONE_STATE,*/
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Global.createDir()
+            if (FileUtils.checkExist(savePath)) {
+                toast(R.string.already_download)
+                return@setOnClickListener
+            }
+
+
+            if (FileUtils.checkExist(tempPath)) {
+                tempPath.copyToAlbum(App.context, Global.SAVE_ALBUM)
+                toast("${getString(R.string.already_save_to)}\n$savePath")
+                ivDownload.setColorFilter(
+                    App.context.resources.getColor(R.color.gray_66),
+                    PorterDuff.Mode.SRC_IN
                 )
-                .onExplain(getStringRes(R.string.permission_tips))
-                .onSetting(getString(R.string.mamual_permission))
-                .request { allGranted, grantedList, deniedList ->
-                    if (allGranted) {
-                        Global.createDir()
-                        if (FileUtils.checkExist(savePath)) {
-                            toast(R.string.already_download)
-                            return@request
-                        }
-
-
-                        if (FileUtils.checkExist(tempPath)) {
-                            tempPath.copyToAlbum(App.context, Global.SAVE_ALBUM)
-                            toast("${getString(R.string.already_save_to)}\n$savePath")
-                            ivDownload.setColorFilter(
-                                App.context.resources.getColor(R.color.gray_66),
-                                PorterDuff.Mode.SRC_IN
-                            )
-                        } else {
-                            toast(R.string.file_not_found)
-                        }
-                    }
-                }
+            } else {
+                toast(R.string.file_not_found)
+            }
         }
 
         ivMore?.setOnClickListener {
@@ -299,7 +291,7 @@ class GifAdapter(context: Context, resId: Int, data: MutableList<GifItem>) :
         tvSize?.text = item.size.toString()
 
         if (FileUtils.checkExist(tempPath)) {
-            val fileSize = FileUtil.getFileSize(tempPath)
+            val fileSize = FileUtils.getFileSize(tempPath)
             downloadProgressBar?.progress = 100
             tvStatus?.text = "状态：已下载"
             Glide.with(App.context)
@@ -350,8 +342,8 @@ class GifAdapter(context: Context, resId: Int, data: MutableList<GifItem>) :
         gifImageView?.visibility = VISIBLE
         tvStatus?.text = "状态：下载完成"
         log("${taskInfo?.url} -> 状态：下载完成")
-        FileUtil.createNewFile(tempPath, false)
-        FileUtil.copyFile(File(cachePath), File(tempPath))
+        FileUtils.createNewFile(tempPath, false)
+        FileUtils.copyFile(File(cachePath), File(tempPath))
         //                com.android.absbase.utils.FileUtils.copyFile(cachePath, tempPath, true)
         //                val drawable = GifDrawable(tempPath)
         //                gifImageView?.setImageDrawable(drawable)

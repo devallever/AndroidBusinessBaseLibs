@@ -5,9 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
-import com.allever.app.gif.memes.BR
 import com.allever.app.gif.memes.R
-import com.funny.gif.memes.app.BaseFragment2
 import com.funny.gif.memes.app.Global
 import com.funny.gif.memes.bean.event.DownloadFinishEvent
 import com.funny.gif.memes.bean.event.LikeEvent
@@ -19,15 +17,15 @@ import com.allever.app.gif.memes.ui.adapter.bean.GifItem
 import com.allever.app.gif.memes.ui.like.adapter.GifLikedAdapter
 import com.allever.app.gif.memes.ui.like.model.LikedViewModel
 import com.funny.gif.memes.util.DBHelper
-import com.allever.lib.common.util.SystemUtils
-import com.allever.lib.common.util.toast
+import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.util.BarUtils
+import app.allever.android.lib.mvvm.base.BaseMvvmFragment
 import com.google.gson.Gson
-import com.xm.lib.base.config.DataBindingConfig
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class LikedFragment : BaseFragment2<FragmentLikedBinding, LikedViewModel>(), View.OnClickListener {
+class LikedFragment : BaseMvvmFragment<FragmentLikedBinding, LikedViewModel>(), View.OnClickListener {
 
     private lateinit var mAdapter: GifLikedAdapter
 
@@ -41,44 +39,8 @@ class LikedFragment : BaseFragment2<FragmentLikedBinding, LikedViewModel>(), Vie
     private var mData = mutableListOf<GifItem>()
     private var mCurrentItem: GifItem? = null
 
-    override fun initDataBindingConfig() = DataBindingConfig(R.layout.fragment_liked, BR.likedViewModel)
-
-    override fun initDataAndEvent() {
-        EventBus.getDefault().register(this)
-
-        mBinding.cbBottomBarCheckAll.setOnCheckedChangeListener { buttonView, isChecked ->
-            mAdapter.allMode = true
-            mAdapter.allCheck = isChecked
-        }
-        mBinding.ivBottomBarBack.setOnClickListener(this)
-        mBinding.ivBottomBarDelete.setOnClickListener(this)
-
-        mAdapter = GifLikedAdapter(requireContext(), R.layout.item_liked, mData)
-        mBinding.rvLiked.layoutManager = GridLayoutManager(context, 3)
-        mBinding.rvLiked.adapter = mAdapter
-        val gson = Gson()
-        mAdapter.itemOptionListener = object : GifLikedAdapter.OnItemOptionClick {
-            override fun onItemClicked(position: Int) {
-                mCurrentItem = mData[position]
-                val item = mData[position]
-                GifPreviewActivity.start(context!!, gson.toJson(item))
-            }
-
-            override fun onLongClick(position: Int) {
-                if (!mEditMode) {
-                    mEditMode = true
-                }
-            }
-        }
-
-        val layoutParams = mBinding.rvLiked.layoutParams as ViewGroup.MarginLayoutParams
-        layoutParams.topMargin = layoutParams.topMargin + SystemUtils.getStatusBarHeight(requireContext())
-        mBinding.rvLiked.layoutParams = layoutParams
-
-        getLikedData()
-    }
-
-    override fun destroyView() {
+    override fun onDestroyView() {
+        super.onDestroyView()
         EventBus.getDefault().unregister(this)
     }
 
@@ -160,6 +122,43 @@ class LikedFragment : BaseFragment2<FragmentLikedBinding, LikedViewModel>(), Vie
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLikeRestoreEvent(event: RestoreLikeEvent) {
+        getLikedData()
+    }
+
+    override fun inflate(): FragmentLikedBinding = FragmentLikedBinding.inflate(layoutInflater)
+
+    override fun init() {
+        EventBus.getDefault().register(this)
+
+        mBinding.cbBottomBarCheckAll.setOnCheckedChangeListener { buttonView, isChecked ->
+            mAdapter.allMode = true
+            mAdapter.allCheck = isChecked
+        }
+        mBinding.ivBottomBarBack.setOnClickListener(this)
+        mBinding.ivBottomBarDelete.setOnClickListener(this)
+
+        mAdapter = GifLikedAdapter(requireContext(), R.layout.item_liked, mData)
+        mBinding.rvLiked.layoutManager = GridLayoutManager(context, 3)
+        mBinding.rvLiked.adapter = mAdapter
+        val gson = Gson()
+        mAdapter.itemOptionListener = object : GifLikedAdapter.OnItemOptionClick {
+            override fun onItemClicked(position: Int) {
+                mCurrentItem = mData[position]
+                val item = mData[position]
+                GifPreviewActivity.start(context!!, gson.toJson(item))
+            }
+
+            override fun onLongClick(position: Int) {
+                if (!mEditMode) {
+                    mEditMode = true
+                }
+            }
+        }
+
+        val layoutParams = mBinding.rvLiked.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.topMargin = layoutParams.topMargin + BarUtils.getStatusBarHeight()
+        mBinding.rvLiked.layoutParams = layoutParams
+
         getLikedData()
     }
 }

@@ -6,11 +6,7 @@ import android.view.View
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
-import com.allever.app.gif.memes.BR
 import com.allever.app.gif.memes.R
-//import com.allever.app.gif.search.ad.AdConstants
-//import com.allever.app.gif.search.ad.SimpleAdChainListener
-import com.funny.gif.memes.app.BaseFragment2
 import com.funny.gif.memes.app.Global
 import com.funny.gif.memes.bean.event.DownloadFinishEvent
 import com.funny.gif.memes.bean.event.LikeEvent
@@ -26,19 +22,17 @@ import com.allever.app.gif.memes.ui.search.model.SearchViewModel
 import com.allever.app.gif.memes.ui.widget.RecyclerViewScrollListener
 import com.funny.gif.memes.util.ImageLoader
 import com.funny.gif.memes.util.SpUtils
-//import com.allever.lib.ad.chain.AdChainHelper
-//import com.allever.lib.ad.chain.IAd
-import com.allever.lib.common.util.log
-import com.allever.lib.common.util.toast
-import com.xm.lib.base.config.DataBindingConfig
-import com.xm.lib.manager.statusbar.BarUtils
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.util.BarUtils
+import app.allever.android.lib.mvvm.base.BaseMvvmFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class SearchFragment : BaseFragment2<FragmentSearchBinding, SearchViewModel>() {
+class SearchFragment : BaseMvvmFragment<FragmentSearchBinding, SearchViewModel>() {
 
     private var mAdapter: GifAdapter? = null
     private lateinit var mProgressDialog: ProgressDialog
@@ -46,61 +40,10 @@ class SearchFragment : BaseFragment2<FragmentSearchBinding, SearchViewModel>() {
 
     private lateinit var mKeyword: String
 
-//    private var mDetailInsertAd: IAd? = null
-
-    override fun initDataBindingConfig() = DataBindingConfig(R.layout.fragment_search, BR.searchViewModel)
-
-    override fun initDataAndEvent() {
-        EventBus.getDefault().register(this)
-
-        ViewHelper.setMarginTop(mBinding.searchViewContainer, BarUtils.getStatusBarHeight())
-
-        mKeyword = arguments?.getString(EXTRA_KEY_WORD) ?: ""
-
-        mProgressDialog = ProgressDialog(activity)
-
-        mBinding.ivRetry.setOnClickListener {
-            mBinding.ivRetry.visibility = View.GONE
-            search(mKeyword)
-        }
-
-        mBinding.searchView.setText(mKeyword)
-        mBinding.searchView.setSelection(mKeyword.length)
-        mBinding.searchView.addSearchListener {
-            search(it)
-        }
-
-        mAdapter = GifAdapter(requireContext(), R.layout.item_gif, mViewModel.gifDataList)
-
-        recyclerViewScrollListener = RecyclerViewScrollListener(object :
-            RecyclerViewScrollListener.OnRecycleRefreshListener {
-            override fun refresh() {
-
-            }
-
-            override fun loadMore() {
-                showLoadingProgressDialog(getString(R.string.searching))
-                search(mKeyword, true)
-            }
-        })
-
-
-        mBinding.gifRecyclerView.addOnScrollListener(recyclerViewScrollListener)
-
-        mBinding.gifRecyclerView.layoutManager = LinearLayoutManager(context)
-        val pagerSnapHelper = PagerSnapHelper()
-        pagerSnapHelper.attachToRecyclerView(mBinding.gifRecyclerView)
-        mBinding.gifRecyclerView.adapter = mAdapter
-
-        if (mKeyword != "") {
-            search(mKeyword)
-        }
-    }
-
-    override fun destroyView() {
+    override fun onDestroyView() {
+        super.onDestroyView()
         DownloadManager.getInstance().cancelAllTask()
         ImageLoader.clearMemoryCache()
-//        mDetailInsertAd?.destroy()
         EventBus.getDefault().unregister(this)
     }
 
@@ -216,6 +159,55 @@ class SearchFragment : BaseFragment2<FragmentSearchBinding, SearchViewModel>() {
                 val position = Global.getIndex(it, mViewModel.gifDataList)
                 mAdapter?.notifyItemChanged(position, position)
             }
+        }
+    }
+
+    override fun inflate(): FragmentSearchBinding = FragmentSearchBinding.inflate(layoutInflater)
+
+    override fun init() {
+        EventBus.getDefault().register(this)
+
+        ViewHelper.setMarginTop(mBinding.searchViewContainer, BarUtils.getStatusBarHeight())
+
+        mKeyword = arguments?.getString(EXTRA_KEY_WORD) ?: ""
+
+        mProgressDialog = ProgressDialog(activity)
+
+        mBinding.ivRetry.setOnClickListener {
+            mBinding.ivRetry.visibility = View.GONE
+            search(mKeyword)
+        }
+
+        mBinding.searchView.setText(mKeyword)
+        mBinding.searchView.setSelection(mKeyword.length)
+        mBinding.searchView.addSearchListener {
+            search(it)
+        }
+
+        mAdapter = GifAdapter(requireContext(), R.layout.item_gif, mViewModel.gifDataList)
+
+        recyclerViewScrollListener = RecyclerViewScrollListener(object :
+            RecyclerViewScrollListener.OnRecycleRefreshListener {
+            override fun refresh() {
+
+            }
+
+            override fun loadMore() {
+                showLoadingProgressDialog(getString(R.string.searching))
+                search(mKeyword, true)
+            }
+        })
+
+
+        mBinding.gifRecyclerView.addOnScrollListener(recyclerViewScrollListener)
+
+        mBinding.gifRecyclerView.layoutManager = LinearLayoutManager(context)
+        val pagerSnapHelper = PagerSnapHelper()
+        pagerSnapHelper.attachToRecyclerView(mBinding.gifRecyclerView)
+        mBinding.gifRecyclerView.adapter = mAdapter
+
+        if (mKeyword != "") {
+            search(mKeyword)
         }
     }
 

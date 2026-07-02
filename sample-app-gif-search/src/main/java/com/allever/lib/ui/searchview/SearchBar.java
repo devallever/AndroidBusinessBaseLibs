@@ -19,6 +19,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import com.allever.app.gif.memes.R;
+
 
 public class SearchBar extends LinearLayout {
 

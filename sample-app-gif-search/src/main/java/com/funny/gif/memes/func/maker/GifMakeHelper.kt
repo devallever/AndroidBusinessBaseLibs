@@ -12,10 +12,9 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import com.allever.lib.common.app.App
-import com.allever.lib.common.util.FileUtil
-import com.allever.lib.common.util.FileUtils
-import com.xm.lib.util.loge
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.logE
+import app.allever.android.lib.core.util.FileUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -31,7 +30,7 @@ object GifMakeHelper {
     init {
         GlobalScope.launch {
             if (!FileUtils.checkExist(gifDir)) {
-                FileUtil.createDir(gifDir)
+                FileUtils.createDir(gifDir)
             }
         }
     }
@@ -63,7 +62,7 @@ object GifMakeHelper {
             toFile
         )
         val end = System.currentTimeMillis()
-        loge("转换${(toPosition - fromPosition) / 1000f}秒耗时${(end - start) / 1000}秒")
+        logE("转换${(toPosition - fromPosition) / 1000f}秒耗时${(end - start) / 1000}秒")
         result
     }
 

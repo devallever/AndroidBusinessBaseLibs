@@ -1,103 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<layout>
-	<data>
-
-	</data>
-
+	<!-- 标题栏 -->
 	<RelativeLayout
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:tools="http://schemas.android.com/tools"
+		android:id="@+id/top_bar"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="@dimen/default_top_bar_height"
+		android:background="@color/color_11_white">
 
-		<include
-			layout="@layout/include_top_bar"/>
+		<ImageView
+			android:id="@+id/iv_left"
+			android:layout_width="@dimen/default_icon_width"
+			android:layout_height="@dimen/default_icon_height"
+			android:layout_centerVertical="true"
+			android:src="@drawable/icon_back"
+			android:scaleType="centerInside"
+			app:tint="@color/top_bar_icon_color_filter" />
 
+		<!-- 标题 -->
 		<LinearLayout
-			android:layout_width="match_parent"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:orientation="vertical"
-			android:layout_below="@+id/top_bar"
-			tools:ignore="RtlSymmetry">
-
-
-			<TextView
-				style="@style/setting_item"
-				android:id="@+id/setting_tv_backup"
-				android:text="@string/backup_restore"
-				android:drawableEnd="@drawable/ic_arrow"
-				android:visibility="gone"/>
-
-<!--			<include layout="@layout/include_divider_line"/>-->
+			android:layout_toEndOf="@+id/iv_left"
+			android:layout_centerVertical="true"
+			android:orientation="horizontal"
+			android:gravity="center_vertical">
 
 			<TextView
-				style="@style/setting_item"
-				android:id="@+id/setting_tv_share"
-				android:text="@string/share"
-				android:drawableEnd="@drawable/ic_share"
-				android:visibility="gone"/>
-
-			<include layout="@layout/include_divider_line"/>
-
-			<TextView
-				style="@style/setting_item"
-				android:id="@+id/setting_tv_feedback"
-				android:text="@string/feedback"
-				android:drawableEnd="@drawable/ic_feedback"/>
-
-			<include layout="@layout/include_divider_line"/>
-
-			<TextView
-				style="@style/setting_item"
-				android:id="@+id/setting_tv_about"
-				android:text="@string/about"
-				android:drawableEnd="@drawable/ic_about"/>
-
-			<include layout="@layout/include_divider_line"/>
-
-			<TextView
-				style="@style/setting_item"
-				android:id="@+id/setting_tv_support"
-				android:text="@string/support"
-				android:drawableEnd="@drawable/ic_support"
-				android:visibility="gone"/>
-
-			<include layout="@layout/include_divider_line"/>
-
-
-			<RelativeLayout
-				android:visibility="gone"
-				style="@style/setting_item"
-				android:drawableEnd="@drawable/ic_support"
-				android:text="@string/support">
-
-				<TextView
-					android:id="@+id/setting_tv_vsersion"
-					style="@style/setting_item"
-					android:layout_width="wrap_content"
-					android:padding="@dimen/dp_0"
-					android:text="@string/version" />
-
-				<androidx.appcompat.widget.SwitchCompat
-					android:id="@+id/switchVersion"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_alignParentRight="true"
-					android:layout_centerVertical="true"/>
-
-			</RelativeLayout>
-
-			<include layout="@layout/include_divider_line" />
-
-
-<!--			<com.allever.lib.ad.chain.BannerLayout-->
-<!--				android:id="@+id/bannerContainer"-->
-<!--				android:layout_width="match_parent"-->
-<!--				android:layout_height="wrap_content"-->
-<!--				android:visibility="gone"/>-->
-
+				android:id="@+id/tv_label"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text=""
+				android:textSize="18sp"
+				android:textStyle="bold"
+				android:textColor="@color/top_bar_tv_color"/>
 		</LinearLayout>
 
+		<ImageView
+			android:id="@+id/iv_right"
+			android:layout_width="@dimen/default_icon_height"
+			android:layout_height="@dimen/default_icon_width"
+			android:scaleType="centerInside"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:visibility="gone"
+			app:tint="@color/top_bar_icon_color_filter" />
 	</RelativeLayout>
-</layout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:layout_below="@+id/top_bar"
+		tools:ignore="RtlSymmetry">
+
+
+		<TextView
+			style="@style/setting_item"
+			android:id="@+id/setting_tv_backup"
+			android:text="@string/backup_restore"
+			android:drawableEnd="@drawable/ic_arrow"
+			android:visibility="gone"/>
+
+		<!--			<include layout="@layout/include_divider_line"/>-->
+
+		<TextView
+			style="@style/setting_item"
+			android:id="@+id/setting_tv_share"
+			android:text="@string/share"
+			android:drawableEnd="@drawable/ic_share"
+			android:visibility="gone"/>
+
+		<include layout="@layout/include_divider_line"/>
+
+		<TextView
+			style="@style/setting_item"
+			android:id="@+id/setting_tv_feedback"
+			android:text="@string/feedback"
+			android:drawableEnd="@drawable/ic_feedback"/>
+
+		<include layout="@layout/include_divider_line"/>
+
+		<TextView
+			style="@style/setting_item"
+			android:id="@+id/setting_tv_about"
+			android:text="@string/about"
+			android:drawableEnd="@drawable/ic_about"/>
+
+		<include layout="@layout/include_divider_line"/>
+
+		<TextView
+			style="@style/setting_item"
+			android:id="@+id/setting_tv_support"
+			android:text="@string/support"
+			android:drawableEnd="@drawable/ic_support"
+			android:visibility="gone"/>
+
+		<include layout="@layout/include_divider_line"/>
+
+
+		<RelativeLayout
+			android:visibility="gone"
+			style="@style/setting_item"
+			android:drawableEnd="@drawable/ic_support"
+			android:text="@string/support">
+
+			<TextView
+				android:id="@+id/setting_tv_vsersion"
+				style="@style/setting_item"
+				android:layout_width="wrap_content"
+				android:padding="0dp"
+				android:text="@string/version" />
+
+			<androidx.appcompat.widget.SwitchCompat
+				android:id="@+id/switchVersion"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentRight="true"
+				android:layout_centerVertical="true"/>
+
+		</RelativeLayout>
+
+		<include layout="@layout/include_divider_line" />
+
+
+		<!--			<com.allever.lib.ad.chain.BannerLayout-->
+		<!--				android:id="@+id/bannerContainer"-->
+		<!--				android:layout_width="match_parent"-->
+		<!--				android:layout_height="wrap_content"-->
+		<!--				android:visibility="gone"/>-->
+
+	</LinearLayout>
+
+</RelativeLayout>

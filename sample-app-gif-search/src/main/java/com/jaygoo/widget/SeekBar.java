@@ -24,6 +24,8 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.IntDef;
 import androidx.core.content.ContextCompat;
 
+import com.allever.app.gif.memes.R;
+
 import java.text.DecimalFormat;
 
 

@@ -2,8 +2,8 @@ package com.funny.gif.memes.app
 
 import android.os.Bundle
 import android.view.View
-import com.allever.lib.common.mvp.BaseMvpActivity
-import com.allever.lib.common.mvp.BasePresenter
+import com.allever.app.gif.memes.ui.mvp.base.BaseMvpActivity
+import com.allever.app.gif.memes.ui.mvp.base.BasePresenter
 import java.lang.RuntimeException
 
 abstract class BaseActivity<V, P : BasePresenter<V>> : BaseMvpActivity<V, P>() {

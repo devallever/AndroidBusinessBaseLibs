@@ -6,25 +6,12 @@ import com.funny.gif.memes.bean.TranslateResponse
 import com.funny.gif.memes.bean.TrendingResponse
 import com.funny.gif.memes.func.network.response.BannerData
 import com.funny.gif.memes.func.network.response.PageData
-import com.xm.netmodel.impl.HttpRequestImpl
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 //import rx.Observable
 
 interface Api {
-
-    companion object {
-        private val api by lazy {
-            HttpRequestImpl.getRequest().createApi(Api::class.java)
-        }
-
-        fun getApi(vararg classes: Class<*>?): Api = if (classes.isEmpty()) {
-            api
-        } else {
-            HttpRequestImpl.getRequest().createApi(Api::class.java, *classes)
-        }
-    }
 
     private val API_KEY: String
         get() = "gdsqQrQq2mEOPm7Q5ZQ2jHRNX91kwYG8"

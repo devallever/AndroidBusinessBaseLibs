@@ -21,7 +21,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 
-import com.allever.lib.common.app.App;
+import app.allever.android.lib.core.app.App;
 
 import java.security.MessageDigest;
 

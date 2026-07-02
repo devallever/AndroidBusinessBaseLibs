@@ -20,7 +20,7 @@ package com.funny.gif.memes.giffun;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.allever.lib.common.app.App;
+import app.allever.android.lib.core.app.App;
 
 /**
  * SharedPreferences工具类，提供简单的封装接口，简化SharedPreferences的用法。

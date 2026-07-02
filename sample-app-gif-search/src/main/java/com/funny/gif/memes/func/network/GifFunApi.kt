@@ -4,22 +4,9 @@ import com.funny.gif.memes.func.network.response.giffun.*
 import com.funny.gif.memes.giffun.GlobalUtil
 import com.funny.gif.memes.giffun.NetworkConst
 import com.funny.gif.memes.util.Utility
-import com.xm.netmodel.impl.HttpRequestImpl
 import retrofit2.http.*
 
 interface GifFunApi {
-
-    companion object {
-        private val api by lazy {
-            HttpRequestImpl.getRequest().createApi(GifFunApi::class.java)
-        }
-
-        fun getApi(vararg classes: Class<*>?): GifFunApi = if (classes.isEmpty()) {
-            api
-        } else {
-            HttpRequestImpl.getRequest().createApi(GifFunApi::class.java, *classes)
-        }
-    }
 
 
     /**

@@ -6,22 +6,20 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.allever.app.gif.memes.BR
 import com.allever.app.gif.memes.R
-import com.funny.gif.memes.app.BaseFragment2
 import com.allever.app.gif.memes.databinding.FragmentMineBinding
 import com.funny.gif.memes.event.GifMakeEvent
 import com.funny.gif.memes.func.store.Repository
-import com.allever.app.gif.memes.ui.GifPreviewActivity
 import com.allever.app.gif.memes.ui.GifPreviewMineActivity
 import com.allever.app.gif.memes.ui.adapter.bean.GifItem
 import com.allever.app.gif.memes.ui.maker.adapter.MyGifAdapter
 import com.allever.app.gif.memes.ui.maker.model.MineViewModel
-import com.allever.lib.common.util.SystemUtils
-import com.allever.lib.common.util.log
-import com.allever.lib.common.util.toast
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.util.BarUtils
+import app.allever.android.lib.core.util.FileUtils
+import app.allever.android.lib.mvvm.base.BaseMvvmFragment
 import com.google.gson.Gson
-import com.xm.lib.base.config.DataBindingConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -30,7 +28,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.io.File
 
-class MineFragment: BaseFragment2<FragmentMineBinding, MineViewModel>(), View.OnClickListener {
+class MineFragment: BaseMvvmFragment<FragmentMineBinding, MineViewModel>(), View.OnClickListener {
 
 
     private lateinit var mAdapter: MyGifAdapter
@@ -45,46 +43,11 @@ class MineFragment: BaseFragment2<FragmentMineBinding, MineViewModel>(), View.On
     private var mData = mutableListOf<GifItem>()
     private var mCurrentItem: GifItem? = null
 
-    override fun initDataBindingConfig() = DataBindingConfig(R.layout.fragment_mine, BR.mineViewModel)
-
-    override fun initDataAndEvent() {
-        EventBus.getDefault().register(this)
-        mBinding.cbBottomBarCheckAll.setOnCheckedChangeListener { buttonView, isChecked ->
-            mAdapter.allMode = true
-            mAdapter.allCheck = isChecked
-        }
-        mBinding.ivBottomBarBack.setOnClickListener(this)
-        mBinding.ivBottomBarDelete.setOnClickListener(this)
-
-        mAdapter = MyGifAdapter(requireContext(), R.layout.item_liked, mData)
-        mBinding.rvLiked.layoutManager = GridLayoutManager(context, 3)
-        mBinding.rvLiked.adapter = mAdapter
-        val gson = Gson()
-        mAdapter.itemOptionListener = object : MyGifAdapter.OnItemOptionClick {
-            override fun onItemClicked(position: Int) {
-                mCurrentItem = mData[position]
-                val item = mData[position]
-                GifPreviewMineActivity.start(requireContext(), gson.toJson(item))
-            }
-
-            override fun onLongClick(position: Int) {
-                if (!mEditMode) {
-                    mEditMode = true
-                }
-            }
-        }
-
-        val layoutParams = mBinding.rvLiked.layoutParams as ViewGroup.MarginLayoutParams
-        layoutParams.topMargin = layoutParams.topMargin + SystemUtils.getStatusBarHeight(requireContext())
-        mBinding.rvLiked.layoutParams = layoutParams
-
-        getLikedData()
-    }
-
-    override fun destroyView() {
+    override fun onDestroyView() {
+        super.onDestroyView()
         EventBus.getDefault().unregister(this)
-    }
 
+    }
     private fun getLikedData() {
         GlobalScope.launch(Dispatchers.Main) {
             val result = Repository.getMyGif()
@@ -119,7 +82,7 @@ class MineFragment: BaseFragment2<FragmentMineBinding, MineViewModel>(), View.On
                     .setPositiveButton(R.string.ok) { dialog, which ->
                         mViewModel.viewModelScope.launch {
                             mAdapter.selectedItem.map {
-                                com.android.absbase.utils.FileUtils.delete(File(it.url), true)
+                                FileUtils.delete(it.url)
                             }
                             getLikedData()
                         }
@@ -143,6 +106,42 @@ class MineFragment: BaseFragment2<FragmentMineBinding, MineViewModel>(), View.On
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLikeUpdate(gifMakeEvent: GifMakeEvent) {
+        getLikedData()
+    }
+
+    override fun inflate(): FragmentMineBinding  = FragmentMineBinding.inflate(layoutInflater)
+
+    override fun init() {
+        EventBus.getDefault().register(this)
+        mBinding.cbBottomBarCheckAll.setOnCheckedChangeListener { buttonView, isChecked ->
+            mAdapter.allMode = true
+            mAdapter.allCheck = isChecked
+        }
+        mBinding.ivBottomBarBack.setOnClickListener(this)
+        mBinding.ivBottomBarDelete.setOnClickListener(this)
+
+        mAdapter = MyGifAdapter(requireContext(), R.layout.item_liked, mData)
+        mBinding.rvLiked.layoutManager = GridLayoutManager(context, 3)
+        mBinding.rvLiked.adapter = mAdapter
+        val gson = Gson()
+        mAdapter.itemOptionListener = object : MyGifAdapter.OnItemOptionClick {
+            override fun onItemClicked(position: Int) {
+                mCurrentItem = mData[position]
+                val item = mData[position]
+                GifPreviewMineActivity.start(requireContext(), gson.toJson(item))
+            }
+
+            override fun onLongClick(position: Int) {
+                if (!mEditMode) {
+                    mEditMode = true
+                }
+            }
+        }
+
+        val layoutParams = mBinding.rvLiked.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.topMargin = layoutParams.topMargin + BarUtils.getStatusBarHeight()
+        mBinding.rvLiked.layoutParams = layoutParams
+
         getLikedData()
     }
 }

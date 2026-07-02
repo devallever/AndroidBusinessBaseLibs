@@ -29,6 +29,8 @@ import java.util.List;
 import static com.jaygoo.widget.SeekBar.INDICATOR_ALWAYS_HIDE;
 import static com.jaygoo.widget.SeekBar.INDICATOR_ALWAYS_SHOW;
 
+import com.allever.app.gif.memes.R;
+
 
 public class RangeSeekBar extends View {
 

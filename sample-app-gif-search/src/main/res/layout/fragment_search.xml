@@ -1,55 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-<layout>
-
-
-    <data>
-        <variable
-            name="searchViewModel"
-            type="com.allever.app.gif.memes.ui.search.model.SearchViewModel" />
-    </data>
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/gifRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/gifRecyclerView"
+    <ImageView
+        android:id="@+id/ivRetry"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/retry"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/shape_home_top_menu_bg">
+
+        <RelativeLayout
+            android:id="@+id/searchViewContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="?actionBarSize">
 
-        <ImageView
-            android:id="@+id/ivRetry"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerInParent="true"
-            android:scaleType="centerInside"
-            android:src="@drawable/retry"
-            android:visibility="gone" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/shape_home_top_menu_bg">
-            <RelativeLayout
-                android:id="@+id/searchViewContainer"
+            <com.allever.lib.ui.searchview.SearchBar
+                android:id="@+id/searchView"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                >
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp" />
 
-                <com.allever.lib.ui.searchview.SearchBar
-                    android:id="@+id/searchView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp" />
-
-            </RelativeLayout>
-        </FrameLayout>
+        </RelativeLayout>
+    </FrameLayout>
 
 
-
-    </RelativeLayout>
-</layout>
+</RelativeLayout>

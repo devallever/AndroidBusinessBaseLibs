@@ -4,14 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.TextView
-import com.allever.app.gif.memes.BuildConfig
 import com.allever.app.gif.memes.R
 import com.funny.gif.memes.app.BaseActivity
 import com.allever.app.gif.memes.ui.mvp.presenter.AboutPresenter
 import com.allever.app.gif.memes.ui.mvp.view.AboutView
-import com.allever.lib.common.app.App
-import com.allever.lib.common.util.SystemUtils
-import com.xm.lib.util.TimeHelper
+import app.allever.android.lib.core.app.App
+import com.funny.gif.memes.util.SystemUtils
 
 class AboutActivity : BaseActivity<AboutView, AboutPresenter>(), AboutView, View.OnClickListener {
 
@@ -22,25 +20,7 @@ class AboutActivity : BaseActivity<AboutView, AboutPresenter>(), AboutView, View
         findViewById<View>(R.id.about_privacy).setOnClickListener(this)
         findViewById<View>(R.id.iv_left).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_label).text = getString(R.string.about)
-//        val channel = UMeng.getChannel()
-        val channel = "google"
-        val last = if (BuildConfig.DEBUG) {
-            "(Debug)-$channel\n" +
-                    "${App.context.packageName}\n"
-//                    "AdMob-${AdConstants.ADMOB_APP_ID}"
-        } else {
-            if (channel == "ad") {
-                "(Release)-$channel\n" +
-                        "${App.context.packageName}\n"
-//                        "AdMob-${AdConstants.ADMOB_APP_ID}"
-            } else {
-                ""
-            }
-        }
-        findViewById<TextView>(R.id.about_app_version).text = "v${BuildConfig.VERSION_NAME}$last"
-        findViewById<TextView>(R.id.about_right).text =
-            String.format(getString(R.string.about_right), TimeHelper.setTime2Format("yyyy", System.currentTimeMillis()), getString(R.string.app_name))
-
+        findViewById<TextView>(R.id.about_app_version).text = "v1.0"
     }
 
     override fun initData() {

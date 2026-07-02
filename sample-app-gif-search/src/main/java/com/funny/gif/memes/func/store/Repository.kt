@@ -4,7 +4,7 @@ import com.funny.gif.memes.app.Global
 import com.funny.gif.memes.func.maker.GifMakeHelper
 import com.funny.gif.memes.func.network.NetRepository
 import com.allever.app.gif.memes.ui.adapter.bean.GifItem
-import com.allever.lib.common.util.log
+import app.allever.android.lib.core.ext.log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File

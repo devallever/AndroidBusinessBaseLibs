@@ -1,10 +1,6 @@
 package com.allever.app.gif.memes.ui.like.model
 
-import com.xm.lib.base.inters.IBaseView
-import com.xm.lib.base.model.BaseViewModelKt
+import app.allever.android.lib.mvvm.base.BaseViewModel
 
-class LikedViewModel: BaseViewModelKt<IBaseView>() {
-    override fun onCreated() {
-
-    }
+class LikedViewModel: BaseViewModel() {
 }

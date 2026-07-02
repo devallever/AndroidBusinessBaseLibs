@@ -27,10 +27,10 @@ dependencies {
     implementation(project(":lib-ffmpeg-command"))
     implementation(project(":lib-media-core"))
 
-    val aarList = mutableListOf(
-        "toolkit-1.1.aar"
-    )
-    implementation(fileTree(mapOf("dir" to "libs", "include" to aarList)))
+//    val aarList = mutableListOf(
+//        "toolkit-1.1.aar"
+//    )
+//    implementation(fileTree(mapOf("dir" to "libs", "include" to aarList)))
 
     //android
     implementation(libs.material)
@@ -50,7 +50,16 @@ dependencies {
     implementation("com.liulishuo.okdownload:sqlite:1.0.4")
     implementation("com.liulishuo.okdownload:okhttp:1.0.4")
 
-    implementation ("org.litepal.android:kotlin:3.0.0")
+    implementation ("org.litepal.guolindev:core:3.2.3")
 //    implementation project(path: ':myselector')
+
+    // okhttp
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+
+    // retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit.converter.scalars)
 
 }

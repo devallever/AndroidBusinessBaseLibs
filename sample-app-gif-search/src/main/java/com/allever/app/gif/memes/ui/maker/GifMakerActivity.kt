@@ -2,18 +2,16 @@ package com.allever.app.gif.memes.ui.maker
 
 import android.content.Context
 import android.os.Bundle
-import com.allever.app.gif.memes.BR
+import app.allever.android.lib.core.helper.ActivityHelper
+import app.allever.android.lib.mvvm.base.BaseMvvmActivity
 import com.allever.app.gif.memes.R
-import com.funny.gif.memes.app.BaseDataActivity2
 import com.allever.app.gif.memes.databinding.ActivityGifMakerBinding
 import com.funny.gif.memes.func.media.MediaBean
 import com.allever.app.gif.memes.ui.maker.model.GifMakerViewModel
 import com.jaygoo.widget.OnRangeChangedListener
 import com.jaygoo.widget.RangeSeekBar
-import com.xm.lib.base.config.DataBindingConfig
-import com.xm.lib.manager.IntentManager
 
-class GifMakerActivity : BaseDataActivity2<ActivityGifMakerBinding, GifMakerViewModel>() {
+class GifMakerActivity : BaseMvvmActivity<ActivityGifMakerBinding, GifMakerViewModel>() {
 
     lateinit var mVideoViewHolder: VideoViewHolder
 
@@ -22,13 +20,26 @@ class GifMakerActivity : BaseDataActivity2<ActivityGifMakerBinding, GifMakerView
         fun start(context: Context, data: MediaBean) {
             val bundle = Bundle()
             bundle.putParcelable(EXTRA_DATA, data)
-            IntentManager.startActivity(context, GifMakerActivity::class.java, bundle)
+            ActivityHelper.startActivity<GifMakerActivity>() {
+                putExtras(bundle)
+            }
         }
     }
 
-    override fun statusColor() = R.color.trans
+    override fun onDestroy() {
+        super.onDestroy()
+        mVideoViewHolder.stop()
+        mVideoViewHolder.destroy()
+    }
 
-    override fun initDataAndEvent() {
+    fun pause() {
+        mVideoViewHolder.pause()
+    }
+
+    override fun inflate(): ActivityGifMakerBinding = ActivityGifMakerBinding.inflate(layoutInflater)
+
+    override fun init() {
+        initObserver()
         mViewModel.mediaBean = intent?.getParcelableExtra(EXTRA_DATA)
         mVideoViewHolder = VideoViewHolder()
         mVideoViewHolder.initVideo(
@@ -69,16 +80,31 @@ class GifMakerActivity : BaseDataActivity2<ActivityGifMakerBinding, GifMakerView
         })
     }
 
-    fun pause() {
-        mVideoViewHolder.pause()
+    private fun initObserver() {
+        mViewModel.startText.observe(this) {
+            mBinding.tvStart.text = it
+        }
+        mViewModel.endText.observe(this) {
+            mBinding.tvEnd.text = it
+        }
+        mViewModel.durationText.observe(this) {
+            mBinding.tvDuration.text = it
+        }
+        //confirmClickAble
+        mViewModel.confirmClickAble.observe(this) {
+            mBinding.btnConfirm.isEnabled = it
+            if ( it) {
+                mBinding.btnConfirm.setBackgroundResource(R.drawable.shape_0091ea_r4)
+            } else {
+                mBinding.btnConfirm.setBackgroundResource(R.drawable.shape_cccccc_r4)
+            }
+        }
+        mViewModel.confirmText.observe(this) {
+            mBinding.btnConfirm.text = it
+        }
+
+        mBinding.btnConfirm.setOnClickListener {
+            mViewModel.onClickConfirm(this)
+        }
     }
-
-
-    override fun destroyView() {
-        mVideoViewHolder.stop()
-        mVideoViewHolder.destroy()
-    }
-
-    override fun initDataBindingConfig() =
-        DataBindingConfig(R.layout.activity_gif_maker, BR.gifMakerViewModel)
 }

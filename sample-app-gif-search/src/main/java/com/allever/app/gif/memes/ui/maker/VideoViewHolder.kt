@@ -17,11 +17,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.VideoView
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.getString
 import com.allever.app.gif.memes.R
-import com.allever.lib.common.util.log
-import com.android.absbase.App
-import com.android.absbase.utils.ResourcesUtils
-import com.android.absbase.utils.ToastUtils
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
 
 class VideoViewHolder
     : View.OnClickListener, View.OnTouchListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener {
@@ -172,7 +172,7 @@ class VideoViewHolder
                     mAlphaAnimator?.start()
                     mHandler.sendEmptyMessageDelayed(MSG_PLAY_PROGRESS, MSG_PLAY_PROGRESS_DELAY)
                 } else {
-                    ToastUtils.show(ResourcesUtils.getString(R.string.preview_video_unavailable_tips))
+                    toast(getString(R.string.preview_video_unavailable_tips))
                 }
             }
         }
@@ -231,7 +231,7 @@ class VideoViewHolder
             return false
         }
 
-        val cr = App.getContext().contentResolver
+        val cr = App.context.contentResolver
         var cursor: Cursor? = null
         try {
             cursor = cr.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,

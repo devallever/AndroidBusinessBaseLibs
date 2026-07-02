@@ -1,5 +1,7 @@
 package com.funny.gif.memes.func.network
 
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.logE
 import com.funny.gif.memes.bean.SearchResponse
 import com.funny.gif.memes.bean.TrendingResponse
 import com.funny.gif.memes.func.network.response.BannerData
@@ -7,8 +9,6 @@ import com.funny.gif.memes.func.network.response.PageData
 import com.funny.gif.memes.func.network.response.giffun.*
 import com.funny.gif.memes.giffun.AuthUtil
 import com.funny.gif.memes.util.Utility
-import com.xm.lib.util.log
-import com.xm.lib.util.loge
 
 object NetRepository {
 
@@ -228,7 +228,7 @@ object NetRepository {
         baseResponse?.data ?: return null
         return if (baseResponse.errorCode != 0) {
             //成功-数据异常
-            loge(baseResponse.errorMsg)
+            logE(baseResponse.errorMsg)
             null
         } else {
             //成功

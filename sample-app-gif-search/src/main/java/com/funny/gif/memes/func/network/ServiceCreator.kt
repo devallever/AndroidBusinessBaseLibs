@@ -1,7 +1,5 @@
 package com.funny.gif.memes.func.network
 
-import com.xm.netmodel.intercepters.HttpHeaderInterceptor
-import com.xm.netmodel.intercepters.LoggingInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -15,12 +13,12 @@ object ServiceCreator {
 
         val builder = OkHttpClient.Builder()
         //日志拦截
-        val loggingInterceptor = HttpLoggingInterceptor(LoggingInterceptor())
+        val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         builder.addInterceptor(loggingInterceptor)
 
         //请求头拦截
-        builder.addInterceptor(HttpHeaderInterceptor())
+//        builder.addInterceptor(HttpheadersInterceptor())
         Retrofit.Builder()
             .client(builder.build())
             .baseUrl(BASE_URL)

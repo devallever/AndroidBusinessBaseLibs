@@ -1,106 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
 
-    <data>
-
-        <variable
-            name="gifMakerViewModel"
-            type="com.allever.app.gif.memes.ui.maker.model.GifMakerViewModel" />
-
-    </data>
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black">
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvStart"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <RelativeLayout
+        <VideoView
+            android:id="@+id/videoView"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_0"
-            android:layout_marginBottom="@dimen/dp_10"
-            app:layout_constraintBottom_toTopOf="@+id/tvStart"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="@color/black"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <VideoView
-                android:id="@+id/videoView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:background="@color/black"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/ivPlayPause"
-                android:layout_width="@dimen/dp_100"
-                android:layout_height="@dimen/dp_100"
-                android:layout_centerInParent="true"
-                android:src="@drawable/icon_album_video_preview_play"
-                app:layout_constraintBottom_toBottomOf="@+id/videoView"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/videoView" />
-
-
-        </RelativeLayout>
-
-
-        <TextView
-            android:id="@+id/tvStart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{gifMakerViewModel.startText, default = 0}"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/rangeSeekBar"
-            app:layout_constraintLeft_toLeftOf="@+id/rangeSeekBar" />
-
-
-        <TextView
-            android:id="@+id/tvEnd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{gifMakerViewModel.endText, default = 100}"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/rangeSeekBar"
-            app:layout_constraintRight_toRightOf="@+id/rangeSeekBar" />
-
-        <TextView
-            android:id="@+id/tvDuration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{gifMakerViewModel.durationText, default = 100}"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/rangeSeekBar"
+        <ImageView
+            android:id="@+id/ivPlayPause"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/icon_album_video_preview_play"
+            app:layout_constraintBottom_toBottomOf="@+id/videoView"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/videoView" />
+
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tvStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/rangeSeekBar"
+        app:layout_constraintLeft_toLeftOf="@+id/rangeSeekBar" />
+
+
+    <TextView
+        android:id="@+id/tvEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="100"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/rangeSeekBar"
+        app:layout_constraintRight_toRightOf="@+id/rangeSeekBar" />
+
+    <TextView
+        android:id="@+id/tvDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/rangeSeekBar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
 
 
 
-        <Button
-            android:id="@+id/btnConfirm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_10"
-            android:enabled="@{gifMakerViewModel.confirmClickAble}"
-            android:background="@{gifMakerViewModel.confirmClickAble ? @drawable/shape_0091ea_r4: @drawable/shape_cccccc_r4}"
-            android:onClick="@{() -> gifMakerViewModel.onClickConfirm()}"
-            android:text="@{gifMakerViewModel.confirmText, default = @string/ok}"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent" />
+    <Button
+        android:id="@+id/btnConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:enabled="false"
+        android:background="@drawable/shape_cccccc_r4"
+        android:text="@string/ok"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-        <com.jaygoo.widget.RangeSeekBar
-            android:id="@+id/rangeSeekBar"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:layout_margin="@dimen/dp_5"
-            app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
-            app:rsb_gravity="center"
-            app:rsb_max="100"
-            app:rsb_min="0" />
+    <com.jaygoo.widget.RangeSeekBar
+        android:id="@+id/rangeSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_margin="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
+        app:rsb_gravity="center"
+        app:rsb_max="100"
+        app:rsb_min="0" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>

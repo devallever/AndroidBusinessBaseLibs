@@ -1,31 +1,31 @@
 package com.allever.app.gif.memes.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import com.allever.app.gif.memes.BuildConfig
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.base.AbstractActivity
+import app.allever.android.lib.core.helper.ActivityHelper
 import com.allever.app.gif.memes.R
 import com.allever.app.gif.memes.ui.main.GifMainActivity
-import com.allever.lib.common.app.BaseActivity
-import com.allever.lib.common.util.ActivityCollector
 import com.funny.gif.memes.app.Global
 import com.funny.gif.memes.util.SpUtils
 
-class SplashActivity : BaseActivity() {
+class SplashActivity : AbstractActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        if (BuildConfig.DEBUG) {
+        if (App.DEBUG) {
             SpUtils.putString(Global.SP_OFFSET, "0")
             SpUtils.putString(Global.SP_SEARCH_OFFSET, "0")
         }
 
-//        BillingHelper.connect()
         mHandler.postDelayed({
-//            BillingHelper.getProductDetails(BillingConfig.PRODUCT_ID_LIST, finish = null)
-            ActivityCollector.startActivity(this, GifMainActivity::class.java)
+            ActivityHelper.startActivity<GifMainActivity>()
             finish()
         }, 2000)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
     }
 }

@@ -26,8 +26,8 @@ import com.funny.gif.memes.giffun.MD5
 import com.funny.gif.memes.giffun.NetworkConst
 import com.funny.gif.memes.giffun.SharedUtil
 import com.funny.gif.memes.giffun.SignUtil
-import com.allever.lib.common.app.App
-import com.allever.lib.common.util.loge
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.logE
 import java.util.*
 
 /**
@@ -67,7 +67,7 @@ object Utility {
                 val packInfo = packageManager.getPackageInfo(App.context.getPackageName(), 0)
                 version = packInfo.versionName?:"1.0.0"
             } catch (e: Exception) {
-                loge(e.message?:"")
+                logE(e.message?:"")
 //                logWarn("getAppVersion", e.message, e)
             }
 
@@ -99,7 +99,7 @@ object Utility {
                 try {
                     deviceId = Settings.Secure.getString(App.context.contentResolver, Settings.Secure.ANDROID_ID)
                 } catch (e: Exception) {
-                    loge(e.message?:"")
+                    logE(e.message?:"")
 //                    logWarn(TAG, "get android_id with error", e)
                 }
                 if (!TextUtils.isEmpty(deviceId) && deviceId!!.length < 255) {

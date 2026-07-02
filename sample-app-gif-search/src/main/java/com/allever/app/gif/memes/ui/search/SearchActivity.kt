@@ -12,12 +12,8 @@ import android.widget.TextView
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
-import com.allever.app.gif.memes.BR
-import com.allever.app.gif.memes.BuildConfig
+import app.allever.android.lib.core.app.App
 import com.allever.app.gif.memes.R
-//import com.allever.app.gif.search.ad.AdConstants
-//import com.allever.app.gif.search.ad.SimpleAdChainListener
-import com.funny.gif.memes.app.BaseDataActivity2
 import com.funny.gif.memes.app.Global
 import com.allever.app.gif.memes.databinding.ActivitySearchBinding
 import com.funny.gif.memes.func.download.DownloadManager
@@ -32,14 +28,14 @@ import com.funny.gif.memes.util.ImageLoader
 import com.funny.gif.memes.util.SpUtils
 //import com.allever.lib.ad.chain.AdChainHelper
 //import com.allever.lib.ad.chain.IAd
-import com.allever.lib.common.util.log
-import com.allever.lib.common.util.toast
-import com.xm.lib.base.config.DataBindingConfig
-import com.xm.lib.manager.statusbar.BarUtils
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.util.BarUtils
+import app.allever.android.lib.mvvm.base.BaseMvvmActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SearchActivity : BaseDataActivity2<ActivitySearchBinding, SearchViewModel>() {
+class SearchActivity : BaseMvvmActivity<ActivitySearchBinding, SearchViewModel>() {
 
     private var mAdapter: GifAdapter? = null
     private lateinit var mProgressDialog: ProgressDialog
@@ -47,15 +43,117 @@ class SearchActivity : BaseDataActivity2<ActivitySearchBinding, SearchViewModel>
 
     private lateinit var mKeyword: String
 
-//    private var mDetailInsertAd: IAd? = null
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        mKeyword = intent?.getStringExtra(EXTRA_KEY_WORD) ?: ""
+        if (mKeyword != "") {
+            mViewModel.gifDataList.clear()
+            mAdapter?.notifyDataSetChanged()
+            mBinding.etSearch?.setText(mKeyword)
+            mBinding.etSearch?.setSelection(mKeyword.length)
+            search(mKeyword)
+        }
+    }
 
-    override fun isPaddingTop(): Boolean = false
-    override fun statusColor(): Int = R.color.trans
 
-    override fun initDataBindingConfig() =
-        DataBindingConfig(R.layout.activity_search, BR.searchViewModel)
+    override fun onDestroy() {
+        super.onDestroy()
+        val urls = mutableListOf<String>()
+        mViewModel.gifDataList.map {
+            urls.add(it.url)
+        }
+        DownloadManager.getInstance().cancel(urls)
+        ImageLoader.clearMemoryCache()
+    }
+    private fun search(keyword: String, isLoadMore: Boolean = false) {
+        if (keyword == "") {
+            toast(getString(R.string.please_input_search_content))
+            return
+        }
 
-    override fun initDataAndEvent() {
+        var keyword = keyword
+        if (!App.DEBUG) {
+            keyword = keyword.replace("sexy", "")
+            keyword = keyword.replace("sex", "")
+        }
+
+        hideKeyboard()
+        mKeyword = keyword
+        val count = Global.SHOW_COUNT
+        var offset = SpUtils.getString(Global.SP_SEARCH_OFFSET, "0")
+        log("offset = $offset")
+        showLoadingProgressDialog(getString(R.string.searching))
+
+        mViewModel.viewModelScope.launch(Dispatchers.Main) {
+            val gifItemList = Repository.search(keyword, offset)
+            hideLoadingProgressDialog()
+
+            recyclerViewScrollListener.setLoadDataStatus(false)
+            mBinding.gifRecyclerView.visibility = View.VISIBLE
+            mBinding.ivRetry.visibility = View.GONE
+
+            if (!isLoadMore) {
+                mViewModel.gifDataList.clear()
+            }
+
+            mViewModel.gifDataList.addAll(gifItemList)
+
+            mAdapter?.notifyDataSetChanged()
+
+            offset = if (Store.getVersion() == Version.INTERNATIONAL) {
+                if (mViewModel.gifDataList.size < count) {
+                    "0"
+                } else {
+                    (offset.toInt() + count + 1).toString()
+                }
+            } else {
+                if (gifItemList.isEmpty()) {
+                    "0"
+                } else {
+                    gifItemList.last().id
+                }
+            }
+
+            SpUtils.putString(Global.SP_SEARCH_OFFSET, offset)
+
+//            loadDetailInsert()
+
+            if (gifItemList.isEmpty()) {
+                recyclerViewScrollListener.setLoadDataStatus(false)
+                if (!isLoadMore) {
+                    mBinding.gifRecyclerView.visibility = View.GONE
+                    mBinding.ivRetry.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    private fun showLoadingProgressDialog(msg: String) {
+        if (!mProgressDialog.isShowing) {
+            mProgressDialog.setMessage(msg)
+            mProgressDialog.show()
+        }
+    }
+
+    private fun hideLoadingProgressDialog() {
+        if (mProgressDialog.isShowing) {
+            mProgressDialog.dismiss()
+        }
+    }
+
+    fun hideKeyboard() {
+        val inputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (inputMethodManager.isActive) {
+            inputMethodManager.hideSoftInputFromWindow(
+                currentFocus?.windowToken, 0
+            )
+        }
+    }
+
+    override fun inflate(): ActivitySearchBinding = ActivitySearchBinding.inflate(layoutInflater)
+
+    override fun init() {
         ViewHelper.setMarginTop(mBinding.topBar, BarUtils.getStatusBarHeight())
         mKeyword = intent?.getStringExtra(EXTRA_KEY_WORD) ?: ""
 
@@ -129,132 +227,6 @@ class SearchActivity : BaseDataActivity2<ActivitySearchBinding, SearchViewModel>
 
         if (mKeyword != "") {
             search(mKeyword)
-        }
-    }
-
-    override fun destroyView() {
-        val urls = mutableListOf<String>()
-        mViewModel.gifDataList.map {
-            urls.add(it.url)
-        }
-        DownloadManager.getInstance().cancel(urls)
-        ImageLoader.clearMemoryCache()
-//        mDetailInsertAd?.destroy()
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        mKeyword = intent?.getStringExtra(EXTRA_KEY_WORD) ?: ""
-        if (mKeyword != "") {
-            mViewModel.gifDataList.clear()
-            mAdapter?.notifyDataSetChanged()
-            mBinding.etSearch?.setText(mKeyword)
-            mBinding.etSearch?.setSelection(mKeyword.length)
-            search(mKeyword)
-        }
-    }
-
-    private fun search(keyword: String, isLoadMore: Boolean = false) {
-        if (keyword == "") {
-            toast(getString(R.string.please_input_search_content))
-            return
-        }
-
-        var keyword = keyword
-        if (!BuildConfig.DEBUG) {
-            keyword = keyword.replace("sexy", "")
-            keyword = keyword.replace("sex", "")
-        }
-
-        hideKeyboard()
-        mKeyword = keyword
-        val count = Global.SHOW_COUNT
-        var offset = SpUtils.getString(Global.SP_SEARCH_OFFSET, "0")
-        log("offset = $offset")
-        showLoadingProgressDialog(getString(R.string.searching))
-
-        mViewModel.viewModelScope.launch(Dispatchers.Main) {
-            val gifItemList = Repository.search(keyword, offset)
-            hideLoadingProgressDialog()
-//            if (mDetailInsertAd != null) {
-//                HandlerHelper.mainHandler.postDelayed({
-//                    toast(R.string.loading_ad_tips)
-//                    mDetailInsertAd?.show()
-//                }, 200)
-//            }
-
-            recyclerViewScrollListener.setLoadDataStatus(false)
-            mBinding.gifRecyclerView.visibility = View.VISIBLE
-            mBinding.ivRetry.visibility = View.GONE
-
-            if (!isLoadMore) {
-                mViewModel.gifDataList.clear()
-            }
-
-            mViewModel.gifDataList.addAll(gifItemList)
-
-            mAdapter?.notifyDataSetChanged()
-
-            offset = if (Store.getVersion() == Version.INTERNATIONAL) {
-                if (mViewModel.gifDataList.size < count) {
-                    "0"
-                } else {
-                    (offset.toInt() + count + 1).toString()
-                }
-            } else {
-                if (gifItemList.isEmpty()) {
-                    "0"
-                } else {
-                    gifItemList.last().id
-                }
-            }
-
-            SpUtils.putString(Global.SP_SEARCH_OFFSET, offset)
-
-//            loadDetailInsert()
-
-            if (gifItemList.isEmpty()) {
-                recyclerViewScrollListener.setLoadDataStatus(false)
-                if (!isLoadMore) {
-                    mBinding.gifRecyclerView.visibility = View.GONE
-                    mBinding.ivRetry.visibility = View.VISIBLE
-                }
-            }
-        }
-    }
-
-
-//    private fun loadDetailInsert() {
-//        AdChainHelper.loadAd(
-//            AdConstants.AD_NAME_DETAIL_INSERT,
-//            null,
-//            object : SimpleAdChainListener {
-//                override fun onLoaded(ad: IAd?) {
-//                    mDetailInsertAd = ad
-//                }
-//            })
-//    }
-
-    private fun showLoadingProgressDialog(msg: String) {
-        if (!mProgressDialog.isShowing) {
-            mProgressDialog.setMessage(msg)
-            mProgressDialog.show()
-        }
-    }
-
-    private fun hideLoadingProgressDialog() {
-        if (mProgressDialog.isShowing) {
-            mProgressDialog.dismiss()
-        }
-    }
-
-    fun hideKeyboard() {
-        val inputMethodManager =
-            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        if (inputMethodManager.isActive) {
-            inputMethodManager.hideSoftInputFromWindow(
-                currentFocus?.windowToken, 0
-            )
         }
     }
 

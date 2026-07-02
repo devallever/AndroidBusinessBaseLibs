@@ -3,9 +3,8 @@ package com.funny.gif.memes.app
 import android.os.Environment
 import com.funny.gif.memes.func.store.Store
 import com.allever.app.gif.memes.ui.adapter.bean.GifItem
-import com.allever.lib.common.app.App
-import com.allever.lib.common.util.FileUtil
-import com.allever.lib.common.util.FileUtils
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.util.FileUtils
 import java.io.File
 
 object Global {
@@ -68,7 +67,7 @@ object Global {
 
     private fun createDir(dir: String) {
         if (!FileUtils.checkExist(dir)) {
-            FileUtil.createDir(dir)
+            FileUtils.createDir(dir)
         }
     }
 

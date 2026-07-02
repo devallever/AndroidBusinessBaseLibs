@@ -11,9 +11,6 @@ import com.allever.app.gif.memes.R
 import com.funny.gif.memes.app.BaseActivity
 import com.allever.app.gif.memes.ui.mvp.presenter.BackupRestorePresenter
 import com.allever.app.gif.memes.ui.mvp.view.BackupRestoreView
-//import com.allever.lib.ad.chain.AdChainHelper
-//import com.allever.lib.ad.chain.AdChainListener
-//import com.allever.lib.ad.chain.IAd
 
 class BackupRestoreActivity : BaseActivity<BackupRestoreView, BackupRestorePresenter>(),
     BackupRestoreView,
@@ -22,10 +19,6 @@ class BackupRestoreActivity : BaseActivity<BackupRestoreView, BackupRestorePrese
     private lateinit var mBtnBackup: Button
     private lateinit var mBtnRestore: Button
     private lateinit var mBtnDelBackup: Button
-
-//    private var mBannerAd: IAd? = null
-//    private var mInsertAd: IAd? = null
-
     override fun getContentView(): Any = R.layout.activity_backup_restore
 
     override fun initView() {

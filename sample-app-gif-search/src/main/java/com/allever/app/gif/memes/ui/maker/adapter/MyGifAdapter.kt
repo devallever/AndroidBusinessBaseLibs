@@ -6,9 +6,9 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import com.allever.app.gif.memes.R
 import com.allever.app.gif.memes.ui.adapter.bean.GifItem
-import com.allever.lib.common.ui.widget.recycler.BaseRecyclerViewAdapter
-import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
-import com.allever.lib.common.util.log
+import com.allever.app.gif.memes.ui.widget.recycler.BaseRecyclerViewAdapter
+import com.allever.app.gif.memes.ui.widget.recycler.BaseViewHolder
+import app.allever.android.lib.core.ext.log
 import com.bumptech.glide.Glide
 
 class MyGifAdapter(context: Context, resId: Int, data: MutableList<GifItem>) :

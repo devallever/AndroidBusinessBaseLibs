@@ -1,27 +1,7 @@
 package com.allever.app.gif.memes.ui.main.model
 
-import com.funny.gif.memes.app.Global
-import com.allever.app.gif.memes.ui.user.LoginActivity
-import com.allever.app.gif.memes.ui.user.UserCenterActivity
-import com.xm.lib.base.inters.IBaseView
-import com.xm.lib.base.model.BaseViewModelKt
-import com.xm.lib.manager.IntentManager
+import app.allever.android.lib.mvvm.base.BaseViewModel
 
-class GifMainViewModel: BaseViewModelKt<IBaseView>() {
-    override fun onCreated() {
+class GifMainViewModel: BaseViewModel() {
 
-
-
-
-    }
-
-    fun onClickRecommend() {
-        if (Global.checkLogin()) {
-            IntentManager.startActivity(mCxt, UserCenterActivity::class.java)
-        } else {
-            IntentManager.startActivity(mCxt, LoginActivity::class.java)
-        }
-//        IntentManager.startActivity(mCxt, GifFunDebugActivity::class.java)
-//        RecommendActivity.start(mCxt, UMeng.getChannel())
-    }
 }

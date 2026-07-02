@@ -1,14 +1,15 @@
 package com.funny.gif.memes.func.media
 
+import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import android.text.TextUtils
-import com.allever.lib.common.app.App
-import com.allever.lib.common.util.log
-import com.android.absbase.utils.FileUtils.isExistFile
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.util.FileUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -106,6 +107,7 @@ object MediaHelper {
     /**
      * 获取所有文件夹
      */
+    @SuppressLint("Range")
     suspend fun getAllFolder(context: Context, type: String, includeGif: Boolean = false) = withContext(Dispatchers.IO) {
 
         val imageFolderList = mutableListOf<FolderBean>()
@@ -494,18 +496,19 @@ object MediaHelper {
      * @return error -> true
      */
     private fun checkImageError(path: String): Boolean {
-        return if (!isExistFile(path)) {
+        return if (!FileUtils.isExistsFile(path)) {
             true
         } else !MediaFile.isImageFile(path)
     }
 
     private fun checkVideoError(path: String): Boolean {
-        return if (!isExistFile(path)) {
+        return if (!FileUtils.isExistsFile(path)) {
             true
         } else !MediaFile.isVideoFile(path)
     }
 
 
+    @SuppressLint("Range")
     private fun getUri(cursor: Cursor): Uri {
         val id = cursor.getLong(cursor.getColumnIndex(MediaStore.Files.FileColumns._ID))
         val mimeType = cursor.getString(

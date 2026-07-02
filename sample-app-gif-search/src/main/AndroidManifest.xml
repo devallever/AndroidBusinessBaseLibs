@@ -10,23 +10,11 @@
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
 
-    <application
-        android:name="com.funny.gif.memes.app.MyApp"
-        android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/FullScreenStyle"
-        tools:ignore="GoogleAppIndexingWarning">
+    <application>
         <activity
             android:name="com.allever.app.gif.memes.ui.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.allever.app.gif.memes.ui.main.GifMainActivity"
@@ -56,18 +44,6 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.allever.app.gif.memes.ui.user.LoginActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.allever.app.gif.memes.ui.user.RegisterActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.allever.app.gif.memes.ui.user.UserCenterActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.allever.app.gif.memes.ui.maker.PickActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -78,6 +54,7 @@
         <activity android:name=".ui.GifPreviewMineActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <activity android:name="app.allever.android.sample.app.gif.search.SampleAppGifSearchActivity" />
     </application>
 
 </manifest>

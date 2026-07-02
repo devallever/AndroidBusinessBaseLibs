@@ -1,13 +1,9 @@
 package com.allever.app.gif.memes.ui.search.model
 
+import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.allever.app.gif.memes.ui.adapter.bean.GifItem
-import com.xm.lib.base.inters.IBaseView
-import com.xm.lib.base.model.BaseViewModelKt
 
-class SearchViewModel: BaseViewModelKt<IBaseView>() {
+class SearchViewModel: BaseViewModel() {
 
     var gifDataList = mutableListOf<GifItem>()
-    override fun onCreated() {
-
-    }
 }

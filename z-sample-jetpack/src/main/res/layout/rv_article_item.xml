@@ -38,7 +38,7 @@
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginTop="10dp"
             android:maxLines="2"
             android:textColor="@color/black"
             app:layout_constraintLeft_toLeftOf="@+id/tvUser"
@@ -49,7 +49,7 @@
             android:id="@+id/tvSort"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/ivLike"
             app:layout_constraintLeft_toLeftOf="@+id/tvUser"
             app:layout_constraintTop_toTopOf="@+id/ivLike" />
@@ -59,7 +59,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="5dp"
             android:src="#50ff0000"
             app:layout_constraintRight_toRightOf="parent"
@@ -69,7 +69,7 @@
             android:id="@+id/bottomView"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginTop="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivLike" />
 

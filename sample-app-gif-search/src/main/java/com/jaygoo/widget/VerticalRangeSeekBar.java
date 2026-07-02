@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.IntDef;
 
+import com.allever.app.gif.memes.R;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 

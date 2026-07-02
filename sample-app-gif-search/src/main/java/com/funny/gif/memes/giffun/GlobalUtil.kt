@@ -23,8 +23,8 @@ import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.text.TextUtils
 import android.widget.Toast
-import com.allever.lib.common.app.App
-import com.allever.lib.common.util.loge
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.logE
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -131,7 +131,7 @@ object GlobalUtil {
             applicationInfo = App.context.packageManager.getApplicationInfo(appPackage, PackageManager.GET_META_DATA)
         } catch (e: PackageManager.NameNotFoundException) {
 //            logWarn(TAG, e.message, e)
-            loge(e.message?:"")
+            logE(e.message?:"")
         }
         if (applicationInfo == null) return ""
         return applicationInfo.metaData.getString(key)

@@ -1,26 +1,24 @@
 package com.allever.app.gif.memes.ui.maker.model
 
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.getString
 import com.allever.app.gif.memes.R
 import com.funny.gif.memes.event.GifMakeEvent
 import com.funny.gif.memes.func.maker.GifMakeHelper
 import com.funny.gif.memes.func.media.MediaBean
-import com.allever.lib.common.util.FileUtils
-import com.allever.lib.common.util.ResUtils
-import com.allever.lib.common.util.getString
-import com.allever.lib.common.util.log
-import com.xm.lib.base.inters.IBaseView
-import com.xm.lib.base.model.BaseViewModelKt
+import app.allever.android.lib.core.util.FileUtils
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.mvvm.base.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import java.io.File
 
-class GifMakerViewModel: BaseViewModelKt<IBaseView>() {
+class GifMakerViewModel: BaseViewModel() {
     var mediaBean: MediaBean? = null
     var startPosition = 0
     var endPosition = 0
@@ -29,13 +27,14 @@ class GifMakerViewModel: BaseViewModelKt<IBaseView>() {
     val durationText = MutableLiveData<String>()
     val confirmClickAble = MutableLiveData<Boolean>()
     val confirmText = MutableLiveData<String>()
-    override fun onCreated() {
+
+    override fun init() {
+        super.init()
         confirmClickAble.value = true
         confirmText.value = getString(R.string.convert)
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun onClickConfirm() {
+    fun onClickConfirm(activity: Activity) {
         mediaBean?.let {
             viewModelScope.launch(Dispatchers.Main) {
                 val fileName = it.name
@@ -50,8 +49,8 @@ class GifMakerViewModel: BaseViewModelKt<IBaseView>() {
                     return@launch
                 }
                 confirmClickAble.value = false
-                confirmText.value = ResUtils.getString(R.string.creating)
-                val result = GifMakeHelper.makeGif(mCxt, it.uri?: return@launch, toFile, startPosition,  endPosition, 150) { current, total , percent->
+                confirmText.value = getString(R.string.creating)
+                val result = GifMakeHelper.makeGif(App.context, it.uri?: return@launch, toFile, startPosition,  endPosition, 150) { current, total, percent->
                     val logMsg = "$percent %"
                     log(logMsg)
                     confirmText.postValue(logMsg)
@@ -60,9 +59,9 @@ class GifMakerViewModel: BaseViewModelKt<IBaseView>() {
                 if (result) {
                     EventBus.getDefault().post(GifMakeEvent())
                     delay(1000)
-                    finish()
+                    activity.finish()
                 } else  {
-                    com.android.absbase.utils.FileUtils.delete(File(toFile), true)
+                    FileUtils.delete(File(toFile))
                 }
                 confirmClickAble.value = true
             }

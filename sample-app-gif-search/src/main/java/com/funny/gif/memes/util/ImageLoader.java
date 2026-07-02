@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 
 import android.widget.ImageView;
 
-import com.android.absbase.App;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.DataSource;
@@ -21,6 +20,8 @@ import com.bumptech.glide.request.transition.Transition;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import app.allever.android.lib.core.app.App;
 
 
 public class ImageLoader {
@@ -55,7 +56,7 @@ public class ImageLoader {
 
     public static void loadImage(String url, int defaultIcon, ImageView imageView, Priority priority,
                                  RequestListener listener, int width, int height) {
-        Glide.with(App.getContext())
+        Glide.with(app.allever.android.lib.core.app.App.context)
                 .load(url)
                 .override(width, height)
                 .priority(priority)
@@ -66,7 +67,7 @@ public class ImageLoader {
 
     public static void loadImage(String url, int defaultIcon, ImageView imageView, Priority priority,
                                  RequestListener listener) {
-        Glide.with(App.getContext())
+        Glide.with(App.context)
                 .load(url)
                 .priority(priority)
                 .placeholder(defaultIcon)
@@ -423,12 +424,12 @@ public class ImageLoader {
 
     public static void clearMemoryCache() {
 //        Sketch.with(App.getContext()).getConfiguration().getMemoryCache().clear();
-        Glide.get(App.getContext()).clearMemory();
+        Glide.get(App.context).clearMemory();
     }
 
     public static void onTrimMemroy(int level) {
 //        Sketch.with(App.getContext()).getConfiguration().getMemoryCache().clear();
-        Glide.get(App.getContext()).onTrimMemory(level);
+        Glide.get(App.context).onTrimMemory(level);
     }
 
     public static void onLowMemory() {

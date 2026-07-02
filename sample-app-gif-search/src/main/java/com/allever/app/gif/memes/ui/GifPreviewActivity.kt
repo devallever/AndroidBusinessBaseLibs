@@ -19,9 +19,12 @@ import com.allever.app.gif.memes.ui.adapter.bean.GifItem
 import com.allever.app.gif.memes.ui.search.SearchActivity
 import com.funny.gif.memes.util.DBHelper
 import com.funny.gif.memes.util.MD5
-import com.allever.lib.common.app.App
-import com.allever.lib.common.app.BaseActivity
-import com.allever.lib.common.util.*
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.base.AbstractActivity
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.helper.ShareHelper
+import app.allever.android.lib.core.util.FileUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.gson.Gson
@@ -30,7 +33,7 @@ import pl.droidsonroids.gif.GifDrawable
 import pl.droidsonroids.gif.GifImageView
 import java.io.File
 
-class GifPreviewActivity : BaseActivity() {
+class GifPreviewActivity : AbstractActivity() {
 
     private var mIsDownloadFinish = false
 
@@ -157,8 +160,8 @@ class GifPreviewActivity : BaseActivity() {
             override fun onCompleted(taskInfo: TaskInfo?) {
                 mIsDownloadFinish = true
                 gifImageView?.visibility = View.VISIBLE
-                FileUtil.createNewFile(tempPath, false)
-                FileUtil.copyFile(File(cachePath), File(tempPath))
+                FileUtils.createNewFile(tempPath, false)
+                FileUtils.copyFile(File(cachePath), File(tempPath))
 //                com.android.absbase.utils.FileUtils.copyFile(cachePath, tempPath, true)
 //                val drawable = GifDrawable(tempPath)
 //                gifImageView?.setImageDrawable(drawable)
@@ -244,9 +247,9 @@ class GifPreviewActivity : BaseActivity() {
                 return@setOnClickListener
             }
             if (FileUtils.checkExist(tempPath)) {
-                FileUtil.createNewFile(savePath, false)
+                FileUtils.createNewFile(savePath, false)
 //                com.android.absbase.utils.FileUtils.copyFile(tempPath, savePath, true)
-                FileUtil.copyFile(File(cachePath), File(tempPath))
+                FileUtils.copyFile(File(cachePath), File(tempPath))
                 toast("${getString(R.string.already_save_to)}\n$savePath")
                 ivDownload.setColorFilter(
                     App.context.resources.getColor(R.color.gray_66),
