@@ -13,7 +13,7 @@
             android:id="@+id/id_store_iv_back"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/sc_ic_back"
             android:layout_alignParentLeft="true"/>
 
         <TextView
@@ -32,14 +32,13 @@
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/id_store_rv_sticker_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/id_store_rl_toolbar">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_below="@id/id_store_rl_toolbar"/>
 
-    <include layout="@layout/net_error" />
+    <include layout="@layout/sc_net_error" />
 
 
 </RelativeLayout>

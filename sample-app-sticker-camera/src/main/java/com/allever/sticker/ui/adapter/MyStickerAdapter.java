@@ -1,19 +1,21 @@
 package com.allever.sticker.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import com.allever.sticker.R;
 import com.allever.sticker.bean.MyStickerItem;
 import com.allever.sticker.event.DeleteStickerEvent;
 
 import org.greenrobot.eventbus.EventBus;
+import org.xm.sticker.camera.R;
 
 import java.util.List;
 
@@ -33,12 +35,12 @@ public class MyStickerAdapter extends RecyclerView.Adapter<MyStickerAdapter.MyVi
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(mContext).inflate(R.layout.item_my_sticker,parent,false);
+        View itemView = LayoutInflater.from(mContext).inflate(org.xm.sticker.camera.R.layout.sc_item_my_sticker,parent,false);
         return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
+    public void onBindViewHolder(MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         final MyStickerItem myStickerItem = mMyStickerItemList.get(position);
         Glide.with(mContext).load(myStickerItem.getPath()).into(holder.iv_type);
         holder.iv_delete.setOnClickListener(new View.OnClickListener() {

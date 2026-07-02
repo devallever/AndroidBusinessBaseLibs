@@ -1,14 +1,13 @@
 package com.allever.sticker.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +16,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
-import com.allever.sticker.R;
+import org.xm.sticker.camera.R;
 import com.allever.sticker.ui.adapter.RecyclerItemClickListener;
-import com.allever.sticker.bean.StoreStickerData;
-import com.allever.sticker.network.RetrofitUtil;
 import com.allever.sticker.ui.adapter.StickerStoreAdapter;
 import com.allever.sticker.bean.StoreStickerItem;
 import com.allever.sticker.util.Constant;
@@ -35,7 +32,7 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-import rx.Observer;
+import app.allever.android.lib.core.base.AbstractActivity;
 
 
 /**
@@ -44,7 +41,7 @@ import rx.Observer;
  * @date 18/2/8
  */
 
-public class StoreActivity extends Activity {
+public class StoreActivity extends AbstractActivity {
     private static final String TAG = "StoreActivity";
     private StickerStoreAdapter mStickerStoreAdapter;
     private RecyclerView mRecyclerView;
@@ -60,7 +57,7 @@ public class StoreActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_store);
+        setContentView(R.layout.sc_activity_store);
 
         EventBus.getDefault().register(this);
 
@@ -69,9 +66,6 @@ public class StoreActivity extends Activity {
         mEditing = getIntent().getBooleanExtra(Constant.EXTRA_EDITOR_ING,false);
 
         initView();
-
-        getStoreData();
-
     }
 
     private void initView(){
@@ -119,7 +113,6 @@ public class StoreActivity extends Activity {
             public void onClick(View v) {
                 mNetErrorContainer.setVisibility(View.INVISIBLE);
                 mProgressDialog.show();
-                getStoreData();
             }
         });
     }
@@ -129,67 +122,8 @@ public class StoreActivity extends Activity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-
-    private void getStoreData(){
-        mProgressDialog.show();
-        RetrofitUtil.getInstance().getStoreSticker(new Observer<StoreStickerData>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(StoreStickerData storeStickerData) {
-
-            }
-        });
-        RetrofitUtil.getInstance().getStoreSticker(new rx.Observer<StoreStickerData>() {
-            @Override
-            public void onCompleted() {
-                if (!StoreActivity.this.isFinishing()){
-                    mStickerStoreAdapter.notifyDataSetChanged();
-                    mNetErrorContainer.setVisibility(View.INVISIBLE);
-                    setHeaderView(mRecyclerView);
-                    mProgressDialog.dismiss();
-                }
-
-            }
-            @Override
-            public void onError(Throwable e) {
-                Log.d(TAG, "onError: ");
-                mProgressDialog.dismiss();
-                mNetErrorContainer.setVisibility(View.VISIBLE);
-            }
-            @Override
-            public void onNext(StoreStickerData storeStickerData) {
-                List<StoreStickerItem> storeStickerItems = storeStickerData.getData();
-                mStoreStickerItems.clear();
-                for (int i=0; i<storeStickerItems.size(); i++){
-                    StoreStickerItem storeStickerItem;
-                    if (i == 0){
-                        mHeaderStoreItem = storeStickerItems.get(0);
-                    }else {
-                        storeStickerItem = storeStickerItems.get(i);
-                        //判断是否已经下载，并设置标记
-                        if (isDownloaded(storeStickerItem.getName())){
-                            storeStickerItem.setDownloaded(true);
-                        }else {
-                            storeStickerItem.setDownloaded(false);
-                        }
-                        mStoreStickerItems.add(storeStickerItem);
-                    }
-                }
-            }
-        });
-    }
-
     private void setHeaderView(ViewGroup parent){
-        View header = LayoutInflater.from(this).inflate(R.layout.item_store_sticker_header, parent, false);
+        View header = LayoutInflater.from(this).inflate(R.layout.sc_item_store_sticker_header, parent, false);
         Glide.with(this).load(mHeaderStoreItem.getUrl()).into((ImageView) header);
         mStickerStoreAdapter.setHeaderView(header);
     }
@@ -210,8 +144,7 @@ public class StoreActivity extends Activity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onStickerOption(String event){
         if (Constant.EVENT_DELETE_STICKER.equals(event) || Constant.EVENT_ADD_STICKER.equals(event)){
-            //TODO
-            getStoreData();
+
         }
         if (Constant.EVENT_FINISH_STORE_ACTIVITY.equals(event)){
             finish();

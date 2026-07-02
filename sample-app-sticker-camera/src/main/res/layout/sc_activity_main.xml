@@ -10,7 +10,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_main_bg"
+        android:src="@drawable/sc_ic_main_bg"
         android:scaleType="centerCrop"/>
 
     <FrameLayout
@@ -18,8 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/ic_bg_banner">
-        <include layout="@layout/right"/>
+        android:background="@drawable/sc_ic_bg_banner">
+        <include layout="@layout/sc_right"/>
     </FrameLayout>
 
 
@@ -36,7 +36,7 @@
             android:layout_height="100dp"
             android:layout_weight="1"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_main_photo"
+            android:src="@drawable/sc_ic_main_photo"
             android:layout_margin="10dp"/>
         <ImageView
             android:id="@+id/id_main_btn_camera"
@@ -44,7 +44,7 @@
             android:layout_height="100dp"
             android:layout_weight="1"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_main_camera"
+            android:src="@drawable/sc_ic_main_camera"
             android:layout_margin="10dp"/>
 
         <ImageView
@@ -53,7 +53,7 @@
             android:layout_height="100dp"
             android:layout_weight="1"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_main_store"
+            android:src="@drawable/sc_ic_main_store"
             android:layout_margin="10dp"/>
 
     </LinearLayout>

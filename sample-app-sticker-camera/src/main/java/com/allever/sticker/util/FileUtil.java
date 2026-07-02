@@ -3,9 +3,10 @@ package com.allever.sticker.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.io.File;
 import java.io.FileOutputStream;

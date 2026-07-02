@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sticker Camera</string>
+    <string name="sc_app_name">Sticker Camera</string>
 
     <string name="crop_rotate">Rotate</string>
     <string name="crop_custom">Custom</string>

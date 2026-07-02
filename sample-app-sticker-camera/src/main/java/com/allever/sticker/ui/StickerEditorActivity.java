@@ -12,11 +12,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,8 +22,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.ViewPager;
+
 import com.allever.sticker.CustomStickerIconEvent;
-import com.allever.sticker.R;
+import org.xm.sticker.camera.R;
 import com.allever.sticker.bean.Sticker;
 import com.allever.sticker.ui.adapter.StickerFragmentPagerAdapter;
 import com.allever.sticker.bean.StickerData;
@@ -36,6 +35,7 @@ import com.allever.sticker.util.Constant;
 import com.allever.sticker.util.DialogUtil;
 import com.allever.sticker.util.FileUtil;
 import com.bumptech.glide.Glide;
+import com.google.android.material.tabs.TabLayout;
 import com.xiaopo.flying.sticker.BitmapStickerIcon;
 import com.xiaopo.flying.sticker.DeleteIconEvent;
 import com.xiaopo.flying.sticker.DrawableSticker;
@@ -52,18 +52,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import app.allever.android.lib.core.base.AbstractActivity;
+import app.allever.android.lib.core.helper.ExecutorHelper;
 
 /**
  * @author allever
  */
-public class StickerEditorActivity extends AppCompatActivity implements StickerFragment.OnStickerClickListener,
+public class StickerEditorActivity extends AbstractActivity implements StickerFragment.OnStickerClickListener,
         View.OnClickListener{
 
     public static final String EXTRA_SOURCE_URI = "source_uri";
@@ -97,7 +92,7 @@ public class StickerEditorActivity extends AppCompatActivity implements StickerF
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sticker_editor);
+        setContentView(R.layout.sc_activity_sticker_editor);
 
         mStoreDir = FileUtil.getStoreDir(this);
 
@@ -166,13 +161,26 @@ public class StickerEditorActivity extends AppCompatActivity implements StickerF
     }
 
     private void getStickerFromFile(){
-        Observable.create(new ObservableOnSubscribe<List<String>>() {
+
+        Runnable finishTask = new Runnable() {
             @Override
-            public void subscribe(ObservableEmitter<List<String>> emitter) throws Exception {
+            public void run() {
+                //回到主线程刷新界面
+                mStickerFragmentPagerAdapter = new StickerFragmentPagerAdapter(getSupportFragmentManager(),mStickerFragmentList);
+                mViewPager.setAdapter(mStickerFragmentPagerAdapter);
+                mTabLayout.setupWithViewPager(mViewPager);
+                resetTabLayout();
+            }
+        };
+
+        ExecutorHelper.INSTANCE.getCacheExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
                 List<StickerData> stickerDataList = new ArrayList<>();
                 File storeDir = new File(mStoreDir);
                 if (!storeDir.exists()){
-                    emitter.onComplete();
+                    runOnUiThread(finishTask);
+                    return;
                 }
 
                 //根据文件路径获取贴纸名称和每个贴纸的路径
@@ -198,31 +206,10 @@ public class StickerEditorActivity extends AppCompatActivity implements StickerF
                         continue;
                     }
                 }
-                emitter.onComplete();
+
+                runOnUiThread(finishTask);
             }
-        })
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<String>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-                    @Override
-                    public void onNext(List<String> strings) {
-                    }
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-                    @Override
-                    public void onComplete() {
-                        //回到主线程刷新界面
-                        mStickerFragmentPagerAdapter = new StickerFragmentPagerAdapter(getSupportFragmentManager(),mStickerFragmentList);
-                        mViewPager.setAdapter(mStickerFragmentPagerAdapter);
-                        mTabLayout.setupWithViewPager(mViewPager);
-                        resetTabLayout();
-                    }
-                });
+        });
     }
 
     private void initData(){
@@ -387,22 +374,22 @@ public class StickerEditorActivity extends AppCompatActivity implements StickerF
         });
 
         BitmapStickerIcon deleteIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this,
-                R.mipmap.sticker_option_close),
+                R.mipmap.sc_sticker_option_close),
                 BitmapStickerIcon.LEFT_TOP);
         deleteIcon.setIconEvent(new DeleteIconEvent());
 
         BitmapStickerIcon zoomIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this,
-                R.mipmap.sticker_option_scale),
+                R.mipmap.sc_sticker_option_scale),
                 BitmapStickerIcon.RIGHT_BOTOM);
         zoomIcon.setIconEvent(new ZoomIconEvent());
 
         BitmapStickerIcon flipIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this,
-                R.mipmap.sticker_option_flip),
+                R.mipmap.sc_sticker_option_flip),
                 BitmapStickerIcon.RIGHT_TOP);
         flipIcon.setIconEvent(new FlipHorizontallyEvent());
 
         BitmapStickerIcon heartIcon =
-                new BitmapStickerIcon(ContextCompat.getDrawable(this, R.mipmap.sticker_option_favorite),
+                new BitmapStickerIcon(ContextCompat.getDrawable(this, R.mipmap.sc_sticker_option_favorite),
                         BitmapStickerIcon.LEFT_BOTTOM);
         heartIcon.setIconEvent(new CustomStickerIconEvent());
 
@@ -447,22 +434,16 @@ public class StickerEditorActivity extends AppCompatActivity implements StickerF
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        switch (id){
-            case R.id.id_sticker_editor_ll_save:
-                if (!mProgressDialog.isShowing()){
-                    mProgressDialog.show();
-                }
-                mLlSave.setClickable(false);
-                saveImage();
-                break;
-            case R.id.id_sticker_editor_ll_back:
-                finish();
-                break;
-            case R.id.id_sticker_editor_iv_store:
-                StoreActivity.startSelf(this, true);
-                break;
-            default:
-                break;
+        if (id == R.id.id_sticker_editor_ll_save) {
+            if (!mProgressDialog.isShowing()) {
+                mProgressDialog.show();
+            }
+            mLlSave.setClickable(false);
+            saveImage();
+        } else if (id == R.id.id_sticker_editor_ll_back) {
+            finish();
+        } else if (id == R.id.id_sticker_editor_iv_store) {
+            StoreActivity.startSelf(this, true);
         }
     }
 
@@ -507,14 +488,14 @@ public class StickerEditorActivity extends AppCompatActivity implements StickerF
 
 
     private View getTabView(int stickerTypeResId){
-        View view = LayoutInflater.from(this).inflate(R.layout.item_sticker_type,null,false);
+        View view = LayoutInflater.from(this).inflate(R.layout.sc_item_sticker_type,null,false);
         ImageView imageView = (ImageView)view.findViewById(R.id.id_item_sticker_type_iv);
         imageView.setImageResource(stickerTypeResId);
         return view;
     }
 
     private View getTabView(String stickerTypePath){
-        View view = LayoutInflater.from(this).inflate(R.layout.item_sticker_type,null,false);
+        View view = LayoutInflater.from(this).inflate(R.layout.sc_item_sticker_type,null,false);
         ImageView imageView = (ImageView)view.findViewById(R.id.id_item_sticker_type_iv);
         Glide.with(this).load(stickerTypePath).into(imageView);
         return view;

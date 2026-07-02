@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.allever.sticker.R;
+import org.xm.sticker.camera.R;
 
 
 /**
@@ -43,7 +43,7 @@ public class DownloadProgressDialog extends  BaseDialog{
 
     @Override
     public View getDialogView() {
-        View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_download,null);
+        View view = LayoutInflater.from(mActivity).inflate(R.layout.sc_dialog_download,null);
         mProgressBar = (ProgressBar)view.findViewById(R.id.id_dialog_download_progress_bar);
         mTvCancel = (TextView) view.findViewById(R.id.id_dialog_download_tv_cancel);
         mTvCancel.setOnClickListener(mCancelClickListener);

@@ -1,6 +1,6 @@
 //package com.videoeditor.ui.widget;
 //
-//import android.support.v7.widget.RecyclerView;
+//import androidx.recyclerview.widget.RecyclerView;
 //import android.support.v7.widget.helper.ItemTouchHelper;
 //
 //import com.allever.videoeditordemo.DragHolderCallBack;

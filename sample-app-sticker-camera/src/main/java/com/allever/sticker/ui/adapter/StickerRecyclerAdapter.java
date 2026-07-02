@@ -1,13 +1,13 @@
 package com.allever.sticker.ui.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.allever.sticker.R;
+import org.xm.sticker.camera.R;
 import com.allever.sticker.bean.Sticker;
 import com.bumptech.glide.Glide;
 
@@ -28,7 +28,7 @@ public class StickerRecyclerAdapter extends RecyclerView.Adapter<StickerRecycler
     }
     @Override
     public StickerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_sticker,parent,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.sc_item_sticker,parent,false);
         StickerViewHolder stickerViewHolder = new StickerViewHolder(view);
         return stickerViewHolder;
     }

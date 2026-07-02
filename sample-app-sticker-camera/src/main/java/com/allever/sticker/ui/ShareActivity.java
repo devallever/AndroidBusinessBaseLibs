@@ -1,13 +1,11 @@
 package com.allever.sticker.ui;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,14 +13,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.allever.sticker.ControllerEnum;
-import com.allever.sticker.R;
+import org.xm.sticker.camera.R;
 import com.allever.sticker.util.Constant;
 import com.bumptech.glide.Glide;
-import com.allever.sticker.util.PermissionUtil;
 
 import java.io.File;
 import java.util.List;
+
+import app.allever.android.lib.core.base.AbstractActivity;
 
 /**
  *
@@ -30,11 +31,9 @@ import java.util.List;
  * @date 18/1/3
  */
 
-public class ShareActivity extends Activity implements View.OnClickListener{
+public class ShareActivity extends AbstractActivity implements View.OnClickListener{
 
     private static final int REQUEST_CODE_PICK_IMAGE = 0x01;
-    private static final int REQUEST_CODE_PERMISSION_STORAGE = 0x02;
-    private static final int REQUEST_CODE_PERMISSION_SETTING_MANUALLY = 0x03;
 
     public static final String EXTRA_IMAGE_PATH = "image_path";
 
@@ -53,56 +52,15 @@ public class ShareActivity extends Activity implements View.OnClickListener{
     private ImageView mBtnLine;
     private ImageView mBtnWhatsapp;
 
-    private static boolean isShowAd = false;
-
-    private boolean mIsActivityVisible = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_share);
+        setContentView(R.layout.sc_activity_share);
 
         mImagePath = getIntent().getStringExtra(EXTRA_IMAGE_PATH);
 
         //初始化控件及设置监听器
         initView();
-
-//        //如果是第一次启动，则加载并显示广告
-//        if(!isShowAd) {
-//            isShowAd = true;
-//
-//            //初始化广告
-//            MobService.startService(this, Constant.AD_DATA,new AdFactory());
-//
-//            //显示插屏
-//            MobService.loadInterstitalAd(this, "mobinter", new IMobAdListener() {
-//                @Override
-//                public void onAdLoaded(IMobAd mobAd) {
-//                    if(mIsActivityVisible && mobAd != null){
-//                        mobAd.showAd();
-//                    }
-//                }
-//
-//                @Override
-//                public void onAdFailedToLoad() {
-//                    com.mob.tool.Utils.printInfo("广告轮询失败");
-//                }
-//            });
-//
-//            //加载并显示banner
-//            MobService.loadBanner(this, "mobban", new IMobAdListener() {
-//                @Override
-//                public void onAdLoaded(IMobAd mobAd) {
-//                    if (mIsActivityVisible && mobAd != null){
-//                        mobAd.showAd();
-//                    }
-//                }
-//
-//                @Override
-//                public void onAdFailedToLoad() {
-//                    com.mob.tool.Utils.printInfo("Banner广告轮询失败");
-//                }
-//            });
-//        }
     }
 
     @Override
@@ -115,13 +73,11 @@ public class ShareActivity extends Activity implements View.OnClickListener{
     protected void onResume() {
         super.onResume();
 //        MobService.onResume(this);
-        mIsActivityVisible = true;
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mIsActivityVisible = false;
     }
 
     private void initView(){
@@ -153,68 +109,26 @@ public class ShareActivity extends Activity implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        switch (id){
-            case R.id.id_share_ll_back:
-                finish();
-                break;
-            case R.id.id_share_tv_home:
-                backHome();
-                break;
-            case R.id.id_share_btn_facebook:
-                shareSingle(Constant.PKG_FACEBOOK);
-                break;
-            case R.id.id_share_btn_twtter:
-                shareSingle(Constant.PKG_TWTTER);
-                break;
-            case R.id.id_share_btn_line:
-                shareSingle(Constant.PKG_LINE);
-                break;
-            case R.id.id_share_btn_whatsapp:
-                shareSingle(Constant.PKG_WHATSAPP);
-                break;
-            case R.id.id_share_btn_more:
-                shareMore();
-                break;
-            case R.id.id_share_rl_edit_next:
-                //如果具有读取存储权限，则打开相册选择图片
-                if (PermissionUtil.hasPermission(this,
-                        PermissionUtil.PERMISSION_READ_EXTRNAL_STORAGE,
-                        PermissionUtil.PERMISSION_WRITE_EXTERNAL_STORAGE)){
-                    ControllerEnum.chooseImageFromGallery(this, REQUEST_CODE_PICK_IMAGE);
-                }else {
-                    //没有权限，则申请相应权限，后回调onRequestPermissionsResult()
-                    PermissionUtil.requestPermission(this,
-                            PermissionUtil.PERMISSION_WRITE_EXTERNAL_STORAGE,
-                            REQUEST_CODE_PERMISSION_STORAGE);
-                }
-                break;
-            default:
-                break;
+        if (id == R.id.id_share_ll_back) {
+            finish();
+        } else if (id == R.id.id_share_tv_home) {
+            backHome();
+        } else if (id == R.id.id_share_btn_facebook) {
+            shareSingle(Constant.PKG_FACEBOOK);
+        } else if (id == R.id.id_share_btn_twtter) {
+            shareSingle(Constant.PKG_TWTTER);
+        } else if (id == R.id.id_share_btn_line) {
+            shareSingle(Constant.PKG_LINE);
+        } else if (id == R.id.id_share_btn_whatsapp) {
+            shareSingle(Constant.PKG_WHATSAPP);
+        } else if (id == R.id.id_share_btn_more) {
+            shareMore();
+        } else if (id == R.id.id_share_rl_edit_next) {//如果具有读取存储权限，则打开相册选择图片
+            ControllerEnum.chooseImageFromGallery(this, REQUEST_CODE_PICK_IMAGE);
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case REQUEST_CODE_PERMISSION_STORAGE:
-                if (PermissionUtil.hasPermission(this,PermissionUtil.PERMISSION_WRITE_EXTERNAL_STORAGE)) {
-                    //用户已授权，则打开相册选择图片
-                    ControllerEnum.chooseImageFromGallery(this, REQUEST_CODE_PICK_IMAGE);
-
-                }else {
-                    //如果用户选择了不在提示,则弹出手动设置权限的对话框
-                    if (PermissionUtil.hasAlwaysDeniedPermission(this,
-                            PermissionUtil.PERMISSION_WRITE_EXTERNAL_STORAGE)){
-                        ControllerEnum.openPermissionSetting(this,
-                                REQUEST_CODE_PERMISSION_SETTING_MANUALLY);
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //先进行resultCode判断，避免每个requestCode都有进行判断

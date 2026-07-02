@@ -41,5 +41,8 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextDetailClickItem("隐私相机", "sample-app-syp-camera") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_SPY_CAMERA).navigation()
         },
+        TextDetailClickItem("贴纸相机", "sample-app-sticker-camera") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_STICKER_CAMERA).navigation()
+        },
     )
 }

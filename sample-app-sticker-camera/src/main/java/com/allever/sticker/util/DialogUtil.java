@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.allever.sticker.R;
+import org.xm.sticker.camera.R;
 
 /**
  *
@@ -26,7 +26,7 @@ public class DialogUtil {
 
     public static AlertDialog createProgressAlertDialog(Context context,String msg, boolean canCancel){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.dialog_progress,null,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.sc_dialog_progress,null,false);
         ((TextView)view.findViewById(R.id.id_dialog_tv_msg)).setText(msg);
         builder.setView(view);
         builder.setCancelable(canCancel);
@@ -35,7 +35,7 @@ public class DialogUtil {
 
     public static AlertDialog createProgressAlertDialog(Context context,int msg, boolean canCancel){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.dialog_progress,null,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.sc_dialog_progress,null,false);
         ((TextView)view.findViewById(R.id.id_dialog_tv_msg)).setText(msg);
         builder.setView(view);
         builder.setCancelable(canCancel);

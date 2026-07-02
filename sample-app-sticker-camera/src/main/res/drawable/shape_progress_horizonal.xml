@@ -4,7 +4,7 @@
         >
         <clip>
             <shape>
-                <solid android:color="@color/gray700"></solid>
+                <solid android:color="@color/sc_gray700"></solid>
             </shape>
 
         </clip>
@@ -14,7 +14,7 @@
         >
         <clip>
             <shape>
-                <solid android:color="@color/colorAccent"></solid>
+                <solid android:color="@color/sc_colorAccent"></solid>
             </shape>
 
         </clip>
@@ -24,7 +24,7 @@
         >
         <clip>
             <shape>
-                <solid android:color="@color/colorAccent"></solid>
+                <solid android:color="@color/sc_colorAccent"></solid>
             </shape>
 
         </clip>

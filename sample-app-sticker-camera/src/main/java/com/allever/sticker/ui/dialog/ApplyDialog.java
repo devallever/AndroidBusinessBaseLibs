@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.allever.sticker.R;
+import org.xm.sticker.camera.R;
 
 /**
  *
@@ -35,7 +35,7 @@ public class ApplyDialog extends BaseDialog{
 
     @Override
     public View getDialogView() {
-        View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_apply,null);
+        View view = LayoutInflater.from(mActivity).inflate(R.layout.sc_dialog_apply,null);
         mLinearChoosePic = (LinearLayout)view.findViewById(R.id.id_dialog_apply_ll_choose);
         mLinearCamera = (LinearLayout)view.findViewById(R.id.id_dialog_apply_ll_camera);
         mLinearChoosePic.setOnClickListener(mChooseListener);

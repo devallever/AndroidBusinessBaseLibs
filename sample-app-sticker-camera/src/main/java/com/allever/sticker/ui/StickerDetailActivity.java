@@ -3,15 +3,14 @@ package com.allever.sticker.ui;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,18 +21,14 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.isseiaoki.simplecropview.util.Utils;
 import com.allever.sticker.ControllerEnum;
-import com.allever.sticker.R;
+import org.xm.sticker.camera.R;
 import com.allever.sticker.ui.adapter.StickerDetailRecyclerAdapter;
-import com.allever.sticker.bean.StickerDetailData;
 import com.allever.sticker.bean.StickerDetailItem;
 import com.allever.sticker.ui.dialog.ApplyDialog;
 import com.allever.sticker.event.DownloadEvent;
-import com.allever.sticker.network.RetrofitUtil;
-import com.allever.sticker.service.DownloadStickerService;
 import com.allever.sticker.util.Constant;
 import com.allever.sticker.util.DialogUtil;
 import com.allever.sticker.util.FileUtil;
-import com.allever.sticker.util.PermissionUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -41,8 +36,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import app.allever.android.lib.core.base.AbstractActivity;
 
 /**
  *
@@ -50,7 +46,7 @@ import java.util.List;
  * @date 18/2/10
  */
 
-public class StickerDetailActivity extends Activity implements View.OnClickListener{
+public class StickerDetailActivity extends AbstractActivity implements View.OnClickListener{
     private static final String TAG = "StickerDetailActivity";
 
     private static final int REQUEST_PICK_IMAGE = 1001;
@@ -83,7 +79,7 @@ public class StickerDetailActivity extends Activity implements View.OnClickListe
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sticker_detail);
+        setContentView(R.layout.sc_activity_sticker_detail);
 
         //获取下载贴纸的路径
         mStoreDir = FileUtil.getStoreDir(this);
@@ -103,9 +99,6 @@ public class StickerDetailActivity extends Activity implements View.OnClickListe
         initView();
 
         initDialog();
-
-        //从服务器获取贴纸详细信息
-        getStickerDetail();
 
     }
 
@@ -148,7 +141,6 @@ public class StickerDetailActivity extends Activity implements View.OnClickListe
             public void onClick(View v) {
                 mNetErrorContainer.setVisibility(View.INVISIBLE);
                 mProgressDialog.show();
-                getStickerDetail();
             }
         });
     }
@@ -164,11 +156,7 @@ public class StickerDetailActivity extends Activity implements View.OnClickListe
                     public void onClick(View v) {
                         mApplyDialog.hide();
                         //choose pic
-                        if (PermissionUtil.hasPermission(StickerDetailActivity.this, PermissionUtil.PERMISSION_WRITE_EXTERNAL_STORAGE)){
-                            ControllerEnum.chooseImageFromGallery(StickerDetailActivity.this, REQUEST_PICK_IMAGE);
-                        }else {
-                            PermissionUtil.requestPermission(StickerDetailActivity.this, PermissionUtil.PERMISSION_WRITE_EXTERNAL_STORAGE, REQUEST_CODE_PERMISSION_STORAGE);
-                        }
+                        ControllerEnum.chooseImageFromGallery(StickerDetailActivity.this, REQUEST_PICK_IMAGE);
                     }
                 },
                 new View.OnClickListener() {
@@ -176,11 +164,7 @@ public class StickerDetailActivity extends Activity implements View.OnClickListe
                     public void onClick(View v) {
                         mApplyDialog.hide();
                         //open camera
-                        if (PermissionUtil.hasPermission(StickerDetailActivity.this, PermissionUtil.PERMISSION_CAMERA)){
-                            mImageUri = ControllerEnum.openCamera(StickerDetailActivity.this, RESULD_CODE_TAKE_PHOTO);
-                        }else {
-                            PermissionUtil.requestPermission(StickerDetailActivity.this, PermissionUtil.PERMISSION_CAMERA, REQUEST_CODE_PERMISSION_CAMERA);
-                        }
+                        mImageUri = ControllerEnum.openCamera(StickerDetailActivity.this, RESULD_CODE_TAKE_PHOTO);
                     }
                 });
     }
@@ -205,43 +189,6 @@ public class StickerDetailActivity extends Activity implements View.OnClickListe
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case REQUEST_CODE_PERMISSION_STORAGE:
-                if (PermissionUtil.hasPermission(this,PermissionUtil.PERMISSION_WRITE_EXTERNAL_STORAGE)) {
-                    //允许
-                    ControllerEnum.chooseImageFromGallery(StickerDetailActivity.this, REQUEST_PICK_IMAGE);
-                }else {
-                    if (PermissionUtil.hasAlwaysDeniedPermission(this,PermissionUtil.PERMISSION_WRITE_EXTERNAL_STORAGE)){
-                        openPermissionSetting();
-                    }
-                }
-                break;
-            case REQUEST_CODE_PERMISSION_CAMERA:
-                if (PermissionUtil.hasPermission(this,PermissionUtil.PERMISSION_CAMERA)) {
-                    //允许
-                    mImageUri = ControllerEnum.openCamera(this, RESULD_CODE_TAKE_PHOTO);
-                }else {
-                    if (PermissionUtil.hasAlwaysDeniedPermission(this,PermissionUtil.PERMISSION_CAMERA)){
-                        openPermissionSetting();
-                    }
-                }
-
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void openPermissionSetting(){
-        PermissionUtil.openPermissionManually(this, REQUEST_CODE_PERMISSION_SETTING, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-    }
 
     private void setImageIntoIv(){
         if (mStickerDetailItem != null){
@@ -254,76 +201,24 @@ public class StickerDetailActivity extends Activity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.id_sticker_detail_tv_download:
-                //判断是否已经下载
-                if (!isDownloaded()){
-                    //没有下载，则开启服务下载贴纸
-                    Intent downloadService = new Intent(this, DownloadStickerService.class);
-                    downloadService.putExtra(Constant.EXTRA_STICKER_NAME, mStickerName);
-                    downloadService.putExtra(Constant.EXTRA_STICKER_DOWNLOAD_URL, mStickerDetailItem.getDownloadurl());
-                    startService(downloadService);
+        if (v.getId() == R.id.id_sticker_detail_tv_download) {//判断是否已经下载
+            if (!isDownloaded()) {
+                //没有下载，则开启服务下载贴纸
 
-                    //刷新下载中的按钮按钮状态
-                    tvDownload.setBackgroundColor(getResources().getColor(R.color.gray700));
-                    tvDownload.setClickable(false);
-                    tvDownload.setText(R.string.download_ing);
-
-                }else {
-                    //已经下载，
-                    //判断当前是否正在存在编辑的状态
-                    if (mEditing){
-                        //正在处于编辑状态，则发送通知，刷新编辑界面，主要是刷新贴纸数， 并退出当前Activity
-                        EventBus.getDefault().post(Constant.EVENT_FINISH_STORE_ACTIVITY);
-                        finish();
-                    }else {
-                        //如果不是编辑状态，则弹出对话框，选择图片或打开相机
-                        mApplyDialog.show();
-                    }
+            } else {
+                //已经下载，
+                //判断当前是否正在存在编辑的状态
+                if (mEditing) {
+                    //正在处于编辑状态，则发送通知，刷新编辑界面，主要是刷新贴纸数， 并退出当前Activity
+                    EventBus.getDefault().post(Constant.EVENT_FINISH_STORE_ACTIVITY);
+                    finish();
+                } else {
+                    //如果不是编辑状态，则弹出对话框，选择图片或打开相机
+                    mApplyDialog.show();
                 }
-                break;
-            default:
-                break;
+            }
         }
     }
-
-    private void getStickerDetail(){
-        mProgressDialog.show();
-
-        RetrofitUtil.getInstance().getStickerDetail(mStickerName, new rx.Observer<StickerDetailData>() {
-            @Override
-            public void onCompleted() {
-                //遍历数据项，获取图片的URL地址
-                Collections.addAll(mPathList, mStickerDetailItem.getSticklisturl());
-
-                //设置头部大图和小图
-                setImageIntoIv();
-
-                mProgressDialog.dismiss();
-
-                //刷新界面
-                mNetErrorContainer.setVisibility(View.INVISIBLE);
-                mCardContainer.setVisibility(View.VISIBLE);
-                mStickerDetailRecyclerAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                e.printStackTrace();
-                mProgressDialog.dismiss();
-                mNetErrorContainer.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onNext(StickerDetailData stickerDetailData) {
-                //获取到数据
-                if (stickerDetailData != null){
-                    mStickerDetailItem = stickerDetailData.getData();
-                }
-            }
-        });
-    }
-
     private boolean isDownloaded(){
         File stickerDir = new File(mStoreDir + "/" + mStickerName);
         if (stickerDir.exists()){
@@ -349,7 +244,7 @@ public class StickerDetailActivity extends Activity implements View.OnClickListe
             tvDownload.setText(R.string.retry);
             Toast.makeText(this, R.string.download_fail, Toast.LENGTH_SHORT).show();
         }
-        tvDownload.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        tvDownload.setBackgroundColor(getResources().getColor(R.color.sc_colorAccent));
         tvDownload.setClickable(true);
 
     }

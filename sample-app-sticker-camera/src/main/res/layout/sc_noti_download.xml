@@ -10,7 +10,7 @@
         android:id="@+id/id_noti_download_iv"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/ic_launcher_128"/>
+        android:src="@drawable/sc_ic_launcher_128"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
         android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:src="@drawable/ic_pause"
+        android:src="@drawable/sc_ic_pause"
         android:padding="10dp"/>
 
     <ProgressBar

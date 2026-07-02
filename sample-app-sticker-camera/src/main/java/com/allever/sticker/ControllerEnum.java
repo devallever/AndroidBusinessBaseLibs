@@ -6,9 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 
-import com.allever.sticker.util.PermissionUtil;
+import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,17 +55,5 @@ public class ControllerEnum {
         Intent albumIntent = new Intent(Intent.ACTION_PICK);
         albumIntent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         activity.startActivityForResult(albumIntent, requestCode);
-    }
-
-    /**
-     * 手动打开权限设置界面，手动添加权限, 回调Activity的onActivityResult方法进行处理
-     * */
-    public static void openPermissionSetting(Activity activity, int requestCode){
-        PermissionUtil.openPermissionManually(activity, requestCode, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
     }
 }

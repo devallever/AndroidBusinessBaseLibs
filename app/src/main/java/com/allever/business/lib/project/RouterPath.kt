@@ -66,5 +66,6 @@ class RouterPath {
         const val PATH_SAMPLE_VIDEO_EDITOR = "/videoeditor/main"
         const val PATH_SAMPLE_SECRET_ALBUM = "/secretalbum/main"
         const val PATH_SAMPLE_APP_SPY_CAMERA = "/appspycamera/main"
+        const val PATH_SAMPLE_APP_STICKER_CAMERA = "/appstickercamera/main"
     }
 }

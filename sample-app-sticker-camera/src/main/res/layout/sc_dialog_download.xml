@@ -39,7 +39,7 @@
             android:gravity="center"
             android:padding="10dp"
             android:text="@string/hide"
-            android:textColor="@color/gray700" />
+            android:textColor="@color/sc_gray700" />
 
         <TextView
             android:id="@+id/id_dialog_download_tv_pause_continue"
@@ -49,7 +49,7 @@
             android:gravity="center"
             android:padding="10dp"
             android:text="@string/pause"
-            android:textColor="@color/gray700" />
+            android:textColor="@color/sc_gray700" />
     </LinearLayout>
 
 </LinearLayout>

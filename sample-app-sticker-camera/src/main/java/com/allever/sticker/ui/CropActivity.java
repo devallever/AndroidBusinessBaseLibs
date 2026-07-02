@@ -13,24 +13,26 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 
 import com.isseiaoki.simplecropview.CropImageView;
 import com.isseiaoki.simplecropview.callback.CropCallback;
 import com.isseiaoki.simplecropview.callback.LoadCallback;
 import com.isseiaoki.simplecropview.callback.SaveCallback;
 import com.isseiaoki.simplecropview.util.Logger;
-import com.allever.sticker.R;
+import org.xm.sticker.camera.R;
 import com.allever.sticker.util.DialogUtil;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import app.allever.android.lib.core.base.AbstractActivity;
 
 /**
  *
@@ -38,7 +40,7 @@ import java.util.Date;
  * @date 18/1/2
  */
 
-public class CropActivity extends AppCompatActivity implements View.OnClickListener{
+public class CropActivity extends AbstractActivity implements View.OnClickListener{
 
     private static final String TAG = "CropActivity";
 
@@ -128,7 +130,7 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crop);
+        setContentView(R.layout.sc_activity_crop);
 
         mSourceUri = getIntent().getParcelableExtra(EXTRA_SOURCE_URI);
 
@@ -234,45 +236,32 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        switch (id){
-            case R.id.id_crop_btn_rotate:
-                mCropImageView.rotateImage(CropImageView.RotateDegrees.ROTATE_90D);
-                break;
-            case R.id.id_crop_btn_free:
-                mCropImageView.setCropMode(CropImageView.CropMode.FREE);
-                break;
-            case R.id.id_crop_btn_1_1:
-                mCropImageView.setCropMode(CropImageView.CropMode.SQUARE);
-                break;
-            case R.id.id_crop_btn_4_3:
-                mCropImageView.setCropMode(CropImageView.CropMode.RATIO_4_3);
-                break;
-            case R.id.id_crop_btn_3_4:
-                mCropImageView.setCropMode(CropImageView.CropMode.RATIO_3_4);
-                break;
-            case R.id.id_crop_btn_16_9:
-                mCropImageView.setCropMode(CropImageView.CropMode.RATIO_16_9);
-                break;
-            case R.id.id_crop_btn_9_16:
-                mCropImageView.setCropMode(CropImageView.CropMode.RATIO_9_16);
-                break;
-            case R.id.id_crop_btn_save:
-                //剪裁图片并保存剪裁后的图片，后续操作在回调接口中完成
-                mCropImageView.crop(mSourceUri).execute(mCropCallback);
+        if (id == R.id.id_crop_btn_rotate) {
+            mCropImageView.rotateImage(CropImageView.RotateDegrees.ROTATE_90D);
+        } else if (id == R.id.id_crop_btn_free) {
+            mCropImageView.setCropMode(CropImageView.CropMode.FREE);
+        } else if (id == R.id.id_crop_btn_1_1) {
+            mCropImageView.setCropMode(CropImageView.CropMode.SQUARE);
+        } else if (id == R.id.id_crop_btn_4_3) {
+            mCropImageView.setCropMode(CropImageView.CropMode.RATIO_4_3);
+        } else if (id == R.id.id_crop_btn_3_4) {
+            mCropImageView.setCropMode(CropImageView.CropMode.RATIO_3_4);
+        } else if (id == R.id.id_crop_btn_16_9) {
+            mCropImageView.setCropMode(CropImageView.CropMode.RATIO_16_9);
+        } else if (id == R.id.id_crop_btn_9_16) {
+            mCropImageView.setCropMode(CropImageView.CropMode.RATIO_9_16);
+        } else if (id == R.id.id_crop_btn_save) {//剪裁图片并保存剪裁后的图片，后续操作在回调接口中完成
+            mCropImageView.crop(mSourceUri).execute(mCropCallback);
 
-                //正在剪裁时，保存按钮为不可点击状态
-                mIvSave.setClickable(false);
-                if(!mCroppingDialog.isShowing()){
-                    mCroppingDialog.show();
-                }
-                //发送一个超时消息，如果超时，则认为剪裁失败
-                mHandler.sendEmptyMessageDelayed(MESSAGE_CROPPING_TIMEOUT, CROPPING_DELAY);
-                break;
-            case R.id.id_crop_iv_cancel:
-                finish();
-                break;
-            default:
-                break;
+            //正在剪裁时，保存按钮为不可点击状态
+            mIvSave.setClickable(false);
+            if (!mCroppingDialog.isShowing()) {
+                mCroppingDialog.show();
+            }
+            //发送一个超时消息，如果超时，则认为剪裁失败
+            mHandler.sendEmptyMessageDelayed(MESSAGE_CROPPING_TIMEOUT, CROPPING_DELAY);
+        } else if (id == R.id.id_crop_iv_cancel) {
+            finish();
         }
     }
 

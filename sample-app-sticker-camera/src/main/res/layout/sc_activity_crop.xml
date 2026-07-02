@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_margin="10dp"
-            android:src="@drawable/ic_cancel"/>
+            android:src="@drawable/sc_ic_cancel"/>
 
         <ImageView
             android:id="@+id/id_crop_btn_save"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_save"
+            android:src="@drawable/sc_ic_save"
             android:padding="5dp"/>
     </RelativeLayout>
 
@@ -135,7 +135,7 @@
         custom:scv_background_color="@color/gray_e"
         custom:scv_handle_color="@color/white"
         custom:scv_guide_color="@color/white"
-        custom:scv_overlay_color="@color/overlay"
+        custom:scv_overlay_color="@color/sc_overlay"
         custom:scv_frame_color="@color/white"
         custom:scv_handle_size="14dp"
         custom:scv_touch_padding="8dp"
