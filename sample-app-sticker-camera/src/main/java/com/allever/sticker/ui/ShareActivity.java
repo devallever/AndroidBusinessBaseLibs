@@ -35,10 +35,11 @@ public class ShareActivity extends AbstractActivity implements View.OnClickListe
 
     private static final int REQUEST_CODE_PICK_IMAGE = 0x01;
 
-    public static final String EXTRA_IMAGE_PATH = "image_path";
+    public static final String EXTRA_IMAGE_URI = "image_uri";
 
 
-    private String mImagePath;
+//    private String mImagePath;
+    private Uri mImageUri;
 
     private ImageView mIvDisplay;
 
@@ -56,8 +57,9 @@ public class ShareActivity extends AbstractActivity implements View.OnClickListe
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sc_activity_share);
+        adaptStatusBar(findViewById(R.id.id_sticker_editor_rl_tool));
 
-        mImagePath = getIntent().getStringExtra(EXTRA_IMAGE_PATH);
+        mImageUri = getIntent().getParcelableExtra(EXTRA_IMAGE_URI);
 
         //初始化控件及设置监听器
         initView();
@@ -82,7 +84,7 @@ public class ShareActivity extends AbstractActivity implements View.OnClickListe
 
     private void initView(){
         mIvDisplay = (ImageView)findViewById(R.id.id_share_iv);
-        Glide.with(this).load(new File(mImagePath)).into(mIvDisplay);
+        Glide.with(this).load(mImageUri).into(mIvDisplay);
 
         mTvHome = findViewById(R.id.id_share_tv_home);
         mTvHome.setOnClickListener(this);
@@ -161,7 +163,7 @@ public class ShareActivity extends AbstractActivity implements View.OnClickListe
     }
 
     private void shareSingle(String containAppPackage){
-        Uri imageUri = Uri.fromFile(new File(mImagePath));
+        Uri imageUri = mImageUri;
         Intent fbIntent = new Intent(Intent.ACTION_SEND);
         fbIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
         fbIntent.setType("image/*");
@@ -185,7 +187,7 @@ public class ShareActivity extends AbstractActivity implements View.OnClickListe
     }
 
     private void shareMore(){
-        Uri imageUri = Uri.fromFile(new File(mImagePath));
+        Uri imageUri = mImageUri;
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
@@ -193,9 +195,9 @@ public class ShareActivity extends AbstractActivity implements View.OnClickListe
         startActivity(Intent.createChooser(shareIntent, getResources().getString(R.string.share_to)));
     }
 
-    public static void startSelf(Context context, String path){
+    public static void startSelf(Context context, Uri uri){
         Intent intent = new Intent(context, ShareActivity.class);
-        intent.putExtra(ShareActivity.EXTRA_IMAGE_PATH,path);
+        intent.putExtra(ShareActivity.EXTRA_IMAGE_URI, uri);
         context.startActivity(intent);
     }
 }

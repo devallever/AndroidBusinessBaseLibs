@@ -2,13 +2,13 @@ package com.allever.sticker.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 
 import com.isseiaoki.simplecropview.CropImageView;
 import com.isseiaoki.simplecropview.callback.CropCallback;
@@ -32,7 +33,9 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import app.allever.android.lib.core.app.App;
 import app.allever.android.lib.core.base.AbstractActivity;
+import app.allever.android.lib.core.ext.LoggerKt;
 
 /**
  *
@@ -122,6 +125,8 @@ public class CropActivity extends AbstractActivity implements View.OnClickListen
         }
 
         @Override public void onError(Throwable e) {
+            e.printStackTrace();
+            LoggerKt.log(TAG, "onError: save error: " + e.getMessage());
             mCroppingDialog.dismiss();
             mIvSave.setClickable(true);
         }
@@ -131,7 +136,7 @@ public class CropActivity extends AbstractActivity implements View.OnClickListen
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sc_activity_crop);
-
+        adaptStatusBar(findViewById(R.id.id_crop_image_view));
         mSourceUri = getIntent().getParcelableExtra(EXTRA_SOURCE_URI);
 
         initView();
@@ -190,9 +195,17 @@ public class CropActivity extends AbstractActivity implements View.OnClickListen
             Log.d(TAG, "createNewUri: file length = " + file.length());
             values.put(MediaStore.Images.Media.SIZE, file.length());
         }
-        ContentResolver resolver = context.getContentResolver();
-        Uri uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-        Logger.i("SaveUri = " + uri);
+//        ContentResolver resolver = context.getContentResolver();
+//        Uri uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+//兼容7.0
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = FileProvider.getUriForFile(App.context, App.context.getPackageName() + ".fileprovider", file);
+        } else {
+            uri = Uri.fromFile(file);
+        }
+        LoggerKt.log("SaveUri = " + uri);
         return uri;
     }
 

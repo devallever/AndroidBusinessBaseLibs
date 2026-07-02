@@ -53,7 +53,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import app.allever.android.lib.core.base.AbstractActivity;
+import app.allever.android.lib.core.ext.LoggerKt;
 import app.allever.android.lib.core.helper.ExecutorHelper;
+import app.allever.android.lib.core.helper.MediaHelper;
+import app.allever.android.lib.core.helper.MediaHelperKt;
+import app.allever.android.lib.core.util.BitmapUtils;
 
 /**
  * @author allever
@@ -93,6 +97,7 @@ public class StickerEditorActivity extends AbstractActivity implements StickerFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sc_activity_sticker_editor);
+        adaptStatusBar(findViewById(R.id.id_sticker_editor_rl_tool));
 
         mStoreDir = FileUtil.getStoreDir(this);
 
@@ -450,10 +455,14 @@ public class StickerEditorActivity extends AbstractActivity implements StickerFr
     private void saveImage(){
         File file = FileUtil.getNewFile(this, "stickercamera");
         if (file != null) {
-            FileUtil.saveImageFile(file, mStickerView.createBitmap());
+            Uri result = MediaHelperKt.saveToAlbum(mStickerView.createBitmap(), this,  file.getName(),  file.getParent(), 100 );
+            if (result != null) {
+                LoggerKt.log("save success " + result);
+            }
             //goto save success Activity
-            ShareActivity.startSelf(this, file.getPath());
+            ShareActivity.startSelf(this, result);
             Toast.makeText(this,"save success ",Toast.LENGTH_SHORT).show();
+            LoggerKt.log("save success " + result);
             mProgressDialog.dismiss();
         } else {
             Toast.makeText(this, "the file is null", Toast.LENGTH_SHORT).show();

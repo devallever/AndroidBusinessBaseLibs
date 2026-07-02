@@ -40,7 +40,7 @@ dependencies {
 //    implementation(libs.retrofit)
 //    implementation(libs.retrofit.converter.gson)
 
-    implementation("com.isseiaoki:simplecropview:1.1.7")
+    implementation("com.isseiaoki:simplecropview:1.1.8")
     implementation("com.flying.xiaopo:sticker:1.6.0")
 //    implementation("io.reactivex:rxandroid:1.2.1")
 //    implementation("io.reactivex.rxjava2:rxjava:2.1.8")
