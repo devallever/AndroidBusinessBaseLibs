@@ -464,6 +464,7 @@ public class StickerEditorActivity extends AbstractActivity implements StickerFr
             Toast.makeText(this,"save success ",Toast.LENGTH_SHORT).show();
             LoggerKt.log("save success " + result);
             mProgressDialog.dismiss();
+            finish();
         } else {
             Toast.makeText(this, "the file is null", Toast.LENGTH_SHORT).show();
             mProgressDialog.dismiss();
