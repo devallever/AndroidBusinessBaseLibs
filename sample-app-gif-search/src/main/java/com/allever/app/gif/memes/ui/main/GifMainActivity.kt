@@ -174,13 +174,12 @@ class GifMainActivity : BaseMvvmActivity<GsActivityGifMainBinding, GifMainViewMo
     override fun onTabReselected(tab: TabLayout.Tab) {}
 
     private fun getTabView(position: Int): View {
-        val view = LayoutInflater.from(this).inflate(R.layout.layout_bottom_tab, null)
+        val view = LayoutInflater.from(this).inflate(R.layout.gs_layout_bottom_tab, null)
         val imageView = view.findViewById<ImageView>(R.id.icon)
         val textView = view.findViewById<TextView>(R.id.text1)
         val tab = TabModel.getTab(position)
         textView.setText(tab.labelResId)
         imageView.setImageResource(tab.iconResId)
-        imageView.isVisible = false
         return view
     }
 

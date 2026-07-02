@@ -17,6 +17,7 @@ class AboutActivity : BaseActivity<AboutView, AboutPresenter>(), AboutView, View
     override fun getContentView(): Any = R.layout.gs_activity_about
 
     override fun initView() {
+        adaptStatusBar(findViewById<View>(R.id.top_bar))
         findViewById<View>(R.id.about_privacy).setOnClickListener(this)
         findViewById<View>(R.id.iv_left).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_label).text = getString(R.string.about)

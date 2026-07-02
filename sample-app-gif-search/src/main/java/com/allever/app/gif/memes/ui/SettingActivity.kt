@@ -30,6 +30,7 @@ class SettingActivity : BaseActivity<SettingView, SettingPresenter>(),
     override fun getContentView(): Any = R.layout.gs_activity_setting
 
     override fun initView() {
+        adaptStatusBar(findViewById(R.id.top_bar))
         findViewById<View>(R.id.setting_tv_share).setOnClickListener(this)
         findViewById<TextView>(R.id.setting_tv_feedback).setOnClickListener(this)
         findViewById<TextView>(R.id.setting_tv_about).setOnClickListener(this)
@@ -55,7 +56,7 @@ class SettingActivity : BaseActivity<SettingView, SettingPresenter>(),
                 if (TextUtils.isEmpty(url)) {
                     url = "https://play.google.com/store/apps/details?id=${App.context.packageName}"
                 }
-                val msg = getString(R.string.share_content, getString(R.string.app_name), url)
+                val msg = getString(R.string.share_content, getString(R.string.gs_app_name), url)
                 ShareHelper.shareText(this, msg)
             }
             R.id.setting_tv_feedback -> {
