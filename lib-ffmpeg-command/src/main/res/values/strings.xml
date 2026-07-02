@@ -1,0 +1,3 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="ffmpeg_app_name" tools:ignore="ExtraTranslation">ffmpeg</string>
+</resources>
