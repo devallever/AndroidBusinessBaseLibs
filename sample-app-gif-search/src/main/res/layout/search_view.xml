@@ -49,6 +49,6 @@
         android:layout_marginRight="10dp"
         android:padding="8dp"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_delete"
+        android:src="@drawable/gs_ic_delete"
         android:tint="#666666" />
 </LinearLayout>

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/default_background_color">
+	android:background="@color/gs_default_background_color">
 
 	<include layout="@layout/include_top_bar"/>
 
@@ -13,13 +13,13 @@
 		android:layout_below="@+id/top_bar"
 		android:layout_centerHorizontal="true"
 		android:layout_marginTop="60dp"
-		android:src="@drawable/ic_logo"/>
+		android:src="@drawable/gs_ic_logo"/>
 
 	<TextView
 		android:id="@+id/about_app_name"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:textColor="@color/default_tv_color"
+		android:textColor="@color/gs_default_tv_color"
 		android:layout_below="@id/about_iv_logo"
 		android:layout_marginTop="20dp"
 		android:layout_centerHorizontal="true"
@@ -31,7 +31,7 @@
 		android:id="@+id/about_app_version"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:textColor="@color/default_tv_color"
+		android:textColor="@color/gs_default_tv_color"
 		android:layout_below="@id/about_app_name"
 		android:layout_marginTop="10dp"
 		android:layout_centerHorizontal="true"
@@ -48,7 +48,7 @@
 		android:layout_alignParentBottom="true"
 		android:layout_marginBottom="20dp"
 		android:layout_centerHorizontal="true"
-		android:textColor="@color/default_tv_color"/>
+		android:textColor="@color/gs_default_tv_color"/>
 
 	<TextView
 		android:id="@+id/about_privacy"
@@ -58,13 +58,13 @@
 		android:layout_centerHorizontal="true"
 		android:layout_above="@id/about_right"
 		android:layout_marginBottom="60dp"
-		android:drawableLeft="@drawable/ic_google_play_privacy"
-		android:drawableStart="@drawable/ic_google_play_privacy"
+		android:drawableLeft="@drawable/gs_ic_google_play_privacy"
+		android:drawableStart="@drawable/gs_ic_google_play_privacy"
 		android:drawablePadding="10dp"
 		android:padding="5dp"
 		android:textSize="12sp"
 		android:gravity="center"
-		android:textColor="@color/default_tv_color"
+		android:textColor="@color/gs_default_tv_color"
 		android:visibility="visible"/>
 
 	<TextView

@@ -11,7 +11,6 @@ import com.funny.gif.memes.app.Global
 import com.funny.gif.memes.bean.event.DownloadFinishEvent
 import com.funny.gif.memes.bean.event.LikeEvent
 import com.funny.gif.memes.bean.event.RemoveLikeListEvent
-import com.allever.app.gif.memes.databinding.FragmentSearchBinding
 import com.funny.gif.memes.func.download.DownloadManager
 import com.funny.gif.memes.func.store.Repository
 import com.funny.gif.memes.func.store.Store
@@ -26,13 +25,14 @@ import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.util.BarUtils
 import app.allever.android.lib.mvvm.base.BaseMvvmFragment
+import com.allever.app.gif.memes.databinding.GsFragmentSearchBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class SearchFragment : BaseMvvmFragment<FragmentSearchBinding, SearchViewModel>() {
+class SearchFragment : BaseMvvmFragment<GsFragmentSearchBinding, SearchViewModel>() {
 
     private var mAdapter: GifAdapter? = null
     private lateinit var mProgressDialog: ProgressDialog
@@ -162,7 +162,7 @@ class SearchFragment : BaseMvvmFragment<FragmentSearchBinding, SearchViewModel>(
         }
     }
 
-    override fun inflate(): FragmentSearchBinding = FragmentSearchBinding.inflate(layoutInflater)
+    override fun inflate(): GsFragmentSearchBinding = GsFragmentSearchBinding.inflate(layoutInflater)
 
     override fun init() {
         EventBus.getDefault().register(this)

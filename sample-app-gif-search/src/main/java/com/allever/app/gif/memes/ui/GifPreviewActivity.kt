@@ -41,7 +41,7 @@ class GifPreviewActivity : AbstractActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gif_preview)
+        setContentView(R.layout.gs_activity_gif_preview)
 
         init()
 
@@ -210,7 +210,7 @@ class GifPreviewActivity : AbstractActivity() {
 
         val liked = DBHelper.isLiked(gifId.toString())
         if (liked) {
-            ivLike?.setColorFilter(resources.getColor(R.color.default_theme_color))
+            ivLike?.setColorFilter(resources.getColor(R.color.gs_default_theme_color))
         } else {
             ivLike?.colorFilter = null
         }
@@ -225,7 +225,7 @@ class GifPreviewActivity : AbstractActivity() {
                 DBHelper.unLiked(gifId.toString())
                 likeEvent.isLiked = false
             } else {
-                ivLike.setColorFilter(resources.getColor(R.color.default_theme_color))
+                ivLike.setColorFilter(resources.getColor(R.color.gs_default_theme_color))
                 DBHelper.liked(gifId.toString(), item)
                 likeEvent.isLiked = true
             }

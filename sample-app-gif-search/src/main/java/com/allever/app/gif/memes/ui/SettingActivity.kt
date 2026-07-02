@@ -27,7 +27,7 @@ class SettingActivity : BaseActivity<SettingView, SettingPresenter>(),
 
     private lateinit var mSwitchVersion: SwitchCompat
 
-    override fun getContentView(): Any = R.layout.activity_setting
+    override fun getContentView(): Any = R.layout.gs_activity_setting
 
     override fun initView() {
         findViewById<View>(R.id.setting_tv_share).setOnClickListener(this)

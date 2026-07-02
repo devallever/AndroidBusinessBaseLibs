@@ -8,14 +8,14 @@ import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.core.util.ResUtils
 import app.allever.android.lib.mvvm.base.BaseMvvmActivity
 import com.allever.app.gif.memes.R
-import com.allever.app.gif.memes.databinding.ActivityPickBinding
+import com.allever.app.gif.memes.databinding.GsActivityPickBinding
 import com.funny.gif.memes.event.GifMakeEvent
 import com.allever.app.gif.memes.ui.maker.model.PickViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class PickActivity : BaseMvvmActivity<ActivityPickBinding, PickViewModel>(){
+class PickActivity : BaseMvvmActivity<GsActivityPickBinding, PickViewModel>(){
 
 
 
@@ -29,9 +29,10 @@ class PickActivity : BaseMvvmActivity<ActivityPickBinding, PickViewModel>(){
         finish()
     }
 
-    override fun inflate(): ActivityPickBinding = ActivityPickBinding.inflate(layoutInflater)
+    override fun inflate(): GsActivityPickBinding = GsActivityPickBinding.inflate(layoutInflater)
 
     override fun init() {
+        adaptStatusBar(mBinding.topBar)
         initObserver()
         EventBus.getDefault().register(this)
         mBinding.ivLeft.setColorFilter(ResUtils.getColor(R.color.white))
@@ -63,6 +64,8 @@ class PickActivity : BaseMvvmActivity<ActivityPickBinding, PickViewModel>(){
                 outRect.bottom = bottomSpacing
             }
         })
+
+        mViewModel.fetchData()
     }
 
     private fun initObserver() {

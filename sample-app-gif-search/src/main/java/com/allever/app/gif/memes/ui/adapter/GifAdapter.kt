@@ -1,6 +1,5 @@
 package com.allever.app.gif.memes.ui.adapter
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.PorterDuff
@@ -10,7 +9,6 @@ import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.getString
 import app.allever.android.lib.core.ext.log
@@ -209,7 +207,7 @@ class GifAdapter(context: Context, resId: Int, data: MutableList<GifItem>) :
 
         val liked = DBHelper.isLiked(item.id.toString())
         if (liked) {
-            ivLike?.setColorFilter(mContext.resources.getColor(R.color.default_theme_color))
+            ivLike?.setColorFilter(mContext.resources.getColor(R.color.gs_default_theme_color))
         } else {
             ivLike?.colorFilter = null
         }
@@ -225,7 +223,7 @@ class GifAdapter(context: Context, resId: Int, data: MutableList<GifItem>) :
                 DBHelper.unLiked(item.id.toString())
                 likeEvent.isLiked = false
             } else {
-                ivLike.setColorFilter(mContext.resources.getColor(R.color.default_theme_color))
+                ivLike.setColorFilter(mContext.resources.getColor(R.color.gs_default_theme_color))
                 DBHelper.liked(item.id.toString(), item)
                 likeEvent.isLiked = true
             }

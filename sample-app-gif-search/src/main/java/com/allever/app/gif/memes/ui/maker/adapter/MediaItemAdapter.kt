@@ -2,8 +2,8 @@ package com.allever.app.gif.memes.ui.maker.adapter
 
 import android.content.Context
 import android.view.ViewGroup
+import android.widget.ImageView
 import app.allever.android.lib.core.helper.DisplayHelper
-import app.allever.android.lib.core.util.DeviceUtils
 import com.allever.app.gif.memes.R
 import com.allever.app.gif.memes.ui.maker.adapter.bean.MediaItem
 import com.allever.app.gif.memes.ui.widget.recycler.BaseRecyclerViewAdapter
@@ -37,11 +37,12 @@ class MediaItemAdapter(val context: Context, resId: Int, data: MutableList<Media
         position: Int,
         item: MediaItem
     ) {
-        Glide.with(context).load(item.data?.uri).into(holder.getView(R.id.iv_image))
+        val imageView = holder.getView<ImageView>(R.id.iv_image)
+        Glide.with(imageView?.context!!).load(item.data?.uri).into(imageView)
         if (item.selected) {
-            holder.setImageResource(R.id.iv_select_flag, R.drawable.icon_album_select)
+            holder.setImageResource(R.id.iv_select_flag, R.drawable.gs_icon_album_select)
         } else {
-            holder.setImageResource(R.id.iv_select_flag, R.drawable.icon_album_unselected)
+            holder.setImageResource(R.id.iv_select_flag, R.drawable.gs_icon_album_unselected)
         }
         holder.itemView
         holder.setOnClickListener(holder.itemView.id, {

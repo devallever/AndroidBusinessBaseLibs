@@ -14,7 +14,7 @@ import com.funny.gif.memes.util.SystemUtils
 class AboutActivity : BaseActivity<AboutView, AboutPresenter>(), AboutView, View.OnClickListener {
 
 
-    override fun getContentView(): Any = R.layout.activity_about
+    override fun getContentView(): Any = R.layout.gs_activity_about
 
     override fun initView() {
         findViewById<View>(R.id.about_privacy).setOnClickListener(this)

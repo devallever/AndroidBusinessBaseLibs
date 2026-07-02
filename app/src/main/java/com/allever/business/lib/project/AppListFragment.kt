@@ -14,7 +14,7 @@ class AppListFragment: ListFragment<FragmentListBinding, ListViewModel, TextDeta
         Gravity.CENTER)
 
     override fun getList(): MutableList<TextDetailClickItem> = mutableListOf(
-        TextDetailClickItem("GifSearch", "sample-app-gif-search") {
+        TextDetailClickItem("Gif图搜索", "sample-app-gif-search") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_GIF_SEARCH).navigation()
         },
         TextDetailClickItem("贴纸相机", "sample-app-sticker-camera") {

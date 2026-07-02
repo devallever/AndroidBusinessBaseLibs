@@ -19,7 +19,7 @@ class BackupRestoreActivity : BaseActivity<BackupRestoreView, BackupRestorePrese
     private lateinit var mBtnBackup: Button
     private lateinit var mBtnRestore: Button
     private lateinit var mBtnDelBackup: Button
-    override fun getContentView(): Any = R.layout.activity_backup_restore
+    override fun getContentView(): Any = R.layout.gs_activity_backup_restore
 
     override fun initView() {
         findViewById<View>(R.id.iv_left).setOnClickListener(this)

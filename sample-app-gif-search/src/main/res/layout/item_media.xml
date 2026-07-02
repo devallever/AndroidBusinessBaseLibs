@@ -19,7 +19,7 @@
         android:id="@+id/mask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/item_cell_mask_color"
+        android:background="@color/gs_item_cell_mask_color"
         android:visibility="gone"/>
 
 
@@ -29,7 +29,7 @@
         android:layout_height="@dimen/item_cell_iv_select_flag_height"
         android:layout_alignParentEnd="true"
         android:scaleType="centerInside"
-        android:src="@drawable/icon_album_unselected" />
+        android:src="@drawable/gs_icon_album_unselected" />
 
     <TextView
         android:id="@+id/tv_video_duration"
@@ -40,7 +40,7 @@
         android:layout_marginEnd="@dimen/item_cell_tv_duration_margin_end"
         android:layout_marginRight="@dimen/item_cell_tv_duration_margin_end"
         android:gravity="center"
-        android:textColor="@color/item_cell_tv_duration_text_color"
+        android:textColor="@color/gs_item_cell_tv_duration_text_color"
         android:textSize="@dimen/item_cell_tv_duration_text_size"
         tools:ignore="RtlHardcoded"
         android:textStyle="bold"

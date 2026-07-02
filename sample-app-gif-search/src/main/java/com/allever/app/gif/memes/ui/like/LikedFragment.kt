@@ -11,7 +11,7 @@ import com.funny.gif.memes.bean.event.DownloadFinishEvent
 import com.funny.gif.memes.bean.event.LikeEvent
 import com.funny.gif.memes.bean.event.RemoveLikeListEvent
 import com.funny.gif.memes.bean.event.RestoreLikeEvent
-import com.allever.app.gif.memes.databinding.FragmentLikedBinding
+import com.allever.app.gif.memes.databinding.GsFragmentLikedBinding
 import com.allever.app.gif.memes.ui.GifPreviewActivity
 import com.allever.app.gif.memes.ui.adapter.bean.GifItem
 import com.allever.app.gif.memes.ui.like.adapter.GifLikedAdapter
@@ -25,7 +25,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class LikedFragment : BaseMvvmFragment<FragmentLikedBinding, LikedViewModel>(), View.OnClickListener {
+class LikedFragment : BaseMvvmFragment<GsFragmentLikedBinding, LikedViewModel>(), View.OnClickListener {
 
     private lateinit var mAdapter: GifLikedAdapter
 
@@ -125,7 +125,7 @@ class LikedFragment : BaseMvvmFragment<FragmentLikedBinding, LikedViewModel>(), 
         getLikedData()
     }
 
-    override fun inflate(): FragmentLikedBinding = FragmentLikedBinding.inflate(layoutInflater)
+    override fun inflate(): GsFragmentLikedBinding = GsFragmentLikedBinding.inflate(layoutInflater)
 
     override fun init() {
         EventBus.getDefault().register(this)

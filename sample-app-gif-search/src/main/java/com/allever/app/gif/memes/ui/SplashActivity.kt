@@ -13,7 +13,7 @@ import com.funny.gif.memes.util.SpUtils
 class SplashActivity : AbstractActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        setContentView(R.layout.gs_activity_splash)
         if (App.DEBUG) {
             SpUtils.putString(Global.SP_OFFSET, "0")
             SpUtils.putString(Global.SP_SEARCH_OFFSET, "0")

@@ -20,9 +20,9 @@
             android:layout_width="@dimen/default_icon_width"
             android:layout_height="@dimen/default_icon_height"
             android:layout_centerVertical="true"
-            android:src="@drawable/icon_back"
+            android:src="@drawable/gs_icon_back"
             android:scaleType="centerInside"
-            app:tint="@color/top_bar_icon_color_filter" />
+            app:tint="@color/gs_top_bar_icon_color_filter" />
 
         <!-- 标题 -->
         <LinearLayout
@@ -40,7 +40,7 @@
                 android:text=""
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/top_bar_tv_color"/>
+                android:textColor="@color/gs_top_bar_tv_color"/>
         </LinearLayout>
 
         <ImageView
@@ -51,7 +51,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:visibility="gone"
-            app:tint="@color/top_bar_icon_color_filter" />
+            app:tint="@color/gs_top_bar_icon_color_filter" />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView

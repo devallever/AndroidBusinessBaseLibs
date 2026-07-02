@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00cffe</color>
-    <color name="colorPrimaryDark">#00cffe</color>
-    <color name="colorAccent">#00cffe</color>
+    <color name="gs_colorPrimary">#00cffe</color>
+    <color name="gs_colorPrimaryDark">#00cffe</color>
+    <color name="gs_colorAccent">#00cffe</color>
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
@@ -10,28 +10,28 @@
     <color name="color_11_white">#11ffffff</color>
     <color name="trans">#00000000</color>
 
-    <color name="default_theme_color">@color/colorPrimary</color>
-    <color name="default_background_color">@color/white</color>
+    <color name="gs_default_theme_color">@color/gs_colorPrimary</color>
+    <color name="gs_default_background_color">@color/white</color>
 
-    <color name="default_top_bar_background_color">@color/black</color>
-    <color name="default_icon_color_filter">@color/black</color>
-    <color name="default_btn_color_filter">@color/black</color>
-    <color name="default_btn_background">@color/black</color>
-    <color name="default_tv_color">@color/black</color>
+    <color name="gs_default_top_bar_background_color">@color/black</color>
+    <color name="gs_default_icon_color_filter">@color/black</color>
+    <color name="gs_default_btn_color_filter">@color/black</color>
+    <color name="gs_default_btn_background">@color/black</color>
+    <color name="gs_default_tv_color">@color/black</color>
 
-	<color name="top_bar_icon_color_filter">@color/black</color>
-	<color name="top_bar_tv_color">@color/black</color>
+	<color name="gs_top_bar_icon_color_filter">@color/black</color>
+	<color name="gs_top_bar_tv_color">@color/black</color>
 
-    <color name="divider_color">#19474747</color>
+    <color name="gs_divider_color">#19474747</color>
 
-    <color name="main_tab_highlight">@color/white</color>
-    <color name="main_tab_unselect_color">#8a8a8a</color>
+    <color name="gs_main_tab_highlight">@color/white</color>
+    <color name="gs_main_tab_unselect_color">#8a8a8a</color>
 
-    <color name="word_item_bottom_background">#313131</color>
+    <color name="gs_word_item_bottom_background">#313131</color>
 
     <!-- 相册单个item -->
-    <color name="item_cell_tv_duration_text_color">@color/white</color>
-    <color name="item_cell_mask_color">#99000000</color>
+    <color name="gs_item_cell_tv_duration_text_color">@color/white</color>
+    <color name="gs_item_cell_mask_color">#99000000</color>
 
     <color name="rsbColorSeekBarDefault">#c3c3c3</color>
     <color name="rsbColorThumbPressed">#FFE7E7E7</color>

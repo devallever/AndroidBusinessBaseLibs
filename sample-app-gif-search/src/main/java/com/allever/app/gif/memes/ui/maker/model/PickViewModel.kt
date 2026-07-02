@@ -55,7 +55,9 @@ class PickViewModel: BaseViewModel() {
             }
 
         })
+    }
 
+    fun fetchData() {
         viewModelScope.launch {
             val allVideo = MediaHelper.getVideoMedia(App.context, "", 0)
             allVideo.map {
@@ -64,6 +66,7 @@ class PickViewModel: BaseViewModel() {
                 mediaItemList.add(mediaItem)
             }
             mediaItemListLiveData.value = mediaItemList
+            adapter.notifyDataSetChanged()
         }
     }
 

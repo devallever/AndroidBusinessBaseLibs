@@ -8,11 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import app.allever.android.lib.core.base.AbstractFragment
 import com.allever.app.gif.memes.R
-import com.allever.app.gif.memes.databinding.ActivityGifMainBinding
+import com.allever.app.gif.memes.databinding.GsActivityGifMainBinding
 import com.allever.app.gif.memes.ui.SettingActivity
 import com.allever.app.gif.memes.ui.TabModel
 import com.allever.app.gif.memes.ui.ViewHelper
@@ -32,7 +33,7 @@ import com.funny.gif.memes.app.Global
 import com.funny.gif.memes.func.download.DownloadManager
 import com.funny.gif.memes.util.ImageLoader
 
-class GifMainActivity : BaseMvvmActivity<ActivityGifMainBinding, GifMainViewModel>(),
+class GifMainActivity : BaseMvvmActivity<GsActivityGifMainBinding, GifMainViewModel>(),
     View.OnClickListener, TabLayout.OnTabSelectedListener {
 
     private lateinit var mVp: ViewPager
@@ -85,24 +86,24 @@ class GifMainActivity : BaseMvvmActivity<ActivityGifMainBinding, GifMainViewMode
 //                        } else {
 //                            bannerContainer.visibility = View.GONE
 //                        }
-                        ivRight.setImageResource(R.drawable.ic_setting)
+                        ivRight.setImageResource(R.drawable.gs_ic_setting)
 //                        mTvTitle.text = getString(R.string.app_name)
                         ivRight.setColorFilter(ResUtils.getColor(R.color.black))
                     }
                     1 -> {
-                        ivRight.setImageResource(R.drawable.ic_setting)
+                        ivRight.setImageResource(R.drawable.gs_ic_setting)
                         topBarContainer.visibility = View.GONE
                         ivRight.setColorFilter(ResUtils.getColor(R.color.black))
 //                        mTvTitle.text = getString(R.string.tab_guide)
                     }
                     2 -> {
-                        ivRight.setImageResource(R.drawable.ic_setting)
+                        ivRight.setImageResource(R.drawable.gs_ic_setting)
                         ivRight.setColorFilter(ResUtils.getColor(R.color.black))
                         topBarContainer.visibility = View.VISIBLE
 //                        bannerContainer.visibility = View.GONE
                     }
                     3 -> {
-                        ivRight.setImageResource(R.drawable.icon_add)
+                        ivRight.setImageResource(R.drawable.gs_icon_add)
                         topBarContainer.visibility = View.VISIBLE
                         ivRight.setColorFilter(ResUtils.getColor(R.color.black))
 //                        bannerContainer.visibility = View.GONE
@@ -179,6 +180,7 @@ class GifMainActivity : BaseMvvmActivity<ActivityGifMainBinding, GifMainViewMode
         val tab = TabModel.getTab(position)
         textView.setText(tab.labelResId)
         imageView.setImageResource(tab.iconResId)
+        imageView.isVisible = false
         return view
     }
 
@@ -230,7 +232,7 @@ class GifMainActivity : BaseMvvmActivity<ActivityGifMainBinding, GifMainViewMode
         checkExit()
     }
 
-    override fun inflate(): ActivityGifMainBinding = ActivityGifMainBinding.inflate(layoutInflater)
+    override fun inflate(): GsActivityGifMainBinding = GsActivityGifMainBinding.inflate(layoutInflater)
 
     override fun init() {
         ViewHelper.setMarginTop(mBinding.topBar, BarUtils.getStatusBarHeight())

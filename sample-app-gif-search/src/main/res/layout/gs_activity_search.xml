@@ -14,7 +14,7 @@
         android:layout_height="100dp"
         android:layout_centerInParent="true"
         android:scaleType="centerInside"
-        android:src="@drawable/retry"
+        android:src="@drawable/gs_retry"
         android:tint="@color/black"
         android:visibility="gone" />
 
@@ -37,7 +37,7 @@
                 android:layout_height="@dimen/default_icon_height"
                 android:layout_centerVertical="true"
                 android:scaleType="center"
-                android:src="@drawable/icon_back" />
+                android:src="@drawable/gs_icon_back" />
 
 
             <LinearLayout
@@ -87,7 +87,7 @@
                     android:layout_marginRight="10dp"
                     android:padding="8dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_delete"
+                    android:src="@drawable/gs_ic_delete"
                     android:tint="@color/gray_66" />
             </LinearLayout>
 

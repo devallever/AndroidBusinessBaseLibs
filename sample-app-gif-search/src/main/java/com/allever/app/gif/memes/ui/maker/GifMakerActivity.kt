@@ -5,13 +5,13 @@ import android.os.Bundle
 import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.mvvm.base.BaseMvvmActivity
 import com.allever.app.gif.memes.R
-import com.allever.app.gif.memes.databinding.ActivityGifMakerBinding
+import com.allever.app.gif.memes.databinding.GsActivityGifMakerBinding
 import com.funny.gif.memes.func.media.MediaBean
 import com.allever.app.gif.memes.ui.maker.model.GifMakerViewModel
 import com.jaygoo.widget.OnRangeChangedListener
 import com.jaygoo.widget.RangeSeekBar
 
-class GifMakerActivity : BaseMvvmActivity<ActivityGifMakerBinding, GifMakerViewModel>() {
+class GifMakerActivity : BaseMvvmActivity<GsActivityGifMakerBinding, GifMakerViewModel>() {
 
     lateinit var mVideoViewHolder: VideoViewHolder
 
@@ -36,7 +36,7 @@ class GifMakerActivity : BaseMvvmActivity<ActivityGifMakerBinding, GifMakerViewM
         mVideoViewHolder.pause()
     }
 
-    override fun inflate(): ActivityGifMakerBinding = ActivityGifMakerBinding.inflate(layoutInflater)
+    override fun inflate(): GsActivityGifMakerBinding = GsActivityGifMakerBinding.inflate(layoutInflater)
 
     override fun init() {
         initObserver()

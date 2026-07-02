@@ -7,7 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.allever.app.gif.memes.R
-import com.allever.app.gif.memes.databinding.FragmentMineBinding
+import com.allever.app.gif.memes.databinding.GsFragmentMineBinding
 import com.funny.gif.memes.event.GifMakeEvent
 import com.funny.gif.memes.func.store.Repository
 import com.allever.app.gif.memes.ui.GifPreviewMineActivity
@@ -28,7 +28,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.io.File
 
-class MineFragment: BaseMvvmFragment<FragmentMineBinding, MineViewModel>(), View.OnClickListener {
+class MineFragment: BaseMvvmFragment<GsFragmentMineBinding, MineViewModel>(), View.OnClickListener {
 
 
     private lateinit var mAdapter: MyGifAdapter
@@ -109,7 +109,7 @@ class MineFragment: BaseMvvmFragment<FragmentMineBinding, MineViewModel>(), View
         getLikedData()
     }
 
-    override fun inflate(): FragmentMineBinding  = FragmentMineBinding.inflate(layoutInflater)
+    override fun inflate(): GsFragmentMineBinding  = GsFragmentMineBinding.inflate(layoutInflater)
 
     override fun init() {
         EventBus.getDefault().register(this)

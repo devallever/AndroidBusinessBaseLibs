@@ -35,7 +35,7 @@ class GifPreviewMineActivity : AbstractActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gif_preview)
+        setContentView(R.layout.gs_activity_gif_preview)
 
         init()
 

@@ -52,10 +52,10 @@ internal object TabModel {
         /**
          *
          */
-        MAIN(TrendFragment::class.java, R.drawable.ic_tab_main, R.string.tab_trend),
-        SEARCH(SearchFragment::class.java, R.drawable.ic_tab_guide, R.string.tab_search),
-        LIKED(LikedFragment::class.java, R.drawable.ic_setting, R.string.tab_liked),
-        MINE(MineFragment::class.java, R.drawable.ic_setting, R.string.mine);
+        MAIN(TrendFragment::class.java, R.drawable.gs_ic_tab_main, R.string.tab_trend),
+        SEARCH(SearchFragment::class.java, R.drawable.gs_ic_tab_guide, R.string.tab_search),
+        LIKED(LikedFragment::class.java, R.drawable.gs_ic_setting, R.string.tab_liked),
+        MINE(MineFragment::class.java, R.drawable.gs_ic_setting, R.string.mine);
 
         val fragmentClassName: String
         var drawable: Drawable? = null

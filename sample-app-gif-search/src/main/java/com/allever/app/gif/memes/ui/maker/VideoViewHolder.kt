@@ -98,7 +98,7 @@ class VideoViewHolder
         mVideoView?.setOnPreparedListener(this)
         mVideoView?.setVideoURI(mUri)
         mIvPlay?.visibility = View.VISIBLE
-        mIvPlay?.setImageResource(R.drawable.icon_album_video_preview_play)
+        mIvPlay?.setImageResource(R.drawable.gs_icon_album_video_preview_play)
         mVideoView?.visibility = View.VISIBLE
 
         mAlphaAnimator = ObjectAnimator.ofFloat(mIvPlay, "alpha", 1f, 0f)
@@ -138,7 +138,7 @@ class VideoViewHolder
     fun pause() {
         mVideoView?.pause()
         mIvPlay?.visibility = View.VISIBLE
-        mIvPlay?.setImageResource(R.drawable.icon_album_video_preview_play)
+        mIvPlay?.setImageResource(R.drawable.gs_icon_album_video_preview_play)
         mIvPlay?.alpha = ALPHA_VALUE_OPAQUE
         mAlphaAnimator?.cancel()
         mHandler.removeMessages(MSG_PLAY_PROGRESS)
@@ -168,7 +168,7 @@ class VideoViewHolder
                     mVideoView?.start()
                     mVideoView?.visibility = View.VISIBLE
 //                    mIvPlay?.visibility = View.GONE
-                    mIvPlay?.setImageResource(R.drawable.icon_album_video_preview_pause)
+                    mIvPlay?.setImageResource(R.drawable.gs_icon_album_video_preview_pause)
                     mAlphaAnimator?.start()
                     mHandler.sendEmptyMessageDelayed(MSG_PLAY_PROGRESS, MSG_PLAY_PROGRESS_DELAY)
                 } else {
@@ -198,7 +198,7 @@ class VideoViewHolder
     override fun onCompletion(mp: MediaPlayer?) {
         mVideoView?.seekTo(mStartPlayPosition)
         mIvPlay?.visibility = View.VISIBLE
-        mIvPlay?.setImageResource(R.drawable.icon_album_video_preview_play)
+        mIvPlay?.setImageResource(R.drawable.gs_icon_album_video_preview_play)
         mAlphaAnimator?.cancel()
         mIvPlay?.alpha = ALPHA_VALUE_OPAQUE
     }

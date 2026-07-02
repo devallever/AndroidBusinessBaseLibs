@@ -3,15 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvLiked"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/rlBottomToolBar"
-        android:layout_marginTop="?actionBarSize"/>
+        android:layout_marginTop="?actionBarSize" />
 
 
     <RelativeLayout
@@ -19,17 +18,17 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/word_item_bottom_background"
+        android:background="@color/gs_word_item_bottom_background"
         android:visibility="visible">
 
         <CheckBox
             android:id="@+id/cbBottomBarCheckAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:button="@drawable/checkbox_style"
             android:layout_centerVertical="true"
-            android:padding="10dp"
-            android:layout_marginStart="20dp"/>
+            android:layout_marginStart="20dp"
+            android:button="@drawable/checkbox_style"
+            android:padding="10dp" />
 
         <ImageView
             android:id="@+id/ivBottomBarBack"
@@ -38,8 +37,7 @@
             android:layout_toStartOf="@+id/ivBottomBarDelete"
             android:layout_toLeftOf="@+id/ivBottomBarDelete"
             android:scaleType="centerInside"
-            android:src="@drawable/icon_bottom_bar_back"
-            />
+            android:src="@drawable/gs_icon_bottom_bar_back" />
 
         <ImageView
             android:id="@+id/ivBottomBarDelete"
@@ -50,7 +48,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:scaleType="centerInside"
-            android:src="@drawable/icon_bottom_bar_delete"
+            android:src="@drawable/gs_icon_bottom_bar_delete"
             tools:tint="@color/white" />
 
     </RelativeLayout>

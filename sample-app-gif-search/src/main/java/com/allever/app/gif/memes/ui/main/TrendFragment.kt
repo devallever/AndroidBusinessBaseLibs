@@ -10,7 +10,7 @@ import com.funny.gif.memes.app.Global
 import com.funny.gif.memes.bean.event.DownloadFinishEvent
 import com.funny.gif.memes.bean.event.LikeEvent
 import com.funny.gif.memes.bean.event.RemoveLikeListEvent
-import com.allever.app.gif.memes.databinding.FragmentTrendBinding
+import com.allever.app.gif.memes.databinding.GsFragmentTrendBinding
 import com.funny.gif.memes.func.store.Repository
 import com.funny.gif.memes.func.store.Store
 import com.funny.gif.memes.func.store.Version
@@ -28,7 +28,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class TrendFragment : BaseMvvmFragment<FragmentTrendBinding, TrendViewModel>(){
+class TrendFragment : BaseMvvmFragment<GsFragmentTrendBinding, TrendViewModel>(){
 
     private lateinit var mProgressDialog: ProgressDialog
     private lateinit var recyclerViewScrollListener: RecyclerViewScrollListener
@@ -128,7 +128,7 @@ class TrendFragment : BaseMvvmFragment<FragmentTrendBinding, TrendViewModel>(){
         }
     }
 
-    override fun inflate(): FragmentTrendBinding = FragmentTrendBinding.inflate(layoutInflater)
+    override fun inflate(): GsFragmentTrendBinding = GsFragmentTrendBinding.inflate(layoutInflater)
 
     override fun init() {
 

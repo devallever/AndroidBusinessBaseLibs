@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import app.allever.android.lib.core.app.App
 import com.allever.app.gif.memes.R
 import com.funny.gif.memes.app.Global
-import com.allever.app.gif.memes.databinding.ActivitySearchBinding
+import com.allever.app.gif.memes.databinding.GsActivitySearchBinding
 import com.funny.gif.memes.func.download.DownloadManager
 import com.funny.gif.memes.func.store.Repository
 import com.funny.gif.memes.func.store.Store
@@ -35,7 +35,7 @@ import app.allever.android.lib.mvvm.base.BaseMvvmActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SearchActivity : BaseMvvmActivity<ActivitySearchBinding, SearchViewModel>() {
+class SearchActivity : BaseMvvmActivity<GsActivitySearchBinding, SearchViewModel>() {
 
     private var mAdapter: GifAdapter? = null
     private lateinit var mProgressDialog: ProgressDialog
@@ -151,7 +151,7 @@ class SearchActivity : BaseMvvmActivity<ActivitySearchBinding, SearchViewModel>(
         }
     }
 
-    override fun inflate(): ActivitySearchBinding = ActivitySearchBinding.inflate(layoutInflater)
+    override fun inflate(): GsActivitySearchBinding = GsActivitySearchBinding.inflate(layoutInflater)
 
     override fun init() {
         ViewHelper.setMarginTop(mBinding.topBar, BarUtils.getStatusBarHeight())
