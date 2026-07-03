@@ -4,19 +4,20 @@ package com.allever.daymatter.mvp;
 import android.app.Activity;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import app.allever.android.lib.core.base.AbstractFragment;
+
 
 /**
  * Created by Mac on 18/3/1.
  */
 
-public abstract class BaseFragment<V, T extends BasePresenter<V>> extends Fragment {
+public abstract class BaseFragment<V, T extends BasePresenter<V>> extends AbstractFragment {
 
     protected T mPresenter;
 

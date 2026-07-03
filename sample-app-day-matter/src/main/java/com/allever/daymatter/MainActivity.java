@@ -1,9 +1,11 @@
 package com.allever.daymatter;
 
+import android.annotation.SuppressLint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Process;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
@@ -12,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.TextView;
 
-import com.allever.daymatter.ad.AdConstants;
 import com.allever.daymatter.event.Event;
 import com.allever.daymatter.event.SortEvent;
 import com.allever.daymatter.ui.DateCalcFragment;
@@ -21,7 +22,6 @@ import com.allever.daymatter.ui.SettingFragment;
 import com.allever.daymatter.ui.SortFragment;
 import com.allever.daymatter.ui.TabModel;
 import com.allever.daymatter.ui.adapter.ViewPagerAdapter;
-import com.allever.daymatter.bean.ItemSlidMenuSort;
 import com.allever.daymatter.event.EventDayMatter;
 import com.allever.daymatter.mvp.BaseActivity;
 import com.allever.daymatter.mvp.presenter.MainActivityPresenter;
@@ -29,32 +29,21 @@ import com.allever.daymatter.mvp.view.IMainActivityView;
 import com.allever.daymatter.ui.widget.tab.TabLayout;
 import com.allever.daymatter.utils.Constants;
 import com.allever.daymatter.utils.DisplayUtil;
-import com.allever.lib.ad.chain.AdChainHelper;
-import com.allever.lib.ad.chain.AdChainListener;
-import com.allever.lib.ad.chain.IAd;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class MainActivity extends
         BaseActivity<IMainActivityView,
                 MainActivityPresenter>
         implements IMainActivityView, TabLayout.OnTabSelectedListener {
 
-    @BindView(R.id.id_main_vp)
     ViewPager mVp;
-    @BindView(R.id.tab_layout)
     TabLayout mTab;
-    @BindView(R.id.tv_label)
     TextView mTvTitle;
 
 
@@ -65,16 +54,15 @@ public class MainActivity extends
     private int mainTabHighlight = 0;
     private int mainTabUnselectColor = 0;
 
-    private IAd mInsertAd;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.dm_activity_main);
+        adaptStatusBar(findViewById(R.id.top_bar));
+
+        findView();
 
         EventBus.getDefault().register(this);
-
-        ButterKnife.bind(this);
 
         findViewById(R.id.iv_back).setVisibility(View.GONE);
         mPresenter.updateTitle();
@@ -87,16 +75,24 @@ public class MainActivity extends
 
         initView();
 
-        loadInsertAd();
+        getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                checkExit();
+            }
+        });
+    }
+
+    private void findView() {
+        mVp = findViewById(R.id.id_main_vp);
+        mTab = findViewById(R.id.tab_layout);
+        mTvTitle = findViewById(R.id.tv_label);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        if (mInsertAd != null) {
-            mInsertAd.destroy();
-        }
     }
 
     @Override
@@ -130,13 +126,13 @@ public class MainActivity extends
                         mPresenter.updateTitle();
                         break;
                     case 1:
-                        mTvTitle.setText(getString(R.string.sort));
+                        mTvTitle.setText(getString(R.string.dm_sort));
                         break;
                     case 2:
-                        mTvTitle.setText(getString(R.string.calc));
+                        mTvTitle.setText(getString(R.string.dm_calc));
                         break;
                     case 3:
-                        mTvTitle.setText(getString(R.string.setting));
+                        mTvTitle.setText(getString(R.string.dm_setting));
                         break;
                     default:
                         break;
@@ -148,8 +144,8 @@ public class MainActivity extends
             }
         });
 
-        mainTabHighlight = getResources().getColor(R.color.main_tab_highlight);
-        mainTabUnselectColor = getResources().getColor(R.color.main_tab_unselect_color);
+        mainTabHighlight = getResources().getColor(R.color.dm_main_tab_highlight);
+        mainTabUnselectColor = getResources().getColor(R.color.dm_main_tab_unselect_color);
 
 
         //tab
@@ -174,8 +170,8 @@ public class MainActivity extends
             tab.setText(labelId);
             ImageView imageView = tab.getCustomView().findViewById(R.id.icon);
             imageView.setColorFilter(null);
-            TextView textView = tab.getCustomView().findViewById(R.id.text1);
-            textView.setTextColor(mTab.getTabTextColors());
+//            TextView textView = tab.getCustomView().findViewById(R.id.text1);
+//            textView.setTextColor(mTab.getTabTextColors());
             mTab.addTab(tab);
         }
 
@@ -222,16 +218,10 @@ public class MainActivity extends
 
     private long mPrevClickBackTime = -1;
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
-        if (mIsAdLoaded) {
-            if (mInsertAd != null) {
-                mInsertAd.show();
-                mIsAdLoaded = false;
-            }
-        } else {
-            checkExit();
-        }
+        checkExit();
     }
 
 
@@ -279,54 +269,12 @@ public class MainActivity extends
     }
 
     private View getTabView(int position) {
-        View view = LayoutInflater.from(this).inflate(R.layout.layout_bottom_tab, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.dm_layout_bottom_tab, null);
         ImageView imageView = view.findViewById(R.id.icon);
         TextView textView = view.findViewById(R.id.text1);
         TabModel.Tab tab = TabModel.INSTANCE.getTab(position);
         textView.setText(tab.getLabelResId());
         imageView.setImageResource(tab.getIconResId());
         return view;
-    }
-
-    private boolean mIsAdLoaded = false;
-    private void loadInsertAd() {
-        AdChainHelper.INSTANCE.loadAd(AdConstants.INSTANCE.getAD_NAME_INSERT(), null, new AdChainListener() {
-            @Override
-            public void onLoaded(@Nullable IAd ad) {
-                mInsertAd = ad;
-                mIsAdLoaded = true;
-            }
-
-            @Override
-            public void onClick() {
-
-            }
-
-            @Override
-            public void onStimulateSuccess() {
-
-            }
-
-            @Override
-            public void playEnd() {
-
-            }
-
-
-            @Override
-            public void onFailed(@NotNull String msg) {
-
-            }
-
-            @Override
-            public void onShowed() {
-
-            }
-
-            @Override
-            public void onDismiss() {
-
-            }
-        });
     }
 }

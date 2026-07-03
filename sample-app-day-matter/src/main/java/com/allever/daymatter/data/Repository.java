@@ -5,18 +5,11 @@ import android.util.Log;
 
 import com.allever.daymatter.R;
 import com.allever.daymatter.bean.ItemSlidMenuSort;
-
-import org.litepal.crud.DataSupport;
-
+import org.litepal.LitePal;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import app.allever.android.lib.core.app.App;
+import app.allever.android.lib.core.helper.ExecutorHelper;
 
 /**
  * Created by Allever on 18/5/26.
@@ -46,19 +39,19 @@ public class Repository implements DataSource {
         Log.d(TAG, "addDefaultSortData: ");
         Event.Sort sortLife = new Event.Sort();
         sortLife.setId(1);
-        sortLife.setName(context.getResources().getString(R.string.sort_life));
+        sortLife.setName(context.getResources().getString(R.string.dm_sort_life));
         sortLife.setDefaultSort(true);
         sortLife.save();
 
         Event.Sort sortWork = new Event.Sort();
         sortWork.setId(2);
-        sortWork.setName(context.getResources().getString(R.string.sort_work));
+        sortWork.setName(context.getResources().getString(R.string.dm_sort_work));
         sortWork.setDefaultSort(true);
         sortWork.save();
 
         Event.Sort sortMemoryDay = new Event.Sort();
         sortMemoryDay.setId(3);
-        sortMemoryDay.setName(context.getResources().getString(R.string.sort_memory_day));
+        sortMemoryDay.setName(context.getResources().getString(R.string.dm_sort_memory_day));
         sortMemoryDay.setDefaultSort(true);
         sortMemoryDay.save();
 
@@ -70,13 +63,13 @@ public class Repository implements DataSource {
 
         //第一项为全部
         ItemSlidMenuSort firstItemSlidMenuSort = new ItemSlidMenuSort();
-        firstItemSlidMenuSort.setCount(DataSupport.findAll(Event.class).size());
-        firstItemSlidMenuSort.setName(context.getString(R.string.all));
+        firstItemSlidMenuSort.setCount(LitePal.findAll(Event.class).size());
+        firstItemSlidMenuSort.setName(context.getString(R.string.dm_all));
         firstItemSlidMenuSort.setId(0);
         list.add(firstItemSlidMenuSort);
 
         //查询分类数
-        List<Event.Sort> sortList = DataSupport.findAll(Event.Sort.class);
+        List<Event.Sort> sortList = LitePal.findAll(Event.Sort.class);
         Log.d(TAG, "getSlidMenuSortData: sort size = " + sortList.size());
 
         for (Event.Sort sort: sortList){
@@ -86,7 +79,7 @@ public class Repository implements DataSource {
             Log.d(TAG, "getSlidMenuSortData: id = " + sort.getId());
 
             //查询该id的事件数
-            List<Event> eventList = DataSupport.where("sortId = " + sort.getId()).find(Event.class);
+            List<Event> eventList = LitePal.where("sortId = " + sort.getId()).find(Event.class);
             if (eventList != null){
                 itemSlidMenuSort.setCount(eventList.size());
             }else {
@@ -120,7 +113,7 @@ public class Repository implements DataSource {
 
     @Override
     public boolean updateEvent(int eventId, String eventTitle, int year, int month, int day, int weekday, int sortId, boolean isTop, int repeatType, boolean isEnd, int endYear, int endMonth, int endDay, int endWeekday) {
-        Event event = DataSupport.find(Event.class, eventId);
+        Event event = LitePal.find(Event.class, eventId);
         if (event == null){
             return false;
         }
@@ -145,90 +138,46 @@ public class Repository implements DataSource {
 
     @Override
     public List<Event> getSortEventList(int sortId) {
-        List<Event> list = DataSupport.where("sortId = " + sortId).find(Event.class);
+        List<Event> list = LitePal.where("sortId = " + sortId).find(Event.class);
         return list;
     }
 
     @Override
     public void getSortEventList(final int sortId, final DataListener<List<Event>> dataListener) {
         final List<Event> list = new ArrayList<>();
-        Observable.create(new ObservableOnSubscribe<Object>() {
+        ExecutorHelper.INSTANCE.getCacheExecutor().execute(new Runnable() {
             @Override
-            public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
-                List<Event> eventList = DataSupport.where("sortId = " + sortId).find(Event.class);
+            public void run() {
+                List<Event> eventList = LitePal.where("sortId = " + sortId).find(Event.class);
                 list.addAll(eventList);
-                emitter.onComplete();
+
+                App.mainHandler.post(() -> dataListener.onSuccess(list));
             }
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io())
-                .subscribe(new Observer<Object>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        dataListener.onFail(e.toString());
-                    }
-
-                    @Override
-                    public void onNext(Object o) {
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        dataListener.onSuccess(list);
-                    }
-                });
+        });
     }
 
     @Override
     public List<Event> getAllEventList() {
-        List<Event> list = DataSupport.findAll(Event.class);
+        List<Event> list = LitePal.findAll(Event.class);
         return list;
     }
 
     @Override
     public void getAllEventList(final DataListener<List<Event>> dataListener) {
         final List<Event> list = new ArrayList<>();
-        Observable.create(new ObservableOnSubscribe<Object>() {
-            @Override
-            public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
-                List<Event> eventList = DataSupport.findAll(Event.class);
-                list.addAll(eventList);
-                emitter.onComplete();
-            }
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io())
-                .subscribe(new Observer<Object>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        dataListener.onFail(e.toString());
-                    }
+        ExecutorHelper.INSTANCE.getCacheExecutor().execute(() -> {
+            List<Event> eventList = LitePal.findAll(Event.class);
+            list.addAll(eventList);
 
-                    @Override
-                    public void onNext(Object o) {
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        dataListener.onSuccess(list);
-                    }
-                });
+            App.mainHandler.post(() -> dataListener.onSuccess(list));
+        });
     }
 
     @Override
     public String getSortName(int sortId) {
         String sortName = "";
-        Event.Sort sort = DataSupport.find(Event.Sort.class, sortId);
+        Event.Sort sort = LitePal.find(Event.Sort.class, sortId);
         if (sort != null){
             sortName = sort.getName();
         }
@@ -237,13 +186,13 @@ public class Repository implements DataSource {
 
     @Override
     public Event getEvent(int eventId) {
-        Event event = DataSupport.find(Event.class, eventId);
+        Event event = LitePal.find(Event.class, eventId);
         return event;
     }
 
     @Override
     public boolean deleteEvent(int eventId) {
-        Event event = DataSupport.find(Event.class, eventId);
+        Event event = LitePal.find(Event.class, eventId);
         if (event == null){
             return true;
         }
@@ -271,18 +220,18 @@ public class Repository implements DataSource {
 
     @Override
     public Config getRemindConfigData() {
-        Config config = DataSupport.find(Config.class, 1);
+        Config config = LitePal.find(Config.class, 1);
         if (config == null){
             addDefaultConfig();
         }
-        config = DataSupport.find(Config.class, 1);
+        config = LitePal.find(Config.class, 1);
         return config;
     }
 
     @Override
     public void updateCurrentRemindSwitch(boolean value) {
         Log.d(TAG, "updateCurrentRemindSwitch: " + value);
-        Config config = DataSupport.find(Config.class, 1);
+        Config config = LitePal.find(Config.class, 1);
         if (value){
             config.setCurrentDayRemind(1);
         }else {
@@ -296,7 +245,7 @@ public class Repository implements DataSource {
     @Override
     public void updateBeforeRemindSwitch(boolean value) {
         Log.d(TAG, "updateBeforeRemindSwitch: " + value);
-        Config config = DataSupport.find(Config.class, 1);
+        Config config = LitePal.find(Config.class, 1);
         if (value){
             config.setBeforeDayRemind(1);
         }else {
@@ -308,7 +257,7 @@ public class Repository implements DataSource {
 
     @Override
     public void updateCurrentRemindTime(int hour, int min) {
-        Config config = DataSupport.find(Config.class, 1);
+        Config config = LitePal.find(Config.class, 1);
         config.setCurrentRemindHour(hour);
         config.setCurrentRemindMin(min);
         boolean result = config.saveOrUpdate("id = " + config.getId());
@@ -317,7 +266,7 @@ public class Repository implements DataSource {
 
     @Override
     public void updateBeforeRemindTiem(int hour, int min) {
-        Config config = DataSupport.find(Config.class, 1);
+        Config config = LitePal.find(Config.class, 1);
         config.setBeforeRemindHour(hour);
         config.setBeforeRemindMin(min);
         boolean result = config.saveOrUpdate("id = " + config.getId());
@@ -326,7 +275,7 @@ public class Repository implements DataSource {
 
     @Override
     public List<Event> getEventListByDate(int year, int month, int day) {
-        List<Event> eventList = DataSupport.where("year = ? and month = ? and day = ?",
+        List<Event> eventList = LitePal.where("year = ? and month = ? and day = ?",
                 String.valueOf(year),
                 String.valueOf(month),
                 String.valueOf(day)
@@ -337,40 +286,25 @@ public class Repository implements DataSource {
     @Override
     public void getEventListByDate(final int year, final int month, final int day, final DataListener<List<Event>> dataListener) {
         final List<Event> list = new ArrayList<>();
-        Observable.create(new ObservableOnSubscribe<Object>() {
+        ExecutorHelper.INSTANCE.getCacheExecutor().execute(new Runnable() {
             @Override
-            public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
-                List<Event> eventList = DataSupport.where("year = ? and month = ? and day = ?",
+            public void run() {
+                List<Event> eventList = LitePal.where("year = ? and month = ? and day = ?",
                         String.valueOf(year),
                         String.valueOf(month),
                         String.valueOf(day)
                 ).find(Event.class);
                 list.addAll(eventList);
-                emitter.onComplete();
-            }
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io())
-                .subscribe(new Observer<Object>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
 
+                App.mainHandler.post(new Runnable() {
                     @Override
-                    public void onError(Throwable e) {
-                        dataListener.onFail(e.toString());
-                    }
-
-                    @Override
-                    public void onNext(Object o) {
-                    }
-
-                    @Override
-                    public void onComplete() {
+                    public void run() {
                         dataListener.onSuccess(list);
                     }
                 });
+
+            }
+        });
     }
 
     @Override
@@ -392,18 +326,18 @@ public class Repository implements DataSource {
         //异步调用
         final List<ItemSlidMenuSort> list = new ArrayList<>();
 
-        Observable.create(new ObservableOnSubscribe<Object>() {
+        ExecutorHelper.INSTANCE.getCacheExecutor().execute(new Runnable() {
             @Override
-            public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
+            public void run() {
                 //第一项为全部
                 ItemSlidMenuSort firstItemSlidMenuSort = new ItemSlidMenuSort();
-                firstItemSlidMenuSort.setCount(DataSupport.findAll(Event.class).size());
-                firstItemSlidMenuSort.setName(context.getString(R.string.all));
+                firstItemSlidMenuSort.setCount(LitePal.findAll(Event.class).size());
+                firstItemSlidMenuSort.setName(context.getString(R.string.dm_all));
                 firstItemSlidMenuSort.setId(0);
                 list.add(firstItemSlidMenuSort);
 
                 //查询分类数
-                List<Event.Sort> sortList = DataSupport.findAll(Event.Sort.class);
+                List<Event.Sort> sortList = LitePal.findAll(Event.Sort.class);
                 Log.d(TAG, "getSlidMenuSortData: sort size = " + sortList.size());
 
                 for (Event.Sort sort: sortList){
@@ -413,7 +347,7 @@ public class Repository implements DataSource {
                     Log.d(TAG, "getSlidMenuSortData: id = " + sort.getId());
 
                     //查询该id的事件数
-                    List<Event> eventList = DataSupport.where("sortId = " + sort.getId()).find(Event.class);
+                    List<Event> eventList = LitePal.where("sortId = " + sort.getId()).find(Event.class);
                     if (eventList != null){
                         itemSlidMenuSort.setCount(eventList.size());
                     }else {
@@ -422,32 +356,14 @@ public class Repository implements DataSource {
                     list.add(itemSlidMenuSort);
                 }
 
-                emitter.onComplete();
-            }
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io())
-                .subscribe(new Observer<Object>() {
+                App.mainHandler.post(new Runnable() {
                     @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        dataListener.onFail(e.toString());
-                    }
-
-                    @Override
-                    public void onNext(Object o) {
-                    }
-
-                    @Override
-                    public void onComplete() {
+                    public void run() {
                         dataListener.onSuccess(list);
                     }
                 });
-
+            }
+        });
     }
 
     @Override
@@ -459,38 +375,22 @@ public class Repository implements DataSource {
         //异步调用
         final List<Event.Sort> list = new ArrayList<>();
 
-        Observable.create(new ObservableOnSubscribe<Object>() {
+        ExecutorHelper.INSTANCE.getCacheExecutor().execute(new Runnable() {
             @Override
-            public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
+            public void run() {
                 //查询分类数
-                List<Event.Sort> sortList = DataSupport.findAll(Event.Sort.class);
+                List<Event.Sort> sortList = LitePal.findAll(Event.Sort.class);
                 Log.d(TAG, "getSortData: sort size = " + sortList.size());
                 list.addAll(sortList);
-                emitter.onComplete();
-            }
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io())
-                .subscribe(new Observer<Object>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
 
+                App.mainHandler.post(new Runnable() {
                     @Override
-                    public void onError(Throwable e) {
-                        dataListener.onFail(e.toString());
-                    }
-
-                    @Override
-                    public void onNext(Object o) {
-                    }
-
-                    @Override
-                    public void onComplete() {
+                    public void run() {
                         dataListener.onSuccess(list);
                     }
                 });
+            }
+        });
     }
 
     @Override
@@ -504,46 +404,13 @@ public class Repository implements DataSource {
 
     @Override
     public void modifySort(int id, String name) {
-        Event.Sort sort = DataSupport.find(Event.Sort.class, id);
+        Event.Sort sort = LitePal.find(Event.Sort.class, id);
         sort.setName(name);
         sort.update(id);
     }
 
     @Override
     public void deleteSort(int id) {
-        DataSupport.delete(Event.Sort.class, id);
+        LitePal.delete(Event.Sort.class, id);
     }
-
-    /***
-     *
-    Observable.create(new ObservableOnSubscribe<Object>() {
-        @Override
-        public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
-
-            emitter.onComplete();
-        }
-    })
-            .subscribeOn(Schedulers.io())
-            .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-            .unsubscribeOn(Schedulers.io())
-            .subscribe(new Observer<Object>() {
-        @Override
-        public void onSubscribe(Disposable d) {
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            dataListener.onFail(e.toString());
-        }
-
-        @Override
-        public void onNext(Object o) {
-        }
-
-        @Override
-        public void onComplete() {
-            dataListener.onSuccess(list);
-        }
-    });
-    */
 }

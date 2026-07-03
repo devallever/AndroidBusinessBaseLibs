@@ -27,53 +27,33 @@ import com.allever.daymatter.mvp.presenter.ModifyDayMatterPresenter;
 import com.allever.daymatter.mvp.view.IModifyDayMatterView;
 import com.allever.daymatter.utils.Constants;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Allever on 18/5/22.
  */
 
-public class ModifyDayMatterActivity extends BaseActivity<IModifyDayMatterView, ModifyDayMatterPresenter> implements IModifyDayMatterView {
+public class ModifyDayMatterActivity extends BaseActivity<IModifyDayMatterView, ModifyDayMatterPresenter> implements IModifyDayMatterView, View.OnClickListener {
 
     private static final String TAG = "ModifyDayMatterActivity";
 
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
 
-    @BindView(R.id.id_toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.id_modify_day_matter_btn_delete)
     Button mBtnDelete;
-    @BindView(R.id.id_modify_day_matter_btn_save)
     Button mBtnSave;
-    @BindView(R.id.id_input_et_title)
     EditText mEtEventTitle;
-    @BindView(R.id.id_input_tv_date)
     TextView mTvDate;
-    @BindView(R.id.id_input_tv_sort)
     TextView mTvSort;
-    @BindView(R.id.id_input_tv_sort_selector)
     TextView mTvSortSelector;
-    @BindView(R.id.id_input_tv_is_top)
     TextView mTvIsTop;
-    @BindView(R.id.id_input_switch_is_top)
     SwitchCompat mSwitchIsTop;
-    @BindView(R.id.id_input_tv_repeat)
     TextView mTvRepeat;
-    @BindView(R.id.id_input_tv_repeat_selector)
     TextView mTvRepeatSelector;
-    @BindView(R.id.id_input_tv_is_end_date)
     TextView mTvIsEndDate;
-    @BindView(R.id.id_input_switch_end_date)
     SwitchCompat mSwitchEndDate;
-    @BindView(R.id.id_input_tv_end_date)
     TextView mTvEndDate;
-    @BindView(R.id.id_modify_day_matter_ll_root)
     LinearLayout mLlRoot;
-    @BindView(R.id.id_input_rl_end_date_switch_container)
     RelativeLayout mRlEndDateSwitchContainer;
-    @BindView(R.id.id_input_rl_end_date_container)
     RelativeLayout mRlEndDateContainer;
 
     private RepeatTypeDialog mRepeatDialog;
@@ -87,16 +67,43 @@ public class ModifyDayMatterActivity extends BaseActivity<IModifyDayMatterView, 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modify_day_matter);
+        setContentView(R.layout.dm_activity_modify_day_matter);
 
-        ButterKnife.bind(this);
+        mToolbar = findViewById(R.id.id_toolbar);
+        mBtnDelete = findViewById(R.id.id_modify_day_matter_btn_delete);
+        mBtnSave = findViewById(R.id.id_modify_day_matter_btn_save);
+        mEtEventTitle = findViewById(R.id.id_input_et_title);
+        mTvDate = findViewById(R.id.id_input_tv_date);
+        mTvSort = findViewById(R.id.id_input_tv_sort);
+        mTvSortSelector = findViewById(R.id.id_input_tv_sort_selector);
+        mTvIsTop = findViewById(R.id.id_input_tv_is_top);
+        mSwitchIsTop = findViewById(R.id.id_input_switch_is_top);
+        mTvRepeat = findViewById(R.id.id_input_tv_repeat);
+        mTvRepeatSelector = findViewById(R.id.id_input_tv_repeat_selector);
+        mTvIsEndDate = findViewById(R.id.id_input_tv_is_end_date);
+        mSwitchEndDate = findViewById(R.id.id_input_switch_end_date);
+        mTvEndDate = findViewById(R.id.id_input_tv_end_date);
+        mLlRoot = findViewById(R.id.id_modify_day_matter_ll_root);
+        mRlEndDateSwitchContainer = findViewById(R.id.id_input_rl_end_date_switch_container);
+        mRlEndDateContainer = findViewById(R.id.id_input_rl_end_date_container);
+
+        adaptStatusBar(mToolbar);
+
+        mBtnDelete.setOnClickListener(this);
+        mBtnSave.setOnClickListener(this);
+        mTvDate.setOnClickListener(this);
+        mTvSort.setOnClickListener(this);
+        mTvIsTop.setOnClickListener(this);
+        mTvRepeat.setOnClickListener(this);
+        mTvIsEndDate.setOnClickListener(this);
+        mTvEndDate.setOnClickListener(this);
 
         mEventId = getIntent().getIntExtra(EXTRA_EVENT_ID,0);
         if (mEventId == 0){
             return;
         }
 
-        initToolbar(mToolbar, R.string.modify_day_matter);
+        initToolbar(mToolbar, R.string.dm_modify_day_matter);
 
         initDialog();
 
@@ -123,7 +130,7 @@ public class ModifyDayMatterActivity extends BaseActivity<IModifyDayMatterView, 
 
     private void initDialog() {
         mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage(getResources().getString(R.string.saving));
+        mProgressDialog.setMessage(getResources().getString(R.string.dm_saving));
 
         /**
          * 重复类型对话框
@@ -140,28 +147,28 @@ public class ModifyDayMatterActivity extends BaseActivity<IModifyDayMatterView, 
                 Log.d(TAG, "onItemClick: repeat" + repeatType);
                 switch (repeatType) {
                     case Constants.REPEAT_TYPE_NO_REPEAT:
-                        setTvRepeatType(getString(R.string.no_repeat));
+                        setTvRepeatType(getString(R.string.dm_no_repeat));
 
                         //结束日期可见
                         setEndDateSwitchVisible();
                         mPresenter.setmEndDateSwitch(mSwitchEndDate.isChecked());
                         break;
                     case Constants.REPEAT_TYPE_PER_WEEK:
-                        setTvRepeatType(getString(R.string.per_week_repeat));
+                        setTvRepeatType(getString(R.string.dm_per_week_repeat));
 
                         //结束日期可见
                         setEndDateSwitchGone();
                         setEndDateItemGone();
                         break;
                     case Constants.REPEAT_TYPE_PER_MONTH:
-                        setTvRepeatType(getString(R.string.per_month_repeat));
+                        setTvRepeatType(getString(R.string.dm_per_month_repeat));
 
                         //结束日期可见
                         setEndDateSwitchGone();
                         setEndDateItemGone();
                         break;
                     case Constants.REPEAT_TYPE_PER_YEAR:
-                        setTvRepeatType(getString(R.string.per_year_repeat));
+                        setTvRepeatType(getString(R.string.dm_per_year_repeat));
 
                         //结束日期可见
                         setEndDateSwitchGone();
@@ -201,73 +208,6 @@ public class ModifyDayMatterActivity extends BaseActivity<IModifyDayMatterView, 
         return new ModifyDayMatterPresenter();
     }
 
-    @OnClick({R.id.id_modify_day_matter_btn_delete,
-            R.id.id_modify_day_matter_btn_save,
-            R.id.id_input_tv_date,
-            R.id.id_input_tv_sort,
-            R.id.id_input_tv_is_top,
-            R.id.id_input_tv_repeat,
-            R.id.id_input_tv_is_end_date,
-            R.id.id_input_tv_end_date})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-
-            //日期
-            case R.id.id_input_tv_date:
-                //弹出日历选择器
-                mPresenter.openDatePicker(this);
-                break;
-
-            //分类
-            case R.id.id_input_tv_sort:
-                //打开选择分类界面
-                mSortDialog.show(getSupportFragmentManager(),TAG);
-                break;
-
-            //置顶项
-            case R.id.id_input_tv_is_top:
-                mSwitchIsTop.setChecked(!mSwitchIsTop.isChecked());
-                break;
-
-            //重复
-            case R.id.id_input_tv_repeat:
-                //打开重复类型对话框
-                showRepeatTypeDialog();
-                break;
-
-            //结束时间项
-            case R.id.id_input_tv_is_end_date:
-                mSwitchEndDate.setChecked(!mSwitchEndDate.isChecked());
-                break;
-
-            //选择结束时间
-            case R.id.id_input_tv_end_date:
-                //如果结束开关为打开状态,则打开日历选择器
-                if (mSwitchEndDate.isChecked()) {
-                    mPresenter.openEndDatePicker(this);
-                } else {
-                    showToast(getResources().getString(R.string.please_open_end_date_switch));
-                }
-                break;
-
-            case R.id.id_modify_day_matter_btn_delete:
-                mPresenter.deleteDayMatter(mEventId);
-                break;
-            case R.id.id_modify_day_matter_btn_save:
-                mEventTitle = mEtEventTitle.getText().toString();
-                //如果标题不为空，则保存事件
-                if (!TextUtils.isEmpty(mEventTitle)) {
-                    //打开progressDialog
-                    mPresenter.updateEvent(mEventId, mEventTitle);
-
-                } else {
-                    showToast(getResources().getString(R.string.please_input_event_title));
-                }
-                break;
-            default:
-                break;
-        }
-    }
 
     public static void startSelf(Context context, int eventId){
         Intent intent = new Intent(context, ModifyDayMatterActivity.class);
@@ -358,5 +298,48 @@ public class ModifyDayMatterActivity extends BaseActivity<IModifyDayMatterView, 
     @Override
     public void setEtTetle(String title) {
         mEtEventTitle.setText(title);
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();//日期
+        if (id == R.id.id_input_tv_date) {//弹出日历选择器
+            mPresenter.openDatePicker(this);
+
+            //分类
+        } else if (id == R.id.id_input_tv_sort) {//打开选择分类界面
+            mSortDialog.show(getSupportFragmentManager(), TAG);
+
+            //置顶项
+        } else if (id == R.id.id_input_tv_is_top) {
+            mSwitchIsTop.setChecked(!mSwitchIsTop.isChecked());
+
+            //重复
+        } else if (id == R.id.id_input_tv_repeat) {//打开重复类型对话框
+            showRepeatTypeDialog();
+
+            //结束时间项
+        } else if (id == R.id.id_input_tv_is_end_date) {
+            mSwitchEndDate.setChecked(!mSwitchEndDate.isChecked());
+
+            //选择结束时间
+        } else if (id == R.id.id_input_tv_end_date) {//如果结束开关为打开状态,则打开日历选择器
+            if (mSwitchEndDate.isChecked()) {
+                mPresenter.openEndDatePicker(this);
+            } else {
+                showToast(getResources().getString(R.string.dm_please_open_end_date_switch));
+            }
+        } else if (id == R.id.id_modify_day_matter_btn_delete) {
+            mPresenter.deleteDayMatter(mEventId);
+        } else if (id == R.id.id_modify_day_matter_btn_save) {
+            mEventTitle = mEtEventTitle.getText().toString();
+            //如果标题不为空，则保存事件
+            if (!TextUtils.isEmpty(mEventTitle)) {
+                //打开progressDialog
+                mPresenter.updateEvent(mEventId, mEventTitle);
+            } else {
+                showToast(getResources().getString(R.string.dm_please_input_event_title));
+            }
+        }
     }
 }

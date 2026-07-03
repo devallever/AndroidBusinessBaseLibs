@@ -41,5 +41,8 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextDetailClickItem("虚拟来电", "sample-app-virtual-call") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_VIRTUAL_CALL).navigation()
         },
+        TextDetailClickItem("倒数日", "sample-app-day-matter") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_DAY_MATTER).navigation()
+        },
     )
 }

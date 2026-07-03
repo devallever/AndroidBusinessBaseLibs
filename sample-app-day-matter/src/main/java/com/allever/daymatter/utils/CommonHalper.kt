@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.allever.daymatter.R
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 
 object CommonHalper {
 
@@ -18,8 +18,8 @@ object CommonHalper {
         val email = arrayOf(FEEDBACK_TO)
         val intent = Intent(Intent.ACTION_SENDTO, uri)
         intent.putExtra(Intent.EXTRA_CC, email)
-        intent.putExtra(Intent.EXTRA_SUBJECT, App.context.getString(R.string.feed_back_subject))
-        intent.putExtra(Intent.EXTRA_TEXT, App.context.getString(R.string.feed_back_content))
-        context?.startActivity(Intent.createChooser(intent, App.context.getString(R.string.select_mail_app)))
+        intent.putExtra(Intent.EXTRA_SUBJECT, App.context.getString(R.string.dm_feed_back_subject))
+        intent.putExtra(Intent.EXTRA_TEXT, App.context.getString(R.string.dm_feed_back_content))
+        context?.startActivity(Intent.createChooser(intent, App.context.getString(R.string.dm_select_mail_app)))
     }
 }

@@ -14,14 +14,14 @@ import com.allever.daymatter.data.DataListener
 import com.allever.daymatter.data.Event
 import com.allever.daymatter.data.Repository
 import com.allever.daymatter.R
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 import java.lang.Exception
 
 object DialogHelper{
 
     fun createSelectSortDialog(activity: Activity, callback: SelectSortCallback?): AlertDialog {
         val dialog = AlertDialog.Builder(activity).create()
-        val view = LayoutInflater.from(activity).inflate(R.layout.dialog_select_sort, null)
+        val view = LayoutInflater.from(activity).inflate(R.layout.dm_dialog_select_sort, null)
         val recyclerView = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.select_sort_rv)
         val data = mutableListOf<Event.Sort>()
         val adapter = DialogSortAdapter(data)
@@ -56,7 +56,7 @@ object DialogHelper{
     fun createMessageDialog(activity: Activity, builder: Builder?, callback: TextDialogCallback?): AlertDialog {
         var builder = builder
         val dialog = AlertDialog.Builder(activity).create()
-        val view = LayoutInflater.from(activity).inflate(R.layout.layout_alert_dialog, null)
+        val view = LayoutInflater.from(activity).inflate(R.layout.dm_layout_alert_dialog, null)
         dialog.setView(view)
         val titleView = view.findViewById(R.id.title) as TextView
         val detailView = view.findViewById(R.id.detail) as TextView
@@ -93,7 +93,7 @@ object DialogHelper{
     fun createEditTextDialog(activity: Context, builder: DialogHelper.Builder?, callback: DialogHelper.EditDialogCallback?): AlertDialog {
         var builder = builder
         val editAlertDialog = AlertDialog.Builder(activity).create()
-        val view = LayoutInflater.from(activity).inflate(R.layout.layout_alert_dialog, null)
+        val view = LayoutInflater.from(activity).inflate(R.layout.dm_layout_alert_dialog, null)
         editAlertDialog.setView(view)
 //        val window = editAlertDialog.window
 //        window?.setContentView(R.layout.layout_alert_dialog)
@@ -170,10 +170,10 @@ object DialogHelper{
 
 
     class Builder{
-        var title: String?= App.context.getString(R.string.dialog_default_title)
-        var message: String? = App.context.getString(R.string.dialog_default_message)
-        var okText: String? = App.context.getString(R.string.dialog_default_positive_text)
-        var cancelText: String? = App.context.getString(R.string.dialog_default_negative_text)
+        var title: String?= App.context.getString(R.string.dm_dialog_default_title)
+        var message: String? = App.context.getString(R.string.dm_dialog_default_message)
+        var okText: String? = App.context.getString(R.string.dm_dialog_default_positive_text)
+        var cancelText: String? = App.context.getString(R.string.dm_dialog_default_negative_text)
         var showEditText: Boolean? = false
         var showMessage: Boolean? = true
         var etContent: String? = ""

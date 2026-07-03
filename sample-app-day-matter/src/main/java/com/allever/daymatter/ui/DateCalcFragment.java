@@ -9,28 +9,18 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.allever.daymatter.ad.AdConstants;
 import com.allever.daymatter.utils.ToastUtil;
 import com.allever.daymatter.R;
 import com.allever.daymatter.mvp.BaseFragment;
 import com.allever.daymatter.mvp.presenter.DateCalcPresenter;
 import com.allever.daymatter.mvp.view.IDateCalcView;
 import com.allever.daymatter.utils.DateUtils;
-import com.allever.lib.ad.chain.AdChainHelper;
-import com.allever.lib.ad.chain.AdChainListener;
-import com.allever.lib.ad.chain.IAd;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  *
@@ -41,37 +31,28 @@ import butterknife.Unbinder;
 public class DateCalcFragment extends BaseFragment<IDateCalcView, DateCalcPresenter> implements IDateCalcView {
 
     //求几天前几天后的开始时间
-    @BindView(R.id.id_fg_date_cal_tv_start_before_after_day)
     TextView mTvStartBeforeAfterDay;
 
     //几天后的输入框
-    @BindView(R.id.id_fg_date_cal_et_day_after)
     EditText mEtDayAfter;
 
     //显示几天后的日期
-    @BindView(R.id.id_fg_date_cal_tv_display_after)
     TextView mTvDisplayAfter;
 
     //几天前的输入框
-    @BindView(R.id.id_fg_date_cal_et_day_before)
     EditText mEtDayBefore;
 
     //显示几天前的日期
-    @BindView(R.id.id_fg_date_cal_tv_display_before)
     TextView mTvDisplayBefore;
 
     //求相隔天数的开始时间
-    @BindView(R.id.id_fg_date_cal_tv_start_distance_day)
     TextView mTvStartDistanceDay;
 
-    @BindView(R.id.id_fg_date_cal_tv_left_or_already)
     TextView mTvLeftAlready;
 
     //显示间隔天数
-    @BindView(R.id.id_fg_date_cal_tv_display_distance_count)
     TextView mTvDisplayDistanceCount;
 
-    Unbinder unbinder;
 
     //几天前几天后开始时间选择器
     private DatePickerDialog mAfterBeforeStartDatePicker;
@@ -94,15 +75,14 @@ public class DateCalcFragment extends BaseFragment<IDateCalcView, DateCalcPresen
     private static final int MAX_CALC_VALUE = 999999;
 
     private ViewGroup mBannerContainer;
-    private IAd mBannerAd;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_date_calc, container, false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dm_fragment_date_calc, container, false);
 
-        unbinder = ButterKnife.bind(this, view);
+        findView(view);
 
         initData();
 
@@ -113,9 +93,19 @@ public class DateCalcFragment extends BaseFragment<IDateCalcView, DateCalcPresen
         setListener();
 
         mBannerContainer = view.findViewById(R.id.bannerContainer);
-        loadBannerAd();
 
         return view;
+    }
+
+    private void findView(View view) {
+        mTvStartBeforeAfterDay = view.findViewById(R.id.id_fg_date_cal_tv_start_before_after_day);
+        mEtDayAfter = view.findViewById(R.id.id_fg_date_cal_et_day_after);
+        mEtDayBefore = view.findViewById(R.id.id_fg_date_cal_et_day_before);
+        mTvDisplayAfter = view.findViewById(R.id.id_fg_date_cal_tv_display_after);
+        mTvDisplayBefore  = view.findViewById(R.id.id_fg_date_cal_tv_display_before);
+        mTvStartDistanceDay = view.findViewById(R.id.id_fg_date_cal_tv_start_distance_day);
+        mTvLeftAlready = view.findViewById(R.id.id_fg_date_cal_tv_left_or_already);
+        mTvDisplayDistanceCount = view.findViewById(R.id.id_fg_date_cal_tv_display_distance_count);
     }
 
     private void initData(){
@@ -201,10 +191,10 @@ public class DateCalcFragment extends BaseFragment<IDateCalcView, DateCalcPresen
             int days = DateUtils.calDistanceDayCount(mDistanceStartYear,mDistanceStartMonth,mDistanceStartDay);
             if (days < 0) {
                 days = Math.abs(days);
-                mTvLeftAlready.setText(R.string.already);
+                mTvLeftAlready.setText(R.string.dm_already);
                 mTvDisplayDistanceCount.setText(days + "");
             } else {
-                mTvLeftAlready.setText(R.string.left);
+                mTvLeftAlready.setText(R.string.dm_left);
                 mTvDisplayDistanceCount.setText(days + "");
             }
 
@@ -284,57 +274,5 @@ public class DateCalcFragment extends BaseFragment<IDateCalcView, DateCalcPresen
     @Override
     protected DateCalcPresenter createPresenter() {
         return new DateCalcPresenter();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-        if (mBannerAd != null) {
-            mBannerAd.destroy();
-        }
-    }
-
-    private void loadBannerAd() {
-        AdChainHelper.INSTANCE.loadAd(AdConstants.INSTANCE.getAD_NAME_BANNER(), mBannerContainer, new AdChainListener() {
-            @Override
-            public void onLoaded(@org.jetbrains.annotations.Nullable IAd ad) {
-                mBannerAd = ad;
-                if (mBannerAd != null) {
-                    mBannerAd.show();
-                }
-            }
-
-            @Override
-            public void onClick() {
-
-            }
-
-            @Override
-            public void onStimulateSuccess() {
-
-            }
-
-            @Override
-            public void playEnd() {
-
-            }
-
-
-            @Override
-            public void onFailed(@NotNull String msg) {
-
-            }
-
-            @Override
-            public void onShowed() {
-
-            }
-
-            @Override
-            public void onDismiss() {
-
-            }
-        });
     }
 }

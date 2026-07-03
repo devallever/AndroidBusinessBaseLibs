@@ -22,25 +22,17 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by Allever on 18/5/22.
  */
 
 public class DayMatterDetailFragment extends BaseFragment<IDayMatterDetailFgView, DayMatterDetailFgPresenter> implements IDayMatterDetailFgView {
-    @BindView(R.id.id_fg_day_matter_detail_tv_title)
     TextView mTvTitle;
-    @BindView(R.id.id_fg_day_matter_detail_fl_title_container)
     FrameLayout mFlTitleContainer;
-    @BindView(R.id.id_fg_day_matter_detail_tv_left_day)
     TextView mTvLeftDay;
-    @BindView(R.id.id_fg_day_matter_detail_tv_date)
     TextView mTvDate;
 
-    Unbinder unbinder;
 
     private ItemDayMatter mItemDayMatter;
 
@@ -55,34 +47,42 @@ public class DayMatterDetailFragment extends BaseFragment<IDayMatterDetailFgView
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_day_matter_detail, container, false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dm_fragment_day_matter_detail, container, false);
 
         EventBus.getDefault().register(this);
 
-        unbinder = ButterKnife.bind(this, view);
+        findView(view);
+
 
         initView();
 
         return view;
     }
 
+    private void findView(View view) {
+        mTvTitle = view.findViewById(R.id.id_fg_day_matter_detail_tv_title);
+        mFlTitleContainer = view.findViewById(R.id.id_fg_day_matter_detail_fl_title_container);
+        mTvLeftDay = view.findViewById(R.id.id_fg_day_matter_detail_tv_left_day);
+        mTvDate = view.findViewById(R.id.id_fg_day_matter_detail_tv_date);
+    }
+
     private void initView(){
         int leftDay = mItemDayMatter.getLeftDay();
         if (leftDay >= 0){
-            mTvTitle.setText(getActivity().getString(R.string.distance) + mItemDayMatter.getTitle() + getActivity().getString(R.string.has));
+            mTvTitle.setText(getActivity().getString(R.string.dm_distance) + mItemDayMatter.getTitle() + getActivity().getString(R.string.dm_has));
             mTvLeftDay.setText(leftDay + "");
-            mFlTitleContainer.setBackgroundColor(getActivity().getResources().getColor(R.color.colorDefault));
+            mFlTitleContainer.setBackgroundColor(getActivity().getResources().getColor(R.color.dm_colorDefault));
         }else {
-            mTvTitle.setText(mItemDayMatter.getTitle() + getActivity().getString(R.string.already));
+            mTvTitle.setText(mItemDayMatter.getTitle() + getActivity().getString(R.string.dm_already));
             mTvLeftDay.setText((-1 * leftDay) + "");
-            mFlTitleContainer.setBackgroundColor(getActivity().getResources().getColor(R.color.orange_500));
+            mFlTitleContainer.setBackgroundColor(getActivity().getResources().getColor(R.color.dm_orange_500));
         }
         String date = DateUtils.formatDate_Y_M_D_WEEK_New(getActivity(),
                 mItemDayMatter.getYear(),
                 mItemDayMatter.getMonth()-1,
                 mItemDayMatter.getDay(),
                 mItemDayMatter.getWeekDay());
-        mTvDate.setText(getActivity().getString(R.string.target_date) + date);
+        mTvDate.setText(getActivity().getString(R.string.dm_target_date) + date);
     }
 
     @Override
@@ -93,7 +93,6 @@ public class DayMatterDetailFragment extends BaseFragment<IDayMatterDetailFgView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
         EventBus.getDefault().unregister(this);
     }
 

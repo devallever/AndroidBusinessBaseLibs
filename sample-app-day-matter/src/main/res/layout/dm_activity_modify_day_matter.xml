@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_modify_day_matter_ll_root">
+
+    <RelativeLayout
+        android:id="@+id/topBarContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dm_default_theme_color">
+        <include layout="@layout/dm_include_toolbar"/>
+    </RelativeLayout>
+
+    <include layout="@layout/dm_input_day_matter"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/id_modify_day_matter_btn_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/dm_delete"
+            android:background="@color/dm_red_300"
+            android:layout_margin="10dp"
+            android:textColor="@color/white"/>
+
+        <Button
+            android:id="@+id/id_modify_day_matter_btn_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/dm_save"
+            android:background="@color/dm_colorDefault"
+            android:layout_margin="10dp"
+            android:textColor="@color/white"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

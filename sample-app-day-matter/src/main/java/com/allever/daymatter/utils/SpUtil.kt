@@ -1,7 +1,7 @@
 package com.allever.daymatter.utils
 
 import android.content.Context
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 
 /**
  * SharedPreferences 工具类

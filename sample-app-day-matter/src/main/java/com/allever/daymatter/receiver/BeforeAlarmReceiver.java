@@ -62,7 +62,7 @@ public class BeforeAlarmReceiver extends BroadcastReceiver {
                 (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 
         Intent actionIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,actionIntent , 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,actionIntent , PendingIntent.FLAG_IMMUTABLE);
 
         for (Event event: eventList){
             Log.d(TAG, "onReceive: title = " + event.getTitle());
@@ -75,9 +75,9 @@ public class BeforeAlarmReceiver extends BroadcastReceiver {
 
             //通知
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"")
-                    .setSmallIcon(R.drawable.ic_logo)
-                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_logo))
-                    .setContentTitle(context.getResources().getString(R.string.app_name))
+                    .setSmallIcon(R.drawable.dm_ic_logo)
+                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.dm_ic_logo))
+                    .setContentTitle(context.getResources().getString(R.string.dm_app_name))
                     .setContentText(event.getTitle() + ": " + date)
                     .setContentIntent(contentIntent)
                     .setDefaults(NotificationCompat.DEFAULT_ALL);

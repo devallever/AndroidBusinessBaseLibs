@@ -9,10 +9,11 @@ import com.allever.daymatter.utils.DateUtils;
 import com.allever.daymatter.R;
 import com.allever.daymatter.mvp.BasePresenter;
 import com.allever.daymatter.mvp.view.IDayMatterListView;
-import com.allever.lib.common.util.log.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import app.allever.android.lib.core.ext.LoggerKt;
 
 /**
  *
@@ -25,7 +26,7 @@ public class DayMatterListPresenter extends BasePresenter<IDayMatterListView>{
      * 获取指定分类事件列表
      * */
     public void getDayMatterData(final Context context, int sortId) {
-        LogUtils.INSTANCE.d("getDayMatterData: with sortId");
+        LoggerKt.log("getDayMatterData: with sortId");
         mDataSource.getSortEventList(sortId, new DataListener<List<Event>>() {
             @Override
             public void onSuccess(List<Event> data) {
@@ -42,7 +43,7 @@ public class DayMatterListPresenter extends BasePresenter<IDayMatterListView>{
      * 获取所有事件
      * */
     public void getDayMatterData(final Context context) {
-        LogUtils.INSTANCE.d( "getDayMatterData: ");
+        LoggerKt.log( "getDayMatterData: ");
         mDataSource.getAllEventList(new DataListener<List<Event>>() {
             @Override
             public void onSuccess(List<Event> data) {
@@ -106,22 +107,22 @@ public class DayMatterListPresenter extends BasePresenter<IDayMatterListView>{
             //如果倒计时天数大于等于0， 表示还没到
             if (topDayMatterItem.getLeftDay() >= 0){
                 //事件标题 ，距离xxx还有
-                mViewRef.get().setTvTitle(context.getResources().getString(R.string.distance)
+                mViewRef.get().setTvTitle(context.getResources().getString(R.string.dm_distance)
                         + topDayMatterItem.getTitle()
-                        + context.getResources().getString(R.string.left));
+                        + context.getResources().getString(R.string.dm_left));
 
                 //剩余天数
                 mViewRef.get().setTvLeftDay(topDayMatterItem.getLeftDay() + "");
             }else {
                 //如果倒计时天数小于0， 表示已经过了 xxx已经
-                mViewRef.get().setTvTitle(topDayMatterItem.getTitle() + context.getString(R.string.already));
+                mViewRef.get().setTvTitle(topDayMatterItem.getTitle() + context.getString(R.string.dm_already));
                 mViewRef.get().setTvLeftDay((-1 * topDayMatterItem.getLeftDay()) + "");
             }
 
 
             //目标日
             StringBuilder builder = new StringBuilder();
-            builder.append(context.getString(R.string.target_date));
+            builder.append(context.getString(R.string.dm_target_date));
             builder.append(DateUtils.formatDate_Y_M_D_WEEK_New(context,
                     topDayMatterItem.getYear(),
                     //月份下标值 0-11

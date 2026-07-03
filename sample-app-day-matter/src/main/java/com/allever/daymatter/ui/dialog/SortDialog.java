@@ -9,10 +9,6 @@ import android.view.ViewGroup;
 
 import com.allever.daymatter.R;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
-
 /**
  * Created by Allever on 18/5/28.
  */
@@ -21,7 +17,6 @@ public class SortDialog extends DialogFragment {
 
     private static OptionListener mOptionListener;
 
-    Unbinder unbinder;
 
     public static SortDialog newInsance(OptionListener optionListener) {
         SortDialog sortDialog = new SortDialog();
@@ -33,48 +28,39 @@ public class SortDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_sort, container, false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dm_dialog_sort, container, false);
 
-        unbinder = ButterKnife.bind(this, view);
+        findView(view);
 
         return view;
+    }
+
+    private void findView(View view) {
+        view.findViewById(R.id.id_dialog_sort_rb_life).setOnClickListener(v -> {
+            if (mOptionListener != null) {
+                mOptionListener.onItemClick(this, getString(R.string.dm_sort_life), 1);
+            }
+        });
+        view.findViewById(R.id.id_dialog_sort_rb_work).setOnClickListener(v -> {
+            if (mOptionListener != null) {
+                mOptionListener.onItemClick(this, getString(R.string.dm_sort_work), 2);
+            }
+        });
+        view.findViewById(R.id.id_dialog_sort_rb_memory_day).setOnClickListener(v -> {
+            if (mOptionListener != null) {
+                mOptionListener.onItemClick(this, getString(R.string.dm_sort_memory_day), 3);
+            }
+        });
+        view.findViewById(R.id.id_dialog_sort_tv_cancel).setOnClickListener(v -> {
+            if (mOptionListener != null){
+                mOptionListener.onCancel(this);
+            }
+        });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    @OnClick({R.id.id_dialog_sort_rb_life,
-            R.id.id_dialog_sort_rb_work,
-            R.id.id_dialog_sort_rb_memory_day,
-            R.id.id_dialog_sort_tv_cancel})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.id_dialog_sort_rb_life:
-                if (mOptionListener != null) {
-                    mOptionListener.onItemClick(this, getString(R.string.sort_life), 1);
-                }
-                break;
-            case R.id.id_dialog_sort_rb_work:
-                if (mOptionListener != null) {
-                    mOptionListener.onItemClick(this, getString(R.string.sort_work), 2);
-                }
-                break;
-            case R.id.id_dialog_sort_rb_memory_day:
-                if (mOptionListener != null) {
-                    mOptionListener.onItemClick(this, getString(R.string.sort_memory_day), 3);
-                }
-                break;
-            case R.id.id_dialog_sort_tv_cancel:
-                if (mOptionListener != null){
-                    mOptionListener.onCancel(this);
-                }
-                break;
-            default:
-                break;
-        }
     }
 
     public interface OptionListener {

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/id_add_day_matter_ll_root">
+
+    <RelativeLayout
+        android:id="@+id/topBarContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dm_default_theme_color">
+        <include layout="@layout/dm_include_toolbar"/>
+    </RelativeLayout>
+
+    <include layout="@layout/dm_input_day_matter"/>
+
+    <Button
+        android:id="@+id/id_add_day_matter_btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dm_colorDefault"
+        android:layout_margin="10dp"
+        android:text="@string/dm_save"
+        android:textColor="@color/white"/>
+
+    <LinearLayout
+        android:id="@+id/id_add_day_matter_delete_update_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/id_edit_day_matter_btn_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/dm_delete"
+            android:background="@color/dm_red_300"
+            android:layout_margin="10dp"
+            android:textColor="@color/white"/>
+
+        <Button
+            android:id="@+id/id_edit_day_matter_btn_update"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/dm_save"
+            android:background="@color/dm_colorDefault"
+            android:layout_margin="10dp"
+            android:textColor="@color/white"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

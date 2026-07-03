@@ -19,11 +19,12 @@ class AboutActivity : BaseActivity<IAboutView, AboutPresenter>(), View.OnClickLi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about)
+        setContentView(R.layout.dm_activity_about)
 
         initView()
+        adaptStatusBar(mToolbar)
 
-        initToolbar(mToolbar, R.string.about)
+        initToolbar(mToolbar, R.string.dm_about)
     }
 
     private fun initView() {

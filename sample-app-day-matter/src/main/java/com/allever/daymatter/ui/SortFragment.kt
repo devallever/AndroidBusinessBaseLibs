@@ -1,7 +1,6 @@
 package com.allever.daymatter.ui
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +13,9 @@ import com.allever.daymatter.mvp.view.ISortListView
 import com.allever.daymatter.ui.adapter.SortAdapter
 import com.allever.daymatter.utils.Constants
 import com.allever.daymatter.utils.DisplayUtil
-import com.allever.lib.common.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.listener.OnItemChildClickListener
+import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener
 import com.yanzhenjie.recyclerview.SwipeMenuBridge
@@ -28,21 +28,21 @@ class SortFragment: BaseFragment<ISortListView,
         SortListPresenter>(),
         ISortListView,
         OnItemMenuClickListener,
-        BaseQuickAdapter.OnItemChildClickListener, View.OnClickListener, BaseQuickAdapter.OnItemClickListener {
+         View.OnClickListener,
+    OnItemClickListener, OnItemChildClickListener {
 
     private lateinit var mRvSort: SwipeRecyclerView
     private lateinit var mAdapter: SortAdapter
     private var mSortData = mutableListOf<Event.Sort>()
     private lateinit var mBtnAddSort: FloatingActionButton
     private lateinit var mView: View
-    private val mHandler = Handler()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        mView = LayoutInflater.from(activity).inflate(R.layout.activity_sort_list, container, false)
+        mView = LayoutInflater.from(activity).inflate(R.layout.dm_activity_sort_list, container, false)
         initData()
         initView()
-        mPresenter.getSlideMenuSortData(context!!)
+        mPresenter.getSlideMenuSortData(requireContext())
         return mView
     }
 
@@ -53,17 +53,17 @@ class SortFragment: BaseFragment<ISortListView,
 
         val menuCreator = SwipeMenuCreator { leftMenu, rightMenu, position ->
             val modifyItem = SwipeMenuItem(activity)
-            modifyItem.text = getString(R.string.sort_list_menu_modify)
+            modifyItem.text = getString(R.string.dm_sort_list_menu_modify)
             modifyItem.setTextColor(resources.getColor(R.color.white))
-            modifyItem.setBackgroundColor(resources.getColor(R.color.sort_list_menu_modify_color))
+            modifyItem.setBackgroundColor(resources.getColor(R.color.dm_sort_list_menu_modify_color))
             modifyItem.height = ViewGroup.LayoutParams.MATCH_PARENT
             modifyItem.width = DisplayUtil.dip2px(60)
             rightMenu.addMenuItem(modifyItem)
 
             val deleteItem = SwipeMenuItem(activity)
-            deleteItem.text = getString(R.string.sort_list_menu_delete)
+            deleteItem.text = getString(R.string.dm_sort_list_menu_delete)
             deleteItem.setTextColor(resources.getColor(R.color.white))
-            deleteItem.setBackgroundColor(resources.getColor(R.color.sort_list_menu_delete_color))
+            deleteItem.setBackgroundColor(resources.getColor(R.color.dm_sort_list_menu_delete_color))
             deleteItem.height = ViewGroup.LayoutParams.MATCH_PARENT
             deleteItem.width = DisplayUtil.dip2px(60)
             rightMenu.addMenuItem(deleteItem)
@@ -79,8 +79,8 @@ class SortFragment: BaseFragment<ISortListView,
 
     private fun initData() {
         mAdapter = SortAdapter(mSortData)
-        mAdapter.onItemChildClickListener = this
-        mAdapter.onItemClickListener = this
+        mAdapter.setOnItemClickListener(this)
+        mAdapter.setOnItemChildClickListener(this)
     }
 
     override fun createPresenter(): SortListPresenter = SortListPresenter()
@@ -91,7 +91,38 @@ class SortFragment: BaseFragment<ISortListView,
         mAdapter.notifyDataSetChanged()
     }
 
-    override fun onItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+    override fun onItemClick(menuBridge: SwipeMenuBridge?, adapterPosition: Int) {
+        menuBridge?.closeMenu()
+        val menuIndex = menuBridge?.position
+        if (adapterPosition in 0..3) {
+            showToast(getString(R.string.dm_can_not_modify_default_sort))
+            return
+        }
+
+        if (menuBridge?.position == 0) {
+            mHandler.postDelayed({
+                mPresenter.modifySort(requireActivity(), mSortData[adapterPosition])
+            }, 200)
+        } else if (menuBridge?.position == 1) {
+            mHandler.postDelayed({
+                mPresenter.deleteSort(requireActivity(), mSortData[adapterPosition])
+            }, 200)
+        }
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.id_btn_add_sort -> {
+                mPresenter.addSort(requireActivity())
+            }
+        }
+    }
+
+    override fun onItemClick(
+        adapter: BaseQuickAdapter<*, *>,
+        view: View,
+        position: Int
+    ) {
         val event = EventDayMatter()
         event.event = Constants.EVENT_SELECT_DISPLAY_SORT_LIST
         event.sortId = mSortData[position].id
@@ -99,37 +130,14 @@ class SortFragment: BaseFragment<ISortListView,
         EventBus.getDefault().post(event)
     }
 
-    override fun onItemClick(menuBridge: SwipeMenuBridge?, adapterPosition: Int) {
-        menuBridge?.closeMenu()
-        val menuIndex = menuBridge?.position
-        if (adapterPosition in 0..3) {
-            showToast(getString(R.string.can_not_modify_default_sort))
-            return
-        }
-
-        if (menuBridge?.position == 0) {
-            mHandler.postDelayed({
-                mPresenter.modifySort(activity!!, mSortData[adapterPosition])
-            }, 200)
-        } else if (menuBridge?.position == 1) {
-            mHandler.postDelayed({
-                mPresenter.deleteSort(activity!!, mSortData[adapterPosition])
-            }, 200)
-        }
-    }
-
-    override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+    override fun onItemChildClick(
+        adapter: BaseQuickAdapter<*, *>,
+        view: View,
+        position: Int
+    ) {
         when (view?.id) {
             R.id.id_item_slid_sort_iv_type -> {
                 mRvSort.smoothOpenRightMenu(position)
-            }
-        }
-    }
-
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.id_btn_add_sort -> {
-                mPresenter.addSort(context!!)
             }
         }
     }

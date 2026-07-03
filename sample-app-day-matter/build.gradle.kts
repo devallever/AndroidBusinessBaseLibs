@@ -48,9 +48,6 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.converter.scalars)
 
-    //Butterknife
-    implementation ("com.jakewharton:butterknife:10.2.3")
-    annotationProcessor ("com.jakewharton:butterknife-compiler:10.2.3")
     //Rx
 
     //功能性RecyclerView

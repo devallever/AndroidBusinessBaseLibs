@@ -29,25 +29,25 @@ public class DateUtils {
         String strWeekDay = "";
         switch (weekday){
             case 1:
-                strWeekDay = context.getResources().getString(R.string.sunday);
+                strWeekDay = context.getResources().getString(R.string.dm_sunday);
                 break;
             case 2:
-                strWeekDay = context.getResources().getString(R.string.monday);
+                strWeekDay = context.getResources().getString(R.string.dm_monday);
                 break;
             case 3:
-                strWeekDay = context.getResources().getString(R.string.tuesday);
+                strWeekDay = context.getResources().getString(R.string.dm_tuesday);
                 break;
             case 4:
-                strWeekDay = context.getResources().getString(R.string.wednesday);
+                strWeekDay = context.getResources().getString(R.string.dm_wednesday);
                 break;
             case 5:
-                strWeekDay = context.getResources().getString(R.string.thursday);
+                strWeekDay = context.getResources().getString(R.string.dm_thursday);
                 break;
             case 6:
-                strWeekDay = context.getResources().getString(R.string.friday);
+                strWeekDay = context.getResources().getString(R.string.dm_friday);
                 break;
             case 7:
-                strWeekDay = context.getResources().getString(R.string.saturday);
+                strWeekDay = context.getResources().getString(R.string.dm_saturday);
                 break;
             default:
                 break;
@@ -76,31 +76,31 @@ public class DateUtils {
         String strWeekDay = "";
         switch (weekday){
             case 1:
-                strWeekDay = context.getResources().getString(R.string.sunday);
+                strWeekDay = context.getResources().getString(R.string.dm_sunday);
                 break;
             case 2:
-                strWeekDay = context.getResources().getString(R.string.monday);
+                strWeekDay = context.getResources().getString(R.string.dm_monday);
                 break;
             case 3:
-                strWeekDay = context.getResources().getString(R.string.tuesday);
+                strWeekDay = context.getResources().getString(R.string.dm_tuesday);
                 break;
             case 4:
-                strWeekDay = context.getResources().getString(R.string.wednesday);
+                strWeekDay = context.getResources().getString(R.string.dm_wednesday);
                 break;
             case 5:
-                strWeekDay = context.getResources().getString(R.string.thursday);
+                strWeekDay = context.getResources().getString(R.string.dm_thursday);
                 break;
             case 6:
-                strWeekDay = context.getResources().getString(R.string.friday);
+                strWeekDay = context.getResources().getString(R.string.dm_friday);
                 break;
             case 7:
-                strWeekDay = context.getResources().getString(R.string.saturday);
+                strWeekDay = context.getResources().getString(R.string.dm_saturday);
                 break;
             default:
                 break;
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat(context.getResources().getString(R.string.date_fromat_yyyy_mm_dd_common));
+        SimpleDateFormat sdf = new SimpleDateFormat(context.getResources().getString(R.string.dm_date_fromat_yyyy_mm_dd_common));
         String yMd = sdf.format(new Date(calendar.getTimeInMillis()));
 
         formatDate = yMd + " " + strWeekDay;
@@ -128,7 +128,7 @@ public class DateUtils {
         calendar.setTimeInMillis(startCalendar.getTimeInMillis());
         calendar.add(Calendar.DAY_OF_MONTH, interval);
 
-        SimpleDateFormat sdf = new SimpleDateFormat(context.getResources().getString(R.string.date_fromat_yyyy_mm_dd_common));
+        SimpleDateFormat sdf = new SimpleDateFormat(context.getResources().getString(R.string.dm_date_fromat_yyyy_mm_dd_common));
         result = sdf.format(new Date(calendar.getTimeInMillis()));
 
         return result;
@@ -155,7 +155,7 @@ public class DateUtils {
         calendar.setTimeInMillis(startCalendar.getTimeInMillis());
         calendar.add(Calendar.DAY_OF_MONTH, -1 * interval);
 
-        SimpleDateFormat sdf = new SimpleDateFormat(context.getResources().getString(R.string.date_fromat_yyyy_mm_dd_common));
+        SimpleDateFormat sdf = new SimpleDateFormat(context.getResources().getString(R.string.dm_date_fromat_yyyy_mm_dd_common));
         result = sdf.format(new Date(calendar.getTimeInMillis()));
 
         return result;

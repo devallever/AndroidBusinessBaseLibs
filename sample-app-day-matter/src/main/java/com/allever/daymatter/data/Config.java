@@ -1,12 +1,12 @@
 package com.allever.daymatter.data;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.crud.LitePalSupport;
 
 /**
  * Created by Allever on 18/6/1.
  */
 
-public class Config extends DataSupport {
+public class Config extends LitePalSupport {
     private int id;
 
     private int currentDayRemind;

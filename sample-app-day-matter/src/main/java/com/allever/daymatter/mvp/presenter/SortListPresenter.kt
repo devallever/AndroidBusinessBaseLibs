@@ -11,7 +11,7 @@ import com.allever.daymatter.mvp.BasePresenter
 import com.allever.daymatter.mvp.view.ISortListView
 import com.allever.daymatter.utils.ToastUtil
 import com.allever.daymatter.R
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 import org.greenrobot.eventbus.EventBus
 
 class SortListPresenter : BasePresenter<ISortListView>() {
@@ -22,7 +22,7 @@ class SortListPresenter : BasePresenter<ISortListView>() {
             override fun onSuccess(data: MutableList<Event.Sort>) {
                 val first = Event.Sort()
                 first.id = 0
-                first.name = App.context.getString(R.string.all)
+                first.name = App.context.getString(R.string.dm_all)
                 data.add(0, first)
                 mViewRef.get()?.setSortData(data)
                 val sortEvent = SortEvent()
@@ -37,7 +37,7 @@ class SortListPresenter : BasePresenter<ISortListView>() {
 
     fun addSort(activity: Context) {
         val dialogBuilder = DialogHelper.Builder()
-        dialogBuilder.title = App.context.resources.getString(R.string.add_sort)
+        dialogBuilder.title = App.context.resources.getString(R.string.dm_add_sort)
         dialogBuilder.isShowMessage(false)
         dialogBuilder.isShowEditText(true)
         val dialog = DialogHelper.createEditTextDialog(activity, dialogBuilder, object : DialogHelper.EditDialogCallback {
@@ -62,7 +62,7 @@ class SortListPresenter : BasePresenter<ISortListView>() {
 
     fun modifySort(activity: Activity, sort: Event.Sort) {
         val dialogBuilder = DialogHelper.Builder()
-        dialogBuilder.title = App.context.resources.getString(R.string.modify_sort)
+        dialogBuilder.title = App.context.resources.getString(R.string.dm_modify_sort)
         dialogBuilder.etContent = sort.name
         dialogBuilder.isShowMessage(false)
         dialogBuilder.isShowEditText(true)
@@ -88,8 +88,8 @@ class SortListPresenter : BasePresenter<ISortListView>() {
 
     fun deleteSort(activity: Activity, sort: Event.Sort) {
         val builder = DialogHelper.Builder()
-        builder.title = App.context.resources.getString(R.string.delete_sort)
-        builder.message = App.context.resources.getString(R.string.make_sure_delete_sort)
+        builder.title = App.context.resources.getString(R.string.dm_delete_sort)
+        builder.message = App.context.resources.getString(R.string.dm_make_sure_delete_sort)
         val dialog = DialogHelper.createMessageDialog(activity, builder, object : DialogHelper.TextDialogCallback {
             override fun onOkClick(dialog: AlertDialog) {
                 mDataSource.deleteSort(sort.id)

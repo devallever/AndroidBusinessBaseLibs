@@ -1,9 +1,9 @@
 package com.allever.daymatter.ui.adapter;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.allever.daymatter.R;
 import com.allever.daymatter.bean.ItemSlidMenuSort;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class SlidMenuSortAdapter extends BaseQuickAdapter<ItemSlidMenuSort, BaseViewHolder> {
     public SlidMenuSortAdapter(List<ItemSlidMenuSort> data) {
-        super(R.layout.item_slid_menu_sort, data);
+        super(R.layout.dm_item_slid_menu_sort, data);
     }
 
     @Override

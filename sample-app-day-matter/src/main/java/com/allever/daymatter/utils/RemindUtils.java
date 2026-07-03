@@ -49,7 +49,7 @@ public class RemindUtils {
 
         //CurrentAlarmReceiver.class为广播接受者
         Intent intent = new Intent(context ,clz);
-        PendingIntent pi = PendingIntent.getBroadcast(context, uniqueRequestCode, intent, 0);
+        PendingIntent pi = PendingIntent.getBroadcast(context, uniqueRequestCode, intent, PendingIntent.FLAG_IMMUTABLE);
         //得到AlarmManager实例
         AlarmManager am = (AlarmManager)context.getSystemService(ALARM_SERVICE);
 
@@ -64,7 +64,7 @@ public class RemindUtils {
         }
 
         Intent intent = new Intent(context, clz);
-        PendingIntent pi = PendingIntent.getBroadcast(context, uniqueRequestCode, intent, 0);
+        PendingIntent pi = PendingIntent.getBroadcast(context, uniqueRequestCode, intent, PendingIntent.FLAG_IMMUTABLE);
         AlarmManager am = (AlarmManager)context.getSystemService(ALARM_SERVICE);
         //取消提醒
         am.cancel(pi);

@@ -1,11 +1,9 @@
 package com.allever.daymatter.ui;
 
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,69 +14,47 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.allever.daymatter.ad.AdConstants;
 import com.allever.daymatter.utils.TimeUtils;
 import com.allever.daymatter.R;
 import com.allever.daymatter.data.Config;
 import com.allever.daymatter.mvp.BaseFragment;
 import com.allever.daymatter.mvp.presenter.SettingPresenter;
 import com.allever.daymatter.mvp.view.ISettingView;
-import com.allever.lib.ad.chain.AdChainHelper;
-import com.allever.lib.ad.chain.AdChainListener;
-import com.allever.lib.ad.chain.IAd;
-
-import org.jetbrains.annotations.NotNull;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 
 /**
  * Created by Allever on 18/6/1.
  */
 
-public class SettingFragment extends BaseFragment<ISettingView, SettingPresenter> implements ISettingView {
+public class SettingFragment extends BaseFragment<ISettingView, SettingPresenter> implements ISettingView, View.OnClickListener {
 
     private static final String TAG = "SettingFragment";
 
-    Unbinder unbinder;
 
     //当天提醒开关
-    @BindView(R.id.id_fg_remind_switch_current_day)
     SwitchCompat mSwitchCurrentDay;
 
     //当天提醒项-主要用于设置监听
-    @BindView(R.id.id_fg_remind_rl_current_day_switch_container)
     RelativeLayout mRlCurrentDaySwitchContainer;
 
     //当天提醒时间
-    @BindView(R.id.id_fg_remind_tv_current_day_remind_time)
     TextView mTvCurrentDayRemindTime;
 
     //当天提醒时间项-主要用于设置监听
-    @BindView(R.id.id_fg_remind_rl_current_day_remind_time_container)
     RelativeLayout mRlCurrentDayRemindTimeContainer;
 
     //前天提醒开关
-    @BindView(R.id.id_fg_remind_switch_before_day)
     SwitchCompat mSwitchBeforeDay;
 
     //前天提醒开关选项-主要用于设置监听
-    @BindView(R.id.id_fg_remind_rl_before_day_switch_container)
     RelativeLayout mRlBeforeDaySwitchContainer;
 
     //前天提醒时间
-    @BindView(R.id.id_fg_remind_tv_before_day_remind_time)
     TextView mTvBeforeDayRemindTime;
 
     //前天提醒时间选项-主要用于设置监听
-    @BindView(R.id.id_fg_remind_rl_before_day_remind_time_container)
     RelativeLayout mRlBeforeDayRemindTimeContainer;
 
-    @BindView(R.id.id_fg_remind_rl_before_day_remind_about_container)
     ViewGroup mAboutContainer;
-    @BindView(R.id.id_fg_remind_rl_before_day_remind_feedback_container)
     ViewGroup mFeedbackContainer;
 
 
@@ -90,9 +66,6 @@ public class SettingFragment extends BaseFragment<ISettingView, SettingPresenter
 
     private Config mConfig;
 
-    private IAd mVideoAd;
-    private IAd mInsertAd;
-    private IAd mBannerAd;
     private ViewGroup mBannerContainer;
 
     @Nullable
@@ -100,9 +73,30 @@ public class SettingFragment extends BaseFragment<ISettingView, SettingPresenter
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_remind, container, false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dm_fragment_remind, container, false);
 
-        unbinder = ButterKnife.bind(this, view);
+
+        mSwitchCurrentDay = view.findViewById(R.id.id_fg_remind_switch_current_day);
+        mRlCurrentDaySwitchContainer = view.findViewById(R.id.id_fg_remind_rl_current_day_switch_container);
+        mTvCurrentDayRemindTime = view.findViewById(R.id.id_fg_remind_tv_current_day_remind_time);
+        mRlCurrentDayRemindTimeContainer = view.findViewById(R.id.id_fg_remind_rl_current_day_remind_time_container);
+        mSwitchBeforeDay = view.findViewById(R.id.id_fg_remind_switch_before_day);
+        mRlBeforeDaySwitchContainer = view.findViewById(R.id.id_fg_remind_rl_before_day_switch_container);
+        mTvBeforeDayRemindTime = view.findViewById(R.id.id_fg_remind_tv_before_day_remind_time);
+        mRlBeforeDayRemindTimeContainer = view.findViewById(R.id.id_fg_remind_rl_before_day_remind_time_container);
+        mAboutContainer = view.findViewById(R.id.id_fg_remind_rl_before_day_remind_about_container);
+        mFeedbackContainer = view.findViewById(R.id.id_fg_remind_rl_before_day_remind_feedback_container);
+
+        // 设置点击监听
+        mRlCurrentDaySwitchContainer.setOnClickListener(this);
+        mRlCurrentDayRemindTimeContainer.setOnClickListener(this);
+        mRlBeforeDaySwitchContainer.setOnClickListener(this);
+        mRlBeforeDayRemindTimeContainer.setOnClickListener(this);
+        mAboutContainer.setOnClickListener(this);
+        mFeedbackContainer.setOnClickListener(this);
+        view.findViewById(R.id.id_fg_remind_rl_before_day_remind_support_container).setOnClickListener(this);
+//        mSupportContainer.setOnClickListener(this); // 别忘了这个
+        
 
         //获取提醒配置
         mPresenter.getRemindConfig();
@@ -184,22 +178,6 @@ public class SettingFragment extends BaseFragment<ISettingView, SettingPresenter
     protected SettingPresenter createPresenter() {
         return new SettingPresenter();
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-        destroyAd(mVideoAd);
-        destroyAd(mBannerAd);
-        destroyAd(mInsertAd);
-    }
-
-    private void destroyAd(IAd ad) {
-        if (ad != null) {
-            ad.destroy();
-        }
-    }
-
     @Override
     public void setCurrentRemindSwitch(boolean value) {
         mSwitchCurrentDay.setChecked(value);
@@ -227,185 +205,41 @@ public class SettingFragment extends BaseFragment<ISettingView, SettingPresenter
         }
     }
 
-    @OnClick({R.id.id_fg_remind_rl_current_day_switch_container,
-            R.id.id_fg_remind_rl_current_day_remind_time_container,
-            R.id.id_fg_remind_rl_before_day_switch_container,
-            R.id.id_fg_remind_rl_before_day_remind_time_container,
-            R.id.id_fg_remind_rl_before_day_remind_about_container,
-            R.id.id_fg_remind_rl_before_day_remind_feedback_container,
-            R.id.id_fg_remind_rl_before_day_remind_support_container})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            //当天提醒
-            case R.id.id_fg_remind_rl_current_day_switch_container:
-                mSwitchCurrentDay.setChecked(!mSwitchCurrentDay.isChecked());
-                break;
-            //当天提醒时间
-            case R.id.id_fg_remind_rl_current_day_remind_time_container:
-                if (mCurrentTimePicker != null){
-                    mCurrentTimePicker.show();
-                }
-                break;
-            //前天提醒
-            case R.id.id_fg_remind_rl_before_day_switch_container:
-                mSwitchBeforeDay.setChecked(!mSwitchBeforeDay.isChecked());
-                break;
-            //前天提醒时间
-            case R.id.id_fg_remind_rl_before_day_remind_time_container:
-                if (mBeforeTimePicker != null){
-                    mBeforeTimePicker.show();
-                }
-                break;
-            case R.id.id_fg_remind_rl_before_day_remind_about_container:
-                AboutActivity.Companion.actionStart(getActivity());
-                break;
-            case R.id.id_fg_remind_rl_before_day_remind_feedback_container:
-                mPresenter.feedback(getActivity());
-                break;
-            case R.id.id_fg_remind_rl_before_day_remind_support_container:
-                supportUS();
-                break;
-            default:
-                break;
-        }
-    }
-
     private void supportUS() {
         new AlertDialog.Builder(getActivity())
                 .setMessage("需要消耗流量，是否继续？")
                 .setPositiveButton("确定", (dialog, which) -> {
-                    loadVideoAd();
                 })
                 .setNegativeButton("残忍拒绝", (dialog, which) -> {
-                    loadBannerAd();
                     showToast("点击下面小广告支持我们");
                 })
                 .show();
     }
 
-    private void loadVideoAd() {
-        AdChainHelper.INSTANCE.loadAd(AdConstants.INSTANCE.getAD_NAME_VIDEO(), null, new AdChainListener() {
-            @Override
-            public void onLoaded(@org.jetbrains.annotations.Nullable IAd ad) {
-                mVideoAd = ad;
-                if (mVideoAd != null) {
-                    mVideoAd.show();
-                }
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();//当天提醒
+        if (id == R.id.id_fg_remind_rl_current_day_switch_container) {
+            mSwitchCurrentDay.setChecked(!mSwitchCurrentDay.isChecked());
+            //当天提醒时间
+        } else if (id == R.id.id_fg_remind_rl_current_day_remind_time_container) {
+            if (mCurrentTimePicker != null) {
+                mCurrentTimePicker.show();
             }
-
-
-            @Override
-            public void onFailed(@NotNull String msg) {
-                loadInsertAd();
+            //前天提醒
+        } else if (id == R.id.id_fg_remind_rl_before_day_switch_container) {
+            mSwitchBeforeDay.setChecked(!mSwitchBeforeDay.isChecked());
+            //前天提醒时间
+        } else if (id == R.id.id_fg_remind_rl_before_day_remind_time_container) {
+            if (mBeforeTimePicker != null) {
+                mBeforeTimePicker.show();
             }
-
-            @Override
-            public void onClick() {
-
-            }
-
-            @Override
-            public void onStimulateSuccess() {
-
-            }
-
-            @Override
-            public void playEnd() {
-
-            }
-
-            @Override
-            public void onShowed() {
-
-            }
-
-            @Override
-            public void onDismiss() {
-
-            }
-        });
-    }
-
-    private void loadInsertAd() {
-        AdChainHelper.INSTANCE.loadAd(AdConstants.INSTANCE.getAD_NAME_INSERT(), null, new AdChainListener() {
-            @Override
-            public void onLoaded(@org.jetbrains.annotations.Nullable IAd ad) {
-                mInsertAd = ad;
-                if (mInsertAd != null) {
-                    mInsertAd.show();
-                }
-            }
-
-            @Override
-            public void onFailed(@NotNull String msg) {
-                loadBannerAd();
-            }
-
-            @Override
-            public void onClick() {
-
-            }
-
-            @Override
-            public void onStimulateSuccess() {
-
-            }
-
-            @Override
-            public void playEnd() {
-
-            }
-
-
-            @Override
-            public void onShowed() {
-
-            }
-
-            @Override
-            public void onDismiss() {
-
-            }
-        });
-    }
-
-    private void loadBannerAd() {
-        AdChainHelper.INSTANCE.loadAd(AdConstants.INSTANCE.getAD_NAME_BANNER(), mBannerContainer, new AdChainListener() {
-            @Override
-            public void onLoaded(@org.jetbrains.annotations.Nullable IAd ad) {
-                mBannerAd = ad;
-            }
-
-            @Override
-            public void onFailed(@NotNull String msg) {
-                showToast("点击下方小广告也是对我们的支持");
-            }
-
-            @Override
-            public void onClick() {
-
-            }
-
-            @Override
-            public void onStimulateSuccess() {
-
-            }
-
-            @Override
-            public void playEnd() {
-
-            }
-
-
-            @Override
-            public void onShowed() {
-
-            }
-
-            @Override
-            public void onDismiss() {
-
-            }
-        });
+        } else if (id == R.id.id_fg_remind_rl_before_day_remind_about_container) {
+            AboutActivity.Companion.actionStart(getActivity());
+        } else if (id == R.id.id_fg_remind_rl_before_day_remind_feedback_container) {
+            mPresenter.feedback(getActivity());
+        } else if (id == R.id.id_fg_remind_rl_before_day_remind_support_container) {
+            supportUS();
+        }
     }
 }

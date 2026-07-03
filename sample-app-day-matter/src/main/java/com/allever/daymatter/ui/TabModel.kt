@@ -47,10 +47,10 @@ internal object TabModel {
         /**
          *
          */
-        MATTER(DayMatterDetailFragment::class.java, R.drawable.ic_matter, R.string.matter),
-        SORT(SortFragment::class.java, R.drawable.ic_sort, R.string.sort),
-        CALC(DateCalcFragment::class.java, R.drawable.ic_calc, R.string.calc),
-        SETTING(SettingFragment::class.java, R.drawable.ic_setting, R.string.setting);
+        MATTER(DayMatterDetailFragment::class.java, R.drawable.dm_ic_matter, R.string.dm_matter),
+        SORT(SortFragment::class.java, R.drawable.dm_ic_sort, R.string.dm_sort),
+        CALC(DateCalcFragment::class.java, R.drawable.dm_ic_calc, R.string.dm_calc),
+        SETTING(SettingFragment::class.java, R.drawable.dm_ic_setting, R.string.dm_setting);
 
         val fragmentClassName: String
         var drawable: Drawable? = null

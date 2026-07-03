@@ -28,22 +28,22 @@ public class DayMatterDetailFgPresenter extends BasePresenter<IDayMatterDetailFg
 
         //如果剩余天数大于等于0， 表示还没到
         if (leftDay >= 0){
-            title = context.getString(R.string.distance) + event.getTitle() + context.getString(R.string.has);
+            title = context.getString(R.string.dm_distance) + event.getTitle() + context.getString(R.string.dm_has);
             iView.setTvTitle(title);
             iView.setTvLeftDay(leftDay + "");
-            iView.setTitleBackgroundColor(context.getResources().getColor(R.color.colorDefault));
+            iView.setTitleBackgroundColor(context.getResources().getColor(R.color.dm_colorDefault));
         }else {
             //如果剩余天数小于0， 表示已经过了
-            title = event.getTitle() +context.getString(R.string.already);
+            title = event.getTitle() +context.getString(R.string.dm_already);
             iView.setTvTitle(title);
             iView.setTvLeftDay((-1 * leftDay) + "");
-            iView.setTitleBackgroundColor(context.getResources().getColor(R.color.orange_500));
+            iView.setTitleBackgroundColor(context.getResources().getColor(R.color.dm_orange_500));
         }
         String date = DateUtils.formatDate_Y_M_D_WEEK_New(context,
                 event.getYear(),
                 event.getMonth()-1,
                 event.getDay(),
                 event.getWeekDay());
-        iView.setTvDate(context.getString(R.string.target_date) + date);
+        iView.setTvDate(context.getString(R.string.dm_target_date) + date);
     }
 }

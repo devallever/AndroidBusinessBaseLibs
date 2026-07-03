@@ -3,18 +3,19 @@ package com.allever.daymatter.mvp;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
 import com.allever.daymatter.R;
 
+import app.allever.android.lib.core.base.AbstractActivity;
+
 /**
  * Created by allever on 18-2-28.
  */
 
-public abstract class BaseActivity<V, T extends BasePresenter<V>> extends AppCompatActivity {
+public abstract class BaseActivity<V, T extends BasePresenter<V>> extends AbstractActivity {
 
     protected T mPresenter;
     protected Handler mHandler = new Handler();
@@ -51,7 +52,7 @@ public abstract class BaseActivity<V, T extends BasePresenter<V>> extends AppCom
 
     protected void initToolbar(Toolbar toolbar){
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationIcon(R.drawable.dm_ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

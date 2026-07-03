@@ -116,12 +116,12 @@ public class EditDayMatterPresenter extends BasePresenter<IAddDayMatterView> {
         if (!TextUtils.isEmpty(sortName)){
             mView.setSort(sortName);
         }else {
-            mView.setSort(context.getResources().getString(R.string.sort_life));
+            mView.setSort(context.getResources().getString(R.string.dm_sort_life));
         }
 
         mView.setTopSwitch(mEvent.isTop());
 
-        mView.setTvRepeatType(context.getResources().getString(R.string.no_repeat));
+        mView.setTvRepeatType(context.getResources().getString(R.string.dm_no_repeat));
 
         mView.setEndDateSwitch(mEvent.isEndSwitch());
 
@@ -205,14 +205,14 @@ public class EditDayMatterPresenter extends BasePresenter<IAddDayMatterView> {
         if (!TextUtils.isEmpty(sortName)){
             mView.setSort(sortName);
         }else {
-            mView.setSort(context.getResources().getString(R.string.sort_life));
+            mView.setSort(context.getResources().getString(R.string.dm_sort_life));
         }
 
         mView.setTopSwitch(event.isTop());
 
         switch (event.getRepeatType()){
             case Constants.REPEAT_TYPE_NO_REPEAT:
-                mView.setTvRepeatType(context.getString(R.string.no_repeat));
+                mView.setTvRepeatType(context.getString(R.string.dm_no_repeat));
                 //设置结束时间可见
                 mView.setEndDateSwitchVisible();
                 if (event.isEndSwitch()){
@@ -222,17 +222,17 @@ public class EditDayMatterPresenter extends BasePresenter<IAddDayMatterView> {
                 }
                 break;
             case Constants.REPEAT_TYPE_PER_WEEK:
-                mView.setTvRepeatType(context.getString(R.string.per_week_repeat));
+                mView.setTvRepeatType(context.getString(R.string.dm_per_week_repeat));
                 mView.setEndDateItemGone();
                 mView.setEndDateSwitchGone();
                 break;
             case Constants.REPEAT_TYPE_PER_MONTH:
-                mView.setTvRepeatType(context.getString(R.string.per_month_repeat));
+                mView.setTvRepeatType(context.getString(R.string.dm_per_month_repeat));
                 mView.setEndDateItemGone();
                 mView.setEndDateSwitchGone();
                 break;
             case Constants.REPEAT_TYPE_PER_YEAR:
-                mView.setTvRepeatType(context.getString(R.string.per_year_repeat));
+                mView.setTvRepeatType(context.getString(R.string.dm_per_year_repeat));
                 mView.setEndDateItemGone();
                 mView.setEndDateSwitchGone();
                 break;

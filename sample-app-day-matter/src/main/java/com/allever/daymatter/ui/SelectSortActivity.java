@@ -16,7 +16,8 @@ public class SelectSortActivity extends BaseActivity<ISelectSortView, SelectSort
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_sort);
+        setContentView(R.layout.dm_activity_select_sort);
+        adaptStatusBar(findViewById(R.id.id_toolbar));
     }
 
     @Override

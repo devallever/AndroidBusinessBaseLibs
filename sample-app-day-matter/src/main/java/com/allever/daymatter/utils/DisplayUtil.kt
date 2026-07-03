@@ -1,6 +1,6 @@
 package com.allever.daymatter.utils
 
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 
 /**
  * Created by allever on 17-8-5.

@@ -1,12 +1,12 @@
 package com.allever.daymatter.data;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.crud.LitePalSupport;
 
 /**
  * Created by Allever on 18/5/21.
  */
 
-public class Event extends DataSupport {
+public class Event extends LitePalSupport {
     private int id;
 
     //事件标题
@@ -162,7 +162,7 @@ public class Event extends DataSupport {
         this.lastUpdateTime = lastUpdateTime;
     }
 
-    public static class Sort extends DataSupport{
+    public static class Sort extends LitePalSupport{
 
         private int id;
 

@@ -20,7 +20,6 @@ import com.allever.daymatter.mvp.BaseFragment;
 import com.allever.daymatter.mvp.presenter.DayMatterListPresenter;
 import com.allever.daymatter.mvp.view.IDayMatterListView;
 import com.allever.daymatter.utils.Constants;
-import com.allever.lib.common.util.log.LogUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,10 +29,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+import app.allever.android.lib.core.ext.LoggerKt;
+
 
 /**
  * Created by Allever on 18/5/21.
@@ -43,22 +40,13 @@ public class DayMatterListFragment extends BaseFragment<IDayMatterListView, DayM
 
     private static final String TAG = "DayMatterListFragment";
 
-    @BindView(R.id.id_fg_day_matter_list_tv_title)
     TextView mTvTitle;
-    @BindView(R.id.id_fg_day_matter_list_tv_date)
     TextView mTvDate;
-    @BindView(R.id.d_fg_day_matter_list_tv_left_day)
     TextView mTvLeftDay;
-    @BindView(R.id.id_fg_day_matter_list_rv)
     RecyclerView mRv;
-    @BindView(R.id.id_main_cv_no_data)
     CardView mCvNoData;
-    @BindView(R.id.id_fg_day_matter_list_ll_list_container)
     LinearLayout mLlListContainer;
-    @BindView(R.id.id_btn_add_event)
     FloatingActionButton mBtnAddEvent;
-
-    private Unbinder unbinder;
 
     private DayMatterListAdapter mAdapter;
 
@@ -73,9 +61,9 @@ public class DayMatterListFragment extends BaseFragment<IDayMatterListView, DayM
 
         EventBus.getDefault().register(this);
 
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_day_matter_list, container, false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dm_fragment_day_matter_list, container, false);
 
-        unbinder = ButterKnife.bind(this, view);
+        findView(view);
 
         //初始化控件并设置监听
         initView();
@@ -88,6 +76,18 @@ public class DayMatterListFragment extends BaseFragment<IDayMatterListView, DayM
         }
 
         return view;
+    }
+
+    private void findView(View view) {
+        mTvTitle = view.findViewById(R.id.id_fg_day_matter_list_tv_title);
+        mTvDate = view.findViewById(R.id.id_fg_day_matter_list_tv_date);
+        mTvLeftDay = view.findViewById(R.id.d_fg_day_matter_list_tv_left_day);
+        mRv = view.findViewById(R.id.id_fg_day_matter_list_rv);
+        mCvNoData = view.findViewById(R.id.id_main_cv_no_data);
+        mLlListContainer = view.findViewById(R.id.id_fg_day_matter_list_ll_list_container);
+        mBtnAddEvent = view.findViewById(R.id.id_btn_add_event);
+        mCvNoData.setOnClickListener(v -> EditDayMatterActivity.startSelf(mActivity, false, -1));
+        mBtnAddEvent.setOnClickListener(v -> EditDayMatterActivity.startSelf(mActivity, false, -1));
     }
 
     private void initView() {
@@ -110,14 +110,7 @@ public class DayMatterListFragment extends BaseFragment<IDayMatterListView, DayM
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
         EventBus.getDefault().unregister(this);
-    }
-
-    @OnClick({R.id.id_main_cv_no_data,
-            R.id.id_btn_add_event})
-    public void onViewClicked() {
-        EditDayMatterActivity.startSelf(mActivity, false, -1);
     }
 
     @SuppressLint("RestrictedApi")
@@ -177,7 +170,7 @@ public class DayMatterListFragment extends BaseFragment<IDayMatterListView, DayM
         String eventType = event.getEvent();
         int sortId = event.getSortId();
         mSortId = sortId;
-        LogUtils.INSTANCE.d("onRefreshDayMatterData: sort id = " + sortId);
+        LoggerKt.log("onRefreshDayMatterData: sort id = " + sortId);
 
         switch (eventType){
             //从主界面点击显示类型时接收到的消息事件
