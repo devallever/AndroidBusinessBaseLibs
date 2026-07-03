@@ -52,6 +52,7 @@
         <activity android:name="org.xm.app.virtual.call.ui.WallPagerPickerActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
+        <activity android:name="app.allever.android.sample.app.virtual.call.SampleAppVirtualCallActivity" />
 
         <service android:name="org.xm.app.virtual.call.service.VirtualCallService" />
 

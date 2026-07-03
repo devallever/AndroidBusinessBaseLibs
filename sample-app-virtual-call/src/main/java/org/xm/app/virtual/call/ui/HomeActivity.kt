@@ -50,7 +50,6 @@ class HomeActivity : BaseActivity<HomeView, HomePresenter>(), HomeView,
         mTab = findViewById(R.id.tab_layout)
         mVp = findViewById(R.id.id_main_vp)
         mTvTitle = findViewById(R.id.id_main_tv_title)
-        findViewById<View>(R.id.iv_right).setOnClickListener(this)
 
         mainTabHighlight = resources.getColor(R.color.vc_main_tab_highlight)
         mainTabUnSelectColor = resources.getColor(R.color.vc_main_tab_unselect_color)

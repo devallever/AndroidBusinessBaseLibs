@@ -23,7 +23,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:textColor="@color/black"
-            android:text="@string/app_name"
+            android:text="@string/vc_app_name"
             android:textSize="20sp"/>
 
     </LinearLayout>

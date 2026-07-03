@@ -38,15 +38,6 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextDetailClickItem("多进程通信-IPC", "sample-ipc") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_IPC).navigation()
         },
-        TextDetailClickItem("隐私相机", "sample-app-syp-camera") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_SPY_CAMERA).navigation()
-        },
-        TextDetailClickItem("贴纸相机", "sample-app-sticker-camera") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_STICKER_CAMERA).navigation()
-        },
-        TextDetailClickItem("Gif图搜索", "sample-app-gif-search") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_GIF_SEARCH).navigation()
-        },
         TextDetailClickItem("虚拟来电", "sample-app-virtual-call") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_VIRTUAL_CALL).navigation()
         },
