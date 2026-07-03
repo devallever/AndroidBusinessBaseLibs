@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.allever.daymatter">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:name="com.allever.daymatter.MyApp"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_logo"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/FullScreenStyle">
+        <activity android:name="com.allever.daymatter.MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.allever.daymatter.ui.EditDayMatterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.allever.daymatter.ui.DayMatterDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.allever.daymatter.ui.ModifyDayMatterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.allever.daymatter.ui.SortListActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.allever.daymatter.ui.AboutActivity"
+            android:screenOrientation="portrait"/>
+
+        <receiver
+            android:name="com.allever.daymatter.receiver.CurrentAlarmReceiver"
+            />
+        <receiver
+            android:name="com.allever.daymatter.receiver.BeforeAlarmReceiver"
+            />
+
+        <!-- 友盟 -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5d959b3e0cafb2bb06000950"/>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="${ADMOB_APP_ID}"/>
+    </application>
+
+</manifest>

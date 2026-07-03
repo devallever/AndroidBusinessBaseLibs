@@ -4,7 +4,7 @@ plugins {
     id("kotlin-kapt")
 }
 
-val modelPkg = "com.allever.app.gif.memes"
+val modelPkg = "com.allever.daymatter"
 
 group = modelPkg
 
@@ -24,8 +24,6 @@ android {
 
 dependencies {
     implementation(project(":sample-common"))
-    implementation(project(":lib-ffmpeg-command"))
-    implementation(project(":lib-media-core"))
 
 //    val aarList = mutableListOf(
 //        "toolkit-1.1.aar"
@@ -37,18 +35,7 @@ dependencies {
     implementation(libs.androidx.cardview)
 
     //third
-    //glide
-    implementation(libs.glide)
     implementation(libs.eventbus)
-
-
-    //local
-    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.19")
-
-    //1.0.7 会报错
-    implementation("com.liulishuo.okdownload:okdownload:1.0.4")
-    implementation("com.liulishuo.okdownload:sqlite:1.0.4")
-    implementation("com.liulishuo.okdownload:okhttp:1.0.4")
 
     implementation ("org.litepal.guolindev:core:3.2.3")
 
@@ -60,5 +47,13 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.converter.scalars)
+
+    //Butterknife
+    implementation ("com.jakewharton:butterknife:10.2.3")
+    annotationProcessor ("com.jakewharton:butterknife-compiler:10.2.3")
+    //Rx
+
+    //功能性RecyclerView
+    implementation ("com.yanzhenjie.recyclerview:x:1.3.2")
 
 }

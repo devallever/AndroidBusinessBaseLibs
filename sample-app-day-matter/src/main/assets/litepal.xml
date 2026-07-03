@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+	<dbname value="daymatter" />
+	<version value="1" />
+	<list>
+		<mapping class="com.allever.daymatter.data.Event" />
+		<mapping class="com.allever.daymatter.data.Event$Sort" />
+		<mapping class="com.allever.daymatter.data.Config" />
+	</list>
+</litepal>

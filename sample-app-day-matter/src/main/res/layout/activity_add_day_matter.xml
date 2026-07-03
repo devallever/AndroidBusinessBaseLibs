@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/id_add_day_matter_ll_root">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include layout="@layout/include_toolbar"/>
+
+        </com.google.android.material.appbar.AppBarLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <include layout="@layout/input_day_matter"/>
+
+    <Button
+        android:id="@+id/id_add_day_matter_btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorDefault"
+        android:layout_margin="10dp"
+        android:text="@string/save"
+        android:textColor="@color/white"/>
+
+    <LinearLayout
+        android:id="@+id/id_add_day_matter_delete_update_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/id_edit_day_matter_btn_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/delete"
+            android:background="@color/red_300"
+            android:layout_margin="10dp"
+            android:textColor="@color/white"/>
+
+        <Button
+            android:id="@+id/id_edit_day_matter_btn_update"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/save"
+            android:background="@color/colorDefault"
+            android:layout_margin="10dp"
+            android:textColor="@color/white"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
