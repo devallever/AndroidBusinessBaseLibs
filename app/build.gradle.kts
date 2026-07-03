@@ -82,6 +82,7 @@ dependencies {
     implementation(project(":sample-app-spy-camera"))
     implementation(project(":sample-app-sticker-camera"))
     implementation(project(":sample-app-gif-search"))
+    implementation(project(":sample-app-virtual-call"))
 
     implementation(project(":z-sample-billing"))
     implementation(project(":z-sample-cleaner"))
