@@ -7,16 +7,17 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
-import com.allever.lib.common.app.BaseFragment;
 
 import org.jetbrains.annotations.NotNull;
+
+import app.allever.android.lib.core.base.AbstractFragment;
 
 
 /**
  * Created by Mac on 18/3/1.
  */
 
-public abstract class BaseMvpFragment<V, P extends BasePresenter<V>> extends BaseFragment {
+public abstract class BaseMvpFragment<V, P extends BasePresenter<V>> extends AbstractFragment {
     protected P mPresenter;
 
     @Override

@@ -3,55 +3,38 @@ package org.xm.app.virtual.call.ui
 import android.content.Context
 import android.content.Intent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
-import com.allever.app.virtual.call.BuildConfig
+import app.allever.android.lib.core.app.App
 import com.allever.app.virtual.call.R
-import com.allever.lib.common.app.App
-import com.allever.lib.common.util.SystemUtils
-import com.allever.lib.umeng.UMeng
-import kotlinx.android.synthetic.main.activity_about.*
-import kotlinx.android.synthetic.main.include_top_bar.*
-import org.xm.app.virtual.call.ad.AdContract
 import org.xm.app.virtual.call.app.BaseActivity
 import org.xm.app.virtual.call.ui.mvp.presenter.AboutPresenter
 import org.xm.app.virtual.call.ui.mvp.view.AboutView
+import org.xm.app.virtual.call.util.SystemUtils
 
 class AboutActivity : BaseActivity<AboutView, AboutPresenter>(),
     AboutView, View.OnClickListener {
 
 
-    override fun getContentView(): Any = R.layout.activity_about
+    override fun getContentView(): Any = R.layout.vc_activity_about
 
     override fun initView() {
         //判断是否有刘海屏幕
         checkNotch(Runnable {
+            val rootLayout = findViewById<ViewGroup>(R.id.rootLayout)
             val statusBarViewId = addStatusBar(rootLayout)
             if (rootLayout is RelativeLayout) {
-                val topBar = top_bar.layoutParams as? RelativeLayout.LayoutParams
+                val topBar = findViewById<View>(R.id.top_bar).layoutParams as? RelativeLayout.LayoutParams
                 topBar?.addRule(RelativeLayout.BELOW, statusBarViewId.id)
             }
         })
         findViewById<View>(R.id.about_privacy).setOnClickListener(this)
         findViewById<View>(R.id.iv_left).setOnClickListener(this)
-        findViewById<TextView>(R.id.tv_label).text = getString(R.string.about)
-        val channel = UMeng.getChannel()
-        val last = if (BuildConfig.DEBUG) {
-            "(Debug)-$channel\n" +
-                    "${App.context.packageName}\n" +
-                    "AdMob-${AdContract.ADMOB_APP_ID}"
-        } else {
-            if (channel == "ad") {
-                "(Release)-$channel\n" +
-                        "${App.context.packageName}\n" +
-                        "AdMob-${AdContract.ADMOB_APP_ID}"
-            } else {
-                ""
-            }
-        }
-        findViewById<TextView>(R.id.about_app_version).text = "v${BuildConfig.VERSION_NAME}$last"
+        findViewById<TextView>(R.id.tv_label).text = getString(R.string.vc_about)
+        findViewById<TextView>(R.id.about_app_version).text = "v1.0"
         findViewById<TextView>(R.id.about_right).text =
-            String.format(getString(R.string.about_right), getString(R.string.app_name))
+            String.format(getString(R.string.vc_about_right), getString(R.string.vc_app_name))
     }
 
     override fun initData() {

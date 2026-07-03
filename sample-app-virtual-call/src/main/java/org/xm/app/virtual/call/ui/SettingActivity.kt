@@ -5,8 +5,8 @@ import android.content.Intent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import app.allever.android.lib.core.helper.FeedbackHelper
 import com.allever.app.virtual.call.R
-import com.allever.lib.common.util.FeedbackHelper
 import org.xm.app.virtual.call.app.BaseActivity
 import org.xm.app.virtual.call.ui.mvp.presenter.SettingPresenter
 import org.xm.app.virtual.call.ui.mvp.view.SettingView
@@ -14,14 +14,14 @@ import org.xm.app.virtual.call.util.SystemUtils
 
 class SettingActivity : BaseActivity<SettingView, SettingPresenter>(),
     SettingView, View.OnClickListener {
-    override fun getContentView(): Any = R.layout.activity_setting
+    override fun getContentView(): Any = R.layout.vc_activity_setting
 
     override fun initView() {
         findViewById<View>(R.id.setting_tv_share).setOnClickListener(this)
         findViewById<TextView>(R.id.setting_tv_feedback).setOnClickListener(this)
         findViewById<TextView>(R.id.setting_tv_about).setOnClickListener(this)
         findViewById<ImageView>(R.id.iv_left).setOnClickListener(this)
-        findViewById<TextView>(R.id.tv_label).text = getString(R.string.setting)
+        findViewById<TextView>(R.id.tv_label).text = getString(R.string.vc_setting)
     }
 
     override fun initData() {

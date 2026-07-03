@@ -4,14 +4,14 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.allever.lib.common.app.BaseActivity;
+import app.allever.android.lib.core.base.AbstractActivity;
 
 
 /**
  * Created by allever on 18-2-28.
  */
 
-public abstract class BaseMvpActivity<V, P extends BasePresenter<V>> extends BaseActivity {
+public abstract class BaseMvpActivity<V, P extends BasePresenter<V>> extends AbstractActivity {
 
     protected P mPresenter;
 

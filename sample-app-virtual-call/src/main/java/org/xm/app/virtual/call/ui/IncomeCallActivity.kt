@@ -13,9 +13,8 @@ import android.widget.Chronometer
 import android.widget.ImageView
 import android.widget.TextView
 import com.allever.app.virtual.call.R
-import com.allever.lib.common.app.App
+import app.allever.android.lib.core.app.App
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.activity_in_come_call.*
 import org.xm.app.virtual.call.app.BaseActivity
 import org.xm.app.virtual.call.app.Global
 import org.xm.app.virtual.call.function.SettingHelper
@@ -44,7 +43,7 @@ class IncomeCallActivity : BaseActivity<IncomeCallView, IncomeCallPresenter>(),
 
     private lateinit var mShakeAnimator: ObjectAnimator
 
-    override fun getContentView(): Any = R.layout.activity_in_come_call
+    override fun getContentView(): Any = R.layout.vc_activity_in_come_call
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
@@ -55,7 +54,7 @@ class IncomeCallActivity : BaseActivity<IncomeCallView, IncomeCallPresenter>(),
     override fun initView() {
         mPresenter.initInComeCall()
 
-        mShakeAnimator = createShakeAnimator(in_come_iv_accept, true)
+        mShakeAnimator = createShakeAnimator(findViewById<View>(R.id.in_come_iv_accept), true)
         mShakeAnimator.start()
 
         mInComeCallContainer = findViewById(R.id.in_come_container)
@@ -94,7 +93,7 @@ class IncomeCallActivity : BaseActivity<IncomeCallView, IncomeCallPresenter>(),
 
         findViewById<View>(R.id.in_come_bg).setBackgroundResource(
             Global.wallPagerItemMap[SettingHelper.getWallPagerTitle()]?.resId
-                ?: R.drawable.default_bg
+                ?: R.drawable.vc_default_bg
         )
 
         if (!SettingHelper.getRandomContact()) {
@@ -165,7 +164,7 @@ class IncomeCallActivity : BaseActivity<IncomeCallView, IncomeCallPresenter>(),
         if (filePath.isNotEmpty()) {
             Glide.with(App.context).load(filePath).into(imageView)
         } else {
-            imageView.setImageResource(R.drawable.ic_contact)
+            imageView.setImageResource(R.drawable.vc_ic_contact)
         }
     }
 

@@ -9,10 +9,10 @@
 
     <ImageView
         android:id="@+id/item_ringtone_iv_ring"
-        android:layout_width="@dimen/default_icon_width"
-        android:layout_height="@dimen/default_icon_height"
+        android:layout_width="@dimen/vc_default_icon_width"
+        android:layout_height="@dimen/vc_default_icon_height"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_ringtone"
+        android:src="@drawable/vc_ic_ringtone"
         android:scaleType="centerInside"/>
 
     <TextView
@@ -27,18 +27,18 @@
 
     <ImageView
         android:id="@+id/item_ringtone_iv_check"
-        android:layout_width="@dimen/default_icon_height"
-        android:layout_height="@dimen/default_icon_width"
+        android:layout_width="@dimen/vc_default_icon_height"
+        android:layout_height="@dimen/vc_default_icon_width"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_checked"
+        android:src="@drawable/vc_ic_checked"
         android:scaleType="centerInside"
-        android:tint="@color/default_theme_color"/>
+        android:tint="@color/vc_default_theme_color"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/divider_color"
+        android:background="@color/vc_divider_color"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

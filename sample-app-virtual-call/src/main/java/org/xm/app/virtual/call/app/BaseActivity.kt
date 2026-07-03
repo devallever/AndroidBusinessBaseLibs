@@ -5,11 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import app.allever.android.lib.core.function.notchcompat.NotchCompat
+import app.allever.android.lib.core.util.BarUtils
 import com.allever.app.virtual.call.R
-import com.allever.lib.common.mvp.BaseMvpActivity
-import com.allever.lib.common.mvp.BasePresenter
-import com.allever.lib.common.util.SystemUiUtils
-import com.allever.lib.notchcompat.NotchCompat
+import org.xm.app.virtual.call.mvp.BaseMvpActivity
+import org.xm.app.virtual.call.mvp.BasePresenter
 
 abstract class BaseActivity<V, P : BasePresenter<V>> : BaseMvpActivity<V, P>() {
 
@@ -42,8 +42,8 @@ abstract class BaseActivity<V, P : BasePresenter<V>> : BaseMvpActivity<V, P>() {
     protected fun addStatusBar(rootLayout: ViewGroup): View {
         val statusBarView = View(this)
         statusBarView.id = statusBarView.hashCode()
-        statusBarView.setBackgroundResource(R.drawable.top_bar_bg)
-        val statusBarHeight = SystemUiUtils.getStatusBarHeight(this)
+        statusBarView.setBackgroundResource(R.drawable.vc_top_bar_bg)
+        val statusBarHeight = BarUtils.getStatusBarHeight()
         val lp = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight)
 
         if (rootLayout is RelativeLayout) {

@@ -1,8 +1,6 @@
 package org.xm.app.virtual.call.ui
 
 import android.animation.ObjectAnimator
-import android.app.Dialog
-import android.content.Intent
 import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
@@ -12,36 +10,17 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
+import app.allever.android.lib.core.helper.DisplayHelper
 import com.allever.app.virtual.call.R
-import com.allever.lib.ad.chain.AdChainHelper
-import com.allever.lib.ad.chain.AdChainListener
-import com.allever.lib.ad.chain.IAd
-import com.allever.lib.comment.CommentHelper
-import com.allever.lib.comment.CommentListener
-import com.allever.lib.common.ui.widget.tab.TabLayout
-import com.allever.lib.common.util.DisplayUtils
-import com.allever.lib.recommend.RecommendActivity
-import com.allever.lib.recommend.RecommendDialogHelper
-import com.allever.lib.recommend.RecommendDialogListener
-import com.allever.lib.recommend.RecommendGlobal
-import com.allever.lib.umeng.UMeng
-import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.xm.app.virtual.call.ad.AdContract
 import org.xm.app.virtual.call.app.BaseActivity
 import org.xm.app.virtual.call.ui.adapter.ViewPagerAdapter
 import org.xm.app.virtual.call.ui.dialog.DialogHelper
 import org.xm.app.virtual.call.ui.mvp.presenter.HomePresenter
 import org.xm.app.virtual.call.ui.mvp.view.HomeView
+import org.xm.app.virtual.call.ui.widget.tab.TabLayout
 
 class HomeActivity : BaseActivity<HomeView, HomePresenter>(), HomeView,
     TabLayout.OnTabSelectedListener, View.OnClickListener {
-
-    private var mExitInsertAd: IAd? = null
-    private var mIsAdLoaded = false
-    private var mBackInsertAd: IAd? = null
 
     private lateinit var mVp: ViewPager
     private lateinit var mViewPagerAdapter: ViewPagerAdapter
@@ -54,29 +33,27 @@ class HomeActivity : BaseActivity<HomeView, HomePresenter>(), HomeView,
 
     private lateinit var mShakeAnimator: ObjectAnimator
 
-    override fun getContentView(): Any = R.layout.activity_home
+    override fun getContentView(): Any = R.layout.vc_activity_home
 
     override fun initView() {
         //判断是否有刘海屏幕
         checkNotch(Runnable {
+            val rootLayout = findViewById<ViewGroup>(R.id.rootLayout)
             val statusBarViewId = addStatusBar(rootLayout)
             if (rootLayout is RelativeLayout) {
-                val topBar = top_bar.layoutParams as? RelativeLayout.LayoutParams
+                val topBar = findViewById<View>(R.id.top_bar).layoutParams as? RelativeLayout.LayoutParams
                 topBar?.addRule(RelativeLayout.BELOW, statusBarViewId.id)
             }
         })
 
 
-//        mShakeAnimator = ShakeHelper.createShakeAnimator(iv_right, true)
-//        mShakeAnimator.start()
-        iv_right.visibility = View.GONE
         mTab = findViewById(R.id.tab_layout)
         mVp = findViewById(R.id.id_main_vp)
         mTvTitle = findViewById(R.id.id_main_tv_title)
         findViewById<View>(R.id.iv_right).setOnClickListener(this)
 
-        mainTabHighlight = resources.getColor(R.color.main_tab_highlight)
-        mainTabUnSelectColor = resources.getColor(R.color.main_tab_unselect_color)
+        mainTabHighlight = resources.getColor(R.color.vc_main_tab_highlight)
+        mainTabUnSelectColor = resources.getColor(R.color.vc_main_tab_unselect_color)
 
         initViewPagerData()
         initViewPager()
@@ -86,21 +63,6 @@ class HomeActivity : BaseActivity<HomeView, HomePresenter>(), HomeView,
     override fun initData() {
         mPresenter?.requestPermission(this, Runnable {
             DialogHelper.createGuideDialog(this)
-        })
-
-        AdChainHelper.loadAd(AdContract.AD_NAME_EXIT_INSERT, window.decorView as ViewGroup, object :
-            AdChainListener {
-            override fun onLoaded(ad: IAd?) {
-                mIsAdLoaded = true
-                mExitInsertAd = ad
-            }
-
-            override fun onShowed() {
-                mIsAdLoaded = false
-            }
-
-            override fun onDismiss() {}
-            override fun onFailed(msg: String) {}
         })
     }
 
@@ -126,13 +88,13 @@ class HomeActivity : BaseActivity<HomeView, HomePresenter>(), HomeView,
             override fun onPageSelected(position: Int) {
                 when (position) {
                     0 -> {
-                        mTvTitle.text = getString(R.string.app_name)
+                        mTvTitle.text = getString(R.string.vc_app_name)
                     }
                     1 -> {
-                        mTvTitle.text = getString(R.string.tab_guide)
+                        mTvTitle.text = getString(R.string.vc_tab_guide)
                     }
                     2 -> {
-                        mTvTitle.text = getString(R.string.setting)
+                        mTvTitle.text = getString(R.string.vc_setting)
                     }
                 }
             }
@@ -144,7 +106,6 @@ class HomeActivity : BaseActivity<HomeView, HomePresenter>(), HomeView,
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.iv_right -> {
-                RecommendActivity.start(this, UMeng.getChannel())
             }
         }
     }
@@ -178,8 +139,8 @@ class HomeActivity : BaseActivity<HomeView, HomePresenter>(), HomeView,
             mTab.addTab(tab)
         }
 
-        mTab.setSelectedTabIndicatorWidth(DisplayUtils.dip2px(0))
-        mTab.setSelectedTabIndicatorHeight(DisplayUtils.dip2px(0))
+        mTab.setSelectedTabIndicatorWidth(DisplayHelper.dip2px(0))
+        mTab.setSelectedTabIndicatorHeight(DisplayHelper.dip2px(0))
         mTab.setSelectedTabIndicatorColor(mainTabHighlight)
     }
 
@@ -210,7 +171,7 @@ class HomeActivity : BaseActivity<HomeView, HomePresenter>(), HomeView,
     override fun onTabReselected(tab: TabLayout.Tab) {}
 
     private fun getTabView(position: Int): View {
-        val view = LayoutInflater.from(this).inflate(R.layout.layout_bottom_tab, null)
+        val view = LayoutInflater.from(this).inflate(R.layout.vc_layout_bottom_tab, null)
         val imageView = view.findViewById<ImageView>(R.id.icon)
         val textView = view.findViewById<TextView>(R.id.text1)
         val tab = TabModel.getTab(position)
@@ -219,109 +180,8 @@ class HomeActivity : BaseActivity<HomeView, HomePresenter>(), HomeView,
         return view
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-//        mHandler.postDelayed({
-//            AdChainHelper.loadAd(AdContract.AD_NAME_MAIN_BACK_INSERT, window.decorView as ViewGroup, object :
-//                AdChainListener {
-//                override fun onLoaded(ad: IAd?) {
-//                    mBackInsertAd = ad
-//                    mBackInsertAd?.show()
-//                }
-//                override fun onShowed() {}
-//                override fun onDismiss() {}
-//                override fun onFailed(msg: String) {}
-//            })
-//        }, 500)
-    }
-
-    override fun onDestroy() {
-        mBackInsertAd?.destroy()
-        mExitInsertAd?.destroy()
-//        mShakeAnimator.cancel()
-        super.onDestroy()
-    }
 
     override fun onBackPressed() {
-        if (mIsAdLoaded) {
-            mExitInsertAd?.show()
-            mIsAdLoaded = false
-        } else {
-            if (UMeng.getChannel() == "google") {
-                //谷歌渠道，首次评分，其余推荐
-                if (mIsShowComment) {
-                    if (RecommendGlobal.recommendData.isEmpty()) {
-                        showComment()
-                    } else {
-                        showRecommendDialog()
-                    }
-                } else {
-                    showComment()
-                }
-            } else {
-                //其他渠道推荐
-                checkExit()
-//                if (RecommendGlobal.recommendData.isEmpty()) {
-//                    checkExit()
-//                } else {
-//                    showRecommendDialog()
-//                }
-            }
-        }
-    }
-
-    private fun showRecommendDialog() {
-        val dialog =
-            RecommendDialogHelper.createRecommendDialog(this, object : RecommendDialogListener {
-                override fun onMore(dialog: Dialog?) {
-                    dialog?.dismiss()
-                }
-
-                override fun onReject(dialog: Dialog?) {
-                    dialog?.dismiss()
-                    GlobalScope.launch {
-                        delay(200)
-                        finish()
-                    }
-                }
-
-                override fun onBackPress(dialog: Dialog?) {
-                    dialog?.dismiss()
-                    GlobalScope.launch {
-                        delay(200)
-                        finish()
-                    }
-                }
-            })
-
-        RecommendDialogHelper.show(this, dialog)
-    }
-
-    private var mIsShowComment = false
-    private fun showComment() {
-        val dialog = CommentHelper.createCommentDialog(this, object : CommentListener {
-            override fun onComment(dialog: Dialog?) {
-                dialog?.dismiss()
-            }
-
-            override fun onReject(dialog: Dialog?) {
-                dialog?.dismiss()
-                GlobalScope.launch {
-                    delay(200)
-                    finish()
-                }
-            }
-
-            override fun onBackPress(dialog: Dialog?) {
-                dialog?.dismiss()
-                GlobalScope.launch {
-                    delay(200)
-                    finish()
-                }
-            }
-        })
-
-        CommentHelper.show(this, dialog)
-        mIsShowComment = true
+        checkExit()
     }
 }

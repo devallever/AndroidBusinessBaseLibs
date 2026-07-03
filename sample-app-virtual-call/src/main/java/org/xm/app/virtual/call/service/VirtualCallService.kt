@@ -7,7 +7,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.os.Message
-import com.allever.lib.common.util.log
+import app.allever.android.lib.core.ext.log
 import org.xm.app.virtual.call.function.SettingHelper
 import org.xm.app.virtual.call.ui.IncomeCallActivity
 
@@ -24,8 +24,8 @@ class VirtualCallService : Service() {
     }
 
     private var mHandler = object : Handler(Looper.getMainLooper()) {
-        override fun handleMessage(msg: Message?) {
-            when (msg?.what) {
+        override fun handleMessage(msg: Message) {
+            when (msg.what) {
                 MSG_VIRTUAL_CALL -> {
                     //启动界面
                     log("启动来电界面")

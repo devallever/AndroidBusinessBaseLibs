@@ -6,9 +6,9 @@ import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.media.RingtoneManager.TITLE_COLUMN_INDEX
 import android.os.AsyncTask
-import com.allever.lib.common.app.App
-import com.allever.lib.common.mvp.BasePresenter
-import com.allever.lib.common.util.log
+import app.allever.android.lib.core.app.App
+import org.xm.app.virtual.call.mvp.BasePresenter
+import app.allever.android.lib.core.ext.log
 import org.xm.app.virtual.call.app.Global
 import org.xm.app.virtual.call.bean.RingtoneItem
 import org.xm.app.virtual.call.function.SettingHelper

@@ -37,4 +37,6 @@ dependencies {
     //glide
     implementation(libs.glide)
     implementation(libs.circleimageview)
+    //material
+    implementation(libs.material)
 }

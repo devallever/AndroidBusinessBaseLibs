@@ -1,22 +1,20 @@
 package org.xm.app.virtual.call.ui
 
-import android.Manifest
 import android.os.Bundle
+import app.allever.android.lib.core.base.AbstractActivity
+import app.allever.android.lib.core.function.notchcompat.NotchCompat
+import app.allever.android.lib.core.helper.ActivityHelper
 import com.allever.app.virtual.call.R
-import com.allever.lib.common.app.BaseActivity
-import com.allever.lib.common.util.ActivityCollector
-import com.allever.lib.notchcompat.NotchCompat
-import com.allever.lib.permission.PermissionManager
 import org.xm.app.virtual.call.app.Global
 import org.xm.app.virtual.call.bean.ContactBean
 import org.xm.app.virtual.call.function.SettingHelper
 import org.xm.app.virtual.call.util.SystemUtils
 
-class SplashActivity : BaseActivity() {
+class SplashActivity : AbstractActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        setContentView(R.layout.vc_activity_splash)
 
         // 全屏显示并适配
         NotchCompat.adaptNotchWithFullScreen(window)
@@ -26,7 +24,8 @@ class SplashActivity : BaseActivity() {
             gotoMain()
         }, 1000)
 
-        if (PermissionManager.hasPermissions(Manifest.permission.READ_CONTACTS)) {
+
+        if (true) {
             SystemUtils.getContactList()
         } else {
             Global.contactList.clear()
@@ -42,7 +41,7 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun gotoMain() {
-        ActivityCollector.startActivity(this, HomeActivity::class.java)
+        ActivityHelper.startActivity<HomeActivity>()
         finish()
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@drawable/default_bg"
+    android:background="@drawable/vc_default_bg"
     android:id="@+id/in_come_bg"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 <!--    来电 -->
@@ -15,15 +15,15 @@
         android:layout_marginTop="60dp"
         android:visibility="visible">
 
-        <com.allever.lib.ui.circleimageview.CircleImageView2
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivAvatar"
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_contact"
+            android:src="@drawable/vc_ic_contact"
             android:scaleType="centerCrop"
-            app:civ2_border_color="@color/white"
-            app:civ2_border_width="1dp"/>
+            app:civ_border_color="@color/white"
+            app:civ_border_width="1dp"/>
 
 
         <TextView
@@ -71,14 +71,14 @@
         android:layout_marginTop="60dp"
         android:visibility="gone">
 
-        <com.allever.lib.ui.circleimageview.CircleImageView2
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivAvatarAccept"
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_contact"
-            app:civ2_border_color="@color/white"
-            app:civ2_border_width="1dp"/>
+            android:src="@drawable/vc_ic_contact"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="1dp"/>
 
         <Chronometer
             android:id="@+id/in_come_tv_time"
@@ -119,20 +119,20 @@
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_call_reject"/>
+            android:src="@drawable/vc_ic_call_reject"/>
         <ImageView
             android:id="@+id/in_come_iv_accept"
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_call_accept"/>
+            android:src="@drawable/vc_ic_call_accept"/>
 
         <ImageView
             android:id="@+id/in_come_iv_send_message"
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_message"
+            android:src="@drawable/vc_ic_message"
             android:visibility="gone"/>
 
     </LinearLayout>

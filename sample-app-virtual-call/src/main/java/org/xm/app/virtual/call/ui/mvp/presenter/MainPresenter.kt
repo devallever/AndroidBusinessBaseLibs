@@ -2,10 +2,10 @@ package org.xm.app.virtual.call.ui.mvp.presenter
 
 import android.content.Intent
 import android.provider.ContactsContract
-import com.allever.lib.common.app.App
-import com.allever.lib.common.mvp.BasePresenter
-import com.allever.lib.common.util.log
-import com.allever.lib.common.util.toast
+import app.allever.android.lib.core.app.App
+import org.xm.app.virtual.call.mvp.BasePresenter
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
 import org.xm.app.virtual.call.ui.mvp.view.MainView
 
 class MainPresenter : BasePresenter<MainView>() {

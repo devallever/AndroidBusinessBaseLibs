@@ -5,15 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import app.allever.android.lib.core.base.AbstractActivity
 import com.allever.app.virtual.call.R
-import com.allever.lib.common.app.BaseActivity
 
-class GuideActivity : BaseActivity(), View.OnClickListener {
+class GuideActivity : AbstractActivity(), View.OnClickListener {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_guide)
+        setContentView(R.layout.vc_activity_guide)
 
         findViewById<View>(R.id.iv_left).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_label).text = "使用说明"

@@ -18,10 +18,10 @@ class InComeCallSettingActivity : BaseActivity<InComeCallSettingView, InComeCall
     private lateinit var mEtPhone: EditText
     private lateinit var mEtContact: EditText
     private lateinit var mEtLocal: EditText
-    override fun getContentView(): Any = R.layout.activity_in_come_call_setting
+    override fun getContentView(): Any = R.layout.vc_activity_in_come_call_setting
 
     override fun initView() {
-        findViewById<TextView>(R.id.tv_label).text = getString(R.string.setting_in_come_call)
+        findViewById<TextView>(R.id.tv_label).text = getString(R.string.vc_setting_in_come_call)
         findViewById<View>(R.id.iv_left).setOnClickListener(this)
 
         mEtTime = findViewById(R.id.setting_item_et_time)

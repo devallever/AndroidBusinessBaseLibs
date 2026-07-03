@@ -7,30 +7,21 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.SwitchCompat
 import com.allever.app.virtual.call.R
-import com.allever.lib.ad.chain.AdChainHelper
-import com.allever.lib.ad.chain.AdChainListener
-import com.allever.lib.ad.chain.IAd
-import com.allever.lib.common.app.App
-import com.allever.lib.common.util.FileUtils
-import com.allever.lib.common.util.SystemUtils
-import com.allever.lib.common.util.log
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.util.FileUtils
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.activity_advanced_income_setting.*
-import kotlinx.android.synthetic.main.include_top_bar.*
-import org.xm.app.virtual.call.ad.AdContract
 import org.xm.app.virtual.call.app.BaseActivity
 import org.xm.app.virtual.call.function.SettingHelper
 import org.xm.app.virtual.call.ui.mvp.presenter.AdvancedIncomeSettingPresenter
 import org.xm.app.virtual.call.ui.mvp.view.AdvancedIncomeSettingView
+import org.xm.app.virtual.call.util.SystemUtils
 import java.io.File
 
 class AdvancedIncomeSettingActivity :
     BaseActivity<AdvancedIncomeSettingView, AdvancedIncomeSettingPresenter>(),
     AdvancedIncomeSettingView,
     View.OnClickListener, CompoundButton.OnCheckedChangeListener {
-
-    private var mBannerAd: IAd? = null
-
     private lateinit var mTvRingtoneTitle: TextView
     private lateinit var mTvWallPagerTitle: TextView
     private lateinit var mSwitchVibrator: SwitchCompat
@@ -45,14 +36,15 @@ class AdvancedIncomeSettingActivity :
 
     private lateinit var mTempPath: String
 
-    override fun getContentView(): Any = R.layout.activity_advanced_income_setting
+    override fun getContentView(): Any = R.layout.vc_activity_advanced_income_setting
 
     override fun initView() {
         //判断是否有刘海屏幕
         checkNotch(Runnable {
+            val rootLayout = findViewById<ViewGroup>(R.id.rootLayout)
             val statusBarViewId = addStatusBar(rootLayout)
             if (rootLayout is RelativeLayout) {
-                val topBar = top_bar.layoutParams as? RelativeLayout.LayoutParams
+                val topBar = findViewById<View>(R.id.top_bar).layoutParams as? RelativeLayout.LayoutParams
                 topBar?.addRule(RelativeLayout.BELOW, statusBarViewId.id)
             }
         })
@@ -60,7 +52,7 @@ class AdvancedIncomeSettingActivity :
         mTempPath = "$cacheDir${File.separator}temp.jpg"
 
         findViewById<View>(R.id.iv_left).setOnClickListener(this)
-        findViewById<TextView>(R.id.tv_label).text = getString(R.string.advanced_setting)
+        findViewById<TextView>(R.id.tv_label).text = getString(R.string.vc_advanced_setting)
         mTvRingtoneTitle = findViewById(R.id.setting_item_tv_ringtone)
         mTvRingtoneTitle.setOnClickListener(this)
         mTvWallPagerTitle = findViewById(R.id.setting_item_tv_background)
@@ -94,8 +86,6 @@ class AdvancedIncomeSettingActivity :
     }
 
     override fun initData() {
-        loadBanner()
-        loadSettingInsert()
     }
 
     override fun createPresenter(): AdvancedIncomeSettingPresenter =
@@ -107,12 +97,10 @@ class AdvancedIncomeSettingActivity :
         mTvWallPagerTitle.text = SettingHelper.getWallPagerTitle()
         mTvAvatarPath.text = SettingHelper.getAvatarPath()
         loadAvatar()
-        mBannerAd?.onAdResume()
     }
 
     override fun onPause() {
         super.onPause()
-        mBannerAd?.onAdPause()
     }
 
     override fun onDestroy() {
@@ -127,20 +115,13 @@ class AdvancedIncomeSettingActivity :
         SettingHelper.setRandomContact(mSwitchRadomContact.isChecked)
         SettingHelper.setAvatarPath(mTvAvatarPath.text.toString())
 
-        mSettingInsertAd?.destroy()
-        mBannerAd?.destroy()
-//        setResult(Activity.RESULT_OK)
         super.onDestroy()
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.iv_left -> {
-                if (mNeedShowInsertAd && mSettingInsertAd != null) {
-                    mSettingInsertAd?.show()
-                } else {
-                    finish()
-                }
+                finish()
             }
             R.id.setting_item_tv_ringtone -> {
                 RingtonePickerActivity.start(this)
@@ -172,7 +153,6 @@ class AdvancedIncomeSettingActivity :
                     mTvAvatarPath.text = filePath
                     SettingHelper.setAvatarPath(filePath)
                     loadAvatar()
-                    mNeedShowInsertAd = true
                 }
                 else -> {
                 }
@@ -181,7 +161,6 @@ class AdvancedIncomeSettingActivity :
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-        mNeedShowInsertAd = true
         when (buttonView?.id) {
             R.id.setting_item_switch_repeat -> {
                 showRepeatSetting(isChecked)
@@ -212,56 +191,10 @@ class AdvancedIncomeSettingActivity :
         if (filePath.isNotEmpty()) {
             Glide.with(App.context).load(filePath).into(mIvAvatar)
         } else {
-            mIvAvatar.setImageResource(R.drawable.ic_contact)
+            mIvAvatar.setImageResource(R.drawable.vc_ic_contact)
         }
     }
-
-    private fun loadBanner() {
-        val bannerContainer = findViewById<ViewGroup>(R.id.banner_container)
-        AdChainHelper.loadAd(AdContract.AD_NAME_ADVANCED_SETTING_BANNER, bannerContainer, object :
-            AdChainListener {
-            override fun onLoaded(ad: IAd?) {
-                mBannerAd = ad
-            }
-
-            override fun onShowed() {}
-            override fun onDismiss() {}
-            override fun onFailed(msg: String) {}
-        })
-    }
-
-    private var mSettingInsertAd: IAd? = null
-    override fun onBackPressed() {
-        if (mNeedShowInsertAd && mSettingInsertAd != null) {
-            mSettingInsertAd?.show()
-            return
-        }
-        super.onBackPressed()
-    }
-
-    private var mNeedShowInsertAd = false
-    private fun loadSettingInsert() {
-        AdChainHelper.loadAd(
-            AdContract.AD_NAME_SETTING_INSERT,
-            window.decorView as ViewGroup,
-            object :
-                AdChainListener {
-                override fun onLoaded(ad: IAd?) {
-                    mSettingInsertAd = ad
-                }
-
-                override fun onShowed() {}
-                override fun onDismiss() {
-                    if (!isFinishing) {
-                        mHandler.postDelayed({
-                            finish()
-                        }, 300)
-                    }
-                }
-
-                override fun onFailed(msg: String) {}
-            })
-    }
+    
 
     companion object {
         private const val RC_PICK_IMAGE = 0x01

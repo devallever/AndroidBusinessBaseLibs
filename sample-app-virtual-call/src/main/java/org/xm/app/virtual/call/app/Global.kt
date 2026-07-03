@@ -21,31 +21,31 @@ object Global {
         var item = WallPagerItem()
         item.title = "Default"
         item.checked = false
-        item.resId = R.drawable.default_bg
+        item.resId = R.drawable.vc_default_bg
         Global.wallPagerItemList.add(item)
 
         item = WallPagerItem()
         item.title = "Xiaomi"
         item.checked = false
-        item.resId = R.drawable.xiaomi_bg
+        item.resId = R.drawable.vc_xiaomi_bg
         Global.wallPagerItemList.add(item)
 
         item = WallPagerItem()
         item.title = "HUAWEI"
         item.checked = false
-        item.resId = R.drawable.huawei_bg
+        item.resId = R.drawable.vc_huawei_bg
         Global.wallPagerItemList.add(item)
 
         item = WallPagerItem()
         item.title = "OPPO"
         item.checked = false
-        item.resId = R.drawable.oppo_bg
+        item.resId = R.drawable.vc_oppo_bg
         Global.wallPagerItemList.add(item)
 
         item = WallPagerItem()
         item.title = "VIVO"
         item.checked = false
-        item.resId = R.drawable.vivo_bg
+        item.resId = R.drawable.vc_vivo_bg
         Global.wallPagerItemList.add(item)
 
         wallPagerItemList.map {

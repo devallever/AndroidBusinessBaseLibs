@@ -2,8 +2,10 @@ package org.xm.app.virtual.call.util
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
+import android.app.Activity
 import android.app.ActivityManager
 import android.app.KeyguardManager
+import android.content.ActivityNotFoundException
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
@@ -16,19 +18,66 @@ import android.os.PowerManager.ACQUIRE_CAUSES_WAKEUP
 import android.os.PowerManager.SCREEN_DIM_WAKE_LOCK
 import android.os.StrictMode
 import android.provider.ContactsContract
+import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
-import com.allever.app.virtual.call.BuildConfig
-import com.allever.app.virtual.call.R
-import com.allever.lib.common.app.App
-import com.allever.lib.common.util.log.LogUtils
+import app.allever.android.lib.core.app.App
 import org.xm.app.virtual.call.app.Global
 import org.xm.app.virtual.call.bean.ContactBean
+import kotlin.collections.get
 
 
 object SystemUtils {
     private val isDebug = true
+
+    /**
+     * 从相册中选择一张图片后， 回调Activity的onActivityResult方法进行处理
+     */
+    fun chooseImageFromGallery(activity: Activity, requestCode: Int) {
+        val albumIntent = Intent(Intent.ACTION_PICK)
+        albumIntent.type = "image/*"
+        albumIntent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        activity.startActivityForResult(albumIntent, requestCode)
+    }
+
+    fun openUrl(activity: Activity, url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        try {
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
+            log("Launching intent: " + intent + " with extras: " + intent.extras)
+            activity.startActivity(intent)
+        } catch (ignored: ActivityNotFoundException) {
+            log("Nothing available to handle $intent")
+        }
+
+    }
+
+    fun isChineseLang(): Boolean {
+        val configuration = App.context.resources.configuration
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            return configuration.locale.language == "zh"
+        } else {
+            val langList = configuration.locales
+            if (langList.isEmpty) {
+                return true
+            }
+            val lang = langList[0]
+            return lang.language == "zh"
+        }
+    }
+
+
+    fun getManifestDataByKey(context: Context, key: String): String {
+        val appInfo = App.context.packageManager
+            .getApplicationInfo(
+                context.packageName,
+                PackageManager.GET_META_DATA
+            )
+        val msg = appInfo.metaData.getString(key)
+        log("$key - $msg")
+        return msg?:""
+    }
 
     @SuppressLint("InvalidWakeLockTag")
     fun wakeUpAndUnlock(context: Context) {
@@ -50,6 +99,7 @@ object SystemUtils {
         wl.release()
     }
 
+    @SuppressLint("Range")
     fun getContactList() {
         Global.contactList.clear()
         val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
@@ -60,7 +110,7 @@ object SystemUtils {
         while (cursor.moveToNext()) {
             val name = cursor.getString(cursor.getColumnIndex(NAME))
             val phone = cursor.getString(cursor.getColumnIndex(NUM))
-            LogUtils.d("姓名：$name, 电话：$phone")
+            log("姓名：$name, 电话：$phone")
             val contactBean = ContactBean()
             contactBean.name = name
             contactBean.phone = phone
@@ -342,14 +392,14 @@ object SystemUtils {
         shareIntent.type = "text/plain"
         return Intent.createChooser(
             shareIntent,
-            context.resources.getString(R.string.common_share_to)
+            "Share to"
         )
     }
 
     fun getManifestDataByKey(key: String): String {
         val appInfo = App.context.packageManager
             .getApplicationInfo(
-                BuildConfig.APPLICATION_ID,
+                App.context.packageName,
                 PackageManager.GET_META_DATA
             )
         val msg = appInfo.metaData.getString(key)

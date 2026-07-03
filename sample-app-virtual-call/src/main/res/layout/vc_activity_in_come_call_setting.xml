@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/default_background_color">
+    android:background="@color/vc_default_background_color">
 
     <include
-        layout="@layout/include_top_bar"/>
+        layout="@layout/vc_include_top_bar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,65 +20,65 @@
 
 
         <LinearLayout
-            style="@style/setting_item_container_style">
+            style="@style/vc_setting_item_container_style">
 
             <TextView
-                style="@style/setting_item_label_style"
+                style="@style/vc_setting_item_label_style"
                 android:text="@string/countdown"/>
 
             <EditText
-                style="@style/setting_item_et_style"
+                style="@style/vc_setting_item_et_style"
                 android:id="@+id/setting_item_et_time"
                 android:hint="秒"
                 android:inputType="number"
                 android:maxLength="2"/>
         </LinearLayout>
-        <include layout="@layout/include_divider_line"/>
+        <include layout="@layout/vc_include_divider_line"/>
 
 
         <LinearLayout
-            style="@style/setting_item_container_style">
+            style="@style/vc_setting_item_container_style">
 
             <TextView
-                style="@style/setting_item_label_style"
+                style="@style/vc_setting_item_label_style"
                 android:text="@string/phone"/>
 
             <EditText
-                style="@style/setting_item_et_style"
+                style="@style/vc_setting_item_et_style"
                 android:id="@+id/setting_item_et_phone"
                 android:hint="@string/phone"
                 android:inputType="phone"/>
         </LinearLayout>
-        <include layout="@layout/include_divider_line"/>
+        <include layout="@layout/vc_include_divider_line"/>
 
 
         <LinearLayout
-            style="@style/setting_item_container_style">
+            style="@style/vc_setting_item_container_style">
 
             <TextView
-                style="@style/setting_item_label_style"
+                style="@style/vc_setting_item_label_style"
                 android:text="@string/contact"/>
 
             <EditText
-                style="@style/setting_item_et_style"
+                style="@style/vc_setting_item_et_style"
                 android:id="@+id/setting_item_et_contact"
                 android:hint="姓名"/>
         </LinearLayout>
-        <include layout="@layout/include_divider_line"/>
+        <include layout="@layout/vc_include_divider_line"/>
 
         <LinearLayout
-            style="@style/setting_item_container_style">
+            style="@style/vc_setting_item_container_style">
 
             <TextView
-                style="@style/setting_item_label_style"
+                style="@style/vc_setting_item_label_style"
                 android:text="@string/place"/>
 
             <EditText
-                style="@style/setting_item_et_style"
+                style="@style/vc_setting_item_et_style"
                 android:id="@+id/setting_item_et_local"
                 android:hint="归属地"/>
         </LinearLayout>
-        <include layout="@layout/include_divider_line"/>
+        <include layout="@layout/vc_include_divider_line"/>
 
 
     </LinearLayout>

@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         tools:context="org.xm.app.virtual.call.ui.MainActivity">
 
-    <include layout="@layout/include_top_bar"/>
+    <include layout="@layout/vc_include_top_bar"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

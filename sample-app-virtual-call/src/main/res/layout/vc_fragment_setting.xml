@@ -13,44 +13,44 @@
 
         <TextView
             android:id="@+id/setting_tv_permission"
-            style="@style/setting_item"
-            android:drawableEnd="@drawable/ic_arrow"
-            android:text="@string/permission_setting" />
+            style="@style/vc_setting_item"
+            android:drawableEnd="@drawable/vc_ic_arrow"
+            android:text="@string/vc_permission_setting" />
 
-        <include layout="@layout/include_divider_line" />
+        <include layout="@layout/vc_include_divider_line" />
 
         <TextView
             android:id="@+id/setting_tv_share"
-            style="@style/setting_item"
-            android:drawableEnd="@drawable/ic_share"
-            android:text="@string/share" />
+            style="@style/vc_setting_item"
+            android:drawableEnd="@drawable/vc_ic_share"
+            android:text="@string/vc_share" />
 
-        <include layout="@layout/include_divider_line" />
+        <include layout="@layout/vc_include_divider_line" />
 
         <TextView
             android:id="@+id/setting_tv_feedback"
-            style="@style/setting_item"
-            android:drawableEnd="@drawable/ic_feedback"
-            android:text="@string/feedback" />
+            style="@style/vc_setting_item"
+            android:drawableEnd="@drawable/vc_ic_feedback"
+            android:text="@string/vc_feedback" />
 
-        <include layout="@layout/include_divider_line" />
+        <include layout="@layout/vc_include_divider_line" />
 
         <TextView
             android:id="@+id/setting_tv_about"
-            style="@style/setting_item"
-            android:drawableEnd="@drawable/ic_about"
-            android:text="@string/about" />
+            style="@style/vc_setting_item"
+            android:drawableEnd="@drawable/vc_ic_about"
+            android:text="@string/vc_about" />
 
-        <include layout="@layout/include_divider_line" />
+        <include layout="@layout/vc_include_divider_line" />
 
         <TextView
             android:id="@+id/setting_tv_support"
-            style="@style/setting_item"
-            android:drawableEnd="@drawable/ic_support"
-            android:text="@string/support"
+            style="@style/vc_setting_item"
+            android:drawableEnd="@drawable/vc_ic_support"
+            android:text="@string/vc_support"
             android:visibility="visible"/>
 
-        <include layout="@layout/include_divider_line"
+        <include layout="@layout/vc_include_divider_line"
             android:visibility="visible"/>
 
         <FrameLayout

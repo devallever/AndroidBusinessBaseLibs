@@ -1,23 +1,23 @@
 <resources>
-    <string name="app_name">VirtualCall</string>
+    <string name="vc_app_name">VirtualCall</string>
 
     <!-- 设置 -->
-    <string name="setting">Setting</string>
-    <string name="setting_in_come_call">Call setup</string>
-    <string name="tab_guide">Instructions for use</string>
+    <string name="vc_setting">Setting</string>
+    <string name="vc_setting_in_come_call">Call setup</string>
+    <string name="vc_tab_guide">Instructions for use</string>
 
-    <string name="share">Share</string>
-    <string name="feedback">Feedback</string>
-    <string name="about">About</string>
-    <string name="support">Support us</string>
-    <string name="advanced_setting">Advanced settings</string>
-    <string name="ringtone_picker">Select ringtone</string>
-    <string name="wall_pager_picker">Choose wallpaper</string>
-    <string name="privacy">Privacy Policy</string>
-    <string name="permission_setting">Setting permissions</string>
-    <string name="about_right">Copyright @2018–2019 %s All Rights Reserved</string>
+    <string name="vc_share">Share</string>
+    <string name="vc_feedback">Feedback</string>
+    <string name="vc_about">About</string>
+    <string name="vc_support">Support us</string>
+    <string name="vc_advanced_setting">Advanced settings</string>
+    <string name="vc_ringtone_picker">Select ringtone</string>
+    <string name="vc_wall_pager_picker">Choose wallpaper</string>
+    <string name="vc_privacy">Privacy Policy</string>
+    <string name="vc_permission_setting">Setting permissions</string>
+    <string name="vc_about_right">Copyright @2018–2019 %s All Rights Reserved</string>
 
-    <string name="guide">Desperate, tired, blind, trivial, difficult to open, an urgent need to get out of the phone to save you from the fire. Leaders, colleagues, elders, friends, lovers call, all can be customized. A simple and practical virtual phone software, a good helper to get out.
+    <string name="vc_guide">Desperate, tired, blind, trivial, difficult to open, an urgent need to get out of the phone to save you from the fire. Leaders, colleagues, elders, friends, lovers call, all can be customized. A simple and practical virtual phone software, a good helper to get out.
 The star idol calls you, and every day, I love you to play Moringcall, and every day is a wonderful day. The effect is realistic, and anyone who wants to call you can. You can also spoof friends and pretend that Love beans give him a call.
 Product features and features:
 \n[One-touch call] Quickly activate the default virtual call, one-click emergency.

@@ -16,13 +16,13 @@ class RingtoneAdapter(context: Context, resId: Int, data: MutableList<RingtoneIt
         holder.setVisible(R.id.item_ringtone_iv_check, item.checked)
 
         if (item.checked) {
-            holder.setTextColorRes(R.id.item_ringtone_tv_title, R.color.item_ringtone_selected)
+            holder.setTextColorRes(R.id.item_ringtone_tv_title, R.color.vc_item_ringtone_selected)
             holder.getView<ImageView>(R.id.item_ringtone_iv_ring)?.setColorFilter(
-                mContext.resources.getColor(R.color.default_theme_color),
+                mContext.resources.getColor(R.color.vc_default_theme_color),
                 PorterDuff.Mode.SRC_IN
             )
         } else {
-            holder.setTextColorRes(R.id.item_ringtone_tv_title, R.color.item_ringtone_un_selected)
+            holder.setTextColorRes(R.id.item_ringtone_tv_title, R.color.vc_item_ringtone_un_selected)
             holder.getView<ImageView>(R.id.item_ringtone_iv_ring)?.colorFilter = null
         }
     }

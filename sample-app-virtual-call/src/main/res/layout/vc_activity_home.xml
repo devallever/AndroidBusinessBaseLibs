@@ -13,21 +13,12 @@
             android:id="@+id/id_main_tv_title"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:background="@drawable/top_bar_bg"
+            android:background="@drawable/vc_top_bar_bg"
             android:text="@string/app_name"
             android:textColor="@color/white"
             android:gravity="center"
             android:textSize="16sp"
             android:textStyle="bold"/>
-
-        <com.allever.lib.ui.widget.AnimationImageView
-            android:id="@+id/iv_right"
-            android:layout_width="@dimen/default_icon_width"
-            android:layout_height="@dimen/default_icon_height"
-            android:src="@drawable/recommend_ic_gift"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:scaleType="centerInside"/>
     </RelativeLayout>
 
 
@@ -46,7 +37,7 @@
         android:layout_above="@+id/tab_layout"
         android:background="#cccccc" />
 
-    <com.allever.lib.common.ui.widget.tab.TabLayout
+    <org.xm.app.virtual.call.ui.widget.tab.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="56dp"

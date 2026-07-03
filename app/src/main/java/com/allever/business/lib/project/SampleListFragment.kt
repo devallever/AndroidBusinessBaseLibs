@@ -47,5 +47,8 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextDetailClickItem("Gif图搜索", "sample-app-gif-search") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_GIF_SEARCH).navigation()
         },
+        TextDetailClickItem("虚拟来电", "sample-app-virtual-call") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_VIRTUAL_CALL).navigation()
+        },
     )
 }

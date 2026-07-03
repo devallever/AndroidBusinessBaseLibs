@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/guide"
+            android:text="@string/vc_guide"
             android:layout_margin="20dp"
             android:textColor="@color/black"
             android:layout_below="@id/adContainer"/>

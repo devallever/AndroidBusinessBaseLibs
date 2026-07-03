@@ -1,23 +1,23 @@
 <resources>
-    <string name="app_name">虚拟来电</string>
+    <string name="vc_app_name">虚拟来电</string>
 
     <!-- 设置 -->
-    <string name="setting">设置</string>
-    <string name="setting_in_come_call">来电设置</string>
-    <string name="tab_guide">使用说明</string>
+    <string name="vc_setting">设置</string>
+    <string name="vc_setting_in_come_call">来电设置</string>
+    <string name="vc_tab_guide">使用说明</string>
 
-    <string name="share">分享</string>
-    <string name="feedback">反馈</string>
-    <string name="about">关于</string>
-    <string name="support">支持我们</string>
-    <string name="advanced_setting">高级设定</string>
-    <string name="ringtone_picker">选择铃声</string>
-    <string name="wall_pager_picker">选择壁纸</string>
-    <string name="privacy">隐私政策</string>
-    <string name="permission_setting">设置权限</string>
-    <string name="about_right">版权所有@2018–2019 %s 保留所有权利</string>
+    <string name="vc_share">分享</string>
+    <string name="vc_feedback">反馈</string>
+    <string name="vc_about">关于</string>
+    <string name="vc_support">支持我们</string>
+    <string name="vc_advanced_setting">高级设定</string>
+    <string name="vc_ringtone_picker">选择铃声</string>
+    <string name="vc_wall_pager_picker">选择壁纸</string>
+    <string name="vc_privacy">隐私政策</string>
+    <string name="vc_permission_setting">设置权限</string>
+    <string name="vc_about_right">版权所有@2018–2019 %s 保留所有权利</string>
 
-    <string name="guide">应酬疲惫，相亲尴尬，琐事缠身，难以开口，急需一个脱身电话救你于水火。领导、同事、长辈、朋友、恋人来电、统统可以自定义。一款简单实用的虚拟电话软件，脱身的好帮手。
+    <string name="vc_guide">应酬疲惫，相亲尴尬，琐事缠身，难以开口，急需一个脱身电话救你于水火。领导、同事、长辈、朋友、恋人来电、统统可以自定义。一款简单实用的虚拟电话软件，脱身的好帮手。
 明星偶像给你打来电话，天天让爱豆大佬给你打Moringcall，每天都是美好的一天。效果逼真，想要谁给你来电都可以。也可以恶搞朋友，假装爱豆给他来电。
 产品功能与特色：
 \n【一键来电】快速启动默认设置的虚拟来电，一键救急。

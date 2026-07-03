@@ -5,8 +5,8 @@ import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Vibrator
-import com.allever.lib.common.app.App
-import com.allever.lib.common.mvp.BasePresenter
+import app.allever.android.lib.core.app.App
+import org.xm.app.virtual.call.mvp.BasePresenter
 import org.xm.app.virtual.call.function.SettingHelper
 import org.xm.app.virtual.call.ui.mvp.view.IncomeCallView
 
