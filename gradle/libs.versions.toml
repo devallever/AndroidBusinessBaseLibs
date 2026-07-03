@@ -116,6 +116,7 @@ navigationFragmentKtx = "2.6.0"
 navigationUiKtx = "2.6.0"
 picker = "v1.0.4"
 ktxSerialization = "1.6.3"
+butterknife = "10.2.3"
 
 
 
@@ -265,6 +266,8 @@ androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navi
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 simplepeng-picker = { group = "com.github.simplepeng", name = "PickerLayoutManager", version.ref = "picker" }
 ktx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "ktxSerialization" }
+
+butterknife-gradle-plugin = { module = "com.jakewharton:butterknife-gradle-plugin", version.ref = "butterknife" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
