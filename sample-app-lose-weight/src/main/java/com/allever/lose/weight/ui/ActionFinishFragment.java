@@ -22,7 +22,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.allever.lose.weight.R;
-import com.allever.lose.weight.ad.AdConstants;
 import com.allever.lose.weight.util.Constant;
 import com.allever.lose.weight.base.BaseDialog;
 import com.allever.lose.weight.base.BaseFragment;
@@ -36,71 +35,39 @@ import com.allever.lose.weight.util.Util;
 import com.allever.lose.weight.ui.view.widget.BMIView;
 
 import org.greenrobot.eventbus.EventBus;
-import org.jetbrains.annotations.NotNull;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 /**
  * Created by Mac on 18/3/2.
  */
-
+@SuppressLint("NonConstantResourceId")
 public class ActionFinishFragment extends BaseFragment<IActionFinishView, ActionFinishPresenter> implements IActionFinishView,
         RemindDialog.IRemindListener,
         HeightWeightDialog.IWHDataListener,
         YearSelectDialog.IYearDataListener {
     private static final String TAG = "ActionFinishFragment";
 
-    @BindView(R.id.id_fg_action_finish_toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.id_fg_action_finish_bmi_view)
     BMIView mBmiView;
-    @BindView(R.id.id_fg_action_finish_tv_cal_name)
     TextView mTvCalName;
-    @BindView(R.id.id_fg_action_finish_tv_cal_value)
     TextView mTvCalValue;
-    @BindView(R.id.id_fg_action_finish_tv_remind)
     TextView mTvRemind;
-    @BindView(R.id.id_fg_action_finish_tv_save)
     TextView mTvSave;
-    @BindView(R.id.id_fg_action_finish_tv_share)
     TextView mTvShare;
-    //    @BindView(R.id.id_fg_action_finish_tv_hide)
-//    TextView mTvHide;
-    @BindView(R.id.id_fg_action_finish_tv_edit_weight)
+    TextView mTvHide;
     TextView mTvEditWeight;
-    @BindView(R.id.id_fg_action_finish_tv_train_duration)
     TextView mTvExerciseDuration;
-    @BindView(R.id.id_fg_action_finish_tv_train_count)
     TextView mTvTrainCount;
-    @BindView(R.id.id_fg_action_finish_tv_finish)
     TextView mTvDayFinish;
-
-    @BindView(R.id.id_fg_action_finish_rb_unit_kg)
     RadioButton mRbKg;
-    @BindView(R.id.id_fg_action_finish_rb_unit_lb)
     RadioButton mRbLb;
 
-    @BindView(R.id.id_fg_action_finish_et_weight)
     EditText mEtWeight;
-    @BindView(R.id.id_fg_action_finish_switch_sync_google)
     SwitchCompat mSwitchSyncGoogle;
-    @BindView(R.id.id_fg_action_finish_rg_feel)
     RadioGroup mRgFeel;
-    @BindView(R.id.id_fg_action_finish_rg_unit_container)
     RadioGroup mRgUnit;
-    //    @BindView(R.id.id_fg_action_finish_btn_save)
-//    Button mBtnSave;
-//    @BindView(R.id.id_fg_action_finish_tv_input_w_h)
-//    TextView mTvInputWH;
-    @BindView(R.id.id_fg_action_finish_nested_scroll_view)
     NestedScrollView idFgActionFinishNestedScrollView;
 
     private float mHeight;
 
-
-    private Unbinder mButterKnifeBinder;
     private RemindDialog mReminderDialog;
     private HeightWeightDialog mHeightWeightDialog;
     private YearSelectDialog mYearDialog;
@@ -129,7 +96,26 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
         }
 
         View view = inflater.inflate(R.layout.fragment_action_finish, container, false);
-        mButterKnifeBinder = ButterKnife.bind(this, view);
+
+        mToolbar = view.findViewById(R.id.id_fg_action_finish_toolbar);
+        mBmiView = view.findViewById(R.id.id_fg_action_finish_bmi_view);
+        mTvCalName = view.findViewById(R.id.id_fg_action_finish_tv_cal_name);
+        mTvCalValue = view.findViewById(R.id.id_fg_action_finish_tv_cal_value);
+        mTvRemind = view.findViewById(R.id.id_fg_action_finish_tv_remind);
+        mTvSave = view.findViewById(R.id.id_fg_action_finish_tv_save);
+        mTvShare = view.findViewById(R.id.id_fg_action_finish_tv_share);
+        mTvEditWeight = view.findViewById(R.id.id_fg_action_finish_tv_edit_weight);
+        mTvExerciseDuration = view.findViewById(R.id.id_fg_action_finish_tv_train_duration);
+        mTvTrainCount = view.findViewById(R.id.id_fg_action_finish_tv_train_count);
+        mTvDayFinish = view.findViewById(R.id.id_fg_action_finish_tv_finish);
+        mRbKg = view.findViewById(R.id.id_fg_action_finish_rb_unit_kg);
+        mRbLb = view.findViewById(R.id.id_fg_action_finish_rb_unit_lb);
+        mEtWeight = view.findViewById(R.id.id_fg_action_finish_et_weight);
+        mSwitchSyncGoogle = view.findViewById(R.id.id_fg_action_finish_switch_sync_google);
+        mRgFeel = view.findViewById(R.id.id_fg_action_finish_rg_feel);
+        mRgUnit = view.findViewById(R.id.id_fg_action_finish_rg_unit_container);
+
+
         initView();
         initToolbar(mToolbar);
 
@@ -142,8 +128,6 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
         mPresenter.getBmi();
         mPresenter.getCurrentDay();
         mPresenter.getWeight();
-
-        loadInsertAd();
 
         return view;
     }
@@ -210,15 +194,10 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
                 if (value.isEmpty()) {
                     value = String.valueOf(0);
                 }
-                switch (id) {
-                    case R.id.id_fg_action_finish_rb_unit_kg:
-                        mPresenter.calLb2Kg(Float.valueOf(value));
-                        break;
-                    case R.id.id_fg_action_finish_rb_unit_lb:
-                        mPresenter.calKg2Lb(Float.valueOf(value));
-                        break;
-                    default:
-                        break;
+                if (id == R.id.id_fg_action_finish_rb_unit_kg) {
+                    mPresenter.calLb2Kg(Float.valueOf(value));
+                } else if (id == R.id.id_fg_action_finish_rb_unit_lb) {
+                    mPresenter.calKg2Lb(Float.valueOf(value));
                 }
             }
         });
@@ -258,23 +237,6 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
             }
         });
 
-//        mTvHide.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // if weight and height == null -> show tv_input_width_height
-//                // 默认已经输入
-//                if (mBmiView.getVisibility() == View.GONE || mBmiView.getVisibility() == View.INVISIBLE) {
-//                    mTvHide.setText(R.string.hide);
-//                    mBmiView.setVisibility(View.VISIBLE);
-//                    mTvEditWeight.setVisibility(View.VISIBLE);
-//                } else {
-//                    mTvHide.setText(R.string.show);
-//                    mBmiView.setVisibility(View.GONE);
-//                    mTvInputWH.setVisibility(View.GONE);
-//                    mTvEditWeight.setVisibility(View.INVISIBLE);
-//                }
-//            }
-//        });
 
 
         mTvEditWeight.setOnClickListener(new View.OnClickListener() {
@@ -287,42 +249,20 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
         mRgFeel.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int id) {
-                switch (id) {
-                    case R.id.id_fg_action_finish_rb_level_1:
-                        showToast("level 1");
-                        break;
-                    case R.id.id_fg_action_finish_rb_level_2:
-                        showToast("level 2");
-                        break;
-                    case R.id.id_fg_action_finish_rb_level_3:
-                        showToast("level 3");
-                        break;
-                    case R.id.id_fg_action_finish_rb_level_4:
-                        showToast("level 4");
-                        break;
-                    case R.id.id_fg_action_finish_rb_level_5:
-                        showToast("level 5");
-                        break;
-                    default:
-                        break;
+                if (id == R.id.id_fg_action_finish_rb_level_1) {
+                    showToast("level 1");
+                } else if (id == R.id.id_fg_action_finish_rb_level_2) {
+                    showToast("level 2");
+                } else if (id == R.id.id_fg_action_finish_rb_level_3) {
+                    showToast("level 3");
+                } else if (id == R.id.id_fg_action_finish_rb_level_4) {
+                    showToast("level 4");
+                } else if (id == R.id.id_fg_action_finish_rb_level_5) {
+                    showToast("level 5");
                 }
             }
         });
 
-//        mBtnSave.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //TODO 刷新主界面
-//                _mActivity.onBackPressed();
-//            }
-//        });
-
-    }
-
-    @Override
-    public void onDestroyView() {
-        mButterKnifeBinder.unbind();
-        super.onDestroyView();
     }
 
     @Override
@@ -447,65 +387,6 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
         mPresenter.getCalorie(mDayId);
         mPresenter.updateYear(year);
         mPresenter.updateGender(gender);
-    }
-
-//    @OnClick(R.id.id_fg_action_finish_tv_input_w_h)
-//    public void onInputWHClick() {
-//        mHeightWeightDialog.show(true);
-//    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mInsertAd != null) {
-            mInsertAd.destroy();
-        }
-    }
-
-    private IAd mInsertAd;
-
-    private void loadInsertAd() {
-        AdChainHelper.INSTANCE.loadAd(AdConstants.INSTANCE.getAD_NAME_INSERT(), null, new AdChainListener() {
-            @Override
-            public void onLoaded(@org.jetbrains.annotations.Nullable IAd ad) {
-                mInsertAd = ad;
-                if (mInsertAd != null) {
-                    mInsertAd.show();
-                }
-            }
-
-            @Override
-            public void onClick() {
-
-            }
-
-            @Override
-            public void onStimulateSuccess() {
-
-            }
-
-            @Override
-            public void playEnd() {
-
-            }
-
-
-            @Override
-            public void onFailed(@NotNull String msg) {
-
-            }
-
-            @Override
-            public void onShowed() {
-
-            }
-
-            @Override
-            public void onDismiss() {
-
-            }
-        });
     }
 
 }

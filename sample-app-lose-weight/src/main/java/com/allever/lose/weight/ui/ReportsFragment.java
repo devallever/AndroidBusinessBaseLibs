@@ -26,15 +26,10 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
 import com.allever.lose.weight.R;
 import com.allever.lose.weight.util.Constant;
 import com.allever.lose.weight.base.BaseDialog;
 import com.allever.lose.weight.ui.dialog.HeightWeightDialog;
-import com.allever.lose.weight.ui.dialog.SyncGoogleFitDialog;
 import com.allever.lose.weight.ui.mvp.presenter.ReportPresenter;
 import com.allever.lose.weight.ui.mvp.view.IReportView;
 import com.allever.lose.weight.util.DateUtil;
@@ -54,12 +49,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
-
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -70,45 +59,26 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
     private static final int REQUEST_OAUTH_REQUEST_CODE = 0x01;
     private static final int RC_SIGN_IN = 0x02;
 
-    @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    Unbinder unbinder;
-    @BindView(R.id.chart)
     LineChart chart;
-    @BindView(R.id.add_weight)
     ImageView addWeight;
-    @BindView(R.id.tv_edit_bmi)
     TextView mTvEditBmi;
-    @BindView(R.id.tv_edit_height)
     TextView tvEditHeight;
-    @BindView(R.id.tv_workout)
     TextView mTvWorkout;
-    @BindView(R.id.tv_kcal)
     TextView mTvKcal;
-    @BindView(R.id.tv_duration)
     TextView mTvDuration;
-    @BindView(R.id.scroll_view)
     NestedScrollView scrollView;
-    @BindView(R.id.heaviest)
     TextView mTvHeaviestWeight;
-    @BindView(R.id.lightest)
     TextView mTvLightestWeight;
-    @BindView(R.id.tv_current)
     TextView mTvCurrentWeight;
-    @BindView(R.id.tv_current_height)
     TextView mTvCurrentHeight;
-    @BindView(R.id.id_fg_report_bmi)
     BMIView mBmiView;
-    @BindView(R.id.id_sync_ll_sync_container)
     LinearLayout mLlSyncContainer;
-    @BindView(R.id.id_sync_tv_account)
     TextView mTvAccount;
-    @BindView(R.id.id_sync_tv_sync_time)
     TextView mTvSyncTime;
     private HistoryItemAdapter mAdapter;
 
     private HeightWeightDialog mHeightWeightDialog;
-    private SyncGoogleFitDialog mSyncGoogleFitDialog;
 
     public static Fragment newInstance() {
         return new ReportsFragment();
@@ -119,7 +89,51 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
         super.onCreateView(inflater, container, savedInstanceState);
         EventBus.getDefault().register(this);
         View view = inflater.inflate(R.layout.fragment_reports, container, false);
-        unbinder = ButterKnife.bind(this, view);
+
+        recyclerView = view.findViewById(R.id.recycler_view);
+        chart = view.findViewById(R.id.chart);
+        addWeight = view.findViewById(R.id.add_weight);
+        mTvEditBmi = view.findViewById(R.id.tv_edit_bmi);
+        tvEditHeight = view.findViewById(R.id.tv_edit_height);
+        mTvWorkout = view.findViewById(R.id.tv_workout);
+        mTvKcal = view.findViewById(R.id.tv_kcal);
+        mTvDuration = view.findViewById(R.id.tv_duration);
+        scrollView = view.findViewById(R.id.scroll_view);
+        mTvHeaviestWeight = view.findViewById(R.id.heaviest);
+        mTvLightestWeight = view.findViewById(R.id.lightest);
+        mTvCurrentWeight = view.findViewById(R.id.tv_current);
+        mTvCurrentHeight = view.findViewById(R.id.tv_current_height);
+        mBmiView = view.findViewById(R.id.id_fg_report_bmi);
+        mLlSyncContainer = view.findViewById(R.id.id_sync_ll_sync_container);
+        mTvAccount = view.findViewById(R.id.id_sync_tv_account);
+        mTvSyncTime = view.findViewById(R.id.id_sync_tv_sync_time);
+        mBmiView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        addWeight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("ReportsFragment", "click");
+                if (getParentFragment() instanceof HomeFragment) {
+                    ((HomeFragment) getParentFragment()).extraTransaction().startDontHideSelf(WeightFragment.newInstance(ReportsFragment.this));
+                }
+            }
+        });
+        mTvEditBmi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mHeightWeightDialog.show(true);
+            }
+        });
+        tvEditHeight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mHeightWeightDialog.show(true);
+            }
+        });
+
 
         //设置图表控件样式
         setChartStyle();
@@ -162,14 +176,6 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
         recyclerView.addItemDecoration(new HorizontalDecoration(ScreenUtils.dp2px(10)));
     }
 
-    @OnClick(R.id.add_weight)
-    public void setWeight() {
-        Log.i("ReportsFragment", "click");
-        if (getParentFragment() instanceof HomeFragment) {
-            ((HomeFragment) getParentFragment()).extraTransaction().startDontHideSelf(WeightFragment.newInstance(this));
-        }
-    }
-
     //数据无实际意义 只获取数量
     private List<Integer> getItemData() {
         List<Integer> list = new ArrayList<>();
@@ -197,24 +203,11 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
-        unbinder.unbind();
     }
 
     @Override
     protected ReportPresenter createPresenter() {
         return new ReportPresenter();
-    }
-
-    @OnClick({R.id.tv_edit_bmi, R.id.tv_edit_height})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.tv_edit_bmi:
-            case R.id.tv_edit_height:
-                mHeightWeightDialog.show(true);
-                break;
-            default:
-                break;
-        }
     }
 
     @Override
@@ -326,8 +319,6 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
         //刷新图表
         mPresenter.getChartData();
         mPresenter.getWeight();
-        //sync google fit
-        mPresenter.syncWeight((float)weight, year, month, day);
     }
 
     @Override
@@ -372,24 +363,6 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
         chart.invalidate();
     }
 
-    @OnClick(R.id.id_sync_ll_sync_container)
-    public void onSyncClicked() {
-        //https://developers.google.com/identity/sign-in/android/
-        //1.登录谷歌账号->
-        //2.登录成功->授权google fit
-        //3.允许->弹出同步框
-
-//        if (Util.isApkAvailable(_mActivity, "com.google.android.gms")){
-//            Log.d(TAG, "onSyncClicked: ener google");
-//            mPresenter.loginGoogle(this,RC_SIGN_IN);
-//        }else {
-//            showToast("没安装谷歌服务");
-//        }
-
-        showToast(R.string.sync);
-
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_OAUTH_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
@@ -398,37 +371,8 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
             mPresenter.saveSyncState(true);
             //刷新界面
             EventBus.getDefault().post(Constant.EVENT_UPDATE_REPORT_SYNC);
-            showSyncDialog();
-        }
-
-        if (requestCode == RC_SIGN_IN && resultCode == RESULT_OK) {
-            handleLoginGoogle(data);
         }
     }
-
-    private void handleLoginGoogle(Intent data) {
-        try {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            GoogleSignInAccount account = task.getResult(ApiException.class);
-            mPresenter.saveSyncAccount(account.getEmail());
-            mPresenter.connectGoogleFit(ReportsFragment.this, REQUEST_OAUTH_REQUEST_CODE);
-        } catch (ApiException e) {
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-        }
-    }
-
-    @Override
-    public void showSyncDialog() {
-        Log.d(TAG, "showSyncDialog: ");
-        mSyncGoogleFitDialog = new SyncGoogleFitDialog(_mActivity);
-        mSyncGoogleFitDialog.show(true);
-    }
-
-    @Override
-    public void hideSyncDialog() {
-        mSyncGoogleFitDialog.destroy();
-    }
-
     @Override
     public void setSync(String account, String time) {
         mTvAccount.setText(account);

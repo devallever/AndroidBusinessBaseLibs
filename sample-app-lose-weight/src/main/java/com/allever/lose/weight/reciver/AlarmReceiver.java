@@ -26,7 +26,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 
         Intent actionIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,actionIntent , 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,actionIntent , PendingIntent.FLAG_IMMUTABLE);
 
         //高版本api
 //        Notification notification = new Notification.Builder(context)

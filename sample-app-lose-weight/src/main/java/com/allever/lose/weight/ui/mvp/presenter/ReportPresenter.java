@@ -5,8 +5,6 @@ import androidx.fragment.app.Fragment;
 import android.util.Log;
 
 import com.github.mikephil.charting.data.Entry;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.allever.lose.weight.MyApplication;
 import com.allever.lose.weight.R;
 import com.allever.lose.weight.data.DataSource;
@@ -16,7 +14,6 @@ import com.allever.lose.weight.data.Repository;
 import com.allever.lose.weight.util.Constant;
 import com.allever.lose.weight.ui.mvp.view.IReportView;
 import com.allever.lose.weight.util.DateUtil;
-import com.allever.lose.weight.util.SyncGoogle;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -93,16 +90,6 @@ public class ReportPresenter extends BasePresenter<IReportView> {
         }
 
     }
-
-    public void connectGoogleFit(Fragment fragment, int requestCode){
-        Log.d(TAG, "syncGoogleFit: isSync = " + GlobalData.config.isSync());
-        if (!GlobalData.config.isSync()){
-            SyncGoogle.getIns().connectGoogleFit(fragment, requestCode);
-        } else {
-            mViewRef.get().showSyncDialog();
-        }
-    }
-
     public void getSyncData() {
         if (GlobalData.config.isSync()){
             String account = GlobalData.config.getAccount();
@@ -124,33 +111,6 @@ public class ReportPresenter extends BasePresenter<IReportView> {
         GlobalData.config.setSync(sync);
         GlobalData.config.setSyncTime(time);
         GlobalData.config.setAccount(GlobalData.config.getAccount());
-        mDataSource.updateConfig();
-    }
-
-    public void syncWeight(float weight, int year, int month, int day) {
-        if (GlobalData.config.isSync()){
-            SyncGoogle.getIns().syncWeight(weight, year, month, day, new OnCompleteListener() {
-                @Override
-                public void onComplete(@NonNull Task task) {
-                    if (task.isSuccessful()){
-                        Log.d(TAG, "onComplete: sync google fit success");
-                        //refresh report
-                        saveSync(true, System.currentTimeMillis());
-                    }else {
-                        Log.d(TAG, "onComplete: sync google fit fail");
-                        Log.e(TAG, "onComplete: ", task.getException());
-                    }
-                }
-            });
-        }
-    }
-
-    public void loginGoogle(Fragment fragment, int requestCode) {
-        SyncGoogle.getIns().loginGoogle(fragment,requestCode);
-    }
-
-    public void saveSyncAccount(String email) {
-        GlobalData.config.setAccount(email);
         mDataSource.updateConfig();
     }
 

@@ -16,11 +16,6 @@ import com.allever.lose.weight.ui.dialog.WeightUnitDialog;
 import com.allever.lose.weight.ui.mvp.presenter.UnitSettingPresenter;
 import com.allever.lose.weight.ui.mvp.view.IUnitSettingView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
-
 /**
  * Created by Mac on 18/3/14.
  */
@@ -31,18 +26,12 @@ public class UnitSettingFragment extends BaseFragment<IUnitSettingView, UnitSett
 
     private static final String TAG = "UnitSettingFragment";
 
-    @BindView(R.id.id_toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.id_fg_unit_setting_tv_weight_unit)
     TextView mTvWeightUnit;
-    @BindView(R.id.id_fg_unit_setting_ll_weight_container)
     LinearLayout mLlWeightContainer;
-    @BindView(R.id.id_fg_unit_setting_tv_height_unit)
     TextView mTvHeightUnit;
-    @BindView(R.id.id_fg_unit_setting_ll_height_container)
     LinearLayout mLlHeightContainer;
 
-    private Unbinder mUnbinder;
     private WeightUnitDialog mWeightUnitDialog;
     private HeightUnitDialog mHeightUnitDialog;
 
@@ -51,7 +40,26 @@ public class UnitSettingFragment extends BaseFragment<IUnitSettingView, UnitSett
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = LayoutInflater.from(_mActivity).inflate(R.layout.fragment_unit_setting, container, false);
-        mUnbinder = ButterKnife.bind(this, view);
+
+        mToolbar = view.findViewById(R.id.id_toolbar);
+        mTvWeightUnit = view.findViewById(R.id.id_fg_unit_setting_tv_weight_unit);
+        mLlWeightContainer = view.findViewById(R.id.id_fg_unit_setting_ll_weight_container);
+        mTvHeightUnit = view.findViewById(R.id.id_fg_unit_setting_tv_height_unit);
+        mLlHeightContainer = view.findViewById(R.id.id_fg_unit_setting_ll_height_container);
+
+        mLlWeightContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWeightUnitDialog.show(true);
+            }
+        });
+        mLlHeightContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mHeightUnitDialog.show(true);
+            }
+        });
+
         mPresenter.getHeightUnit();
         mPresenter.getWeightUnit();
         initToolbar(mToolbar, R.string.unit_setting);
@@ -59,11 +67,6 @@ public class UnitSettingFragment extends BaseFragment<IUnitSettingView, UnitSett
         return view;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mUnbinder.unbind();
-    }
 
     private void initDialog(){
         mWeightUnitDialog = new WeightUnitDialog(_mActivity, this);
@@ -103,20 +106,6 @@ public class UnitSettingFragment extends BaseFragment<IUnitSettingView, UnitSett
     @Override
     protected UnitSettingPresenter createPresenter() {
         return new UnitSettingPresenter();
-    }
-
-    @OnClick({R.id.id_fg_unit_setting_ll_weight_container, R.id.id_fg_unit_setting_ll_height_container})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.id_fg_unit_setting_ll_weight_container:
-                mWeightUnitDialog.show(true);
-                break;
-            case R.id.id_fg_unit_setting_ll_height_container:
-                mHeightUnitDialog.show(true);
-                break;
-            default:
-                break;
-        }
     }
 
     @Override

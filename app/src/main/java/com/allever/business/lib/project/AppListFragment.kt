@@ -14,6 +14,9 @@ class AppListFragment: ListFragment<FragmentListBinding, ListViewModel, TextDeta
         Gravity.CENTER)
 
     override fun getList(): MutableList<TextDetailClickItem> = mutableListOf(
+        TextDetailClickItem("30天减肥", "sample-app-lose-weight") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_LOSE_WEIGHT).navigation()
+        },
         TextDetailClickItem("倒数日", "sample-app-day-matter") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_DAY_MATTER).navigation()
         },

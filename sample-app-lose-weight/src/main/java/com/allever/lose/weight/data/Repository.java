@@ -23,7 +23,8 @@ import com.allever.lose.weight.bean.Exercise;
 import com.allever.lose.weight.bean.TrainData;
 import com.allever.lose.weight.util.DateUtil;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.LitePal;
+
 
 /**
  * Created by Mac on 2018/3/7.
@@ -47,7 +48,7 @@ public class Repository implements DataSource{
 
     @Override
     public int getCurrentDay(){
-        Person.ExerciseRecord exerciseRecord = DataSupport.findLast(Person.ExerciseRecord.class);
+        Person.ExerciseRecord exerciseRecord = LitePal.findLast(Person.ExerciseRecord.class);
         if (exerciseRecord == null){
             return 1;
         }else {
@@ -67,7 +68,7 @@ public class Repository implements DataSource{
         int finishDay = 0;
         for (TrainData trainData: GlobalData.trainDataList){
             int id = Integer.valueOf(trainData.getName());
-            List<Person.ScheduleRecord> list = DataSupport.where("type = ?", String.valueOf(id)).find(Person.ScheduleRecord.class);
+            List<Person.ScheduleRecord> list = LitePal.where("type = ?", String.valueOf(id)).find(Person.ScheduleRecord.class);
             if (trainData.getExercise().size() == 0){
                 if (list.size() == 1){
                     finishDay += 1;
@@ -133,7 +134,7 @@ public class Repository implements DataSource{
      * */
     @Override
     public long getDurationSecond(){
-        List<Person.ExerciseRecord> list = DataSupport.findAll(Person.ExerciseRecord.class);
+        List<Person.ExerciseRecord> list = LitePal.findAll(Person.ExerciseRecord.class);
         long duration = 0;
         for (Person.ExerciseRecord exerciseRecord: list){
             long end = exerciseRecord.getEndTime();
@@ -172,13 +173,13 @@ public class Repository implements DataSource{
      */
     @Override
     public boolean getIsWork(int year, int month, int day){
-        List<Person.ExerciseRecord> exerciseRecords = DataSupport.where("year = ? and month = ? and day = ?",
+        List<Person.ExerciseRecord> exerciseRecords = LitePal.where("year = ? and month = ? and day = ?",
                 String.valueOf(year),
                 String.valueOf(month),
                 String.valueOf(day))
             .find(Person.ExerciseRecord.class);
 
-        List<Person.ExerciseRecord> all = DataSupport.findAll(Person.ExerciseRecord.class);
+        List<Person.ExerciseRecord> all = LitePal.findAll(Person.ExerciseRecord.class);
         if (exerciseRecords.size()> 0){
             return true;
         }else {
@@ -189,7 +190,7 @@ public class Repository implements DataSource{
     @Override
     public double getHeaviest(){
         //对数据库排序查找
-        List<Person.WeightRecord> weightRecordList = DataSupport.order("weight desc").find(Person.WeightRecord.class);
+        List<Person.WeightRecord> weightRecordList = LitePal.order("weight desc").find(Person.WeightRecord.class);
         if (weightRecordList.size() > 0){
             return  weightRecordList.get(0).getWeight();
         }else {
@@ -199,7 +200,7 @@ public class Repository implements DataSource{
 
     @Override
     public double getLightest(){
-        List<Person.WeightRecord> weightRecordList = DataSupport.order("weight asc").find(Person.WeightRecord.class);
+        List<Person.WeightRecord> weightRecordList = LitePal.order("weight asc").find(Person.WeightRecord.class);
         if (weightRecordList.size() > 0){
             return  weightRecordList.get(0).getWeight();
         }else {
@@ -324,7 +325,7 @@ public class Repository implements DataSource{
      * */
     @Override
     public int getActionIndex(int dayId) {
-        List<Person.ScheduleRecord> scheduleRecordList = DataSupport.where("type = ?", String.valueOf(dayId)).find(Person.ScheduleRecord.class);
+        List<Person.ScheduleRecord> scheduleRecordList = LitePal.where("type = ?", String.valueOf(dayId)).find(Person.ScheduleRecord.class);
         int currentAction = scheduleRecordList.size() + 1;
         if (currentAction-1 == getLevelCount(dayId)){
             //已经完成全部
@@ -342,7 +343,7 @@ public class Repository implements DataSource{
      * */
     @Override
     public boolean isFinishTrain(int dayId) {
-        List<Person.ScheduleRecord> scheduleRecordList = DataSupport.where("type = ?", String.valueOf(dayId)).find(Person.ScheduleRecord.class);
+        List<Person.ScheduleRecord> scheduleRecordList = LitePal.where("type = ?", String.valueOf(dayId)).find(Person.ScheduleRecord.class);
         if (scheduleRecordList.size() == getLevelCount(dayId) && scheduleRecordList.size() != 0){
             //已经完成全部
             return true;
@@ -399,7 +400,7 @@ public class Repository implements DataSource{
      * */
     @Override
     public int getExerciseCount(){
-        return DataSupport.findAll(Person.ExerciseRecord.class).size();
+        return LitePal.findAll(Person.ExerciseRecord.class).size();
     }
 
     /**
@@ -409,7 +410,7 @@ public class Repository implements DataSource{
     @Override
     public int getCalories(int dayId){
         //读取最新一条记录
-        Person.ExerciseRecord exerciseRecord = DataSupport.findLast(Person.ExerciseRecord.class);
+        Person.ExerciseRecord exerciseRecord = LitePal.findLast(Person.ExerciseRecord.class);
         long duration  = exerciseRecord.getEndTime() - exerciseRecord.getStartTime() - exerciseRecord.getPauseDuration();
         TrainData trainData = GlobalData.trainDataMap.get(dayId);
         float factorTotal = 0;
@@ -544,7 +545,7 @@ public class Repository implements DataSource{
      * */
     @Override
     public int getTotalTrainedCount() {
-        return DataSupport.findAll(Person.ScheduleRecord.class).size();
+        return LitePal.findAll(Person.ScheduleRecord.class).size();
     }
 
     /**
@@ -552,7 +553,7 @@ public class Repository implements DataSource{
      * */
     @Override
     public int getLevelTrainedCount(int dayId) {
-        return DataSupport.where("type = ?", String.valueOf(dayId)).find(Person.ScheduleRecord.class).size();
+        return LitePal.where("type = ?", String.valueOf(dayId)).find(Person.ScheduleRecord.class).size();
     }
 
     /**
@@ -609,7 +610,7 @@ public class Repository implements DataSource{
      * */
     @Override
     public List<Person.ExerciseRecord> getAllExerciseRecord() {
-        return DataSupport.order("id desc").find(Person.ExerciseRecord.class);
+        return LitePal.order("id desc").find(Person.ExerciseRecord.class);
     }
 
     /**
@@ -617,17 +618,17 @@ public class Repository implements DataSource{
      * */
     @Override
     public void deleteAllSchedule() {
-        DataSupport.deleteAll(Person.ScheduleRecord.class);
+        LitePal.deleteAll(Person.ScheduleRecord.class);
     }
 
     @Override
     public void deleteAllData() {
-        DataSupport.deleteAll(Person.ScheduleRecord.class);
-        DataSupport.deleteAll(Config.class);
-        DataSupport.deleteAll(Person.ExerciseRecord.class);
-        DataSupport.deleteAll(Person.class);
-        DataSupport.deleteAll(Person.WeightRecord.class);
-        DataSupport.deleteAll(Config.Reminder.class);
+        LitePal.deleteAll(Person.ScheduleRecord.class);
+        LitePal.deleteAll(Config.class);
+        LitePal.deleteAll(Person.ExerciseRecord.class);
+        LitePal.deleteAll(Person.class);
+        LitePal.deleteAll(Person.WeightRecord.class);
+        LitePal.deleteAll(Config.Reminder.class);
     }
 
     @Override
@@ -638,7 +639,7 @@ public class Repository implements DataSource{
 
     @Override
     public List<Person.WeightRecord> getWeightRecordList() {
-        List<Person.WeightRecord> list = DataSupport.order("year asc, month asc, day asc").find(Person.WeightRecord.class);
+        List<Person.WeightRecord> list = LitePal.order("year asc, month asc, day asc").find(Person.WeightRecord.class);
         for (Person.WeightRecord weightRecord: list){
             Log.d(TAG, "getWeightRecordList: " + weightRecord.getYear() + "-" + weightRecord.getMonth() + "-" + weightRecord.getDay() + ": " + weightRecord.getWeight() + " kg");
         }
@@ -647,7 +648,7 @@ public class Repository implements DataSource{
 
     @Override
     public double getHistoryWeight(int year, int month, int day) {
-        List<Person.WeightRecord> list = DataSupport.where("year = ? and month = ? and day = ?",
+        List<Person.WeightRecord> list = LitePal.where("year = ? and month = ? and day = ?",
                 String.valueOf(year),
                 String.valueOf(month),
                 String.valueOf(day)

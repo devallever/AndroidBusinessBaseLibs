@@ -10,7 +10,7 @@ plugins {
 buildscript {
     dependencies {
 //        classpath (libs.applovinqualityservicegradleplugin)
-        classpath(libs.butterknife.gradle.plugin)
+//        classpath(libs.butterknife.gradle.plugin)
     }
 }
 

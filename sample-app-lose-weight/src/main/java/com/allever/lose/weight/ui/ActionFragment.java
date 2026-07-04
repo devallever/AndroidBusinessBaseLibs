@@ -7,10 +7,6 @@ import android.speech.tts.TextToSpeech;
 
 import androidx.annotation.Nullable;
 
-import com.allever.lib.ad.chain.AdChainHelper;
-import com.allever.lib.ad.chain.AdChainListener;
-import com.allever.lib.ad.chain.IAd;
-import com.allever.lose.weight.ad.AdConstants;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.widget.Toolbar;
@@ -41,11 +37,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 /**
  * Created by Mac on 18/2/28.
  */
@@ -57,34 +48,20 @@ public class ActionFragment extends BaseFragment<IActionView, ActionPresenter> i
     private static final int DIALOG_DELAY = 0x02;
     private static final int DIALOG_CLOSE = 0x03;
 
-    @BindView(R.id.id_fg_action_iv_guide)
     ImageView mIvGuide;
-    @BindView(R.id.id_toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.id_fg_action_btn_pause)
     FloatingActionButton mBtnPause;
-    @BindView(R.id.id_fg_action_progress_time)
     ProgressBar mProgressBarTime;
-    @BindView(R.id.id_fg_action_tv_action_desc)
     TextView mTvDesc;
-    @BindView(R.id.id_fg_action_tv_process)
     TextView mTvProgress;
-    @BindView(R.id.id_fg_action_tv_current_time)
     TextView mTvTime;
-    @BindView(R.id.id_fg_action_tv_total)
     TextView mTvTotal;
-    @BindView(R.id.id_fg_action_tv_action_name)
     TextView mTvActionName;
-    @BindView(R.id.id_fg_action_iv_video)
     ImageView mIvVideo;
-    @BindView(R.id.id_fg_action_iv_sound)
     ImageView mIvVoice;
-    @BindView(R.id.bannerContainer)
     ViewGroup bannerContainer;
 
     private ExitActionDialog mExitDialog;
-
-    private Unbinder mButterKnifeBinder;
 
     private int mDialogOption = DIALOG_CLOSE;
 
@@ -94,7 +71,6 @@ public class ActionFragment extends BaseFragment<IActionView, ActionPresenter> i
     private int mDayId = 1;
     private int mActionId = 1;
 
-    private IAd mBannerAd;
 
     public static ActionFragment newInstance(int dayId, int actionId) {
         ActionFragment fragment = new ActionFragment();
@@ -117,13 +93,26 @@ public class ActionFragment extends BaseFragment<IActionView, ActionPresenter> i
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_action, container, false);
 
+        mIvGuide = view.findViewById(R.id.id_fg_action_iv_guide);
+        mToolbar = view.findViewById(R.id.id_toolbar);
+        mBtnPause = view.findViewById(R.id.id_fg_action_btn_pause);
+        mProgressBarTime = view.findViewById(R.id.id_fg_action_progress_time);
+        mTvDesc = view.findViewById(R.id.id_fg_action_tv_action_desc);
+        mTvProgress = view.findViewById(R.id.id_fg_action_tv_process);
+        mTvTime = view.findViewById(R.id.id_fg_action_tv_current_time);
+        mTvTotal = view.findViewById(R.id.id_fg_action_tv_total);
+        mTvActionName = view.findViewById(R.id.id_fg_action_tv_action_name);
+        mIvVideo = view.findViewById(R.id.id_fg_action_iv_video);
+        mIvVoice = view.findViewById(R.id.id_fg_action_iv_sound);
+        bannerContainer = view.findViewById(R.id.bannerContainer);
+
+
         Bundle args = getArguments();
         if (args != null) {
             mDayId = args.getInt(Constant.EXTRA_DAY_ID);
             mActionId = args.getInt(Constant.EXTRA_ACTION_ID);
         }
 
-        mButterKnifeBinder = ButterKnife.bind(this, view);
         initDialog();
         initView();
 
@@ -133,8 +122,6 @@ public class ActionFragment extends BaseFragment<IActionView, ActionPresenter> i
         mPresenter.getActionImgUrlList(mDayId, mActionId);
 
         mPresenter.setStartTime();
-
-        loadBanner();
 
         return view;
     }
@@ -204,7 +191,6 @@ public class ActionFragment extends BaseFragment<IActionView, ActionPresenter> i
 
     @Override
     public void onDestroyView() {
-        mButterKnifeBinder.unbind();
         EventBus.getDefault().unregister(this);
         super.onDestroyView();
     }
@@ -357,73 +343,5 @@ public class ActionFragment extends BaseFragment<IActionView, ActionPresenter> i
     @Override
     public void onSoundDialogCancel() {
         mPresenter.restartAction(mDayId, mActionId);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mBannerAd != null) {
-            mBannerAd.onAdResume();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mBannerAd != null) {
-            mBannerAd.onAdPause();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mBannerAd != null) {
-            mBannerAd.destroy();
-        }
-    }
-
-    private void loadBanner() {
-        AdChainHelper.INSTANCE.loadAd(AdConstants.INSTANCE.getAD_NAME_BANNER(), bannerContainer, new AdChainListener() {
-            @Override
-            public void onLoaded(@org.jetbrains.annotations.Nullable IAd ad) {
-                mBannerAd = ad;
-                if (mBannerAd != null) {
-                    mBannerAd.show();
-                }
-            }
-
-            @Override
-            public void onClick() {
-
-            }
-
-            @Override
-            public void onStimulateSuccess() {
-
-            }
-
-            @Override
-            public void playEnd() {
-
-            }
-
-
-
-            @Override
-            public void onFailed(@NotNull String msg) {
-
-            }
-
-            @Override
-            public void onShowed() {
-
-            }
-
-            @Override
-            public void onDismiss() {
-
-            }
-        });
     }
 }

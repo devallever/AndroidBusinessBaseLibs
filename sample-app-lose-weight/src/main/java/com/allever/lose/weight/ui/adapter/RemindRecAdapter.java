@@ -1,7 +1,7 @@
 package com.allever.lose.weight.ui.adapter;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.allever.lose.weight.R;
 import com.allever.lose.weight.data.Config;
 import com.allever.lose.weight.util.DateUtil;
@@ -26,25 +26,25 @@ public class RemindRecAdapter extends BaseQuickAdapter<Config.Reminder, BaseView
         holder.setChecked(R.id.reminder_switch, item.isRemindSwitch());
         StringBuilder repeatStr = new StringBuilder();
         if (item.isMonRepeat()) {
-            repeatStr.append(mContext.getResources().getString(R.string.monday) + " ");
+            repeatStr.append(getContext().getResources().getString(R.string.monday) + " ");
         }
         if (item.isTueRepeat()) {
-            repeatStr.append(mContext.getResources().getString(R.string.tuesday) + " ");
+            repeatStr.append(getContext().getResources().getString(R.string.tuesday) + " ");
         }
         if (item.isWebRepeat()) {
-            repeatStr.append(mContext.getResources().getString(R.string.wednesday) + " ");
+            repeatStr.append(getContext().getResources().getString(R.string.wednesday) + " ");
         }
         if (item.isThurRepeat()) {
-            repeatStr.append(mContext.getResources().getString(R.string.thursday) + " ");
+            repeatStr.append(getContext().getResources().getString(R.string.thursday) + " ");
         }
         if (item.isFriRepeat()) {
-            repeatStr.append(mContext.getResources().getString(R.string.friday) + " ");
+            repeatStr.append(getContext().getResources().getString(R.string.friday) + " ");
         }
         if (item.isSatRepeat()) {
-            repeatStr.append(mContext.getResources().getString(R.string.saturday) + " ");
+            repeatStr.append(getContext().getResources().getString(R.string.saturday) + " ");
         }
         if (item.isSunRepeat()) {
-            repeatStr.append(mContext.getResources().getString(R.string.sunday) + " ");
+            repeatStr.append(getContext().getResources().getString(R.string.sunday) + " ");
         }
         holder.setText(R.id.tv_weekly, repeatStr.toString());
         holder.addOnClickListener(R.id.reminder_switch);

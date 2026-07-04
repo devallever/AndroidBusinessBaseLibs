@@ -1,6 +1,6 @@
 package com.allever.lose.weight.data;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.crud.LitePalSupport;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Mac on 2018/3/7.
  */
 
-public class Person extends DataSupport{
+public class Person extends LitePalSupport {
     private int id;
     //用户的年龄
     private int mAge = 18;
@@ -191,7 +191,7 @@ public class Person extends DataSupport{
     /**
      * 体重记录
      */
-    public static class WeightRecord extends DataSupport{
+    public static class WeightRecord extends LitePalSupport{
 
         private int id;
 
@@ -267,7 +267,7 @@ public class Person extends DataSupport{
     /**
      * 运动记录
      */
-    public static class ExerciseRecord extends DataSupport{
+    public static class ExerciseRecord extends LitePalSupport{
         private int id;
 
         //训练的类别，比如第一天，第五天或睡前拉伸
@@ -354,7 +354,7 @@ public class Person extends DataSupport{
 
 
     private List<ScheduleRecord> scheduleRecordList = new LinkedList<>();
-    public static class ScheduleRecord extends DataSupport{
+    public static class ScheduleRecord extends LitePalSupport{
         private int id;
         //动作id
         private int actionId;

@@ -10,7 +10,6 @@ import com.allever.lose.weight.util.Util;
 
 import java.util.Locale;
 
-import butterknife.ButterKnife;
 import me.yokeyword.fragmentation.SupportActivity;
 
 public class ActionMainActivity extends SupportActivity {
@@ -21,7 +20,6 @@ public class ActionMainActivity extends SupportActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_test);
-        ButterKnife.bind(this);
 
         int dayId = getIntent().getIntExtra(Constant.EXTRA_DAY_ID, 1);
         String dayText = getIntent().getStringExtra(Constant.EXTRA_DAY_TEXT);

@@ -18,10 +18,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.allever.lib.ad.chain.AdChainHelper;
-import com.allever.lib.ad.chain.AdChainListener;
-import com.allever.lib.ad.chain.IAd;
-import com.allever.lose.weight.ad.AdConstants;
 import com.dinuscxj.progressbar.CircleProgressBar;
 import com.allever.lose.weight.R;
 import com.allever.lose.weight.util.Constant;
@@ -33,13 +29,6 @@ import com.allever.lose.weight.ui.mvp.presenter.ActionNextPresenter;
 import com.allever.lose.weight.ui.mvp.view.IActionNextView;
 
 import org.greenrobot.eventbus.EventBus;
-import org.jetbrains.annotations.NotNull;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
-
 /**
  * Created by Mac on 18/3/1.
  */
@@ -49,22 +38,14 @@ public class ActionNextFragment extends BaseFragment<IActionNextView, ActionNext
     private static final int DIALOG_DELAY = 0x02;
     private static final int DIALOG_CLOSE = 0x03;
 
-    @BindView(R.id.id_fg_action_next_iv_guide)
     ImageView mIvGuide;
-    @BindView(R.id.id_fg_action_next_tv_time)
     TextView mTvTime;
-    @BindView(R.id.id_fg_action_next_tv_progress)
     TextView mTvCurrentLevel;
-    @BindView(R.id.id_fg_action_next_tv_name)
     TextView mTvName;
-    @BindView(R.id.id_fg_action_next_progress_bar)
     CircleProgressBar mCircleProgressBar;
-    @BindView(R.id.id_fg_action_next_h_progress)
     ProgressBar mHProgressBar;
-    @BindView(R.id.id_fg_action_next_tv_skip)
     TextView mTvSkip;
 
-    private Unbinder mButterKnifeBinder;
     private AnimationDrawable mAnimationDrawable;
     private ValueAnimator mValueAnimator;
 
@@ -91,7 +72,23 @@ public class ActionNextFragment extends BaseFragment<IActionNextView, ActionNext
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_action_next, container, false);
-        mButterKnifeBinder = ButterKnife.bind(this, view);
+
+        mIvGuide = view.findViewById(R.id.id_fg_action_next_iv_guide);
+        mTvTime = view.findViewById(R.id.id_fg_action_next_tv_time);
+        mTvCurrentLevel = view.findViewById(R.id.id_fg_action_next_tv_progress);
+        mTvName = view.findViewById(R.id.id_fg_action_next_tv_name);
+        mCircleProgressBar = view.findViewById(R.id.id_fg_action_next_progress_bar);
+        mHProgressBar = view.findViewById(R.id.id_fg_action_next_h_progress);
+        mTvSkip = view.findViewById(R.id.id_fg_action_next_tv_skip);
+        mTvSkip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mValueAnimator.cancel();
+                mAnimationDrawable.stop();
+                startWithPop(ActionFragment.newInstance(mDayId, mActionId));
+            }
+        });
+
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -106,8 +103,6 @@ public class ActionNextFragment extends BaseFragment<IActionNextView, ActionNext
         initView();
 
         startTimeCounter();
-
-        loadInsertAd();
 
         return view;
     }
@@ -149,7 +144,6 @@ public class ActionNextFragment extends BaseFragment<IActionNextView, ActionNext
 
     @Override
     public void onDestroyView() {
-        mButterKnifeBinder.unbind();
         mValueAnimator.cancel();
         mAnimationDrawable.stop();
         super.onDestroyView();
@@ -229,68 +223,8 @@ public class ActionNextFragment extends BaseFragment<IActionNextView, ActionNext
         return super.onBackPressedSupport();
     }
 
-    @OnClick(R.id.id_fg_action_next_tv_skip)
-    public void onClickSkip() {
-        mValueAnimator.cancel();
-        mAnimationDrawable.stop();
-        startWithPop(ActionFragment.newInstance(mDayId, mActionId));
-    }
-
     @Override
     public void setCurrentActionId(int actionId) {
         mActionId = actionId;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mInsertAd != null) {
-            mInsertAd.destroy();
-        }
-    }
-
-    private IAd mInsertAd;
-    private void loadInsertAd() {
-        AdChainHelper.INSTANCE.loadAd(AdConstants.INSTANCE.getAD_NAME_INSERT(), null, new AdChainListener() {
-            @Override
-            public void onLoaded(@org.jetbrains.annotations.Nullable IAd ad) {
-                mInsertAd = ad;
-                if (mInsertAd != null) {
-                    mInsertAd.show();
-                }
-            }
-
-            @Override
-            public void onClick() {
-
-            }
-
-            @Override
-            public void onStimulateSuccess() {
-
-            }
-
-            @Override
-            public void playEnd() {
-
-            }
-
-
-
-            @Override
-            public void onFailed(@NotNull String msg) {
-
-            }
-
-            @Override
-            public void onShowed() {
-
-            }
-
-            @Override
-            public void onDismiss() {
-
-            }
-        });
     }
 }

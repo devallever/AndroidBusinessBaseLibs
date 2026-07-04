@@ -3,18 +3,19 @@ package com.allever.lose.weight.base;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.allever.lose.weight.ui.mvp.presenter.BasePresenter;
 import com.allever.lose.weight.util.Util;
 
 import java.util.Locale;
 
+import app.allever.android.lib.core.base.AbstractActivity;
+
 /**
  * Created by allever on 18-2-28.
  */
 
-public abstract class BaseActivity<V, T extends BasePresenter<V>> extends AppCompatActivity {
+public abstract class BaseActivity<V, T extends BasePresenter<V>> extends AbstractActivity {
 
     protected T mPresenter;
 

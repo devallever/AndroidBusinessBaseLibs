@@ -14,11 +14,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.fitness.data.DataPoint;
-import com.google.android.gms.fitness.data.DataSet;
-import com.google.android.gms.fitness.data.DataSource;
-import com.google.android.gms.fitness.data.DataType;
-import com.google.android.gms.fitness.data.Field;
 import com.allever.lose.weight.MyApplication;
 import com.allever.lose.weight.R;
 import com.allever.lose.weight.data.Config;
@@ -188,40 +183,40 @@ public class Util {
     }
 
 
-    public static DataSet createWeightDataSet(float weight, int year, int month, int day) {
-        // Create a data source
-        DataSource dataSource =
-                new DataSource.Builder()
-                        .setAppPackageName(MyApplication.getContext())
-                        .setDataType(DataType.TYPE_WEIGHT)
-                        .setStreamName(TAG + " - weight")
-                        .setType(DataSource.TYPE_RAW)
-                        .build();
-
-        DataSet dataSet = DataSet.create(dataSource);
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar = Calendar.getInstance();
-        Log.d(TAG, "createDataSet: weitht = " + weight);
-        try {
-            Log.d(TAG, "createDataSet: date = " + year + "-" + month + "-" + day + ": " + weight);
-            calendar.setTime(simpleDateFormat.parse(year + "-" + month + "-" + day));
-            long endTime = calendar.getTimeInMillis();
-            calendar.add(Calendar.HOUR_OF_DAY, -1);
-            long startTime = calendar.getTimeInMillis();
-            Log.d(TAG, "createDataSet: startTime = " + simpleDateFormat.format(startTime));
-            Log.d(TAG, "createDataSet: endTime = " + simpleDateFormat.format(endTime));
-            DataPoint dataPoint =
-                    dataSet.createDataPoint().setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS);
-            dataPoint.getValue(Field.FIELD_WEIGHT).setFloat(weight);
-            dataSet.add(dataPoint);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        // [END build_insert_data_request]
-
-        return dataSet;
-    }
+//    public static DataSet createWeightDataSet(float weight, int year, int month, int day) {
+//        // Create a data source
+//        DataSource dataSource =
+//                new DataSource.Builder()
+//                        .setAppPackageName(MyApplication.getContext())
+//                        .setDataType(DataType.TYPE_WEIGHT)
+//                        .setStreamName(TAG + " - weight")
+//                        .setType(DataSource.TYPE_RAW)
+//                        .build();
+//
+//        DataSet dataSet = DataSet.create(dataSource);
+//
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        Calendar calendar = Calendar.getInstance();
+//        Log.d(TAG, "createDataSet: weitht = " + weight);
+//        try {
+//            Log.d(TAG, "createDataSet: date = " + year + "-" + month + "-" + day + ": " + weight);
+//            calendar.setTime(simpleDateFormat.parse(year + "-" + month + "-" + day));
+//            long endTime = calendar.getTimeInMillis();
+//            calendar.add(Calendar.HOUR_OF_DAY, -1);
+//            long startTime = calendar.getTimeInMillis();
+//            Log.d(TAG, "createDataSet: startTime = " + simpleDateFormat.format(startTime));
+//            Log.d(TAG, "createDataSet: endTime = " + simpleDateFormat.format(endTime));
+//            DataPoint dataPoint =
+//                    dataSet.createDataPoint().setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS);
+//            dataPoint.getValue(Field.FIELD_WEIGHT).setFloat(weight);
+//            dataSet.add(dataPoint);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        // [END build_insert_data_request]
+//
+//        return dataSet;
+//    }
 
 
     public static boolean isApkAvailable(Context context, String packagename) {

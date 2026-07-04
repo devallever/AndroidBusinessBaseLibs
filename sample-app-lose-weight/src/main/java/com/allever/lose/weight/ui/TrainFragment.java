@@ -14,10 +14,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.allever.lib.ad.chain.AdChainHelper;
-import com.allever.lib.ad.chain.AdChainListener;
-import com.allever.lib.ad.chain.IAd;
-import com.allever.lose.weight.ad.AdConstants;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.allever.lose.weight.R;
 import com.allever.lose.weight.util.Constant;
@@ -28,44 +24,30 @@ import com.allever.lose.weight.ui.adapter.TrainItemAdapter;
 import com.allever.lose.weight.base.BaseMainFragment;
 import com.allever.lose.weight.util.ScreenUtils;
 import com.allever.lose.weight.ui.view.widget.SpacesItemDecoration;
-import com.github.mikephil.charting.formatter.IFillFormatter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class TrainFragment extends BaseMainFragment<ITrainView, TrainPresenter> implements ITrainView{
-    @BindView(R.id.image_workout)
     ImageView image;
-    @BindView(R.id.progress)
     ProgressBar mProgressBar;
-    @BindView(R.id.tv_day_left)
     TextView mTvTimeLeft;
-    @BindView(R.id.tv_progress)
     TextView finishPercent;
-    @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.bannerContainer)
     ViewGroup bannerContainer;
-    Unbinder unbinder;
     private List<DayInfoBean> mDayInfoBeanList = new ArrayList<>();
     private TrainItemAdapter mAdapter;
 
 
-    private IAd mBannerAd;
 
 
     public static TrainFragment newInstance() {
@@ -77,13 +59,18 @@ public class TrainFragment extends BaseMainFragment<ITrainView, TrainPresenter> 
         super.onCreateView(inflater, container, savedInstanceState);
         EventBus.getDefault().register(this);
         View view = inflater.inflate(R.layout.fragment_train, container, false);
-        unbinder = ButterKnife.bind(this, view);
+
+        image = view.findViewById(R.id.image_workout);
+        mTvTimeLeft = view.findViewById(R.id.tv_day_left);
+        finishPercent = view.findViewById(R.id.tv_progress);
+        mProgressBar = view.findViewById(R.id.progress);
+        bannerContainer = view.findViewById(R.id.bannerContainer);
+        bannerContainer.setVisibility(View.GONE);
+
 
         initView();
 
         refreshView();
-
-        loadBanner();
 
         return view;
     }
@@ -95,7 +82,7 @@ public class TrainFragment extends BaseMainFragment<ITrainView, TrainPresenter> 
         recyclerView.setAdapter(mAdapter);
         recyclerView.addItemDecoration(new SpacesItemDecoration(ScreenUtils.dp2px(10)));
 
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(_mActivity, ActionMainActivity.class);
@@ -110,7 +97,6 @@ public class TrainFragment extends BaseMainFragment<ITrainView, TrainPresenter> 
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
-        unbinder.unbind();
     }
 
     @Override
@@ -148,71 +134,4 @@ public class TrainFragment extends BaseMainFragment<ITrainView, TrainPresenter> 
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mBannerAd != null) {
-            mBannerAd.onAdResume();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mBannerAd != null) {
-            mBannerAd.onAdPause();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mBannerAd != null) {
-            mBannerAd.destroy();
-        }
-    }
-
-    private void loadBanner() {
-        AdChainHelper.INSTANCE.loadAd(AdConstants.INSTANCE.getAD_NAME_BANNER(), bannerContainer, new AdChainListener() {
-            @Override
-            public void onLoaded(@Nullable IAd ad) {
-                mBannerAd = ad;
-                if (mBannerAd != null) {
-                    mBannerAd.show();
-                }
-            }
-
-            @Override
-            public void onClick() {
-
-            }
-
-            @Override
-            public void onStimulateSuccess() {
-
-            }
-
-            @Override
-            public void playEnd() {
-
-            }
-
-
-
-            @Override
-            public void onFailed(@NotNull String msg) {
-
-            }
-
-            @Override
-            public void onShowed() {
-
-            }
-
-            @Override
-            public void onDismiss() {
-
-            }
-        });
-    }
 }

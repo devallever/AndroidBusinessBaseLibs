@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 
-import com.allever.lib.common.util.ActivityCollector;
-import com.allever.lib.recommend.RecommendActivity;
-import com.allever.lib.umeng.UMeng;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,22 +28,14 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 /**
  * Created by Mac on 2018/3/1.
  */
 
 public class HomeFragment extends BaseMainFragment<IHomeView, HomePresenter> implements IHomeView {
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.tab_layout)
     TabLayout tabLayout;
-    @BindView(R.id.viewpager)
     ViewPager viewpager;
-    Unbinder unbinder;
 
     private int mPageIndex;
 
@@ -74,7 +63,9 @@ public class HomeFragment extends BaseMainFragment<IHomeView, HomePresenter> imp
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        unbinder = ButterKnife.bind(this, view);
+        toolbar = view.findViewById(R.id.toolbar);
+        tabLayout = view.findViewById(R.id.tab_layout);
+        viewpager = view.findViewById(R.id.viewpager);
 
         toolbar.setTitle(R.string.app_bar_title);
         initToolbarNav(toolbar, true);
@@ -105,7 +96,6 @@ public class HomeFragment extends BaseMainFragment<IHomeView, HomePresenter> imp
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
         EventBus.getDefault().unregister(this);
     }
 
@@ -130,13 +120,6 @@ public class HomeFragment extends BaseMainFragment<IHomeView, HomePresenter> imp
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.recommend) {
-            Activity activity = getActivity();
-            if (activity != null) {
-                RecommendActivity.Companion.start(activity, UMeng.INSTANCE.getChannel());
-            }
-
-        }
         if (id == R.id.homeAsUp) {
             mOpenDraweListener.onOpenDrawer();
         }

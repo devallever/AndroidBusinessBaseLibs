@@ -12,6 +12,7 @@ import com.allever.lose.weight.R;
 import com.allever.lose.weight.ui.adapter.ReminderAdapter;
 import com.allever.lose.weight.base.BaseDialog;
 import com.allever.lose.weight.bean.ReminderItem;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,7 @@ public class RemindDialog extends BaseDialog {
         mAdapter = new ReminderAdapter(mContext, mReminderItemList);
         mRv.setLayoutManager(new LinearLayoutManager(mContext));
         mRv.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 mPosition = position;

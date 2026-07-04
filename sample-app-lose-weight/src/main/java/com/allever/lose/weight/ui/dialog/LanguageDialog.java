@@ -12,6 +12,7 @@ import com.allever.lose.weight.data.Config;
 import com.allever.lose.weight.ui.adapter.LanguageAdapter;
 import com.allever.lose.weight.base.BaseDialog;
 import com.allever.lose.weight.bean.LanguageItem;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class LanguageDialog extends BaseDialog {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         mAdapter = new LanguageAdapter(mActivity, mLanguageItems);
         mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (mListener != null){

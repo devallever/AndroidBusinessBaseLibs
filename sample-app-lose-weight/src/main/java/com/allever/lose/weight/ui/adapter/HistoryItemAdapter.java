@@ -4,7 +4,7 @@ import androidx.annotation.Nullable;
 import android.util.Log;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.allever.lose.weight.R;
 import com.allever.lose.weight.data.DataSource;
 import com.allever.lose.weight.data.Repository;
@@ -43,7 +43,7 @@ public class HistoryItemAdapter extends BaseQuickAdapter<Integer, BaseViewHolder
             return;
         }
         //1,2,3....
-        int position = helper.getAdapterPosition();
+        int position = getData().indexOf(item);
         int displayDay;
         //这个月的天数
         int dayCount = DateUtil.getMonthDayCount(mYear, mMonth);
@@ -52,9 +52,9 @@ public class HistoryItemAdapter extends BaseQuickAdapter<Integer, BaseViewHolder
         if (position == mWeek) {
             Log.d(TAG, "convert: setColor");
             displayDay = mDay;
-            helper.setTextColor(R.id.text_week_date, mContext.getResources().getColor(R.color.green_16));
+            helper.setTextColor(R.id.text_week_date, getContext().getResources().getColor(R.color.green_16));
         } else  {
-            helper.setTextColor(R.id.text_week_date, mContext.getResources().getColor(R.color.black));
+            helper.setTextColor(R.id.text_week_date, getContext().getResources().getColor(R.color.black));
             //核心公式
             displayDay = mDay+position-mWeek;
             

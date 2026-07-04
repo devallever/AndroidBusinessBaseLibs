@@ -4,16 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import com.allever.lib.ad.chain.AdChainHelper;
-import com.allever.lib.ad.chain.AdChainListener;
-import com.allever.lib.ad.chain.IAd;
-import com.allever.lib.common.util.ToastUtils;
-import com.allever.lib.recommend.RecommendDialog;
-import com.allever.lib.recommend.RecommendDialogHelper;
-import com.allever.lib.recommend.RecommendDialogListener;
-import com.allever.lib.recommend.RecommendGlobal;
-import com.allever.lose.weight.ad.AdConstants;
 import com.allever.lose.weight.base.MyContextWrapper;
 import com.allever.lose.weight.util.Util;
 import com.google.android.material.navigation.NavigationView;
@@ -23,6 +13,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,52 +36,46 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import app.allever.android.lib.core.ext.ToastKt;
 import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportActivity;
 import me.yokeyword.fragmentation.SupportFragment;
 
-import static kotlinx.coroutines.android.HandlerDispatcherKt.getMainHandler;
 
 public class MainActivity extends SupportActivity implements NavigationView.OnNavigationItemSelectedListener, BaseMainFragment.OnFragmentOpenDrawerListener {
 
     private static final String TAG = "MainActivity";
 
-    @BindView(R.id.navigation_view)
     NavigationView navigationView;
-    @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
 
     private DataSource mDataSource = Repository.getInstance();
 
-    private IAd mInsertAd;
 
-    private Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+
+        //findvIEWBYID
+        navigationView = findViewById(R.id.navigation_view);
+        drawerLayout = findViewById(R.id.drawer_layout);
 
         if (findFragment(HomeFragment.class) == null) {
             loadRootFragment(R.id.fl_container, HomeFragment.newInstance());  //load root Fragment
         }
         setNavigationView();
 
-        loadInsertAd();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        if (mInsertAd != null) {
-            mInsertAd.destroy();
-        }
     }
 
     private void setNavigationView() {
@@ -135,59 +120,51 @@ public class MainActivity extends SupportActivity implements NavigationView.OnNa
             public void run() {
                 int id = item.getItemId();
                 final ISupportFragment topFragment = getTopFragment();
-                switch (id){
-                    case R.id.plans:
-                        startFragment(0);
-                        break;
-                    case R.id.report:
-                        startFragment(3);
-                        break;
-                    case R.id.reminder:
-                        ReminderFragment reminderFragment = findFragment(ReminderFragment.class);
-                        if (reminderFragment == null) {
-                            popTo(HomeFragment.class, false, new Runnable() {
+                if (id == R.id.plans) {
+                    startFragment(0);
+                } else if (id == R.id.report) {
+                    startFragment(3);
+                } else if (id == R.id.reminder) {
+                    ReminderFragment reminderFragment = findFragment(ReminderFragment.class);
+                    if (reminderFragment == null) {
+                        popTo(HomeFragment.class, false, new Runnable() {
+                            @Override
+                            public void run() {
+                                start(ReminderFragment.newInstance());
+                            }
+                        }, getFragmentAnimator().getPopExit());
+                    } else {
+                        popTo(ReminderFragment.class, false);
+                    }
+                } else if (id == R.id.setting) {
+                    SettingsFragment settingsFragment = findFragment(SettingsFragment.class);
+                    if (settingsFragment == null) {
+                        popTo(HomeFragment.class, false, new Runnable() {
+                            @Override
+                            public void run() {
+                                start(SettingsFragment.newInstance());
+                            }
+                        }, getFragmentAnimator().getPopExit());
+                    } else {
+                        popTo(SettingsFragment.class, false);
+                    }
+                } else if (id == R.id.reset_schedule) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+                            .setMessage(R.string.reset_schedule)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void run() {
-                                    start(ReminderFragment.newInstance());
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mDataSource.deleteAllSchedule();
+                                    EventBus.getDefault().post(Constant.EVENT_REFRESH_VIEW);
                                 }
-                            }, getFragmentAnimator().getPopExit());
-                        } else {
-                            popTo(ReminderFragment.class, false);
-                        }
-                        break;
-                    case R.id.setting:
-                        SettingsFragment settingsFragment = findFragment(SettingsFragment.class);
-                        if (settingsFragment == null) {
-                            popTo(HomeFragment.class, false, new Runnable() {
+                            })
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                 @Override
-                                public void run() {
-                                    start(SettingsFragment.newInstance());
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
                                 }
-                            }, getFragmentAnimator().getPopExit());
-                        } else {
-                            popTo(SettingsFragment.class, false);
-                        }
-                        break;
-                    case R.id.reset_schedule:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
-                                .setMessage(R.string.reset_schedule)
-                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        mDataSource.deleteAllSchedule();
-                                        EventBus.getDefault().post(Constant.EVENT_REFRESH_VIEW);
-                                    }
-                                })
-                                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                        builder.create().show();
-                        break;
-                    default:
-                        break;
+                            });
+                    builder.create().show();
                 }
             }
         }, 300);
@@ -219,66 +196,18 @@ public class MainActivity extends SupportActivity implements NavigationView.OnNa
             if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                 pop();
             } else {
-//                finish();
-                if (mIsAdLoaded) {
-                    if (mInsertAd != null) {
-                        mInsertAd.show();
-                    }
-                    mIsAdLoaded = false;
-                } else  {
-                    if (RecommendGlobal.INSTANCE.getRecommendData().isEmpty()) {
-                        checkExit(null);
-                    } else {
-                        showRecommendDialog();
-                    }
-                }
+                checkExit(null);
             }
         }
     }
 
-    private void showRecommendDialog() {
-        RecommendDialogHelper.INSTANCE.create(this, new RecommendDialogListener() {
-            @Override
-            public void onBackPress(@Nullable Dialog dialog) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        finish();
-                    }
-                }, 200);
-            }
-
-            @Override
-            public void onReject(@Nullable Dialog dialog) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        finish();
-                    }
-                }, 200);
-            }
-
-            @Override
-            public void onMore(@Nullable Dialog dialog) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-        });
-    }
 
     private long firstPressedBackTime = 0L;
     protected void checkExit(Runnable runnable) {
         if (System.currentTimeMillis() - firstPressedBackTime < 2000) {
             finish();
         } else {
-            ToastUtils.INSTANCE.show(getString(R.string.common_click_again_to_exit));
+            ToastKt.toast("common_click_again_to_exit");
             firstPressedBackTime = System.currentTimeMillis();
         }
     }
@@ -288,49 +217,6 @@ public class MainActivity extends SupportActivity implements NavigationView.OnNa
         if (Constant.EVENT_START_HISTORY.equals(event)){
             start(new HistoryFragment());
         }
-    }
-
-    private boolean mIsAdLoaded = false;
-    private void loadInsertAd() {
-        AdChainHelper.INSTANCE.loadAd(AdConstants.INSTANCE.getAD_NAME_INSERT(), null, new AdChainListener() {
-            @Override
-            public void onLoaded(@Nullable IAd ad) {
-                mInsertAd = ad;
-                mIsAdLoaded = true;
-            }
-
-            @Override
-            public void onClick() {
-
-            }
-
-            @Override
-            public void onStimulateSuccess() {
-
-            }
-
-            @Override
-            public void playEnd() {
-
-            }
-
-
-
-            @Override
-            public void onFailed(@NotNull String msg) {
-
-            }
-
-            @Override
-            public void onShowed() {
-
-            }
-
-            @Override
-            public void onDismiss() {
-
-            }
-        });
     }
 
 }

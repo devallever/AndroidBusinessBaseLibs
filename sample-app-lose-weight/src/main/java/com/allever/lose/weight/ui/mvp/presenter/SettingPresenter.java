@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.speech.tts.TextToSpeech;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 
 import com.allever.lose.weight.MyApplication;
@@ -17,7 +16,6 @@ import com.allever.lose.weight.data.Repository;
 import com.allever.lose.weight.util.Constant;
 import com.allever.lose.weight.ui.mvp.view.ISettingView;
 import com.allever.lose.weight.util.DateUtil;
-import com.allever.lose.weight.util.SyncGoogle;
 import com.allever.lose.weight.bean.TTSBean;
 
 import java.util.ArrayList;
@@ -61,17 +59,6 @@ public class SettingPresenter extends BasePresenter<ISettingView>{
         mDataSource.updateConfig();
     }
 
-
-
-    public void connectGoogleFit(Fragment fragment, int requestCode){
-        Log.d(TAG, "syncGoogleFit: isSync = " + GlobalData.config.isSync());
-        if (!GlobalData.config.isSync()){
-            SyncGoogle.getIns().connectGoogleFit(fragment, requestCode);
-        } else {
-            mViewRef.get().showSyncDialog();
-        }
-    }
-
     public void getSyncData() {
         if (GlobalData.config.isSync()){
             String account = GlobalData.config.getAccount();
@@ -87,10 +74,6 @@ public class SettingPresenter extends BasePresenter<ISettingView>{
     public void saveSyncState(boolean sync){
         GlobalData.config.setSync(sync);
         mDataSource.updateConfig();
-    }
-
-    public void loginGoogle(Fragment fragment, int requestCode) {
-        SyncGoogle.getIns().loginGoogle(fragment,requestCode);
     }
 
     public void saveSyncAccount(String email) {

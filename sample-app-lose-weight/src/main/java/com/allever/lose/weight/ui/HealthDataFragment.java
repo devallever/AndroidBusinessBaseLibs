@@ -19,12 +19,6 @@ import com.allever.lose.weight.ui.mvp.presenter.HealthDataPresenter;
 import com.allever.lose.weight.ui.mvp.view.IHealthDataView;
 
 import java.util.Calendar;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
-
 /**
  * Created by Mac on 18/3/13.
  */
@@ -34,19 +28,13 @@ public class HealthDataFragment extends BaseFragment<IHealthDataView, HealthData
         DatePickerDialog.OnDateSetListener{
     private static final String TAG = "HealthDataFragment";
 
-    @BindView(R.id.id_fg_health_data_tv_gender)
     TextView mTvGender;
-    @BindView(R.id.id_fg_health_data_ll_gender_container)
     LinearLayout mLlGenderContainer;
-    @BindView(R.id.id_fg_health_data_tv_birthday)
     TextView mTvBirthday;
-    @BindView(R.id.id_fg_health_data_ll_birthday_container)
     LinearLayout mLlBirthdayContainer;
-    @BindView(R.id.id_toolbar)
     Toolbar mToolbar;
 
 
-    private Unbinder mButterKnifeBinder;
     private GenderDialog mGenderDialog;
     private DatePickerDialog mBirthdayDialog;
     private int mYear;
@@ -59,7 +47,16 @@ public class HealthDataFragment extends BaseFragment<IHealthDataView, HealthData
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = LayoutInflater.from(_mActivity).inflate(R.layout.fragment_health_data, container, false);
-        mButterKnifeBinder = ButterKnife.bind(this, view);
+
+        mTvGender = view.findViewById(R.id.id_fg_health_data_tv_gender);
+        mLlGenderContainer = view.findViewById(R.id.id_fg_health_data_ll_gender_container);
+        mTvBirthday = view.findViewById(R.id.id_fg_health_data_tv_birthday);
+        mLlBirthdayContainer = view.findViewById(R.id.id_fg_health_data_ll_birthday_container);
+        mToolbar = view.findViewById(R.id.id_toolbar);
+
+        mLlGenderContainer.setOnClickListener(v -> showGenderDialog());
+        mLlBirthdayContainer.setOnClickListener(v -> showBirthdayDialog());
+
         initToolbar(mToolbar, R.string.health_data);
         mCalendar = Calendar.getInstance();
         mYear = mCalendar.get(Calendar.YEAR);
@@ -78,11 +75,6 @@ public class HealthDataFragment extends BaseFragment<IHealthDataView, HealthData
 
     }
 
-    @Override
-    public void onDestroyView() {
-        mButterKnifeBinder.unbind();
-        super.onDestroyView();
-    }
 
     @Override
     public void setGender(String gender) {
@@ -117,20 +109,6 @@ public class HealthDataFragment extends BaseFragment<IHealthDataView, HealthData
     @Override
     protected HealthDataPresenter createPresenter() {
         return new HealthDataPresenter();
-    }
-
-    @OnClick({R.id.id_fg_health_data_ll_gender_container, R.id.id_fg_health_data_ll_birthday_container})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.id_fg_health_data_ll_gender_container:
-                showGenderDialog();
-                break;
-            case R.id.id_fg_health_data_ll_birthday_container:
-                showBirthdayDialog();
-                break;
-            default:
-                break;
-        }
     }
 
     @Override

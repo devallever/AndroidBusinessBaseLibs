@@ -5,12 +5,6 @@ import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
-import com.allever.lib.ad.chain.AdChainHelper;
-import com.allever.lib.common.app.App;
-import com.allever.lib.recommend.RecommendGlobal;
-import com.allever.lib.umeng.UMeng;
-import com.allever.lose.weight.ad.AdConstants;
-import com.allever.lose.weight.ad.AdFactory;
 import com.allever.lose.weight.data.Config;
 import com.allever.lose.weight.data.DataSource;
 import com.allever.lose.weight.data.GlobalData;
@@ -24,49 +18,59 @@ import com.allever.lose.weight.util.Util;
 import com.allever.lose.weight.util.ScreenUtils;
 
 import org.litepal.LitePal;
-import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import app.allever.android.lib.core.app.App;
 import me.yokeyword.fragmentation.Fragmentation;
 
 /**
  * Created by maozhi on 2018/2/27.
  */
 
-public class MyApplication extends App {
+public class MyApplication{
     private static final String TAG = "MyApplication";
-    private static MyApplication mContext;
+    private static Application mContext;
     private static TextToSpeech mSpeech;
+
+    private boolean isInit = false;
 
     private DataSource mDataSource;
 
-    @Override
+    //getInstance inner class
+    private static class MyApplicationHolder {
+        private static final MyApplication INSTANCE = new MyApplication();
+        private MyApplicationHolder() {}
+
+    }
+
+    public static MyApplication getInstance() {
+        return MyApplication.MyApplicationHolder.INSTANCE;
+    }
+
     public void onCreate() {
+        if (isInit) {
+            return;
+        }
         Log.d(TAG, "onCreate: ");
-        super.onCreate();
-        mContext = this;
+        mContext = App.Companion.getApp();
         Fragmentation.builder()
                 // 显示悬浮球 ; 其他Mode:SHAKE: 摇一摇唤出   NONE：隐藏
                 .stackViewMode(Fragmentation.NONE)
-                .debug(BuildConfig.DEBUG)
+                .debug(App.Companion.getDEBUG())
                 .install();
-        ScreenUtils.init(this);
-
-        com.android.absbase.App.setContext(this);
-
-        AdChainHelper.INSTANCE.init(this, AdConstants.INSTANCE.getAdData(), new AdFactory());
+        ScreenUtils.init(App.Companion.getContext());
 
         //初始化LitePal
-        LitePal.initialize(this);
+        LitePal.initialize(App.Companion.getContext());
 
         //初始化个人信息
         initDBData();
 
         //初始化语言
-        Util.setLanguage(this);
+        Util.setLanguage(App.Companion.getContext());
 
         //获取训练数据
         initTrainData();
@@ -74,13 +78,7 @@ public class MyApplication extends App {
         //初始化语音
         speechInstant();
 
-
-        //初始化友盟
-        if (!BuildConfig.DEBUG) {
-            UMeng.INSTANCE.init(this, null, null, true);
-        }
-
-        RecommendGlobal.INSTANCE.init(UMeng.INSTANCE.getChannel());
+        isInit = true;
 
     }
 
@@ -118,7 +116,7 @@ public class MyApplication extends App {
 
     private void initDBData(){
         Log.d(TAG, "initDBData: ");
-        if (DataSupport.findAll(Person.class).size() == 0){
+        if (LitePal.findAll(Person.class).size() == 0){
             Person person = new Person();
             person.setmAge(0);
             person.setmCurWeight(50);
@@ -132,10 +130,10 @@ public class MyApplication extends App {
             person.save();
             GlobalData.person = person;
         }else {
-            GlobalData.person = DataSupport.findAll(Person.class).get(0);
+            GlobalData.person = LitePal.findAll(Person.class).get(0);
         }
 
-        if (DataSupport.findAll(Config.class).size() == 0){
+        if (LitePal.findAll(Config.class).size() == 0){
             Config config = new Config();
             config.setLanguage(Config.LANG_CHINESE);
             config.setMuteOption(false);
@@ -148,10 +146,10 @@ public class MyApplication extends App {
             config.save();
             GlobalData.config = config;
         }else {
-            GlobalData.config = DataSupport.findAll(Config.class).get(0);
+            GlobalData.config = LitePal.findAll(Config.class).get(0);
         }
 
-        List<Config.Reminder> reminderList = DataSupport.findAll(Config.Reminder.class);
+        List<Config.Reminder> reminderList = LitePal.findAll(Config.Reminder.class);
         GlobalData.reminderList = reminderList;
     }
 

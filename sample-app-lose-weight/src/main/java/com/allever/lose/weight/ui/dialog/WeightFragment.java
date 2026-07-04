@@ -18,10 +18,6 @@ import com.allever.lose.weight.R;
 import com.allever.lose.weight.data.DataSource;
 import com.allever.lose.weight.data.Repository;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -30,20 +26,12 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 public class WeightFragment extends SupportFragment implements CalendarView.OnDateSelectedListener {
 
-    @BindView(R.id.calendarView)
     CalendarView mCalendarView;
-    @BindView(R.id.calendarLayout)
     CalendarLayout calendarLayout;
-    Unbinder unbinder;
-    @BindView(R.id.current_date)
     TextView currentDate;
-    @BindView(R.id.weight)
     LinearLayout weight;
-    @BindView(R.id.cancel)
     TextView cancel;
-    @BindView(R.id.save)
     TextView save;
-    @BindView(R.id.edit_weight)
     EditText editWeight;
     private int fetureColor;
     private DataSource mDataSource;
@@ -64,7 +52,33 @@ public class WeightFragment extends SupportFragment implements CalendarView.OnDa
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_weight, container, false);
-        unbinder = ButterKnife.bind(this, view);
+
+        mCalendarView = view.findViewById(R.id.calendarView);
+        calendarLayout = view.findViewById(R.id.calendarLayout);
+        currentDate = view.findViewById(R.id.current_date);
+        weight = view.findViewById(R.id.weight);
+        cancel = view.findViewById(R.id.cancel);
+        save = view.findViewById(R.id.save);
+        editWeight = view.findViewById(R.id.edit_weight);
+
+        cancel.setOnClickListener(v -> {
+            pop();
+        });
+        save.setOnClickListener(v -> {
+            if (mListener != null){
+                String valueStr = editWeight.getText().toString();
+                if (valueStr.isEmpty()) valueStr = "0";
+                double weight = Double.valueOf(valueStr);
+                if (weight < 0){
+                    Toast.makeText(_mActivity, _mActivity.getResources().getString(R.string.weight_not_allow), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                mListener.onSaveClick(weight, mYear, mMonth, mDay);
+                pop();
+            }
+        });
+
+
         fetureColor = Color.parseColor("#d0d0d0");
         mDataSource = Repository.getInstance();
         setDate();
@@ -85,7 +99,6 @@ public class WeightFragment extends SupportFragment implements CalendarView.OnDa
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
     }
 
     @Override
@@ -96,33 +109,6 @@ public class WeightFragment extends SupportFragment implements CalendarView.OnDa
         mMonth = calendar.getMonth();
         mYear = calendar.getYear();
         editWeight.setText(String.valueOf(mDataSource.getHistoryWeight(mYear, mMonth, mDay)));
-    }
-
-
-
-    @OnClick({R.id.cancel, R.id.save})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.cancel:
-                pop();
-                break;
-            case R.id.save:
-                if (mListener != null){
-                    String valueStr = editWeight.getText().toString();
-                    if (valueStr.isEmpty()) valueStr = "0";
-                    double weight = Double.valueOf(valueStr);
-                    if (weight < 0){
-                        Toast.makeText(_mActivity, _mActivity.getResources().getString(R.string.weight_not_allow), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    mListener.onSaveClick(weight, mYear, mMonth, mDay);
-                    pop();
-                }
-
-                break;
-            default:
-                break;
-        }
     }
 
     public interface IWeightRecordListener{

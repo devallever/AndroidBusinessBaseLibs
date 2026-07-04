@@ -26,12 +26,6 @@ import com.allever.lose.weight.ui.mvp.presenter.ActionReadyPresenter;
 import com.allever.lose.weight.ui.mvp.view.IActionReadyView;
 
 import org.greenrobot.eventbus.EventBus;
-import org.litepal.util.Const;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 /**
  * Created by Mac on 18/2/28.
  */
@@ -39,19 +33,12 @@ import butterknife.Unbinder;
 public class ActionReadyFragment  extends BaseFragment<IActionReadyView, ActionReadyPresenter> implements IActionReadyView {
     private static final String TAG = "ActionReadyFragment";
 
-    @BindView(R.id.id_fg_action_ready_iv_guide)
     ImageView mIvGuide;
-    @BindView(R.id.id_toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.id_fg_action_ready_progress_bar)
     CircleProgressBar mCircleProgressBar;
-    @BindView(R.id.id_fg_action_ready_tv_time)
     TextView mTvTime;
-    @BindView(R.id.id_fg_action_ready_btn_start_pause)
     FloatingActionButton mBtnStartPause;
-    @BindView(R.id.id_fg_action_ready_tv_skip)
     TextView mTvSkip;
-    @BindView(R.id.id_fg_action_ready_tv_desc)
     TextView mTvDesc;
 
     private AnimationDrawable mAnimationDrawable;
@@ -67,7 +54,6 @@ public class ActionReadyFragment  extends BaseFragment<IActionReadyView, ActionR
     private int mDayId = 1;
 
     private ActionItem mActionItem;
-    private Unbinder mButterKnifeBinder;
 
     public static ActionReadyFragment newInstance(int dayId, int actionId){
         ActionReadyFragment fragment = new ActionReadyFragment();
@@ -80,7 +66,6 @@ public class ActionReadyFragment  extends BaseFragment<IActionReadyView, ActionR
 
     @Override
     public void onDestroyView() {
-        mButterKnifeBinder.unbind();
         mValueAnimator.cancel();
         mAnimationDrawable.stop();
         super.onDestroyView();
@@ -96,7 +81,14 @@ public class ActionReadyFragment  extends BaseFragment<IActionReadyView, ActionR
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_action_ready, container,false);
-        mButterKnifeBinder = ButterKnife.bind(this, view);
+
+        mIvGuide = view.findViewById(R.id.id_fg_action_ready_iv_guide);
+        mToolbar = view.findViewById(R.id.id_toolbar);
+        mCircleProgressBar = view.findViewById(R.id.id_fg_action_ready_progress_bar);
+        mTvTime = view.findViewById(R.id.id_fg_action_ready_tv_time);
+        mBtnStartPause = view.findViewById(R.id.id_fg_action_ready_btn_start_pause);
+        mTvSkip = view.findViewById(R.id.id_fg_action_ready_tv_skip);
+        mTvDesc = view.findViewById(R.id.id_fg_action_ready_tv_desc);
 
         Bundle args = getArguments();
         if (args != null) {

@@ -22,8 +22,6 @@ public interface IReportView {
     void refreshView();
 
     void setChartData(List<Entry> entryList, Date startDate, Date endDate);
-    void showSyncDialog();
-    void hideSyncDialog();
     void setSync(String account, String time);
 
 

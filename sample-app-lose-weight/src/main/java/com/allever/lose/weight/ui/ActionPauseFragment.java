@@ -23,9 +23,6 @@ import com.allever.lose.weight.ui.mvp.view.IActionPauseView;
 
 import org.greenrobot.eventbus.EventBus;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by Mac on 18/3/1.
@@ -34,23 +31,15 @@ import butterknife.Unbinder;
 public class ActionPauseFragment extends BaseFragment<IActionPauseView, ActionPausePresenter> implements IActionPauseView {
     private static final String TAG = "ActionPauseFragment";
 
-    @BindView(R.id.id_fg_action_pause_iv_guide)
     ImageView mIvGuide;
-    @BindView(R.id.id_fg_action_pause_iv_close)
     ImageView mIvClose;
-    @BindView(R.id.id_fg_action_pause_tv_video)
     TextView mTvVideo;
-    @BindView(R.id.id_fg_action_pause_tv_name)
     TextView mTvName;
-    @BindView(R.id.id_fg_action_pause_tv_action_desc)
     TextView mTvDesc;
-    @BindView(R.id.id_action_pause_tv_left_time)
     TextView mTvLeftTime;
-    @BindView(R.id.id_fg_action_pause_progress_bar)
     ProgressBar mProgressBar;
 
 
-    private Unbinder mButterKnifeBinder;
     private AnimationDrawable mAnimationDrawable;
 
     private int mDayId = 1;
@@ -72,7 +61,15 @@ public class ActionPauseFragment extends BaseFragment<IActionPauseView, ActionPa
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_action_pause, container, false);
-        mButterKnifeBinder = ButterKnife.bind(this, view);
+
+        mIvGuide = view.findViewById(R.id.id_fg_action_pause_iv_guide);
+        mIvClose = view.findViewById(R.id.id_fg_action_pause_iv_close);
+        mTvVideo = view.findViewById(R.id.id_fg_action_pause_tv_video);
+        mTvName = view.findViewById(R.id.id_fg_action_pause_tv_name);
+        mTvDesc = view.findViewById(R.id.id_fg_action_pause_tv_action_desc);
+        mTvLeftTime = view.findViewById(R.id.id_action_pause_tv_left_time);
+        mProgressBar = view.findViewById(R.id.id_fg_action_pause_progress_bar);
+
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -86,12 +83,6 @@ public class ActionPauseFragment extends BaseFragment<IActionPauseView, ActionPa
         mPresenter.getLeftTime(mDayId, mActionId, mDuration);
         mPresenter.getCurrentLevel(mDayId, mActionId);
         return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        mButterKnifeBinder.unbind();
-        super.onDestroyView();
     }
 
     private void initView() {

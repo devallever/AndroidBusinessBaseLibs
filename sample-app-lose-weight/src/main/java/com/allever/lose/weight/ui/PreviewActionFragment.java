@@ -25,24 +25,15 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 /**
  * Created by Mac on 18/2/27.
  */
 
 public class PreviewActionFragment extends BaseFragment<IPreviewActionView, PreviewActionPresenter> implements IPreviewActionView {
-    @BindView(R.id.id_preview_action_rv)
     RecyclerView mRecyclerView;
-    @BindView(R.id.id_preview_action_btn_start)
     Button mBtnStart;
-    @BindView(R.id.id_preview_action_btn_end)
     Button mBtnEnd;
-    @BindView(R.id.id_preview_action_ll_rest_container)
     LinearLayout mLlRestContainer;
-    @BindView(R.id.id_toolbar)
     Toolbar mToolbar;
 
     //第几天id
@@ -51,7 +42,6 @@ public class PreviewActionFragment extends BaseFragment<IPreviewActionView, Prev
     private int mActionId;
     //标题
     private String mTitle = "";
-    private Unbinder mButterKnifeBinder;
 
     public static PreviewActionFragment newInstance(int dayId, String title) {
         PreviewActionFragment fragment = new PreviewActionFragment();
@@ -74,19 +64,18 @@ public class PreviewActionFragment extends BaseFragment<IPreviewActionView, Prev
         }
 
         View view = inflater.inflate(R.layout.fragment_preview_action,container,false);
-        mButterKnifeBinder = ButterKnife.bind(this, view);
+
+        mRecyclerView = view.findViewById(R.id.id_preview_action_rv);
+        mBtnStart = view.findViewById(R.id.id_preview_action_btn_start);
+        mBtnEnd = view.findViewById(R.id.id_preview_action_btn_end);
+        mLlRestContainer = view.findViewById(R.id.id_preview_action_ll_rest_container);
+        mToolbar = view.findViewById(R.id.id_toolbar);
 
         initView();
 
         mPresenter.getActionPreview(mDayId);
 
         return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        mButterKnifeBinder.unbind();
-        super.onDestroyView();
     }
 
     private void initView(){

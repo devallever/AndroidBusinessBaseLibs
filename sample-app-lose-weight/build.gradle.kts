@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
-    id("com.jakewharton.butterknife")
+//    id("com.jakewharton.butterknife")
 }
 
 val modelPkg = "com.allever.lose.weight"
@@ -41,6 +41,8 @@ dependencies {
     implementation(libs.eventbus)
     //gson
     implementation(libs.gson)
+    //litepal
+    implementation ("org.litepal.guolindev:core:3.2.3")
 
 
     // 如果想使用SwipeBack 滑动边缘退出Fragment/Activity功能，完整的添加规则如下：
@@ -52,8 +54,8 @@ dependencies {
     implementation ("me.yokeyword:eventbus-activity-scope:1.1.0")
 // Your EventBus")s version
 
-    implementation ("com.jakewharton:butterknife:10.2.3")
-    annotationProcessor ("com.jakewharton:butterknife-compiler:10.2.3")
+//    implementation ("com.jakewharton:butterknife:10.2.3")
+//    annotationProcessor ("com.jakewharton:butterknife-compiler:10.2.3")
 
     implementation ("com.dinuscxj:circleprogressbar:1.1.1")
     //图表控件

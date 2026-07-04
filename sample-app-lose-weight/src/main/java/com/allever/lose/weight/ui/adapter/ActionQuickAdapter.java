@@ -5,9 +5,9 @@ import android.graphics.drawable.AnimationDrawable;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.allever.lose.weight.R;
 import com.allever.lose.weight.bean.ActionItem;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 import java.util.List;
 

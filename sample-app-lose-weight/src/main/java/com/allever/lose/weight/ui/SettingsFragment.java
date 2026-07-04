@@ -15,21 +15,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.allever.lib.common.app.App;
-import com.allever.lib.umeng.UMeng;
-import com.allever.lose.weight.BuildConfig;
-import com.allever.lose.weight.ad.AdConstants;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
 import com.allever.lose.weight.MainActivity;
 import com.allever.lose.weight.MyApplication;
 import com.allever.lose.weight.R;
 import com.allever.lose.weight.util.Constant;
 import com.allever.lose.weight.base.BaseFragment;
 import com.allever.lose.weight.ui.dialog.LanguageDialog;
-import com.allever.lose.weight.ui.dialog.SyncGoogleFitDialog;
 import com.allever.lose.weight.ui.mvp.presenter.SettingPresenter;
 import com.allever.lose.weight.ui.mvp.view.ISettingView;
 import com.allever.lose.weight.util.Util;
@@ -44,12 +35,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
-
-
 /**
  * Created by Mac on 2018/3/1.
  */
@@ -60,43 +45,24 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
     private static final int RC_SIGN_IN = 0x02;
 
 
-    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    Unbinder unbinder;
-    @BindView(R.id.test_voice)
     TextView testVoice;
-    @BindView(R.id.setting)
     TextView mSetting;
-    @BindView(R.id.select_engine)
     TextView selectEngine;
-    @BindView(R.id.sound_options)
     TextView soundOptions;
-    @BindView(R.id.id_fg_setting_tv_health_data)
     TextView mTvHealthData;
-    @BindView(R.id.id_fg_setting_tv_unit_setting)
     TextView mTvUnitSetting;
-    @BindView(R.id.id_fg_setting_tv_language_setting_setting)
     TextView mTvLanguageSetting;
-    @BindView(R.id.id_fg_setting_tv_share)
     TextView mTvShare;
-    @BindView(R.id.id_fg_setting_tv_delete_all_data)
     TextView mTvDeleteAllData;
-    @BindView(R.id.id_fg_setting_tv_download_tts)
     TextView mTvDownloadTts;
-    @BindView(R.id.id_fg_setting_tv_rate_us)
     TextView mTvRateUs;
 
-    @BindView(R.id.id_sync_ll_sync_container)
     LinearLayout mLlSyncContainer;
-    @BindView(R.id.id_sync_tv_account)
     TextView mTvAccount;
-    @BindView(R.id.id_sync_tv_sync_time)
     TextView mTvSyncTime;
-    @BindView(R.id.id_fg_setting_tv_reminder)
     TextView mTvReminder;
-    @BindView(R.id.id_fg_setting_tv_feedback)
     TextView mTvFeedback;
-    @BindView(R.id.tvVersion)
     TextView mTvVersion;
 
     private TextToSpeech mSpeech;
@@ -106,7 +72,6 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
 
     private LanguageDialog mLanguageDialog;
     private SoundOptionsFragment mSoundDialog;
-    private SyncGoogleFitDialog mSyncGoogleFitDialog;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -117,7 +82,123 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        unbinder = ButterKnife.bind(this, view);
+
+        mToolbar = view.findViewById(R.id.toolbar);
+        testVoice = view.findViewById(R.id.test_voice);
+        mSetting = view.findViewById(R.id.setting);
+        selectEngine = view.findViewById(R.id.select_engine);
+        soundOptions = view.findViewById(R.id.sound_options);
+        mTvHealthData = view.findViewById(R.id.id_fg_setting_tv_health_data);
+        mTvUnitSetting = view.findViewById(R.id.id_fg_setting_tv_unit_setting);
+        mTvLanguageSetting = view.findViewById(R.id.id_fg_setting_tv_language_setting_setting);
+        mTvShare = view.findViewById(R.id.id_fg_setting_tv_share);
+        mTvDeleteAllData = view.findViewById(R.id.id_fg_setting_tv_delete_all_data);
+        mTvDownloadTts = view.findViewById(R.id.id_fg_setting_tv_download_tts);
+        mTvRateUs = view.findViewById(R.id.id_fg_setting_tv_rate_us);
+        mTvReminder = view.findViewById(R.id.id_fg_setting_tv_reminder);
+        mTvFeedback = view.findViewById(R.id.id_fg_setting_tv_feedback);
+        mTvVersion = view.findViewById(R.id.tvVersion);
+        mLlSyncContainer = view.findViewById(R.id.id_sync_ll_sync_container);
+        mTvAccount = view.findViewById(R.id.id_sync_tv_account);
+        mTvSyncTime = view.findViewById(R.id.id_sync_tv_sync_time);
+        mTvLanguageSetting = view.findViewById(R.id.id_fg_setting_tv_language_setting_setting);
+
+        testVoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSpeech.speak(getString(R.string.tts_tset), TextToSpeech.QUEUE_FLUSH, null);
+                showTTSTestDialog();
+            }
+        });
+        mSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent("com.android.settings.TTS_SETTINGS"));
+            }
+        });
+        soundOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSoundDialog.show(getFragmentManager());
+            }
+        });
+        mTvHealthData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                start(new HealthDataFragment());
+            }
+        });
+        mTvUnitSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                start(new UnitSettingFragment());
+            }
+        });
+        mTvLanguageSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLanguageDialog.show(true);
+            }
+        });
+        mTvShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareIntent = Util.getShareIntent(_mActivity);
+                startActivity(shareIntent);
+            }
+        });
+        mTvDeleteAllData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(_mActivity)
+                        .setMessage(R.string.delete_all_data)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mPresenter.deleteAllData();
+                                Util.restartApp(_mActivity, MainActivity.class);
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                builder.create().show();
+            }
+        });
+        mTvDownloadTts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Util.searchFromMarket(_mActivity, "text to speech");
+            }
+        });
+        mTvRateUs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Util.openAppInPlay(_mActivity, _mActivity.getPackageName());
+            }
+        });
+        selectEngine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSingleChoiceDialogFragment();
+            }
+        });
+        mTvReminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                start(new ReminderFragment());
+            }
+        });
+        mTvFeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.sendFeedBack(_mActivity);
+            }
+        });
+
         EventBus.getDefault().register(this);
 
         initToolbar(mToolbar, R.string.settings);
@@ -127,21 +208,7 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
         mPresenter.getLanguage(_mActivity);
         mPresenter.getSyncData();
 
-        String channel = UMeng.INSTANCE.getChannel();
-        String last = "";
-        if (BuildConfig.DEBUG) {
-            last = "(Debug)-" + channel + "\n" +
-                    App.context.getPackageName() + "\n" +
-                    "AdMob-" + AdConstants.INSTANCE.getADMOB_APP_ID();
-        } else {
-            if ("ad".equals(channel)) {
-                last = "(Release)-" + channel + "\n" +
-                        App.context.getPackageName() + "\n" +
-                        "AdMob-" + AdConstants.INSTANCE.getADMOB_APP_ID();
-            }
-        }
-
-        mTvVersion.setText("Ver:" + BuildConfig.VERSION_NAME + "\n" + last);
+        mTvVersion.setText("Ver:1.0");
 
         return view;
     }
@@ -151,16 +218,6 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
         mSoundDialog = new SoundOptionsFragment(_mActivity, this);
     }
 
-    @OnClick(R.id.test_voice)
-    public void setTestVoice() {
-        mSpeech.speak(getString(R.string.tts_tset), TextToSpeech.QUEUE_FLUSH, null);
-        showTTSTestDialog();
-    }
-
-    @OnClick(R.id.setting)
-    public void setmSetting() {
-        startActivity(new Intent("com.android.settings.TTS_SETTINGS"));
-    }
 
     private void showTTSTestDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(_mActivity);
@@ -205,7 +262,6 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
         EventBus.getDefault().unregister(this);
     }
 
@@ -221,26 +277,6 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
         return new SettingPresenter();
     }
 
-    @OnClick(R.id.sound_options)
-    public void onSoundOptionsClicked() {
-        mSoundDialog.show(getFragmentManager());
-    }
-
-    @OnClick(R.id.id_fg_setting_tv_health_data)
-    public void onHealthDataClick() {
-        start(new HealthDataFragment());
-    }
-
-    @OnClick(R.id.id_fg_setting_tv_unit_setting)
-    public void onOnUnitSettingClicked() {
-        start(new UnitSettingFragment());
-    }
-
-    @OnClick(R.id.id_fg_setting_tv_language_setting_setting)
-    public void onLanguageSettingClicked() {
-        mLanguageDialog.show(true);
-    }
-
     @Override
     public void onObtainLanguage(int id, String language) {
         Log.d(TAG, "onObtainLanguage: id = " + id);
@@ -254,11 +290,6 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
         Util.restartApp(_mActivity, MainActivity.class);
     }
 
-    @OnClick(R.id.id_fg_setting_tv_share)
-    public void onShareClicked() {
-        Intent shareIntent = Util.getShareIntent(_mActivity);
-        startActivity(shareIntent);
-    }
 
     @Override
     public void onObtainSoundOption(boolean isMute, boolean voice, boolean trainVoice) {
@@ -271,60 +302,6 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
         mTvLanguageSetting.setText(getString(R.string.language_select) + " - " + language);
     }
 
-    @OnClick(R.id.id_fg_setting_tv_delete_all_data)
-    public void onDeleteAllDataClick() {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(_mActivity)
-                .setMessage(R.string.delete_all_data)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mPresenter.deleteAllData();
-                        Util.restartApp(_mActivity, MainActivity.class);
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        builder.create().show();
-    }
-
-    @OnClick(R.id.id_fg_setting_tv_download_tts)
-    public void onDownlodTTSClicked() {
-        Util.searchFromMarket(_mActivity, "text to speech");
-    }
-
-    @OnClick(R.id.id_fg_setting_tv_rate_us)
-    public void onRateUsClicked() {
-        Util.openAppInPlay(_mActivity, _mActivity.getPackageName());
-    }
-
-    @OnClick(R.id.select_engine)
-    public void onSelectEngine() {
-        showSingleChoiceDialogFragment();
-    }
-
-
-    @OnClick(R.id.id_sync_ll_sync_container)
-    public void onSyncClicked() {
-        //https://developers.google.com/identity/sign-in/android/
-        //1.登录谷歌账号->
-        //2.登录成功->授权google fit
-        //3.允许->弹出同步框
-
-//        if (Util.isApkAvailable(_mActivity, "com.google.android.gms")){
-//            mPresenter.loginGoogle(this,RC_SIGN_IN);
-//        }else {
-//            showToast("没安装谷歌服务");
-//        }
-
-        showToast(R.string.sync);
-
-
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_OAUTH_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
@@ -332,51 +309,6 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
             //获取上一次的同步时间
             mPresenter.saveSyncState(true);
             EventBus.getDefault().post(Constant.EVENT_UPDATE_REPORT_SYNC);
-            showSyncDialog();
         }
-
-        if (requestCode == RC_SIGN_IN && resultCode == RESULT_OK) {
-            handleLoginGoogle(data);
-        }
-    }
-
-    private void handleLoginGoogle(Intent data) {
-        try {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            GoogleSignInAccount account = task.getResult(ApiException.class);
-            mPresenter.saveSyncAccount(account.getEmail());
-            mPresenter.connectGoogleFit(SettingsFragment.this, REQUEST_OAUTH_REQUEST_CODE);
-        } catch (ApiException e) {
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-        }
-    }
-
-    @Override
-    public void showSyncDialog() {
-        Log.d(TAG, "showSyncDialog: ");
-        mSyncGoogleFitDialog = new SyncGoogleFitDialog(_mActivity);
-        mSyncGoogleFitDialog.show(true);
-    }
-
-    @Override
-    public void hideSyncDialog() {
-        mSyncGoogleFitDialog.destroy();
-    }
-
-    @Override
-    public void setSync(String account, String time) {
-        mTvAccount.setText(account);
-        mTvSyncTime.setText(getString(R.string.last_sync) + ": " + time);
-        mTvSyncTime.setTextColor(getResources().getColor(R.color.green_16));
-    }
-
-    @OnClick(R.id.id_fg_setting_tv_reminder)
-    public void onRemindClicked() {
-        start(new ReminderFragment());
-    }
-
-    @OnClick(R.id.id_fg_setting_tv_feedback)
-    public void onFeedBackClicked() {
-        mPresenter.sendFeedBack(_mActivity);
     }
 }

@@ -7,8 +7,4 @@ package com.allever.lose.weight.ui.mvp.view;
 public interface ISettingView {
 
     void setLanguage(int flag, String language);
-
-    void showSyncDialog();
-    void hideSyncDialog();
-    void setSync(String account, String time);
 }

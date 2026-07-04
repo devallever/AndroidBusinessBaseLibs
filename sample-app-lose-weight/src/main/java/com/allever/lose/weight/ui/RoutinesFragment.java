@@ -21,6 +21,7 @@ import com.allever.lose.weight.bean.RoutineItem;
 import com.allever.lose.weight.ui.adapter.RoutinesItemAdapter;
 import com.allever.lose.weight.util.ScreenUtils;
 import com.allever.lose.weight.ui.view.widget.SpacesItemDecoration;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -29,21 +30,13 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class RoutinesFragment extends BaseFragment<IRoutineView, RoutinePresenter> implements IRoutineView {
 
 
-    @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-
-    Unbinder unbinder;
 
     private List<RoutineItem> mRoutineItemList = new ArrayList<>();
 
@@ -57,8 +50,9 @@ public class RoutinesFragment extends BaseFragment<IRoutineView, RoutinePresente
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_routines, container, false);
-        unbinder = ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
+
+        recyclerView = view.findViewById(R.id.recycler_view);
 
         initView();
         mPresenter.getRoutineDataList();
@@ -73,7 +67,7 @@ public class RoutinesFragment extends BaseFragment<IRoutineView, RoutinePresente
         recyclerView.setAdapter(trainItemAdapter);
         recyclerView.addItemDecoration(new SpacesItemDecoration(ScreenUtils.dp2px(10)));
 
-        trainItemAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        trainItemAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(_mActivity, ActionMainActivity.class);
@@ -86,7 +80,6 @@ public class RoutinesFragment extends BaseFragment<IRoutineView, RoutinePresente
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
         EventBus.getDefault().unregister(this);
     }
 

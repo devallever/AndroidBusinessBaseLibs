@@ -9,25 +9,16 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
-    <application
-        android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:name=".MyApplication"
-        android:theme="@style/AppTheme">
+    <application>
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".ui.ActionMainActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name="app.allever.android.sample.app.lose.weight.SampleAppLoseWeightActivity" />
+
         <receiver
             android:name=".reciver.AlarmReceiver"
             android:process=":remote"

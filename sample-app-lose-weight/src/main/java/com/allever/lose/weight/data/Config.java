@@ -1,12 +1,12 @@
 package com.allever.lose.weight.data;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.crud.LitePalSupport;
 
 /**
  * Created by Mac on 18/3/19.
  */
 
-public class Config  extends DataSupport{
+public class Config  extends LitePalSupport {
     public static final int LANG_CHINESE = 1;
     public static final int LANG_ENGLISH = 2;
 
@@ -100,7 +100,7 @@ public class Config  extends DataSupport{
         this.syncTime = syncTime;
     }
 
-    public static class Reminder extends DataSupport{
+    public static class Reminder extends LitePalSupport{
         private int id;
         private int hour;
         private int minute;

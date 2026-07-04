@@ -128,21 +128,16 @@ public class HeightWeightDialog extends BaseDialog {
                 if (mEtTextWeight.isEmpty()){
                     mEtTextWeight = "0";
                 }
-                switch (checkedId){
-                    case R.id.id_dialog_h_w_rb_unit_kg:
-                        GlobalData.person.setmWeightUnit(Constant.UNIT_WEIGHT_KG);
-                        //数值转换->更新显示
-                        mEtTextWeight = String.valueOf(CalculationUtil.lb2Kg(Float.valueOf(mEtTextWeight)));
-                        mEtWeight.setText(mEtTextWeight);
-                        break;
-                    case R.id.id_dialog_h_w_rb_unit_lb:
-                        GlobalData.person.setmWeightUnit(Constant.UNIT_WEIGHT_LB);
-                        //数值转换->更新显示
-                        mEtTextWeight = String.valueOf(CalculationUtil.kg2Lb(Float.valueOf(mEtTextWeight)));
-                        mEtWeight.setText(mEtTextWeight);
-                        break;
-                    default:
-                        break;
+                if (checkedId == R.id.id_dialog_h_w_rb_unit_kg) {
+                    GlobalData.person.setmWeightUnit(Constant.UNIT_WEIGHT_KG);
+                    //数值转换->更新显示
+                    mEtTextWeight = String.valueOf(CalculationUtil.lb2Kg(Float.valueOf(mEtTextWeight)));
+                    mEtWeight.setText(mEtTextWeight);
+                } else if (checkedId == R.id.id_dialog_h_w_rb_unit_lb) {
+                    GlobalData.person.setmWeightUnit(Constant.UNIT_WEIGHT_LB);
+                    //数值转换->更新显示
+                    mEtTextWeight = String.valueOf(CalculationUtil.kg2Lb(Float.valueOf(mEtTextWeight)));
+                    mEtWeight.setText(mEtTextWeight);
                 }
                 mDataSource.updatePersonInfo();
             }
@@ -152,33 +147,27 @@ public class HeightWeightDialog extends BaseDialog {
         mRgHeight.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
-                    case R.id.id_dialog_h_w_rb_unit_cm:
-                        GlobalData.person.setmHeightUnit(Constant.UNIT_HEIGHT_CM);
-                        mLlEtHeightContainer.setVisibility(View.INVISIBLE);
-                        mEtCm.setVisibility(View.VISIBLE);
+                if (checkedId == R.id.id_dialog_h_w_rb_unit_cm) {
+                    GlobalData.person.setmHeightUnit(Constant.UNIT_HEIGHT_CM);
+                    mLlEtHeightContainer.setVisibility(View.INVISIBLE);
+                    mEtCm.setVisibility(View.VISIBLE);
 
-                        mEtTextFt = mEtFt.getText().toString();
-                        mEtTextIn = mEtIn.getText().toString();
-                        if (mEtTextFt.isEmpty()) mEtTextFt = DEFAULT_VALUE;
-                        if (mEtTextIn.isEmpty()) mEtTextIn = DEFAULT_VALUE;
-                        float cm = CalculationUtil.ft_in2cm(Float.valueOf(mEtTextFt), Float.valueOf(mEtTextIn));
-                        mEtCm.setText(String.valueOf(String.valueOf(cm)));
+                    mEtTextFt = mEtFt.getText().toString();
+                    mEtTextIn = mEtIn.getText().toString();
+                    if (mEtTextFt.isEmpty()) mEtTextFt = DEFAULT_VALUE;
+                    if (mEtTextIn.isEmpty()) mEtTextIn = DEFAULT_VALUE;
+                    float cm = CalculationUtil.ft_in2cm(Float.valueOf(mEtTextFt), Float.valueOf(mEtTextIn));
+                    mEtCm.setText(String.valueOf(String.valueOf(cm)));
+                } else if (checkedId == R.id.id_dialog_h_w_rb_unit_in) {
+                    GlobalData.person.setmHeightUnit(Constant.UNIT_HEIGHT_IN);
+                    mLlEtHeightContainer.setVisibility(View.VISIBLE);
+                    mEtCm.setVisibility(View.INVISIBLE);
 
-                        break;
-                    case R.id.id_dialog_h_w_rb_unit_in:
-                        GlobalData.person.setmHeightUnit(Constant.UNIT_HEIGHT_IN);
-                        mLlEtHeightContainer.setVisibility(View.VISIBLE);
-                        mEtCm.setVisibility(View.INVISIBLE);
-
-                        mEtTextCm = mEtCm.getText().toString();
-                        if (mEtTextCm.isEmpty()) mEtTextCm = DEFAULT_VALUE;
-                        float[] value = CalculationUtil.cm2ft_in(Float.valueOf(mEtTextCm));
-                        mEtFt.setText(String.valueOf(value[0]));
-                        mEtIn.setText(String.valueOf(value[1]));
-                        break;
-                    default:
-                        break;
+                    mEtTextCm = mEtCm.getText().toString();
+                    if (mEtTextCm.isEmpty()) mEtTextCm = DEFAULT_VALUE;
+                    float[] value = CalculationUtil.cm2ft_in(Float.valueOf(mEtTextCm));
+                    mEtFt.setText(String.valueOf(value[0]));
+                    mEtIn.setText(String.valueOf(value[1]));
                 }
                 mDataSource.updatePersonInfo();
             }

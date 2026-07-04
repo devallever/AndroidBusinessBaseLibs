@@ -26,30 +26,17 @@ import com.allever.lose.weight.ui.view.widget.DividerItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
-
 /**
  * Created by Mac on 2018/3/1.
  */
 
 public class HistoryFragment extends BaseFragment<IHistoryView, HistoryPresenter> implements IHistoryView, CalendarView.OnDateSelectedListener {
-    @BindView(R.id.id_toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    Unbinder unbinder;
-    @BindView(R.id.tv_month_day)
     TextView mTextMonthDay;
-    @BindView(R.id.tv_year)
     TextView mTextYear;
-    @BindView(R.id.tv_lunar)
     TextView mTextLunar;
-    @BindView(R.id.rl_tool)
     RelativeLayout rlTool;
-    @BindView(R.id.calendarView)
     CalendarView mCalendarView;
 
     private ExerciseRecordItemAdapter mAdapter;
@@ -64,7 +51,15 @@ public class HistoryFragment extends BaseFragment<IHistoryView, HistoryPresenter
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_history, container, false);
-        unbinder = ButterKnife.bind(this, view);
+
+        mToolbar = view.findViewById(R.id.id_toolbar);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        mTextMonthDay = view.findViewById(R.id.tv_month_day);
+        mTextYear = view.findViewById(R.id.tv_year);
+        mTextLunar = view.findViewById(R.id.tv_lunar);
+        rlTool = view.findViewById(R.id.rl_tool);
+        mCalendarView = view.findViewById(R.id.calendarView);
+
         initView();
 
         mPresenter.getRecordList();
@@ -99,12 +94,6 @@ public class HistoryFragment extends BaseFragment<IHistoryView, HistoryPresenter
         mTextLunar.setVisibility(View.VISIBLE);
         mTextYear.setVisibility(View.VISIBLE);
         mTextMonthDay.setText(calendar.getYear() + "/" + calendar.getMonth());
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 
     @Override
