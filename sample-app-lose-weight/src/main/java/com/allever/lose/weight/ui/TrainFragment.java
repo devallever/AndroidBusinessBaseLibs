@@ -60,6 +60,7 @@ public class TrainFragment extends BaseMainFragment<ITrainView, TrainPresenter> 
         EventBus.getDefault().register(this);
         View view = inflater.inflate(R.layout.lw_fragment_train, container, false);
 
+        recyclerView = view.findViewById(R.id.recycler_view);
         image = view.findViewById(R.id.image_workout);
         mTvTimeLeft = view.findViewById(R.id.tv_day_left);
         finishPercent = view.findViewById(R.id.tv_progress);

@@ -1,5 +1,6 @@
 package com.allever.lose.weight;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
@@ -24,6 +25,8 @@ import java.util.List;
 import java.util.Locale;
 
 import app.allever.android.lib.core.app.App;
+import app.allever.android.lib.core.ext.LoggerKt;
+import app.allever.android.lib.core.helper.GsonHelper;
 import me.yokeyword.fragmentation.Fragmentation;
 
 /**
@@ -32,7 +35,8 @@ import me.yokeyword.fragmentation.Fragmentation;
 
 public class MyApplication{
     private static final String TAG = "MyApplication";
-    private static Application mContext;
+    @SuppressLint("StaticFieldLeak")
+    private static Context mContext;
     private static TextToSpeech mSpeech;
 
     private boolean isInit = false;
@@ -116,7 +120,7 @@ public class MyApplication{
 
     private void initDBData(){
         Log.d(TAG, "initDBData: ");
-        if (LitePal.findAll(Person.class).size() == 0){
+        if (LitePal.findAll(Person.class).isEmpty()){
             Person person = new Person();
             person.setmAge(0);
             person.setmCurWeight(50);
@@ -133,7 +137,7 @@ public class MyApplication{
             GlobalData.person = LitePal.findAll(Person.class).get(0);
         }
 
-        if (LitePal.findAll(Config.class).size() == 0){
+        if (LitePal.findAll(Config.class).isEmpty()){
             Config config = new Config();
             config.setLanguage(Config.LANG_CHINESE);
             config.setMuteOption(false);
@@ -148,6 +152,8 @@ public class MyApplication{
         }else {
             GlobalData.config = LitePal.findAll(Config.class).get(0);
         }
+
+        LoggerKt.log("initDBData: config = " + GsonHelper.INSTANCE.toJson(GlobalData.config));
 
         List<Config.Reminder> reminderList = LitePal.findAll(Config.Reminder.class);
         GlobalData.reminderList = reminderList;
@@ -174,6 +180,7 @@ public class MyApplication{
             //每个动作描述
             for (ActionData actionData : Repository.getInstance().getActionDesc(MyApplication.getContext())){
                 GlobalData.actionDataMap.put(actionData.getId(), actionData);
+                LoggerKt.log("actionData = " + GsonHelper.INSTANCE.toJson(actionData));
             }
 
             //

@@ -25,6 +25,8 @@ import com.allever.lose.weight.util.DateUtil;
 
 import org.litepal.LitePal;
 
+import app.allever.android.lib.core.ext.LoggerKt;
+
 
 /**
  * Created by Mac on 2018/3/7.
@@ -705,6 +707,7 @@ public class Repository implements DataSource{
 
     public List<ActionData> getActionDesc(Context context) throws IOException {
         int id = GlobalData.config.getLanguage();
+        LoggerKt.log("getActionDesc: id =" + id);
         String json = "";
         switch (id){
             case Config.LANG_CHINESE:
@@ -717,6 +720,7 @@ public class Repository implements DataSource{
                 break;
         }
         if (TextUtils.isEmpty(json)){
+            LoggerKt.log("getActionDesc: json is null");
             return new ArrayList<>();
         }
         List<ActionData> actionDataList = jsonToBeanList(json, ActionData.class);

@@ -8,6 +8,7 @@ import app.allever.android.lib.common.databinding.ActivityListBinding
 import app.allever.android.lib.core.helper.ActivityHelper
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.allever.lose.weight.MainActivity
+import com.allever.lose.weight.MyApplication
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 @Route(path = "/apploseweight/main")
@@ -21,4 +22,9 @@ class SampleAppLoseWeightActivity: ListActivity<ActivityListBinding, ListViewMod
             ActivityHelper.startActivity<MainActivity>()
         }
     )
+
+    override fun init() {
+        super.init()
+        MyApplication.getInstance().onCreate()
+    }
 }

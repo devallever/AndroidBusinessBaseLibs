@@ -43,7 +43,7 @@ public class HistoryItemAdapter extends BaseQuickAdapter<Integer, BaseViewHolder
             return;
         }
         //1,2,3....
-        int position = getData().indexOf(item);
+        int position = getItemPosition(item);
         int displayDay;
         //这个月的天数
         int dayCount = DateUtil.getMonthDayCount(mYear, mMonth);
@@ -90,6 +90,9 @@ public class HistoryItemAdapter extends BaseQuickAdapter<Integer, BaseViewHolder
         }
 
         Log.d(TAG, "convert: position = " + position);
+        if (position == 0) {
+            return;
+        }
         helper.setText(R.id.text_week_abbr,items[position-1]);
 
     }
