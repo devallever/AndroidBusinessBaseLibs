@@ -57,7 +57,7 @@ dependencies {
 //    implementation ("com.jakewharton:butterknife:10.2.3")
 //    annotationProcessor ("com.jakewharton:butterknife-compiler:10.2.3")
 
-    implementation ("com.dinuscxj:circleprogressbar:1.1.1")
+    implementation ("com.dinuscxj:circleprogressbar:1.3.0")
     //图表控件
     implementation ("com.github.PhilJay:MPAndroidChart:v3.0.3")
     //日历控件

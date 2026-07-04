@@ -34,7 +34,7 @@ public class YearSelectDialog extends BaseDialog {
     }
     @Override
     public View getDialogView() {
-        View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_year_select,null);
+        View view = LayoutInflater.from(mActivity).inflate(R.layout.lw_dialog_year_select,null);
         WheelView wheelView = (WheelView)view.findViewById(R.id.id_dialog_year_select_wheel_view_year_select);
         wheelView.setOffset(1);
         wheelView.setOnWheelViewListener(new WheelView.OnWheelViewListener() {

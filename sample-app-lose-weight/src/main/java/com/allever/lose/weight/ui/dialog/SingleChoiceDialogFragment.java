@@ -50,7 +50,7 @@ public class SingleChoiceDialogFragment extends DialogFragment {
             if (title != null && onClickListener != null && positiveCallback != null){
                 builder.setTitle(title)
                         .setSingleChoiceItems(labels, selectPosition, onClickListener)
-                        .setPositiveButton(R.string.ok, positiveCallback);
+                        .setPositiveButton(R.string.lw_ok, positiveCallback);
             }
         }
 

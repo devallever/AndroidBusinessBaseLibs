@@ -1,5 +1,6 @@
 package com.allever.lose.weight.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
@@ -15,21 +16,23 @@ import java.util.List;
 
 public class TrainItemAdapter extends BaseQuickAdapter<DayInfoBean, BaseViewHolder> {
     public TrainItemAdapter(@Nullable List<DayInfoBean> data) {
-        super(R.layout.item_train, data);
+        super(R.layout.lw_item_train, data);
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     protected void convert(BaseViewHolder helper, DayInfoBean item) {
         if (item == null){
             return;
         }
         CircleProgressBar circleProgressBar = helper.getView(R.id.id_item_train_progress_bar_train);
+        circleProgressBar.setStyle(2);//SOLID_LINE
         CardView mCardView = helper.getView(R.id.card_view);
         helper.setText(R.id.tv_day, item.getTitle());
-        String trainDetail = getContext().getString(R.string.train_detail, String.valueOf(item.getLevelCount()), String.valueOf(item.getTrainedCount()));
+        String trainDetail = getContext().getString(R.string.lw_train_detail, String.valueOf(item.getLevelCount()), String.valueOf(item.getTrainedCount()));
         helper.setText(R.id.tvTrainInfoDetail,  trainDetail);
         if (item.isCurrentDay()) {
-            mCardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.theme_color));
+            mCardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.lw_theme_color));
             helper.setTextColor(R.id.tv_day, Color.parseColor("#FFFFFF"));
             helper.setTextColor(R.id.tvTrainInfoDetail, Color.parseColor("#FFFFFF"));
             circleProgressBar.setProgressStartColor(getContext().getResources().getColor(R.color.white));
@@ -37,11 +40,11 @@ public class TrainItemAdapter extends BaseQuickAdapter<DayInfoBean, BaseViewHold
             helper.setTextColor(R.id.id_item_train_tv_progress, getContext().getResources().getColor(R.color.white));
         } else {
             mCardView.setCardBackgroundColor(getContext().getResources().getColor(R.color.white));
-            helper.setTextColor(R.id.tv_day, getContext().getResources().getColor(R.color.theme_color));
-            helper.setTextColor(R.id.tvTrainInfoDetail, getContext().getResources().getColor(R.color.theme_color_weak));
-            circleProgressBar.setProgressStartColor(getContext().getResources().getColor(R.color.green_200));
-            circleProgressBar.setProgressEndColor(getContext().getResources().getColor(R.color.green_200));
-            helper.setTextColor(R.id.id_item_train_tv_progress, getContext().getResources().getColor(R.color.green_200));
+            helper.setTextColor(R.id.tv_day, getContext().getResources().getColor(R.color.lw_theme_color));
+            helper.setTextColor(R.id.tvTrainInfoDetail, getContext().getResources().getColor(R.color.lw_theme_color_weak));
+            circleProgressBar.setProgressStartColor(getContext().getResources().getColor(R.color.lw_green_200));
+            circleProgressBar.setProgressEndColor(getContext().getResources().getColor(R.color.lw_green_200));
+            helper.setTextColor(R.id.id_item_train_tv_progress, getContext().getResources().getColor(R.color.lw_green_200));
         }
 
 

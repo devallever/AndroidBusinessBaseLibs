@@ -17,7 +17,7 @@ public class DialogUtil {
 
     public static AlertDialog createProgressAlertDialog(Activity activity, String msg, boolean canCancel){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        View view = LayoutInflater.from(activity).inflate(R.layout.dialog_progress,null,false);
+        View view = LayoutInflater.from(activity).inflate(R.layout.lw_dialog_progress,null,false);
         ((TextView)view.findViewById(R.id.id_dialog_tv_msg)).setText(msg);
         builder.setView(view);
         builder.setCancelable(canCancel);
@@ -26,7 +26,7 @@ public class DialogUtil {
 
     public static AlertDialog createProgressAlertDialog(Activity activity, int msg, boolean canCancel){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        View view = LayoutInflater.from(activity).inflate(R.layout.dialog_progress,null,false);
+        View view = LayoutInflater.from(activity).inflate(R.layout.lw_dialog_progress,null,false);
         ((TextView)view.findViewById(R.id.id_dialog_tv_msg)).setText(msg);
         builder.setView(view);
         builder.setCancelable(canCancel);

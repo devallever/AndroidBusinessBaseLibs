@@ -333,7 +333,7 @@ public class WheelView extends ScrollView {
         if (null == paint) {
             paint = new Paint();
 //            paint.setColor(Color.parseColor("#83cde6"));
-            paint.setColor(getResources().getColor(R.color.green_16));
+            paint.setColor(getResources().getColor(R.color.lw_green_16));
             paint.setStrokeWidth(dip2px(2f));
         }
 

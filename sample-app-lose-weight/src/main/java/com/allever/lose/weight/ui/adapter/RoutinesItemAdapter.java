@@ -13,7 +13,7 @@ import java.util.List;
 public class RoutinesItemAdapter extends BaseQuickAdapter<RoutineItem,BaseViewHolder> {
 
     public RoutinesItemAdapter(@Nullable List<RoutineItem> data) {
-        super(R.layout.fragment_routines_item, data);
+        super(R.layout.lw_fragment_routines_item, data);
     }
 
     public RoutinesItemAdapter(int layoutResId, @Nullable List<RoutineItem> data) {

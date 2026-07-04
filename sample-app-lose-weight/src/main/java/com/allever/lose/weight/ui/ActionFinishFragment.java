@@ -95,7 +95,7 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
             mDayId = bundle.getInt(Constant.EXTRA_DAY_ID);
         }
 
-        View view = inflater.inflate(R.layout.fragment_action_finish, container, false);
+        View view = inflater.inflate(R.layout.lw_fragment_action_finish, container, false);
 
         mToolbar = view.findViewById(R.id.id_fg_action_finish_toolbar);
         mBmiView = view.findViewById(R.id.id_fg_action_finish_bmi_view);
@@ -134,7 +134,7 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
 
     protected void initView() {
         mHeightWeightDialog = new HeightWeightDialog.Builder(_mActivity)
-                .setOkBtn(getResources().getString(R.string.next), new BaseDialog.ClickListener() {
+                .setOkBtn(getResources().getString(R.string.lw_next), new BaseDialog.ClickListener() {
                     @Override
                     public void onClick(BaseDialog dialog) {
                         //dialog.hide();
@@ -286,7 +286,7 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
      */
     @Override
     public void setCalorie(int calorie) {
-        mTvCalName.setText(getString(R.string.calorie));
+        mTvCalName.setText(getString(R.string.lw_calorie));
         mTvCalName.setClickable(false);
         mTvCalValue.setText(String.valueOf(calorie));
         mTvCalValue.setClickable(false);
@@ -323,7 +323,7 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
 
     @Override
     public void setDayFinish(int day) {
-        mTvDayFinish.setText("Day " + day + getResources().getString(R.string.finish));
+        mTvDayFinish.setText("Day " + day + getResources().getString(R.string.lw_finish));
     }
 
     @Override
@@ -357,7 +357,7 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
         Log.d(TAG, "onWHDataOptain: weight = " + weight);
         //更新数据 向数据库或全局类中刷新数据
         if (weight == 0 || height == 0) {
-            showToast(R.string.please_input_weight_height);
+            showToast(R.string.lw_please_input_weight_height);
             mHeightWeightDialog.show(true);
         } else {
             mHeightWeightDialog.hide();

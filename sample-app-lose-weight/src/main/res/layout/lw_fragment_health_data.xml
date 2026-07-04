@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/id_fg_health_data_toolbar"
+        layout="@layout/lw_toolbar"/>
+
+    <LinearLayout
+        android:id="@+id/id_fg_health_data_ll_gender_container"
+        style="@style/lw_fg_health_data_item_container">
+        <TextView
+            style="@style/lw_blackTextStyle"
+            android:textSize="20sp"
+            android:text="@string/lw_gender"/>
+        <TextView
+            android:id="@+id/id_fg_health_data_tv_gender"
+            style="@style/lw_grayTextStyle"
+            android:text="@string/lw_male"
+            android:layout_marginTop="5dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/id_fg_health_data_ll_birthday_container"
+        style="@style/lw_fg_health_data_item_container">
+        <TextView
+            style="@style/lw_blackTextStyle"
+            android:textSize="20sp"
+            android:text="@string/lw_birth_year"/>
+        <TextView
+            android:id="@+id/id_fg_health_data_tv_birthday"
+            style="@style/lw_grayTextStyle"
+            android:text="2000-10-10"
+            android:layout_marginTop="5dp"/>
+    </LinearLayout>
+
+</LinearLayout>

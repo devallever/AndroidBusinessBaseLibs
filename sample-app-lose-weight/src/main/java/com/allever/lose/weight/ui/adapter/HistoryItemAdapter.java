@@ -52,7 +52,7 @@ public class HistoryItemAdapter extends BaseQuickAdapter<Integer, BaseViewHolder
         if (position == mWeek) {
             Log.d(TAG, "convert: setColor");
             displayDay = mDay;
-            helper.setTextColor(R.id.text_week_date, getContext().getResources().getColor(R.color.green_16));
+            helper.setTextColor(R.id.text_week_date, getContext().getResources().getColor(R.color.lw_green_16));
         } else  {
             helper.setTextColor(R.id.text_week_date, getContext().getResources().getColor(R.color.black));
             //核心公式
@@ -80,12 +80,12 @@ public class HistoryItemAdapter extends BaseQuickAdapter<Integer, BaseViewHolder
         helper.setText(R.id.text_week_date,String.valueOf(displayDay));
 
         if (position > mWeek) {
-            helper.setImageResource(R.id.image_week_day,R.drawable.ic_calendar_future);
+            helper.setImageResource(R.id.image_week_day,R.drawable.lw_ic_calendar_future);
         } else {
             if (mDataSource.getIsWork(mYear, mMonth, displayDay)){
-                helper.setImageResource(R.id.image_week_day,R.drawable.ic_calendar_completed);
+                helper.setImageResource(R.id.image_week_day,R.drawable.lw_ic_calendar_completed);
             } else {
-                helper.setImageResource(R.id.image_week_day,R.drawable.ic_calendar_not_completed);
+                helper.setImageResource(R.id.image_week_day,R.drawable.lw_ic_calendar_not_completed);
             }
         }
 

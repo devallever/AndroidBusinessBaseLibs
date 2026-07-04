@@ -67,11 +67,12 @@ public class ActionNextFragment extends BaseFragment<IActionNextView, ActionNext
         return fragment;
     }
 
+    @SuppressLint("WrongConstant")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_action_next, container, false);
+        View view = inflater.inflate(R.layout.lw_fragment_action_next, container, false);
 
         mIvGuide = view.findViewById(R.id.id_fg_action_next_iv_guide);
         mTvTime = view.findViewById(R.id.id_fg_action_next_tv_time);
@@ -103,6 +104,8 @@ public class ActionNextFragment extends BaseFragment<IActionNextView, ActionNext
         initView();
 
         startTimeCounter();
+
+        mCircleProgressBar.setStyle(2);//SOLID_LINE
 
         return view;
     }
@@ -161,7 +164,7 @@ public class ActionNextFragment extends BaseFragment<IActionNextView, ActionNext
 
         mTvName.setText(actionItem.getName());
 
-        mPresenter.speak(getString(R.string.next), TextToSpeech.QUEUE_ADD);
+        mPresenter.speak(getString(R.string.lw_next), TextToSpeech.QUEUE_ADD);
         mPresenter.speak(actionItem.getName(), TextToSpeech.QUEUE_ADD);
     }
 

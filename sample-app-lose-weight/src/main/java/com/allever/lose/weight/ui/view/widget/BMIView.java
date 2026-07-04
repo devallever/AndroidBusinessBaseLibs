@@ -127,13 +127,13 @@ public class BMIView extends View {
     private void initBodyCategories() {
         bodyCategoryList = new ArrayList<>();
 
-        bodyCategoryList.add(new BodyCategory(SEVERELY_UNDERWEIGHT, severelyUnderweightColor, getResources().getString(R.string.SEVERELY_UNDERWEIGHT), 15, 15));
-        bodyCategoryList.add(new BodyCategory(UNDERWEIGHT, underweightColor, getResources().getString(R.string.UNDERWEIGHT), 16, 16));
-        bodyCategoryList.add(new BodyCategory(NORMAL, normalColor, getResources().getString(R.string.NORMAL), 18.5f, 18.5f));
-        bodyCategoryList.add(new BodyCategory(OVERWEIGHT, overweightColor, getResources().getString(R.string.OVERWEIGHT), 25, 25));
-        bodyCategoryList.add(new BodyCategory(OBESE_CLASS_1, obeseClass1Color, getResources().getString(R.string.OBESE_CLASS_1), 30, 30));
-        bodyCategoryList.add(new BodyCategory(OBESE_CLASS_2, obeseClass2Color, getResources().getString(R.string.OBESE_CLASS_2), 35, 35));
-        bodyCategoryList.add(new BodyCategory(OBESE_CLASS_3, obeseClass3Color, getResources().getString(R.string.OBESE_CLASS_3), 40, 40));
+        bodyCategoryList.add(new BodyCategory(SEVERELY_UNDERWEIGHT, severelyUnderweightColor, getResources().getString(R.string.lw_SEVERELY_UNDERWEIGHT), 15, 15));
+        bodyCategoryList.add(new BodyCategory(UNDERWEIGHT, underweightColor, getResources().getString(R.string.lw_UNDERWEIGHT), 16, 16));
+        bodyCategoryList.add(new BodyCategory(NORMAL, normalColor, getResources().getString(R.string.lw_NORMAL), 18.5f, 18.5f));
+        bodyCategoryList.add(new BodyCategory(OVERWEIGHT, overweightColor, getResources().getString(R.string.lw_OVERWEIGHT), 25, 25));
+        bodyCategoryList.add(new BodyCategory(OBESE_CLASS_1, obeseClass1Color, getResources().getString(R.string.lw_OBESE_CLASS_1), 30, 30));
+        bodyCategoryList.add(new BodyCategory(OBESE_CLASS_2, obeseClass2Color, getResources().getString(R.string.lw_OBESE_CLASS_2), 35, 35));
+        bodyCategoryList.add(new BodyCategory(OBESE_CLASS_3, obeseClass3Color, getResources().getString(R.string.lw_OBESE_CLASS_3), 40, 40));
 
         currentBodyCategory = NORMAL;
     }

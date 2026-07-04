@@ -37,10 +37,10 @@ public class SettingPresenter extends BasePresenter<ISettingView>{
         String language= "";
         switch (id){
             case Config.LANG_CHINESE:
-                language = context.getResources().getString(R.string.chinese);
+                language = context.getResources().getString(R.string.lw_chinese);
                 break;
             case Config.LANG_ENGLISH:
-                language = context.getResources().getString(R.string.english);
+                language = context.getResources().getString(R.string.lw_english);
                 break;
             default:
                 break;
@@ -59,17 +59,17 @@ public class SettingPresenter extends BasePresenter<ISettingView>{
         mDataSource.updateConfig();
     }
 
-    public void getSyncData() {
-        if (GlobalData.config.isSync()){
-            String account = GlobalData.config.getAccount();
-            long syncTime = GlobalData.config.getSyncTime();
-            mViewRef.get().setSync(account, DateUtil.formatSyncTime(syncTime));
-        }else {
-            //设置默认值
-            mViewRef.get().setSync(MyApplication.getContext().getResources().getString(R.string.keep_data_in_cloud),
-                    MyApplication.getContext().getResources().getString(R.string.never_backed_up));
-        }
-    }
+//    public void getSyncData() {
+//        if (GlobalData.config.isSync()){
+//            String account = GlobalData.config.getAccount();
+//            long syncTime = GlobalData.config.getSyncTime();
+//            mViewRef.get().setSync(account, DateUtil.formatSyncTime(syncTime));
+//        }else {
+//            //设置默认值
+//            mViewRef.get().setSync(MyApplication.getContext().getResources().getString(R.string.lw_keep_data_in_cloud),
+//                    MyApplication.getContext().getResources().getString(R.string.lw_never_backed_up));
+//        }
+//    }
 
     public void saveSyncState(boolean sync){
         GlobalData.config.setSync(sync);
@@ -91,9 +91,9 @@ public class SettingPresenter extends BasePresenter<ISettingView>{
         String[] email = {Constant.FEEDBACK_TO};
         Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
         intent.putExtra(Intent.EXTRA_CC, email);
-        intent.putExtra(Intent.EXTRA_SUBJECT, activity.getResources().getString(R.string.feed_back_subject));
-        intent.putExtra(Intent.EXTRA_TEXT, activity.getResources().getString(R.string.feed_back_content));
-        activity.startActivity(Intent.createChooser(intent, activity.getResources().getString(R.string.select_mail_app)));
+        intent.putExtra(Intent.EXTRA_SUBJECT, activity.getResources().getString(R.string.lw_feed_back_subject));
+        intent.putExtra(Intent.EXTRA_TEXT, activity.getResources().getString(R.string.lw_feed_back_content));
+        activity.startActivity(Intent.createChooser(intent, activity.getResources().getString(R.string.lw_select_mail_app)));
     }
 
     public void saveVoiceOption(boolean isMute, boolean voice, boolean trainVoice) {

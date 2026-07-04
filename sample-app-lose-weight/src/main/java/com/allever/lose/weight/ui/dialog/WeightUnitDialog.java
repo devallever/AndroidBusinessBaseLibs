@@ -20,7 +20,7 @@ public class WeightUnitDialog extends BaseDialog {
     }
     @Override
     public View getDialogView() {
-        View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_weight_unit, null,false);
+        View view = LayoutInflater.from(mActivity).inflate(R.layout.lw_dialog_weight_unit, null,false);
 
         RadioButton btnLb = (RadioButton)view.findViewById(R.id.id_dialog_weight_unit_rb_lb);
         RadioButton btnKg = (RadioButton)view.findViewById(R.id.id_dialog_weight_unit_rb_kg);
@@ -29,7 +29,7 @@ public class WeightUnitDialog extends BaseDialog {
             @Override
             public void onClick(View v) {
                 if (mListener != null){
-                    mListener.onObtainWeightUnit(mActivity.getResources().getString(R.string.unit_lb));
+                    mListener.onObtainWeightUnit(mActivity.getResources().getString(R.string.lw_unit_lb));
                 }
                 hide();
             }
@@ -39,7 +39,7 @@ public class WeightUnitDialog extends BaseDialog {
             @Override
             public void onClick(View v) {
                 if (mListener != null){
-                    mListener.onObtainWeightUnit(mActivity.getResources().getString(R.string.unit_kg));
+                    mListener.onObtainWeightUnit(mActivity.getResources().getString(R.string.lw_unit_kg));
                 }
                 hide();
             }

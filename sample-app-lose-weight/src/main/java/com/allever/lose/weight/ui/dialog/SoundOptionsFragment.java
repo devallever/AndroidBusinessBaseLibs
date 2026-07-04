@@ -43,9 +43,9 @@ public class SoundOptionsFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.sound_options);
+        builder.setTitle(R.string.lw_sound_options);
         builder.setCancelable(false);
-        View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_sound_options, null);
+        View view = LayoutInflater.from(mActivity).inflate(R.layout.lw_dialog_sound_options, null);
 
         final SwitchCompat swMute = (SwitchCompat)view.findViewById(R.id.id_dialog_sound_switch_mute);
         final SwitchCompat swVoice = (SwitchCompat)view.findViewById(R.id.id_dialog_sound_switch_voice);

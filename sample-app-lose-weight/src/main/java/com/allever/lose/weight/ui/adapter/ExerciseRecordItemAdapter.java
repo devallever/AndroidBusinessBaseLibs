@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ExerciseRecordItemAdapter extends BaseQuickAdapter<ExerciseRecordItem, BaseViewHolder> {
     public ExerciseRecordItemAdapter(List<ExerciseRecordItem> exerciseRecordItemList){
-        super(R.layout.fragment_history_item, exerciseRecordItemList);
+        super(R.layout.lw_fragment_history_item, exerciseRecordItemList);
     }
 
     @Override

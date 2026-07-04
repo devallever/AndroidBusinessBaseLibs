@@ -36,12 +36,12 @@ public class LanguageDialog extends BaseDialog {
         mLanguageItems = new ArrayList<>();
         LanguageItem languageItemChinese = new LanguageItem();
         languageItemChinese.setId(Config.LANG_CHINESE);
-        languageItemChinese.setName(mActivity.getResources().getString(R.string.chinese));
+        languageItemChinese.setName(mActivity.getResources().getString(R.string.lw_chinese));
         languageItemChinese.setSelect(true);
 
         LanguageItem languageItemEnglish = new LanguageItem();
         languageItemEnglish.setId(Config.LANG_ENGLISH);
-        languageItemEnglish.setName(mActivity.getResources().getString(R.string.english));
+        languageItemEnglish.setName(mActivity.getResources().getString(R.string.lw_english));
         languageItemEnglish.setSelect(false);
 
         mLanguageItems.add(languageItemChinese);
@@ -49,7 +49,7 @@ public class LanguageDialog extends BaseDialog {
     }
     @Override
     public View getDialogView() {
-        View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_language_select, null, false);
+        View view = LayoutInflater.from(mActivity).inflate(R.layout.lw_dialog_language_select, null, false);
         mRecyclerView = (RecyclerView)view.findViewById(R.id.id_dialog_language_rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         mAdapter = new LanguageAdapter(mActivity, mLanguageItems);

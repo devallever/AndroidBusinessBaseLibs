@@ -14,7 +14,7 @@ import java.util.List;
 
 public class LanguageAdapter extends BaseQuickAdapter<LanguageItem, BaseViewHolder> {
     public LanguageAdapter(Context context, List<LanguageItem> languageItems){
-        super(R.layout.item_language, languageItems);
+        super(R.layout.lw_item_language, languageItems);
 
     }
     @Override

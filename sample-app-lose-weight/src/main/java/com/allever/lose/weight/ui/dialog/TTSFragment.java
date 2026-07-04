@@ -28,7 +28,7 @@ public class TTSFragment extends SupportFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_tts, container, false);
+        View view = inflater.inflate(R.layout.lw_dialog_tts, container, false);
         mDown = view.findViewById(R.id.down_tts);
         mSetting = view.findViewById(R.id.set_tts);
         mDown.setOnClickListener(new View.OnClickListener() {

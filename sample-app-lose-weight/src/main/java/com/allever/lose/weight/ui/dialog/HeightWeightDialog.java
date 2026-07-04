@@ -61,7 +61,7 @@ public class HeightWeightDialog extends BaseDialog {
     }
     @Override
     public View getDialogView() {
-        View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_height_weight,null, false);
+        View view = LayoutInflater.from(mActivity).inflate(R.layout.lw_dialog_height_weight,null, false);
 
         mLlEtHeightContainer = (LinearLayout)view.findViewById(R.id.id_dialog_h_w_ll_et_in_container);
 
@@ -212,7 +212,7 @@ public class HeightWeightDialog extends BaseDialog {
                             return;
                         }
                         if (height < 0){
-                            Toast.makeText(mActivity, mActivity.getResources().getString(R.string.height_not_allow), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mActivity, mActivity.getResources().getString(R.string.lw_height_not_allow), Toast.LENGTH_SHORT).show();
                             return;
                         }
                         mBuilder.whdataListener.onWHDataOptain(weight, height);

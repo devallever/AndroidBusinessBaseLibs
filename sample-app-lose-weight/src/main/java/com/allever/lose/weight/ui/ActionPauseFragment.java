@@ -1,6 +1,5 @@
 package com.allever.lose.weight.ui;
 
-import android.annotation.SuppressLint;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 
@@ -60,7 +59,7 @@ public class ActionPauseFragment extends BaseFragment<IActionPauseView, ActionPa
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_action_pause, container, false);
+        View view = inflater.inflate(R.layout.lw_fragment_action_pause, container, false);
 
         mIvGuide = view.findViewById(R.id.id_fg_action_pause_iv_guide);
         mIvClose = view.findViewById(R.id.id_fg_action_pause_iv_close);

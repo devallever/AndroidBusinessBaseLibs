@@ -58,7 +58,7 @@ public class TrainFragment extends BaseMainFragment<ITrainView, TrainPresenter> 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         EventBus.getDefault().register(this);
-        View view = inflater.inflate(R.layout.fragment_train, container, false);
+        View view = inflater.inflate(R.layout.lw_fragment_train, container, false);
 
         image = view.findViewById(R.id.image_workout);
         mTvTimeLeft = view.findViewById(R.id.tv_day_left);
@@ -106,7 +106,7 @@ public class TrainFragment extends BaseMainFragment<ITrainView, TrainPresenter> 
 
     @Override
     public void setDayLeft(int leftDay, int progress, int total, int percent) {
-        mTvTimeLeft.setText(leftDay + getResources().getString(R.string.day_left));
+        mTvTimeLeft.setText(leftDay + getResources().getString(R.string.lw_day_left));
         mProgressBar.setMax(total);
         mProgressBar.setProgress(progress);
         finishPercent.setText(percent + "%");

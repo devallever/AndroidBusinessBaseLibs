@@ -39,7 +39,7 @@ public class UnitSettingFragment extends BaseFragment<IUnitSettingView, UnitSett
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = LayoutInflater.from(_mActivity).inflate(R.layout.fragment_unit_setting, container, false);
+        View view = LayoutInflater.from(_mActivity).inflate(R.layout.lw_fragment_unit_setting, container, false);
 
         mToolbar = view.findViewById(R.id.id_toolbar);
         mTvWeightUnit = view.findViewById(R.id.id_fg_unit_setting_tv_weight_unit);
@@ -62,7 +62,7 @@ public class UnitSettingFragment extends BaseFragment<IUnitSettingView, UnitSett
 
         mPresenter.getHeightUnit();
         mPresenter.getWeightUnit();
-        initToolbar(mToolbar, R.string.unit_setting);
+        initToolbar(mToolbar, R.string.lw_unit_setting);
         initDialog();
         return view;
     }

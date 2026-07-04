@@ -1,6 +1,5 @@
 package com.allever.lose.weight.ui;
 
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -34,7 +33,6 @@ import com.allever.lose.weight.ui.mvp.view.IActionView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 /**
@@ -91,7 +89,7 @@ public class ActionFragment extends BaseFragment<IActionView, ActionPresenter> i
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_action, container, false);
+        View view = inflater.inflate(R.layout.lw_fragment_action, container, false);
 
         mIvGuide = view.findViewById(R.id.id_fg_action_iv_guide);
         mToolbar = view.findViewById(R.id.id_toolbar);

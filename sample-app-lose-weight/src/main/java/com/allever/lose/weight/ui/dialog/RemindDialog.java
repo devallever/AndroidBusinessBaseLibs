@@ -35,7 +35,7 @@ public class RemindDialog extends BaseDialog {
     }
     @Override
     public View getDialogView() {
-        View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_finish_noti,null);
+        View view = LayoutInflater.from(mActivity).inflate(R.layout.lw_dialog_finish_noti,null);
         initData();
         mRv = (RecyclerView) view.findViewById(R.id.id_dialog_finish_reminder_rv);
         mAdapter = new ReminderAdapter(mContext, mReminderItemList);

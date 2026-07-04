@@ -16,7 +16,7 @@ import java.util.List;
 
 public class ReminderAdapter extends BaseQuickAdapter<ReminderItem, BaseViewHolder>{
     public ReminderAdapter(Context context, List<ReminderItem> reminderItemList){
-        super(R.layout.item_finish_reminder, reminderItemList);
+        super(R.layout.lw_item_finish_reminder, reminderItemList);
     }
     @Override
     protected void convert(BaseViewHolder helper, ReminderItem item) {
@@ -25,9 +25,9 @@ public class ReminderAdapter extends BaseQuickAdapter<ReminderItem, BaseViewHold
         }
         ImageView imageView = (ImageView)helper.getView(R.id.id_item_finish_reminder_iv_select);
         if (item.isSelected()){
-            imageView.setImageResource(R.drawable.rp_feel_level_checked);
+            imageView.setImageResource(R.drawable.lw_rp_feel_level_checked);
         }else {
-            imageView.setImageResource(R.drawable.rp_feel_level_unchecked);
+            imageView.setImageResource(R.drawable.lw_rp_feel_level_unchecked);
         }
         helper.setText(R.id.id_item_finish_reminder_tv_time,item.getTime());
     }

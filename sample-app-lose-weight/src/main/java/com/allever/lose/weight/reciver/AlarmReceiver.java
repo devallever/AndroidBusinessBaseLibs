@@ -41,10 +41,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 //        notification.defaults |= Notification.DEFAULT_LIGHTS;
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"")
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
-                .setContentTitle(context.getResources().getString(R.string.app_name))
-                .setContentText(context.getResources().getString(R.string.time_to_action))
+                .setSmallIcon(R.drawable.lw_ic_logo)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.lw_ic_logo))
+                .setContentTitle(context.getResources().getString(R.string.lw_app_name))
+                .setContentText(context.getResources().getString(R.string.lw_time_to_action))
                 .setContentIntent(contentIntent)
                 .setDefaults(NotificationCompat.DEFAULT_ALL);
 

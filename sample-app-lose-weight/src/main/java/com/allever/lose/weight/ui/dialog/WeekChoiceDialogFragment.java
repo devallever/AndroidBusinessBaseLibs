@@ -46,11 +46,11 @@ public class WeekChoiceDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        String[] items = getActivity().getResources().getStringArray(R.array.week_value);
+        String[] items = getActivity().getResources().getStringArray(R.array.lw_week_value);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(title).setMultiChoiceItems(items, defaultSelectedStatus, onMultiChoiceClickListener)
-                .setPositiveButton(R.string.save, positiveCallback)
-                .setNegativeButton(R.string.cancel,null);
+                .setPositiveButton(R.string.lw_save, positiveCallback)
+                .setNegativeButton(R.string.lw_cancel,null);
         return builder.create();
     }
 

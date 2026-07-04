@@ -84,6 +84,7 @@ dependencies {
     implementation(project(":sample-app-gif-search"))
     implementation(project(":sample-app-virtual-call"))
     implementation(project(":sample-app-day-matter"))
+    implementation(project(":sample-app-lose-weight"))
 
     implementation(project(":z-sample-billing"))
     implementation(project(":z-sample-cleaner"))

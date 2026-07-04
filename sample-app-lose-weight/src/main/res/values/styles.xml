@@ -1,37 +1,37 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="lw_AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+<!--        <item name="colorPrimary">@color/lw_colorPrimary</item>-->
+<!--        <item name="colorPrimaryDark">@color/lw_colorPrimaryDark</item>-->
+<!--        <item name="colorAccent">@color/lw_colorAccent</item>-->
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="lw_AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="lw_AppTheme.lw_AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="lw_AppTheme.lw_PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="actionMenuTextColor">@android:color/white</item>
     </style>
 
-    <style name="ActionProgressStyle" parent="Base.Widget.AppCompat.ProgressBar.Horizontal">
+    <style name="lw_ActionProgressStyle" parent="Base.Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:maxHeight">50dp</item>
         <item name="android:minHeight">5dp</item>
         <item name="android:indeterminateOnly">false</item>
         <item name="android:indeterminateDrawable">
             @android:drawable/progress_indeterminate_horizontal
         </item>
-        <item name="android:progressDrawable">@drawable/shape_progress_horizonal</item>
+        <item name="android:progressDrawable">@drawable/lw_shape_progress_horizonal</item>
     </style>
 
-    <style name="whiteTextStyle">
+    <style name="lw_whiteTextStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
@@ -44,49 +44,49 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:gravity">center</item>
     </style>
-    <style name="blackTextStyle">
+    <style name="lw_blackTextStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black</item>
     </style>
-    <style name="action_finish_item_title_style" parent="blackTextStyle">
+    <style name="lw_action_finish_item_title_style" parent="lw_blackTextStyle">
         <item name="android:textSize">25sp</item>
     </style>
-    <style name="action_finish_item_container">
+    <style name="lw_action_finish_item_container">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">10dp</item>
     </style>
-    <style name="action_finish_item_weitht_unit_style" parent="whiteTextStyle">
+    <style name="lw_action_finish_itcem_weitht_unit_style" parent="lw_whiteTextStyle">
         <item name="android:layout_width">35dp</item>
         <item name="android:padding">5dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@color/green_16</item>
+        <item name="android:background">@color/lw_green_16</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_alignParentBottom">true</item>
     </style>
 
-    <style name="action_finish_rb_feel">
+    <style name="lw_action_finish_rb_feel">
         <item name="android:layout_width">20dp</item>
         <item name="android:layout_height">20dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/rb_finish_feel_selector</item>
+        <item name="android:background">@drawable/lw_rb_finish_feel_selector</item>
         <item name="android:button">@null</item>
         <item name="android:layout_margin">10dp</item>
     </style>
 
-    <style name="action_finish_rb_unit">
+    <style name="lw_action_finish_rb_unit">
         <item name="android:layout_width">30dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/rb_finish_unit_selector</item>
+        <item name="android:background">@drawable/lw_rb_finish_unit_selector</item>
         <item name="android:button">@null</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:padding">5dp</item>
     </style>
 
-    <style name="alertDialogStyle" parent="@style/Theme.AppCompat.Dialog.Alert">
+    <style name="lw_alertDialogStyle" parent="@style/Theme.AppCompat.Dialog.Alert">
         <!--<item name="android:background">@drawable/dialog_box</item>-->
         <item name="android:windowFrame">@null</item>
         <!--<item name="android:windowBackground">@drawable/inset_dialog_box</item>-->
@@ -95,44 +95,44 @@
         <item name="android:windowMinWidthMinor">30%</item>
     </style>
 
-    <style name="dialog_year_select_rb_gender">
+    <style name="lw_dialog_year_select_rb_gender">
         <item name="android:layout_width">30dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/rb_finish_unit_selector</item>
+        <item name="android:background">@drawable/lw_rb_finish_unit_selector</item>
         <item name="android:button">@null</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:padding">5dp</item>
     </style>
 
-    <style name="greenTextStyle">
+    <style name="lw_greenTextStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/green_16</item>
+        <item name="android:textColor">@color/lw_green_16</item>
     </style>
-    <style name="grayTextStyle">
+    <style name="lw_grayTextStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/gray_500</item>
+        <item name="android:textColor">@color/lw_gray_500</item>
     </style>
 
-    <style name="dialog_year_select_tv_option_style" parent="greenTextStyle">
+    <style name="lw_dialog_year_select_tv_option_style" parent="lw_greenTextStyle">
         <item name="android:textSize">16sp</item>
         <item name="android:padding">10dp</item>
     </style>
 
-    <style name="dialog_h_w_tv_option_style" parent="greenTextStyle">
+    <style name="lw_dialog_h_w_tv_option_style" parent="lw_greenTextStyle">
         <item name="android:textSize">16sp</item>
         <item name="android:padding">10dp</item>
     </style>
 
-    <style name="routine_tv_item_style" parent="whiteTextStyle">
+    <style name="lw_routine_tv_item_style" parent="lw_whiteTextStyle">
         <item name="android:layout_marginTop">5dp</item>
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="fg_health_data_item_container">
+    <style name="lw_fg_health_data_item_container">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">10dp</item>
@@ -140,7 +140,7 @@
         <item name="android:layout_marginTop">10dp</item>
     </style>
 
-    <style name="setting_item_tv_style">
+    <style name="lw_setting_item_tv_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:background">?android:selectableItemBackground</item>
@@ -150,40 +150,40 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="dialog_general_rg">
+    <style name="lw_dialog_general_rg">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">20dp</item>
         <item name="android:orientation">vertical</item>
     </style>
 
-    <style name="dialog_general_rb">
+    <style name="lw_dialog_general_rb">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">10dp</item>
     </style>
 
-    <style name="centerTextView">
+    <style name="lw_centerTextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_marginTop">10dp</item>
     </style>
 
-    <style name="SwitchDialogItemContainerStyle">
+    <style name="lw_SwitchDialogItemContainerStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">10dp</item>
         <item name="android:orientation">horizontal</item>
     </style>
 
-    <style name="SwitchDialogItemTvLabelStyle">
+    <style name="sw_SwitchDialogItemTvLabelStyle">
         <item name="android:layout_width">100dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
     </style>
 
-    <style name="SwitchDialogItemRadioGroupStyle">
+    <style name="lw_SwitchDialogItemRadioGroupStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
@@ -191,12 +191,12 @@
     </style>
 
 
-    <style name="SwitchDialogItemRadioButtonStyle">
+    <style name="lw_SwitchDialogItemRadioButtonStyle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/rb_switch</item>
+        <item name="android:background">@drawable/lw_rb_switch</item>
         <item name="android:button">@null</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:textColor">@color/white</item>

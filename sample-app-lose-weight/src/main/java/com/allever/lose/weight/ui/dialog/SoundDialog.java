@@ -22,7 +22,7 @@ public class SoundDialog extends BaseDialog {
     }
     @Override
     public View getDialogView() {
-        View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_sound, null, false);
+        View view = LayoutInflater.from(mActivity).inflate(R.layout.lw_dialog_sound, null, false);
         TextView tvOk = (TextView)view.findViewById(R.id.id_dialog_sound_tv_ok);
 
         final SwitchCompat swMute = (SwitchCompat)view.findViewById(R.id.id_dialog_sound_switch_mute);

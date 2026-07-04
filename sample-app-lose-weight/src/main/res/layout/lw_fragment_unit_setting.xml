@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/id_fg_unit_setting_toolbar"
+        layout="@layout/lw_toolbar"/>
+
+    <LinearLayout
+        android:id="@+id/id_fg_unit_setting_ll_weight_container"
+        style="@style/lw_fg_health_data_item_container">
+        <TextView
+            style="@style/lw_blackTextStyle"
+            android:textSize="20sp"
+            android:text="@string/lw_weight_unit"/>
+        <TextView
+            android:id="@+id/id_fg_unit_setting_tv_weight_unit"
+            style="@style/lw_grayTextStyle"
+            android:text="@string/lw_unit_kg"
+            android:layout_marginTop="5dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/id_fg_unit_setting_ll_height_container"
+        style="@style/lw_fg_health_data_item_container">
+        <TextView
+            style="@style/lw_blackTextStyle"
+            android:textSize="20sp"
+            android:text="@string/lw_height_unit"/>
+        <TextView
+            android:id="@+id/id_fg_unit_setting_tv_height_unit"
+            style="@style/lw_grayTextStyle"
+            android:text="@string/lw_unit_cm"
+            android:layout_marginTop="5dp"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -28,21 +28,21 @@ public class RoutinePresenter extends BasePresenter<IRoutineView>{
             routineItem = new RoutineItem();
             switch (dayId){
                 case RoutineItem.ID_MORIING:
-                    routineItem.setBgResId(R.drawable.cover_morning);
-                    routineItem.setSmallResId(R.drawable.ic_morning);
-                    routineItem.setTitle(MyApplication.getContext().getResources().getString(R.string.morning_stretch));
+                    routineItem.setBgResId(R.drawable.lw_cover_morning);
+                    routineItem.setSmallResId(R.drawable.lw_ic_morning);
+                    routineItem.setTitle(MyApplication.getContext().getResources().getString(R.string.lw_morning_stretch));
                     break;
                 case RoutineItem.ID_SLEEP:
-                    routineItem.setBgResId(R.drawable.cover_sleep);
-                    routineItem.setSmallResId(R.drawable.ic_sleep);
-                    routineItem.setTitle(MyApplication.getContext().getResources().getString(R.string.sleep_stretch));
+                    routineItem.setBgResId(R.drawable.lw_cover_sleep);
+                    routineItem.setSmallResId(R.drawable.lw_ic_sleep);
+                    routineItem.setTitle(MyApplication.getContext().getResources().getString(R.string.lw_sleep_stretch));
                     break;
                 default:
                     break;
             }
-            routineItem.setCount("- " + mDataSource.getLevelCount(dayId) + " " + MyApplication.getContext().getResources().getString(R.string.routine_exercise));
-            routineItem.setDuration("- " + mDataSource.getLevelDuration(dayId) + " " +  MyApplication.getContext().getResources().getString(R.string.routine_duration));
-            routineItem.setKcal("- " + mDataSource.getLevelKcal(dayId) + " " + MyApplication.getContext().getResources().getString(R.string.routine_kcal));
+            routineItem.setCount("- " + mDataSource.getLevelCount(dayId) + " " + MyApplication.getContext().getResources().getString(R.string.lw_routine_exercise));
+            routineItem.setDuration("- " + mDataSource.getLevelDuration(dayId) + " " +  MyApplication.getContext().getResources().getString(R.string.lw_routine_duration));
+            routineItem.setKcal("- " + mDataSource.getLevelKcal(dayId) + " " + MyApplication.getContext().getResources().getString(R.string.lw_routine_kcal));
             routineItem.setId(dayId);
             routineItemList.add(routineItem);
         }

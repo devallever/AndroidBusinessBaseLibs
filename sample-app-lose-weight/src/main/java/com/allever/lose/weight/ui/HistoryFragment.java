@@ -50,7 +50,7 @@ public class HistoryFragment extends BaseFragment<IHistoryView, HistoryPresenter
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_history, container, false);
+        View view = inflater.inflate(R.layout.lw_fragment_history, container, false);
 
         mToolbar = view.findViewById(R.id.id_toolbar);
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -69,7 +69,7 @@ public class HistoryFragment extends BaseFragment<IHistoryView, HistoryPresenter
     }
 
     private void initView() {
-        initToolbar(mToolbar,R.string.history);
+        initToolbar(mToolbar,R.string.lw_history);
 
         mAdapter = new ExerciseRecordItemAdapter(mExerciseRecordItemList);
         recyclerView.setLayoutManager(new LinearLayoutManager(_mActivity));
@@ -113,7 +113,7 @@ public class HistoryFragment extends BaseFragment<IHistoryView, HistoryPresenter
         if (exerciseRecordList == null){
             return;
         }
-        mTextLunar.setText(R.string.today);
+        mTextLunar.setText(R.string.lw_today);
         mTextYear.setText(String.valueOf(mCalendarView.getCurYear()));
         mTextMonthDay.setText(mCalendarView.getCurMonth() + "月" + mCalendarView.getCurDay()+"日");
         List<Calendar> schemes = new ArrayList<>();

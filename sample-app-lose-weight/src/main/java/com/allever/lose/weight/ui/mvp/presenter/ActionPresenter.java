@@ -263,7 +263,7 @@ public class ActionPresenter extends BasePresenter<IActionView> {
     }
 
     private void playCountDown(Context context){
-        final int id = mSoundPool.load(context, R.raw.td_countdown,1);
+        final int id = mSoundPool.load(context, R.raw.lw_td_countdown,1);
         final  int j = this.mAudioManager.getStreamVolume(3);
         mSoundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override

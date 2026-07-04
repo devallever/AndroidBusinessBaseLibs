@@ -51,9 +51,9 @@ public class ActionFinishPresenter extends BasePresenter<IActionFinishView> {
         int dayId = mDataSource.getCurrentDay();
         String title;
         if (dayId-1 >= 0 && dayId-1 < GlobalData.dayTitles.length){
-            title = GlobalData.dayTitles[dayId-1] + MyApplication.getContext().getResources().getString(R.string.finish);
+            title = GlobalData.dayTitles[dayId-1] + MyApplication.getContext().getResources().getString(R.string.lw_finish);
         }else {
-            title = dayId + MyApplication.getContext().getResources().getString(R.string.finish);
+            title = dayId + MyApplication.getContext().getResources().getString(R.string.lw_finish);
         }
         mViewRef.get().setDayFinishTitle(title);
     }

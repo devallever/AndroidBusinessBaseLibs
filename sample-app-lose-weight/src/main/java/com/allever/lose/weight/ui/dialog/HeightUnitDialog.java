@@ -20,7 +20,7 @@ public class HeightUnitDialog extends BaseDialog {
     }
     @Override
     public View getDialogView() {
-        View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_height_unit, null,false);
+        View view = LayoutInflater.from(mActivity).inflate(R.layout.lw_dialog_height_unit, null,false);
 
         RadioButton btnCm = (RadioButton)view.findViewById(R.id.id_dialog_height_unit_rb_cm);
         RadioButton btnIn = (RadioButton)view.findViewById(R.id.id_dialog_height_unit_rb_in);
@@ -29,7 +29,7 @@ public class HeightUnitDialog extends BaseDialog {
             @Override
             public void onClick(View v) {
                 if (mListener != null){
-                    mListener.onObtainHeightUnit(mActivity.getResources().getString(R.string.unit_cm));
+                    mListener.onObtainHeightUnit(mActivity.getResources().getString(R.string.lw_unit_cm));
                 }
                 hide();
             }
@@ -39,7 +39,7 @@ public class HeightUnitDialog extends BaseDialog {
             @Override
             public void onClick(View v) {
                 if (mListener != null){
-                    mListener.onObtainHeightUnit(mActivity.getResources().getString(R.string.unit_in));
+                    mListener.onObtainHeightUnit(mActivity.getResources().getString(R.string.lw_unit_in));
                 }
                 hide();
             }

@@ -37,10 +37,10 @@ public class HistoryPresenter extends BasePresenter<IHistoryView> {
             //日常训练
             switch (dayId){
                 case 31:
-                    exerciseRecordItem.setName(MyApplication.getContext().getResources().getString(R.string.morning_stretch));
+                    exerciseRecordItem.setName(MyApplication.getContext().getResources().getString(R.string.lw_morning_stretch));
                     break;
                 case 32:
-                    exerciseRecordItem.setName(MyApplication.getContext().getResources().getString(R.string.sleep_stretch));
+                    exerciseRecordItem.setName(MyApplication.getContext().getResources().getString(R.string.lw_sleep_stretch));
                     break;
                 default:
                     break;

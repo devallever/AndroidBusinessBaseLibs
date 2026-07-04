@@ -76,11 +76,12 @@ public class ActionReadyFragment  extends BaseFragment<IActionReadyView, ActionR
         return new ActionReadyPresenter();
     }
 
+    @SuppressLint("WrongConstant")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_action_ready, container,false);
+        View view = inflater.inflate(R.layout.lw_fragment_action_ready, container,false);
 
         mIvGuide = view.findViewById(R.id.id_fg_action_ready_iv_guide);
         mToolbar = view.findViewById(R.id.id_toolbar);
@@ -97,15 +98,17 @@ public class ActionReadyFragment  extends BaseFragment<IActionReadyView, ActionR
         }
 
         initView();
-        initToolbar(mToolbar, R.string.ready);
+        initToolbar(mToolbar, R.string.lw_ready);
 
         mPresenter.getCurrentActionId(mDayId);
         mPresenter.getActionData(mDayId, mActionId);
-        mPresenter.speak(getString(R.string.ready_start), TextToSpeech.QUEUE_ADD);
+        mPresenter.speak(getString(R.string.lw_ready_start), TextToSpeech.QUEUE_ADD);
         mPresenter.speak(mActionItem.getName(), TextToSpeech.QUEUE_ADD);
         mPresenter.speak(String.valueOf(mActionItem.getTime()), TextToSpeech.QUEUE_ADD);
 
         startTimeCounter();
+
+        mCircleProgressBar.setStyle(2);//SOLID_LINE
 
         return view;
     }
@@ -119,13 +122,13 @@ public class ActionReadyFragment  extends BaseFragment<IActionReadyView, ActionR
                 if (mValueAnimator.isRunning()){
                     mValueAnimator.cancel();
                     mAnimationDrawable.stop();
-                    mBtnStartPause.setImageResource(R.drawable.exo_controls_play);
+                    mBtnStartPause.setImageResource(R.drawable.lw_exo_controls_play);
                     //暂停运动计时
                     mPresenter.setPauseTime();
                 }else {
                     startTimeCounter();
                     mAnimationDrawable.start();
-                    mBtnStartPause.setImageResource(R.drawable.exo_controls_pause);
+                    mBtnStartPause.setImageResource(R.drawable.lw_exo_controls_pause);
                     //恢复运动计时
                     mPresenter.setReStartTime();
                     mPresenter.setPauseDuration();
@@ -164,7 +167,7 @@ public class ActionReadyFragment  extends BaseFragment<IActionReadyView, ActionR
                 //start actionFragment
                 mValueAnimator.cancel();
                 if (mCurrentProgress == mTime*1000){
-                    mPresenter.speak(getString(R.string.start), TextToSpeech.QUEUE_FLUSH);
+                    mPresenter.speak(getString(R.string.lw_start), TextToSpeech.QUEUE_FLUSH);
                     startWithPop(ActionFragment.newInstance(mDayId, mActionId));
                 }
             }

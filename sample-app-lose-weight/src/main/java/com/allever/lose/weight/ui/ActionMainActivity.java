@@ -19,7 +19,7 @@ public class ActionMainActivity extends SupportActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_test);
+        setContentView(R.layout.lw_activity_main_test);
 
         int dayId = getIntent().getIntExtra(Constant.EXTRA_DAY_ID, 1);
         String dayText = getIntent().getStringExtra(Constant.EXTRA_DAY_TEXT);

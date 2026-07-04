@@ -18,9 +18,9 @@ public class HealthDataPresenter extends BasePresenter<IHealthDataView> {
     public void getGender(){
         int gender = mDataSource.getGender();
         if (gender == 0){
-            mViewRef.get().setGender(MyApplication.getContext().getResources().getString(R.string.male));
+            mViewRef.get().setGender(MyApplication.getContext().getResources().getString(R.string.lw_male));
         }else {
-            mViewRef.get().setGender(MyApplication.getContext().getResources().getString(R.string.female));
+            mViewRef.get().setGender(MyApplication.getContext().getResources().getString(R.string.lw_female));
         }
     }
 

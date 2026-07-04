@@ -1,9 +1,5 @@
 package com.allever.lose.weight.ui.mvp.presenter;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import android.util.Log;
-
 import com.github.mikephil.charting.data.Entry;
 import com.allever.lose.weight.MyApplication;
 import com.allever.lose.weight.R;
@@ -97,8 +93,8 @@ public class ReportPresenter extends BasePresenter<IReportView> {
             mViewRef.get().setSync(account, DateUtil.formatTime(syncTime, DateUtil.FORMAT_MM_dd_HH_mm));
         }else {
             //设置默认值
-            mViewRef.get().setSync(MyApplication.getContext().getResources().getString(R.string.keep_data_in_cloud),
-                    MyApplication.getContext().getResources().getString(R.string.never_backed_up));
+            mViewRef.get().setSync(MyApplication.getContext().getResources().getString(R.string.lw_keep_data_in_cloud),
+                    MyApplication.getContext().getResources().getString(R.string.lw_never_backed_up));
         }
     }
 

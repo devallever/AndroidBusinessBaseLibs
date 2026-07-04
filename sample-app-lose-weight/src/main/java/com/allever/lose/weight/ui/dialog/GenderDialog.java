@@ -20,7 +20,7 @@ public class GenderDialog extends BaseDialog {
     }
     @Override
     public View getDialogView() {
-        View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_gender, null,false);
+        View view = LayoutInflater.from(mActivity).inflate(R.layout.lw_dialog_gender, null,false);
 
         RadioButton btnMale = (RadioButton)view.findViewById(R.id.id_dialog_gender_rb_male);
         RadioButton btnFemale = (RadioButton)view.findViewById(R.id.id_dialog_gender_rb_female);
@@ -28,7 +28,7 @@ public class GenderDialog extends BaseDialog {
             @Override
             public void onClick(View v) {
                 if (mListener != null){
-                    mListener.onObtainGender(0, mActivity.getResources().getString(R.string.female));
+                    mListener.onObtainGender(0, mActivity.getResources().getString(R.string.lw_female));
                 }
                 hide();
             }
@@ -38,7 +38,7 @@ public class GenderDialog extends BaseDialog {
             @Override
             public void onClick(View v) {
                 if (mListener != null){
-                    mListener.onObtainGender(1, mActivity.getResources().getString(R.string.female));
+                    mListener.onObtainGender(1, mActivity.getResources().getString(R.string.lw_female));
                 }
                 hide();
             }

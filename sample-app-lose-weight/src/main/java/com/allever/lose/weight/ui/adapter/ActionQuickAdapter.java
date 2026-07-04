@@ -19,7 +19,7 @@ public class ActionQuickAdapter extends BaseQuickAdapter<ActionItem, BaseViewHol
     private static final String TAG = "ActionQuickAdapter";
     private Context mContext;
     public ActionQuickAdapter(Context context, List<ActionItem> data){
-        super(R.layout.item_action, data);
+        super(R.layout.lw_item_action, data);
         mContext = context;
     }
     @Override

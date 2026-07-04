@@ -1,6 +1,5 @@
 package com.allever.lose.weight.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 
@@ -61,13 +60,13 @@ public class HomeFragment extends BaseMainFragment<IHomeView, HomePresenter> imp
             mPageIndex = savedInstanceState.getInt(Constant.EXTRA_MAIN_PAGE_INDEX,0);
         }
 
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.lw_fragment_home, container, false);
 
         toolbar = view.findViewById(R.id.toolbar);
         tabLayout = view.findViewById(R.id.tab_layout);
         viewpager = view.findViewById(R.id.viewpager);
 
-        toolbar.setTitle(R.string.app_bar_title);
+        toolbar.setTitle(R.string.lw_app_bar_title);
         initToolbarNav(toolbar, true);
 
 
@@ -83,10 +82,10 @@ public class HomeFragment extends BaseMainFragment<IHomeView, HomePresenter> imp
 
     private void setTabLayout() {
         tabLayout.setSelectedTabIndicatorColor(0xFFFFFFFF);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_30days));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_tourines));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_reports));
-        TabAdapter mAdapter = new TabAdapter(getChildFragmentManager(),getString(R.string.tab_30days), getString(R.string.tab_tourines), getString(R.string.tab_reports));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.lw_tab_30days));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.lw_tab_tourines));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.lw_tab_reports));
+        TabAdapter mAdapter = new TabAdapter(getChildFragmentManager(),getString(R.string.lw_tab_30days), getString(R.string.lw_tab_tourines), getString(R.string.lw_tab_reports));
         viewpager.setOffscreenPageLimit(3);
         viewpager.setAdapter(mAdapter);
         tabLayout.setupWithViewPager(viewpager);
@@ -113,16 +112,16 @@ public class HomeFragment extends BaseMainFragment<IHomeView, HomePresenter> imp
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_home, menu);
+        inflater.inflate(R.menu.lw_menu_home, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.homeAsUp) {
-            mOpenDraweListener.onOpenDrawer();
-        }
+//        if (id == R.id.homeAsUp) {
+//            mOpenDraweListener.onOpenDrawer();
+//        }
         return super.onOptionsItemSelected(item);
     }
 }

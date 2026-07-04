@@ -30,7 +30,7 @@ public class ExitActionDialog extends BaseDialog {
 
     @Override
     public View getDialogView() {
-        View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_action_exit,null);
+        View view = LayoutInflater.from(mActivity).inflate(R.layout.lw_dialog_action_exit,null);
         mIvClose = (ImageView)view.findViewById(R.id.id_dialog_action_exit_iv_close);
         mBtnExit = (Button) view.findViewById(R.id.id_dialog_action_exit_btn_exit);
         mBtnDelay = (Button) view.findViewById(R.id.id_dialog_action_exit_btn_delay);

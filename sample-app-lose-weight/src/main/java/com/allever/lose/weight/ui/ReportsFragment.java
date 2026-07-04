@@ -1,7 +1,6 @@
 package com.allever.lose.weight.ui;
 
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -88,7 +87,7 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         EventBus.getDefault().register(this);
-        View view = inflater.inflate(R.layout.fragment_reports, container, false);
+        View view = inflater.inflate(R.layout.lw_fragment_reports, container, false);
 
         recyclerView = view.findViewById(R.id.recycler_view);
         chart = view.findViewById(R.id.chart);
@@ -148,7 +147,7 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
 
     private void initDialog() {
         mHeightWeightDialog = new HeightWeightDialog.Builder(_mActivity)
-                .setOkBtn(getResources().getString(R.string.save), new BaseDialog.ClickListener() {
+                .setOkBtn(getResources().getString(R.string.lw_save), new BaseDialog.ClickListener() {
                     @Override
                     public void onClick(BaseDialog dialog) {
                         //dialog.hide();
@@ -161,7 +160,7 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
 
     private void setRecyclerView() {
         LayoutInflater layoutInflater = LayoutInflater.from(_mActivity);
-        mAdapter = new HistoryItemAdapter(R.layout.item_weekly_calendar_item, getItemData());
+        mAdapter = new HistoryItemAdapter(R.layout.lw_item_weekly_calendar_item, getItemData());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 7) {
             @Override
             public boolean canScrollHorizontally() {
@@ -170,7 +169,7 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
         };
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
-        mAdapter.addHeaderView(layoutInflater.inflate(R.layout.item_history_header, recyclerView, false));
+        mAdapter.addHeaderView(layoutInflater.inflate(R.layout.lw_item_history_header, recyclerView, false));
         mAdapter.addFooterView(getFooter(layoutInflater));
         recyclerView.setAdapter(mAdapter);
         recyclerView.addItemDecoration(new HorizontalDecoration(ScreenUtils.dp2px(10)));
@@ -186,7 +185,7 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
     }
 
     private View getFooter(LayoutInflater inflater) {
-        View view = inflater.inflate(R.layout.item_history_footer, recyclerView, false);
+        View view = inflater.inflate(R.layout.lw_item_history_footer, recyclerView, false);
         TextView records = view.findViewById(R.id.records);
         records.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -342,15 +341,15 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
         }
         LineDataSet lineDataSet;
 
-        lineDataSet = new LineDataSet(entryList, getString(R.string.weight));
+        lineDataSet = new LineDataSet(entryList, getString(R.string.lw_weight));
         // 设置曲线颜色
-        lineDataSet.setColor(getResources().getColor(R.color.orange_500));
+        lineDataSet.setColor(getResources().getColor(R.color.lw_orange_500));
         // 设置平滑曲线
         lineDataSet.setMode(LineDataSet.Mode.LINEAR);
         // 坐标点的小圆点
         lineDataSet.setDrawCircles(true);
         lineDataSet.setDrawCircleHole(false);
-        lineDataSet.setCircleColor(getResources().getColor(R.color.orange_500));
+        lineDataSet.setCircleColor(getResources().getColor(R.color.lw_orange_500));
         lineDataSet.setCircleSize(DensityUtil.dip2px(_mActivity, 1.2f));
         // 不显示坐标点的数据
         lineDataSet.setDrawValues(false);
@@ -377,6 +376,6 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
     public void setSync(String account, String time) {
         mTvAccount.setText(account);
         mTvSyncTime.setText(getString(R.string.last_sync) + ": " + time);
-        mTvSyncTime.setTextColor(getResources().getColor(R.color.green_16));
+        mTvSyncTime.setTextColor(getResources().getColor(R.color.lw_green_16));
     }
 }

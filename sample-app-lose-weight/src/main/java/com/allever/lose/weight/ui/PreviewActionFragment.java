@@ -1,6 +1,5 @@
 package com.allever.lose.weight.ui;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -63,7 +62,7 @@ public class PreviewActionFragment extends BaseFragment<IPreviewActionView, Prev
             mTitle = args.getString(Constant.EXTRA_DAY_TEXT);
         }
 
-        View view = inflater.inflate(R.layout.fragment_preview_action,container,false);
+        View view = inflater.inflate(R.layout.lw_fragment_preview_action,container,false);
 
         mRecyclerView = view.findViewById(R.id.id_preview_action_rv);
         mBtnStart = view.findViewById(R.id.id_preview_action_btn_start);
@@ -120,7 +119,7 @@ public class PreviewActionFragment extends BaseFragment<IPreviewActionView, Prev
         }
         ActionQuickAdapter mAdapter = new ActionQuickAdapter(getActivity(), actionItemList);
         mRecyclerView.setAdapter(mAdapter);
-        mAdapter.addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.action_footer,mRecyclerView,false));
+        mAdapter.addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.lw_action_footer,mRecyclerView,false));
 
         mActionId = actionItemList.get(0).getActionId();
 

@@ -49,7 +49,7 @@ public class RoutinesFragment extends BaseFragment<IRoutineView, RoutinePresente
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_routines, container, false);
+        View view = inflater.inflate(R.layout.lw_fragment_routines, container, false);
         EventBus.getDefault().register(this);
 
         recyclerView = view.findViewById(R.id.recycler_view);

@@ -37,7 +37,7 @@ public class BirthdayDialog extends BaseDialog {
     }
     @Override
     public View getDialogView() {
-        View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_birthday, null, false);
+        View view = LayoutInflater.from(mActivity).inflate(R.layout.lw_dialog_birthday, null, false);
 
         mWVYear = (WheelView)view.findViewById(R.id.id_dialog_birthday_wv_year);
         mWVMonth = (WheelView)view.findViewById(R.id.id_dialog_birthday_wv_month);

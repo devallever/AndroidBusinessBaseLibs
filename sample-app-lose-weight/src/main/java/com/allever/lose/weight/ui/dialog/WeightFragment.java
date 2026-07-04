@@ -51,7 +51,7 @@ public class WeightFragment extends SupportFragment implements CalendarView.OnDa
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_weight, container, false);
+        View view = inflater.inflate(R.layout.lw_fragment_weight, container, false);
 
         mCalendarView = view.findViewById(R.id.calendarView);
         calendarLayout = view.findViewById(R.id.calendarLayout);

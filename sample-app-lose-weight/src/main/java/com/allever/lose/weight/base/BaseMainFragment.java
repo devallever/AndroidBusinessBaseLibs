@@ -43,7 +43,7 @@ public abstract  class BaseMainFragment<V, T extends BasePresenter<V>> extends S
     }
 
     protected void initToolbarNav(Toolbar toolbar, boolean isHome) {
-        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+        toolbar.setNavigationIcon(R.drawable.lw_ic_menu_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

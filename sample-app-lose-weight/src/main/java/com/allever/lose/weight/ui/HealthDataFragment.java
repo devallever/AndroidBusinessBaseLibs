@@ -46,7 +46,7 @@ public class HealthDataFragment extends BaseFragment<IHealthDataView, HealthData
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = LayoutInflater.from(_mActivity).inflate(R.layout.fragment_health_data, container, false);
+        View view = LayoutInflater.from(_mActivity).inflate(R.layout.lw_fragment_health_data, container, false);
 
         mTvGender = view.findViewById(R.id.id_fg_health_data_tv_gender);
         mLlGenderContainer = view.findViewById(R.id.id_fg_health_data_ll_gender_container);
@@ -57,7 +57,7 @@ public class HealthDataFragment extends BaseFragment<IHealthDataView, HealthData
         mLlGenderContainer.setOnClickListener(v -> showGenderDialog());
         mLlBirthdayContainer.setOnClickListener(v -> showBirthdayDialog());
 
-        initToolbar(mToolbar, R.string.health_data);
+        initToolbar(mToolbar, R.string.lw_health_data);
         mCalendar = Calendar.getInstance();
         mYear = mCalendar.get(Calendar.YEAR);
         mMonth = mCalendar.get(Calendar.MONTH);

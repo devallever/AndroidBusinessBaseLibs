@@ -19,10 +19,7 @@ import com.allever.lose.weight.R;
 import com.allever.lose.weight.data.Config;
 import com.allever.lose.weight.data.GlobalData;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Mac on 18/3/1.
@@ -57,15 +54,15 @@ public class Util {
             return null;
         }
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(context.getResources().getString(R.string.share_text_1) + "\n\n");
-        stringBuilder.append(context.getResources().getString(R.string.share_text_2) + "\n\n");
-        stringBuilder.append(context.getResources().getString(R.string.share_text_3) + "\n");
-        stringBuilder.append(context.getResources().getString(R.string.share_text_4));
+        stringBuilder.append(context.getResources().getString(R.string.lw_share_text_1) + "\n\n");
+        stringBuilder.append(context.getResources().getString(R.string.lw_share_text_2) + "\n\n");
+        stringBuilder.append(context.getResources().getString(R.string.lw_share_text_3) + "\n");
+        stringBuilder.append(context.getResources().getString(R.string.lw_share_text_4));
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_TEXT, stringBuilder.toString());
         shareIntent.setType("text/plain");
-        Intent intent = Intent.createChooser(shareIntent, context.getResources().getString(R.string.share_to));
+        Intent intent = Intent.createChooser(shareIntent, context.getResources().getString(R.string.lw_share_to));
         return intent;
     }
 

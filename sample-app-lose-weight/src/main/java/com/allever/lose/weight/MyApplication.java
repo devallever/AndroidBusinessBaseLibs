@@ -177,7 +177,7 @@ public class MyApplication{
             }
 
             //
-            GlobalData.dayTitles = getContext().getResources().getStringArray(R.array.day_title);
+            GlobalData.dayTitles = getContext().getResources().getStringArray(R.array.lw_day_title);
 
         }catch (IOException ioe){
             ioe.printStackTrace();

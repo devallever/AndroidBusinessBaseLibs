@@ -81,7 +81,7 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        View view = inflater.inflate(R.layout.lw_fragment_settings, container, false);
 
         mToolbar = view.findViewById(R.id.toolbar);
         testVoice = view.findViewById(R.id.test_voice);
@@ -106,7 +106,7 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
         testVoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSpeech.speak(getString(R.string.tts_tset), TextToSpeech.QUEUE_FLUSH, null);
+                mSpeech.speak(getString(R.string.lw_tts_tset), TextToSpeech.QUEUE_FLUSH, null);
                 showTTSTestDialog();
             }
         });
@@ -151,15 +151,15 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
             @Override
             public void onClick(View v) {
                 androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(_mActivity)
-                        .setMessage(R.string.delete_all_data)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        .setMessage(R.string.lw_delete_all_data)
+                        .setPositiveButton(R.string.lw_ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mPresenter.deleteAllData();
                                 Util.restartApp(_mActivity, MainActivity.class);
                             }
                         })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.lw_cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -201,12 +201,11 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
 
         EventBus.getDefault().register(this);
 
-        initToolbar(mToolbar, R.string.settings);
+        initToolbar(mToolbar, R.string.lw_settings);
         mSpeech = MyApplication.speechInstant();
         initDialog();
 
         mPresenter.getLanguage(_mActivity);
-        mPresenter.getSyncData();
 
         mTvVersion.setText("Ver:1.0");
 
@@ -221,14 +220,14 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
 
     private void showTTSTestDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(_mActivity);
-        builder.setMessage(R.string.voice_dialog_title);
-        builder.setPositiveButton(R.string.voice_dialog_can, new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.lw_voice_dialog_title);
+        builder.setPositiveButton(R.string.lw_voice_dialog_can, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
             }
         });
-        builder.setNegativeButton(R.string.voice_dialog_cant, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.lw_voice_dialog_cant, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 extraTransaction().startDontHideSelf(TTSFragment.newInstance());
@@ -268,7 +267,6 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUpdateSyncView(String event) {
         if (Constant.EVENT_UPDATE_REPORT_SYNC.equalsIgnoreCase(event)) {
-            mPresenter.getSyncData();
         }
     }
 
@@ -282,7 +280,7 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
         Log.d(TAG, "onObtainLanguage: id = " + id);
         Log.d(TAG, "onObtainLanguage: language = " + language);
         //更新数据
-        mTvLanguageSetting.setText(getString(R.string.language_select) + " - " + language);
+        mTvLanguageSetting.setText(getString(R.string.lw_language_select) + " - " + language);
         mPresenter.saveLanguage(id);
 
         //更新语言
@@ -299,7 +297,7 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
 
     @Override
     public void setLanguage(int flag, String language) {
-        mTvLanguageSetting.setText(getString(R.string.language_select) + " - " + language);
+        mTvLanguageSetting.setText(getString(R.string.lw_language_select) + " - " + language);
     }
 
     @Override

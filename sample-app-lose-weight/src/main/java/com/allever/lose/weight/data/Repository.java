@@ -660,7 +660,7 @@ public class Repository implements DataSource{
     }
 
     public List<ActionImage> getActionMap(Context context) throws IOException {
-        String json = readFileFromAssets(context, "uri_map.json");
+        String json = readFileFromAssets(context, "lw_uri_map.json");
         List<ActionImage> list = jsonToBeanList(json, ActionImage.class);
         return list;
     }
@@ -708,10 +708,10 @@ public class Repository implements DataSource{
         String json = "";
         switch (id){
             case Config.LANG_CHINESE:
-                json = readFileFromAssets(context, "action_data_zh.json");
+                json = readFileFromAssets(context, "lw_action_data_zh.json");
                 break;
             case Config.LANG_ENGLISH:
-                json = readFileFromAssets(context, "action_data_en.json");
+                json = readFileFromAssets(context, "lw_action_data_en.json");
                 break;
             default:
                 break;

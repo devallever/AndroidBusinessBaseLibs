@@ -1,6 +1,5 @@
 package com.allever.lose.weight;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import androidx.appcompat.app.AlertDialog;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.allever.lose.weight.data.DataSource;
@@ -31,8 +29,6 @@ import com.allever.lose.weight.base.BaseMainFragment;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
@@ -57,7 +53,7 @@ public class MainActivity extends SupportActivity implements NavigationView.OnNa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.lw_activity_main);
 
         EventBus.getDefault().register(this);
 
@@ -80,7 +76,7 @@ public class MainActivity extends SupportActivity implements NavigationView.OnNa
 
     private void setNavigationView() {
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.lw_open, R.string.lw_close);
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
@@ -150,15 +146,15 @@ public class MainActivity extends SupportActivity implements NavigationView.OnNa
                     }
                 } else if (id == R.id.reset_schedule) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
-                            .setMessage(R.string.reset_schedule)
-                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            .setMessage(R.string.lw_reset_schedule)
+                            .setPositiveButton(R.string.lw_ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     mDataSource.deleteAllSchedule();
                                     EventBus.getDefault().post(Constant.EVENT_REFRESH_VIEW);
                                 }
                             })
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            .setNegativeButton(R.string.lw_cancel, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();

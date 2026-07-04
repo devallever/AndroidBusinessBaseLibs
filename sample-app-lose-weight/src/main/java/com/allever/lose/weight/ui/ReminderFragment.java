@@ -55,7 +55,7 @@ public class ReminderFragment extends BaseFragment<IReminderView, ReminderPresen
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View view = inflater.inflate(R.layout.fragment_reminder, container, false);
+        View view = inflater.inflate(R.layout.lw_fragment_reminder, container, false);
 
         mToolbar = view.findViewById(R.id.toolbar);
         mRecyclerView = view.findViewById(R.id.recycler_view);
@@ -88,7 +88,7 @@ public class ReminderFragment extends BaseFragment<IReminderView, ReminderPresen
         });
 
 
-        initToolbar(mToolbar, R.string.remind);
+        initToolbar(mToolbar, R.string.lw_remind);
 
         initViewAndSetListner();
 
@@ -136,7 +136,7 @@ public class ReminderFragment extends BaseFragment<IReminderView, ReminderPresen
         if (reminder == null) {
             return;
         }
-        String title = getString(R.string.repeat);
+        String title = getString(R.string.lw_repeat);
         WeekChoiceDialogFragment weekChoiceDialogFragment = new WeekChoiceDialogFragment();
         weekChoiceDialogFragment.show(reminder, title, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
