@@ -25,11 +25,6 @@ android {
 dependencies {
     implementation(project(":sample-common"))
 
-//    val aarList = mutableListOf(
-//        "toolkit-1.1.aar"
-//    )
-//    implementation(fileTree(mapOf("dir" to "libs", "include" to aarList)))
-
     //android
     implementation(libs.material)
     implementation(libs.androidx.cardview)
@@ -37,7 +32,7 @@ dependencies {
     //third
     implementation(libs.eventbus)
 
-    implementation ("org.litepal.guolindev:core:3.2.3")
+    implementation (libs.litepal.core)
 
     // okhttp
     implementation(libs.okhttp)
@@ -51,6 +46,6 @@ dependencies {
     //Rx
 
     //功能性RecyclerView
-    implementation ("com.yanzhenjie.recyclerview:x:1.3.2")
+    implementation (libs.recyclerviewx)
 
 }

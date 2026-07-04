@@ -27,11 +27,6 @@ dependencies {
     implementation(project(":lib-ffmpeg-command"))
     implementation(project(":lib-media-core"))
 
-//    val aarList = mutableListOf(
-//        "toolkit-1.1.aar"
-//    )
-//    implementation(fileTree(mapOf("dir" to "libs", "include" to aarList)))
-
     //android
     implementation(libs.material)
     implementation(libs.androidx.cardview)
@@ -42,15 +37,15 @@ dependencies {
     implementation(libs.eventbus)
 
 
-    //local
-    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.19")
+    implementation(libs.android.gif.drawable)
 
     //1.0.7 会报错
-    implementation("com.liulishuo.okdownload:okdownload:1.0.4")
-    implementation("com.liulishuo.okdownload:sqlite:1.0.4")
-    implementation("com.liulishuo.okdownload:okhttp:1.0.4")
+    implementation(libs.okdownload)
+    implementation(libs.okdownload.sqlite)
+    implementation(libs.okdownload.okhttp)
 
-    implementation ("org.litepal.guolindev:core:3.2.3")
+    //litepalcore
+    implementation(libs.litepal.core)
 
     // okhttp
     implementation(libs.okhttp)

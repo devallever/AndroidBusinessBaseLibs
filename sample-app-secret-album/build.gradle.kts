@@ -32,17 +32,16 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to aarList)))
 
     //android
-    implementation("androidx.gridlayout:gridlayout:1.0.0")
+    implementation(libs.androidx.gridlayout)
     implementation(libs.material)
     implementation(libs.androidx.cardview)
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation(libs.androidx.legacy.support.v4)
 
     //third
     implementation(libs.chrisbanes.photoview)
     //glide
     implementation(libs.glide)
-//    implementation("com.davemorrissey.labs:subsampling-scale-image-view:3.10.0")
-    implementation("com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0")
+    implementation(libs.subsampling.scale.image.view.androidx)
     implementation(libs.eventbus)
 
 }

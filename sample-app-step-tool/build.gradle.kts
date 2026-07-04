@@ -57,6 +57,5 @@ dependencies {
     api(libs.mmkv.static)
 
     //腾讯vap
-    implementation("io.github.tencent:vap:2.0.28")
-//    implementation(libs.simplepeng.picker)
+    implementation(libs.tencent.vap)
 }

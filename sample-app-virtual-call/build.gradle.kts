@@ -25,18 +25,11 @@ android {
 dependencies {
     implementation(project(":sample-common"))
 
-//    val aarList = mutableListOf(
-//        "toolkit-v1-1.1.aar"
-//    )
-//    implementation(fileTree(mapOf("dir" to "libs", "include" to aarList)))
-
     //android
     implementation(libs.androidx.cardview)
+    implementation(libs.material)
 
-    //third
     //glide
     implementation(libs.glide)
     implementation(libs.circleimageview)
-    //material
-    implementation(libs.material)
 }

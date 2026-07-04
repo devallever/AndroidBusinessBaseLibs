@@ -35,28 +35,26 @@ dependencies {
 
 
     //android
-    implementation("androidx.gridlayout:gridlayout:1.0.0")
+    implementation(libs.androidx.gridlayout)
     implementation(libs.material)
     implementation(libs.androidx.cardview)
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation(libs.androidx.legacy.support.v4)
 
     //third
-    implementation("pub.devrel:easypermissions:1.2.0")
-    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.12")
-    implementation("org.greenrobot:greendao-generator:3.2.0")
-    annotationProcessor ("com.jakewharton:butterknife-compiler:10.1.0")
-    implementation("org.greenrobot:eventbus:3.0.0")
-    implementation("org.greenrobot:greendao:3.2.0")
+    implementation(libs.android.gif.drawable)
+    implementation(libs.greendao.generator)
+    implementation(libs.eventbus)
+    implementation(libs.greendao)
     implementation(libs.glide)
-    implementation("com.github.bumptech.glide:okhttp3-integration:4.3.1@aar")
-    implementation("com.readystatesoftware.systembartint:systembartint:1.0.3")
-    implementation("com.zhy:magic-viewpager:1.0.1")
+    implementation(libs.glide.okhttp3.integration)
+    implementation(libs.systembartint)
+    implementation(libs.magic.viewpager)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
-    implementation("com.liulishuo.okdownload:okdownload:1.0.4")
-    implementation("com.liulishuo.okdownload:sqlite:1.0.4")
-    implementation("com.liulishuo.okdownload:okhttp:1.0.4")
-    implementation("me.xiaopan:sketch:2.5.0")
+    implementation(libs.okdownload)
+    implementation(libs.okdownload.sqlite)
+    implementation(libs.okdownload.okhttp)
+    implementation(libs.xiaopan.sketch)
     implementation(libs.airbnb.lottie)
 
 }

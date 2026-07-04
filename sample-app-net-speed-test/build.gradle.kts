@@ -22,15 +22,15 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     //gso
-    implementation("org.jsoup:jsoup:1.14.3")
+    implementation(libs.jsoup)
     //material
     implementation(libs.material)
-    implementation("com.dinuscxj:circleprogressbar:1.3.0")
+    implementation (libs.circleprogressbar)
     //litepal
-    implementation ("org.litepal.guolindev:core:3.2.3")
+    implementation (libs.litepal.core)
     //Location
-    implementation ("com.google.android.gms:play-services-maps:19.0.0")
-    implementation ("com.google.android.gms:play-services-location:21.3.0")
-    implementation ("com.google.android.libraries.places:places:3.5.0")
-    implementation ("com.google.maps.android:android-maps-utils:2.3.0")
+    implementation (libs.play.services.maps)
+    implementation (libs.play.services.location)
+    implementation (libs.google.places)
+    implementation (libs.android.maps.utils)
 }

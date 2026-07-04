@@ -35,7 +35,7 @@ import com.android.permissions.compat.PermissionManager
 import java.io.File
 import java.util.LinkedList
 
-class LocalMusicActivity : Base2Activity(), View.OnClickListener, PermissionCallbacks {
+class LocalMusicActivity : Base2Activity(), View.OnClickListener {
     private lateinit var mBack: ImageView
     private lateinit var mScaningLayout: ViewGroup
     private lateinit var mNoDataLayout: ViewGroup
@@ -211,17 +211,17 @@ class LocalMusicActivity : Base2Activity(), View.OnClickListener, PermissionCall
 //        mPermissionManager.onRequestPermissionResult(requestCode, permissions, grantResults, this)
 //    }
 
-    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
-        if (mPermissionManager.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            updateData(false, true)
-        }
-    }
+//    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+//        if (mPermissionManager.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+//            updateData(false, true)
+//        }
+//    }
 
-    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
-        if (mPermissionManager.isPermissionPermanentlyDenied(this, *mPermissions)) {
-            mPermissionManager.jumpToSettingDialog(this)
-        }
-    }
+//    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
+//        if (mPermissionManager.isPermissionPermanentlyDenied(this, *mPermissions)) {
+//            mPermissionManager.jumpToSettingDialog(this)
+//        }
+//    }
 
     private fun rescan() {
         mRescan = true
