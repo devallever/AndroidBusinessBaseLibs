@@ -34,6 +34,14 @@ object AdCore {
     private var activeProviderType: String? = null
 
     /**
+     * 按 AdType 维度记录竞价/瀑布流获胜的 provider
+     * 解决同时加载多种广告类型时全局 provider 被覆盖的问题
+     */
+    private val adTypeProviderMap = ConcurrentHashMap<AdType, IAdProvider>()
+    private val adTypeConfigMap = ConcurrentHashMap<AdType, AdProviderConfig>()
+    private val adTypeProviderTypeMap = ConcurrentHashMap<AdType, String>()
+
+    /**
      * 缓存每个注册的AdProvider
      */
     internal val providerPool = ConcurrentHashMap<String, IAdProvider>()
@@ -148,8 +156,10 @@ object AdCore {
 
     /**
      * 切换到指定AdProvider
+     * @param providerType provider 类型
+     * @param adType 如果不为 null，同时更新该广告类型的 provider 映射（用于竞价/瀑布流）
      */
-    fun switchToProvider(providerType: String): Boolean {
+    fun switchToProvider(providerType: String, adType: AdType? = null): Boolean {
         if (!providerPool.containsKey(providerType)) {
             logE("$TAG: Cannot switch to $providerType, not initialized")
             return false
@@ -163,11 +173,20 @@ object AdCore {
             return false
         }
 
+        // 更新全局默认（用于 init / Single 模式 / 兼容旧代码）
         currentProvider = provider
         currentConfig = config
         activeProviderType = providerType
 
-        log("$TAG: Switched to active provider: $providerType")
+        // 如果传了 adType，同时更新该 adType 的映射
+        if (adType != null) {
+            adTypeProviderMap[adType] = provider
+            adTypeConfigMap[adType] = config
+            adTypeProviderTypeMap[adType] = providerType
+            log("$TAG: Switched to active provider: $providerType for ${adType.name}")
+        } else {
+            log("$TAG: Switched to active provider: $providerType")
+        }
         return true
     }
 
@@ -206,7 +225,7 @@ object AdCore {
         container: ViewGroup? = null,
         callback: IAdCallback? = null
     ) {
-        val provider = getActiveProvider() ?: return
+        val provider = getActiveProvider(adType) ?: return
         provider.showAd(activity, adType, container, callback)
     }
 
@@ -236,6 +255,9 @@ object AdCore {
         currentProvider = null
         currentConfig = null
         activeProviderType = null
+        adTypeProviderMap.clear()
+        adTypeConfigMap.clear()
+        adTypeProviderTypeMap.clear()
         loadMode = LoadMode.SINGLE
 
         log("$TAG: All providers destroyed")
@@ -251,11 +273,18 @@ object AdCore {
             activeProviderType = null
         }
 
+        // 清理该 provider 在 adType 映射中的记录
+        adTypeProviderTypeMap.entries.removeIf { it.value == providerType }
+        adTypeProviderMap.entries.removeIf { it.value.getProviderType() == providerType }
+        adTypeConfigMap.entries.removeIf { (adType, _) ->
+            adTypeProviderTypeMap[adType] == null
+        }
+
         log("$TAG: Provider $providerType destroyed")
     }
 
     fun isReady(adType: AdType): Boolean {
-        return currentProvider?.isReady(adType) ?: false
+        return getActiveProvider(adType)?.isReady(adType) ?: false
     }
 
     //todo check 单凭判断当前初始化状态，是否会误判
@@ -310,10 +339,20 @@ object AdCore {
     }
 
     fun getAdIdByType(adType: AdType): String? {
-        return currentConfig?.getAdIdByType(adType)
+        // 优先从该 adType 的 config 获取
+        return adTypeConfigMap[adType]?.getAdIdByType(adType)
+            ?: currentConfig?.getAdIdByType(adType)
     }
 
-    fun getActiveProvider(): IAdProvider? {
+    /**
+     * 获取当前活跃的 AdProvider
+     * @param adType 如果不为 null，优先返回该广告类型对应的 provider（竞价/瀑布流场景）
+     * @return 优先返回 adType 映射的 provider，回退到全局默认
+     */
+    fun getActiveProvider(adType: AdType? = null): IAdProvider? {
+        if (adType != null) {
+            adTypeProviderMap[adType]?.let { return it }
+        }
         val provider = currentProvider
         if (provider == null) {
             logE("$TAG: No active provider. Call init() first.")

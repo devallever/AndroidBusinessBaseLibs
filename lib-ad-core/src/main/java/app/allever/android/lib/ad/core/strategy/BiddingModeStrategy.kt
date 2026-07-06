@@ -55,7 +55,7 @@ class BiddingModeStrategy : BaseModeStrategy() {
     override fun checkCache(
         adType: AdType, callback: IAdCallback?
     ): Boolean {
-        val activeProvider = getActiveProvider() ?: return false
+        val activeProvider = getActiveProvider(adType) ?: return false
         val providerType = activeProvider.getProviderType()
 
         if (activeProvider.isReady(adType)) {
@@ -290,7 +290,7 @@ class BiddingModeStrategy : BaseModeStrategy() {
                 AdLog.logMessage("🏆 $actionLabel: ${result.providerType}" + " | Price: $${result.formattedPrice}" + " | Source: $priceSource", strategyName = TAG, adType = adType, isPreload = isPreload)
 
 
-            switchToProvider(winner.key)
+            switchToProvider(winner.key, adType)
 
             if (isPreload) {
                 AdLog.logMessage("Preload successful! Next ad will use: ${winner.key}", strategyName = TAG, adType = adType, isPreload = true, success = true)

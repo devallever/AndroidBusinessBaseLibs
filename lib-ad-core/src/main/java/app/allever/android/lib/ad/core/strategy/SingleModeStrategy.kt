@@ -18,7 +18,7 @@ class SingleModeStrategy : BaseModeStrategy() {
         adType: AdType,
         callback: IAdCallback?
     ) {
-        val provider = getActiveProvider()
+        val provider = getActiveProvider(adType)
         
         if (!requireProvider(provider, callback, isPreload = false)) {
             return
@@ -47,7 +47,7 @@ class SingleModeStrategy : BaseModeStrategy() {
             return
         }
 
-        val provider = getActiveProvider()
+        val provider = getActiveProvider(adType)
 
         if (!requireProvider(provider, null, isPreload = true)) {
             return
@@ -70,7 +70,7 @@ class SingleModeStrategy : BaseModeStrategy() {
         adType: AdType,
         callback: IAdCallback?
     ): Boolean {
-        val provider = getActiveProvider()
+        val provider = getActiveProvider(adType)
 
         if (!requireProvider(provider, callback, isPreload = false)) {
             return false
@@ -79,7 +79,7 @@ class SingleModeStrategy : BaseModeStrategy() {
         if (provider!!.isReady(adType)) {
             AdLog.logMessage("Provider ${provider.getProviderType()} has valid cache", strategyName = TAG, adType = adType, providerType = provider.getProviderType(), action = "cache")
 
-            switchToProvider(provider.getProviderType())
+            switchToProvider(provider.getProviderType(), adType)
 
             return true
         }

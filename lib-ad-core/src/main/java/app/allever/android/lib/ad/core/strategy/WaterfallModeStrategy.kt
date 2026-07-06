@@ -38,7 +38,7 @@ class WaterfallModeStrategy : BaseModeStrategy() {
 
             if (provider.isReady(adType)) {
                 AdLog.logMessage("Found cache in $providerType", strategyName = TAG, adType = adType, providerType = providerType)
-                switchToProvider(providerType)
+                switchToProvider(providerType, adType)
                 return true
             }
         }
@@ -153,7 +153,7 @@ class WaterfallModeStrategy : BaseModeStrategy() {
             override fun onAdLoaded() {
                 AdLog.logMessage("SUCCESS at [$currentIndex]: $providerType successful!", strategyName = TAG, adType = adType, isPreload = isPreload, success = true)
 
-                switchToProvider(providerType)
+                switchToProvider(providerType, adType)
 
                 if (!isPreload) {
                     callback?.onAdLoaded()
