@@ -13,6 +13,8 @@ import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.ad.core.type.BiddingResult
 import app.allever.android.lib.core.ext.log
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
@@ -111,71 +113,69 @@ class BiddingModeStrategy : BaseModeStrategy() {
         scope.launch {
             val callbackRef = WeakReference(callback)
             val timeout = getBiddingTimeout(biddingProviders)
-            val collectedResults = mutableMapOf<String, BiddingEntry>()
 
-            try {
-                withTimeout(timeout) {
-                    coroutineScope {
-                        biddingProviders.mapIndexed { index, (providerType, config) ->
-                            launch {
-                                val result = tryLoadFromSingleProvider(
-                                    index,
-                                    biddingProviders.size,
-                                    providerType,
-                                    config,
-                                    context,
-                                    adType
-                                )
-                                synchronized(collectedResults) {
-                                    collectedResults[providerType] = result.second
-                                }
-                            }
-                        }
+            // 1. 将 deferredList 声明在 try 块外部，以便 catch 块可以访问
+            // 注意：async 必须在当前的协程作用域内启动，这里直接在 launch 内启动
+            val deferredList = biddingProviders.mapIndexed { index, (providerType, config) ->
+                async {
+                    try {
+                        tryLoadFromSingleProvider(index, biddingProviders.size, providerType, config, context, adType)
+                    } catch (e: Exception) {
+                        // 内部消化异常，防止 async 抛出未捕获异常导致外层崩溃
+                        Pair(providerType, BiddingEntry(success = false, errorMessage = e.message ?: "Cancelled"))
                     }
                 }
-
-                AdLog.logMessage(
-                    message = "All providers responded within ${timeout}ms",
-                    strategyName = TAG,
-                    isPreload = isPreload
-                )
-
-            } catch (e: TimeoutCancellationException) {
-                AdLog.logMessage(
-                    message = "⏰ TIMEOUT! (${timeout}ms) | Collected ${collectedResults.size}/${biddingProviders.size} results before timeout",
-                    strategyName = TAG,
-                    isPreload = isPreload,
-                    success = false
-                )
-            } catch (e: Exception) {
-                AdLog.logMessage(
-                    message = e.message ?: "Unknown error",
-                    strategyName = TAG,
-                    isPreload = isPreload,
-                    success = false
-                )
             }
 
-            // 超时后，只要有结果（无论是否全部完成），都执行竞价
-            if (collectedResults.isNotEmpty()) {
-                val successCount = collectedResults.values.count { it.success }
-                AdLog.logMessage(
-                    message = "Executing bidding with ${collectedResults.size} results ($successCount success)",
-                    strategyName = TAG,
-                    adType = adType,
-                    isPreload = isPreload
-                )
-                handleBiddingResults(collectedResults.toMap(), adType, callbackRef.get(), isPreload)
-            } else {
-                AdLog.logMessage(
-                    message = "No results collected, all failed or cancelled",
-                    strategyName = TAG,
-                    adType = adType,
-                    isPreload = isPreload,
-                    success = false
-                )
-                if (!isPreload) {
-                    fallbackToSingle(context, adType, callbackRef.get(), false)
+            try {
+                // 2. withTimeout 仅包裹 awaitAll()
+                // 如果超时，只会取消 awaitAll 的等待，不会自动取消外部的 async 任务
+                val collectedResults = withTimeout(timeout) {
+                    deferredList.awaitAll().toMap()
+                }
+
+                if (collectedResults.isNotEmpty()) {
+                    handleBiddingResults(collectedResults, adType, callbackRef.get(), isPreload)
+
+                    AdLog.logMessage(
+                        message = "All providers responded within ${timeout}ms",
+                        strategyName = TAG,
+                        isPreload = isPreload
+                    )
+                } else {
+                    if (!isPreload) fallbackToSingle(context, adType, callbackRef.get(), false)
+                }
+
+            } catch (e: TimeoutCancellationException) {
+                // 3. 超时异常捕获：收集已完成的结果
+                // getCompleted() 会获取已计算的结果，如果没有完成会抛出 IllegalStateException，所以需要过滤
+                val partialResults = deferredList
+                    .filter { it.isCompleted && !it.isCancelled }
+                    .mapNotNull { runCatching { it.getCompleted() }.getOrNull() }
+                    .toMap()
+
+                // 4. ⚠️ 关键补漏：手动取消所有尚未完成的 async 任务！
+                // 因为 async 提到了 withTimeout 外部，超时后它们不会被自动取消。
+                // 如果不调用 cancel()，这些网络请求协程会在后台继续运行，造成资源浪费。
+                deferredList.forEach { if (it.isActive) it.cancel() }
+
+                if (partialResults.isNotEmpty()) {
+                    AdLog.logMessage(
+                        message = "⏰ TIMEOUT! (${timeout}ms) | Collected ${partialResults.size}/${biddingProviders.size} results before timeout",
+                        strategyName = TAG,
+                        isPreload = isPreload,
+                        success = false
+                    )
+                    handleBiddingResults(partialResults, adType, callbackRef.get(), isPreload)
+                } else {
+                    AdLog.logMessage(
+                        message = "No results collected, all failed or cancelled",
+                        strategyName = TAG,
+                        adType = adType,
+                        isPreload = isPreload,
+                        success = false
+                    )
+                    if (!isPreload) fallbackToSingle(context, adType, callbackRef.get(), false)
                 }
             }
         }
