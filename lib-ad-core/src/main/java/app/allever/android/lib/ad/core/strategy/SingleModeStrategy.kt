@@ -55,15 +55,21 @@ class SingleModeStrategy : BaseModeStrategy() {
 
         AdLog.logMessage("Starting preload for ${adType.name}", adType = adType, strategyName = TAG, isPreload = true, providerType = adManager.loadMode.name, action = "Preloading")
 
-        provider?.loadAd(context, adType, adId!!, object : IAdCallback {
+        val preloadCallback = object : IAdCallback {
             override fun onAdLoaded() {
+                pendingCallbacks.remove(this)
                 AdLog.logMessage("${adType.name} preloaded successfully and cached", adType = adType, strategyName = TAG, isPreload = true, success = true)
             }
 
             override fun onAdFail(errorCode: Int, errorMessage: String) {
+                pendingCallbacks.remove(this)
                 AdLog.logMessage("${adType.name} preload failed", adType = adType, strategyName = TAG, isPreload = true, success = false)
             }
-        })
+        }
+
+        // 持有强引用，防止 Provider 内部 WeakReference 包装的 callback 被 GC 回收
+        pendingCallbacks.add(preloadCallback)
+        provider?.loadAd(context, adType, adId!!, preloadCallback)
     }
 
     override fun checkCache(

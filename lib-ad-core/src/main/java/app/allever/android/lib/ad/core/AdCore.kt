@@ -206,7 +206,7 @@ object AdCore {
             if (cacheResult) {
                 log("$TAG: [CACHE] ✅ Cache HIT! Using cached ad for ${adType.name}")
                 log("$TAG: [CACHE] 📌 Note: Next ad will be preloaded after this one is dismissed")
-                callback?.onAdLoaded()
+                callback?.onAdLoadedWithPrice(0.0)
                 return
             }
 
@@ -236,9 +236,10 @@ object AdCore {
         callback: IAdCallback? = null
     ) {
         loadAd(activity.applicationContext, adType, object : IAdCallback {
-            override fun onAdLoaded() {
+
+            override fun onAdLoadedWithPrice(eCPM: Double) {
                 showAd(activity, adType, container, callback)
-                callback?.onAdLoaded()
+                callback?.onAdLoadedWithPrice(eCPM)
             }
 
             override fun onAdFail(errorCode: Int, errorMessage: String) {

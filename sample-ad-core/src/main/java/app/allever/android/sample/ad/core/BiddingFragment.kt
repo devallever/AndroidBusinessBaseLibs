@@ -242,22 +242,6 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
                 appendStatus("-".repeat(60))
             }
 
-            override fun onAdLoaded() {
-                appendStatus("✅ Interstitial LOADED successfully!")
-
-                if (AdCore.cacheFirstEnabled) {
-                    //
-                    appendStatus("  ⚡ CACHE HIT! Served from cache (instant!)")
-                    appendStatus("  Provider: ${AdCore.getActiveProviderType()}")
-                    appendStatus("  [No network request needed - using cached ad]")
-                } else {
-                    appendStatus("  Provider: ${AdCore.getActiveProviderType()}")
-                    appendStatus("  (Normal load - no caching)")
-                }
-
-                appendStatus("-".repeat(60))
-            }
-
             override fun onAdFail(errorCode: Int, errorMessage: String) {
                 appendStatus("✗ Interstitial FAILED: $errorMessage")
                 if (mode == LoadMode.BIDDING) {
@@ -312,13 +296,6 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
                 appendStatus("-".repeat(60))
             }
 
-            override fun onAdLoaded() {
-                appendStatus("✓ Reward Video LOADED!")
-                appendStatus("  Provider: ${AdCore.getActiveProviderType()}")
-                appendStatus("  (No bidding - loaded in single/waterfall mode)")
-                appendStatus("-".repeat(60))
-            }
-
             override fun onAdFail(errorCode: Int, errorMessage: String) {
                 appendStatus("✗ Reward Video FAILED: $errorMessage")
                 if (mode == LoadMode.BIDDING) {
@@ -358,7 +335,6 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             activity = requireActivity(),
             adType = AdType.INTERSTITIAL,
             callback = object : IAdCallback {
-                override fun onAdLoaded() {}
                 override fun onAdFail(errorCode: Int, errorMessage: String) {
                     appendStatus("✗ Show failed: $errorMessage")
                 }
@@ -389,7 +365,6 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             activity = requireActivity(),
             adType = AdType.REWARD_VIDEO,
             callback = object : IAdCallback {
-                override fun onAdLoaded() {}
                 override fun onAdFail(errorCode: Int, errorMessage: String) {
                     appendStatus("✗ Show failed: $errorMessage")
                 }
@@ -446,20 +421,6 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
                 appendStatus("-".repeat(60))
             }
 
-            override fun onAdLoaded() {
-                appendStatus("✅ Splash LOADED successfully!")
-
-                if (AdCore.cacheFirstEnabled) {
-                    appendStatus("  ⚡ CACHE HIT! Served from cache (instant!)")
-                    appendStatus("  Provider: ${AdCore.getActiveProviderType()}")
-                    appendStatus("  [No network request needed - using cached ad]")
-                } else {
-                    appendStatus("  Provider: ${AdCore.getActiveProviderType()}")
-                    appendStatus("  (Normal load - no caching)")
-                }
-
-                appendStatus("-".repeat(60))
-            }
 
             override fun onAdFail(errorCode: Int, errorMessage: String) {
                 appendStatus("✗ Splash FAILED: $errorMessage")
@@ -501,7 +462,6 @@ class BiddingFragment : BaseFragment<FragmentBiddingBinding, BaseViewModel>() {
             activity = requireActivity(),
             adType = AdType.SPLASH,
             callback = object : IAdCallback {
-                override fun onAdLoaded() {}
                 override fun onAdFail(errorCode: Int, errorMessage: String) {
                     appendStatus("✗ Show failed: $errorMessage")
                 }

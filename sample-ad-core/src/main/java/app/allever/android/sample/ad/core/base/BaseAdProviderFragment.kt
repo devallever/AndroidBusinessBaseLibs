@@ -108,7 +108,7 @@ abstract class BaseAdProviderFragment<DB, VM> :
             activity = requireActivity(),
             adType = AdType.REWARD_VIDEO,
             callback = object : IAdCallback {
-                override fun onAdLoaded() {
+                override fun onAdLoadedWithPrice(eCPM: Double) {
                     updateStatus("✓ Reward video loaded")
                 }
 
@@ -148,7 +148,7 @@ abstract class BaseAdProviderFragment<DB, VM> :
             adType = AdType.BANNER,
             container = mBinding.bannerContainer,
             callback = object : IAdCallback {
-                override fun onAdLoaded() {
+                override fun onAdLoadedWithPrice(eCPM: Double) {
                     updateStatus("✓ Banner loaded")
                 }
 
@@ -169,7 +169,7 @@ abstract class BaseAdProviderFragment<DB, VM> :
 
     private fun createAdCallback(adTypeName: String): IAdCallback {
         return object : IAdCallback {
-            override fun onAdLoaded() {
+            override fun onAdLoadedWithPrice(eCPM: Double) {
                 updateStatus("✓ $adTypeName loaded")
             }
 

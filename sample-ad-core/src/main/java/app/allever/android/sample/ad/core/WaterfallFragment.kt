@@ -186,7 +186,7 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
         }
 
         AdCore.loadAd(requireActivity(), AdType.INTERSTITIAL, object : IAdCallback {
-            override fun onAdLoaded() {
+            override fun onAdLoadedWithPrice(eCPM: Double) {
                 appendStatus("✓ Interstitial LOADED successfully!")
                 appendStatus("  Winner: ${AdCore.getActiveProviderType()}")
                 if (mode == LoadMode.WATERFALL) {
@@ -232,7 +232,7 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
         appendStatus("Mode: $mode")
 
         AdCore.loadAd(requireActivity(), AdType.REWARD_VIDEO, object : IAdCallback {
-            override fun onAdLoaded() {
+            override fun onAdLoadedWithPrice(eCPM: Double) {
                 appendStatus("✓ Reward Video LOADED!")
                 appendStatus("  Winner: ${AdCore.getActiveProviderType()}")
             }
@@ -271,7 +271,6 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
             activity = requireActivity(),
             adType = AdType.INTERSTITIAL,
             callback = object : IAdCallback {
-                override fun onAdLoaded() {}
                 override fun onAdFail(errorCode: Int, errorMessage: String) {
                     appendStatus("✗ Show failed: $errorMessage")
                 }
@@ -302,7 +301,6 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
             activity = requireActivity(),
             adType = AdType.REWARD_VIDEO,
             callback = object : IAdCallback {
-                override fun onAdLoaded() {}
                 override fun onAdFail(errorCode: Int, errorMessage: String) {
                     appendStatus("✗ Show failed: $errorMessage")
                 }
@@ -342,7 +340,7 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
         }
 
         AdCore.loadAd(requireActivity(), AdType.SPLASH, object : IAdCallback {
-            override fun onAdLoaded() {
+            override fun onAdLoadedWithPrice(eCPM: Double) {
                 appendStatus("✓ Splash LOADED successfully!")
                 appendStatus("  Winner: ${AdCore.getActiveProviderType()}")
                 if (mode == LoadMode.WATERFALL) {
@@ -388,7 +386,6 @@ class WaterfallFragment : BaseFragment<FragmentWaterfallBinding, BaseViewModel>(
             activity = requireActivity(),
             adType = AdType.SPLASH,
             callback = object : IAdCallback {
-                override fun onAdLoaded() {}
                 override fun onAdFail(errorCode: Int, errorMessage: String) {
                     appendStatus("✗ Show failed: $errorMessage")
                 }

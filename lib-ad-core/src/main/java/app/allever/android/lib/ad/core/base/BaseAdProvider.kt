@@ -199,7 +199,7 @@ abstract class BaseAdProvider : IAdProvider {
         val simulatedECPM = generateSimulatedPrice()
         
         AdLog.logMessage(
-            message = "Simulated eCPM: $$simulatedECPM",
+            message = "Simulated eCPM: $$simulatedECPM ${if (callback == null) "callback == null" else ""}",
             providerType = providerType,
             adType = adType,
         )

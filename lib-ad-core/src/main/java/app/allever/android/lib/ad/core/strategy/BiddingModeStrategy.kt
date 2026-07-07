@@ -210,17 +210,9 @@ class BiddingModeStrategy : BaseModeStrategy() {
         AdLog.logMessage("[$index/$totalSize] Requesting: $providerType", strategyName = TAG, adType = adType)
 
         return suspendCancellableCoroutine { continuation ->
-            provider.loadAd(context, adType, adId, object : IAdCallback {
-                override fun onAdLoaded() {
-                    AdLog.logMessage("[$index/$totalSize] Loaded: $providerType | Price: \$0.00", strategyName = TAG, success = true, adType = adType, providerType = providerType)
-                    if (continuation.isActive) {
-                        continuation.resume(
-                            Pair(
-                                providerType,
-                                BiddingEntry(success = true, eCPM = 0.0)
-                            )
-                        )
-                    }
+            val adCallback = object : IAdCallback {
+                private fun complete() {
+                    pendingCallbacks.remove(this)
                 }
 
                 override fun onAdLoadedWithPrice(price: Double) {
@@ -230,6 +222,7 @@ class BiddingModeStrategy : BaseModeStrategy() {
                             Pair(providerType, BiddingEntry(success = true, eCPM = price))
                         )
                     }
+                    complete()
                 }
 
                 override fun onAdFail(errorCode: Int, errorMessage: String) {
@@ -245,15 +238,21 @@ class BiddingModeStrategy : BaseModeStrategy() {
                             )
                         )
                     }
+                    complete()
                 }
 
                 override fun onAdShow() {}
                 override fun onAdClick() {}
                 override fun onAdDismiss() {}
                 override fun onAdRewarded(amount: Int, name: String) {}
-            })
+            }
+
+            // 持有强引用，防止 Provider 内部 WeakReference 包装的 callback 被 GC 回收
+            pendingCallbacks.add(adCallback)
+            provider.loadAd(context, adType, adId, adCallback)
 
             continuation.invokeOnCancellation {
+                pendingCallbacks.remove(adCallback)
                 AdLog.logMessage("[$index/$totalSize] ⚠️ Cancelling: $providerType", strategyName = TAG, success = false, adType = adType, providerType = providerType)
             }
         }

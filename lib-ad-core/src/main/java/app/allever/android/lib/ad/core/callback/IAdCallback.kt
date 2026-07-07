@@ -1,7 +1,6 @@
 package app.allever.android.lib.ad.core.callback
 
 interface IAdCallback {
-    fun onAdLoaded() {}
 
     fun onAdLoadedWithPrice(eCPM: Double) {}
 

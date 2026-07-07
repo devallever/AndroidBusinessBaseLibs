@@ -148,19 +148,22 @@ class WaterfallModeStrategy : BaseModeStrategy() {
 
         AdLog.logMessage("[$currentIndex/$providers.size] Trying: $providerType (ID: $adId)", strategyName = TAG, adType = adType, isPreload = isPreload, success = false)
 
-        provider.loadAd(context, adType, adId, object : IAdCallback {
+        val adCallback = object : IAdCallback {
 
-            override fun onAdLoaded() {
+            override fun onAdLoadedWithPrice(eCPM: Double) {
+                super.onAdLoadedWithPrice(eCPM)
+                pendingCallbacks.remove(this)
                 AdLog.logMessage("SUCCESS at [$currentIndex]: $providerType successful!", strategyName = TAG, adType = adType, isPreload = isPreload, success = true)
 
                 switchToProvider(providerType, adType)
 
                 if (!isPreload) {
-                    callback?.onAdLoaded()
+                    callback?.onAdLoadedWithPrice(eCPM)
                 }
             }
 
             override fun onAdFail(errorCode: Int, errorMessage: String) {
+                pendingCallbacks.remove(this)
                 //ADL
                 AdLog.logMessage("FAILED at [$currentIndex]: $providerType - Error($errorCode): $errorMessage", strategyName = TAG, adType = adType, isPreload = isPreload, success = false)
 
@@ -193,6 +196,10 @@ class WaterfallModeStrategy : BaseModeStrategy() {
                 AdLog.logMessage("Rewarded from: $providerType - Amount: $rewardAmount, Name: $rewardName", strategyName = TAG, adType = adType, isPreload = isPreload)
                 callback?.onAdRewarded(rewardAmount, rewardName)
             }
-        })
+        }
+
+        // 持有强引用，防止 Provider 内部 WeakReference 包装的 callback 被 GC 回收
+        pendingCallbacks.add(adCallback)
+        provider.loadAd(context, adType, adId, adCallback)
     }
 }

@@ -126,7 +126,7 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
             activity = requireActivity(),
             adType = AdType.INTERSTITIAL,
             callback = object : IAdCallback {
-                override fun onAdLoaded() {
+                override fun onAdLoadedWithPrice(eCPM: Double) {
                     updateStatus("✓ Interstitial loaded")
                 }
 
@@ -163,7 +163,7 @@ class MultiProviderFragment : BaseFragment<FragmentMultiProviderBinding, BaseVie
             activity = requireActivity(),
             adType = AdType.REWARD_VIDEO,
             callback = object : IAdCallback {
-                override fun onAdLoaded() {
+                override fun onAdLoadedWithPrice(eCPM: Double) {
                     updateStatus("✓ Reward loaded")
                 }
 
