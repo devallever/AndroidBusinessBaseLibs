@@ -1,5 +1,6 @@
 package app.allever.android.lib.ad.core.strategy
 
+import android.annotation.SuppressLint
 import android.content.Context
 import app.allever.android.lib.ad.core.AdCore.LoadMode
 import app.allever.android.lib.ad.core.AdCore.getActiveProvider
@@ -258,6 +259,7 @@ class BiddingModeStrategy : BaseModeStrategy() {
         }
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun handleBiddingResults(
         results: Map<String, BiddingEntry>,
         adType: AdType,

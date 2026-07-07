@@ -11,15 +11,6 @@ import app.allever.android.lib.ad.core.type.AdType
 import app.allever.android.lib.core.app.App
 
 abstract class BaseAdProvider : IAdProvider {
-    protected open fun loadSplashAd(context: Context, adId: String, callback: IAdCallback?) {}
-    protected open fun loadInterstitialAd(context: Context, adId: String, callback: IAdCallback?) {}
-    protected open fun loadRewardedAd(context: Context, adId: String, callback: IAdCallback?) {}
-    protected open fun loadBannerAd(context: Context, adId: String, callback: IAdCallback?) {}
-
-    protected open fun showSplashAd(activity: Activity, callback: IAdCallback?) {}
-    protected open fun showInterstitialAd(activity: Activity, callback: IAdCallback?) {}
-    protected open fun showRewardedAd(activity: Activity, callback: IAdCallback?) {}
-    protected open fun showBannerAd(container: ViewGroup?, callback: IAdCallback?) {}
 
     protected abstract fun onDestroy()
 
