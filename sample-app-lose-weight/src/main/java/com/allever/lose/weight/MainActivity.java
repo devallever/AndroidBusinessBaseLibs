@@ -71,7 +71,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                checkExit(null);
+                finish();
             }
         });
 
