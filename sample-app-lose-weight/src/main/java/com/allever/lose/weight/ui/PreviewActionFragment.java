@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.allever.lose.weight.MyApplication;
 import com.allever.lose.weight.R;
 import com.allever.lose.weight.data.GlobalData;
 import com.allever.lose.weight.util.Constant;
@@ -69,6 +70,7 @@ public class PreviewActionFragment extends BaseFragment<IPreviewActionView, Prev
         mBtnEnd = view.findViewById(R.id.id_preview_action_btn_end);
         mLlRestContainer = view.findViewById(R.id.id_preview_action_ll_rest_container);
         mToolbar = view.findViewById(R.id.id_toolbar);
+        adaptStatusBar(mToolbar);
 
         initView();
 
@@ -86,7 +88,11 @@ public class PreviewActionFragment extends BaseFragment<IPreviewActionView, Prev
                 //go to action ready
                 GlobalData.initTime();
                 GlobalData.startTime = System.currentTimeMillis();
-                startWithPop(ActionReadyFragment.newInstance(mDayId, mActionId));
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constant.EXTRA_DAY_ID, mDayId);
+                bundle.putInt(Constant.EXTRA_ACTION_ID, mActionId);
+                MyApplication.startFragment(ActionReadyFragment.class, bundle);
+                finish();
             }
         });
 
@@ -108,7 +114,7 @@ public class PreviewActionFragment extends BaseFragment<IPreviewActionView, Prev
             mBtnEnd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    _mActivity.onBackPressed();
+                    requireActivity().onBackPressed();
                 }
             });
 

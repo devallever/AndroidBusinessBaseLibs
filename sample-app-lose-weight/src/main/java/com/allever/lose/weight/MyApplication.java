@@ -3,14 +3,18 @@ package com.allever.lose.weight;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+
+import androidx.fragment.app.Fragment;
 
 import com.allever.lose.weight.data.Config;
 import com.allever.lose.weight.data.DataSource;
 import com.allever.lose.weight.data.GlobalData;
 import com.allever.lose.weight.data.Person;
 import com.allever.lose.weight.data.Repository;
+import com.allever.lose.weight.ui.ReminderFragment;
 import com.allever.lose.weight.util.Constant;
 import com.allever.lose.weight.bean.ActionData;
 import com.allever.lose.weight.bean.ActionImage;
@@ -24,10 +28,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import app.allever.android.lib.common.FragmentActivity;
 import app.allever.android.lib.core.app.App;
 import app.allever.android.lib.core.ext.LoggerKt;
 import app.allever.android.lib.core.helper.GsonHelper;
-import me.yokeyword.fragmentation.Fragmentation;
 
 /**
  * Created by maozhi on 2018/2/27.
@@ -60,11 +64,6 @@ public class MyApplication{
         }
         Log.d(TAG, "onCreate: ");
         mContext = App.Companion.getApp();
-        Fragmentation.builder()
-                // 显示悬浮球 ; 其他Mode:SHAKE: 摇一摇唤出   NONE：隐藏
-                .stackViewMode(Fragmentation.NONE)
-                .debug(App.Companion.getDEBUG())
-                .install();
         ScreenUtils.init(App.Companion.getContext());
 
         //初始化LitePal
@@ -190,5 +189,9 @@ public class MyApplication{
             ioe.printStackTrace();
         }
 
+    }
+
+    public static void startFragment(Class<?> clazz, Bundle bundle) {
+        FragmentActivity.Companion.start("", false, false, bundle, clazz);
     }
 }

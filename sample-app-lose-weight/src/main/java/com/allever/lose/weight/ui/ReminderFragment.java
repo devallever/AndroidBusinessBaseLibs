@@ -58,6 +58,7 @@ public class ReminderFragment extends BaseFragment<IReminderView, ReminderPresen
         View view = inflater.inflate(R.layout.lw_fragment_reminder, container, false);
 
         mToolbar = view.findViewById(R.id.toolbar);
+        adaptStatusBar(mToolbar);
         mRecyclerView = view.findViewById(R.id.recycler_view);
         addReminder = view.findViewById(R.id.add_reminder);
         addReminder.setOnClickListener(new View.OnClickListener() {
@@ -113,9 +114,9 @@ public class ReminderFragment extends BaseFragment<IReminderView, ReminderPresen
                     Config.Reminder reminder = mReminderList.get(position);
                     reminder.setRemindSwitch(aSwitch.isChecked());
                     if (aSwitch.isChecked()) {
-                        mPresenter.setReminder(_mActivity, mReminderList.get(position));
+                        mPresenter.setReminder(requireActivity(), mReminderList.get(position));
                     } else {
-                        mPresenter.cancelReminder(_mActivity, mReminderList.get(position));
+                        mPresenter.cancelReminder(requireActivity(), mReminderList.get(position));
                     }
                     //更新数据库
                     mPresenter.updateReminder(position, reminder);
@@ -175,7 +176,7 @@ public class ReminderFragment extends BaseFragment<IReminderView, ReminderPresen
             public void onClick(DialogInterface dialog, int which) {
                 //ok 添加(更新)一条提醒记录
                 mPresenter.addReminder(reminder);
-                mPresenter.setReminder(_mActivity, reminder);
+                mPresenter.setReminder(requireActivity(), reminder);
 
             }
         }, getFragmentManager());

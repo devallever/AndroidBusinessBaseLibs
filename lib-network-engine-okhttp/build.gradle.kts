@@ -14,5 +14,5 @@ android {
 dependencies {
     api(project(":core"))
     api(project(":lib-network-core"))
-    implementation(libs.okhttp)
+    api(libs.okhttp)
 }

@@ -10,6 +10,7 @@ import android.speech.tts.TextToSpeech;
 
 import androidx.annotation.Nullable;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.allever.lose.weight.MyApplication;
 import com.dinuscxj.progressbar.CircleProgressBar;
 import com.allever.lose.weight.R;
 import com.allever.lose.weight.util.Constant;
@@ -86,7 +88,11 @@ public class ActionNextFragment extends BaseFragment<IActionNextView, ActionNext
             public void onClick(View v) {
                 mValueAnimator.cancel();
                 mAnimationDrawable.stop();
-                startWithPop(ActionFragment.newInstance(mDayId, mActionId));
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constant.EXTRA_DAY_ID, mDayId);
+                bundle.putInt(Constant.EXTRA_ACTION_ID, mActionId);
+                MyApplication.startFragment(ActionFragment.class, bundle);
+                finish();
             }
         });
 
@@ -113,13 +119,13 @@ public class ActionNextFragment extends BaseFragment<IActionNextView, ActionNext
     private void initView() {
         mCircleProgressBar.setMax(mTime * 1000);
 
-        mExitDialog = new ExitActionDialog.Builder(_mActivity)
+        mExitDialog = new ExitActionDialog.Builder(requireActivity())
                 .setExitListener(new ExitActionDialog.ClickListener() {
                     @Override
                     public void onClick(BaseDialog dialog) {
                         mDialogOption = DIALOG_EXIT;
                         hideExitDialog();
-                        _mActivity.onBackPressed();
+                        requireActivity().onBackPressed();
                         mPresenter.saveExerciseRecord(mDayId);
                         EventBus.getDefault().post(Constant.EVENT_REFRESH_VIEW);
                     }
@@ -138,7 +144,7 @@ public class ActionNextFragment extends BaseFragment<IActionNextView, ActionNext
                     public void onClick(BaseDialog dialog) {
                         mDialogOption = DIALOG_DELAY;
                         hideExitDialog();
-                        _mActivity.onBackPressed();
+                        requireActivity().onBackPressed();
                         mPresenter.saveExerciseRecord(mDayId);
                         EventBus.getDefault().post(Constant.EVENT_REFRESH_VIEW);
                     }
@@ -200,7 +206,11 @@ public class ActionNextFragment extends BaseFragment<IActionNextView, ActionNext
                 mValueAnimator.cancel();
                 if (mCurrentProgress == mTime * 1000) {
                     //release
-                    startWithPop(ActionFragment.newInstance(mDayId, mActionId));
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(Constant.EXTRA_DAY_ID, mDayId);
+                    bundle.putInt(Constant.EXTRA_ACTION_ID, mActionId);
+                    MyApplication.startFragment(ActionFragment.class, bundle);
+                    finish();
                 }
             }
         });
@@ -215,15 +225,16 @@ public class ActionNextFragment extends BaseFragment<IActionNextView, ActionNext
         mExitDialog.hide();
     }
 
+
     @Override
-    public boolean onBackPressedSupport() {
+    public void onBackPressed() {
         if (mDialogOption == DIALOG_CLOSE) {
             showExitDialog();
             mValueAnimator.cancel();
             mAnimationDrawable.stop();
-            return true;
+        } else {
+            finish();
         }
-        return super.onBackPressedSupport();
     }
 
     @Override

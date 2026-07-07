@@ -7,6 +7,8 @@ import android.os.Message;
 import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 
+import app.allever.android.lib.core.ext.LoggerKt;
+
 
 /**
  * @author allever
@@ -59,6 +61,7 @@ public abstract class BaseDialog implements DialogInterface.OnShowListener, Dial
 	}
 	
 	private void showDialog(boolean cancelable) {
+		LoggerKt.log("showDialog: " + this.getClass().getSimpleName());
 		if (mDialog == null) {
 			mDialog = new AlertDialog.Builder(mActivity).create();
 			
@@ -72,7 +75,9 @@ public abstract class BaseDialog implements DialogInterface.OnShowListener, Dial
 		}
 		
 		if (!mDialog.isShowing()) {
-			mDialog.show();
+			if (mActivity != null && (!mActivity.isFinishing() && !mActivity.isDestroyed())) {
+				mDialog.show();
+			}
 			mHandler.removeMessages(MSG_DIALOG_HIDE);
 		}
 	}

@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.core.helper.HandlerHelper
+import app.allever.android.lib.core.helper.ViewHelper
 
 abstract class AbstractFragment : Fragment() {
 
@@ -40,5 +42,17 @@ abstract class AbstractFragment : Fragment() {
 
     open fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         return false
+    }
+
+    open fun onBackPressed() {
+        finish()
+    }
+
+    protected fun finish() {
+        requireActivity().finish()
+    }
+
+    protected fun adaptStatusBar(view: View) {
+        ViewHelper.setMarginTop(view, DisplayHelper.getStatusBarHeight(requireContext()))
     }
 }

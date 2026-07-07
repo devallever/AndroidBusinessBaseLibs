@@ -102,6 +102,7 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
         mTvAccount = view.findViewById(R.id.id_sync_tv_account);
         mTvSyncTime = view.findViewById(R.id.id_sync_tv_sync_time);
         mTvLanguageSetting = view.findViewById(R.id.id_fg_setting_tv_language_setting_setting);
+        adaptStatusBar(mToolbar);
 
         testVoice.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,13 +126,13 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
         mTvHealthData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                start(new HealthDataFragment());
+                MyApplication.startFragment(HealthDataFragment.class, null);
             }
         });
         mTvUnitSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                start(new UnitSettingFragment());
+                MyApplication.startFragment(UnitSettingFragment.class, null);
             }
         });
         mTvLanguageSetting.setOnClickListener(new View.OnClickListener() {
@@ -143,20 +144,20 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
         mTvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent shareIntent = Util.getShareIntent(_mActivity);
+                Intent shareIntent = Util.getShareIntent(requireActivity());
                 startActivity(shareIntent);
             }
         });
         mTvDeleteAllData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(_mActivity)
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(requireActivity())
                         .setMessage(R.string.lw_delete_all_data)
                         .setPositiveButton(R.string.lw_ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mPresenter.deleteAllData();
-                                Util.restartApp(_mActivity, MainActivity.class);
+                                Util.restartApp(requireActivity(), MainActivity.class);
                             }
                         })
                         .setNegativeButton(R.string.lw_cancel, new DialogInterface.OnClickListener() {
@@ -171,13 +172,13 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
         mTvDownloadTts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Util.searchFromMarket(_mActivity, "text to speech");
+                Util.searchFromMarket(requireActivity(), "text to speech");
             }
         });
         mTvRateUs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Util.openAppInPlay(_mActivity, _mActivity.getPackageName());
+                Util.openAppInPlay(requireActivity(), requireActivity().getPackageName());
             }
         });
         selectEngine.setOnClickListener(new View.OnClickListener() {
@@ -189,13 +190,13 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
         mTvReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                start(new ReminderFragment());
+                MyApplication.startFragment(ReminderFragment.class, null);
             }
         });
         mTvFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.sendFeedBack(_mActivity);
+                mPresenter.sendFeedBack(requireActivity());
             }
         });
 
@@ -205,7 +206,7 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
         mSpeech = MyApplication.speechInstant();
         initDialog();
 
-        mPresenter.getLanguage(_mActivity);
+        mPresenter.getLanguage(requireActivity());
 
         mTvVersion.setText("Ver:1.0");
 
@@ -213,13 +214,13 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
     }
 
     private void initDialog() {
-        mLanguageDialog = new LanguageDialog(_mActivity, this);
-        mSoundDialog = new SoundOptionsFragment(_mActivity, this);
+        mLanguageDialog = new LanguageDialog(requireActivity(), this);
+        mSoundDialog = new SoundOptionsFragment(requireActivity(), this);
     }
 
 
     private void showTTSTestDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(_mActivity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         builder.setMessage(R.string.lw_voice_dialog_title);
         builder.setPositiveButton(R.string.lw_voice_dialog_can, new DialogInterface.OnClickListener() {
             @Override
@@ -230,7 +231,8 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
         builder.setNegativeButton(R.string.lw_voice_dialog_cant, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                extraTransaction().startDontHideSelf(TTSFragment.newInstance());
+                MyApplication.startFragment(TTSFragment.class, null);
+//                extraTransaction().startDontHideSelf(TTSFragment.newInstance());
             }
         });
         builder.show();
@@ -284,8 +286,8 @@ public class SettingsFragment extends BaseFragment<ISettingView, SettingPresente
         mPresenter.saveLanguage(id);
 
         //更新语言
-        Util.setLanguage(_mActivity);
-        Util.restartApp(_mActivity, MainActivity.class);
+        Util.setLanguage(requireActivity());
+        Util.restartApp(requireActivity(), MainActivity.class);
     }
 
 

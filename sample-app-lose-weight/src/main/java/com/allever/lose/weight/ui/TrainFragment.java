@@ -86,7 +86,7 @@ public class TrainFragment extends BaseMainFragment<ITrainView, TrainPresenter> 
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(_mActivity, ActionMainActivity.class);
+                Intent intent = new Intent(requireActivity(), ActionMainActivity.class);
                 intent.putExtra(Constant.EXTRA_DAY_ID, mDayInfoBeanList.get(position).getType());
                 intent.putExtra(Constant.EXTRA_DAY_TEXT, mDayInfoBeanList.get(position).getTitle());
                 startActivity(intent);

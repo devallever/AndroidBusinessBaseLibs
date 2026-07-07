@@ -13,13 +13,13 @@ import android.widget.Toast;
 import com.allever.lose.weight.R;
 import com.allever.lose.weight.ui.mvp.presenter.BasePresenter;
 
-import me.yokeyword.fragmentation.SupportFragment;
+import app.allever.android.lib.core.base.AbstractFragment;
 
 /**
  * Created by Mac on 18/3/1.
  */
 
-public abstract class BaseFragment<V, T extends BasePresenter<V>> extends SupportFragment {
+public abstract class BaseFragment<V, T extends BasePresenter<V>> extends AbstractFragment {
     protected T mPresenter;
 
     @Override
@@ -56,16 +56,16 @@ public abstract class BaseFragment<V, T extends BasePresenter<V>> extends Suppor
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                _mActivity.onBackPressed();
+                requireActivity().onBackPressed();
             }
         });
     }
 
     protected void showToast(String msg){
-        Toast.makeText(_mActivity, msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
     }
     protected void showToast(int msg){
-        Toast.makeText(_mActivity, msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 
     protected abstract T createPresenter();

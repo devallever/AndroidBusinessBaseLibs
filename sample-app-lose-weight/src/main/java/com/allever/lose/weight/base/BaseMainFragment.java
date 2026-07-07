@@ -13,13 +13,13 @@ import android.widget.Toast;
 import com.allever.lose.weight.R;
 import com.allever.lose.weight.ui.mvp.presenter.BasePresenter;
 
-import me.yokeyword.fragmentation.SupportFragment;
+import app.allever.android.lib.core.base.AbstractFragment;
 
 /**
  * Created by Mac on 2018/3/1.
  */
 
-public abstract  class BaseMainFragment<V, T extends BasePresenter<V>> extends SupportFragment {
+public abstract  class BaseMainFragment<V, T extends BasePresenter<V>> extends AbstractFragment {
     protected T mPresenter;
     protected OnFragmentOpenDrawerListener mOpenDraweListener;
 
@@ -73,13 +73,6 @@ public abstract  class BaseMainFragment<V, T extends BasePresenter<V>> extends S
 
     public interface OnFragmentOpenDrawerListener {
         void onOpenDrawer();
-    }
-
-    protected void showToast(String msg){
-        Toast.makeText(_mActivity, msg, Toast.LENGTH_SHORT).show();
-    }
-    protected void showToast(int msg){
-        Toast.makeText(_mActivity, msg, Toast.LENGTH_SHORT).show();
     }
 
     protected abstract T createPresenter();

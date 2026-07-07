@@ -39,13 +39,14 @@ public class UnitSettingFragment extends BaseFragment<IUnitSettingView, UnitSett
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = LayoutInflater.from(_mActivity).inflate(R.layout.lw_fragment_unit_setting, container, false);
+        View view = LayoutInflater.from(requireActivity()).inflate(R.layout.lw_fragment_unit_setting, container, false);
 
         mToolbar = view.findViewById(R.id.id_toolbar);
         mTvWeightUnit = view.findViewById(R.id.id_fg_unit_setting_tv_weight_unit);
         mLlWeightContainer = view.findViewById(R.id.id_fg_unit_setting_ll_weight_container);
         mTvHeightUnit = view.findViewById(R.id.id_fg_unit_setting_tv_height_unit);
         mLlHeightContainer = view.findViewById(R.id.id_fg_unit_setting_ll_height_container);
+        adaptStatusBar(mToolbar);
 
         mLlWeightContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,8 +70,8 @@ public class UnitSettingFragment extends BaseFragment<IUnitSettingView, UnitSett
 
 
     private void initDialog(){
-        mWeightUnitDialog = new WeightUnitDialog(_mActivity, this);
-        mHeightUnitDialog = new HeightUnitDialog(_mActivity, this);
+        mWeightUnitDialog = new WeightUnitDialog(requireActivity(), this);
+        mHeightUnitDialog = new HeightUnitDialog(requireActivity(), this);
     }
 
     @Override

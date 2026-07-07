@@ -70,7 +70,7 @@ public class RoutinesFragment extends BaseFragment<IRoutineView, RoutinePresente
         trainItemAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(_mActivity, ActionMainActivity.class);
+                Intent intent = new Intent(requireActivity(), ActionMainActivity.class);
                 intent.putExtra(Constant.EXTRA_DAY_ID, mRoutineItemList.get(position).getId());
                 intent.putExtra(Constant.EXTRA_DAY_TEXT, mRoutineItemList.get(position).getTitle());
                 startActivity(intent);

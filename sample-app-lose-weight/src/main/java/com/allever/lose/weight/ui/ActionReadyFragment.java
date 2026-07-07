@@ -8,6 +8,8 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import androidx.annotation.Nullable;
+
+import com.allever.lose.weight.MyApplication;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -90,6 +92,7 @@ public class ActionReadyFragment  extends BaseFragment<IActionReadyView, ActionR
         mBtnStartPause = view.findViewById(R.id.id_fg_action_ready_btn_start_pause);
         mTvSkip = view.findViewById(R.id.id_fg_action_ready_tv_skip);
         mTvDesc = view.findViewById(R.id.id_fg_action_ready_tv_desc);
+        adaptStatusBar(mToolbar);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -141,7 +144,11 @@ public class ActionReadyFragment  extends BaseFragment<IActionReadyView, ActionR
             public void onClick(View v) {
                 mValueAnimator.cancel();
                 mAnimationDrawable.stop();
-                startWithPop(ActionFragment.newInstance(mDayId,mActionId));
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constant.EXTRA_DAY_ID, mDayId);
+                bundle.putInt(Constant.EXTRA_ACTION_ID, mActionId);
+                MyApplication.startFragment(ActionFragment.class, bundle);
+                finish();
             }
         });
 
@@ -168,7 +175,11 @@ public class ActionReadyFragment  extends BaseFragment<IActionReadyView, ActionR
                 mValueAnimator.cancel();
                 if (mCurrentProgress == mTime*1000){
                     mPresenter.speak(getString(R.string.lw_start), TextToSpeech.QUEUE_FLUSH);
-                    startWithPop(ActionFragment.newInstance(mDayId, mActionId));
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(Constant.EXTRA_DAY_ID, mDayId);
+                    bundle.putInt(Constant.EXTRA_ACTION_ID, mActionId);
+                    MyApplication.startFragment(ActionFragment.class, bundle);
+                    finish();
                 }
             }
         });
@@ -199,13 +210,14 @@ public class ActionReadyFragment  extends BaseFragment<IActionReadyView, ActionR
         mTvTime.setText(time);
     }
 
+
     @Override
-    public boolean onBackPressedSupport() {
+    public void onDestroy() {
         //结束运动
         mPresenter.setEndTime();
         //保存记录
         mPresenter.saveExerciseRecord(mDayId);
         EventBus.getDefault().post(Constant.EVENT_REFRESH_VIEW);
-        return super.onBackPressedSupport();
+        super.onDestroy();
     }
 }

@@ -21,6 +21,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.allever.lose.weight.MyApplication;
 import com.allever.lose.weight.R;
 import com.allever.lose.weight.util.Constant;
 import com.allever.lose.weight.base.BaseDialog;
@@ -119,7 +120,7 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
         initView();
         initToolbar(mToolbar);
 
-        mReminderDialog = new RemindDialog(_mActivity, this);
+        mReminderDialog = new RemindDialog(requireActivity(), this);
         mReminderDialog.show();
 
         mPresenter.getTrainCount();
@@ -133,7 +134,7 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
     }
 
     protected void initView() {
-        mHeightWeightDialog = new HeightWeightDialog.Builder(_mActivity)
+        mHeightWeightDialog = new HeightWeightDialog.Builder(requireActivity())
                 .setOkBtn(getResources().getString(R.string.lw_next), new BaseDialog.ClickListener() {
                     @Override
                     public void onClick(BaseDialog dialog) {
@@ -143,7 +144,7 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
                 .setDataListener(ActionFinishFragment.this)
                 .build();
 
-        mYearDialog = new YearSelectDialog(_mActivity, new View.OnClickListener() {
+        mYearDialog = new YearSelectDialog(requireActivity(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mYearDialog.hide();
@@ -168,21 +169,21 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
         mTvRemind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                start(ReminderFragment.newInstance());
+                MyApplication.startFragment(ReminderFragment.class, null);
             }
         });
 
         mTvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                _mActivity.onBackPressed();
+                requireActivity().onBackPressed();
             }
         });
 
         mTvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent shareIntent = Util.getShareIntent(_mActivity);
+                Intent shareIntent = Util.getShareIntent(requireActivity());
                 startActivity(shareIntent);
             }
         });
@@ -369,11 +370,12 @@ public class ActionFinishFragment extends BaseFragment<IActionFinishView, Action
 
     }
 
+
     @Override
-    public boolean onBackPressedSupport() {
+    public void onDestroyView() {
+        super.onDestroyView();
         EventBus.getDefault().post(Constant.EVENT_START_HISTORY);
         EventBus.getDefault().post(Constant.EVENT_REFRESH_VIEW);
-        return super.onBackPressedSupport();
     }
 
     /**

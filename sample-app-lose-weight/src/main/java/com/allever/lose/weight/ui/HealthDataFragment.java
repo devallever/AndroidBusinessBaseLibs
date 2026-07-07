@@ -46,13 +46,14 @@ public class HealthDataFragment extends BaseFragment<IHealthDataView, HealthData
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = LayoutInflater.from(_mActivity).inflate(R.layout.lw_fragment_health_data, container, false);
+        View view = LayoutInflater.from(requireActivity()).inflate(R.layout.lw_fragment_health_data, container, false);
 
         mTvGender = view.findViewById(R.id.id_fg_health_data_tv_gender);
         mLlGenderContainer = view.findViewById(R.id.id_fg_health_data_ll_gender_container);
         mTvBirthday = view.findViewById(R.id.id_fg_health_data_tv_birthday);
         mLlBirthdayContainer = view.findViewById(R.id.id_fg_health_data_ll_birthday_container);
         mToolbar = view.findViewById(R.id.id_toolbar);
+        adaptStatusBar(mToolbar);
 
         mLlGenderContainer.setOnClickListener(v -> showGenderDialog());
         mLlBirthdayContainer.setOnClickListener(v -> showBirthdayDialog());
@@ -70,8 +71,8 @@ public class HealthDataFragment extends BaseFragment<IHealthDataView, HealthData
     }
 
     private void initDialog() {
-        mGenderDialog = new GenderDialog(_mActivity, this);
-        mBirthdayDialog = new DatePickerDialog(_mActivity, this,mYear,mMonth,mDay);
+        mGenderDialog = new GenderDialog(requireActivity(), this);
+        mBirthdayDialog = new DatePickerDialog(requireActivity(), this,mYear,mMonth,mDay);
 
     }
 

@@ -6,6 +6,7 @@ import android.speech.tts.TextToSpeech;
 
 import androidx.annotation.Nullable;
 
+import com.allever.lose.weight.MyApplication;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.widget.Toolbar;
@@ -104,6 +105,8 @@ public class ActionFragment extends BaseFragment<IActionView, ActionPresenter> i
         mIvVoice = view.findViewById(R.id.id_fg_action_iv_sound);
         bannerContainer = view.findViewById(R.id.bannerContainer);
 
+        adaptStatusBar(mToolbar);
+
 
         Bundle args = getArguments();
         if (args != null) {
@@ -126,15 +129,15 @@ public class ActionFragment extends BaseFragment<IActionView, ActionPresenter> i
 
 
     private void initDialog() {
-        mSoundDialog = new SoundDialog(_mActivity, this);
-        mExitDialog = new ExitActionDialog.Builder(_mActivity)
+        mSoundDialog = new SoundDialog(requireActivity(), this);
+        mExitDialog = new ExitActionDialog.Builder(requireActivity())
                 .setExitListener(new ExitActionDialog.ClickListener() {
                     @Override
                     public void onClick(BaseDialog dialog) {
                         mDialogOption = DIALOG_EXIT;
                         hideExitDialog();
                         mPresenter.stopAction();
-                        _mActivity.onBackPressed();
+                        requireActivity().onBackPressed();
                         mPresenter.saveExerciseRecord(mDayId);
                         EventBus.getDefault().post(Constant.EVENT_REFRESH_VIEW);
                         mPresenter.pauseTTS();
@@ -155,7 +158,7 @@ public class ActionFragment extends BaseFragment<IActionView, ActionPresenter> i
                         mDialogOption = DIALOG_DELAY;
                         hideExitDialog();
                         mPresenter.stopAction();
-                        _mActivity.onBackPressed();
+                        requireActivity().onBackPressed();
                         mPresenter.saveExerciseRecord(mDayId);
                         EventBus.getDefault().post(Constant.EVENT_REFRESH_VIEW);
                         mPresenter.pauseTTS();
@@ -170,7 +173,11 @@ public class ActionFragment extends BaseFragment<IActionView, ActionPresenter> i
                 //stop action
                 mPresenter.pauseAction();
                 int duration = mPresenter.getCurrentDurationTime();
-                start(ActionPauseFragment.newInstance(mDayId, mActionId, duration));
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constant.EXTRA_DAY_ID, mDayId);
+                bundle.putInt(Constant.EXTRA_ACTION_ID, mActionId);
+                bundle.putInt(Constant.EXTRA_DURATION, duration);
+                MyApplication.startFragment(ActionPauseFragment.class, bundle);
                 mPresenter.pauseTTS();
             }
         });
@@ -195,7 +202,7 @@ public class ActionFragment extends BaseFragment<IActionView, ActionPresenter> i
 
     @Override
     protected ActionPresenter createPresenter() {
-        return new ActionPresenter(_mActivity);
+        return new ActionPresenter(requireActivity());
     }
 
     @Override
@@ -295,7 +302,11 @@ public class ActionFragment extends BaseFragment<IActionView, ActionPresenter> i
     public void startNextFragment() {
         //添加训练进度
         mPresenter.saveActionScheduleRecord(mDayId, mActionId);
-        startWithPop(ActionNextFragment.newInstance(mDayId, mActionId));
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constant.EXTRA_DAY_ID, mDayId);
+        bundle.putInt(Constant.EXTRA_ACTION_ID, mActionId);
+        MyApplication.startFragment(ActionNextFragment.class, bundle);
+        finish();
     }
 
     @Override
@@ -306,17 +317,11 @@ public class ActionFragment extends BaseFragment<IActionView, ActionPresenter> i
         mPresenter.saveActionScheduleRecord(mDayId, mActionId);
         //添加训练记录
         mPresenter.saveExerciseRecord(mDayId);
-        startWithPop(ActionFinishFragment.newInstance(mDayId, mActionId));
-    }
-
-
-    @Override
-    public boolean onBackPressedSupport() {
-        if (mDialogOption == DIALOG_CLOSE) {
-            showExitDialog();
-            return true;
-        }
-        return super.onBackPressedSupport();
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constant.EXTRA_DAY_ID, mDayId);
+        bundle.putInt(Constant.EXTRA_ACTION_ID, mActionId);
+        MyApplication.startFragment(ActionFinishFragment.class, bundle);
+        finish();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -341,5 +346,10 @@ public class ActionFragment extends BaseFragment<IActionView, ActionPresenter> i
     @Override
     public void onSoundDialogCancel() {
         mPresenter.restartAction(mDayId, mActionId);
+    }
+
+    @Override
+    public void onBackPressed() {
+        showExitDialog();
     }
 }

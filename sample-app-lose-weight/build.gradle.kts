@@ -39,12 +39,6 @@ dependencies {
     //litepal
     implementation (libs.litepal.core)
 
-
-    // 如果想使用SwipeBack 滑动边缘退出Fragment/Activity功能，完整的添加规则如下：
-    implementation (libs.fragmentationx)
-// swipeback基于fragmentation, 如果是自定制SupportActivity/Fragment，则参照SwipeBackActivity/Fragment实现即可
-    implementation (libs.fragmentationx.swipeback)
-
 // Activity作用域的EventBus，更安全，可有效避免after onSavenInstanceState()异常
     implementation (libs.eventbus.activity.scope)
 

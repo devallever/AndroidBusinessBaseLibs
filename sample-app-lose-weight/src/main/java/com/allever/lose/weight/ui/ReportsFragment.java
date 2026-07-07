@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.allever.lose.weight.MyApplication;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
@@ -115,9 +116,8 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
             @Override
             public void onClick(View view) {
                 Log.i("ReportsFragment", "click");
-                if (getParentFragment() instanceof HomeFragment) {
-                    ((HomeFragment) getParentFragment()).extraTransaction().startDontHideSelf(WeightFragment.newInstance(ReportsFragment.this));
-                }
+                WeightFragment.setRecordListener(ReportsFragment.this);
+                MyApplication.startFragment(WeightFragment.class, null);
             }
         });
         mTvEditBmi.setOnClickListener(new View.OnClickListener() {
@@ -146,7 +146,7 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
     }
 
     private void initDialog() {
-        mHeightWeightDialog = new HeightWeightDialog.Builder(_mActivity)
+        mHeightWeightDialog = new HeightWeightDialog.Builder(requireActivity())
                 .setOkBtn(getResources().getString(R.string.lw_save), new BaseDialog.ClickListener() {
                     @Override
                     public void onClick(BaseDialog dialog) {
@@ -159,7 +159,7 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
     }
 
     private void setRecyclerView() {
-        LayoutInflater layoutInflater = LayoutInflater.from(_mActivity);
+        LayoutInflater layoutInflater = LayoutInflater.from(requireActivity());
         mAdapter = new HistoryItemAdapter(R.layout.lw_item_weekly_calendar_item, getItemData());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 7) {
             @Override
@@ -191,7 +191,7 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
             @Override
             public void onClick(View v) {
                 if (getParentFragment() instanceof HomeFragment) {
-                    ((HomeFragment) getParentFragment()).start(HistoryFragment.newInstance());
+                    MyApplication.startFragment(HistoryFragment.class, null);
                 }
             }
         });
@@ -297,15 +297,15 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
         // 设置x轴数据的位置
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         // 设置x轴数据偏移量
-        xAxis.setYOffset(DensityUtil.dip2px(_mActivity, 3f));
-        xAxis.setXOffset(DensityUtil.dip2px(_mActivity, 1f));
+        xAxis.setYOffset(DensityUtil.dip2px(requireActivity(), 3f));
+        xAxis.setXOffset(DensityUtil.dip2px(requireActivity(), 1f));
 
         YAxis yAxis = chart.getAxisLeft();
         // 设置y轴数据的位置
         yAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         // 设置y轴数据偏移量
-        yAxis.setXOffset(DensityUtil.dip2px(_mActivity, 3f));
-        yAxis.setYOffset(DensityUtil.dip2px(_mActivity, -1f));
+        yAxis.setXOffset(DensityUtil.dip2px(requireActivity(), 3f));
+        yAxis.setYOffset(DensityUtil.dip2px(requireActivity(), -1f));
 
         chart.invalidate();
     }
@@ -350,12 +350,12 @@ public class ReportsFragment extends BaseMainFragment<IReportView, ReportPresent
         lineDataSet.setDrawCircles(true);
         lineDataSet.setDrawCircleHole(false);
         lineDataSet.setCircleColor(getResources().getColor(R.color.lw_orange_500));
-        lineDataSet.setCircleSize(DensityUtil.dip2px(_mActivity, 1.2f));
+        lineDataSet.setCircleSize(DensityUtil.dip2px(requireActivity(), 1.2f));
         // 不显示坐标点的数据
         lineDataSet.setDrawValues(false);
         // 不显示定位线
         lineDataSet.setHighlightEnabled(false);
-        lineDataSet.setLineWidth(DensityUtil.dip2px(_mActivity, 0.5f));
+        lineDataSet.setLineWidth(DensityUtil.dip2px(requireActivity(), 0.5f));
 
         LineData data = new LineData(lineDataSet);
         chart.setData(data);

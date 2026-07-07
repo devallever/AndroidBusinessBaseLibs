@@ -71,6 +71,8 @@ dependencies {
     implementation(project(":sample-vpn"))
     implementation(project(":sample-cleaner"))
     implementation(project(":sample-ipc"))
+    implementation(project(":sample-im"))
+
 //    implementation(project(":sample-dj-csj"))
     implementation(project(":sample-app-charge-reward"))
     implementation(project(":sample-app-vpn-flash-tunnel"))

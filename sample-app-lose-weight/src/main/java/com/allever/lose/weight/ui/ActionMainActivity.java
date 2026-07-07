@@ -10,9 +10,10 @@ import com.allever.lose.weight.util.Util;
 
 import java.util.Locale;
 
-import me.yokeyword.fragmentation.SupportActivity;
+import app.allever.android.lib.core.base.AbstractActivity;
+import app.allever.android.lib.core.helper.FragmentHelper;
 
-public class ActionMainActivity extends SupportActivity {
+public class ActionMainActivity extends AbstractActivity {
     private static final String TAG = "ActionMainActivity";
     private static final String mDefaultTitle = "第一天";
 
@@ -27,8 +28,7 @@ public class ActionMainActivity extends SupportActivity {
             dayText = mDefaultTitle;
         }
 
-        loadRootFragment(R.id.id_main_fg_container, PreviewActionFragment.newInstance(dayId, dayText));
-        //loadRootFragment(R.id.id_main_fg_container, new ActionFinishFragment(dayId, 1));
+        FragmentHelper.INSTANCE.addToContainer(getSupportFragmentManager(), PreviewActionFragment.newInstance(dayId, dayText), R.id.id_main_fg_container);
 
     }
 

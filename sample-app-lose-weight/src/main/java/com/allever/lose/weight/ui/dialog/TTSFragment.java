@@ -10,13 +10,14 @@ import android.widget.TextView;
 
 import com.allever.lose.weight.R;
 import com.allever.lose.weight.util.Util;
-import me.yokeyword.fragmentation.SupportFragment;
+
+import app.allever.android.lib.core.base.AbstractFragment;
 
 /**
  * Created by Mac on 2018/3/7.
  */
 
-public class TTSFragment extends SupportFragment {
+public class TTSFragment extends AbstractFragment {
 
     TextView mDown;
     TextView mSetting;
@@ -34,7 +35,7 @@ public class TTSFragment extends SupportFragment {
         mDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Util.searchFromMarket(_mActivity,"text to speech");
+                Util.searchFromMarket(requireActivity(),"text to speech");
             }
         });
         mSetting.setOnClickListener(new View.OnClickListener() {

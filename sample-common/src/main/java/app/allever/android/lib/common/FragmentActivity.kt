@@ -2,8 +2,10 @@ package app.allever.android.lib.common
 
 import android.os.Bundle
 import android.text.TextUtils
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import app.allever.android.lib.common.databinding.ActivityBaseFragmentBinding
+import app.allever.android.lib.core.base.AbstractFragment
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.core.ui.EmptyFragment
@@ -15,12 +17,15 @@ class FragmentActivity :
     private var mDarkMode = false
 
     companion object {
-//        fun <T : Class<*>> start(title: String, clz: T) {
-//            ActivityHelper.startActivity<FragmentActivity> {
-//                putExtra("fragmentName", clz.name)
-//                putExtra("title", title)
-//            }
-//        }
+        fun <T : Class<*>> start(title: String, showTopBar: Boolean = true, darkMode: Boolean = false, bundle: Bundle? = null, clz: T) {
+            ActivityHelper.startActivity<FragmentActivity> {
+                putExtra("fragmentName", clz.name)
+                putExtra("title", title)
+                putExtra("showTopBar", showTopBar)
+                putExtra("darkMode", darkMode)
+                putExtra("fragmentArgs", bundle)
+            }
+        }
 
         inline fun <reified T> start(
             title: String,
@@ -62,6 +67,15 @@ class FragmentActivity :
     override fun init() {
         super.init()
         initTopBar(intent?.getStringExtra("title") ?: "FragmentActivity")
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val isAbsFragment = mFragment is AbstractFragment
+                if (isAbsFragment) {
+                    (mFragment as AbstractFragment).onBackPressed()
+                }
+            }
+        })
     }
 
     override fun showTopBar(): Boolean {

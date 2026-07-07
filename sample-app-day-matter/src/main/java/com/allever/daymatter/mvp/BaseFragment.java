@@ -60,7 +60,7 @@ public abstract class BaseFragment<V, T extends BasePresenter<V>> extends Abstra
 //        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                _mActivity.onBackPressed();
+//                requireActivity().onBackPressed();
 //            }
 //        });
     }

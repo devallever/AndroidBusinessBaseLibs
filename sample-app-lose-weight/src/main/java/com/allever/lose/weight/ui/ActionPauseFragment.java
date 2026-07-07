@@ -88,7 +88,7 @@ public class ActionPauseFragment extends BaseFragment<IActionPauseView, ActionPa
         mIvClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                _mActivity.onBackPressed();
+                requireActivity().onBackPressed();
             }
         });
     }
@@ -141,9 +141,8 @@ public class ActionPauseFragment extends BaseFragment<IActionPauseView, ActionPa
     }
 
     @Override
-    public boolean onBackPressedSupport() {
-        Log.d(TAG, "onBackPressedSupport: ");
+    public void onDestroyView() {
+        super.onDestroyView();
         EventBus.getDefault().post(Constant.EVENT_ON_RESTART_ACTION);
-        return super.onBackPressedSupport();
     }
 }

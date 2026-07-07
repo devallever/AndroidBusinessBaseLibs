@@ -39,7 +39,7 @@ public class HomeFragment extends BaseMainFragment<IHomeView, HomePresenter> imp
     private int mPageIndex;
 
 
-    public static HomeFragment newInstance() {
+    public static HomeFragment  newInstance() {
         return new HomeFragment();
     }
 
@@ -68,6 +68,7 @@ public class HomeFragment extends BaseMainFragment<IHomeView, HomePresenter> imp
 
         toolbar.setTitle(R.string.lw_app_bar_title);
         initToolbarNav(toolbar, true);
+        adaptStatusBar(toolbar);
 
 
         AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();

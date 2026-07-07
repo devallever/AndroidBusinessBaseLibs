@@ -18,13 +18,13 @@ import com.allever.lose.weight.R;
 import com.allever.lose.weight.data.DataSource;
 import com.allever.lose.weight.data.Repository;
 
-import me.yokeyword.fragmentation.SupportFragment;
+import app.allever.android.lib.core.base.AbstractFragment;
 
 /**
  * Created by Mac on 2018/3/7.
  */
 
-public class WeightFragment extends SupportFragment implements CalendarView.OnDateSelectedListener {
+public class WeightFragment extends AbstractFragment implements CalendarView.OnDateSelectedListener {
 
     CalendarView mCalendarView;
     CalendarLayout calendarLayout;
@@ -40,12 +40,8 @@ public class WeightFragment extends SupportFragment implements CalendarView.OnDa
     private int mYear;
     private static IWeightRecordListener mListener;
 
-    public static WeightFragment newInstance(IWeightRecordListener weightRecordListener) {
-        Bundle args = new Bundle();
-        WeightFragment fragment = new WeightFragment();
-        fragment.setArguments(args);
+    public static void setRecordListener(IWeightRecordListener weightRecordListener) {
         mListener = weightRecordListener;
-        return fragment;
     }
 
     @Nullable
@@ -62,7 +58,7 @@ public class WeightFragment extends SupportFragment implements CalendarView.OnDa
         editWeight = view.findViewById(R.id.edit_weight);
 
         cancel.setOnClickListener(v -> {
-            pop();
+            requireActivity().finish();
         });
         save.setOnClickListener(v -> {
             if (mListener != null){
@@ -70,11 +66,11 @@ public class WeightFragment extends SupportFragment implements CalendarView.OnDa
                 if (valueStr.isEmpty()) valueStr = "0";
                 double weight = Double.valueOf(valueStr);
                 if (weight < 0){
-                    Toast.makeText(_mActivity, _mActivity.getResources().getString(R.string.weight_not_allow), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireActivity(), requireActivity().getResources().getString(R.string.weight_not_allow), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 mListener.onSaveClick(weight, mYear, mMonth, mDay);
-                pop();
+                requireActivity().finish();
             }
         });
 

@@ -59,6 +59,7 @@ public class HistoryFragment extends BaseFragment<IHistoryView, HistoryPresenter
         mTextLunar = view.findViewById(R.id.tv_lunar);
         rlTool = view.findViewById(R.id.rl_tool);
         mCalendarView = view.findViewById(R.id.calendarView);
+        adaptStatusBar(mToolbar);
 
         initView();
 
@@ -72,10 +73,10 @@ public class HistoryFragment extends BaseFragment<IHistoryView, HistoryPresenter
         initToolbar(mToolbar,R.string.lw_history);
 
         mAdapter = new ExerciseRecordItemAdapter(mExerciseRecordItemList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(_mActivity));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(_mActivity, DividerItemDecoration.VERTICAL_LIST));
+        recyclerView.addItemDecoration(new DividerItemDecoration(requireActivity(), DividerItemDecoration.VERTICAL_LIST));
 
     }
 
