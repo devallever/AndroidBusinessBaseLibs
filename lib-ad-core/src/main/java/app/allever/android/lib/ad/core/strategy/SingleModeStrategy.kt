@@ -56,7 +56,7 @@ class SingleModeStrategy : BaseModeStrategy() {
         AdLog.logMessage("Starting preload for ${adType.name}", adType = adType, strategyName = TAG, isPreload = true, providerType = adManager.loadMode.name, action = "Preloading")
 
         val preloadCallback = object : IAdCallback {
-            override fun onAdLoaded() {
+            override fun onAdLoadedWithPrice(eCPM: Double) {
                 pendingCallbacks.remove(this)
                 AdLog.logMessage("${adType.name} preloaded successfully and cached", adType = adType, strategyName = TAG, isPreload = true, success = true)
             }

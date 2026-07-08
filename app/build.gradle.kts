@@ -72,6 +72,7 @@ dependencies {
     implementation(project(":sample-cleaner"))
     implementation(project(":sample-ipc"))
     implementation(project(":sample-im"))
+    implementation(project(":sample-bluetooth"))
 
 //    implementation(project(":sample-dj-csj"))
     implementation(project(":sample-app-charge-reward"))

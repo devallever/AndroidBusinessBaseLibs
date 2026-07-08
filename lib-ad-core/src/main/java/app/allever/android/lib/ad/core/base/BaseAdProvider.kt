@@ -106,7 +106,7 @@ abstract class BaseAdProvider : IAdProvider {
                         adType = adType,
                     )
                     doLoadAd(activity, adType, adId, object : IAdCallback {
-                        override fun onAdLoaded() {
+                        override fun onAdLoadedWithPrice(eCPM: Double) {
                             AdLog.logMessage(
                                 message = "${adType.name} reloaded successfully after expiration",
                                 providerType = providerType,

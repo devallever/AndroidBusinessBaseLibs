@@ -41,5 +41,8 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextDetailClickItem("IM", "sample-im") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_IM).navigation()
         },
+        TextDetailClickItem("蓝牙", "sample-bluetooth") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_BLUETOOTH).navigation()
+        },
     )
 }
