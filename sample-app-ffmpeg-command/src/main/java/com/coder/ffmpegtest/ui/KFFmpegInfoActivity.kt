@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.allever.android.lib.core.base.AbstractActivity
 import com.coder.ffmpeg.annotation.MediaAttribute
 import com.coder.ffmpeg.jni.FFmpegCommand
 import com.coder.ffmpegtest.R
@@ -22,7 +23,7 @@ import java.util.*
  * @author: AnJoiner
  * @datetime: 20-4-8
  */
-class KFFmpegInfoActivity : AppCompatActivity() {
+class KFFmpegInfoActivity : AbstractActivity() {
 
     private var mAudioPath: String? = null
     private var mVideoPath: String? = null
@@ -35,6 +36,7 @@ class KFFmpegInfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ffc_activity_ffmpeg_info)
+        adaptStatusBar(findViewById(android.R.id.content))
         init()
     }
 

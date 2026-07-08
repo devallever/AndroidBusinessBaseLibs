@@ -13,6 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.allever.android.lib.core.base.AbstractActivity
 import com.coder.ffmpeg.annotation.Direction
 import com.coder.ffmpeg.annotation.ImageFormat
 import com.coder.ffmpeg.annotation.MediaAttribute
@@ -37,7 +38,7 @@ import java.util.*
  * @author: AnJoiner
  * @datetime: 20-1-23
  */
-class KFFmpegCommandActivity : AppCompatActivity() {
+class KFFmpegCommandActivity : AbstractActivity() {
 
     private var mAudioPath: String? = null
     private var mVideoPath: String? = null
@@ -56,6 +57,7 @@ class KFFmpegCommandActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ffc_activity_ffmpeg_command)
+        adaptStatusBar(findViewById(R.id.tvCmd))
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),

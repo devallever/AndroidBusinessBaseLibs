@@ -7,10 +7,11 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import app.allever.android.lib.core.base.AbstractActivity
 import com.coder.ffmpegtest.R
 
 @SuppressLint("NonConstantResourceId")
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AbstractActivity(), View.OnClickListener {
     var mCommandBtn: Button? = null
     var mInfoBtn: Button? = null
     var mFormatBtn: Button? = null

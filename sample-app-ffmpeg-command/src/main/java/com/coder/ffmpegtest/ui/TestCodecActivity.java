@@ -12,7 +12,9 @@ import com.coder.ffmpegtest.R;
 
 import java.io.File;
 
-public class TestCodecActivity extends AppCompatActivity {
+import app.allever.android.lib.core.base.AbstractActivity;
+
+public class TestCodecActivity extends AbstractActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

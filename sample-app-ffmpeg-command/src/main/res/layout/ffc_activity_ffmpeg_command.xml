@@ -4,14 +4,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:background="@color/ffc_colorPrimary"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:id="@+id/tvCmd"
+    <FrameLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"/>
+        android:background="@color/ffc_colorPrimary"
+        android:padding="5dp">
+        <TextView
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:id="@+id/tvCmd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </FrameLayout>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"

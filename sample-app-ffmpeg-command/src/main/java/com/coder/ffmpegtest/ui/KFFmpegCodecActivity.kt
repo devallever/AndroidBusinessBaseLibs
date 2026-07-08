@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.allever.android.lib.core.base.AbstractActivity
 import com.coder.ffmpeg.annotation.CodecAttribute
 import com.coder.ffmpeg.jni.FFmpegCommand
 import com.coder.ffmpegtest.R
@@ -20,7 +21,7 @@ import java.util.ArrayList
  * @author: AnJoiner
  * @datetime: 20-11-14
  */
-class KFFmpegCodecActivity : AppCompatActivity(){
+class KFFmpegCodecActivity : AbstractActivity(){
 
     private var mRecyclerView: RecyclerView? = null
     private var tvContent: TextView? = null
@@ -30,7 +31,7 @@ class KFFmpegCodecActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ffc_activity_ffmpeg_codec)
-
+        adaptStatusBar(findViewById(android.R.id.content))
         init()
     }
 
