@@ -38,8 +38,8 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextDetailClickItem("多进程通信-IPC", "sample-ipc") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_IPC).navigation()
         },
-        TextDetailClickItem("30天减肥", "sample-app-lose-weight") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_LOSE_WEIGHT).navigation()
+        TextDetailClickItem("IM", "sample-im") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_IM).navigation()
         },
     )
 }

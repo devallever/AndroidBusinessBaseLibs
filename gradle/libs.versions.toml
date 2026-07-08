@@ -4,6 +4,7 @@ androidMapsUtils = "2.3.0"
 cardview = "1.0.0"
 compileSdk = "35"
 gridlayout = "1.0.0"
+javaWebsocket = "1.6.0"
 kotlinReflectVersion = "1.5.10"
 minSdk = "24"
 places = "3.5.0"
@@ -323,6 +324,7 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 litepal-core = { module = "org.litepal.guolindev:core", version.ref = "litepalCore" }
 easyhttp = { module = "com.github.getActivity:EasyHttp", version.ref = "easyhttp" }
 magic-viewpager = { module = "com.zhy:magic-viewpager", version.ref = "magicViewpager" }
+java-websocket = { module = "org.java-websocket:Java-WebSocket", version.ref = "javaWebsocket" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
