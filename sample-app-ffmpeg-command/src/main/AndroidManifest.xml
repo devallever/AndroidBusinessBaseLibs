@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.coder.ffmpegtest">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+
+    <application>
+        <activity android:name=".ui.MainActivity"
+            android:screenOrientation="portrait"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!--通过命令行执行-->
+        <activity android:name=".ui.KFFmpegCommandActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+        <!--获取视频信息-->
+        <activity android:name=".ui.KFFmpegInfoActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--获取支持格式-->
+        <activity android:name=".ui.KFFmppegFormatActivity"
+            android:screenOrientation="portrait"/>
+
+        <!--获取支持编码-->
+        <activity android:name=".ui.KFFmpegCodecActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.TestCodecActivity"
+            android:screenOrientation="portrait"/>
+
+        <service android:name=".service.FFmpegCommandService" />
+        <service android:name=".service.FFmpegCommandService2" android:process=":ffmpegCommand2" />
+    </application>
+
+</manifest>
