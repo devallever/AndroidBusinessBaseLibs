@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.allever.android.lib.core.base.AbstractActivity
@@ -52,10 +51,10 @@ class KFFmpegInfoActivity : AbstractActivity() {
     }
 
     private fun initData() {
-        FileUtils.copy2Memory(this, "test.mp3")
-        FileUtils.copy2Memory(this, "test.mp4")
-        mAudioPath = File(externalCacheDir, "test.mp3").absolutePath
-        mVideoPath = File(externalCacheDir, "test.mp4").absolutePath
+        FileUtils.copy2Memory(this, "ffc_test.mp3")
+        FileUtils.copy2Memory(this, "ffc_test.mp4")
+        mAudioPath = File(externalCacheDir, "ffc_test.mp3").absolutePath
+        mVideoPath = File(externalCacheDir, "ffc_test.mp4").absolutePath
         val commands = this.resources.getStringArray(R.array.ffc_infos)
         val beans: MutableList<CommandBean> = ArrayList()
         for (i in commands.indices) {

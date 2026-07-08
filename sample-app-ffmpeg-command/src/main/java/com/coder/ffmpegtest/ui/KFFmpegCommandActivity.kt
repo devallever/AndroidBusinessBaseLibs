@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -79,14 +78,14 @@ class KFFmpegCommandActivity : AbstractActivity() {
     }
 
     private fun initData() {
-        FileUtils.copy2Memory(this, "test.mp3")
-        FileUtils.copy2Memory(this, "test.mp4")
-        FileUtils.copy2Memory(this, "testbg.mp3")
-        FileUtils.copy2Memory(this, "water.png")
-        mAudioPath = File(externalCacheDir, "test.mp3").absolutePath
-        mVideoPath = File(externalCacheDir, "test.mp4").absolutePath
-        mAudioBgPath = File(externalCacheDir, "testbg.mp3").absolutePath
-        mImagePath = File(externalCacheDir, "water.png").absolutePath
+        FileUtils.copy2Memory(this, "ffc_test.mp3")
+        FileUtils.copy2Memory(this, "ffc_test.mp4")
+        FileUtils.copy2Memory(this, "ffc_testbg.mp3")
+        FileUtils.copy2Memory(this, "ffc_water.png")
+        mAudioPath = File(externalCacheDir, "ffc_test.mp3").absolutePath
+        mVideoPath = File(externalCacheDir, "ffc_test.mp4").absolutePath
+        mAudioBgPath = File(externalCacheDir, "ffc_testbg.mp3").absolutePath
+        mImagePath = File(externalCacheDir, "ffc_water.png").absolutePath
         val commands = this.resources.getStringArray(R.array.ffc_commands)
         val beans: MutableList<CommandBean> = ArrayList()
         for (i in commands.indices) {
@@ -172,7 +171,7 @@ class KFFmpegCommandActivity : AbstractActivity() {
 
 
     private fun cutAudio() {
-        targetPath = externalCacheDir.toString() + File.separator + "target.mp3"
+        targetPath = externalCacheDir.toString() + File.separator + "ffc_target.mp3"
         GlobalScope.launch {
             FFmpegCommand.runCmd(FFmpegUtils.cutAudio(mAudioPath, 5, 10, targetPath), callback("音频剪切完成", targetPath))
         }
@@ -187,7 +186,7 @@ class KFFmpegCommandActivity : AbstractActivity() {
 
 
     private fun concatAudio() {
-        targetPath = externalCacheDir.toString() + File.separator + "target.mp3"
+        targetPath = externalCacheDir.toString() + File.separator + "ffc_target.mp3"
         GlobalScope.launch {
             FFmpegCommand.runCmd(FFmpegUtils.concatAudio(mAudioPath, mAudioPath, targetPath), callback("音频拼接完成", targetPath))
         }
@@ -210,7 +209,7 @@ class KFFmpegCommandActivity : AbstractActivity() {
      * 变更声音
      */
     private fun reduceAudio() {
-        targetPath = externalCacheDir.toString() + File.separator + "target.mp3"
+        targetPath = externalCacheDir.toString() + File.separator + "ffc_target.mp3"
         GlobalScope.launch {
             FFmpegCommand.runCmd(FFmpegUtils.changeVolume(mAudioBgPath, 0.5f, targetPath), callback("音频降音完成", targetPath))
         }
@@ -348,7 +347,7 @@ class KFFmpegCommandActivity : AbstractActivity() {
     }
 
     private fun mixAudio() {
-        targetPath = externalCacheDir.toString() + File.separator + "target.mp3"
+        targetPath = externalCacheDir.toString() + File.separator + "ffc_target.mp3"
         GlobalScope.launch {
             FFmpegCommand.runCmd(FFmpegUtils.mixAudio(mAudioPath, mAudioBgPath, targetPath), callback("音频混合完成", targetPath))
         }
@@ -398,14 +397,14 @@ class KFFmpegCommandActivity : AbstractActivity() {
 
 
     private fun fadeIn() {
-        targetPath = externalCacheDir.toString() + File.separator + "target.mp3"
+        targetPath = externalCacheDir.toString() + File.separator + "ffc_target.mp3"
         GlobalScope.launch {
             FFmpegCommand.runCmd(FFmpegUtils.audioFadeIn(mAudioPath, targetPath), callback("音频淡入完成", targetPath))
         }
     }
 
     private fun fadeOut() {
-        targetPath = externalCacheDir.toString() + File.separator + "target.mp3"
+        targetPath = externalCacheDir.toString() + File.separator + "ffc_target.mp3"
         GlobalScope.launch {
             FFmpegCommand.runCmd(FFmpegUtils.audioFadeOut(mAudioPath, targetPath, 34, 5), callback("音频淡出完成", targetPath))
         }
@@ -459,7 +458,7 @@ class KFFmpegCommandActivity : AbstractActivity() {
     }
 
     private fun audio2Mp3lame() {
-        targetPath = externalCacheDir.toString() + File.separator + "target.mp3"
+        targetPath = externalCacheDir.toString() + File.separator + "ffc_target.mp3"
         val aac = externalCacheDir.toString() + File.separator + "target.aac"
         if (!File(aac).exists()) {
             ToastUtils.show("请先执行音频转fdk_aac")
@@ -513,7 +512,7 @@ class KFFmpegCommandActivity : AbstractActivity() {
     }
 
     private fun makeMuteAudio() {
-        targetPath = externalCacheDir.toString() + File.separator + "target.mp3"
+        targetPath = externalCacheDir.toString() + File.separator + "ffc_target.mp3"
         GlobalScope.launch {
             FFmpegCommand.runCmd(FFmpegUtils.makeMuteAudio(targetPath), callback("生成静音文件成功", targetPath))
         }
