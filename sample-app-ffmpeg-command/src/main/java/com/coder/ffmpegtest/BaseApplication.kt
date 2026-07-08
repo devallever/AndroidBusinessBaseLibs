@@ -1,23 +1,19 @@
 package com.coder.ffmpegtest
 
 import android.app.Application
+import app.allever.android.lib.core.app.App
 import com.coder.ffmpeg.jni.FFmpegCommand
-import com.tencent.bugly.crashreport.CrashReport
 
 /**
  * @author: AnJoiner
  * @datetime: 19-12-20
  */
-class BaseApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        instance = this
-        FFmpegCommand.setDebug(true)
-        CrashReport.initCrashReport(applicationContext, "d7b0e14940", true)
-    }
+object BaseApplication {
+    var instance: Application? = null
+        private set
 
-    companion object {
-        var instance: BaseApplication? = null
-            private set
+     fun onCreate() {
+        instance = App.app
+        FFmpegCommand.setDebug(true)
     }
 }

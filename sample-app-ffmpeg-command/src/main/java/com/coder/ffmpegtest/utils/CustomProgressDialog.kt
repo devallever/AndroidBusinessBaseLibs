@@ -11,7 +11,7 @@ import android.widget.TextView
 import com.coder.ffmpegtest.R
 import java.lang.ref.WeakReference
 
-class CustomProgressDialog private constructor(context: Context, message: CharSequence?) : Dialog(context, R.style.CustomProgressDialog), DialogInterface.OnCancelListener {
+class CustomProgressDialog private constructor(context: Context, message: CharSequence?) : Dialog(context, R.style.ffc_CustomProgressDialog), DialogInterface.OnCancelListener {
     private var mContext = WeakReference<Context?>(null)
     private val mMessageText: TextView
     override fun onCancel(dialog: DialogInterface) {
@@ -71,7 +71,7 @@ class CustomProgressDialog private constructor(context: Context, message: CharSe
 
     init {
         mContext = WeakReference(context)
-        val view = LayoutInflater.from(mContext.get()).inflate(R.layout.dialog_custom_progress,
+        val view = LayoutInflater.from(mContext.get()).inflate(R.layout.ffc_dialog_custom_progress,
                 null)
         mMessageText = view.findViewById(R.id.tv_message)
         if (!TextUtils.isEmpty(message)) {

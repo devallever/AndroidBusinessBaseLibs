@@ -23,7 +23,7 @@
             android:layout_width="100dp"
             android:text="支持编码"
             android:inputType="text"
-            android:background="@drawable/shape_button_border"
+            android:background="@drawable/ffc_shape_button_border"
             android:layout_height="100dp"/>
 
 
@@ -33,7 +33,7 @@
             android:text="支持格式"
             android:layout_marginLeft="10dp"
             android:inputType="text"
-            android:background="@drawable/shape_button_border"
+            android:background="@drawable/ffc_shape_button_border"
             android:layout_height="100dp"/>
 
     </LinearLayout>
@@ -50,7 +50,7 @@
             android:layout_width="100dp"
             android:text="Command"
             android:inputType="text"
-            android:background="@drawable/shape_button_border"
+            android:background="@drawable/ffc_shape_button_border"
             android:layout_height="100dp"/>
 
 
@@ -59,7 +59,7 @@
             android:layout_width="100dp"
             android:layout_marginLeft="10dp"
             android:text="媒体信息"
-            android:background="@drawable/shape_button_border"
+            android:background="@drawable/ffc_shape_button_border"
             android:layout_height="100dp"/>
 
 

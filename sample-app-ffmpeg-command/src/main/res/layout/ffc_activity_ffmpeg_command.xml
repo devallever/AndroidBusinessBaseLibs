@@ -4,6 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:background="@color/ffc_colorPrimary"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:id="@+id/tvCmd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"
@@ -15,12 +24,12 @@
         android:paddingTop="10dp"
         android:paddingStart="10dp"
         android:layout_marginTop="10dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/ffc_colorPrimary"
         android:paddingEnd="10dp"
         android:layout_height="80dp">
         <TextView
             android:layout_width="wrap_content"
-            android:text="@string/str_output_result"
+            android:text="@string/str_output_dir"
             android:textColor="@color/white"
             android:layout_height="wrap_content"/>
 

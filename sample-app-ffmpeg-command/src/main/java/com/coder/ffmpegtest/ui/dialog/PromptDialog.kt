@@ -30,7 +30,7 @@ class PromptDialog : BaseDialog(),View.OnClickListener {
     }
 
     override val layoutId: Int
-        get() = R.layout.dialog_prompt
+        get() = R.layout.ffc_dialog_prompt
 
     override fun init() {
         initView()

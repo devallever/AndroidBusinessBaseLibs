@@ -9,7 +9,7 @@ import com.coder.ffmpegtest.BaseApplication
  */
 object ToastUtils {
     fun show(msg: String?) {
-        Toast.makeText(BaseApplication.Companion.instance?.getApplicationContext(), msg,
+        Toast.makeText(BaseApplication.instance?.applicationContext, msg,
                 Toast.LENGTH_SHORT).show()
     }
 }

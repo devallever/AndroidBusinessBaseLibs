@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.coder.ffmpegtest">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -13,11 +12,6 @@
         <activity android:name=".ui.MainActivity"
             android:screenOrientation="portrait"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <!--通过命令行执行-->
         <activity android:name=".ui.KFFmpegCommandActivity"
@@ -39,6 +33,7 @@
 
         <activity android:name=".ui.TestCodecActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name="app.allever.android.sample.app.ffmpeg.command.SampleFFMpegCommandActivity" />
 
         <service android:name=".service.FFmpegCommandService" />
         <service android:name=".service.FFmpegCommandService2" android:process=":ffmpegCommand2" />

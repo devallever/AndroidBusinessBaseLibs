@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:minHeight="200dp"
         android:layout_margin="10dp"
-        android:background="@drawable/shape_button_border"
+        android:background="@drawable/ffc_shape_button_border"
         android:layout_height="wrap_content">
 
         <TextView

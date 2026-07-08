@@ -17,7 +17,7 @@ public class TestCodecActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_codec);
+        setContentView(R.layout.ffc_activity_test_codec);
 
         findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
             @Override

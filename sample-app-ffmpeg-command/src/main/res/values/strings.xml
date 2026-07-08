@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FFmpegCommand</string>
+    <string name="ffc_app_name">FFMpegCommand</string>
     <string name="str_transform_audio">音频转码</string>
     <string name="str_transform_video">视频转码</string>
     <string name="str_cut_audio">音频剪切</string>

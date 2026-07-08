@@ -34,7 +34,7 @@ class KFFmpegInfoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ffmpeg_info)
+        setContentView(R.layout.ffc_activity_ffmpeg_info)
         init()
     }
 
@@ -54,7 +54,7 @@ class KFFmpegInfoActivity : AppCompatActivity() {
         FileUtils.copy2Memory(this, "test.mp4")
         mAudioPath = File(externalCacheDir, "test.mp3").absolutePath
         mVideoPath = File(externalCacheDir, "test.mp4").absolutePath
-        val commands = this.resources.getStringArray(R.array.infos)
+        val commands = this.resources.getStringArray(R.array.ffc_infos)
         val beans: MutableList<CommandBean> = ArrayList()
         for (i in commands.indices) {
             beans.add(CommandBean(commands[i], i))

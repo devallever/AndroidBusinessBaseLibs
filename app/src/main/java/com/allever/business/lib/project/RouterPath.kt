@@ -73,5 +73,6 @@ class RouterPath {
         const val PATH_SAMPLE_APP_VIRTUAL_CALL = "/appvirtualcall/main"
         const val PATH_SAMPLE_APP_DAY_MATTER = "/appdaymatter/main"
         const val PATH_SAMPLE_APP_LOSE_WEIGHT = "/apploseweight/main"
+        const val PATH_SAMPLE_APP_FFMPEG_COMMAND = "/appffmpegcommand/main"
     }
 }

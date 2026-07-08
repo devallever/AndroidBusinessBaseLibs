@@ -1,19 +1,19 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="ffc_BaseAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/ffc_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/ffc_colorPrimaryDark</item>
+        <item name="colorAccent">@color/ffc_colorAccent</item>
     </style>
 
-    <style name="AppTheme" parent="BaseAppTheme">
+    <style name="AppTheme" parent="ffc_BaseAppTheme">
 
     </style>
 
 
-    <style name="CustomProgressDialog" parent="@android:style/Theme.Dialog">
+    <style name="ffc_CustomProgressDialog" parent="@android:style/Theme.Dialog">
         <!-- Dialog的windowFrame框为无 -->
         <item name="android:windowFrame">@null</item>
         <!-- 是否浮现在activity之上 -->

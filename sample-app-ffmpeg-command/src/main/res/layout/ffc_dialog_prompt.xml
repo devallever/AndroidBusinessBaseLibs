@@ -12,7 +12,7 @@
     <LinearLayout
         android:id="@+id/ll_view"
         android:layout_width="275dp"
-        android:background="@drawable/shape_dialog_prompt_bg"
+        android:background="@drawable/ffc_shape_dialog_prompt_bg"
         android:orientation="vertical"
         android:gravity="center_horizontal"
         android:paddingTop="20dp"
@@ -93,7 +93,7 @@
                 android:text="确定"
                 android:background="@android:color/transparent"
                 android:textSize="13sp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/ffc_colorPrimary"
                 android:layout_height="match_parent"/>
 
         </LinearLayout>

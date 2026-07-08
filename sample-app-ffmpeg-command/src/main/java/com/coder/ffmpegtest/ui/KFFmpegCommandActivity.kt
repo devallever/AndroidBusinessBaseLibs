@@ -55,7 +55,7 @@ class KFFmpegCommandActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ffmpeg_command)
+        setContentView(R.layout.ffc_activity_ffmpeg_command)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
@@ -85,7 +85,7 @@ class KFFmpegCommandActivity : AppCompatActivity() {
         mVideoPath = File(externalCacheDir, "test.mp4").absolutePath
         mAudioBgPath = File(externalCacheDir, "testbg.mp3").absolutePath
         mImagePath = File(externalCacheDir, "water.png").absolutePath
-        val commands = this.resources.getStringArray(R.array.commands)
+        val commands = this.resources.getStringArray(R.array.ffc_commands)
         val beans: MutableList<CommandBean> = ArrayList()
         for (i in commands.indices) {
             beans.add(CommandBean(commands[i], i))
@@ -569,7 +569,7 @@ class KFFmpegCommandActivity : AppCompatActivity() {
             }
 
             override fun onError(errorCode: Int, errorMsg: String?) {
-                Log.d("FFmpegCmd", errorMsg)
+                Log.d("FFmpegCmd", errorMsg?:"")
                 runOnUiThread {
                     ToastUtils.show(errorMsg)
                     mErrorDialog?.setContent(0)

@@ -29,7 +29,7 @@ class KFFmpegCodecActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ffmpeg_codec)
+        setContentView(R.layout.ffc_activity_ffmpeg_codec)
 
         init()
     }
@@ -49,7 +49,7 @@ class KFFmpegCodecActivity : AppCompatActivity(){
 
 
     private fun initData() {
-        val commands = this.resources.getStringArray(R.array.codecs)
+        val commands = this.resources.getStringArray(R.array.ffc_codecs)
         val beans: MutableList<CommandBean> = ArrayList()
         for (i in commands.indices) {
             beans.add(CommandBean(commands[i], i))

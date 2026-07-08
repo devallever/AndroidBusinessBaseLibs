@@ -19,7 +19,7 @@ class FFmpegCommandAdapter(private val mStrings: List<CommandBean>) : RecyclerVi
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FFmpegCommandViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_ffmpeg_command, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.ffc_adapter_ffmpeg_command, parent, false)
         return FFmpegCommandViewHolder(view)
     }
 

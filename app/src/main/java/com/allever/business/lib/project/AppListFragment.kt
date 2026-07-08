@@ -14,6 +14,9 @@ class AppListFragment: ListFragment<FragmentListBinding, ListViewModel, TextDeta
         Gravity.CENTER)
 
     override fun getList(): MutableList<TextDetailClickItem> = mutableListOf(
+        TextDetailClickItem("FFMpegCommand", "sample-app-ffmpeg-command") {
+            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_FFMPEG_COMMAND).navigation()
+        },
         TextDetailClickItem("30天减肥", "sample-app-lose-weight") {
             ARouter.getInstance().build(RouterPath.PATH_SAMPLE_APP_LOSE_WEIGHT).navigation()
         },
