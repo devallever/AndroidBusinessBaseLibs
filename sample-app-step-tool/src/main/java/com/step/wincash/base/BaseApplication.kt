@@ -61,13 +61,13 @@ object BaseApplication {
             InitManager.init(App.app)
             App.app.registerActivityLifecycleCallbacks(AppLifecycleCallback())
             NetworkHelper.setupNetworkCallback()
-            initStepLib()
+//            initStepLib()
             timer.setTickCallback {
                 WithdrawBusiness.updateRank()
             }
             FpManger.stepConfig
         } else {
-            initStepLibConfig()
+//            initStepLibConfig()
         }
     }
 

@@ -384,7 +384,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         if (!StepBusiness.hasRequirePermission(requireActivity())) {
             StepBusiness.requestPermission(requireActivity())
         } else {
-            StepTracker.startTrackingService()
+//            StepTracker.startTrackingService()
         }
     }
 

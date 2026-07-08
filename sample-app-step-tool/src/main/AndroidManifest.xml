@@ -2,32 +2,32 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+<!--    <uses-permission android:name="android.permission.INTERNET" />-->
+<!--    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>-->
 
-    <!--<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <!--<uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />-->
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
-    <!--Android 13及以上版本需要的通知权限-->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+<!--    &lt;!&ndash;<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
+<!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />&ndash;&gt;-->
+<!--    <uses-permission android:name="android.permission.WAKE_LOCK" />-->
+<!--    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />-->
+<!--    &lt;!&ndash;<uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />&ndash;&gt;-->
+<!--    <uses-permission android:name="android.permission.VIBRATE" />-->
+<!--    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />-->
+<!--    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />-->
+<!--    &lt;!&ndash;Android 13及以上版本需要的通知权限&ndash;&gt;-->
+<!--    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />-->
 
-    <!--android 10需添加这个权限，读取运动信息，需要动态申请-->
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+<!--    &lt;!&ndash;android 10需添加这个权限，读取运动信息，需要动态申请&ndash;&gt;-->
+<!--    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />-->
 
 
-    <!-- 协处理器计步权限 -->
-    <uses-feature android:name="android.hardware.sensor.accelerometer" />
-    <uses-feature
-        android:name="android.hardware.sensor.stepcounter"
-        android:required="true" />
-    <uses-feature
-        android:name="android.hardware.sensor.stepdetector"
-        android:required="true" />
+<!--    &lt;!&ndash; 协处理器计步权限 &ndash;&gt;-->
+<!--    <uses-feature android:name="android.hardware.sensor.accelerometer" />-->
+<!--    <uses-feature-->
+<!--        android:name="android.hardware.sensor.stepcounter"-->
+<!--        android:required="true" />-->
+<!--    <uses-feature-->
+<!--        android:name="android.hardware.sensor.stepdetector"-->
+<!--        android:required="true" />-->
 
     <application>
 
@@ -71,45 +71,45 @@
 
         <!-- stepLib -->
         <!--重构后的计步跟踪服务-->
-        <service
-            android:name="com.carefree.steplib.service.StepTrackingService"
-            android:enabled="true"
-            android:exported="false"
-            android:launchMode="singleInstance"
-            android:priority="1000"
-            android:process=":stepLib"
-            android:foregroundServiceType="health">
-            <intent-filter>
-                <!-- 系统启动完成后会调用 -->
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.DATE_CHANGED" />
-                <action android:name="android.intent.action.MEDIA_MOUNTED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-                <action android:name="android.intent.action.ACTION_TIME_TICK" />
-                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
-                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
-            </intent-filter>
-        </service>
+<!--        <service-->
+<!--            android:name="com.carefree.steplib.service.StepTrackingService"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="false"-->
+<!--            android:launchMode="singleInstance"-->
+<!--            android:priority="1000"-->
+<!--            android:process=":stepLib"-->
+<!--            android:foregroundServiceType="health">-->
+<!--            <intent-filter>-->
+<!--                &lt;!&ndash; 系统启动完成后会调用 &ndash;&gt;-->
+<!--                <action android:name="android.intent.action.BOOT_COMPLETED" />-->
+<!--                <action android:name="android.intent.action.DATE_CHANGED" />-->
+<!--                <action android:name="android.intent.action.MEDIA_MOUNTED" />-->
+<!--                <action android:name="android.intent.action.USER_PRESENT" />-->
+<!--                <action android:name="android.intent.action.ACTION_TIME_TICK" />-->
+<!--                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />-->
+<!--                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
 
-        <!--开机自启动-->
-        <receiver
-            android:name="com.carefree.steplib.step.StepBootCompleteReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
+<!--        &lt;!&ndash;开机自启动&ndash;&gt;-->
+<!--        <receiver-->
+<!--            android:name="com.carefree.steplib.step.StepBootCompleteReceiver"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="false">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.BOOT_COMPLETED" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
 
-        <!-- 关机广播 -->
-        <receiver
-            android:name="com.carefree.steplib.step.StepShutdownReceiver"
-            android:exported="true">
-            <intent-filter>
-                <!-- 关机广播 -->
-                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
-            </intent-filter>
-        </receiver>
+<!--        &lt;!&ndash; 关机广播 &ndash;&gt;-->
+<!--        <receiver-->
+<!--            android:name="com.carefree.steplib.step.StepShutdownReceiver"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                &lt;!&ndash; 关机广播 &ndash;&gt;-->
+<!--                <action android:name="android.intent.action.ACTION_SHUTDOWN" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
     </application>
 
 </manifest>

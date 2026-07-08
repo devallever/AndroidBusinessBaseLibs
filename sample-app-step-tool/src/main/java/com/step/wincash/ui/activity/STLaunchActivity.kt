@@ -54,7 +54,7 @@ class STLaunchActivity : BaseActivity<StActivityLaunchBinding>() {
         if (!StepBusiness.hasRequirePermission(this)){
             StepBusiness.requestPermission(this)
         } else {
-            StepTracker.startTrackingService()
+//            StepTracker.startTrackingService()
             goMain()
         }
     }

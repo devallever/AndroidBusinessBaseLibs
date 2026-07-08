@@ -90,7 +90,7 @@ class STMainActivity : BaseActivity<StActivityMainBinding>() {
         registerEventbus()
         initTab()
         if (StepBusiness.hasRequirePermission(this)) {
-            StepTracker.startTrackingService()
+//            StepTracker.startTrackingService()
         }
         BaseApplication.timer.start()
     }
@@ -261,10 +261,10 @@ class STMainActivity : BaseActivity<StActivityMainBinding>() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         StepBusiness.handlePermissionResult(this, requestCode, grantResults) {
-            StepTracker.startTrackingService()
+//            StepTracker.startTrackingService()
         }
         if (requestCode == StepBusiness.RC_SETTING) {
-            StepTracker.startTrackingService()
+//            StepTracker.startTrackingService()
         }
     }
 
