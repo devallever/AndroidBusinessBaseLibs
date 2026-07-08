@@ -10,6 +10,7 @@ import android.util.Log
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.allever.android.lib.core.base.AbstractActivity
@@ -27,7 +28,9 @@ import com.coder.ffmpegtest.ui.dialog.PromptDialog
 import com.coder.ffmpegtest.ui.dialog.PromptDialog.OnPromptListener
 import com.coder.ffmpegtest.utils.FileUtils
 import com.coder.ffmpegtest.utils.ToastUtils
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
@@ -67,8 +70,9 @@ class KFFmpegCommandActivity : AbstractActivity() {
 
     private fun init() {
         initView()
-        initData()
-        initListener()
+        initData {
+            initListener()
+        }
     }
 
     private fun initView() {
@@ -77,23 +81,29 @@ class KFFmpegCommandActivity : AbstractActivity() {
         mTvCmd = findViewById(R.id.tvCmd)
     }
 
-    private fun initData() {
-        FileUtils.copy2Memory(this, "ffc_test.mp3")
-        FileUtils.copy2Memory(this, "ffc_test.mp4")
-        FileUtils.copy2Memory(this, "ffc_testbg.mp3")
-        FileUtils.copy2Memory(this, "ffc_water.png")
-        mAudioPath = File(externalCacheDir, "ffc_test.mp3").absolutePath
-        mVideoPath = File(externalCacheDir, "ffc_test.mp4").absolutePath
-        mAudioBgPath = File(externalCacheDir, "ffc_testbg.mp3").absolutePath
-        mImagePath = File(externalCacheDir, "ffc_water.png").absolutePath
-        val commands = this.resources.getStringArray(R.array.ffc_commands)
-        val beans: MutableList<CommandBean> = ArrayList()
-        for (i in commands.indices) {
-            beans.add(CommandBean(commands[i], i))
+    private fun initData(finish: () -> Unit) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            FileUtils.copy2Memory(this@KFFmpegCommandActivity, "ffc_test.mp3")
+            FileUtils.copy2Memory(this@KFFmpegCommandActivity, "ffc_test.mp4")
+            FileUtils.copy2Memory(this@KFFmpegCommandActivity, "ffc_testbg.mp3")
+            FileUtils.copy2Memory(this@KFFmpegCommandActivity, "ffc_water.png")
+            mAudioPath = File(externalCacheDir, "ffc_test.mp3").absolutePath
+            mVideoPath = File(externalCacheDir, "ffc_test.mp4").absolutePath
+            mAudioBgPath = File(externalCacheDir, "ffc_testbg.mp3").absolutePath
+            mImagePath = File(externalCacheDir, "ffc_water.png").absolutePath
+            val commands = this@KFFmpegCommandActivity.resources.getStringArray(R.array.ffc_commands)
+            val beans: MutableList<CommandBean> = ArrayList()
+            for (i in commands.indices) {
+                beans.add(CommandBean(commands[i], i))
+            }
+            launch(Dispatchers.Main) {
+                mAdapter = FFmpegCommandAdapter(beans)
+                mRecyclerView!!.layoutManager = GridLayoutManager(this@KFFmpegCommandActivity, 3)
+                mRecyclerView!!.adapter = mAdapter
+                finish.invoke()
+            }
         }
-        mAdapter = FFmpegCommandAdapter(beans)
-        mRecyclerView!!.layoutManager = GridLayoutManager(this, 3)
-        mRecyclerView!!.adapter = mAdapter
+
     }
 
 
