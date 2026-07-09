@@ -11,9 +11,9 @@ import app.android.gp.ai.translator.bean.TranslateResult
 import app.android.gp.ai.translator.ui.mvp.view.TranslationView
 import app.android.gp.ai.translator.util.ClipboardHelper
 import app.android.gp.ai.translator.util.JsonHelper
-import app.woejt.wwzdndgl.lib.mvp.BasePresenter
-import app.woejt.wwzdndgl.lib.util.log
-import app.woejt.wwzdndgl.lib.util.toast
+import app.android.gp.ai.translator.app.mvp.BasePresenter
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
 import org.greenrobot.eventbus.EventBus
 
 class TranslationPresenter : BasePresenter<TranslationView>() {

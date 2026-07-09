@@ -1,7 +1,5 @@
 package app.android.gp.ai.translator.ui.dialog
 
-//import org.xm.app.text.translator.ui.adapter.SelectEngineAdapter
-//import org.xm.app.text.translator.ui.adapter.SelectLangAdapter
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
@@ -23,8 +21,8 @@ import app.android.gp.ai.translator.ui.adapter.SelectEngineAdapter
 import app.android.gp.ai.translator.ui.adapter.SelectLangAdapter
 import app.android.gp.ai.translator.util.ClipboardHelper
 import app.android.gp.ai.translator.util.JsonHelper
-import app.woejt.wwzdndgl.lib.recycler.BaseViewHolder
-import app.woejt.wwzdndgl.lib.recycler.ItemListener
+import app.android.gp.ai.translator.ui.widget.recycler.BaseViewHolder
+import app.android.gp.ai.translator.ui.widget.recycler.ItemListener
 
 object DialogHelper {
 
@@ -137,7 +135,7 @@ object DialogHelper {
 
         mTranslateResultContainer.visibility = View.VISIBLE
 
-        return AlertDialog.Builder(activity, app.woejt.wwzdndgl.lib.R.style.CommonCustomDialogStyle)
+        return AlertDialog.Builder(activity, R.style.TTCommonCustomDialogStyle)
             .setView(root)
             .setCancelable(true)
             .create()

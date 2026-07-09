@@ -5,20 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import app.allever.android.lib.core.base.AbstractActivity
+import app.allever.android.lib.core.util.BarUtils
 import app.android.gp.ai.translator.R
-import app.woejt.wwzdndgl.lib.app.AbsActivity
-import app.woejt.wwzdndgl.lib.util.SystemUtils
-import app.weong.ajkojt.notch.compat.notchcompat.NotchCompat
-import app.woejt.wwzdndgl.lib.util.log
 
-abstract class AppActivity : AbsActivity() {
+abstract class AppActivity : AbstractActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 透明状态栏并适配
-        NotchCompat.adaptNotchWithImmersive(window)
-        log("w.xdo")
 
         when (
             val contentView = getContentView()) {
@@ -34,7 +29,6 @@ abstract class AppActivity : AbsActivity() {
         }
 
         initView()
-        log("asdfwo")
         initData()
     }
 
@@ -42,27 +36,16 @@ abstract class AppActivity : AbsActivity() {
     abstract fun initView()
     abstract fun initData()
 
-    protected fun checkNotch(runnable: Runnable?) {
-        NotchCompat.hasNotch(window, runnable)
-    }
-
     protected fun addStatusBar(rootLayout: ViewGroup, toolBar: View) {
-        log("asdfwo")
         val statusBarView = View(this)
-        log("asdfwo")
         statusBarView.id = statusBarView.hashCode()
-        log("asdfwo")
         statusBarView.setBackgroundResource(R.drawable.bg_top_bar)
-        log("asdfwo")
-        val statusBarHeight = SystemUtils.getStatusBarHeight(this)
-        log("asdfwo")
+        val statusBarHeight = BarUtils.getStatusBarHeight()
         val lp = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight)
 
         if (rootLayout is RelativeLayout) {
-            log("asdfwo")
             rootLayout.addView(statusBarView, lp)
             val topBarLp = toolBar.layoutParams as? RelativeLayout.LayoutParams
-            log("asdfwo")
             topBarLp?.addRule(RelativeLayout.BELOW, statusBarView.id)
         } else if (rootLayout is LinearLayout) {
             rootLayout.addView(statusBarView, 0, lp)

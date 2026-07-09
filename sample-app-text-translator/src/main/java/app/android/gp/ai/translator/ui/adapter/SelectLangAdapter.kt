@@ -4,8 +4,8 @@ import android.content.Context
 import app.android.gp.ai.translator.R
 import app.android.gp.ai.translator.language.Lang
 import app.android.gp.ai.translator.ui.adapter.item.SelectLangItem
-import app.woejt.wwzdndgl.lib.recycler.BaseRecyclerViewAdapter
-import app.woejt.wwzdndgl.lib.recycler.BaseViewHolder
+import app.android.gp.ai.translator.ui.widget.recycler.BaseRecyclerViewAdapter
+import app.android.gp.ai.translator.ui.widget.recycler.BaseViewHolder
 
 class SelectLangAdapter(context: Context, layoutResId: Int, data: MutableList<SelectLangItem>) :
     BaseRecyclerViewAdapter<SelectLangItem>(context, layoutResId, data) {

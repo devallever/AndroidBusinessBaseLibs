@@ -8,8 +8,8 @@ import app.android.gp.ai.translator.app.Global
 import app.android.gp.ai.translator.ui.adapter.item.WordItem
 import app.android.gp.ai.translator.bean.TranslateResult
 import app.android.gp.ai.translator.util.JsonHelper
-import app.woejt.wwzdndgl.lib.recycler.BaseRecyclerViewAdapter
-import app.woejt.wwzdndgl.lib.recycler.BaseViewHolder
+import app.android.gp.ai.translator.ui.widget.recycler.BaseRecyclerViewAdapter
+import app.android.gp.ai.translator.ui.widget.recycler.BaseViewHolder
 
 class WordAdapter(context: Context, layoutResId: Int, data: MutableList<WordItem>) :
     BaseRecyclerViewAdapter<WordItem>(context, layoutResId, data) {

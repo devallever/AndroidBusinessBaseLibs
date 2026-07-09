@@ -25,9 +25,6 @@ import app.android.gp.ai.translator.ui.adapter.item.SelectLangItem
 import app.android.gp.ai.translator.ui.dialog.DialogHelper
 import app.android.gp.ai.translator.ui.mvp.presenter.TranslationPresenter
 import app.android.gp.ai.translator.ui.mvp.view.TranslationView
-import com.allever.android.lib.admob.AdManager
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.interstitial.InterstitialAd
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -85,8 +82,6 @@ class TranslationFragmentPage : AppMvpFragment<TranslationView, TranslationPrese
     private var mNeedRestartAudioRecognize = false
 
     private lateinit var mBinding: FTranslationBinding
-
-    private var interstitialAd: InterstitialAd? = null
 
     override fun getContentView(): View {
         mBinding = FTranslationBinding.inflate(layoutInflater)
@@ -155,13 +150,6 @@ class TranslationFragmentPage : AppMvpFragment<TranslationView, TranslationPrese
                 }
             })
 
-        val adCallback = object : FullScreenContentCallback() {
-            override fun onAdDismissedFullScreenContent() {
-                AdManager.loadInter {
-                    interstitialAd = it
-                }
-            }
-        }
         mEtContent.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
@@ -170,19 +158,6 @@ class TranslationFragmentPage : AppMvpFragment<TranslationView, TranslationPrese
                     val content = editable.toString()
                     hideKeyboard()
                     translate()
-                    if (Global.searchCount % 4 == 0) {
-                        if (interstitialAd != null) {
-                            interstitialAd?.fullScreenContentCallback = adCallback
-                            interstitialAd?.show(requireActivity())
-                            interstitialAd = null
-                        } else {
-                            AdManager.loadInter {
-                                it.fullScreenContentCallback = adCallback
-                                it.show(requireActivity())
-                            }
-                        }
-
-                    }
                     Global.searchCount++
                     return@OnEditorActionListener true
                 }
@@ -208,12 +183,6 @@ class TranslationFragmentPage : AppMvpFragment<TranslationView, TranslationPrese
         })
 
         mCardDictPanel = root.findViewById(R.id.cardDictPanel)
-
-        AdManager.loadNativeAd(mBinding.bannerContainer, "Translate")
-
-        AdManager.loadInter {
-            interstitialAd = it
-        }
 
     }
 

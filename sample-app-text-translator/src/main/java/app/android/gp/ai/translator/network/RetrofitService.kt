@@ -5,7 +5,6 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
-import rx.Observable
 
 /**
  * Created by Allever on 2017/1/15.
@@ -16,7 +15,7 @@ interface RetrofitService {
 //    fun translate(@Query("q") content: String): Observable<TranslationBean>
 
     @GET("translate_a/single")
-    fun translate(
+    suspend fun translate(
         @Query("q") q: String,
         @Query("client") content: String = "gtx",
         @Query("dt") dt: String = "t",
@@ -30,13 +29,13 @@ interface RetrofitService {
         @Query("hl") hl: String = "zh-CN",
         @Query("tk") tk: String = ""
 
-    ): Observable<TranslationBean>
+    ): TranslationBean
 
     /**
      * q=apple&from=en&to=zh&appid=2015063000000001&salt=1435660288&sign=f89f9594663708c1605f3d736d01d2d4
      */
     @GET("api/trans/vip/translate")
-    fun translateBaidu(
+    suspend fun translateBaidu(
         @Query("q") q: String,
         @Query("from") from: String = "auto",
         @Query("to") to: String = "en",
@@ -44,7 +43,7 @@ interface RetrofitService {
         @Query("salt") slat: String = "",
         @Query("sign") sign: String = ""
 
-    ): Observable<TranslationBean>
+    ): TranslationBean
 
     //https://translate.google.cn/translate_tts?client=gtx&ie=UTF-8&tl=zh-CN&total=1&idx=0&textlen=2&tk=&q=设置
     @GET("translate_tts")

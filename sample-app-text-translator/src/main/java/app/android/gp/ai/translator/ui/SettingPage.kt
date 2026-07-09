@@ -7,7 +7,6 @@ import app.android.gp.ai.translator.app.AppMvpActivity
 import app.android.gp.ai.translator.databinding.ASettingBinding
 import app.android.gp.ai.translator.ui.mvp.presenter.SettingPresenter
 import app.android.gp.ai.translator.ui.mvp.view.SettingView
-import com.allever.android.lib.admob.AdManager
 
 class SettingPage : AppMvpActivity<SettingView, SettingPresenter>(), SettingView {
     private lateinit var mBinding: ASettingBinding

@@ -10,8 +10,9 @@ import app.android.gp.ai.translator.function.MediaHelper
 import app.android.gp.ai.translator.db.DBHelper
 import app.android.gp.ai.translator.bean.TranslateResult
 import app.android.gp.ai.translator.network.RetrofitUtil
-import app.woejt.wwzdndgl.lib.util.log
-import rx.Subscriber
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.helper.CoroutineHelper
+import kotlinx.coroutines.launch
 
 class GoogleEngine : ITranslateEngine {
     override fun init(context: Context) {
@@ -27,28 +28,23 @@ class GoogleEngine : ITranslateEngine {
         toLang: String,
         callback: ITranslateCallback?
     ) {
-        RetrofitUtil.translate(object : Subscriber<TranslationBean>() {
-            override fun onCompleted() {}
-            override fun onError(e: Throwable) {
-                e.printStackTrace()
-                log("Fail")
-            }
-
-            override fun onNext(bean: TranslationBean) {
-                val resultBean = TranslateResult()
-                resultBean.fromLang = getSrcLang(bean)
-                resultBean.fromLangText = Global.langCodeKeyMap[fromLang] ?: Lang.CHINESE.KEY
-                resultBean.srcText = getSrcText(bean)
-                resultBean.srcSymbol = getSrcSymbol(bean)
-                resultBean.toLang = toLang
-                resultBean.toLangText = Global.langCodeKeyMap[toLang] ?: Lang.CHINESE.KEY
-                resultBean.translateText = getTranslateText(bean)
-                resultBean.translateTextSymbol = getTranslateSymbol(bean)
-                resultBean.more = getDictText(bean)
+        CoroutineHelper.IO.launch {
+            val bean = RetrofitUtil.translate(q, fromLang, toLang)
+            val resultBean = TranslateResult()
+            resultBean.fromLang = getSrcLang(bean)
+            resultBean.fromLangText = Global.langCodeKeyMap[fromLang] ?: Lang.CHINESE.KEY
+            resultBean.srcText = getSrcText(bean)
+            resultBean.srcSymbol = getSrcSymbol(bean)
+            resultBean.toLang = toLang
+            resultBean.toLangText = Global.langCodeKeyMap[toLang] ?: Lang.CHINESE.KEY
+            resultBean.translateText = getTranslateText(bean)
+            resultBean.translateTextSymbol = getTranslateSymbol(bean)
+            resultBean.more = getDictText(bean)
+            CoroutineHelper.MAIN.launch {
                 callback?.onTranslateResult(resultBean)
-
             }
-        }, q, fromLang, toLang)
+        }
+
     }
 
     override fun tts(content: String, toLang: String) {

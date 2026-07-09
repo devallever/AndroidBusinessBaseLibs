@@ -2,17 +2,13 @@ package app.android.gp.ai.translator.network
 
 import app.android.gp.ai.translator.bean.TranslationBean
 import app.android.gp.ai.translator.util.MD5
-import app.woejt.wwzdndgl.lib.util.log
-import app.woejt.wwzdndgl.lib.util.logRandomString
+import app.allever.android.lib.core.ext.log
+
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Callback
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import rx.Subscriber
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 /**
@@ -25,43 +21,36 @@ object RetrofitUtil {
     private lateinit var retrofitService: RetrofitService
 
     fun init(baseUrl: String) {
-        logRandomString()
+        
         BASE_URL = baseUrl
-        logRandomString()
+        
         val client = OkHttpClient.Builder()
             .connectTimeout(5000, TimeUnit.SECONDS)
             .build()
-        logRandomString()
+        
         retrofit = Retrofit.Builder()
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .baseUrl(BASE_URL)
             .build()
-        logRandomString()
+        
         retrofitService = retrofit.create(RetrofitService::class.java)
     }
 
-    fun translate(
-        subscriber: Subscriber<TranslationBean>,
+    suspend fun translate(
         content: String,
         sl: String,
         tl: String
-    ) {
-        logRandomString()
-        retrofitService.translate(content, sl = sl, tl = tl)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .unsubscribeOn(Schedulers.io())
-            .subscribe(subscriber)
+    ): TranslationBean{
+        
+        return retrofitService.translate(content, sl = sl, tl = tl)
     }
 
-    fun translateBaidu(
-        subscriber: Subscriber<TranslationBean>,
+    suspend fun translateBaidu(
         content: String,
         sl: String,
         tl: String
-    ) {
+    ): TranslationBean {
 
         /**
         q=apple
@@ -78,15 +67,15 @@ object RetrofitUtil {
         sign=MD5(2015063000000001apple143566028812345678)，得到sign=f89f9594663708c1605f3d736d01d2d4
          */
         val appid = "20220204001074352"
-        logRandomString()
+        
         val slat = System.currentTimeMillis().toString()
         val secert = "rJwc7ZcutAnfe14Cjfrd"
-        logRandomString()
+        
         val signString = "${appid}${content}${slat}${secert}"
         log("signString = $signString")
-        logRandomString()
+        
         val sign = MD5.getMD5StrToLowerCase(signString)
-        retrofitService.translateBaidu(
+        return retrofitService.translateBaidu(
             q = content,
             from = sl,
             to = tl,
@@ -94,10 +83,6 @@ object RetrofitUtil {
             slat = slat,
             sign = sign
         )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .unsubscribeOn(Schedulers.io())
-            .subscribe(subscriber)
     }
 
     fun requestTTS(content: String, tl: String, callback: Callback<ResponseBody>) {

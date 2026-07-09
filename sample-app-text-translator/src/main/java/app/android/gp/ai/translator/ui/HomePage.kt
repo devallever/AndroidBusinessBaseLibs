@@ -5,14 +5,14 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.GravityCompat
+import app.allever.android.lib.core.helper.ActivityHelper
 import app.android.gp.ai.translator.R
 import app.android.gp.ai.translator.app.AppMvpActivity
 import app.android.gp.ai.translator.databinding.ADrawerMainBinding
 import app.android.gp.ai.translator.ui.mvp.presenter.MainPresenter
 import app.android.gp.ai.translator.ui.mvp.view.MainView
-import app.woejt.wwzdndgl.lib.util.ActivityCollector
-import com.allever.android.lib.admob.AdManager
 import com.google.android.material.navigation.NavigationView
 
 class HomePage : AppMvpActivity<MainView, MainPresenter>(), MainView,
@@ -42,7 +42,18 @@ class HomePage : AppMvpActivity<MainView, MainPresenter>(), MainView,
         }
         mBinding.navigationView.setNavigationItemSelectedListener(this)
 
-        AdManager.loadNativeAd(mBinding.bannerContainer, "Home")
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (mBinding.drawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                    mBinding.drawerLayout.closeDrawers()
+                    return
+                }
+
+                checkExit()
+            }
+
+        })
+
     }
 
     override fun initData() {
@@ -64,25 +75,22 @@ class HomePage : AppMvpActivity<MainView, MainPresenter>(), MainView,
         mBinding.drawerLayout.postDelayed({
             when (item.itemId) {
                 R.id.nav_history -> {
-                    ActivityCollector.startActivity(this, HistoryPage::class.java)
+                    ActivityHelper.startActivity<HistoryPage>()
                 }
                 R.id.nav_word -> {
-                    ActivityCollector.startActivity(this, WordPage::class.java)
+                    ActivityHelper.startActivity<WordPage>()
                 }
-//                R.id.nav_backup -> {
-//                    ActivityCollector.startActivity(this, BackupRestoreActivity::class.java)
-//                }
+                R.id.nav_backup -> {
+                    ActivityHelper.startActivity<BackupRestorePage>()
+                }
                 R.id.nav_guide -> {
-                    ActivityCollector.startActivity(this, GuidePage::class.java)
+                    ActivityHelper.startActivity<GuidePage>()
                 }
                 R.id.nav_setting -> {
-                    ActivityCollector.startActivity(this, SettingPage::class.java)
+                    ActivityHelper.startActivity<SettingPage>()
                 }
                 R.id.nav_about -> {
-                    ActivityCollector.startActivity(
-                        this,
-                        app.android.gp.ai.translator.ui.AboutPage::class.java
-                    )
+                    ActivityHelper.startActivity<AboutPage>()
                 }
             }
             mBinding.drawerLayout.closeDrawers()
@@ -102,13 +110,4 @@ class HomePage : AppMvpActivity<MainView, MainPresenter>(), MainView,
 //        super.onDestroy()
 //    }
 
-    override fun onBackPressed() {
-
-        if (mBinding.drawerLayout.isDrawerOpen(Gravity.LEFT)) {
-            mBinding.drawerLayout.closeDrawers()
-            return
-        }
-
-        checkExit()
-    }
 }

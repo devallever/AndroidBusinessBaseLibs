@@ -3,8 +3,15 @@ package app.android.gp.ai.translator.ui.mvp.presenter
 import android.app.Activity
 import android.os.Environment
 import app.android.gp.ai.translator.ui.mvp.view.BackupRestoreView
-import app.woejt.wwzdndgl.lib.app.App
-import app.woejt.wwzdndgl.lib.mvp.BasePresenter
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
+import app.android.gp.ai.translator.R
+import app.android.gp.ai.translator.app.mvp.BasePresenter
+import app.android.gp.ai.translator.bean.Backup
+import app.android.gp.ai.translator.db.DBHelper
+import app.android.gp.ai.translator.util.FileUtils
+import com.google.gson.Gson
 //import org.xm.app.text.translator.ui.mvp.view.BackupRestoreView
 import java.io.File
 
@@ -14,34 +21,23 @@ class BackupRestorePresenter : BasePresenter<BackupRestoreView>() {
 
     fun backup(activity: Activity, task: Runnable) {
 
-//        PermissionManager.request(object : PermissionListener {
-//            override fun onGranted(grantedList: MutableList<String>) {
-//                kotlin.run {
-//                    val historyList = DBHelper.getAllHistory()
-//                    if (historyList.isEmpty()) {
-//                        toast(R.string.no_backup_data)
-//                        task.run()
-//                        return
-//                    }
-//                    val backupBean = BackupBean()
-//                    backupBean.data = historyList
-//                    val result = Gson().toJson(backupBean)
-//                    log("backupResult = $result")
-//                    val success = FileUtil.saveStringToFile(result, BACKUP_FILE_PATH)
-//                    if (success) {
-//                        toast(R.string.backup_success)
-//                    } else {
-//                        toast(R.string.backup_fail)
-//                    }
-//                    task.run()
-//                }
-//            }
-//
-//            override fun onDenied(deniedList: MutableList<String>) {
-//                toast(R.string.no_wire_store_permission_tips)
-//                task.run()
-//            }
-//        }, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val historyList = DBHelper.getAllHistory()
+        if (historyList.isEmpty()) {
+            toast(R.string.no_backup_data)
+            task.run()
+            return
+        }
+        val backupBean = Backup()
+        backupBean.data = historyList
+        val result = Gson().toJson(backupBean)
+        log("backupResult = $result")
+        val success = app.allever.android.lib.core.util.FileUtils.saveStringToFile(result, BACKUP_FILE_PATH)
+        if (success) {
+            toast(R.string.backup_success)
+        } else {
+            toast(R.string.backup_fail)
+        }
+        task.run()
 
     }
 
@@ -75,7 +71,7 @@ class BackupRestorePresenter : BasePresenter<BackupRestoreView>() {
 //                                if (saveResult) {
 //                                    log("恢复翻译成功")
 //                                } else {
-//                                    loge("恢复翻译失败")
+//                                    logE("恢复翻译失败")
 //                                }
 //                            }
 //                        }

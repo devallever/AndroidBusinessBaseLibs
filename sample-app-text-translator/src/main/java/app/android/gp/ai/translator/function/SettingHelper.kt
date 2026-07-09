@@ -3,7 +3,7 @@ package app.android.gp.ai.translator.function
 import app.android.gp.ai.translator.language.Lang
 import app.android.gp.ai.translator.translate.EngineType
 import app.android.gp.ai.translator.util.SharedPrefUtils
-import app.woejt.wwzdndgl.lib.util.logRandomString
+
 
 
 object SettingHelper {
@@ -16,7 +16,7 @@ object SettingHelper {
     private const val KEY_DEFAULT_TRANSLATE_ENGINE = "KEY_DEFAULT_TRANSLATE_ENGINE"
 
     fun setAutoPlayAudioSwitch(switch: Boolean) {
-        logRandomString()
+        
         SharedPrefUtils.putBoolean(KEY_AUTO_PLAY_AUDIO, switch)
     }
 
@@ -25,37 +25,37 @@ object SettingHelper {
     }
 
     fun setCopyClipBoardSwitch(switch: Boolean) {
-        logRandomString()
+        
         SharedPrefUtils.putBoolean(KEY_COPY_TO_CLIPBOARD, switch)
     }
 
     fun getCopyClipBoard(): Boolean {
-        logRandomString()
+        
         return SharedPrefUtils.getBoolean(KEY_COPY_TO_CLIPBOARD, true)
     }
 
     fun setAutoTranslateSwitch(switch: Boolean) {
-        logRandomString()
+        
         SharedPrefUtils.putBoolean(KEY_AUTO_TRANSLATE, switch)
     }
 
     fun getAutoTranslate(): Boolean {
-        logRandomString()
+        
         return SharedPrefUtils.getBoolean(KEY_AUTO_TRANSLATE, true)
     }
 
     fun setForegroundServiceSwitch(switch: Boolean) {
-        logRandomString()
+        
         SharedPrefUtils.putBoolean(KEY_FOREGROUND_SERVICE, switch)
     }
 
     fun getForegroundServiceSwitch(): Boolean {
-        logRandomString()
+        
         return SharedPrefUtils.getBoolean(KEY_FOREGROUND_SERVICE, true)
     }
 
     fun setDefaultTranslateLang(translateLang: String) {
-        logRandomString()
+        
         SharedPrefUtils.putString(KEY_DEFAULT_TRANSLATE_LANG, translateLang)
     }
 
@@ -64,12 +64,12 @@ object SettingHelper {
     }
 
     fun setDefaultTranslateEngine(translateEngine: Int) {
-        logRandomString()
+        
         SharedPrefUtils.putInt(KEY_DEFAULT_TRANSLATE_ENGINE, translateEngine)
     }
 
     fun getDefaultTranslateEngine(): Int {
-        logRandomString()
+        
         return SharedPrefUtils.getInt(KEY_DEFAULT_TRANSLATE_ENGINE, EngineType.GOOGLE)
     }
 }

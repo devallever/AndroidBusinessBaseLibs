@@ -3,10 +3,10 @@ package app.android.gp.ai.translator.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import app.allever.android.lib.core.base.AbstractActivity
 import app.android.gp.ai.translator.R
-import app.woejt.wwzdndgl.lib.app.AbsActivity
 
-class DialogTranslatePage : AbsActivity() {
+class DialogTranslatePage : AbstractActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.d_translate_activity)

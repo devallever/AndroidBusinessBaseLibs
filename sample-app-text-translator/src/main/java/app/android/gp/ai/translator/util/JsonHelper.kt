@@ -1,6 +1,6 @@
 package app.android.gp.ai.translator.util
 
-import app.woejt.wwzdndgl.lib.util.logRandomString
+
 import com.google.gson.Gson
 
 object JsonHelper {
@@ -12,7 +12,7 @@ object JsonHelper {
      * @return
      */
     fun <T> json2Object(json: String, type: Class<T>): T? {
-        logRandomString()
+        
         return try {
             Gson().fromJson(json, type)
         } catch (e: Exception) {

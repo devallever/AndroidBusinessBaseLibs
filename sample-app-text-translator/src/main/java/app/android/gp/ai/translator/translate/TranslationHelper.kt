@@ -9,8 +9,8 @@ import app.android.gp.ai.translator.network.TTSRequestCallback
 import app.android.gp.ai.translator.db.DBHelper
 import app.android.gp.ai.translator.db.History
 import app.android.gp.ai.translator.network.RetrofitUtil
-import app.woejt.wwzdndgl.lib.util.ShareHelper
-import app.woejt.wwzdndgl.lib.util.log
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.helper.ShareHelper
 import org.greenrobot.eventbus.EventBus
 import java.io.File
 

@@ -23,8 +23,7 @@ import app.android.gp.ai.translator.ui.adapter.item.WordItem
 import app.android.gp.ai.translator.ui.dialog.DialogHelper
 import app.android.gp.ai.translator.ui.mvp.presenter.WordPresenter
 import app.android.gp.ai.translator.ui.mvp.view.WordView
-import app.woejt.wwzdndgl.lib.util.toast
-import com.allever.android.lib.admob.AdManager
+import app.allever.android.lib.core.ext.toast
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode

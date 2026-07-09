@@ -3,8 +3,8 @@ package app.android.gp.ai.translator.db
 import app.android.gp.ai.translator.event.RemoveLikesEventB
 import app.android.gp.ai.translator.bean.TranslateResult
 import app.android.gp.ai.translator.util.MD5
-import app.woejt.wwzdndgl.lib.util.log
-import app.woejt.wwzdndgl.lib.util.loge
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.logE
 import com.google.gson.Gson
 import org.greenrobot.eventbus.EventBus
 import org.litepal.LitePal
@@ -38,11 +38,11 @@ object DBHelper {
                 if (saveResult) {
                     log("保存翻译成功")
                 } else {
-                    loge("保存翻译失败")
+                    logE("保存翻译失败")
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                loge("保存翻译失败")
+                logE("保存翻译失败")
             }
         }
     }
@@ -62,11 +62,11 @@ object DBHelper {
                 if (saveResult) {
                     log("保存翻译成功")
                 } else {
-                    loge("保存翻译失败")
+                    logE("保存翻译失败")
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                loge("保存翻译失败")
+                logE("保存翻译失败")
             }
         }
     }
@@ -152,7 +152,7 @@ object DBHelper {
         if (ttsResult) {
             log("保存语音记录成功")
         } else {
-            loge("保存语音记录失败")
+            logE("保存语音记录失败")
         }
     }
 

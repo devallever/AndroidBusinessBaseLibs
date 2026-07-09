@@ -1,10 +1,10 @@
 package app.android.gp.ai.translator.ui
 
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
+import app.allever.android.lib.core.helper.ActivityHelper
 import app.android.gp.ai.translator.app.AppActivity
 import app.android.gp.ai.translator.databinding.ASplashBinding
-import app.woejt.wwzdndgl.lib.util.ActivityCollector
-import app.weong.ajkojt.notch.compat.notchcompat.NotchCompat
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -18,18 +18,20 @@ class SplashPage : AppActivity() {
     }
 
     override fun initView() {
-        NotchCompat.adaptNotchWithFullScreen(window)
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+
+            }
+
+        })
     }
 
     override fun initData() {
         lifecycleScope.launch {
             delay(1000)
-            ActivityCollector.startActivity(this@SplashPage, HomePage::class.java)
+            ActivityHelper.startActivity<HomePage>()
             finish()
         }
     }
 
-    override fun onBackPressed() {
-
-    }
 }

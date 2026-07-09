@@ -3,10 +3,10 @@ package app.android.gp.ai.translator.function
 import android.content.Context
 import android.os.Build
 import android.speech.tts.TextToSpeech
-import app.woejt.wwzdndgl.lib.app.App
-import app.woejt.wwzdndgl.lib.util.log
-import app.woejt.wwzdndgl.lib.util.logRandomString
-import app.woejt.wwzdndgl.lib.util.loge
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.log
+
+import app.allever.android.lib.core.ext.logE
 import java.util.*
 
 object TTSHelper {
@@ -16,16 +16,16 @@ object TTSHelper {
     private var mInit = false
 
     fun init(context: Context) {
-        logRandomString()
+        
         mSpeech = TextToSpeech(
             context
         ) { status ->
-            logRandomString()
+            
             if (status == TextToSpeech.SUCCESS) {
                 mInit = true
                 log("init tts success")
             } else {
-                loge("init tts fail")
+                logE("init tts fail")
             }
         }
     }
@@ -34,9 +34,9 @@ object TTSHelper {
         if (!mInit) {
             init(App.context)
         }
-        logRandomString()
+        
         mSpeech?.language = local
-        logRandomString()
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mSpeech?.speak(
                 content,
@@ -44,7 +44,7 @@ object TTSHelper {
                 null,
                 System.currentTimeMillis().toString()
             )
-            logRandomString()
+            
         } else {
             mSpeech?.speak(content, TextToSpeech.QUEUE_FLUSH, null)
         }

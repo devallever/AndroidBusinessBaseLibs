@@ -4,10 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.TextView
+import app.allever.android.lib.core.helper.FeedbackHelper
 import app.android.gp.ai.translator.R
 import app.android.gp.ai.translator.app.AppActivity
 import app.android.gp.ai.translator.databinding.AGuideBinding
-import app.woejt.wwzdndgl.lib.util.FeedbackHelper
 
 class GuidePage : AppActivity() {
 

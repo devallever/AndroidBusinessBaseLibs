@@ -1,7 +1,7 @@
 package app.android.gp.ai.translator.util
 
 import android.content.Context
-import app.woejt.wwzdndgl.lib.app.App
+import app.allever.android.lib.core.app.App
 
 /**
  * SharedPreferences 工具类

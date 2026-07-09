@@ -4,16 +4,15 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import app.allever.android.lib.core.base.AbstractFragment
+import app.allever.android.lib.core.helper.ActivityHelper
 import app.android.gp.ai.translator.R
 import app.android.gp.ai.translator.app.AppActivity
 import app.android.gp.ai.translator.databinding.AWordBinding
-import app.woejt.wwzdndgl.lib.app.AbsFragment
-import app.woejt.wwzdndgl.lib.util.ActivityCollector
-import com.allever.android.lib.admob.AdManager
 
 class WordPage : AppActivity() {
 
-    private lateinit var mFragment: AbsFragment
+    private lateinit var mFragment: AbstractFragment
 
     private lateinit var mBinding: AWordBinding
 
@@ -32,11 +31,10 @@ class WordPage : AppActivity() {
         }
         ivRight.setImageResource(R.drawable.ic_history)
         ivRight.setOnClickListener {
-            ActivityCollector.startActivity(this, HistoryPage::class.java)
+            ActivityHelper.startActivity<HistoryPage>()
         }
         ivRight.visibility = View.VISIBLE
 
-        AdManager.loadNativeAd(mBinding.bannerContainer, "word")
     }
 
     override fun initData() {

@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import app.woejt.wwzdndgl.lib.mvp.BaseMvpFragment
-import app.woejt.wwzdndgl.lib.mvp.BasePresenter
-import app.woejt.wwzdndgl.lib.util.log
+import app.android.gp.ai.translator.app.mvp.BaseMvpFragment
+import app.android.gp.ai.translator.app.mvp.BasePresenter
+import app.allever.android.lib.core.ext.log
 
 abstract class AppMvpFragment<V, P : BasePresenter<V>> : BaseMvpFragment<V, P>() {
 

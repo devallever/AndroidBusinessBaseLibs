@@ -6,7 +6,7 @@ import app.android.gp.ai.translator.ui.adapter.item.WordItem
 import app.android.gp.ai.translator.db.DBHelper
 import app.android.gp.ai.translator.db.History
 import app.android.gp.ai.translator.ui.mvp.view.WordView
-import app.woejt.wwzdndgl.lib.mvp.BasePresenter
+import app.android.gp.ai.translator.app.mvp.BasePresenter
 import org.greenrobot.eventbus.EventBus
 import org.litepal.LitePal
 

@@ -19,11 +19,10 @@ import app.android.gp.ai.translator.ui.dialog.DialogHelper
 import app.android.gp.ai.translator.ui.mvp.presenter.SettingPresenter
 import app.android.gp.ai.translator.ui.mvp.view.SettingView
 import app.android.gp.ai.translator.util.CommonHelper
-import app.woejt.wwzdndgl.lib.app.App
-import app.woejt.wwzdndgl.lib.util.ActivityCollector
-import app.woejt.wwzdndgl.lib.util.ShareHelper
-import app.woejt.wwzdndgl.lib.util.toast
-import com.allever.android.lib.admob.AdManager
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.helper.ActivityHelper
+import app.allever.android.lib.core.helper.ShareHelper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -107,7 +106,6 @@ class SettingFragmentPage : AppMvpFragment<SettingView, SettingPresenter>(), Set
                 }
             })
 
-        AdManager.loadNativeAd(mBinding.bannerContainer, "setting")
     }
 
     override fun initData() {
@@ -118,7 +116,7 @@ class SettingFragmentPage : AppMvpFragment<SettingView, SettingPresenter>(), Set
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.setting_tv_guide -> {
-                ActivityCollector.startActivity(requireActivity(), GuidePage::class.java)
+                ActivityHelper.startActivity<GuidePage>()
             }
 //            R.id.setting_tv_permission -> {
 //            }

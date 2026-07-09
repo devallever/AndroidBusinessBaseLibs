@@ -24,9 +24,8 @@ import app.android.gp.ai.translator.ui.adapter.item.WordItem
 import app.android.gp.ai.translator.ui.dialog.DialogHelper
 import app.android.gp.ai.translator.ui.mvp.presenter.HistoryPresenter
 import app.android.gp.ai.translator.ui.mvp.view.HistoryView
-import app.woejt.wwzdndgl.lib.util.ActivityCollector
-import app.woejt.wwzdndgl.lib.util.toast
-import com.allever.android.lib.admob.AdManager
+import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.helper.ActivityHelper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -144,7 +143,6 @@ class HistoryPage : AppMvpActivity<HistoryView, HistoryPresenter>(), HistoryView
 
         }
 
-        AdManager.loadNativeAd(findViewById(R.id.bannerContainer), "Translate")
     }
 
     override fun initData() {
@@ -159,7 +157,7 @@ class HistoryPage : AppMvpActivity<HistoryView, HistoryPresenter>(), HistoryView
                 onBackPressed()
             }
             R.id.iv_right -> {
-                ActivityCollector.startActivity(this, BackupRestorePage::class.java)
+                ActivityHelper.startActivity<BackupRestorePage>()
             }
             R.id.tvTranslateLanguage -> {
                 mSelectTranslateLangDialog?.show()

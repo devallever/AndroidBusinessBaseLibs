@@ -231,6 +231,7 @@ play-services-oss-licenses = { module = "com.google.android.gms:play-services-os
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 retrofit-converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit" }
+retrofit-adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofitRxjava2Adapter" }
 arouter-api = { group = "com.alibaba", name = "arouter-api", version.ref = "arouter" }
 arouter-compiler = { group = "com.alibaba", name = "arouter-compiler", version.ref = "arouter" }
 mmkv-static = { group = "com.tencent", name = "mmkv-static", version.ref = "mmkv" }
@@ -292,7 +293,6 @@ facebook-share = { module = "com.facebook.android:facebook-share", version.ref =
 facebook-fresco = { module = "com.facebook.fresco:fresco", version.ref = "fresco" }
 androidx-document-file = { module = "androidx.documentfile:documentfile", version.ref = "documentfile" }
 android-install-referrer = { module = "com.android.installreferrer:installreferrer", version.ref = "installReferrer" }
-retrofit-adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofitRxjava2Adapter" }
 jakewharton-timber = { module = "com.jakewharton.timber:timber", version.ref = "timberVersion" }
 dnsjava = { module = "dnsjava:dnsjava", version.ref = "dnsjava" }
 xpopup = {module = "com.github.li-xiaojun:XPopup", version.ref = "xPopup"}

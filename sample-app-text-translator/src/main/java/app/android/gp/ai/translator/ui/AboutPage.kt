@@ -4,16 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.TextView
-import app.android.gp.ai.translator.BuildConfig
 import app.android.gp.ai.translator.R
 import app.android.gp.ai.translator.app.AppMvpActivity
 import app.android.gp.ai.translator.databinding.AAboutBinding
 import app.android.gp.ai.translator.ui.mvp.presenter.AboutPresenter
 import app.android.gp.ai.translator.ui.mvp.view.AboutView
-import app.woejt.wwzdndgl.lib.app.App
-import app.woejt.wwzdndgl.lib.util.SystemUtils
-import com.allever.android.lib.admob.AdActivity
-import com.allever.android.lib.admob.DevModeDialog
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.helper.SystemHelper
 
 class AboutPage : AppMvpActivity<AboutView, AboutPresenter>(), AboutView {
 
@@ -21,13 +18,6 @@ class AboutPage : AppMvpActivity<AboutView, AboutPresenter>(), AboutView {
 
     private lateinit var mBinding: AAboutBinding
 
-
-    private val devModeDialog by lazy {
-        DevModeDialog(this) {
-            val intent = Intent(this, AdActivity::class.java)
-            startActivity(intent)
-        }
-    }
 
 
     override fun getContentView(): Any {
@@ -38,20 +28,16 @@ class AboutPage : AppMvpActivity<AboutView, AboutPresenter>(), AboutView {
     override fun initView() {
         addStatusBar(findViewById(R.id.rootLayout), findViewById(R.id.top_bar))
         mBinding.aboutPrivacy.setOnClickListener {
-            SystemUtils.startWebView(App.context, PRIVACY_URL)
+            SystemHelper.startWebView(App.context, PRIVACY_URL)
         }
         findViewById<View>(R.id.iv_left).setOnClickListener {
             finish()
         }
         findViewById<TextView>(R.id.tv_label).text = getString(R.string.about)
         val last = ""
-        mBinding.aboutAppVersion.text = "v${BuildConfig.VERSION_NAME}$last"
+        mBinding.aboutAppVersion.text = "v1.0"
         mBinding.aboutRight.text =
             String.format(getString(R.string.about_right), getString(R.string.app_name))
-        mBinding.aboutIvLogo.setOnLongClickListener {
-            devModeDialog.show()
-            true
-        }
     }
 
     override fun initData() {

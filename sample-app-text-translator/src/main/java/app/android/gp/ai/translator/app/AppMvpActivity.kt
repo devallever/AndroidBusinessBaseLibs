@@ -5,22 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.util.BarUtils
 import app.android.gp.ai.translator.R
-import app.woejt.wwzdndgl.lib.mvp.BaseMvpActivity
-import app.woejt.wwzdndgl.lib.mvp.BasePresenter
-import app.woejt.wwzdndgl.lib.util.SystemUtils
-import app.weong.ajkojt.notch.compat.notchcompat.NotchCompat
-import app.woejt.wwzdndgl.lib.util.log
+import app.android.gp.ai.translator.app.mvp.BaseMvpActivity
+import app.android.gp.ai.translator.app.mvp.BasePresenter
 
 abstract class AppMvpActivity<V, P : BasePresenter<V>> : BaseMvpActivity<V, P>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        log("woow9520s.xje0w")
-        // 透明状态栏
-        NotchCompat.adaptNotchWithImmersive(window)
-        log("woow9520s.xje0w")
         when (
             val contentView = getContentView()) {
             is Int -> {
@@ -33,19 +28,13 @@ abstract class AppMvpActivity<V, P : BasePresenter<V>> : BaseMvpActivity<V, P>()
                 throw RuntimeException("Please check contentView type")
             }
         }
-        log("woow9520s.xje0w")
         initView()
-        log("woow9520s.xje0w")
         initData()
     }
 
     abstract fun getContentView(): Any
     abstract fun initView()
     abstract fun initData()
-
-    protected fun checkNotch(runnable: Runnable?) {
-        NotchCompat.hasNotch(window, runnable)
-    }
 
     protected fun addStatusBar(rootLayout: ViewGroup, toolBar: View) {
         val statusBarView = View(this)
@@ -54,7 +43,7 @@ abstract class AppMvpActivity<V, P : BasePresenter<V>> : BaseMvpActivity<V, P>()
         log("woow9520s.xje0w")
         statusBarView.setBackgroundResource(R.drawable.bg_top_bar)
         log("woow9520s.xje0w")
-        val statusBarHeight = SystemUtils.getStatusBarHeight(this)
+        val statusBarHeight = BarUtils.getStatusBarHeight()
         log("woow9520s.xje0w")
         val lp = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight)
 
