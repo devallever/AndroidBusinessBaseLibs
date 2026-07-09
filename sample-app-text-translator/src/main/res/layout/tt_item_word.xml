@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
-            android:button="@drawable/style_check_box"
+            android:button="@drawable/tt_style_check_box"
             android:clickable="false"
             android:padding="10dp"
             android:visibility="gone" />
@@ -45,7 +45,7 @@
                     android:layout_centerVertical="true"
                     android:padding="10dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_star_empty" />
+                    android:src="@drawable/tt_ic_star_empty" />
 
                 <TextView
                     android:id="@+id/tvSrcText"
@@ -68,7 +68,7 @@
                     android:layout_centerVertical="true"
                     android:padding="10dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_delete" />
+                    android:src="@drawable/tt_ic_delete" />
 
             </RelativeLayout>
 

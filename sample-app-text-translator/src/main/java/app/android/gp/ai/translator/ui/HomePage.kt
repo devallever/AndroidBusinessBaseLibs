@@ -1,5 +1,6 @@
 package app.android.gp.ai.translator.ui
 
+import android.annotation.SuppressLint
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
@@ -20,20 +21,25 @@ class HomePage : AppMvpActivity<MainView, MainPresenter>(), MainView,
 
     private lateinit var mBinding: ADrawerMainBinding
 
+    override fun isSupportSwipeBack(): Boolean {
+        return false
+    }
+
     override fun getContentView(): Any {
         mBinding = ADrawerMainBinding.inflate(layoutInflater)
         return mBinding.root
     }
 
+    @SuppressLint("WrongConstant")
     override fun initView() {
         addStatusBar(mBinding.rootLayout, findViewById(R.id.top_bar))
 
         val ivLeft = findViewById<ImageView>(R.id.iv_left)
-        ivLeft.setImageResource(R.drawable.ic_menu)
+        ivLeft.setImageResource(R.drawable.tt_ic_menu)
         ivLeft.setOnClickListener {
-            mBinding.drawerLayout.openDrawer(Gravity.LEFT)
+            mBinding.drawerLayout.openDrawer(Gravity.START)
         }
-        findViewById<TextView>(R.id.tv_label).text = getString(R.string.app_name)
+        findViewById<TextView>(R.id.tv_label).text = getString(R.string.tt_app_name)
         val ivRight = findViewById<ImageView>(R.id.iv_right)
         ivRight.clearColorFilter()
         ivRight.visibility = View.GONE
@@ -44,7 +50,7 @@ class HomePage : AppMvpActivity<MainView, MainPresenter>(), MainView,
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (mBinding.drawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                if (mBinding.drawerLayout.isDrawerOpen(Gravity.START)) {
                     mBinding.drawerLayout.closeDrawers()
                     return
                 }
@@ -99,15 +105,5 @@ class HomePage : AppMvpActivity<MainView, MainPresenter>(), MainView,
 
         return true
     }
-
-//    override fun onDestroy() {
-//        if (SettingHelper.getForegroundServiceSwitch()) {
-//            //启动一个前台服务
-//            TranslationService.start(this)
-//        } else {
-//            TranslationService.stop(this)
-//        }
-//        super.onDestroy()
-//    }
 
 }

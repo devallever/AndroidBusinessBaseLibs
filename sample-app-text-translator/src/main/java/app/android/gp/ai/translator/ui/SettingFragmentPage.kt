@@ -1,7 +1,6 @@
 package app.android.gp.ai.translator.ui
 
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
@@ -122,8 +121,8 @@ class SettingFragmentPage : AppMvpFragment<SettingView, SettingPresenter>(), Set
 //            }
             R.id.setting_tv_share -> {
                 val msg = getString(
-                    R.string.share_content,
-                    getString(R.string.app_name),
+                    R.string.tt_share_content,
+                    getString(R.string.tt_app_name),
                     App.context.packageName
                 )
                 ShareHelper.shareText(this, msg)

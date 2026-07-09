@@ -25,11 +25,11 @@ class WordPage : AppActivity() {
         addStatusBar(mBinding.rootLayout, findViewById(R.id.top_bar))
         val ivLeft = findViewById<ImageView>(R.id.iv_left)
         val ivRight = findViewById<ImageView>(R.id.iv_right)
-        findViewById<TextView>(R.id.tv_label).text = getString(R.string.title_words)
+        findViewById<TextView>(R.id.tv_label).text = getString(R.string.tt_title_words)
         ivLeft.setOnClickListener {
             onKeyDown(0, null)
         }
-        ivRight.setImageResource(R.drawable.ic_history)
+        ivRight.setImageResource(R.drawable.tt_ic_history)
         ivRight.setOnClickListener {
             ActivityHelper.startActivity<HistoryPage>()
         }

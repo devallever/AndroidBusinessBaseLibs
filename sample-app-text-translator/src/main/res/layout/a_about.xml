@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <include layout="@layout/include_top_bar" />
+    <include layout="@layout/tt_include_top_bar" />
 
     <ImageView
         android:id="@+id/about_iv_logo"
@@ -23,8 +23,8 @@
         android:layout_below="@id/about_iv_logo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="@string/app_name"
-        android:textColor="@color/default_tv_color"
+        android:text="@string/tt_app_name"
+        android:textColor="@color/tt_default_tv_color"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -37,7 +37,7 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="V1.0"
-        android:textColor="@color/default_tv_color"
+        android:textColor="@color/tt_default_tv_color"
         android:textStyle="bold" />
 
     <TextView
@@ -47,8 +47,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        android:text="@string/about_right"
-        android:textColor="@color/default_tv_color"
+        android:text="@string/tt_about_right"
+        android:textColor="@color/tt_default_tv_color"
         android:textSize="10sp" />
 
     <TextView
@@ -58,13 +58,13 @@
         android:layout_above="@id/about_right"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp"
-        android:drawableStart="@drawable/ic_google_play_privacy"
-        android:drawableLeft="@drawable/ic_google_play_privacy"
+        android:drawableStart="@drawable/tt_ic_google_play_privacy"
+        android:drawableLeft="@drawable/tt_ic_google_play_privacy"
         android:drawablePadding="10dp"
         android:gravity="center"
         android:padding="5dp"
-        android:text="@string/privacy"
-        android:textColor="@color/default_tv_color"
+        android:text="@string/tt_privacy"
+        android:textColor="@color/tt_default_tv_color"
         android:textSize="12sp"
         android:visibility="visible" />
 

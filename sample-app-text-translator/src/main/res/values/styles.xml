@@ -1,33 +1,33 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="tt_AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/tt_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/tt_colorPrimaryDark</item>
+        <item name="colorAccent">@color/tt_colorAccent</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
 
-    <style name="AppTheme.NoActionBar">
+    <style name="tt_AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="SplashTheme" parent="AppTheme.NoActionBar">
-        <item name="android:windowBackground">@drawable/bg_common</item>
+    <style name="tt_SplashTheme" parent="tt_AppTheme.NoActionBar">
+        <item name="android:windowBackground">@drawable/tt_bg_common</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="tt_AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="tt_AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!-- 全屏 -->
-    <style name="FullScreenStyle" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="tt_FullScreenStyle" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
@@ -35,7 +35,7 @@
 
 
     <!-- Setting -->
-    <style name="setting_item">
+    <style name="tt_setting_item">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?actionBarSize</item>
         <item name="android:paddingLeft">20dp</item>
@@ -43,14 +43,14 @@
     </style>
 
     <!-- Setting -->
-    <style name="setting_item_label" parent="setting_item">
-        <item name="android:textColor">@color/default_tv_color</item>
+    <style name="tt_setting_item_label" parent="tt_setting_item">
+        <item name="android:textColor">@color/tt_default_tv_color</item>
         <item name="android:textSize">16sp</item>
         <item name="android:gravity">center_vertical</item>
     </style>
 
 
-    <style name="dialogstyle" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="tt_dialogstyle" parent="Theme.AppCompat.Light.NoActionBar">
         <!--设置dialog的背景-->
         <item name="android:windowBackground">@android:color/transparent</item>
         <!--设置Dialog的windowFrame框为无-->
@@ -69,7 +69,7 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-    <style name="TranslationDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+    <style name="tt_TranslationDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
         <!--背景颜色及和透明程度-->
         <item name="android:windowBackground">@android:color/transparent</item>
         <!--是否去除标题 -->
@@ -82,7 +82,7 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-    <style name="TTCommonCustomDialogStyle" parent="android:style/Theme.Dialog">
+    <style name="tt_TTCommonCustomDialogStyle" parent="android:style/Theme.Dialog">
         <!--背景颜色及和透明程度-->
         <item name="android:windowBackground">@android:color/transparent</item>
         <!--是否去除标题 -->

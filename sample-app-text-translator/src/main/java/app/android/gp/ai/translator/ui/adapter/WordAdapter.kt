@@ -42,9 +42,9 @@ class WordAdapter(context: Context, layoutResId: Int, data: MutableList<WordItem
     override fun bindHolder(holder: BaseViewHolder, position: Int, item: WordItem) {
         val history = item.history ?: return
         if (history.liked == 1) {
-            holder.setImageResource(R.id.ivLiked, R.drawable.ic_star_full)
+            holder.setImageResource(R.id.ivLiked, R.drawable.tt_ic_star_full)
         } else {
-            holder.setImageResource(R.id.ivLiked, R.drawable.ic_star_empty)
+            holder.setImageResource(R.id.ivLiked, R.drawable.tt_ic_star_empty)
         }
 
         holder.setText(R.id.tvSrcText, history.srcText)

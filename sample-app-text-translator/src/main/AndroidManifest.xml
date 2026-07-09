@@ -9,7 +9,7 @@
     <application>
         <activity
             android:name=".ui.SplashPage"
-            android:theme="@style/SplashTheme"
+            android:theme="@style/tt_SplashTheme"
             android:screenOrientation="portrait"
             android:exported="true">
         </activity>
@@ -26,7 +26,7 @@
 
         <activity
             android:name=".ui.DialogTranslatePage"
-            android:theme="@style/dialogstyle"
+            android:theme="@style/tt_dialogstyle"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
@@ -43,8 +43,9 @@
         <activity
             android:name=".ui.WordPage"
             android:screenOrientation="portrait" />
+        <activity android:name="app.allever.android.sample.app.text.translator.SampleTextTranslatorActivity" />
 
-<!--        <service-->
+        <!--        <service-->
 <!--            android:name=".function.TranslationService"-->
 <!--            android:priority="1000" />-->
 

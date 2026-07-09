@@ -5,7 +5,7 @@
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_top_bar">
+        android:background="@drawable/tt_bg_top_bar">
 
         <RelativeLayout
             android:id="@+id/topBarContainer"
@@ -15,13 +15,13 @@
 
             <ImageView
                 android:id="@+id/iv_left"
-                android:layout_width="@dimen/default_icon_width"
-                android:layout_height="@dimen/default_icon_height"
+                android:layout_width="@dimen/tt_default_icon_width"
+                android:layout_height="@dimen/tt_default_icon_height"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center_vertical"
                 android:scaleType="centerInside"
-                android:src="@drawable/icon_back"
-                android:tint="@color/top_bar_icon_color_filter" />
+                android:src="@drawable/tt_icon_back"
+                android:tint="@color/tt_top_bar_icon_color_filter" />
 
             <!-- 标题 -->
             <LinearLayout
@@ -38,15 +38,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:textColor="@color/top_bar_tv_color"
+                    android:textColor="@color/tt_top_bar_tv_color"
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/iv_right"
-                android:layout_width="@dimen/default_icon_height"
-                android:layout_height="@dimen/default_icon_width"
+                android:layout_width="@dimen/tt_default_icon_height"
+                android:layout_height="@dimen/tt_default_icon_width"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:scaleType="centerInside"
@@ -58,6 +58,6 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_below="@+id/topBarContainer"
-            android:background="@drawable/bg_top_bar_bottom" />
+            android:background="@drawable/tt_bg_top_bar_bottom" />
     </RelativeLayout>
 </merge>

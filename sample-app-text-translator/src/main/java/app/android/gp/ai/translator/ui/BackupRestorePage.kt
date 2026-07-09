@@ -24,7 +24,7 @@ class BackupRestorePage : AppMvpActivity<BackupRestoreView, BackupRestorePresent
     override fun initView() {
         addStatusBar(findViewById(R.id.rootLayout), findViewById(R.id.top_bar))
         findViewById<View>(R.id.iv_left).setOnClickListener(this)
-        findViewById<TextView>(R.id.tv_label).text = getString(R.string.backup_restore)
+        findViewById<TextView>(R.id.tv_label).text = getString(R.string.tt_backup_restore)
         mBtnBackup = findViewById(R.id.btnBackup)
         mBtnBackup.setOnClickListener(this)
         mBtnRestore = findViewById(R.id.btnRestore)
@@ -45,10 +45,10 @@ class BackupRestorePage : AppMvpActivity<BackupRestoreView, BackupRestorePresent
             }
             R.id.btnBackup -> {
                 AlertDialog.Builder(this)
-                    .setTitle(R.string.warm_tips)
-                    .setMessage(R.string.backup_tips)
+                    .setTitle(R.string.tt_warm_tips)
+                    .setMessage(R.string.tt_backup_tips)
                     .setPositiveButton(
-                        R.string.backup
+                        R.string.tt_backup
                     ) { dialog, which ->
                         mBtnBackup.isClickable = false
                         mPresenter?.backup(this, Runnable {
@@ -57,7 +57,7 @@ class BackupRestorePage : AppMvpActivity<BackupRestoreView, BackupRestorePresent
                         dialog.dismiss()
                     }
                     .setNegativeButton(
-                        R.string.cancle
+                        R.string.tt_cancle
                     ) { dialog, which ->
                         dialog.dismiss()
                     }
@@ -72,10 +72,10 @@ class BackupRestorePage : AppMvpActivity<BackupRestoreView, BackupRestorePresent
 
             R.id.btnDeleteBackup -> {
                 AlertDialog.Builder(this)
-                    .setTitle(R.string.warm_tips)
-                    .setMessage(R.string.del_backup_tips)
+                    .setTitle(R.string.tt_warm_tips)
+                    .setMessage(R.string.tt_del_backup_tips)
                     .setPositiveButton(
-                        R.string.del_backup
+                        R.string.tt_del_backup
                     ) { dialog, which ->
                         mBtnDelBackup.isClickable = false
                         mPresenter?.delBackup(this, Runnable {
@@ -84,7 +84,7 @@ class BackupRestorePage : AppMvpActivity<BackupRestoreView, BackupRestorePresent
                         dialog.dismiss()
                     }
                     .setNegativeButton(
-                        R.string.cancle
+                        R.string.tt_cancle
                     ) { dialog, which ->
                         dialog.dismiss()
                     }

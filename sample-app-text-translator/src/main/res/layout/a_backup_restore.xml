@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/include_top_bar" />
+    <include layout="@layout/tt_include_top_bar" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,8 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_margin="10dp"
-            android:background="@drawable/bg_common_btn"
-            android:text="@string/backup"
+            android:background="@drawable/tt_bg_common_btn"
+            android:text="@string/tt_backup"
             android:textColor="@color/white" />
 
 
@@ -27,8 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_margin="10dp"
-            android:background="@drawable/bg_common_btn"
-            android:text="@string/restore"
+            android:background="@drawable/tt_bg_common_btn"
+            android:text="@string/tt_restore"
             android:textColor="@color/white" />
 
         <Button
@@ -36,8 +36,8 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_margin="10dp"
-            android:background="@drawable/bg_btn_delete_backup"
-            android:text="@string/del_backup"
+            android:background="@drawable/tt_bg_btn_delete_backup"
+            android:text="@string/tt_del_backup"
             android:textColor="@color/white" />
 
     </LinearLayout>

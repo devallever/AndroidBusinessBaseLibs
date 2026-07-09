@@ -15,7 +15,7 @@
         android:layout_marginRight="10dp">
 
         <!-- 选择语言 -->
-        <include layout="@layout/include_select_language_bar" />
+        <include layout="@layout/tt_include_select_language_bar" />
 
         <!-- 输入栏 -->
         <RelativeLayout
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:layout_below="@+id/itemSelectLanguage"
-            android:background="@drawable/bg_input_container">
+            android:background="@drawable/tt_bg_input_container">
 
             <EditText
                 android:id="@+id/etInputContent"
@@ -32,13 +32,13 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toLeftOf="@+id/ivInputClose"
                 android:background="#00000000"
-                android:hint="@string/please_input_content"
+                android:hint="@string/tt_please_input_content"
                 android:imeOptions="actionSearch"
                 android:maxLines="1"
                 android:padding="5dp"
                 android:singleLine="true"
                 android:textColor="@color/black"
-                android:textColorHint="@color/et_hint_color"
+                android:textColorHint="@color/tt_et_hint_color"
                 android:textSize="14sp"
                 tools:ignore="RtlHardcoded" />
 
@@ -50,7 +50,7 @@
                 android:layout_centerVertical="true"
                 android:rotation="90"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_close"
+                android:src="@drawable/tt_ic_close"
                 android:tint="@color/gray_700"
                 android:visibility="gone" />
         </RelativeLayout>
@@ -106,7 +106,7 @@
                                 android:layout_width="40dp"
                                 android:layout_height="match_parent"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/ic_sound"
+                                android:src="@drawable/tt_ic_sound"
                                 android:tint="@color/black" />
 
                             <TextView
@@ -126,7 +126,7 @@
                                 android:layout_centerVertical="true"
                                 android:padding="10dp"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/ic_star_empty" />
+                                android:src="@drawable/tt_ic_star_empty" />
 
                             <ImageView
                                 android:id="@+id/ivCopySrcText"
@@ -136,7 +136,7 @@
                                 android:layout_toStartOf="@+id/ivLiked"
                                 android:padding="10dp"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/ic_copy"
+                                android:src="@drawable/tt_ic_copy"
                                 android:tint="@color/black" />
 
                         </RelativeLayout>
@@ -192,7 +192,7 @@
                                 android:layout_width="40dp"
                                 android:layout_height="match_parent"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/ic_sound"
+                                android:src="@drawable/tt_ic_sound"
                                 android:tint="@color/black" />
 
                             <TextView
@@ -212,7 +212,7 @@
                                 android:layout_centerVertical="true"
                                 android:padding="10dp"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/ic_copy"
+                                android:src="@drawable/tt_ic_copy"
                                 android:tint="@color/black" />
 
                             <ImageView
@@ -223,7 +223,7 @@
                                 android:layout_toStartOf="@+id/ivCopyTranslateText"
                                 android:padding="10dp"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/ic_share"
+                                android:src="@drawable/tt_ic_share"
                                 android:tint="@color/black" />
                         </RelativeLayout>
 
@@ -264,8 +264,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="@string/translation_more"
-                        android:textColor="@color/default_theme_color"
+                        android:text="@string/tt_translation_more"
+                        android:textColor="@color/tt_default_theme_color"
                         android:textStyle="bold" />
 
                     <androidx.cardview.widget.CardView

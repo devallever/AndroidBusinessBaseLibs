@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="300dp"
+    android:background="@drawable/tt_bg_copy_translation_result"
     android:scrollbars="none">
 
     <LinearLayout
@@ -27,7 +28,8 @@
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_sound" />
+                    android:src="@drawable/tt_ic_sound"
+                    android:tint="@color/black" />
 
                 <TextView
                     android:id="@+id/tvSoundSrcLanguage"
@@ -36,7 +38,7 @@
                     android:layout_toEndOf="@+id/ivSoundSrc"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/black" />
 
                 <ImageView
                     android:id="@+id/ivLiked"
@@ -46,7 +48,7 @@
                     android:layout_centerVertical="true"
                     android:padding="10dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_star_empty" />
+                    android:src="@drawable/tt_ic_star_empty" />
 
                 <ImageView
                     android:id="@+id/ivCopySrcText"
@@ -56,7 +58,8 @@
                     android:layout_toStartOf="@+id/ivLiked"
                     android:padding="10dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_copy" />
+                    android:src="@drawable/tt_ic_copy"
+                    android:tint="@color/black" />
 
             </RelativeLayout>
 
@@ -67,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:text=""
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -78,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:padding="0dp"
                 android:text=""
-                android:textColor="@color/default_gray_alpha" />
+                android:textColor="@color/gray_700" />
 
         </LinearLayout>
 
@@ -101,7 +104,8 @@
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_sound" />
+                    android:src="@drawable/tt_ic_sound"
+                    android:tint="@color/black" />
 
                 <TextView
                     android:id="@+id/tvSoundTranslateLanguage"
@@ -110,7 +114,7 @@
                     android:layout_toEndOf="@+id/ivSoundTranslate"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/black" />
 
                 <ImageView
                     android:id="@+id/ivCopyTranslateText"
@@ -120,7 +124,8 @@
                     android:layout_centerVertical="true"
                     android:padding="10dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_copy" />
+                    android:src="@drawable/tt_ic_copy"
+                    android:tint="@color/black" />
 
                 <ImageView
                     android:id="@+id/ivShareTranslateSound"
@@ -130,8 +135,8 @@
                     android:layout_toStartOf="@+id/ivCopyTranslateText"
                     android:padding="10dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_share"
-                    android:tint="@color/default_gray_alpha" />
+                    android:src="@drawable/tt_ic_share"
+                    android:tint="@color/black" />
             </RelativeLayout>
 
             <!-- 翻译文本 -->
@@ -141,7 +146,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:text=""
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -152,7 +157,7 @@
                 android:layout_height="wrap_content"
                 android:padding="0dp"
                 android:text=""
-                android:textColor="@color/default_gray_alpha" />
+                android:textColor="@color/gray_700" />
 
         </LinearLayout>
 
@@ -162,7 +167,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
     </LinearLayout>

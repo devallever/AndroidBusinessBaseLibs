@@ -18,7 +18,7 @@ class SettingPage : AppMvpActivity<SettingView, SettingPresenter>(), SettingView
 
     override fun initView() {
         addStatusBar(mBinding.rootLayout, findViewById(R.id.top_bar))
-        findViewById<TextView>(R.id.tv_label).text = getString(R.string.setting)
+        findViewById<TextView>(R.id.tv_label).text = getString(R.string.tt_setting)
         findViewById<View>(R.id.iv_left).setOnClickListener {
             finish()
         }

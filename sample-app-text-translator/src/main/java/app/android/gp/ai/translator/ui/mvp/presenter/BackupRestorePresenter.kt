@@ -10,7 +10,6 @@ import app.android.gp.ai.translator.R
 import app.android.gp.ai.translator.app.mvp.BasePresenter
 import app.android.gp.ai.translator.bean.Backup
 import app.android.gp.ai.translator.db.DBHelper
-import app.android.gp.ai.translator.util.FileUtils
 import com.google.gson.Gson
 //import org.xm.app.text.translator.ui.mvp.view.BackupRestoreView
 import java.io.File
@@ -23,7 +22,7 @@ class BackupRestorePresenter : BasePresenter<BackupRestoreView>() {
 
         val historyList = DBHelper.getAllHistory()
         if (historyList.isEmpty()) {
-            toast(R.string.no_backup_data)
+            toast(R.string.tt_no_backup_data)
             task.run()
             return
         }
@@ -33,9 +32,9 @@ class BackupRestorePresenter : BasePresenter<BackupRestoreView>() {
         log("backupResult = $result")
         val success = app.allever.android.lib.core.util.FileUtils.saveStringToFile(result, BACKUP_FILE_PATH)
         if (success) {
-            toast(R.string.backup_success)
+            toast(R.string.tt_backup_success)
         } else {
-            toast(R.string.backup_fail)
+            toast(R.string.tt_backup_fail)
         }
         task.run()
 

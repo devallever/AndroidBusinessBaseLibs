@@ -9,7 +9,7 @@ object ClipboardHelper {
     fun copy(content: String?) {
         val ret = ClipboardInterface.setText(content, App.context)
         if (ret) {
-            toast(App.context.getString(R.string.already_copied_to_clipboard))
+            toast(App.context.getString(R.string.tt_already_copied_to_clipboard))
         }
     }
 }

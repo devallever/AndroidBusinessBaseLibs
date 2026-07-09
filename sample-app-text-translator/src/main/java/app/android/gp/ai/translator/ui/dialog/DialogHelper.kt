@@ -74,9 +74,9 @@ object DialogHelper {
         mIvLiked.setOnClickListener {
             val newHistory = TranslationHelper.liked(history)
             if (newHistory?.liked == 1) {
-                mIvLiked.setImageResource(R.drawable.ic_star_full)
+                mIvLiked.setImageResource(R.drawable.tt_ic_star_full)
             } else {
-                mIvLiked.setImageResource(R.drawable.ic_star_empty)
+                mIvLiked.setImageResource(R.drawable.tt_ic_star_empty)
             }
         }
         mIvCopySrcText = root.findViewById(R.id.ivCopySrcText)
@@ -113,9 +113,9 @@ object DialogHelper {
             val dictText = translationBean.more
             mTvSoundSrcLanguage.text = srcLang
             if (history.liked == 1) {
-                mIvLiked.setImageResource(R.drawable.ic_star_full)
+                mIvLiked.setImageResource(R.drawable.tt_ic_star_full)
             } else {
-                mIvLiked.setImageResource(R.drawable.ic_star_empty)
+                mIvLiked.setImageResource(R.drawable.tt_ic_star_empty)
             }
             mTvSrcText.text = srcText
             mTvSrcSymbol.text = srcSymbol
@@ -135,7 +135,7 @@ object DialogHelper {
 
         mTranslateResultContainer.visibility = View.VISIBLE
 
-        return AlertDialog.Builder(activity, R.style.TTCommonCustomDialogStyle)
+        return AlertDialog.Builder(activity, R.style.tt_TTCommonCustomDialogStyle)
             .setView(root)
             .setCancelable(true)
             .create()
@@ -171,7 +171,7 @@ object DialogHelper {
             dataList.removeAt(0)
         }
 
-        val adapter = SelectLangAdapter(activity, R.layout.item_language, dataList)
+        val adapter = SelectLangAdapter(activity, R.layout.tt_item_language, dataList)
         val recyclerView = root.findViewById<RecyclerView>(R.id.rvLanguage)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapter
@@ -216,7 +216,7 @@ object DialogHelper {
         firstItem.lang = Lang.ALL
         dataList.add(0, firstItem)
 
-        val adapter = SelectLangAdapter(activity, R.layout.item_language, dataList)
+        val adapter = SelectLangAdapter(activity, R.layout.tt_item_language, dataList)
         val recyclerView = root.findViewById<RecyclerView>(R.id.rvLanguage)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapter
@@ -256,7 +256,7 @@ object DialogHelper {
             dataList.add(item)
         }
 
-        val adapter = SelectEngineAdapter(activity, R.layout.item_language, dataList)
+        val adapter = SelectEngineAdapter(activity, R.layout.tt_item_language, dataList)
         val recyclerView = root.findViewById<RecyclerView>(R.id.rvLanguage)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapter

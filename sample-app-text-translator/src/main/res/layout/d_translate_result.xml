@@ -2,8 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="300dp"
-    android:background="@drawable/bg_result_dialog">
+    android:background="@drawable/tt_bg_result_dialog">
 
-    <include layout="@layout/include_translate_result_white" />
+    <include layout="@layout/tt_include_translate_result_white" />
 
 </FrameLayout>

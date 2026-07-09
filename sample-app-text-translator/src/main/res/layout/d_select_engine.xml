@@ -7,9 +7,9 @@
         android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:background="@color/default_theme_color"
+        android:background="@color/tt_default_theme_color"
         android:gravity="center"
-        android:text="@string/select_engine"
+        android:text="@string/tt_select_engine"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -19,6 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvTitle"
-        android:background="@color/default_gray_alpha" />
+        android:background="@color/tt_default_gray_alpha" />
 
 </RelativeLayout>

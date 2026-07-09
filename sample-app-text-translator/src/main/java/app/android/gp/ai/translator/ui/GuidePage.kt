@@ -22,7 +22,7 @@ class GuidePage : AppActivity() {
         findViewById<View>(R.id.iv_left).setOnClickListener {
             finish()
         }
-        findViewById<TextView>(R.id.tv_label).text = getString(R.string.setting_guide)
+        findViewById<TextView>(R.id.tv_label).text = getString(R.string.tt_setting_guide)
 
         mBinding.btnFeedback.setOnClickListener {
             FeedbackHelper.feedback(this)

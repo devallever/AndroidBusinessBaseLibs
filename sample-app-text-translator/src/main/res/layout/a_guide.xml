@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <include layout="@layout/include_top_bar" />
+    <include layout="@layout/tt_include_top_bar" />
 
     <TextView
         android:id="@+id/tvGuide"
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/top_bar"
         android:padding="10dp"
-        android:text="@string/guide" />
+        android:text="@string/tt_guide" />
 
     <Button
         android:id="@+id/btnFeedback"
@@ -21,8 +21,8 @@
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:layout_margin="10dp"
-        android:background="@drawable/bg_common_btn"
-        android:text="@string/feedback"
+        android:background="@drawable/tt_bg_common_btn"
+        android:text="@string/tt_feedback"
         android:textColor="@color/white" />
 
     <FrameLayout

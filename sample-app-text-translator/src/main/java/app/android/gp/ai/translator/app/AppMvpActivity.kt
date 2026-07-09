@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.util.BarUtils
 import app.android.gp.ai.translator.R
 import app.android.gp.ai.translator.app.mvp.BaseMvpActivity
@@ -38,23 +37,23 @@ abstract class AppMvpActivity<V, P : BasePresenter<V>> : BaseMvpActivity<V, P>()
 
     protected fun addStatusBar(rootLayout: ViewGroup, toolBar: View) {
         val statusBarView = View(this)
-        log("woow9520s.xje0w")
+
         statusBarView.id = statusBarView.hashCode()
-        log("woow9520s.xje0w")
-        statusBarView.setBackgroundResource(R.drawable.bg_top_bar)
-        log("woow9520s.xje0w")
+        
+        statusBarView.setBackgroundResource(R.drawable.tt_bg_top_bar)
+        
         val statusBarHeight = BarUtils.getStatusBarHeight()
-        log("woow9520s.xje0w")
+        
         val lp = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight)
 
         if (rootLayout is RelativeLayout) {
             rootLayout.addView(statusBarView, lp)
-            log("woow9520s.xje0w")
+            
             val topBarLp = toolBar.layoutParams as? RelativeLayout.LayoutParams
             topBarLp?.addRule(RelativeLayout.BELOW, statusBarView.id)
         } else if (rootLayout is LinearLayout) {
             rootLayout.addView(statusBarView, 0, lp)
         }
-        log("woow9520s.xje0w")
+        
     }
 }

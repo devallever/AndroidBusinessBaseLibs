@@ -1,75 +1,73 @@
 <resources>
-    <string name="admob_app_id" translatable="false">ca-app-pub-0000000000000000~0000000000</string>
-    <string name="ad">Ad</string>
 
-    <string name="app_name">AI Translator</string>
+    <string name="tt_app_name">AI Translator</string>
 
     <!-- 设置 -->
-    <string name="setting">Settings</string>
+    <string name="tt_setting">Settings</string>
 
-    <string name="title_history">History</string>
-    <string name="title_words">Words</string>
+    <string name="tt_title_history">History</string>
+    <string name="tt_title_words">Words</string>
 
-    <string name="share">Share</string>
-    <string name="feedback">Feedback</string>
-    <string name="about">About</string>
-    <string name="support">Support Us</string>
-    <string name="privacy">Privacy policy</string>
-    <string name="setting_guide">Instructions For Use</string>
-    <string name="about_right">Copyright @2018–2024 %s All rights reserved</string>
+    <string name="tt_share">Share</string>
+    <string name="tt_feedback">Feedback</string>
+    <string name="tt_about">About</string>
+    <string name="tt_support">Support Us</string>
+    <string name="tt_privacy">Privacy policy</string>
+    <string name="tt_setting_guide">Instructions For Use</string>
+    <string name="tt_about_right">Copyright @2018–2024 %s All rights reserved</string>
 
     <!-- 翻译设置 -->
-    <string name="auto_play_audio">Auto Play Voice</string>
-    <string name="copy_to_clipboard">Copy to Pasteboard</string>
-    <string name="auto_translate">Global Replication Search</string>
-    <string name="foreground_service_permanent">Notification bar resident</string>
-    <string name="default_translate_lang">Set default translation language</string>
-    <string name="default_translate_engine">Set default translation engine</string>
-    <string name="backup_restore">Data Backup and Recovery</string>
+    <string name="tt_auto_play_audio">Auto Play Voice</string>
+    <string name="tt_copy_to_clipboard">Copy to Pasteboard</string>
+    <string name="tt_auto_translate">Global Replication Search</string>
+    <string name="tt_foreground_service_permanent">Notification bar resident</string>
+    <string name="tt_default_translate_lang">Set default translation language</string>
+    <string name="tt_default_translate_engine">Set default translation engine</string>
+    <string name="tt_backup_restore">Data Backup and Recovery</string>
 
-    <string name="chinese">中文</string>
-    <string name="english">English</string>
+    <string name="tt_chinese">中文</string>
+    <string name="tt_english">English</string>
 
-    <string name="guide">
+    <string name="tt_guide">
         1. If you want to use the copy search function, please agree to allow the background pop-up interface and display the hanging window.
         \n\n2. If the window for granting permission cannot be popped up, please go to "Settings -> Set Permissions" manually. Get permission
         \n\n3. It is recommended to enable the notification bar to be resident, so as to better use the global copy search function
         \n\n4. If you have any suggestions or comments, please send us feedback.</string>
 
-    <string name="all">All</string>
+    <string name="tt_all">All</string>
 
-    <string name="select_lang">Please Select a language</string>
-    <string name="select_engine">Please Select a Translate Engine</string>
-    <string name="already_copied_to_clipboard">Already Copied to clipboard</string>
-    <string name="backup">Backup</string>
-    <string name="restore">Restore</string>
-    <string name="del_backup">Delete Backup</string>
-    <string name="warm_tips">Tips</string>
-    <string name="backup_tips">This will overwrite the previous backup. Do you need a backup?</string>
-    <string name="del_backup_tips">This operation will delete your backup file. Do you need to delete it?</string>
-    <string name="cancle">Cancel</string>
-    <string name="ok">Ok</string>
-    <string name="please_input_content">Please enter what you want to translate</string>
-    <string name="reject_permission_tips">Denying permissions will not be able to use certain features</string>
-    <string name="no_wire_store_permission_tips">No Write Permission</string>
-    <string name="no_read_store_permission_tips">No Read Storage Permission</string>
-    <string name="remove_tips">Do you want to remove the selected word?</string>
-    <string name="added_to_words">Added to word book</string>
-    <string name="removed_from_words">Has been removed from the word book</string>
-    <string name="un_slelectd">Unselected</string>
-    <string name="no_backup_data">No Backup data</string>
-    <string name="backup_success">Backup Success</string>
-    <string name="backup_fail">Backup Failed</string>
-    <string name="restore_success">Successful Recovery</string>
-    <string name="restore_fail">Recovery Failure</string>
-    <string name="del_backup_success">Delete backup successfully</string>
+    <string name="tt_select_lang">Please Select a language</string>
+    <string name="tt_select_engine">Please Select a Translate Engine</string>
+    <string name="tt_already_copied_to_clipboard">Already Copied to clipboard</string>
+    <string name="tt_backup">Backup</string>
+    <string name="tt_restore">Restore</string>
+    <string name="tt_del_backup">Delete Backup</string>
+    <string name="tt_warm_tips">Tips</string>
+    <string name="tt_backup_tips">This will overwrite the previous backup. Do you need a backup?</string>
+    <string name="tt_del_backup_tips">This operation will delete your backup file. Do you need to delete it?</string>
+    <string name="tt_cancle">Cancel</string>
+    <string name="tt_ok">Ok</string>
+    <string name="tt_please_input_content">Please enter what you want to translate</string>
+    <string name="tt_reject_permission_tips">Denying permissions will not be able to use certain features</string>
+    <string name="tt_no_wire_store_permission_tips">No Write Permission</string>
+    <string name="tt_no_read_store_permission_tips">No Read Storage Permission</string>
+    <string name="tt_remove_tips">Do you want to remove the selected word?</string>
+    <string name="tt_added_to_words">Added to word book</string>
+    <string name="tt_removed_from_words">Has been removed from the word book</string>
+    <string name="tt_un_slelectd">Unselected</string>
+    <string name="tt_no_backup_data">No Backup data</string>
+    <string name="tt_backup_success">Backup Success</string>
+    <string name="tt_backup_fail">Backup Failed</string>
+    <string name="tt_restore_success">Successful Recovery</string>
+    <string name="tt_restore_fail">Recovery Failure</string>
+    <string name="tt_del_backup_success">Delete backup successfully</string>
 
-    <string name="translate_go">Go</string>
+    <string name="tt_translate_go">Go</string>
 
-    <string name="share_content">【%s】This application is very good, I recommend it. Get address \n
+    <string name="tt_share_content">【%s】This application is very good, I recommend it. Get address \n
 https://play.google.com/store/apps/details?id=%s</string>
 
-    <string name="translation_more">More</string>
+    <string name="tt_translation_more">More</string>
 
-    <string name="notification_msg">%s is providing you with translation services</string>
+    <string name="tt_notification_msg">%s is providing you with translation services</string>
 </resources>

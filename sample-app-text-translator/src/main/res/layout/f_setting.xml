@@ -16,13 +16,13 @@
 
             <RelativeLayout
                 android:id="@+id/itemDefaultTranslateLang"
-                style="@style/setting_item">
+                style="@style/tt_setting_item">
 
                 <TextView
-                    style="@style/setting_item_label"
+                    style="@style/tt_setting_item_label"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
-                    android:text="@string/default_translate_lang" />
+                    android:text="@string/tt_default_translate_lang" />
 
                 <TextView
                     android:id="@+id/tvDefaultTranslateLang"
@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@id/ivDefaultTranslateLang"
-                    android:text="@string/english" />
+                    android:text="@string/tt_english" />
 
                 <ImageView
                     android:id="@+id/ivDefaultTranslateLang"
@@ -39,22 +39,22 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:checked="true"
-                    android:src="@drawable/ic_arrow" />
+                    android:src="@drawable/tt_ic_arrow" />
 
 
             </RelativeLayout>
 
-            <include layout="@layout/include_divider_line" />
+            <include layout="@layout/tt_include_divider_line" />
 
             <RelativeLayout
                 android:id="@+id/itemDefaultTranslateEngine"
-                style="@style/setting_item">
+                style="@style/tt_setting_item">
 
                 <TextView
-                    style="@style/setting_item_label"
+                    style="@style/tt_setting_item_label"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
-                    android:text="@string/default_translate_engine" />
+                    android:text="@string/tt_default_translate_engine" />
 
                 <TextView
                     android:id="@+id/tvDefaultTranslateEngine"
@@ -71,23 +71,23 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:checked="true"
-                    android:src="@drawable/ic_arrow" />
+                    android:src="@drawable/tt_ic_arrow" />
 
 
             </RelativeLayout>
 
-            <include layout="@layout/include_divider_line" />
+            <include layout="@layout/tt_include_divider_line" />
 
             <RelativeLayout
                 android:id="@+id/itemAutoPlayAudio"
-                style="@style/setting_item">
+                style="@style/tt_setting_item">
 
                 <TextView
-                    style="@style/setting_item_label"
+                    style="@style/tt_setting_item_label"
                     android:layout_toStartOf="@id/switchAutoPlayAudio"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
-                    android:text="@string/auto_play_audio" />
+                    android:text="@string/tt_auto_play_audio" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchAutoPlayAudio"
@@ -99,18 +99,18 @@
 
             </RelativeLayout>
 
-            <include layout="@layout/include_divider_line" />
+            <include layout="@layout/tt_include_divider_line" />
 
             <RelativeLayout
                 android:id="@+id/itemCopyToClipBoard"
-                style="@style/setting_item">
+                style="@style/tt_setting_item">
 
                 <TextView
-                    style="@style/setting_item_label"
+                    style="@style/tt_setting_item_label"
                     android:layout_toStartOf="@id/switchCopyToClipboard"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
-                    android:text="@string/copy_to_clipboard" />
+                    android:text="@string/tt_copy_to_clipboard" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchCopyToClipboard"
@@ -122,18 +122,18 @@
 
             </RelativeLayout>
 
-            <include layout="@layout/include_divider_line" />
+            <include layout="@layout/tt_include_divider_line" />
 
             <RelativeLayout
                 android:id="@+id/itemAutoTranslate"
-                style="@style/setting_item">
+                style="@style/tt_setting_item">
 
                 <TextView
-                    style="@style/setting_item_label"
+                    style="@style/tt_setting_item_label"
                     android:layout_toStartOf="@id/switchAutoTranslate"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
-                    android:text="@string/auto_translate" />
+                    android:text="@string/tt_auto_translate" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchAutoTranslate"
@@ -145,18 +145,18 @@
 
             </RelativeLayout>
 
-            <include layout="@layout/include_divider_line" />
+            <include layout="@layout/tt_include_divider_line" />
 
             <RelativeLayout
                 android:id="@+id/itemForegroundService"
-                style="@style/setting_item">
+                style="@style/tt_setting_item">
 
                 <TextView
-                    style="@style/setting_item_label"
+                    style="@style/tt_setting_item_label"
                     android:layout_toStartOf="@id/switchForegroundService"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
-                    android:text="@string/foreground_service_permanent" />
+                    android:text="@string/tt_foreground_service_permanent" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchForegroundService"
@@ -168,7 +168,7 @@
 
             </RelativeLayout>
 
-            <include layout="@layout/include_divider_line" />
+            <include layout="@layout/tt_include_divider_line" />
 
             <!--            <RelativeLayout-->
             <!--                android:id="@+id/itemBackupRestore"-->
@@ -201,16 +201,16 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="@color/divider_color" />
+                android:background="@color/tt_divider_color" />
 
 
             <TextView
                 android:id="@+id/setting_tv_guide"
-                style="@style/setting_item_label"
-                android:drawableEnd="@drawable/ic_arrow"
-                android:text="@string/setting_guide" />
+                style="@style/tt_setting_item_label"
+                android:drawableEnd="@drawable/tt_ic_arrow"
+                android:text="@string/tt_setting_guide" />
 
-            <include layout="@layout/include_divider_line" />
+            <include layout="@layout/tt_include_divider_line" />
 
             <!--            <TextView-->
             <!--                android:id="@+id/setting_tv_permission"-->
@@ -222,13 +222,13 @@
 
             <TextView
                 android:id="@+id/setting_tv_share"
-                style="@style/setting_item_label"
-                android:drawableEnd="@drawable/ic_share"
-                android:text="@string/share"
+                style="@style/tt_setting_item_label"
+                android:drawableEnd="@drawable/tt_ic_share"
+                android:text="@string/tt_share"
                 android:visibility="visible" />
 
             <include
-                layout="@layout/include_divider_line"
+                layout="@layout/tt_include_divider_line"
                 android:visibility="visible" />
 
             <!--            <TextView-->
@@ -241,14 +241,14 @@
 
             <TextView
                 android:id="@+id/setting_tv_about"
-                style="@style/setting_item_label"
-                android:drawableEnd="@drawable/ic_about"
-                android:text="@string/about" />
+                style="@style/tt_setting_item_label"
+                android:drawableEnd="@drawable/tt_ic_about"
+                android:text="@string/tt_about" />
 
-            <include layout="@layout/include_divider_line" />
+            <include layout="@layout/tt_include_divider_line" />
 
             <include
-                layout="@layout/include_divider_line"
+                layout="@layout/tt_include_divider_line"
                 android:visibility="visible" />
 
             <FrameLayout

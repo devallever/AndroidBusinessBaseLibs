@@ -33,11 +33,11 @@ class AboutPage : AppMvpActivity<AboutView, AboutPresenter>(), AboutView {
         findViewById<View>(R.id.iv_left).setOnClickListener {
             finish()
         }
-        findViewById<TextView>(R.id.tv_label).text = getString(R.string.about)
+        findViewById<TextView>(R.id.tv_label).text = getString(R.string.tt_about)
         val last = ""
         mBinding.aboutAppVersion.text = "v1.0"
         mBinding.aboutRight.text =
-            String.format(getString(R.string.about_right), getString(R.string.app_name))
+            String.format(getString(R.string.tt_about_right), getString(R.string.tt_app_name))
     }
 
     override fun initData() {

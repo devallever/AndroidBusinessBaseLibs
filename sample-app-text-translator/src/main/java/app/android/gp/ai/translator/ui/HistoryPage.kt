@@ -60,7 +60,7 @@ class HistoryPage : AppMvpActivity<HistoryView, HistoryPresenter>(), HistoryView
         addStatusBar(findViewById(R.id.rootLayout), findViewById(R.id.top_bar))
         EventBus.getDefault().register(this)
         findViewById<View>(R.id.iv_left).setOnClickListener(this)
-        findViewById<TextView>(R.id.tv_label).text = getString(R.string.title_history)
+        findViewById<TextView>(R.id.tv_label).text = getString(R.string.tt_title_history)
         val ivRight = findViewById<ImageView>(R.id.iv_right)
         ivRight.setOnClickListener(this)
 //        ivRight.visibility = View.VISIBLE
@@ -105,7 +105,7 @@ class HistoryPage : AppMvpActivity<HistoryView, HistoryPresenter>(), HistoryView
 
         mRvWord = findViewById(R.id.rvHistory)
         mRvWord.layoutManager = LinearLayoutManager(this)
-        mAdapter = WordAdapter(this, R.layout.item_word, mWordItemList)
+        mAdapter = WordAdapter(this, R.layout.tt_item_word, mWordItemList)
         mRvWord.adapter = mAdapter
         mAdapter?.itemOptionListener = object : WordAdapter.OnItemOptionClick {
             override fun onItemClicked(position: Int) {
@@ -129,13 +129,13 @@ class HistoryPage : AppMvpActivity<HistoryView, HistoryPresenter>(), HistoryView
             override fun onRemoveClicked(position: Int) {
 //                toast("onRemoveClicked")
                 AlertDialog.Builder(this@HistoryPage)
-                    .setMessage(R.string.remove_tips)
+                    .setMessage(R.string.tt_remove_tips)
                     .setCancelable(true)
-                    .setPositiveButton(R.string.ok) { dialog, which ->
+                    .setPositiveButton(R.string.tt_ok) { dialog, which ->
                         mPresenter.remove(mWordItemList[position].history)
                         dialog.dismiss()
                     }
-                    .setNegativeButton(R.string.cancle) { dialog, which ->
+                    .setNegativeButton(R.string.tt_cancle) { dialog, which ->
                         dialog.dismiss()
                     }
                     .show()
@@ -171,17 +171,17 @@ class HistoryPage : AppMvpActivity<HistoryView, HistoryPresenter>(), HistoryView
             }
             R.id.ivBottomBarDelete -> {
                 if (mAdapter?.selectedItem?.isEmpty() == true) {
-                    toast(R.string.un_slelectd)
+                    toast(R.string.tt_un_slelectd)
                     return
                 }
                 AlertDialog.Builder(this)
-                    .setMessage(R.string.remove_tips)
+                    .setMessage(R.string.tt_remove_tips)
                     .setCancelable(true)
-                    .setPositiveButton(R.string.ok) { dialog, which ->
+                    .setPositiveButton(R.string.tt_ok) { dialog, which ->
                         mPresenter.removeHistories(mAdapter?.selectedItem)
                         dialog.dismiss()
                     }
-                    .setNegativeButton(R.string.cancle) { dialog, which ->
+                    .setNegativeButton(R.string.tt_cancle) { dialog, which ->
                         dialog.dismiss()
                     }
                     .show()

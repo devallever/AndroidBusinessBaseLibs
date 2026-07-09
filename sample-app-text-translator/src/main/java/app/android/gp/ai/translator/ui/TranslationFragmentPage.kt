@@ -322,9 +322,9 @@ class TranslationFragmentPage : AppMvpFragment<TranslationView, TranslationPrese
 
     override fun refreshLiked(liked: Boolean) {
         if (liked) {
-            mIvLiked.setImageResource(R.drawable.ic_star_full)
+            mIvLiked.setImageResource(R.drawable.tt_ic_star_full)
         } else {
-            mIvLiked.setImageResource(R.drawable.ic_star_empty)
+            mIvLiked.setImageResource(R.drawable.tt_ic_star_empty)
         }
     }
 

@@ -20,7 +20,7 @@ class TranslationPresenter : BasePresenter<TranslationView>() {
 
     fun translate(content: String, sl: String = LanguageHelper.AUTO(), translateLanguage: String) {
         if (content.isEmpty()) {
-            toast(R.string.please_input_content)
+            toast(R.string.tt_please_input_content)
             return
         }
 
@@ -79,9 +79,9 @@ class TranslationPresenter : BasePresenter<TranslationView>() {
             val history = DBHelper.getHistory(content, sl, tl)
             val like = history?.liked
             if (like == 0) {
-                toast(R.string.added_to_words)
+                toast(R.string.tt_added_to_words)
             } else {
-                toast(R.string.removed_from_words)
+                toast(R.string.tt_removed_from_words)
             }
             mViewRef?.get()?.refreshLiked(history?.liked == 1)
             EventBus.getDefault().post(UpdateRecordEventB())

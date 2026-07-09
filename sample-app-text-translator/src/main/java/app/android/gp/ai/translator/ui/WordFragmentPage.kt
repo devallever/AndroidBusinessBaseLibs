@@ -99,7 +99,7 @@ class WordFragmentPage : AppMvpFragment<WordView, WordPresenter>(), WordView, Vi
 
         mRvHistory = root.findViewById(R.id.rvWords)
         mRvHistory.layoutManager = LinearLayoutManager(activity)
-        mAdapter = WordAdapter(requireActivity(), R.layout.item_word, mWordItemList)
+        mAdapter = WordAdapter(requireActivity(), R.layout.tt_item_word, mWordItemList)
         mRvHistory.adapter = mAdapter
         mAdapter?.itemOptionListener = object : WordAdapter.OnItemOptionClick {
             override fun onItemClicked(position: Int) {
@@ -123,13 +123,13 @@ class WordFragmentPage : AppMvpFragment<WordView, WordPresenter>(), WordView, Vi
             override fun onRemoveClicked(position: Int) {
 //                toast("onRemoveClicked")
                 AlertDialog.Builder(activity!!)
-                    .setMessage(R.string.remove_tips)
+                    .setMessage(R.string.tt_remove_tips)
                     .setCancelable(true)
-                    .setPositiveButton(R.string.ok) { dialog, which ->
+                    .setPositiveButton(R.string.tt_ok) { dialog, which ->
                         mPresenter.removeLiked(mWordItemList[position].history)
                         dialog.dismiss()
                     }
-                    .setNegativeButton(R.string.cancle) { dialog, which ->
+                    .setNegativeButton(R.string.tt_cancle) { dialog, which ->
                         dialog.dismiss()
                     }
                     .show()
@@ -159,17 +159,17 @@ class WordFragmentPage : AppMvpFragment<WordView, WordPresenter>(), WordView, Vi
             }
             R.id.ivBottomBarDelete -> {
                 if (mAdapter?.selectedItem?.isEmpty() == true) {
-                    toast(R.string.un_slelectd)
+                    toast(R.string.tt_un_slelectd)
                     return
                 }
                 AlertDialog.Builder(requireActivity())
-                    .setMessage(R.string.remove_tips)
+                    .setMessage(R.string.tt_remove_tips)
                     .setCancelable(true)
-                    .setPositiveButton(R.string.ok) { dialog, which ->
+                    .setPositiveButton(R.string.tt_ok) { dialog, which ->
                         mPresenter.removeLikes(mAdapter?.selectedItem)
                         dialog.dismiss()
                     }
-                    .setNegativeButton(R.string.cancle) { dialog, which ->
+                    .setNegativeButton(R.string.tt_cancle) { dialog, which ->
                         dialog.dismiss()
                     }
                     .show()
