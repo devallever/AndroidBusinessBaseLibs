@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+    <RelativeLayout
+        android:id="@+id/inputCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <!-- 选择语言 -->
+        <include layout="@layout/include_select_language_bar" />
+
+        <!-- 输入栏 -->
+        <RelativeLayout
+            android:id="@+id/inputContainer"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:layout_below="@+id/itemSelectLanguage"
+            android:background="@drawable/bg_input_container">
+
+            <EditText
+                android:id="@+id/etInputContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_toLeftOf="@+id/ivInputClose"
+                android:background="#00000000"
+                android:hint="@string/please_input_content"
+                android:imeOptions="actionSearch"
+                android:maxLines="1"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/et_hint_color"
+                android:textSize="14sp"
+                tools:ignore="RtlHardcoded" />
+
+            <ImageView
+                android:id="@+id/ivInputClose"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:rotation="90"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_close"
+                android:tint="@color/gray_700"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <!--  com.allever.lib.ad.chain.BannerLayout      -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bannerContainer"
+        android:layout_below="@+id/inputCardView"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="6dp">
+
+        <!-- 结果 -->
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/llResultContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- 原语言 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#10333333"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <RelativeLayout
+                            android:id="@+id/resultSrcSoundContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp">
+
+                            <ImageView
+                                android:id="@+id/ivSoundSrc"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_sound"
+                                android:tint="@color/black" />
+
+                            <TextView
+                                android:id="@+id/tvSoundSrcLanguage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_toEndOf="@+id/ivSoundSrc"
+                                android:gravity="center"
+                                android:padding="10dp"
+                                android:textColor="@color/black" />
+
+                            <ImageView
+                                android:id="@+id/ivLiked"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:padding="10dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_star_empty" />
+
+                            <ImageView
+                                android:id="@+id/ivCopySrcText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toStartOf="@+id/ivLiked"
+                                android:padding="10dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_copy"
+                                android:tint="@color/black" />
+
+                        </RelativeLayout>
+
+                        <!-- 原文本 -->
+                        <TextView
+                            android:id="@+id/tvSrcText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text=""
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <!-- 原文本音标 -->
+                        <TextView
+                            android:id="@+id/tvSrcSymbol"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="0dp"
+                            android:text=""
+                            android:textColor="@color/gray_700" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- 翻译语言 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardBackgroundColor="#10333333"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <!-- 翻译 -->
+                        <RelativeLayout
+                            android:id="@+id/resultTranslateSoundContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/ivSoundTranslate"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_sound"
+                                android:tint="@color/black" />
+
+                            <TextView
+                                android:id="@+id/tvSoundTranslateLanguage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_toEndOf="@+id/ivSoundTranslate"
+                                android:gravity="center"
+                                android:padding="10dp"
+                                android:textColor="@color/black" />
+
+                            <ImageView
+                                android:id="@+id/ivCopyTranslateText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:padding="10dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_copy"
+                                android:tint="@color/black" />
+
+                            <ImageView
+                                android:id="@+id/ivShareTranslateSound"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toStartOf="@+id/ivCopyTranslateText"
+                                android:padding="10dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_share"
+                                android:tint="@color/black" />
+                        </RelativeLayout>
+
+                        <!-- 翻译文本 -->
+                        <TextView
+                            android:id="@+id/tvTranslateText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text=""
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <!-- 翻译音标 -->
+                        <TextView
+                            android:id="@+id/tvTranslateSymbol"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="0dp"
+                            android:text=""
+                            android:textColor="@color/gray_700" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- 更多 -->
+                <LinearLayout
+                    android:id="@+id/cardDictPanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="@string/translation_more"
+                        android:textColor="@color/default_theme_color"
+                        android:textStyle="bold" />
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        app:cardBackgroundColor="#10333333"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <!-- 词典 -->
+                            <TextView
+                                android:id="@+id/tvResult"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="10dp" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/bannerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible" />
+
+</RelativeLayout>
