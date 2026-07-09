@@ -1,12 +1,7 @@
 package app.allever.android.sample.im.websocket.client
 
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
 import java.net.URI
@@ -35,11 +30,14 @@ object IMWebSocketClient {
 
     // 重连任务Job，用于取消重连
     private var reconnectJob: Job? = null
-
-    /**
-     * 连接服务端
-     * @param url 服务端地址，如 ws://192.168.1.100:8887
-     */
+    // 新增：心跳相关
+    private var heartbeatJob: Job? = null
+    @Volatile
+    private var lastPongTime: Long = 0L
+    private const val HEARTBEAT_INTERVAL = 30 * 1000L  // 30秒发一次心跳
+    private const val HEARTBEAT_TIMEOUT = 90 * 1000L   // 90秒没收到回复视为断线
+    private const val HEARTBEAT_PING = "HEARTBEAT_PING"
+    private const val HEARTBEAT_PONG = "HEARTBEAT_PONG"
     fun connect(url: String) {
         if (client != null && client?.isOpen == true) {
             log("客户端已经连接，请勿重复连接")
@@ -47,59 +45,66 @@ object IMWebSocketClient {
         }
         this.currentUrl = url
         this.isManualClose = false
-        reconnectJob?.cancel() // 取消可能存在的重连任务
-        scope.launch {
-            createAndConnect(url)
-        }
+        reconnectJob?.cancel()
+        scope.launch { createAndConnect(url) }
     }
-
-    /**
-     * 创建连接并阻塞直到成功或失败
-     */
     private fun createAndConnect(url: String) {
         val uri = URI(url)
         client = object : WebSocketClient(uri) {
             override fun onOpen(handshakedata: ServerHandshake?) {
                 log("连接服务端成功: $url")
+                lastPongTime = System.currentTimeMillis() // 初始化时间
+                startHeartbeat() // 开启心跳
                 notifyOpen()
             }
-
             override fun onMessage(message: String?) {
+                if (message == HEARTBEAT_PONG) {
+                    lastPongTime = System.currentTimeMillis()
+                    return // 心跳回复不抛给 UI 层
+                }
+                log("收到服务端消息: $message")
                 notifyMessage(message ?: "")
             }
-
             override fun onClose(code: Int, reason: String?, remote: Boolean) {
                 log("连接已关闭: code=$code, reason=$reason")
+                heartbeatJob?.cancel() // 停止心跳
                 notifyClose(code, reason, remote)
-                // 非主动断开时，触发自动重连
-                if (!isManualClose) {
-                    tryReconnect()
-                }
+                if (!isManualClose) tryReconnect()
             }
-
             override fun onError(ex: Exception?) {
-                // 优化：如果 ex 为空，提示未知异常
                 logE("连接发生错误: ${ex?.message ?: "未知异常"}")
                 notifyError(ex)
-                // 发生错误通常意味着连接中断，尝试重连
-                if (!isManualClose && client?.isOpen != true) {
-                    tryReconnect()
-                }
+                if (!isManualClose && client?.isOpen != true) tryReconnect()
             }
         }
-        // 设置心跳保活：15秒内没有发送消息，自动发送一个ping帧
-        client?.connectionLostTimeout = 15
         try {
-            client?.connectBlocking() // 阻塞直到连接成功或失败
+            client?.connectBlocking()
         } catch (e: Exception) {
             logE("连接失败: ${e.message}")
             tryReconnect()
         }
     }
-
     /**
-     * 发送消息
+     * 新增：客户端发送心跳并检测超时
      */
+    private fun startHeartbeat() {
+        heartbeatJob?.cancel()
+        heartbeatJob = scope.launch {
+            while (isActive && !isManualClose) {
+                delay(HEARTBEAT_INTERVAL)
+                if (client != null && client?.isOpen == true) {
+                    client?.send(HEARTBEAT_PING)
+                    Log.d(TAG, "发送心跳: $HEARTBEAT_PING")
+                    // 检查是否超时
+                    if (System.currentTimeMillis() - lastPongTime > HEARTBEAT_TIMEOUT) {
+                        logE("心跳超时，服务端无响应，触发重连")
+                        client?.close() // 主动关闭会触发 onClose -> tryReconnect
+                        break
+                    }
+                }
+            }
+        }
+    }
     fun sendMessage(message: String): Boolean {
         if (client != null && client?.isOpen == true) {
             client?.send(message)
@@ -109,82 +114,37 @@ object IMWebSocketClient {
         logE("发送失败：连接未开启")
         return false
     }
-
-    /**
-     * 主动断开连接
-     */
     fun disconnect() {
         if (!isConnected()) return
         isManualClose = true
-        reconnectJob?.cancel() // 取消正在等待的重连任务
+        reconnectJob?.cancel()
+        heartbeatJob?.cancel() // 停止心跳
         scope.launch {
-            // 增加协程内部的二次校验，防止并发空指针
             val currentClient = client ?: return@launch
             currentClient.closeBlocking()
             client = null
             log("客户端已主动断开")
         }
     }
-
-    /**
-     * 断线重连机制
-     */
     private fun tryReconnect() {
-        if (reconnectJob?.isActive == true) return // 已经在重连中，跳过
+        if (reconnectJob?.isActive == true) return
         reconnectJob = scope.launch {
-            delay(3000) // 延迟3秒重连
+            delay(3000)
             if (!isManualClose && currentUrl != null) {
                 log("尝试重新连接...")
-                currentUrl?.let { url ->
-                    createAndConnect(url)
-                }
+                currentUrl?.let { createAndConnect(it) }
             }
         }
     }
-
-    fun isConnected(): Boolean {
-        return client != null && client?.isOpen == true
-    }
-
-    fun registerClientListener(listener: ClientListener?) {
-        this.clientListener = listener
-    }
-
-    fun unregisterClientListener() {
-        this.clientListener = null
-    }
-
-    // ==================== 回调通知与日志 ====================
-    private fun notifyOpen() {
-        scope.launch(Dispatchers.Main) { clientListener?.onOpen() }
-    }
-
-    private fun notifyMessage(message: String) {
-        scope.launch(Dispatchers.Main) { clientListener?.onMessage(message) }
-    }
-
-    private fun notifyClose(code: Int, reason: String?, remote: Boolean) {
-        scope.launch(Dispatchers.Main) { clientListener?.onClose(code, reason, remote) }
-    }
-
-    private fun notifyError(ex: Exception?) {
-        scope.launch(Dispatchers.Main) { clientListener?.onError(ex) }
-    }
-
-    private fun log(message: String) {
-        Log.d(TAG, message)
-        scope.launch(Dispatchers.Main) { clientListener?.onLog(message) }
-    }
-
-    private fun logE(message: String) {
-        Log.e(TAG, message)
-        scope.launch(Dispatchers.Main) { clientListener?.onLog(message) }
-    }
-
-    /**
-     * 客户端事件监听器
-     * 所有回调方法已在主线程执行，可直接更新 UI
-     */
+    fun isConnected(): Boolean = client != null && client?.isOpen == true
+    fun registerClientListener(listener: ClientListener?) { this.clientListener = listener }
+    fun unregisterClientListener() { this.clientListener = null }
+    private fun notifyOpen() { scope.launch(Dispatchers.Main) { clientListener?.onOpen() } }
+    private fun notifyMessage(message: String) { scope.launch(Dispatchers.Main) { clientListener?.onMessage(message) } }
+    private fun notifyClose(code: Int, reason: String?, remote: Boolean) { scope.launch(Dispatchers.Main) { clientListener?.onClose(code, reason, remote) } }
+    private fun notifyError(ex: Exception?) { scope.launch(Dispatchers.Main) { clientListener?.onError(ex) } }
+    private fun log(message: String) { Log.d(TAG, message); scope.launch(Dispatchers.Main) { clientListener?.onLog(message) } }
+    private fun logE(message: String) { Log.e(TAG, message); scope.launch(Dispatchers.Main) { clientListener?.onLog(message) } }
     interface ClientListener {
         fun onLog(log: String)
         fun onOpen()
