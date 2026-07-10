@@ -8,6 +8,8 @@ import app.allever.android.lib.core.helper.TimeHelper
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.lib.network.core.NetCore
 import app.allever.android.sample.im.databinding.ImHttpClientManageFragmentBinding
+import app.allever.android.sample.im.http.LocalHttpServer
+import app.allever.android.sample.im.http.StatusData
 import app.allever.android.sample.im.response.BaseResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,7 +59,7 @@ class SampleHttpClientManageFragment :
 //
 //                })
                 lifecycleScope.launch {
-                    val result = NetCore.get<BaseResponse<Any>>("/api/status")
+                    val result = NetCore.get<BaseResponse<StatusData>>("/api/status")
                     if (result.isSuccess()) {
                         val data = "netCore请求成功 data：${result.data?.toJson()}"
                         log(data)

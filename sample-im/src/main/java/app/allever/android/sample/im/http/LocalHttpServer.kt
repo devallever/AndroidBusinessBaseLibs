@@ -2,19 +2,54 @@ package app.allever.android.sample.im.http
 
 import android.util.Log
 import app.allever.android.sample.im.websocket.server.IMWebSocketServer
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import fi.iki.elonen.NanoHTTPD
 import fi.iki.elonen.NanoHTTPD.SOCKET_READ_TIMEOUT
 import kotlinx.coroutines.*
-import org.json.JSONArray
-import org.json.JSONObject
 import java.io.ByteArrayInputStream
 import java.lang.ref.WeakReference
 import java.net.Inet4Address
 import java.net.NetworkInterface
 
 /**
- * Android 本地 HTTP 服务端
- * 修复：编码问题、重复Content-Type、JSON结构统一
+ * 统一响应结构
+ */
+data class BaseResponse<T>(
+    val code: Int = -1,
+    val msg: String = "",
+    val data: T? = null
+)
+
+// ========== 各接口数据模型 ==========
+ data class StatusData(
+    val port: Int,
+    val online_client: Int,
+    val timestamp: Long
+)
+
+ data class MessageData(
+    val message: String
+)
+
+ data class EchoData(
+    val text: String
+)
+
+ data class UserInfoData(
+    val userId: String,
+    val nickname: String,
+    val level: Int
+)
+
+private data class UserInfoRequest(
+    val userId: String = ""
+)
+
+/**
+ * Android 本地 HTTP 服务端 - Gson 版
+ * 彻底解决 org.json 整数转浮点数问题，类型严格可控
  */
 object LocalHttpServer {
     private val TAG = LocalHttpServer::class.java.simpleName
@@ -26,6 +61,11 @@ object LocalHttpServer {
 
     @Volatile
     private var listener: WeakReference<HttpServerListener>? = null
+
+    // 全局 Gson 实例：开启 null 序列化，保证响应结构永远统一
+    private val gson: Gson = GsonBuilder()
+        .serializeNulls()
+        .create()
 
     private object BizCode {
         const val SUCCESS = 0
@@ -51,10 +91,11 @@ object LocalHttpServer {
                         handleRequest(session)
                     } catch (e: Exception) {
                         logE("请求处理异常: ${e.message}")
-                        buildJsonResponse(
+                        buildJsonResponse<Any?>(
                             httpStatus = Response.Status.INTERNAL_ERROR,
                             bizCode = BizCode.SERVER_ERROR,
-                            msg = "服务器内部错误"
+                            msg = "服务器内部错误",
+                            data = null
                         )
                     }
                 }
@@ -80,105 +121,110 @@ object LocalHttpServer {
         }
     }
 
+    // ====================== 路由分发 ======================
     private fun handleRequest(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
+        // 跨域预检：显式指定泛型
         if (session.method == NanoHTTPD.Method.OPTIONS) {
-            return buildSuccessResponse()
+            return buildSuccessResponse<Any?>(null)
         }
 
         return when (session.uri) {
-            "/" -> buildSuccessResponse(JSONObject().put("message", "Android Local HTTP Server is running."))
+            "/" -> buildSuccessResponse(MessageData("Android Local HTTP Server is running."))
             "/api/status" -> handleStatus()
             "/api/echo" -> handleEcho(session)
             "/api/user" -> handleUserInfo(session)
-            else -> buildJsonResponse(
+            else -> buildJsonResponse<Any?>(
                 httpStatus = NanoHTTPD.Response.Status.NOT_FOUND,
                 bizCode = BizCode.NOT_FOUND,
-                msg = "接口不存在"
+                msg = "接口不存在",
+                data = null
             )
         }
     }
 
+    // ====================== 业务接口 ======================
     private fun handleStatus(): NanoHTTPD.Response {
-        val data = JSONObject().apply {
-            put("port", port)
-            put("online_client", IMWebSocketServer.getOnlineCount())
-            put("timestamp", System.currentTimeMillis())
-        }
+        val data = StatusData(
+            port = port,
+            online_client = IMWebSocketServer.getOnlineCount(),
+            timestamp = System.currentTimeMillis()
+        )
         return buildSuccessResponse(data)
     }
 
     private fun handleEcho(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
         val text = session.parms["text"] ?: "空内容"
-        return buildSuccessResponse(JSONObject().put("text", "你发送了: $text"))
+        return buildSuccessResponse(EchoData("你发送了: $text"))
     }
 
     private fun handleUserInfo(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
         if (session.method != NanoHTTPD.Method.POST) {
-            return buildJsonResponse(
+            return buildJsonResponse<Any?>(
                 httpStatus = NanoHTTPD.Response.Status.METHOD_NOT_ALLOWED,
                 bizCode = BizCode.METHOD_NOT_ALLOWED,
-                msg = "仅支持 POST 请求"
+                msg = "仅支持 POST 请求",
+                data = null
             )
         }
 
-        val body = parseJsonBody(session)
-            ?: return buildJsonResponse(
+        val request = parseJsonBody<UserInfoRequest>(session)
+            ?: return buildJsonResponse<Any?>(
                 httpStatus = NanoHTTPD.Response.Status.BAD_REQUEST,
                 bizCode = BizCode.BAD_REQUEST,
-                msg = "请求体必须为合法 JSON"
+                msg = "请求体必须为合法 JSON",
+                data = null
             )
 
-        val userId = body.optString("userId", "")
-        val result = JSONObject().apply {
-            put("userId", userId)
-            put("nickname", "用户_$userId")
-            put("level", 1)
-        }
+        val userId = request.userId
+        val result = UserInfoData(
+            userId = userId,
+            nickname = "用户_$userId",
+            level = 1
+        )
         return buildSuccessResponse(result)
     }
 
-    // ====================== 响应构建（核心修复） ======================
-    private fun buildSuccessResponse(): NanoHTTPD.Response {
-        return buildJsonResponse(bizCode = BizCode.SUCCESS, msg = "success")
-    }
+    // ====================== 统一响应构建 ======================
+    /**
+     * 成功响应：携带数据对象
+     */
+//    private fun <T> buildSuccessResponse(data: T): NanoHTTPD.Response {
+//        return buildJsonResponse(bizCode = BizCode.SUCCESS, msg = "success", data = data)
+//    }
 
-    private fun buildSuccessResponse(data: JSONObject): NanoHTTPD.Response {
-        return buildJsonResponse(bizCode = BizCode.SUCCESS, msg = "success", data = data)
-    }
-
-    private fun buildSuccessResponse(data: JSONArray): NanoHTTPD.Response {
+    /**
+     * 成功响应：无数据，显式指定泛型
+     */
+    private fun <T> buildSuccessResponse(data: T? = null): NanoHTTPD.Response {
         return buildJsonResponse(bizCode = BizCode.SUCCESS, msg = "success", data = data)
     }
 
     /**
      * 统一 JSON 响应底层方法
-     * 关键：手动转 UTF-8 字节数组，用 InputStream 返回，编码和长度 100% 可控
+     * 基于 BaseResponse 结构 + Gson 序列化，编码与长度完全可控
      */
-    private fun buildJsonResponse(
+    private fun <T> buildJsonResponse(
         httpStatus: NanoHTTPD.Response.Status = NanoHTTPD.Response.Status.OK,
         bizCode: Int,
         msg: String,
-        data: Any? = null
+        data: T? = null
     ): NanoHTTPD.Response {
-        // 1. 构造完整 JSON
-        val jsonBody = JSONObject().apply {
-            put("code", bizCode)
-            put("msg", msg)
-            put("data", data ?: JSONObject.NULL)
-        }.toString()
+        // 1. 构造标准响应结构，Gson 序列化为 JSON 字符串
+        val response = BaseResponse(bizCode, msg, data)
+        val jsonBody = gson.toJson(response)
 
-        // 2. 手动转 UTF-8 字节数组，编码完全可控
+        // 2. 手动转 UTF-8 字节数组，编码 100% 可控
         val bytes = jsonBody.toByteArray(Charsets.UTF_8)
         val inputStream = ByteArrayInputStream(bytes)
 
-        // 3. 用 InputStream 重载返回，指定准确长度
+        // 3. 流式返回，指定准确长度
         return NanoHTTPD.newFixedLengthResponse(
             httpStatus,
             "application/json",
             inputStream,
             bytes.size.toLong()
         ).apply {
-            // 只在这里设置一次 charset，不再重复 addHeader
+            // 只设置一次 Content-Type，避免重复头
             addHeader("Content-Type", "application/json; charset=utf-8")
             // 跨域头
             addHeader("Access-Control-Allow-Origin", "*")
@@ -188,10 +234,16 @@ object LocalHttpServer {
     }
 
     // ====================== 请求解析工具 ======================
-    private fun parseJsonBody(session: NanoHTTPD.IHTTPSession): JSONObject? {
+    /**
+     * 通用解析 POST JSON 请求体
+     * @param T 目标数据类型
+     * @return 解析成功返回实体，失败返回 null
+     */
+    private inline fun <reified T> parseJsonBody(session: NanoHTTPD.IHTTPSession): T? {
         return try {
             val body = session.inputStream.bufferedReader(Charsets.UTF_8).readText()
-            if (body.isBlank()) null else JSONObject(body)
+            if (body.isBlank()) null
+            else gson.fromJson(body, object : TypeToken<T>() {}.type)
         } catch (e: Exception) {
             null
         }
