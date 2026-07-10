@@ -4,6 +4,7 @@ import android.util.Log
 import kotlinx.coroutines.*
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
+import java.lang.ref.WeakReference
 import java.net.URI
 
 /**
@@ -18,7 +19,7 @@ object IMWebSocketClient {
 
     // 增加 @Volatile 保证多线程下的可见性
     @Volatile
-    private var clientListener: ClientListener? = null
+    private var clientListener: WeakReference<ClientListener>? = null
 
     // 记录当前连接的目标地址，用于断线重连
     @Volatile
@@ -64,7 +65,20 @@ object IMWebSocketClient {
     }
 
     private fun createAndConnect(url: String) {
-        val uri = URI(url)
+        // 先销毁旧连接，释放端口/线程资源
+        client?.let { oldClient ->
+            if (oldClient.isOpen) {
+                try {
+                    oldClient.closeBlocking()
+                } catch (e: Exception) {}
+            }
+        }
+        val uri = try {
+            URI(url)
+        } catch (e: Exception) {
+            logE("连接地址格式错误: ${e.message}")
+            return
+        }
         client = object : WebSocketClient(uri) {
             override fun onOpen(handshakedata: ServerHandshake?) {
                 // 连接成功，重置退避时间
@@ -94,7 +108,7 @@ object IMWebSocketClient {
             override fun onError(ex: Exception?) {
                 logE("连接发生错误: ${ex?.message ?: "未知异常"}")
                 notifyError(ex)
-//                if (!isManualClose && client?.isOpen != true) tryReconnect()
+                if (!isManualClose) tryReconnect()
             }
         }
         try {
@@ -136,9 +150,14 @@ object IMWebSocketClient {
     }
     fun sendMessage(message: String): Boolean {
         if (client != null && client?.isOpen == true) {
-            client?.send(message)
-            log("发送消息: $message")
-            return true
+            try {
+                client?.send(message)
+                log("发送消息: $message")
+                return true
+            } catch (e: Exception) {
+                logE("发送消息异常：${e.message}")
+                return false
+            }
         }
         logE("发送失败：连接未开启")
         return false
@@ -182,7 +201,7 @@ object IMWebSocketClient {
 
     fun isConnected(): Boolean = client != null && client?.isOpen == true
     fun registerClientListener(listener: ClientListener?) {
-        this.clientListener = listener
+        this.clientListener = WeakReference(listener)
     }
 
     fun unregisterClientListener() {
@@ -190,27 +209,27 @@ object IMWebSocketClient {
     }
 
     private fun notifyOpen() {
-        scope.launch(Dispatchers.Main) { clientListener?.onOpen() }
+        scope.launch(Dispatchers.Main) { clientListener?.get()?.onOpen() }
     }
 
     private fun notifyMessage(message: String) {
-        scope.launch(Dispatchers.Main) { clientListener?.onMessage(message) }
+        scope.launch(Dispatchers.Main) { clientListener?.get()?.onMessage(message) }
     }
 
     private fun notifyClose(code: Int, reason: String?, remote: Boolean) {
-        scope.launch(Dispatchers.Main) { clientListener?.onClose(code, reason, remote) }
+        scope.launch(Dispatchers.Main) { clientListener?.get()?.onClose(code, reason, remote) }
     }
 
     private fun notifyError(ex: Exception?) {
-        scope.launch(Dispatchers.Main) { clientListener?.onError(ex) }
+        scope.launch(Dispatchers.Main) { clientListener?.get()?.onError(ex) }
     }
 
     private fun log(message: String) {
-        Log.d(TAG, message); scope.launch(Dispatchers.Main) { clientListener?.onLog(message) }
+        Log.d(TAG, message); scope.launch(Dispatchers.Main) { clientListener?.get()?.onLog(message) }
     }
 
     private fun logE(message: String) {
-        Log.e(TAG, message); scope.launch(Dispatchers.Main) { clientListener?.onLog(message) }
+        Log.e(TAG, message); scope.launch(Dispatchers.Main) { clientListener?.get()?.onLog(message) }
     }
 
     interface ClientListener {
