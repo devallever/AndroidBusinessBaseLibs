@@ -145,15 +145,18 @@ object IMWebSocketClient {
     }
 
     fun disconnect() {
-        if (!isConnected()) return
+        // 修改：如果 client 为空，且没有正在等待的重连任务，才真正无需处理
+        if (client == null && !isWaitingReconnect) return
         isManualClose = true
         reconnectJob?.cancel() // 取消可能正在等待的重连
         heartbeatJob?.cancel() // 停止心跳
         currentReconnectDelay = initialReconnectDelay // 主动断开也重置退避时间
         isWaitingReconnect = false // 新增：重置标志
         scope.launch {
-            val currentClient = client ?: return@launch
-            currentClient.closeBlocking()
+            val currentClient = client
+            if (currentClient != null && currentClient.isOpen) {
+                currentClient.closeBlocking()
+            }
             client = null
             log("客户端已主动断开")
         }
