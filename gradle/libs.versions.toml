@@ -7,6 +7,7 @@ gridlayout = "1.0.0"
 javaWebsocket = "1.6.0"
 kotlinReflectVersion = "1.5.10"
 minSdk = "24"
+nanohttpd = "2.3.1"
 places = "3.5.0"
 playServicesLocation = "21.3.0"
 playServicesMaps = "19.0.0"
@@ -215,6 +216,7 @@ coil-video = { group = "io.coil-kt", name = "coil-video", version.ref = "coil" }
 
 # third party
 mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
+nanohttpd = { module = "org.nanohttpd:nanohttpd", version.ref = "nanohttpd" }
 okdownload-sqlite = { module = "com.liulishuo.okdownload:sqlite", version.ref = "sqlite" }
 okdownload-okhttp = { module = "com.liulishuo.okdownload:okhttp", version.ref = "okdownload" }
 okdownload = { module = "com.liulishuo.okdownload:okdownload", version.ref = "okdownload" }

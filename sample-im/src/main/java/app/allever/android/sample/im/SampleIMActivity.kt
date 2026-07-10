@@ -9,6 +9,8 @@ import app.allever.android.lib.common.adapter.bean.TextDetailClickItem
 import app.allever.android.lib.common.databinding.ActivityListBinding
 import app.allever.android.sample.im.connection.JavaWebSocketConnectionManager
 import app.allever.android.sample.im.connection.OkHttpWebSocketConnectionManager
+import app.allever.android.sample.im.websocket.SampleHttpMainFragment
+import app.allever.android.sample.im.websocket.SampleHttpServerManageFragment
 import app.allever.android.sample.im.websocket.SampleWebSocketMainFragment
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -23,6 +25,9 @@ class SampleIMActivity: ListActivity<ActivityListBinding, ListViewModel, TextDet
     override fun getList(): MutableList<TextDetailClickItem> = mutableListOf(
         TextDetailClickItem("WebSocket") {
             FragmentActivity.start<SampleWebSocketMainFragment>(it.title)
+        },
+        TextDetailClickItem("Http") {
+            FragmentActivity.start<SampleHttpMainFragment>(it.title)
         }
     )
 }

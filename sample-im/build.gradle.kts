@@ -16,4 +16,5 @@ dependencies {
     implementation(project(":lib-network-core"))
     implementation(project(":lib-network-engine-okhttp"))
     implementation(libs.java.websocket)
+    implementation(libs.nanohttpd)
 }
