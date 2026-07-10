@@ -9,9 +9,11 @@ import app.allever.android.lib.common.adapter.bean.TextDetailClickItem
 import app.allever.android.lib.common.databinding.ActivityListBinding
 import app.allever.android.sample.im.connection.JavaWebSocketConnectionManager
 import app.allever.android.sample.im.connection.OkHttpWebSocketConnectionManager
+import app.allever.android.sample.im.http.LocalHttpServer
 import app.allever.android.sample.im.websocket.SampleHttpMainFragment
 import app.allever.android.sample.im.websocket.SampleHttpServerManageFragment
 import app.allever.android.sample.im.websocket.SampleWebSocketMainFragment
+import app.allever.android.sample.im.websocket.server.IMWebSocketServer
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 
@@ -30,4 +32,10 @@ class SampleIMActivity: ListActivity<ActivityListBinding, ListViewModel, TextDet
             FragmentActivity.start<SampleHttpMainFragment>(it.title)
         }
     )
+
+    override fun init() {
+        super.init()
+        IMWebSocketServer.startServer(5400)
+        LocalHttpServer.startServer()
+    }
 }

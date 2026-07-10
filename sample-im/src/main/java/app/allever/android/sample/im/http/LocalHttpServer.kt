@@ -3,15 +3,18 @@ package app.allever.android.sample.im.http
 import android.util.Log
 import app.allever.android.sample.im.websocket.server.IMWebSocketServer
 import fi.iki.elonen.NanoHTTPD
+import fi.iki.elonen.NanoHTTPD.SOCKET_READ_TIMEOUT
 import kotlinx.coroutines.*
+import org.json.JSONArray
 import org.json.JSONObject
+import java.io.ByteArrayInputStream
 import java.lang.ref.WeakReference
 import java.net.Inet4Address
 import java.net.NetworkInterface
 
 /**
  * Android 本地 HTTP 服务端
- * 设计风格与 IMWebSocketServer 保持一致
+ * 修复：编码问题、重复Content-Type、JSON结构统一
  */
 object LocalHttpServer {
     private val TAG = LocalHttpServer::class.java.simpleName
@@ -23,6 +26,14 @@ object LocalHttpServer {
 
     @Volatile
     private var listener: WeakReference<HttpServerListener>? = null
+
+    private object BizCode {
+        const val SUCCESS = 0
+        const val BAD_REQUEST = 400
+        const val NOT_FOUND = 404
+        const val METHOD_NOT_ALLOWED = 405
+        const val SERVER_ERROR = 500
+    }
 
     fun startServer(port: Int = 8080) {
         if (server != null) {
@@ -40,7 +51,11 @@ object LocalHttpServer {
                         handleRequest(session)
                     } catch (e: Exception) {
                         logE("请求处理异常: ${e.message}")
-                        buildErrorResponse(500, "服务器内部错误")
+                        buildJsonResponse(
+                            httpStatus = Response.Status.INTERNAL_ERROR,
+                            bizCode = BizCode.SERVER_ERROR,
+                            msg = "服务器内部错误"
+                        )
                     }
                 }
             }
@@ -48,7 +63,7 @@ object LocalHttpServer {
             server = newServer
             scope.launch {
                 try {
-                    newServer.start(NanoHTTPD.SOCKET_READ_TIMEOUT, false)
+                    newServer.start(SOCKET_READ_TIMEOUT, false)
                     val url = getServerUrl()
                     log("HTTP 服务启动成功: $url")
                     scope.launch(Dispatchers.Main) {
@@ -65,21 +80,21 @@ object LocalHttpServer {
         }
     }
 
-    /**
-     * 统一请求分发
-     */
     private fun handleRequest(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
-        // 处理跨域预检
         if (session.method == NanoHTTPD.Method.OPTIONS) {
-            return buildSuccessResponse("")
+            return buildSuccessResponse()
         }
 
         return when (session.uri) {
-            "/" -> buildSuccessResponse("Android Local HTTP Server is running.")
+            "/" -> buildSuccessResponse(JSONObject().put("message", "Android Local HTTP Server is running."))
             "/api/status" -> handleStatus()
             "/api/echo" -> handleEcho(session)
             "/api/user" -> handleUserInfo(session)
-            else -> buildErrorResponse(404, "接口不存在")
+            else -> buildJsonResponse(
+                httpStatus = NanoHTTPD.Response.Status.NOT_FOUND,
+                bizCode = BizCode.NOT_FOUND,
+                msg = "接口不存在"
+            )
         }
     }
 
@@ -89,30 +104,100 @@ object LocalHttpServer {
             put("online_client", IMWebSocketServer.getOnlineCount())
             put("timestamp", System.currentTimeMillis())
         }
-        return buildSuccessResponse(data.toString())
+        return buildSuccessResponse(data)
     }
 
     private fun handleEcho(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
         val text = session.parms["text"] ?: "空内容"
-        return buildSuccessResponse("你发送了: $text")
+        return buildSuccessResponse(JSONObject().put("text", "你发送了: $text"))
     }
 
     private fun handleUserInfo(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
         if (session.method != NanoHTTPD.Method.POST) {
-            return buildErrorResponse(405, "仅支持 POST 请求")
+            return buildJsonResponse(
+                httpStatus = NanoHTTPD.Response.Status.METHOD_NOT_ALLOWED,
+                bizCode = BizCode.METHOD_NOT_ALLOWED,
+                msg = "仅支持 POST 请求"
+            )
         }
-        val body = session.inputStream.bufferedReader().readText()
-        val json = JSONObject(body)
-        val userId = json.optString("userId")
 
+        val body = parseJsonBody(session)
+            ?: return buildJsonResponse(
+                httpStatus = NanoHTTPD.Response.Status.BAD_REQUEST,
+                bizCode = BizCode.BAD_REQUEST,
+                msg = "请求体必须为合法 JSON"
+            )
+
+        val userId = body.optString("userId", "")
         val result = JSONObject().apply {
             put("userId", userId)
             put("nickname", "用户_$userId")
             put("level", 1)
         }
-        return buildSuccessResponse(result.toString())
+        return buildSuccessResponse(result)
     }
 
+    // ====================== 响应构建（核心修复） ======================
+    private fun buildSuccessResponse(): NanoHTTPD.Response {
+        return buildJsonResponse(bizCode = BizCode.SUCCESS, msg = "success")
+    }
+
+    private fun buildSuccessResponse(data: JSONObject): NanoHTTPD.Response {
+        return buildJsonResponse(bizCode = BizCode.SUCCESS, msg = "success", data = data)
+    }
+
+    private fun buildSuccessResponse(data: JSONArray): NanoHTTPD.Response {
+        return buildJsonResponse(bizCode = BizCode.SUCCESS, msg = "success", data = data)
+    }
+
+    /**
+     * 统一 JSON 响应底层方法
+     * 关键：手动转 UTF-8 字节数组，用 InputStream 返回，编码和长度 100% 可控
+     */
+    private fun buildJsonResponse(
+        httpStatus: NanoHTTPD.Response.Status = NanoHTTPD.Response.Status.OK,
+        bizCode: Int,
+        msg: String,
+        data: Any? = null
+    ): NanoHTTPD.Response {
+        // 1. 构造完整 JSON
+        val jsonBody = JSONObject().apply {
+            put("code", bizCode)
+            put("msg", msg)
+            put("data", data ?: JSONObject.NULL)
+        }.toString()
+
+        // 2. 手动转 UTF-8 字节数组，编码完全可控
+        val bytes = jsonBody.toByteArray(Charsets.UTF_8)
+        val inputStream = ByteArrayInputStream(bytes)
+
+        // 3. 用 InputStream 重载返回，指定准确长度
+        return NanoHTTPD.newFixedLengthResponse(
+            httpStatus,
+            "application/json",
+            inputStream,
+            bytes.size.toLong()
+        ).apply {
+            // 只在这里设置一次 charset，不再重复 addHeader
+            addHeader("Content-Type", "application/json; charset=utf-8")
+            // 跨域头
+            addHeader("Access-Control-Allow-Origin", "*")
+            addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+            addHeader("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        }
+    }
+
+    // ====================== 请求解析工具 ======================
+    private fun parseJsonBody(session: NanoHTTPD.IHTTPSession): JSONObject? {
+        return try {
+            val body = session.inputStream.bufferedReader(Charsets.UTF_8).readText()
+            if (body.isBlank()) null else JSONObject(body)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    // ====================== 生命周期 ======================
     fun stopServer() {
         if (server == null) return
         scope.launch {
@@ -154,42 +239,7 @@ object LocalHttpServer {
         return "127.0.0.1"
     }
 
-    // ========== 响应工具 ==========
-    private fun buildSuccessResponse(data: String): NanoHTTPD.Response {
-        return NanoHTTPD.newFixedLengthResponse(
-            NanoHTTPD.Response.Status.OK,
-            "application/json; charset=utf-8",
-            JSONObject().apply {
-                put("code", 200)
-                put("msg", "success")
-                put("data", data)
-            }.toString()
-        ).apply { addCorsHeaders(this) }
-    }
-
-    private fun buildErrorResponse(code: Int, msg: String): NanoHTTPD.Response {
-        val status = when (code) {
-            404 -> NanoHTTPD.Response.Status.NOT_FOUND
-            405 -> NanoHTTPD.Response.Status.METHOD_NOT_ALLOWED
-            else -> NanoHTTPD.Response.Status.INTERNAL_ERROR
-        }
-        return NanoHTTPD.newFixedLengthResponse(
-            status,
-            "application/json; charset=utf-8",
-            JSONObject().apply {
-                put("code", code)
-                put("msg", msg)
-            }.toString()
-        ).apply { addCorsHeaders(this) }
-    }
-
-    private fun addCorsHeaders(response: NanoHTTPD.Response) {
-        response.addHeader("Access-Control-Allow-Origin", "*")
-        response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-        response.addHeader("Access-Control-Allow-Headers", "Content-Type, Authorization")
-    }
-
-    // ========== 日志与监听 ==========
+    // ====================== 日志与监听 ======================
     private fun log(msg: String) {
         Log.d(TAG, msg)
         scope.launch(Dispatchers.Main) { listener?.get()?.onLog(msg) }

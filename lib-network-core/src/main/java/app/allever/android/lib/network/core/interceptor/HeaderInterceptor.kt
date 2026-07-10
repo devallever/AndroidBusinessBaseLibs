@@ -33,7 +33,7 @@ class HeaderInterceptor(private val globalHeaders: Map<String, String>) : NetInt
             .writeTimeout(originalRequest.writeTimeoutMs)
 
         // 1. 先加默认公共头
-        builder.header("Accept-Encoding", "gzip")
+//        builder.header("Accept-Encoding", "gzip")
         builder.header("Accept", "application/json")
         builder.header("Content-Type", "application/json; charset=utf-8")
 

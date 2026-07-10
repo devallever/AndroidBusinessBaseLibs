@@ -187,9 +187,8 @@ class UrlConnectionEngine(private val config: UrlConnectionConfig) : HttpEngine 
             }
 
             if (inputStream == null) null
-            else ByteArrayOutputStream().use { output ->
-                inputStream.copyTo(output)
-                output.toByteArray()
+            inputStream.use {
+                it.readBytes()
             }
         } catch (_: Exception) {
             null
