@@ -33,6 +33,9 @@ object IMWebSocketServer {
     private const val HEARTBEAT_PING = "HEARTBEAT_PING"
     private const val HEARTBEAT_PONG = "HEARTBEAT_PONG"
     private const val HEARTBEAT_TIMEOUT = 45 * 1000L // 45秒未收到消息视为超时
+
+    // 新增变量
+    private var heartbeatCheckJob: Job? = null
     fun startServer(port: Int) {
         if (server != null) {
             log("服务端已经在运行中，请勿重复启动")
@@ -89,6 +92,8 @@ object IMWebSocketServer {
                     val clientId = conn?.let { getClientId(it) } ?: "全局"
                     if (ex is java.net.BindException) {
                         logE("连接异常 ($clientId): 端口 $port 被占用")
+                        // 新增：端口绑定失败时，释放 server 对象，允许重新启动
+                        server = null
                     } else {
                         logE("连接异常 ($clientId): ${ex.message}")
                     }
@@ -103,7 +108,8 @@ object IMWebSocketServer {
      * 新增：定时清理僵尸连接
      */
     private fun startHeartbeatCheck() {
-        scope.launch {
+        heartbeatCheckJob?.cancel()
+        heartbeatCheckJob = scope.launch {
             while (isActive && server != null) {
                 delay(15 * 1000) // 每 15 秒检查一次
                 val currentTime = System.currentTimeMillis()
@@ -123,7 +129,13 @@ object IMWebSocketServer {
 
     private suspend fun processMessage(clientId: String, message: String, senderConn: WebSocket) {
         if (message.startsWith("@")) {
-            val targetEndIndex = message.indexOf(":")
+            /**
+             * 当前 getClientId 返回的是 IP:Port（例如 192.168.1.100:5400），它本身就包含冒号 :。
+             * 而在 processMessage 中，私聊指令解析使用的是 message.indexOf(":")，这会导致取到的是第一个冒号。
+             * 如果客户端发送 @192.168.1.100:5400:你好，targetEndIndex 会停在 192.168.1.100 后面的冒号，导致 targetId 变成 192.168.1.100，而不是完整的 192.168.1.100:5400，服务端永远找不到目标用户，私聊功能失效。
+             */
+            // 修改：从索引 1 开始查找冒号，避免把 IP 里的冒号当成指令分隔符
+            val targetEndIndex = message.indexOf(":", startIndex = 1)
             if (targetEndIndex > 0) {
                 val targetId = message.substring(1, targetEndIndex)
                 val realMsg = message.substring(targetEndIndex + 1).trim()
@@ -153,11 +165,13 @@ object IMWebSocketServer {
         if (targetClients.isNotEmpty()) server?.broadcast(message, targetClients)
     }
 
+    // 在 stopServer 中新增取消逻辑
     fun stopServer() {
         if (!isStarted()) return
         scope.launch {
             // 增加协程内部的二次校验
             val currentServer = server ?: return@launch
+            heartbeatCheckJob?.cancel() // 新增：显式取消心跳检测
             clientsMap.values.forEach { it.close() }
             clientsMap.clear()
             heartbeatMap.clear()
