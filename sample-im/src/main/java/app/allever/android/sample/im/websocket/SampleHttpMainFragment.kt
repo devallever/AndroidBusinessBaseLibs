@@ -27,27 +27,5 @@ class SampleHttpMainFragment: ListFragment<FragmentListBinding, ListViewModel, T
 
     override fun init() {
         super.init()
-        initNetwork()
-    }
-
-    private fun initNetwork() {
-        NetCore.init {
-            // 使用公开测试 API
-            baseUrl("http://10.20.224.246:8080")
-            // 设置统一业务响应类型
-            responseClass(BaseResponse::class.java)
-
-//            engine(OkHttpEngine.ENGINE_NAME) {
-//                // OkHttp 专属配置
-//                (this as? OkHttpConfig)?.apply {
-////                    connectionPool(5, 5, java.util.concurrent.TimeUnit.MINUTES)
-////                    retryOnConnectionFailure(true)
-////                    addInterceptor("LoggingInterceptor")
-////                    addNetworkInterceptor("LoggingInterceptor")
-//                }
-//            }
-        }
-
-        log("Network 已初始化，引擎: ${NetCore.currentEngine()}")
     }
 }

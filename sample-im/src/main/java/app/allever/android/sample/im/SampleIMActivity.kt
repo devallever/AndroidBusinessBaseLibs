@@ -30,12 +30,14 @@ class SampleIMActivity: ListActivity<ActivityListBinding, ListViewModel, TextDet
         },
         TextDetailClickItem("Http") {
             FragmentActivity.start<SampleHttpMainFragment>(it.title)
-        }
+        },
+        TextDetailClickItem("一键启动WebSocket和Http") {
+            IMWebSocketServer.startServer(5400)
+            LocalHttpServer.startServer()
+        },
+        TextDetailClickItem("一键停止WebSocket和Http") {
+            IMWebSocketServer.stopServer()
+            LocalHttpServer.stopServer()
+        },
     )
-
-    override fun init() {
-        super.init()
-        IMWebSocketServer.startServer(5400)
-        LocalHttpServer.startServer()
-    }
 }
