@@ -1,6 +1,5 @@
 package app.allever.android.sample.im.websocket
 
-import android.util.Log
 import android.view.Gravity
 import app.allever.android.lib.common.FragmentActivity
 import app.allever.android.lib.common.ListFragment
@@ -9,11 +8,8 @@ import app.allever.android.lib.common.adapter.TextDetailClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextDetailClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
 import app.allever.android.lib.core.ext.log
-import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.network.core.NetCore
-import app.allever.android.lib.network.engine.okhttp.OkHttpConfig
-import app.allever.android.lib.network.engine.okhttp.OkHttpEngine
-import app.allever.android.sample.im.response.BaseResponse
+import app.allever.android.sample.im.http.response.BaseResponse
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 class SampleHttpMainFragment: ListFragment<FragmentListBinding, ListViewModel, TextDetailClickItem>() {

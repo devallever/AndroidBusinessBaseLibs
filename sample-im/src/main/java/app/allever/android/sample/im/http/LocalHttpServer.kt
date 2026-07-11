@@ -1,6 +1,11 @@
 package app.allever.android.sample.im.http
 
 import android.util.Log
+import app.allever.android.sample.im.http.request.UserInfoRequest
+import app.allever.android.sample.im.http.response.EchoData
+import app.allever.android.sample.im.http.response.MessageData
+import app.allever.android.sample.im.http.response.StatusData
+import app.allever.android.sample.im.http.response.UserInfoData
 import app.allever.android.sample.im.websocket.server.IMWebSocketServer
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -12,40 +17,6 @@ import java.io.ByteArrayInputStream
 import java.lang.ref.WeakReference
 import java.net.Inet4Address
 import java.net.NetworkInterface
-
-/**
- * 统一响应结构
- */
-data class BaseResponse<T>(
-    val code: Int = -1,
-    val msg: String = "",
-    val data: T? = null
-)
-
-// ========== 各接口数据模型 ==========
- data class StatusData(
-    val port: Int,
-    val online_client: Int,
-    val timestamp: Long
-)
-
- data class MessageData(
-    val message: String
-)
-
- data class EchoData(
-    val text: String
-)
-
- data class UserInfoData(
-    val userId: String,
-    val nickname: String,
-    val level: Int
-)
-
-private data class UserInfoRequest(
-    val userId: String = ""
-)
 
 /**
  * Android 本地 HTTP 服务端 - Gson 版
@@ -210,7 +181,7 @@ object LocalHttpServer {
         data: T? = null
     ): NanoHTTPD.Response {
         // 1. 构造标准响应结构，Gson 序列化为 JSON 字符串
-        val response = BaseResponse(bizCode, msg, data)
+        val response = ServerResponse(bizCode, msg, data)
         val jsonBody = gson.toJson(response)
 
         // 2. 手动转 UTF-8 字节数组，编码 100% 可控

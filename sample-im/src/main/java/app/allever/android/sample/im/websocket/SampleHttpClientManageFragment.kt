@@ -8,16 +8,12 @@ import app.allever.android.lib.core.helper.TimeHelper
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.lib.network.core.NetCore
 import app.allever.android.sample.im.databinding.ImHttpClientManageFragmentBinding
-import app.allever.android.sample.im.http.LocalHttpServer
-import app.allever.android.sample.im.http.StatusData
-import app.allever.android.sample.im.response.BaseResponse
+import app.allever.android.sample.im.http.response.BaseResponse
+import app.allever.android.sample.im.http.response.StatusData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
-import java.io.IOException
 
 class SampleHttpClientManageFragment :
     BaseFragment<ImHttpClientManageFragmentBinding, BaseViewModel>() {
@@ -43,21 +39,6 @@ class SampleHttpClientManageFragment :
                     log("ok请求成功：${resultString}")
                 }
 
-//                call.enqueue(object : okhttp3.Callback {
-//                    override fun onFailure(call: Call, e: IOException) {
-//                        lifecycleScope.launch(Dispatchers.Main) {
-//                            log("请求失败：${e.message}")
-//                        }
-//                    }
-//
-//                    override fun onResponse(call: Call, response: Response) {
-//                        val resultString = response.body?.string()
-//                        lifecycleScope.launch(Dispatchers.Main) {
-//                            log("请求成功：${resultString}")
-//                        }
-//                    }
-//
-//                })
                 lifecycleScope.launch {
                     val result = NetCore.get<BaseResponse<StatusData>>("/api/status")
                     if (result.isSuccess()) {

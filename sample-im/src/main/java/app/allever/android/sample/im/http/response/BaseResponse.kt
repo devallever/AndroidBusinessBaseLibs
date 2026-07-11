@@ -1,4 +1,4 @@
-package app.allever.android.sample.im.response
+package app.allever.android.sample.im.http.response
 
 import app.allever.android.lib.network.core.response.IBaseResponse
 import app.allever.android.lib.network.core.response.ResponseCode
