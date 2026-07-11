@@ -17,13 +17,12 @@ import java.net.NetworkInterface
 
 /**
  * Android 本地 HTTP 服务端 - Handler 解耦版
- * 每个接口独立 Handler 类，直接访问单例获取公共能力
+ * 新增：统一请求/响应日志打印，回调 onLog
  */
 object LocalHttpServer {
     private val TAG = LocalHttpServer::class.java.simpleName
     private var server: NanoHTTPD? = null
 
-    /** 端口：外部只读，内部可修改 */
     @Volatile
     var port: Int = 8080
         private set
@@ -33,12 +32,10 @@ object LocalHttpServer {
     @Volatile
     private var listener: WeakReference<HttpServerListener>? = null
 
-    /** Gson 实例：同包可见，供 Handler 使用 */
     internal val gson: Gson = GsonBuilder()
         .serializeNulls()
         .create()
 
-    // 路由表：path -> 处理器
     private val routeMap = mutableMapOf<String, HttpRequestHandler>()
 
     private object BizCode {
@@ -49,14 +46,12 @@ object LocalHttpServer {
     }
 
     init {
-        // 注册所有接口处理器
         registerHandler(RootHandler())
         registerHandler(StatusHandler())
         registerHandler(EchoHandler())
         registerHandler(UserInfoHandler())
     }
 
-    /** 注册接口处理器（对外暴露，可动态新增接口） */
     fun registerHandler(handler: HttpRequestHandler) {
         routeMap[handler.path] = handler
     }
@@ -72,7 +67,6 @@ object LocalHttpServer {
 
             val newServer = object : NanoHTTPD(port) {
                 override fun serve(session: IHTTPSession): Response {
-                    log("收到请求: ${session.method} ${session.uri}")
                     return try {
                         dispatchRequest(session)
                     } catch (e: Exception) {
@@ -107,14 +101,28 @@ object LocalHttpServer {
         }
     }
 
-    /** 请求分发 */
+    /**
+     * 请求分发 + 统一请求日志
+     */
     private fun dispatchRequest(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
-        // 统一处理跨域预检
-        if (session.method == NanoHTTPD.Method.OPTIONS) {
+        val method = session.method
+        val uri = session.uri
+
+        // 1. 打印请求基础信息 + GET 查询参数
+        val paramStr = session.parms.entries
+            .joinToString("&") { "${it.key}=${it.value}" }
+        if (paramStr.isNotEmpty()) {
+            log("[请求] $method $uri?$paramStr")
+        } else {
+            log("[请求] $method $uri")
+        }
+
+        // 跨域预检
+        if (method == NanoHTTPD.Method.OPTIONS) {
             return buildSuccessResponse<Any?>(null)
         }
 
-        val handler = routeMap[session.uri]
+        val handler = routeMap[uri]
         return handler?.handle(session)
             ?: buildJsonResponse<Any?>(
                 httpStatus = NanoHTTPD.Response.Status.NOT_FOUND,
@@ -124,17 +132,13 @@ object LocalHttpServer {
             )
     }
 
-    // ====================== 统一响应构建（同包可见） ======================
-
-    /**
-     * 成功响应：无数据/空数据
-     */
+    // ====================== 统一响应构建 ======================
     internal fun <T> buildSuccessResponse(data: T? = null): NanoHTTPD.Response {
         return buildJsonResponse(bizCode = BizCode.SUCCESS, msg = "success", data = data)
     }
 
     /**
-     * 统一 JSON 响应底层方法
+     * 统一响应出口 + 响应日志打印
      */
     internal fun <T> buildJsonResponse(
         httpStatus: NanoHTTPD.Response.Status = NanoHTTPD.Response.Status.OK,
@@ -144,6 +148,10 @@ object LocalHttpServer {
     ): NanoHTTPD.Response {
         val response = ServerResponse(bizCode, msg, data)
         val jsonBody = gson.toJson(response)
+
+        // 2. 打印响应内容
+        log("[响应] $httpStatus $jsonBody")
+
         val bytes = jsonBody.toByteArray(Charsets.UTF_8)
         val inputStream = ByteArrayInputStream(bytes)
 
@@ -202,13 +210,13 @@ object LocalHttpServer {
         return "127.0.0.1"
     }
 
-    // ====================== 日志与监听 ======================
-    private fun log(msg: String) {
+    // ====================== 日志（改为 internal，供同包扩展函数调用） ======================
+    internal fun log(msg: String) {
         Log.d(TAG, msg)
         scope.launch(Dispatchers.Main) { listener?.get()?.onLog(msg) }
     }
 
-    private fun logE(msg: String) {
+    internal fun logE(msg: String) {
         Log.e(TAG, msg)
         scope.launch(Dispatchers.Main) { listener?.get()?.onLog(msg) }
     }

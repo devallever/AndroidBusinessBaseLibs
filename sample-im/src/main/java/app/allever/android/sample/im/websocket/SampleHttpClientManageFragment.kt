@@ -45,7 +45,7 @@ class SampleHttpClientManageFragment :
         mBinding.btnTest.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 val request = Request.Builder()
-                    .url(getBaseUrl())
+                    .url("${getBaseUrl()}/api/status")
                     .get()
                     .build()
                 val call = okHttpClient.newCall(request)
