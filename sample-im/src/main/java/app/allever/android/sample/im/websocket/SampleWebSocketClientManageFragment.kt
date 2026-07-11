@@ -3,14 +3,14 @@ package app.allever.android.sample.im.websocket
 import android.view.View
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.helper.TimeHelper
-import app.allever.android.lib.core.store.StoreCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
+import app.allever.android.sample.im.IMConfig
 import app.allever.android.sample.im.databinding.ImWebsocketClientManageFragmentBinding
 import app.allever.android.sample.im.websocket.client.IMWebSocketClient
 
 class SampleWebSocketClientManageFragment: BaseFragment<ImWebsocketClientManageFragmentBinding, BaseViewModel>() {
 
-    private val SP_KEY_WS_URL = "SP_KEY_WS_URL"
+
     private val clientListener = object : IMWebSocketClient.ClientListener {
         override fun onLog(log: String) {
             log(log)
@@ -42,17 +42,22 @@ class SampleWebSocketClientManageFragment: BaseFragment<ImWebsocketClientManageF
     override fun init() {
         IMWebSocketClient.registerClientListener(clientListener)
         mBinding.tvStatus.text = if (IMWebSocketClient.isConnected()) "已连接" else "未连接"
-        val url = StoreCore.getString(SP_KEY_WS_URL, "ws://192.168.43.53:5400")
+        val url = IMConfig.getWebsocketUrl()
         mBinding.etUrl.setText(url)
 
         mBinding.btnConnect.setOnClickListener {
+            if (!IMConfig.isLogin()) {
+                log("请先登录")
+                return@setOnClickListener
+            }
             val url = mBinding.etUrl.text.toString()
             if (url.isEmpty()) {
                 log("请输入正确的URL")
                 return@setOnClickListener
             }
-            IMWebSocketClient.connect(url)
-            StoreCore.putString(SP_KEY_WS_URL, url)
+            val connectUrl = "$url?username=${IMConfig.getLoginUser()}"
+            IMWebSocketClient.connect(connectUrl)
+            IMConfig.saveWebsocketUrl(url)
         }
         mBinding.btnDisconnect.setOnClickListener {
             IMWebSocketClient.disconnect()

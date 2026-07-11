@@ -7,12 +7,18 @@ import java.nio.charset.Charset
 
 /**
  * 解析 POST JSON 请求体，并打印请求体日志
+ * 正确读取 POST JSON 请求体（NanoHTTPD 标准写法）
  */
 internal inline fun <reified T> NanoHTTPD.IHTTPSession.parseJsonBody(): T? {
     return try {
-        val body = inputStream.bufferedReader(Charsets.UTF_8).readText()
+        // 1. 先触发 NanoHTTPD 解析请求体
+        val params = mutableMapOf<String, String>()
+        this.parseBody(params)
 
-        // 打印 POST 请求体
+        // 2. 从解析结果中取出原始 JSON 字符串
+        val body = params["postData"] ?: ""
+
+        // 3. 打印请求体日志
         if (body.isNotBlank()) {
             LocalHttpServer.log("[请求体] ${this.uri} -> $body")
         }

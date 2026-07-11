@@ -2,6 +2,9 @@ package app.allever.android.sample.im.http
 
 import android.util.Log
 import app.allever.android.sample.im.http.handler.EchoHandler
+import app.allever.android.sample.im.http.handler.LoginHandler
+import app.allever.android.sample.im.http.handler.LogoutHandler
+import app.allever.android.sample.im.http.handler.RegisterHandler
 import app.allever.android.sample.im.http.handler.RootHandler
 import app.allever.android.sample.im.http.handler.StatusHandler
 import app.allever.android.sample.im.http.handler.UserInfoHandler
@@ -50,6 +53,9 @@ object LocalHttpServer {
         registerHandler(StatusHandler())
         registerHandler(EchoHandler())
         registerHandler(UserInfoHandler())
+        registerHandler(RegisterHandler())
+        registerHandler(LoginHandler())
+        registerHandler(LogoutHandler())
     }
 
     fun registerHandler(handler: HttpRequestHandler) {
@@ -106,23 +112,24 @@ object LocalHttpServer {
      */
     private fun dispatchRequest(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
         val method = session.method
-        val uri = session.uri
+        val fullUri = session.uri
+        // 纯路径部分，用于路由匹配
+        val path = fullUri.substringBefore("?")
+        // 查询参数部分，用于日志打印
+        val query = fullUri.substringAfter("?", missingDelimiterValue = "")
 
-        // 1. 打印请求基础信息 + GET 查询参数
-        val paramStr = session.parms.entries
-            .joinToString("&") { "${it.key}=${it.value}" }
-        if (paramStr.isNotEmpty()) {
-            log("[请求] $method $uri?$paramStr")
+        if (query.isNotEmpty()) {
+            log("[请求] $method $fullUri")
         } else {
-            log("[请求] $method $uri")
+            log("[请求] $method $fullUri")
         }
 
-        // 跨域预检
         if (method == NanoHTTPD.Method.OPTIONS) {
             return buildSuccessResponse<Any?>(null)
         }
 
-        val handler = routeMap[uri]
+        // 用纯路径匹配路由
+        val handler = routeMap[path]
         return handler?.handle(session)
             ?: buildJsonResponse<Any?>(
                 httpStatus = NanoHTTPD.Response.Status.NOT_FOUND,

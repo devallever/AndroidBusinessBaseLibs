@@ -1,6 +1,7 @@
 package app.allever.android.sample.im.websocket.server
 
 import android.util.Log
+import app.allever.android.sample.im.database.UserRepository
 import kotlinx.coroutines.*
 import org.java_websocket.WebSocket
 import org.java_websocket.handshake.ClientHandshake
@@ -20,22 +21,24 @@ object IMWebSocketServer {
 
     @Volatile
     private var port: Int = 5400
+
+    // key 改为用户名
     private val clientsMap = ConcurrentHashMap<String, WebSocket>()
 
     // 新增：记录客户端最后活跃时间
     private val heartbeatMap = ConcurrentHashMap<String, Long>()
+
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     // 增加 @Volatile 保证多线程下的可见性
     @Volatile
     private var serverListener: WeakReference<ServerListener>? = null
-    // 新增：心跳常量
+
     private const val HEARTBEAT_PING = "HEARTBEAT_PING"
     private const val HEARTBEAT_PONG = "HEARTBEAT_PONG"
-    private const val HEARTBEAT_TIMEOUT = 45 * 1000L // 45秒未收到消息视为超时
-
-    // 新增变量
+    private const val HEARTBEAT_TIMEOUT = 45 * 1000L
     private var heartbeatCheckJob: Job? = null
+
     fun startServer(port: Int) {
 
         if (server != null) {
@@ -46,8 +49,7 @@ object IMWebSocketServer {
             // 双重校验，防止排队进入同步块时服务已被其他线程启动
             if (server != null) return
             this.port = port
-            // 注意：这里直接在同步块内创建并启动 server，不再嵌套到 launch 异步执行
-            // WebSocketServer.start() 本身会启动内部线程，不会阻塞太久
+
             val newServer = object : WebSocketServer(InetSocketAddress(port)) {
                 override fun onStart() {
                     log("IM 服务端已启动，监听端口: $port")
@@ -56,48 +58,55 @@ object IMWebSocketServer {
                     scope.launch(Dispatchers.Main) {
                         serverListener?.get()?.onStarted(url)
                     }
-                    // 启动心跳检测定时器
                     startHeartbeatCheck()
                 }
 
                 override fun onOpen(conn: WebSocket, handshake: ClientHandshake) {
-                    val clientId = getClientId(conn)
-                    clientsMap[clientId] = conn
-                    heartbeatMap[clientId] = System.currentTimeMillis() // 初始化活跃时间
-                    log("客户端连接成功: $clientId, 当前在线人数: ${clientsMap.size}")
-                    sendMessageToClient(clientId, "系统消息：欢迎加入聊天室！")
-                    broadcastToOthers("系统消息：$clientId 上线了", conn)
+                    // 从 URL 参数获取用户名，格式：ws://ip:port?username=xxx
+                    val username = getUsernameFromHandshake(handshake)
+                    if (username.isBlank() || !UserRepository.isUserExists(username)) {
+                        conn.close(1008, "用户未登录或不存在")
+                        return
+                    }
+
+                    // 如果该用户已在线，踢掉旧连接
+                    clientsMap[username]?.close(1008, "账号在其他地方登录")
+
+                    clientsMap[username] = conn
+                    heartbeatMap[username] = System.currentTimeMillis()
+                    log("用户上线: $username, 当前在线人数: ${clientsMap.size}")
+
+                    sendMessageToClient(username, "系统消息：欢迎回来，$username！")
+                    broadcastToOthers("系统消息：$username 上线了", username)
                 }
 
                 override fun onClose(conn: WebSocket, code: Int, reason: String?, remote: Boolean) {
-                    val clientId = getClientId(conn)
-                    clientsMap.remove(clientId)
-                    heartbeatMap.remove(clientId)
-                    log("客户端断开连接: $clientId, 剩余在线人数: ${clientsMap.size}")
-                    broadcastToOthers("系统消息：$clientId 离线了", conn)
+                    val username = getUsernameByConn(conn) ?: return
+                    clientsMap.remove(username)
+                    heartbeatMap.remove(username)
+                    log("用户离线: $username, 剩余在线人数: ${clientsMap.size}")
+                    broadcastToOthers("系统消息：$username 离线了", username)
                 }
 
                 override fun onMessage(conn: WebSocket, message: String) {
-                    val clientId = getClientId(conn)
-                    // 更新活跃时间
-                    heartbeatMap[clientId] = System.currentTimeMillis()
-                    // 处理心跳请求
+                    val username = getUsernameByConn(conn) ?: return
+                    heartbeatMap[username] = System.currentTimeMillis()
+
                     if (message == HEARTBEAT_PING) {
-                        log("收到 $clientId 的心跳包")
-                        sendMessageToClient(clientId, HEARTBEAT_PONG)
-                        return // 心跳包不进行业务广播
+                        sendMessageToClient(username, HEARTBEAT_PONG)
+                        return
                     }
-                    log("收到 $clientId 的消息: $message")
+
+                    log("收到 $username 的消息: $message")
                     scope.launch {
-                        processMessage(clientId, message, conn)
+                        processMessage(username, message, conn)
                     }
                 }
 
                 override fun onError(conn: WebSocket?, ex: Exception) {
-                    val clientId = conn?.let { getClientId(it) } ?: "全局"
+                    val clientId = conn?.let { getUsernameByConn(it) } ?: "全局"
                     if (ex is java.net.BindException) {
                         logE("连接异常 ($clientId): 端口 $port 被占用")
-                        // 新增：端口绑定失败时，释放 server 对象，允许重新启动
                         server = null
                     } else {
                         logE("连接异常 ($clientId): ${ex.message}")
@@ -106,7 +115,7 @@ object IMWebSocketServer {
             }
             newServer.isReuseAddr = true
             server = newServer
-            // 启动放到 IO 线程，避免阻塞调用线程
+
             scope.launch {
                 try {
                     newServer.start()
@@ -121,92 +130,127 @@ object IMWebSocketServer {
         }
     }
 
+    // ====================== 身份工具 ======================
     /**
-     * 新增：定时清理僵尸连接
+     * 从握手参数中解析用户名
      */
+    private fun getUsernameFromHandshake(handshake: ClientHandshake): String {
+        val resource = handshake.resourceDescriptor
+        val queryStart = resource.indexOf("?")
+        if (queryStart == -1) return ""
+
+        val query = resource.substring(queryStart + 1)
+        val params = query.split("&")
+        for (param in params) {
+            val pair = param.split("=")
+            if (pair.size == 2 && pair[0] == "username") {
+                return pair[1]
+            }
+        }
+        return ""
+    }
+
+    /**
+     * 根据连接反查用户名
+     */
+    private fun getUsernameByConn(conn: WebSocket): String? {
+        return clientsMap.entries.firstOrNull { it.value == conn }?.key
+    }
+
+    /**
+     * 断开指定用户连接（供 HTTP 退出接口调用）
+     */
+    fun disconnectUser(username: String) {
+        clientsMap[username]?.close(1000, "主动退出登录")
+    }
+
+    // ====================== 心跳检测 ======================
     private fun startHeartbeatCheck() {
         heartbeatCheckJob?.cancel()
         heartbeatCheckJob = scope.launch {
             while (isActive && server != null) {
                 delay(15 * 1000) // 每 15 秒检查一次
                 val currentTime = System.currentTimeMillis()
+                val timeoutUsers = mutableListOf<String>()
                 //原因：两个线程同时修改同一个 ConcurrentHashMap，虽然不会抛 ConcurrentModificationException，但可能导致迭代遗漏、状态不一致。
                 // 第一步：收集所有超时客户端
-                val timeoutClients = mutableListOf<String>()
-                heartbeatMap.forEach { (clientId, lastActiveTime) ->
+                heartbeatMap.forEach { (username, lastActiveTime) ->
                     if (currentTime - lastActiveTime > HEARTBEAT_TIMEOUT) {
-                        timeoutClients.add(clientId)
+                        timeoutUsers.add(username)
                     }
                 }
                 // 第二步：统一关闭
-                timeoutClients.forEach { clientId ->
-                    logE("心跳超时，主动断开僵尸连接: $clientId")
-                    clientsMap[clientId]?.close()
+                timeoutUsers.forEach { username ->
+                    logE("心跳超时，断开用户: $username")
+                    clientsMap[username]?.close()
                 }
             }
         }
     }
 
-    private suspend fun processMessage(clientId: String, message: String, senderConn: WebSocket) {
+    // ====================== 消息处理 ======================
+    private suspend fun processMessage(username: String, message: String, senderConn: WebSocket) {
         if (message.startsWith("@")) {
-            //@clientId#消息
             val targetEndIndex = message.indexOf("#")
             if (targetEndIndex > 1) {
-                val targetId = message.substring(1, targetEndIndex)
+                val targetUser = message.substring(1, targetEndIndex)
                 val realMsg = message.substring(targetEndIndex + 1).trim()
-                sendPrivateMessage(targetId, "$clientId 私聊你: $realMsg")
+                sendPrivateMessage(targetUser, "$username 私聊你: $realMsg")
             }
         } else {
-            broadcastToOthers("$clientId: $message", senderConn)
+            broadcastToOthers("$username: $message", username)
         }
     }
 
-    private fun getClientId(conn: WebSocket): String {
-        return conn.remoteSocketAddress.address.hostAddress + ":" + conn.remoteSocketAddress.port
-    }
-
-    fun sendMessageToClient(clientId: String, message: String) {
-        clientsMap[clientId]?.let { conn ->
+    // ====================== 消息发送 ======================
+    fun sendMessageToClient(username: String, message: String) {
+        clientsMap[username]?.let { conn ->
             if (conn.isOpen) {
-                //如果连接已断开、缓冲区满、网络异常，send() 会抛出异常，导致调用方崩溃。broadcast 内部虽然有异常处理，但单条发送没有。
                 try {
                     conn.send(message)
                 } catch (e: Exception) {
-                    logE("发送消息失败 $clientId: ${e.message}")
+                    logE("发送消息失败 $username: ${e.message}")
                 }
             }
         }
     }
 
-    fun sendPrivateMessage(targetClientId: String, message: String) =
-        sendMessageToClient(targetClientId, message)
+    fun sendPrivateMessage(targetUser: String, message: String) =
+        sendMessageToClient(targetUser, message)
 
     fun getOnlineCount(): Int = clientsMap.size
-    private fun broadcastToOthers(message: String, senderConn: WebSocket) {
-        val targetClients = clientsMap.values.filter { it != senderConn && it.isOpen }
-        if (targetClients.isNotEmpty()) server?.broadcast(message, targetClients)
+
+    private fun broadcastToOthers(message: String, excludeUser: String) {
+        val targetClients = clientsMap.entries
+            .filter { it.key != excludeUser && it.value.isOpen }
+            .map { it.value }
+
+        if (targetClients.isNotEmpty()) {
+            try {
+                server?.broadcast(message, targetClients)
+            } catch (e: Exception) {
+                logE("广播异常: ${e.message}")
+            }
+        }
     }
 
-    // 在 stopServer 中新增取消逻辑
+    // ====================== 生命周期 ======================
     fun stopServer() {
         if (!isStarted()) return
         scope.launch {
             // 增加协程内部的二次校验
             val currentServer = server ?: return@launch
-            heartbeatCheckJob?.cancel() // 新增：显式取消心跳检测
+            heartbeatCheckJob?.cancel()
             heartbeatCheckJob = null
 
             clientsMap.values.forEach {
-                try { it.close() } catch (e: Exception) {
-                    logE("关闭连接异常: ${e.message}")
-                /* ignore */
-                }
+                try { it.close() } catch (_: Exception) {}
             }
             clientsMap.clear()
             heartbeatMap.clear()
 
             try {
-                currentServer.stop(1000) // 1秒超时，优雅关闭
+                currentServer.stop(1000)
             } catch (e: Exception) {
                 logE("停止服务异常: ${e.message}")
             } finally {
@@ -219,27 +263,28 @@ object IMWebSocketServer {
     }
 
     fun isStarted(): Boolean = server != null
+
     private fun getLocalIpAddress(): String {
         try {
             val interfaces = NetworkInterface.getNetworkInterfaces()
             while (interfaces.hasMoreElements()) {
-                val networkInterface = interfaces.nextElement()
-                if (networkInterface.isLoopback || !networkInterface.isUp) continue
-                val addresses = networkInterface.inetAddresses
+                val ni = interfaces.nextElement()
+                if (ni.isLoopback || !ni.isUp) continue
+                val addresses = ni.inetAddresses
                 while (addresses.hasMoreElements()) {
-                    val inetAddress = addresses.nextElement()
-                    if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) {
-                        return inetAddress.hostAddress
+                    val addr = addresses.nextElement()
+                    if (!addr.isLoopbackAddress && addr is Inet4Address) {
+                        return addr.hostAddress
                     }
                 }
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        } catch (_: Exception) {}
         return "未知IP"
     }
 
     fun getConnectUrl(): String = if (server != null) "ws://${getLocalIpAddress()}:$port" else ""
+
+    // ====================== 日志 ======================
     private fun log(message: String) {
         Log.d(TAG, message)
         scope.launch(Dispatchers.Main) { serverListener?.get()?.onLog(message) }
@@ -254,10 +299,6 @@ object IMWebSocketServer {
         this.serverListener = WeakReference(serverListener)
     }
 
-    /**
-     * 服务端事件监听器
-     * 建议将日志和业务消息分开，方便 UI 层做不同处理
-     */
     fun unregisterServerListener() {
         this.serverListener = null
     }

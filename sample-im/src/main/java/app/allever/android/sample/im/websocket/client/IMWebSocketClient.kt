@@ -51,6 +51,10 @@ object IMWebSocketClient {
 
     @Volatile
     private var currentReconnectDelay = initialReconnectDelay
+
+    /**
+     * ws://ip:port?username=xxx
+     */
     fun connect(url: String) {
         if (client != null && client?.isOpen == true) {
             log("客户端已经连接，请勿重复连接")
@@ -94,7 +98,6 @@ object IMWebSocketClient {
                     lastPongTime = System.currentTimeMillis()
                     return // 心跳回复不抛给 UI 层
                 }
-                log("收到服务端消息: $message")
                 notifyMessage(message ?: "")
             }
 

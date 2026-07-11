@@ -17,4 +17,8 @@ dependencies {
     implementation(project(":lib-network-engine-okhttp"))
     implementation(libs.java.websocket)
     implementation(libs.nanohttpd)
+    //room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
 }

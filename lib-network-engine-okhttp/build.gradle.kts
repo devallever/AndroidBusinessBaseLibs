@@ -15,4 +15,6 @@ dependencies {
     api(project(":core"))
     api(project(":lib-network-core"))
     api(libs.okhttp)
+    //okhttp-logging-interceptor
+    api(libs.okhttp.logging.interceptor)
 }

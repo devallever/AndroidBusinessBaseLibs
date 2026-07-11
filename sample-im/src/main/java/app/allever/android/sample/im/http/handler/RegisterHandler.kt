@@ -3,14 +3,13 @@ package app.allever.android.sample.im.http.handler
 import app.allever.android.sample.im.database.UserRepository
 import app.allever.android.sample.im.http.HttpRequestHandler
 import app.allever.android.sample.im.http.LocalHttpServer
-import app.allever.android.sample.im.http.parseJsonBody
-import app.allever.android.sample.im.http.request.UserInfoRequest
-
+import app.allever.android.sample.im.http.request.AuthRequest
 import app.allever.android.sample.im.http.response.UserInfoData
+import app.allever.android.sample.im.http.parseJsonBody
 import fi.iki.elonen.NanoHTTPD
 
-class UserInfoHandler : HttpRequestHandler {
-    override val path: String = "/api/user"
+class RegisterHandler : HttpRequestHandler {
+    override val path: String = "/api/user/register"
 
     override fun handle(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
         if (session.method != NanoHTTPD.Method.POST) {
@@ -22,28 +21,28 @@ class UserInfoHandler : HttpRequestHandler {
             )
         }
 
-        val request = session.parseJsonBody<UserInfoRequest>()
+        val req = session.parseJsonBody<AuthRequest>()
             ?: return LocalHttpServer.buildJsonResponse(
                 httpStatus = NanoHTTPD.Response.Status.BAD_REQUEST,
                 bizCode = 400,
-                msg = "请求体必须为合法 JSON",
+                msg = "参数格式错误",
                 data = null
             )
 
-        val user = UserRepository.getUserByUsername(request.username)
-        if (user == null) {
-            return LocalHttpServer.buildJsonResponse(
-                httpStatus = NanoHTTPD.Response.Status.BAD_REQUEST,
-                bizCode = 408,
-                msg = "查不到用户",
+        val userId = UserRepository.register(req.username, req.password)
+        return if (userId != null) {
+            val data = UserInfoData(
+                userId = userId,
+                username = req.username,
+                createTime = System.currentTimeMillis()
+            )
+            LocalHttpServer.buildSuccessResponse(data)
+        } else {
+            LocalHttpServer.buildJsonResponse(
+                bizCode = 1001,
+                msg = "注册失败：用户名已存在或参数不合法",
                 data = null
             )
         }
-        val result = UserInfoData(
-            userId = user.id,
-            username = user.username,
-            createTime = user.createTime
-        )
-        return LocalHttpServer.buildSuccessResponse(result)
     }
 }
