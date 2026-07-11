@@ -34,6 +34,7 @@ class RegisterHandler : HttpRequestHandler {
             val data = UserInfoData(
                 userId = userId,
                 username = req.username,
+                online = 0,
                 createTime = System.currentTimeMillis()
             )
             LocalHttpServer.buildSuccessResponse(data)

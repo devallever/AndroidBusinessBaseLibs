@@ -42,6 +42,7 @@ class UserInfoHandler : HttpRequestHandler {
         val result = UserInfoData(
             userId = user.id,
             username = user.username,
+            online = user.online,
             createTime = user.createTime
         )
         return LocalHttpServer.buildSuccessResponse(result)

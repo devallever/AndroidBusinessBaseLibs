@@ -3,6 +3,7 @@ package app.allever.android.sample.im.business
 import androidx.lifecycle.lifecycleScope
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.common.FragmentActivity
+import app.allever.android.lib.core.ext.toJson
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.helper.GsonHelper
 import app.allever.android.lib.mvvm.base.BaseViewModel
@@ -72,6 +73,18 @@ class LoginSampleFragment : BaseFragment<ImLoginFragmentBinding, BaseViewModel>(
 
             btnEnterChatroom.setOnClickListener {
                 FragmentActivity.start<SampleWebSocketClientManageFragment>("聊天室")
+            }
+
+            btnOnlineUserList.setOnClickListener {
+                lifecycleScope.launch {
+                    FragmentActivity.start<OnlineUserListFragment>("用户列表")
+//                    val response = NetCore.get<BaseResponse<List<UserInfoData>>>("/api/user/onlineList")
+//                    if (response.isSuccess() && response.data != null) {
+//                        toast("获取在线用户列表成功: ${response.data.toJson()}")
+//                    } else {
+//                        toast("获取在线用户列表失败：${response.msg}")
+//                    }
+                }
             }
         }
     }

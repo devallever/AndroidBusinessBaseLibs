@@ -12,5 +12,7 @@ data class UserEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val username: String,
     val passwordHash: String,
-    val createTime: Long = System.currentTimeMillis()
+    val createTime: Long = System.currentTimeMillis(),
+    // 新增：在线状态 0=离线 1=在线
+    val online: Int = 0
 )

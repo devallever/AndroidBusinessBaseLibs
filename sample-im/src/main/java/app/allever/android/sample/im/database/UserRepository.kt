@@ -36,10 +36,26 @@ object UserRepository {
      * 检查用户是否存在
      */
     fun isUserExists(username: String): Boolean {
-        return getUserByUsername(username) != null
+        return userDao.getUserByUsername(username) != null
+    }
+
+    // 更新在线状态
+    fun updateOnlineStatus(username: String, isOnline: Boolean) {
+        val status = if (isOnline) 1 else 0
+        userDao.updateOnlineStatus(username, status)
+    }
+
+    // 重置所有用户为离线
+    fun resetAllOnlineStatus() {
+        userDao.resetAllOnlineStatus()
     }
 
     fun getUserByUsername(username: String): UserEntity? {
         return userDao.getUserByUsername(username)
+    }
+
+    // 获取所有在线用户
+    fun getOnlineUserList(): List<UserEntity> {
+        return userDao.getOnlineUsers()
     }
 }

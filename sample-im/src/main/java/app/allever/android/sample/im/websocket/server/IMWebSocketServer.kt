@@ -55,6 +55,10 @@ object IMWebSocketServer {
                     log("IM 服务端已启动，监听端口: $port")
                     val url = getConnectUrl()
                     log("IM 服务端已启动，监听地址: $url")
+
+                    // 服务启动：重置所有用户在线状态，避免脏数据
+                    UserRepository.resetAllOnlineStatus()
+
                     scope.launch(Dispatchers.Main) {
                         serverListener?.get()?.onStarted(url)
                     }
@@ -74,6 +78,10 @@ object IMWebSocketServer {
 
                     clientsMap[username] = conn
                     heartbeatMap[username] = System.currentTimeMillis()
+
+                    // 更新数据库：用户上线
+                    UserRepository.updateOnlineStatus(username, true)
+
                     log("用户上线: $username, 当前在线人数: ${clientsMap.size}")
 
                     sendMessageToClient(username, "系统消息：欢迎回来，$username！")
@@ -84,6 +92,10 @@ object IMWebSocketServer {
                     val username = getUsernameByConn(conn) ?: return
                     clientsMap.remove(username)
                     heartbeatMap.remove(username)
+
+                    // 更新数据库：用户离线
+                    UserRepository.updateOnlineStatus(username, false)
+
                     log("用户离线: $username, 剩余在线人数: ${clientsMap.size}")
                     broadcastToOthers("系统消息：$username 离线了", username)
                 }

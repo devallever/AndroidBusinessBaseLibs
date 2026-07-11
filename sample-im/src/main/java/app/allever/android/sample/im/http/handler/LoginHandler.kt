@@ -34,6 +34,7 @@ class LoginHandler : HttpRequestHandler {
             val data = UserInfoData(
                 userId = user.id,
                 username = user.username,
+                online = user.online,
                 createTime = user.createTime
             )
             LocalHttpServer.buildSuccessResponse(data)

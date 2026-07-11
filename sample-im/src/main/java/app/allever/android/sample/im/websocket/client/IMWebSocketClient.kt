@@ -166,6 +166,15 @@ object IMWebSocketClient {
         return false
     }
 
+    fun sendMessageToTarget(message: String, username: String) {
+        if (username.isEmpty()) {
+            sendMessage(message)
+        } else {
+            val realMessage = "@$username#$message"
+            sendMessage(realMessage)
+        }
+    }
+
     fun disconnect() {
         // 修改：如果 client 为空，且没有正在等待的重连任务，才真正无需处理
         if (client == null && !isWaitingReconnect) return

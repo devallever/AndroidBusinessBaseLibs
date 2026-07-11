@@ -4,6 +4,7 @@ import android.util.Log
 import app.allever.android.sample.im.http.handler.EchoHandler
 import app.allever.android.sample.im.http.handler.LoginHandler
 import app.allever.android.sample.im.http.handler.LogoutHandler
+import app.allever.android.sample.im.http.handler.OnlineUserListHandler
 import app.allever.android.sample.im.http.handler.RegisterHandler
 import app.allever.android.sample.im.http.handler.RootHandler
 import app.allever.android.sample.im.http.handler.StatusHandler
@@ -56,6 +57,7 @@ object LocalHttpServer {
         registerHandler(RegisterHandler())
         registerHandler(LoginHandler())
         registerHandler(LogoutHandler())
+        registerHandler(OnlineUserListHandler())
     }
 
     fun registerHandler(handler: HttpRequestHandler) {

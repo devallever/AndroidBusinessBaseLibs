@@ -40,6 +40,12 @@
             android:layout_height="wrap_content"
             android:text="进入聊天室" />
 
+        <Button
+            android:id="@+id/btnOnlineUserList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="在线用户列表" />
+
 
     </LinearLayout>
 
