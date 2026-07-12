@@ -2,6 +2,12 @@ package app.allever.android.sample.im.websocket.server
 
 import android.util.Log
 import app.allever.android.sample.im.database.UserRepository
+import app.allever.android.sample.im.protocol.ContentType
+import app.allever.android.sample.im.protocol.Message
+import app.allever.android.sample.im.protocol.MessageBuilder
+import app.allever.android.sample.im.protocol.MessageProtocol
+import app.allever.android.sample.im.protocol.MessageStatus
+import app.allever.android.sample.im.protocol.MessageType
 import kotlinx.coroutines.*
 import org.java_websocket.WebSocket
 import org.java_websocket.handshake.ClientHandshake
@@ -91,8 +97,22 @@ object IMWebSocketServer {
 
                     log("用户上线: $username, 当前在线人数: ${clientsMap.size}")
 
-                    sendMessageToClient(username, "系统消息：欢迎回来，$username！")
-                    broadcastToOthers("系统消息：$username 上线了", username)
+                    val welcomeMsg = MessageBuilder()
+                        .type(MessageType.SYSTEM)
+                        .fromUser("system")
+                        .toUser(username)
+                        .content("欢迎回来，$username！")
+                        .status(MessageStatus.SENT)
+                        .buildText()
+                    sendMessageToClient(username, welcomeMsg)
+
+                    val onlineMsg = MessageBuilder()
+                        .type(MessageType.SYSTEM)
+                        .fromUser("system")
+                        .content("$username 上线了")
+                        .status(MessageStatus.SENT)
+                        .buildText()
+                    broadcastToOthers(onlineMsg, username)
                 }
 
                 override fun onClose(conn: WebSocket, code: Int, reason: String?, remote: Boolean) {
@@ -105,7 +125,13 @@ object IMWebSocketServer {
                     UserRepository.updateOnlineStatus(username, false)
 
                     log("用户离线: $username, 剩余在线人数: ${clientsMap.size}")
-                    broadcastToOthers("系统消息：$username 离线了", username)
+                    val offlineMsg = MessageBuilder()
+                        .type(MessageType.SYSTEM)
+                        .fromUser("system")
+                        .content("$username 离线了")
+                        .status(MessageStatus.SENT)
+                        .buildText()
+                    broadcastToOthers(offlineMsg, username)
                 }
 
                 override fun onMessage(conn: WebSocket, message: String) {
@@ -215,11 +241,64 @@ object IMWebSocketServer {
             if (targetEndIndex > 1) {
                 val targetUser = message.substring(1, targetEndIndex)
                 val realMsg = message.substring(targetEndIndex + 1).trim()
-                sendPrivateMessage(targetUser, "$username 私聊你: $realMsg")
+                val msg = MessageBuilder()
+                    .type(MessageType.PRIVATE)
+                    .fromUser(username)
+                    .toUser(targetUser)
+                    .content(realMsg)
+                    .status(MessageStatus.SENT)
+                    .buildText()
+                sendPrivateMessage(msg)
+            }
+            return
+        }
+
+        if (message.startsWith("{")) {
+            try {
+                val msg = Message.fromJson(message)
+                msg.fromUser = username
+                msg.status = MessageStatus.SENT
+                dispatchMessage(msg)
+            } catch (e: Exception) {
+                logE("解析 JSON 消息失败: ${e.message}")
+                val textMsg = MessageBuilder()
+                    .type(MessageType.BROADCAST)
+                    .fromUser(username)
+                    .content(message)
+                    .status(MessageStatus.SENT)
+                    .buildText()
+                broadcastToOthers(textMsg, username)
             }
         } else {
-            broadcastToOthers("$username: $message", username)
+            val textMsg = MessageBuilder()
+                .type(MessageType.BROADCAST)
+                .fromUser(username)
+                .content(message)
+                .status(MessageStatus.SENT)
+                .buildText()
+            broadcastToOthers(textMsg, username)
         }
+    }
+
+    private fun dispatchMessage(msg: Message) {
+        when (msg.type) {
+            MessageType.PRIVATE -> sendPrivateMessage(msg)
+            MessageType.GROUP -> sendGroupMessage(msg)
+            MessageType.SYSTEM -> sendSystemMessage(msg)
+            MessageType.BROADCAST -> broadcastToOthers(msg, msg.fromUser)
+        }
+    }
+
+    private fun sendPrivateMessage(msg: Message) {
+        sendMessageToClient(msg.toUser, msg)
+    }
+
+    private fun sendGroupMessage(msg: Message) {
+        broadcastToOthers(msg, msg.fromUser)
+    }
+
+    private fun sendSystemMessage(msg: Message) {
+        broadcastToOthers(msg, "")
     }
 
     // ====================== 消息发送 ======================
@@ -228,6 +307,18 @@ object IMWebSocketServer {
             if (conn.isOpen) {
                 try {
                     conn.send(message)
+                } catch (e: Exception) {
+                    logE("发送消息失败 $username: ${e.message}")
+                }
+            }
+        }
+    }
+
+    fun sendMessageToClient(username: String, message: Message) {
+        clientsMap[username]?.let { conn ->
+            if (conn.isOpen) {
+                try {
+                    conn.send(message.toJson())
                 } catch (e: Exception) {
                     logE("发送消息失败 $username: ${e.message}")
                 }
@@ -248,6 +339,20 @@ object IMWebSocketServer {
         if (targetClients.isNotEmpty()) {
             try {
                 server?.broadcast(message, targetClients)
+            } catch (e: Exception) {
+                logE("广播异常: ${e.message}")
+            }
+        }
+    }
+
+    private fun broadcastToOthers(message: Message, excludeUser: String) {
+        val targetClients = clientsMap.entries
+            .filter { it.key != excludeUser && it.value.isOpen }
+            .map { it.value }
+
+        if (targetClients.isNotEmpty()) {
+            try {
+                server?.broadcast(message.toJson(), targetClients)
             } catch (e: Exception) {
                 logE("广播异常: ${e.message}")
             }

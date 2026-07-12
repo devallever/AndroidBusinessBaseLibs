@@ -1,6 +1,11 @@
 package app.allever.android.sample.im.websocket.client
 
 import android.util.Log
+import app.allever.android.sample.im.protocol.ContentType
+import app.allever.android.sample.im.protocol.Message
+import app.allever.android.sample.im.protocol.MessageBuilder
+import app.allever.android.sample.im.protocol.MessageStatus
+import app.allever.android.sample.im.protocol.MessageType
 import kotlinx.coroutines.*
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
@@ -96,9 +101,21 @@ object IMWebSocketClient {
             override fun onMessage(message: String?) {
                 if (message == HEARTBEAT_PONG) {
                     lastPongTime = System.currentTimeMillis()
-                    return // 心跳回复不抛给 UI 层
+                    return
                 }
-                notifyMessage(message ?: "")
+                message?.let {
+                    if (it.startsWith("{")) {
+                        try {
+                            val msg = Message.fromJson(it)
+                            notifyMessage(msg)
+                        } catch (e: Exception) {
+                            logE("解析 JSON 消息失败: ${e.message}")
+                            notifyMessage(it)
+                        }
+                    } else {
+                        notifyMessage(it)
+                    }
+                }
             }
 
             override fun onClose(code: Int, reason: String?, remote: Boolean) {
@@ -166,13 +183,35 @@ object IMWebSocketClient {
         return false
     }
 
-    fun sendMessageToTarget(message: String, username: String) {
-        if (username.isEmpty()) {
-            sendMessage(message)
-        } else {
-            val realMessage = "@$username#$message"
-            sendMessage(realMessage)
+    fun sendMessage(message: Message): Boolean {
+        if (client != null && client?.isOpen == true) {
+            try {
+                val json = message.toJson()
+                client?.send(json)
+                log("发送消息: $json")
+                return true
+            } catch (e: Exception) {
+                logE("发送消息异常：${e.message}")
+                return false
+            }
         }
+        logE("发送失败：连接未开启")
+        return false
+    }
+
+    fun sendTextMessage(content: String, toUser: String = "") {
+        val msg = MessageBuilder()
+            .type(if (toUser.isEmpty()) MessageType.BROADCAST else MessageType.PRIVATE)
+            .contentType(ContentType.TEXT)
+            .toUser(toUser)
+            .content(content)
+            .status(MessageStatus.SENDING)
+            .buildText()
+        sendMessage(msg)
+    }
+
+    fun sendMessageToTarget(message: String, username: String) {
+        sendTextMessage(message, username)
     }
 
     fun disconnect() {
@@ -228,6 +267,10 @@ object IMWebSocketClient {
         scope.launch(Dispatchers.Main) { clientListener?.get()?.onMessage(message) }
     }
 
+    private fun notifyMessage(message: Message) {
+        scope.launch(Dispatchers.Main) { clientListener?.get()?.onMessage(message) }
+    }
+
     private fun notifyClose(code: Int, reason: String?, remote: Boolean) {
         scope.launch(Dispatchers.Main) { clientListener?.get()?.onClose(code, reason, remote) }
     }
@@ -248,6 +291,7 @@ object IMWebSocketClient {
         fun onLog(log: String)
         fun onOpen()
         fun onMessage(message: String)
+        fun onMessage(message: Message)
         fun onClose(code: Int, reason: String?, remote: Boolean)
         fun onError(ex: Exception?)
     }
