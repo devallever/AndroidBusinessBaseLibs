@@ -23,4 +23,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
     implementation(libs.ktx.serialization)
+    //media-core
+    implementation(project(":lib-media-core"))
+    implementation(project(":lib-media-picker"))
+    //glide
+    implementation(libs.glide)
 }

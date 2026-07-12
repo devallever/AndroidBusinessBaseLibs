@@ -1,7 +1,11 @@
 package app.allever.android.sample.im.http
 
+import android.content.Context
 import android.util.Log
+import app.allever.android.lib.core.app.App
 import app.allever.android.sample.im.http.handler.EchoHandler
+import app.allever.android.sample.im.http.handler.ImageHandler
+import app.allever.android.sample.im.http.handler.ImageUploadHandler
 import app.allever.android.sample.im.http.handler.LoginHandler
 import app.allever.android.sample.im.http.handler.LogoutHandler
 import app.allever.android.sample.im.http.handler.OnlineUserListHandler
@@ -31,6 +35,16 @@ object LocalHttpServer {
     var port: Int = 8080
         private set
 
+    private var appContext: Context = App.context
+
+    fun init(context: Context) {
+        this.appContext = context.applicationContext
+    }
+
+    fun getFilesDir(): String {
+        return appContext?.filesDir?.absolutePath ?: System.getProperty("java.io.tmpdir")
+    }
+
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     @Volatile
@@ -58,6 +72,8 @@ object LocalHttpServer {
         registerHandler(LoginHandler())
         registerHandler(LogoutHandler())
         registerHandler(OnlineUserListHandler())
+        registerHandler(ImageUploadHandler())
+        registerHandler(ImageHandler())
     }
 
     fun registerHandler(handler: HttpRequestHandler) {
@@ -131,7 +147,17 @@ object LocalHttpServer {
         }
 
         // 用纯路径匹配路由
-        val handler = routeMap[path]
+        var handler = routeMap[path]
+        
+        // 如果精确匹配失败，尝试前缀匹配（用于 /api/image/xxx.jpg 这种动态路径）
+        // 按路径长度降序排序，优先匹配最长的前缀（避免 /api/image 被 / 匹配）
+        if (handler == null) {
+            handler = routeMap.entries
+                .filter { path.startsWith(it.key) }
+                .maxByOrNull { it.key.length }
+                ?.value
+        }
+        
         return handler?.handle(session)
             ?: buildJsonResponse<Any?>(
                 httpStatus = NanoHTTPD.Response.Status.NOT_FOUND,
