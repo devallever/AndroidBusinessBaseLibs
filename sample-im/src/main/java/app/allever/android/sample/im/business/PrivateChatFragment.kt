@@ -10,6 +10,7 @@ import app.allever.android.sample.im.IMConfig
 import app.allever.android.sample.im.databinding.ImPrivateChatFragmentBinding
 import app.allever.android.sample.im.databinding.ImWebsocketClientManageFragmentBinding
 import app.allever.android.sample.im.protocol.Message
+import app.allever.android.sample.im.protocol.TextMessage
 import app.allever.android.sample.im.websocket.client.IMWebSocketClient
 import kotlinx.coroutines.launch
 
@@ -30,6 +31,16 @@ class PrivateChatFragment: BaseFragment<ImPrivateChatFragmentBinding, BaseViewMo
 
         override fun onMessage(message: Message) {
             log("收到消息[${message.type}][${message.contentType}]: ${message.fromUser} -> ${message.toUser}: ${message.content}")
+            when (message) {
+                is TextMessage -> {
+                    if (message.fromUser == toUsername) {
+                        log("收到消息[${message.type}][${message.contentType}]: ${message.fromUser} -> ${message.toUser}: ${message.content}")
+                    }
+                }
+                else -> {
+                    log("收到消息[${message.type}][${message.contentType}]: ${message.fromUser} -> ${message.toUser}: ${message.content}")
+                }
+            }
         }
 
         override fun onClose(code: Int, reason: String?, remote: Boolean) {

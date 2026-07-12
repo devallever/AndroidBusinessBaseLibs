@@ -12,11 +12,16 @@ class TextMessage(
 ) : Message(
     messageId = messageId,
     type = type,
-    contentType = ContentType.TEXT,
+    contentType = Companion.contentType,
     fromUser = fromUser,
     toUser = toUser,
     content = content,
     timestamp = timestamp,
     status = status,
     extras = extras
-)
+) {
+    companion object : MessageTypeDef {
+        override val contentType = ContentType.TEXT
+        override val clazz = TextMessage::class.java
+    }
+}

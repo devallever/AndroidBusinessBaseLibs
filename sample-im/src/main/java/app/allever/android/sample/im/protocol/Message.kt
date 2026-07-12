@@ -1,6 +1,7 @@
 package app.allever.android.sample.im.protocol
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import java.io.Serializable
 import java.util.*
 
@@ -101,8 +102,23 @@ class MessageBuilder {
 }
 
 object MessageProtocol {
-    val gson: Gson = com.google.gson.GsonBuilder()
+    val gson: Gson = GsonBuilder()
         .serializeNulls()
-        .registerTypeAdapter(Message::class.java, MessageDeserializer())
+        .registerTypeAdapter(Message::class.java, MessageDeserializer)
         .create()
+
+    fun register(clazz: Class<out Message>) {
+        try {
+            val companionField = clazz.getDeclaredField("Companion")
+            companionField.isAccessible = true
+            val companion = companionField.get(null) as? MessageTypeDef
+            companion?.let { MessageDeserializer.register(it) }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun register(def: MessageTypeDef) {
+        MessageDeserializer.register(def)
+    }
 }

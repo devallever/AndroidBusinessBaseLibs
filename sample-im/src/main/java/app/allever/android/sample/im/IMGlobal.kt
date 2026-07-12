@@ -4,11 +4,17 @@ import app.allever.android.lib.network.core.NetCore
 import app.allever.android.lib.network.engine.okhttp.OkHttpConfig
 import app.allever.android.lib.network.engine.okhttp.OkHttpEngine
 import app.allever.android.sample.im.http.response.BaseResponse
+import app.allever.android.sample.im.protocol.CustomMessage
+import app.allever.android.sample.im.protocol.MessageProtocol
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
 object IMGlobal {
+
+    fun init() {
+        MessageProtocol.register(CustomMessage)
+    }
 
     // 建议全局复用 OkHttpClient，不要每次创建
     val okHttpClient by lazy {

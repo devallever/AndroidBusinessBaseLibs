@@ -11,15 +11,20 @@ class ImageMessage(
     extras: MutableMap<String, Any?> = mutableMapOf(),
     var width: Int = 0,
     var height: Int = 0,
-    var url: String = ""
+    var thumbnailUrl: String = ""
 ) : Message(
     messageId = messageId,
     type = type,
-    contentType = ContentType.IMAGE,
+    contentType = Companion.contentType,
     fromUser = fromUser,
     toUser = toUser,
     content = content,
     timestamp = timestamp,
     status = status,
     extras = extras
-)
+) {
+    companion object : MessageTypeDef {
+        override val contentType = ContentType.IMAGE
+        override val clazz = ImageMessage::class.java
+    }
+}

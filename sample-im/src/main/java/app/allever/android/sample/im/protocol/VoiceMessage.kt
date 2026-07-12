@@ -10,16 +10,20 @@ class VoiceMessage(
     status: MessageStatus = MessageStatus.SENDING,
     extras: MutableMap<String, Any?> = mutableMapOf(),
     var duration: Int = 0,
-    var sampleRate: Int = 0,
-    val url: String = ""
+    var sampleRate: Int = 0
 ) : Message(
     messageId = messageId,
     type = type,
-    contentType = ContentType.VOICE,
+    contentType = Companion.contentType,
     fromUser = fromUser,
     toUser = toUser,
     content = content,
     timestamp = timestamp,
     status = status,
     extras = extras
-)
+) {
+    companion object : MessageTypeDef {
+        override val contentType = ContentType.VOICE
+        override val clazz = VoiceMessage::class.java
+    }
+}

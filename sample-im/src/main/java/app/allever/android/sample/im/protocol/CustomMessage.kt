@@ -13,11 +13,16 @@ class CustomMessage(
 ) : Message(
     messageId = messageId,
     type = type,
-    contentType = ContentType.CUSTOM,
+    contentType = Companion.contentType,
     fromUser = fromUser,
     toUser = toUser,
     content = content,
     timestamp = timestamp,
     status = status,
     extras = extras
-)
+) {
+    companion object : MessageTypeDef {
+        override val contentType = ContentType.CUSTOM
+        override val clazz = CustomMessage::class.java
+    }
+}
