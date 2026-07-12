@@ -7,19 +7,11 @@ import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextDetailClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextDetailClickItem
 import app.allever.android.lib.common.databinding.ActivityListBinding
-import app.allever.android.lib.network.core.NetCore
-import app.allever.android.lib.network.engine.okhttp.OkHttpConfig
-import app.allever.android.lib.network.engine.okhttp.OkHttpEngine
 import app.allever.android.sample.im.business.LoginSampleFragment
 import app.allever.android.sample.im.business.RegisterSampleFragment
-import app.allever.android.sample.im.connection.JavaWebSocketConnectionManager
-import app.allever.android.sample.im.connection.OkHttpWebSocketConnectionManager
-import app.allever.android.sample.im.database.AppDatabase
 import app.allever.android.sample.im.http.LocalHttpServer
-import app.allever.android.sample.im.http.response.BaseResponse
 import app.allever.android.sample.im.websocket.SampleHttpMainFragment
 import app.allever.android.sample.im.websocket.SampleWebSocketMainFragment
-import app.allever.android.sample.im.websocket.client.IMWebSocketClient
 import app.allever.android.sample.im.websocket.server.IMWebSocketServer
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -58,10 +50,6 @@ class SampleIMActivity: ListActivity<ActivityListBinding, ListViewModel, TextDet
 
     override fun init() {
         super.init()
-        AppDatabase.init(this.applicationContext)
-        if (IMConfig.isLogin()) {
-            IMWebSocketClient.connect(IMConfig.getConnectWebsocketUrl(IMConfig.getLoginUser()))
-        }
-        IMGlobal.initNetwork()
+        IMGlobal.init()
     }
 }

@@ -1,19 +1,30 @@
 package app.allever.android.sample.im
 
+import app.allever.android.lib.core.app.App
 import app.allever.android.lib.network.core.NetCore
-import app.allever.android.lib.network.engine.okhttp.OkHttpConfig
-import app.allever.android.lib.network.engine.okhttp.OkHttpEngine
+import app.allever.android.sample.im.database.AppDatabase
 import app.allever.android.sample.im.http.response.BaseResponse
 import app.allever.android.sample.im.protocol.CustomMessage
 import app.allever.android.sample.im.protocol.MessageProtocol
+import app.allever.android.sample.im.websocket.client.IMWebSocketClient
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
 object IMGlobal {
+    private var isInitialized = false
 
     fun init() {
+        if (isInitialized) {
+             return
+        }
         MessageProtocol.register(CustomMessage)
+        AppDatabase.init(App.context)
+        if (IMConfig.isLogin()) {
+            IMWebSocketClient.connect(IMConfig.getConnectWebsocketUrl(IMConfig.getLoginUser()))
+        }
+        initNetwork()
+        isInitialized = true
     }
 
     // 建议全局复用 OkHttpClient，不要每次创建
