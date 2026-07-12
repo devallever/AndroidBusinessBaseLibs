@@ -28,6 +28,9 @@ object IMWebSocketServer {
     // 新增：记录客户端最后活跃时间
     private val heartbeatMap = ConcurrentHashMap<String, Long>()
 
+    // 反向映射：WebSocket -> 用户名，用于 O(1) 查找
+    private val connUsernameMap = ConcurrentHashMap<WebSocket, String>()
+
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     // 增加 @Volatile 保证多线程下的可见性
@@ -74,9 +77,13 @@ object IMWebSocketServer {
                     }
 
                     // 如果该用户已在线，踢掉旧连接
-                    clientsMap[username]?.close(1008, "账号在其他地方登录")
+                    clientsMap[username]?.let { oldConn ->
+                        connUsernameMap.remove(oldConn)
+                        oldConn.close(1008, "账号在其他地方登录")
+                    }
 
                     clientsMap[username] = conn
+                    connUsernameMap[conn] = username
                     heartbeatMap[username] = System.currentTimeMillis()
 
                     // 更新数据库：用户上线
@@ -91,6 +98,7 @@ object IMWebSocketServer {
                 override fun onClose(conn: WebSocket, code: Int, reason: String?, remote: Boolean) {
                     val username = getUsernameByConn(conn) ?: return
                     clientsMap.remove(username)
+                    connUsernameMap.remove(conn)
                     heartbeatMap.remove(username)
 
                     // 更新数据库：用户离线
@@ -163,10 +171,10 @@ object IMWebSocketServer {
     }
 
     /**
-     * 根据连接反查用户名
+     * 根据连接反查用户名（O(1) 查找）
      */
     private fun getUsernameByConn(conn: WebSocket): String? {
-        return clientsMap.entries.firstOrNull { it.value == conn }?.key
+        return connUsernameMap[conn]
     }
 
     /**
@@ -259,6 +267,7 @@ object IMWebSocketServer {
                 try { it.close() } catch (_: Exception) {}
             }
             clientsMap.clear()
+            connUsernameMap.clear()
             heartbeatMap.clear()
 
             try {
