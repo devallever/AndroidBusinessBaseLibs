@@ -24,7 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import app.allever.android.lib.network.core.engine.body.MultipartNetBody
 import app.allever.android.sample.im.http.API
-import app.allever.android.sample.im.http.response.UploadImageData
+import app.allever.android.sample.im.http.response.ImageData
 import java.io.File
 import java.io.FileOutputStream
 
@@ -91,16 +91,20 @@ class LoginSampleFragment : BaseFragment<ImLoginFragmentBinding, BaseViewModel>(
             }
 
             btnOnlineUserList.setOnClickListener {
-                    lifecycleScope.launch {
-                        FragmentActivity.start<OnlineUserListFragment>("用户列表")
-                    }
-                }
-
-                btnUploadImage.setOnClickListener {
-                    MediaPickerCore.launchImage(picturePicker)
+                lifecycleScope.launch {
+                    FragmentActivity.start<OnlineUserListFragment>("用户列表")
                 }
             }
+
+            btnUploadImage.setOnClickListener {
+                MediaPickerCore.launchImage(picturePicker)
+            }
+
+            btnServerImageList.setOnClickListener {
+                FragmentActivity.start<ServerImageListFragment>("服务器图片列表")
+            }
         }
+    }
 
     override fun onResume() {
         super.onResume()
@@ -136,14 +140,14 @@ class LoginSampleFragment : BaseFragment<ImLoginFragmentBinding, BaseViewModel>(
                     return@launch
                 }
 
-                val response = NetCore.post<BaseResponse<UploadImageData>>(API.IMAGE_UPLOAD) {
+                val response = NetCore.post<BaseResponse<ImageData>>(API.IMAGE_UPLOAD) {
                     body(MultipartNetBody(listOf(
                         ImagePart(file)
                     )))
                 }
 
                 if (response.isSuccess() && response.data != null) {
-                    val imageUrl = response.data.url
+                    val imageUrl = "${IMConfig.getHttpBaseUrl()}${response.data.url}"
                     mBinding.tvImageUrl.text = "图片地址: $imageUrl"
                     mBinding.tvImageUrl.visibility = ImageView.VISIBLE
                     toast("上传成功: $imageUrl")

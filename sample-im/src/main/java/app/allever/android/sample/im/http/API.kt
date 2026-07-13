@@ -20,5 +20,7 @@ class API {
         //image
         const val IMAGE = "/api/image"
         const val IMAGE_UPLOAD = "/api/image/upload"
+        const val IMAGE_LIST = "/api/image/list"
+        const val IMAGE_DELETE = "/api/image/delete"
     }
 }

@@ -1,6 +1,7 @@
 package app.allever.android.sample.im.http.response
 
-data class UploadImageData(
+data class ImageData(
+    val filename: String,
     val url: String,
-    val filename: String
+    val size: Long
 )

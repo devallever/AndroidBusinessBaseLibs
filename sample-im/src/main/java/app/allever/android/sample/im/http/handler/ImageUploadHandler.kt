@@ -56,10 +56,10 @@ class ImageUploadHandler : HttpRequestHandler {
                 }
             }
 
-            val url = "${LocalHttpServer.getServerUrl()}${API.IMAGE}/$filename"
+            val url = "${API.IMAGE}/$filename"
             LocalHttpServer.log("图片上传成功: $url")
 
-            LocalHttpServer.buildSuccessResponse(mapOf("url" to url, "filename" to filename))
+            LocalHttpServer.buildSuccessResponse(mapOf("url" to url, "filename" to filename, "size" to tempFile.length()))
         } catch (e: Exception) {
             LocalHttpServer.logE("图片上传失败: ${e.message}")
             LocalHttpServer.buildJsonResponse<Any?>(

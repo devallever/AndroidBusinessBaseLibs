@@ -4,7 +4,9 @@ import android.content.Context
 import android.util.Log
 import app.allever.android.lib.core.app.App
 import app.allever.android.sample.im.http.handler.EchoHandler
+import app.allever.android.sample.im.http.handler.ImageDeleteHandler
 import app.allever.android.sample.im.http.handler.ImageHandler
+import app.allever.android.sample.im.http.handler.ImageListHandler
 import app.allever.android.sample.im.http.handler.ImageUploadHandler
 import app.allever.android.sample.im.http.handler.LoginHandler
 import app.allever.android.sample.im.http.handler.LogoutHandler
@@ -68,6 +70,9 @@ object LocalHttpServer {
         const val LOGIN_FAILED = 1002
         const val USER_NOT_FOUND = 1003
         const val USER_QUERY_NOT_FOUND = 1004
+
+        const val IMAGE_DELETE_FAILED = 1005
+        const val IMAGE_NOT_FOUND = 1006
     }
 
     init {
@@ -81,6 +86,8 @@ object LocalHttpServer {
         registerHandler(OnlineUserListHandler())
         registerHandler(ImageUploadHandler())
         registerHandler(ImageHandler())
+        registerHandler(ImageListHandler())
+        registerHandler(ImageDeleteHandler())
     }
 
     fun registerHandler(handler: HttpRequestHandler) {

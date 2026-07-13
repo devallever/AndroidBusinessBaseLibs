@@ -15,17 +15,10 @@ import app.allever.android.sample.im.http.response.BaseResponse
 import app.allever.android.sample.im.http.response.StatusData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
 import okhttp3.Request
 
 class SampleHttpClientManageFragment :
     BaseFragment<ImHttpClientManageFragmentBinding, BaseViewModel>() {
-
-
-
-    private val okHttpClient by lazy {
-        OkHttpClient.Builder().build()
-    }
 
     override fun inflate() = ImHttpClientManageFragmentBinding.inflate(layoutInflater)
 
@@ -48,7 +41,7 @@ class SampleHttpClientManageFragment :
                     .url("${IMConfig.getHttpBaseUrl()}${API.USER_STATUS}")
                     .get()
                     .build()
-                val call = okHttpClient.newCall(request)
+                val call = IMGlobal.okHttpClient.newCall(request)
                 val response = call.execute()
                 val resultString = response.body?.string()
                 lifecycleScope.launch(Dispatchers.Main) {

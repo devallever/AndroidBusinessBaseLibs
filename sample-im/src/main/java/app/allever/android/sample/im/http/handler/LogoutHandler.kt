@@ -42,14 +42,14 @@ class LogoutHandler : HttpRequestHandler {
             )
         }
 
-        if (!UserRepository.isUserExists(req.username)) {
-            return LocalHttpServer.buildJsonResponse(
-                httpStatus = NanoHTTPD.Response.Status.BAD_REQUEST,
-                bizCode = LocalHttpServer.BizCode.USER_NOT_FOUND,
-                msg = "用户不存在",
-                data = null
-            )
-        }
+//        if (!UserRepository.isUserExists(req.username)) {
+//            return LocalHttpServer.buildJsonResponse(
+//                httpStatus = NanoHTTPD.Response.Status.BAD_REQUEST,
+//                bizCode = LocalHttpServer.BizCode.USER_NOT_FOUND,
+//                msg = "用户不存在",
+//                data = null
+//            )
+//        }
 
         // 断开该用户的 WebSocket 连接
         IMWebSocketServer.disconnectUser(req.username)
