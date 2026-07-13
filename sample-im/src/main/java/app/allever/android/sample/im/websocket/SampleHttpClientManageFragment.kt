@@ -10,6 +10,7 @@ import app.allever.android.lib.network.core.NetCore
 import app.allever.android.sample.im.IMConfig
 import app.allever.android.sample.im.IMGlobal
 import app.allever.android.sample.im.databinding.ImHttpClientManageFragmentBinding
+import app.allever.android.sample.im.http.API
 import app.allever.android.sample.im.http.response.BaseResponse
 import app.allever.android.sample.im.http.response.StatusData
 import kotlinx.coroutines.Dispatchers
@@ -44,7 +45,7 @@ class SampleHttpClientManageFragment :
         mBinding.btnTest.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 val request = Request.Builder()
-                    .url("${IMConfig.getHttpBaseUrl()}/api/status")
+                    .url("${IMConfig.getHttpBaseUrl()}${API.USER_STATUS}")
                     .get()
                     .build()
                 val call = okHttpClient.newCall(request)
@@ -55,7 +56,7 @@ class SampleHttpClientManageFragment :
                 }
 
                 lifecycleScope.launch {
-                    val result = NetCore.get<BaseResponse<StatusData>>("/api/status")
+                    val result = NetCore.get<BaseResponse<StatusData>>(API.USER_STATUS)
                     if (result.isSuccess()) {
                         val data = "netCore请求成功 data：${result.data?.toJson()}"
                         log(data)

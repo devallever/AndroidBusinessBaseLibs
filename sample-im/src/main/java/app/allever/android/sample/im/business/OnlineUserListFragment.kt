@@ -12,6 +12,7 @@ import app.allever.android.lib.core.helper.CoroutineHelper
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.lib.network.core.NetCore
 import app.allever.android.sample.im.IMConfig
+import app.allever.android.sample.im.http.API
 import app.allever.android.sample.im.http.response.BaseResponse
 import app.allever.android.sample.im.http.response.UserInfoData
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -26,7 +27,7 @@ class OnlineUserListFragment: ListFragment<FragmentListBinding, BaseViewModel, T
     override fun init() {
         super.init()
         CoroutineHelper.IO.launch {
-            val response = NetCore.get<BaseResponse<List<UserInfoData>>>("/api/user/onlineList")
+            val response = NetCore.get<BaseResponse<List<UserInfoData>>>(API.USER_ONLINE)
             if (response.isSuccess() && response.data != null) {
                 val list = mutableListOf<TextDetailClickItem>()
                 response.data.forEach {user ->

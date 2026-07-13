@@ -56,11 +56,18 @@ object LocalHttpServer {
 
     private val routeMap = mutableMapOf<String, HttpRequestHandler>()
 
-    private object BizCode {
+    object BizCode {
         const val SUCCESS = 0
+
         const val BAD_REQUEST = 400
         const val NOT_FOUND = 404
+        const val METHOD_NOT_ALLOWED = 405
         const val SERVER_ERROR = 500
+
+        const val REGISTER_FAILED = 1001
+        const val LOGIN_FAILED = 1002
+        const val USER_NOT_FOUND = 1003
+        const val USER_QUERY_NOT_FOUND = 1004
     }
 
     init {

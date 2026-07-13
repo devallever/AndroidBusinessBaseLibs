@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import app.allever.android.lib.network.core.engine.body.MultipartNetBody
+import app.allever.android.sample.im.http.API
 import app.allever.android.sample.im.http.response.UploadImageData
 import java.io.File
 import java.io.FileOutputStream
@@ -73,7 +74,7 @@ class LoginSampleFragment : BaseFragment<ImLoginFragmentBinding, BaseViewModel>(
             btnLogout.setOnClickListener {
                 lifecycleScope.launch {
                     val response = NetCore.post<BaseResponse<Any>>(
-                        "/api/user/logout", AuthRequest(username = IMConfig.getLoginUser()))
+                        API.LOGOUT, AuthRequest(username = IMConfig.getLoginUser()))
                     if (response.isSuccess()) {
                         toast("退出成功")
                         IMConfig.saveUser("")
@@ -135,7 +136,7 @@ class LoginSampleFragment : BaseFragment<ImLoginFragmentBinding, BaseViewModel>(
                     return@launch
                 }
 
-                val response = NetCore.post<BaseResponse<UploadImageData>>("/api/image/upload") {
+                val response = NetCore.post<BaseResponse<UploadImageData>>(API.IMAGE_UPLOAD) {
                     body(MultipartNetBody(listOf(
                         ImagePart(file)
                     )))

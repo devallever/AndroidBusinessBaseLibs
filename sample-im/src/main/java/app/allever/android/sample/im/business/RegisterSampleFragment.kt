@@ -9,6 +9,7 @@ import app.allever.android.lib.network.core.NetCore
 import app.allever.android.sample.im.IMConfig
 import app.allever.android.sample.im.IMGlobal
 import app.allever.android.sample.im.databinding.ImRegisterFragmentBinding
+import app.allever.android.sample.im.http.API
 import app.allever.android.sample.im.http.request.AuthRequest
 import app.allever.android.sample.im.http.response.BaseResponse
 import app.allever.android.sample.im.http.response.UserInfoData
@@ -70,7 +71,7 @@ class RegisterSampleFragment : BaseFragment<ImRegisterFragmentBinding, BaseViewM
 //                }
                 lifecycleScope.launch {
                     val response = NetCore.post<BaseResponse<UserInfoData>>(
-                        "/api/user/register",
+                        API.REGISTER,
                         AuthRequest(username, password)
                     )
                     if (response.isSuccess() && response.data != null) {

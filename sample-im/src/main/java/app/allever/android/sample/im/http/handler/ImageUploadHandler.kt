@@ -1,5 +1,6 @@
 package app.allever.android.sample.im.http.handler
 
+import app.allever.android.sample.im.http.API
 import app.allever.android.sample.im.http.HttpRequestHandler
 import app.allever.android.sample.im.http.LocalHttpServer
 import fi.iki.elonen.NanoHTTPD
@@ -9,7 +10,7 @@ import java.io.FileOutputStream
 import java.util.UUID
 
 class ImageUploadHandler : HttpRequestHandler {
-    override val path: String = "/api/image/upload"
+    override val path = API.IMAGE_UPLOAD
 
     override fun handle(session: NanoHTTPD.IHTTPSession): NanoHTTPD.Response {
         return try {
@@ -19,7 +20,7 @@ class ImageUploadHandler : HttpRequestHandler {
             if (files.isEmpty()) {
                 return LocalHttpServer.buildJsonResponse<Any?>(
                     httpStatus = NanoHTTPD.Response.Status.BAD_REQUEST,
-                    bizCode = 400,
+                    bizCode = LocalHttpServer.BizCode.BAD_REQUEST,
                     msg = "请选择图片文件",
                     data = null
                 )
@@ -29,7 +30,7 @@ class ImageUploadHandler : HttpRequestHandler {
             if (tempFilePath.isNullOrEmpty()) {
                 return LocalHttpServer.buildJsonResponse<Any?>(
                     httpStatus = NanoHTTPD.Response.Status.BAD_REQUEST,
-                    bizCode = 400,
+                    bizCode = LocalHttpServer.BizCode.BAD_REQUEST,
                     msg = "请选择图片文件",
                     data = null
                 )
@@ -39,7 +40,7 @@ class ImageUploadHandler : HttpRequestHandler {
             if (!tempFile.exists()) {
                 return LocalHttpServer.buildJsonResponse<Any?>(
                     httpStatus = NanoHTTPD.Response.Status.BAD_REQUEST,
-                    bizCode = 400,
+                    bizCode = LocalHttpServer.BizCode.BAD_REQUEST,
                     msg = "文件不存在",
                     data = null
                 )
@@ -55,7 +56,7 @@ class ImageUploadHandler : HttpRequestHandler {
                 }
             }
 
-            val url = "${LocalHttpServer.getServerUrl()}/api/image/$filename"
+            val url = "${LocalHttpServer.getServerUrl()}${API.IMAGE}/$filename"
             LocalHttpServer.log("图片上传成功: $url")
 
             LocalHttpServer.buildSuccessResponse(mapOf("url" to url, "filename" to filename))
@@ -63,7 +64,7 @@ class ImageUploadHandler : HttpRequestHandler {
             LocalHttpServer.logE("图片上传失败: ${e.message}")
             LocalHttpServer.buildJsonResponse<Any?>(
                 httpStatus = NanoHTTPD.Response.Status.INTERNAL_ERROR,
-                bizCode = 500,
+                bizCode = LocalHttpServer.BizCode.SERVER_ERROR,
                 msg = "图片上传失败",
                 data = null
             )
