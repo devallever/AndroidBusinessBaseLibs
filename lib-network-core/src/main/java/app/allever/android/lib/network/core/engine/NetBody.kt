@@ -111,6 +111,72 @@ private class EmptyNetBody : NetBody() {
     }
 }
 
+/**
+ * Multipart 请求体的单个部分
+ */
+data class NetBodyPart(
+    val name: String,
+    val filename: String? = null,
+    val contentType: String? = null,
+    val content: ByteArray? = null,
+    val file: java.io.File? = null
+)
+
+/**
+ * Multipart 请求体（支持多文件上传）
+ */
+class MultipartNetBody(
+    private val parts: List<NetBodyPart>,
+    private val boundary: String = generateBoundary()
+) : NetBody() {
+
+    override val contentType: String? = "multipart/form-data; boundary=$boundary"
+
+    override fun contentLength(): Long {
+        return try {
+            val outputStream = java.io.ByteArrayOutputStream()
+            writeTo(outputStream)
+            outputStream.size().toLong()
+        } catch (e: Exception) {
+            -1L
+        }
+    }
+
+    override fun writeTo(output: java.io.OutputStream) {
+        parts.forEach { part ->
+            output.write("--$boundary\r\n".toByteArray(Charsets.UTF_8))
+
+            if (part.filename != null) {
+                val contentType = part.contentType ?: "application/octet-stream"
+                output.write("Content-Disposition: form-data; name=\"${part.name}\"; filename=\"${part.filename}\"\r\n".toByteArray(Charsets.UTF_8))
+                output.write("Content-Type: $contentType\r\n".toByteArray(Charsets.UTF_8))
+            } else {
+                output.write("Content-Disposition: form-data; name=\"${part.name}\"\r\n".toByteArray(Charsets.UTF_8))
+            }
+
+            output.write("\r\n".toByteArray(Charsets.UTF_8))
+
+            if (part.file != null) {
+                part.file.inputStream().use { input ->
+                    input.copyTo(output)
+                }
+            } else if (part.content != null) {
+                output.write(part.content)
+            }
+
+            output.write("\r\n".toByteArray(Charsets.UTF_8))
+        }
+
+        output.write("--$boundary--\r\n".toByteArray(Charsets.UTF_8))
+    }
+
+    companion object {
+        private fun generateBoundary(): String {
+            return "NetBodyBoundary_${System.currentTimeMillis()}_${java.util.UUID.randomUUID()}"
+        }
+    }
+}
+
 /** 旧名兼容别名（后续版本移除） */
 @Deprecated("请使用 NetBody 替代", ReplaceWith("NetBody"))
 typealias RequestBody = NetBody
