@@ -8,7 +8,6 @@ import app.allever.android.lib.common.FragmentActivity
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toast
-import app.allever.android.lib.core.helper.GsonHelper
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.lib.network.core.NetCore
@@ -22,16 +21,12 @@ import app.allever.android.sample.im.websocket.client.IMWebSocketClient
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.asRequestBody
+import app.allever.android.lib.network.core.engine.MultipartNetBody
+import app.allever.android.lib.network.core.engine.NetBodyPart
 import java.io.File
 import java.io.FileOutputStream
 
 class LoginSampleFragment : BaseFragment<ImLoginFragmentBinding, BaseViewModel>() {
-    private val okHttpClient = OkHttpClient.Builder().build()
     private val picturePicker = MediaPickerCore.registerPickerLauncher(this) {
         if (it.isEmpty()) {
             toast("请选择图片")
@@ -45,7 +40,7 @@ class LoginSampleFragment : BaseFragment<ImLoginFragmentBinding, BaseViewModel>(
 
     override fun init() {
         mBinding.apply {
-            Glide.with(this@LoginSampleFragment).load("http://192.168.43.106:8080/api/image/b2063dc8-1cdf-4d30-85ce-8f3e12a9d920.jpg").into(ivPreview)
+            Glide.with(this@LoginSampleFragment).load("${IMConfig.getHttpBaseUrl()}/api/image/6924ad23-ee60-4166-9403-2efa2b54e402.jpg").into(ivPreview)
             btnLogin.setOnClickListener {
                 val username = etUsername.text.toString()
                 val password = etPassword.text.toString()
@@ -123,7 +118,7 @@ class LoginSampleFragment : BaseFragment<ImLoginFragmentBinding, BaseViewModel>(
     }
 
     private fun uploadImage(uri: Uri) {
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch {
             try {
                 val file = uriToFile(uri)
                 if (file == null) {
@@ -132,11 +127,6 @@ class LoginSampleFragment : BaseFragment<ImLoginFragmentBinding, BaseViewModel>(
                     return@launch
                 }
 
-                val requestBody = MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart("image", file.name, file.asRequestBody("image/*".toMediaType()))
-                    .build()
-
                 val httpUrl = IMConfig.getHttpBaseUrl()
                 if (httpUrl.isEmpty()) {
                     toast("HTTP 服务未启动")
@@ -144,40 +134,32 @@ class LoginSampleFragment : BaseFragment<ImLoginFragmentBinding, BaseViewModel>(
                     return@launch
                 }
 
-                val request = Request.Builder()
-                    .url("$httpUrl/api/image/upload")
-                    .post(requestBody)
-                    .build()
+                val response = NetCore.post<BaseResponse<UploadImageData>>("/api/image/upload") {
+                    body(MultipartNetBody(listOf(
+                        NetBodyPart(
+                            name = "image",
+                            filename = file.name,
+                            contentType = "image/*",
+                            file = file
+                        )
+                    )))
+                }
 
-                val response = okHttpClient.newCall(request).execute()
-                if (response.isSuccessful) {
-                    val body = response.body?.string()?:""
-                    val result = GsonHelper.fromJson(body, UploadResult::class.java)?: return@launch
-                    if (result.code == 0 && result.data != null) {
-                        val imageUrl = result.data.url
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            mBinding.tvImageUrl.text = "图片地址: $imageUrl"
-                            mBinding.tvImageUrl.visibility = ImageView.VISIBLE
-                            toast("上传成功: $imageUrl")
-                            log("上传成功: $imageUrl")
-                            Glide.with(this@LoginSampleFragment).load(imageUrl).into(mBinding.ivPreview)
-                        }
-                    } else {
-                        toast("上传失败: ${result.msg}")
-                        log("上传失败: ${result.msg}")
-                    }
+                if (response.isSuccess() && response.data != null) {
+                    val imageUrl = response.data.url
+                    mBinding.tvImageUrl.text = "图片地址: $imageUrl"
+                    mBinding.tvImageUrl.visibility = ImageView.VISIBLE
+                    toast("上传成功: $imageUrl")
+                    log("上传成功: $imageUrl")
+                    Glide.with(this@LoginSampleFragment).load(imageUrl).into(mBinding.ivPreview)
                 } else {
-                    toast("上传失败: ${response.code}")
-                    log("上传失败: ${response.code}")
+                    toast("上传失败: ${response.msg}")
+                    log("上传失败: ${response.msg}")
                 }
             } catch (e: Exception) {
                 toast("上传异常: ${e.message}")
                 log("上传异常: ${e.message}")
             }
-        }
-
-        lifecycleScope.launch {
-//            NetCore.post("/api/image/upload", "")
         }
     }
 
