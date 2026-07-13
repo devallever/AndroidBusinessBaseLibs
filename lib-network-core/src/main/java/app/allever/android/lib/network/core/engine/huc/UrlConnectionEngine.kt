@@ -3,11 +3,10 @@ package app.allever.android.lib.network.core.engine.huc
 import app.allever.android.lib.network.core.engine.EngineRegistry
 import app.allever.android.lib.network.core.engine.HttpEngine
 import app.allever.android.lib.network.core.engine.HttpMethod
-import app.allever.android.lib.network.core.engine.NetBody
+import app.allever.android.lib.network.core.engine.body.NetBody
 import app.allever.android.lib.network.core.engine.NetCall
 import app.allever.android.lib.network.core.engine.NetRequest
 import app.allever.android.lib.network.core.engine.NetResponse
-import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.net.ConnectException
 import java.net.HttpURLConnection

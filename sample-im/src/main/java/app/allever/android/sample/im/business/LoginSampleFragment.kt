@@ -11,6 +11,7 @@ import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.media.picker.MediaPickerCore
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.lib.network.core.NetCore
+import app.allever.android.lib.network.core.engine.body.multipart.ImagePart
 import app.allever.android.sample.im.IMConfig
 import app.allever.android.sample.im.databinding.ImLoginFragmentBinding
 import app.allever.android.sample.im.http.request.AuthRequest
@@ -21,8 +22,8 @@ import app.allever.android.sample.im.websocket.client.IMWebSocketClient
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import app.allever.android.lib.network.core.engine.MultipartNetBody
-import app.allever.android.lib.network.core.engine.NetBodyPart
+import app.allever.android.lib.network.core.engine.body.MultipartNetBody
+import app.allever.android.sample.im.http.response.UploadImageData
 import java.io.File
 import java.io.FileOutputStream
 
@@ -136,12 +137,7 @@ class LoginSampleFragment : BaseFragment<ImLoginFragmentBinding, BaseViewModel>(
 
                 val response = NetCore.post<BaseResponse<UploadImageData>>("/api/image/upload") {
                     body(MultipartNetBody(listOf(
-                        NetBodyPart(
-                            name = "image",
-                            filename = file.name,
-                            contentType = "image/*",
-                            file = file
-                        )
+                        ImagePart(file)
                     )))
                 }
 
@@ -177,15 +173,4 @@ class LoginSampleFragment : BaseFragment<ImLoginFragmentBinding, BaseViewModel>(
             null
         }
     }
-
-    private data class UploadResult(
-        val code: Int,
-        val msg: String,
-        val data: UploadImageData?
-    )
-
-    private data class UploadImageData(
-        val url: String,
-        val filename: String
-    )
 }
