@@ -5,6 +5,7 @@ import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -302,6 +303,16 @@ class EditActivity : AppActivity<TcActivityEditBinding, EditViewMode>() {
 //        mBinding.ivRecommend.setOnClickListener {
 //            ActivityHelper.startActivity(this, RecommendListActivity::class.java)
 //        }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (mBinding.menuContainer.isVisible) {
+                    mBinding.btnEditStyle.performClick()
+                } else {
+                    finish()
+                }
+            }
+        })
     }
 
     private fun initPopMenu() {
@@ -319,13 +330,6 @@ class EditActivity : AppActivity<TcActivityEditBinding, EditViewMode>() {
     override fun onDestroy() {
         super.onDestroy()
         TemplateManager.destroyTemplate()
-    }
-
-    override fun onBackPressed() {
-        if (mBinding.menuContainer.isVisible) {
-            mBinding.btnEditStyle.performClick()
-        } else {
-        }
     }
 
     private fun checkPermission() =  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
