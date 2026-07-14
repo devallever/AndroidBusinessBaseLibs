@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/template_ticket_card_bg_color" />
+
+    <corners
+        android:bottomRightRadius="20.0dp"
+        android:bottomLeftRadius="20.0dp" />
+
+
+</shape>

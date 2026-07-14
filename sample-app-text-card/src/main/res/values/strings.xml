@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Card Maker</string>
+    <string name="export">Export</string>
+    <string name="done">Done</string>
+    <string name="tab_template">Template</string>
+    <string name="tab_switch">Switch</string>
+    <string name="tab_bg_color">BGColor</string>
+    <string name="symbol">Symbol</string>
+    <string name="date_time_format"><![CDATA[Date & Time Format]]></string>
+    <string name="word_format_word_count">words: %s</string>
+    <string name="word_format_count_word">%s words</string>
+    <string name="word_format_count">%s</string>
+    <string name="word_format">Word Format</string>
+    <string name="title_hint">Title here</string>
+    <string name="text_hint">Text here</string>
+    <string name="author_hint">Author/Quote here...</string>
+    <string name="share">Share</string>
+    <string name="save_to_album">Save to album</string>
+    <string name="clear_text_tips">Are you sure you want to clear all text your input?</string>
+    <string name="clear_all_text">Clear All Text</string>
+    <string name="clear">Clear</string>
+    <string name="cancle">Cancel</string>
+    <string name="setting">Setting</string>
+    <string name="support_us">SUPPORT US</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="share_app">Share App</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="version">Version</string>
+    <string name="default_author">Author</string>
+    <string name="default_title">Make Text To Beautiful Cards !\n</string>
+    <string name="agree">Agree</string>
+    <string name="reject">Reject</string>
+    <string name="request_permission_message">We need store permission to save image.</string>
+    <string name="permission_tips_title">Tips</string>
+    <string name="default_text">Life was like a box of chocolates, you never know what you\'re gonna get.\nYou got a dream, you gotta protect it. People can\'t do something themselves, they wanna tell you you can\'t do it. If you want something, go get it.\nEasy doesn\'t enter into grown-up life.</string>
+</resources>

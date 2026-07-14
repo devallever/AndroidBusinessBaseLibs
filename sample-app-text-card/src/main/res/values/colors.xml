@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="theme_color">@color/googleBleu</color>
+    <color name="page_bg">#000000</color>
+    <color name="card_drak_bg_color">@color/color_080510</color>
+
+    <color name="template_ticket_card_bg_color_dark">@color/color_80000000</color>
+    <color name="template_ticket_card_bg_color">@color/white</color>
+
+    <color name="googleRed">#EB4334</color>
+    <color name="googleGreen">#35AA53</color>
+    <color name="googleBleu">#4586F3</color>
+    <color name="googleYellow">#FBBD06</color>
+
+    <color name="color_CCCCCC">#CCCCCC</color>
+    <color name="color_999999">#999999</color>
+    <color name="color_B0B5B9">#B0B5B9</color>
+    <color name="color_EEEEEE">#EEEEEE</color>
+    <color name="color_252525">#252525</color>
+    <color name="color_080510">#080510</color>
+    <color name="color_100f17">#100f17</color>
+    <color name="color_41404A">#41404A</color>
+    <color name="color_4C5159">#4C5159</color>
+    <color name="color_4D4E5D">#4D4D5E</color>
+    <color name="color_1c1c1e">#1C1C1E</color>
+    <color name="color_B0AFB0">#B0AFB0</color>
+    <color name="color_B0000000">#B0000000</color>
+    <color name="color_A0000000">#A0000000</color>
+    <color name="color_80000000">#80000000</color>
+    <color name="color_60000000">#60000000</color>
+    <color name="color_40000000">#40000000</color>
+    <color name="color_20000000">#20000000</color>
+    <color name="color_10000000">#10000000</color>
+
+    <color name="color_B0ffffff">#B0ffffff</color>
+    <color name="color_A0ffffff">#A0ffffff</color>
+    <color name="color_80ffffff">#80ffffff</color>
+    <color name="color_60ffffff">#60ffffff</color>
+    <color name="color_40ffffff">#40ffffff</color>
+    <color name="color_20ffffff">#20ffffff</color>
+    <color name="color_10ffffff">#10ffffff</color>
+
+    <color name="color_F5F5F5">#F5F5F5</color>
+    <color name="color_0A0A0A">#0A0A0A</color>
+    <color name="color_171717">#171717</color>
+    <color name="color_2B2B2B">#2B2B2B</color>
+    <color name="color_EFEFEF">#EFEFEF</color>
+
+</resources>

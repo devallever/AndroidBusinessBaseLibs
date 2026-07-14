@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.TextCard" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+    </style>
+
+    <!-- default textview style -->
+    <style name="defaultTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="smallTextStyle" parent="defaultTextStyle">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="superSmallTextStyle" parent="defaultTextStyle">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="bigTextStyle" parent="defaultTextStyle">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="superBigTextStyle" parent="defaultTextStyle">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Theme.Design.BottomSheetDialog</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+</resources>
