@@ -13,6 +13,8 @@ import app.allever.android.sample.im.databinding.ImHttpClientManageFragmentBindi
 import app.allever.android.sample.im.http.API
 import app.allever.android.sample.im.http.response.BaseResponse
 import app.allever.android.sample.im.http.response.StatusData
+import app.allever.android.sample.im.websocket.client.IMWebSocketClient
+import app.allever.android.sample.im.websocket.server.IMWebSocketServer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.Request
@@ -23,16 +25,17 @@ class SampleHttpClientManageFragment :
     override fun inflate() = ImHttpClientManageFragmentBinding.inflate(layoutInflater)
 
     override fun init() {
-        mBinding.etBaseUrl.setText(IMConfig.getHttpBaseUrl())
+        mBinding.etBaseUrl.setText(IMConfig.getServerIp())
 
         mBinding.btnSetUrl.setOnClickListener {
-            val url = mBinding.etBaseUrl.text.toString()
-            if (url.isEmpty()) {
+            val ip = mBinding.etBaseUrl.text.toString()
+            if (ip.isEmpty()) {
                 log("请输入url")
                 return@setOnClickListener
             }
-            IMConfig.saveHttpBaseUrl(url)
+            IMConfig.saveServerIp(ip)
             IMGlobal.initNetwork()
+            IMWebSocketClient.updateConnect(IMConfig.getConnectWebsocketUrl())
         }
 
         mBinding.btnTest.setOnClickListener {

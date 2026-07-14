@@ -29,6 +29,8 @@ object IMWebSocketClient {
     // 记录当前连接的目标地址，用于断线重连
     @Volatile
     private var currentUrl: String? = null
+    @Volatile
+    private var updateUrlStarted = false
 
     // 标记是否为主动断开（主动断开则不触发自动重连）
     @Volatile
@@ -71,6 +73,14 @@ object IMWebSocketClient {
         this.isWaitingReconnect = false
         reconnectJob?.cancel()
         scope.launch { createAndConnect(url) }
+    }
+
+    fun updateConnect(url: String) {
+        this.currentUrl = url
+        if (isConnected()) {
+            disconnect()
+            updateUrlStarted = true
+        }
     }
 
     private fun createAndConnect(url: String) {
@@ -123,6 +133,11 @@ object IMWebSocketClient {
                 heartbeatJob?.cancel() // 停止心跳
                 notifyClose(code, reason, remote)
                 if (!isManualClose) tryReconnect()
+                if (updateUrlStarted) {
+                    updateUrlStarted = false
+                    log("更新ip重新连接")
+                    connect(currentUrl ?: "")
+                }
             }
 
             override fun onError(ex: Exception?) {

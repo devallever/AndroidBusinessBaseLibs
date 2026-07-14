@@ -6,11 +6,22 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:hint="ws://192.168.43.53:5400"
+        android:hint="192.168.43.53"
         android:id="@+id/etUrl"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnSetUrl"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnSetUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="设置IP" />
+
 
     <LinearLayout
         android:id="@+id/llBtn"

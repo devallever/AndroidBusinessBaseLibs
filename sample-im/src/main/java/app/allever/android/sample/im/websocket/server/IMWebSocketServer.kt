@@ -48,7 +48,7 @@ object IMWebSocketServer {
     private const val HEARTBEAT_TIMEOUT = 45 * 1000L
     private var heartbeatCheckJob: Job? = null
 
-    fun startServer(port: Int) {
+    fun startServer(port: Int = 5400) {
 
         if (server != null) {
             log("服务端已经在运行中，请勿重复启动")

@@ -72,6 +72,10 @@ class LoginSampleFragment : BaseFragment<ImLoginFragmentBinding, BaseViewModel>(
             }
 
             btnLogout.setOnClickListener {
+                toast("退出成功")
+                IMConfig.saveUser("")
+                IMWebSocketClient.disconnect()
+                updateLoginStatus()
                 lifecycleScope.launch {
                     val response = NetCore.post<BaseResponse<Any>>(
                         API.LOGOUT, AuthRequest(username = IMConfig.getLoginUser()))

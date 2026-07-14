@@ -5,9 +5,11 @@ import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.helper.TimeHelper
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.im.IMConfig
+import app.allever.android.sample.im.IMGlobal
 import app.allever.android.sample.im.databinding.ImWebsocketClientManageFragmentBinding
 import app.allever.android.sample.im.protocol.Message
 import app.allever.android.sample.im.websocket.client.IMWebSocketClient
+import app.allever.android.sample.im.websocket.server.IMWebSocketServer
 
 class SampleWebSocketClientManageFragment: BaseFragment<ImWebsocketClientManageFragmentBinding, BaseViewModel>() {
 
@@ -47,22 +49,27 @@ class SampleWebSocketClientManageFragment: BaseFragment<ImWebsocketClientManageF
     override fun init() {
         IMWebSocketClient.registerClientListener(clientListener)
         mBinding.tvStatus.text = if (IMWebSocketClient.isConnected()) "已连接" else "未连接"
-        val url = IMConfig.getWebsocketUrl()
-        mBinding.etUrl.setText(url)
+        mBinding.etUrl.setText(IMConfig.getServerIp())
+
+        mBinding.btnSetUrl.setOnClickListener {
+            val ip = mBinding.etUrl.text.toString()
+            if (ip.isEmpty()) {
+                log("请输入ip")
+                return@setOnClickListener
+            }
+            IMConfig.saveServerIp(ip)
+            IMGlobal.initNetwork()
+            IMWebSocketClient.updateConnect(IMConfig.getConnectWebsocketUrl())
+        }
 
         mBinding.btnConnect.setOnClickListener {
             if (!IMConfig.isLogin()) {
                 log("请先登录")
                 return@setOnClickListener
             }
-            val url = mBinding.etUrl.text.toString()
-            if (url.isEmpty()) {
-                log("请输入正确的URL")
-                return@setOnClickListener
-            }
+            val url = IMConfig.getWebsocketUrl()
             val connectUrl = "$url?username=${IMConfig.getLoginUser()}"
             IMWebSocketClient.connect(connectUrl)
-            IMConfig.saveWebsocketUrl(url)
         }
         mBinding.btnDisconnect.setOnClickListener {
             IMWebSocketClient.disconnect()

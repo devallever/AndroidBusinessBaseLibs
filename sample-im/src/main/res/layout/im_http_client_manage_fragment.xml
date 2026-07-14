@@ -26,13 +26,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="http://192.168.0.1:8080" />
+                    android:hint="192.168.0.1" />
 
                 <Button
                     android:id="@+id/btnSetUrl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="设置BaseUrl" />
+                    android:text="设置IP" />
 
             </LinearLayout>
 

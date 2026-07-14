@@ -51,5 +51,40 @@ class SampleIMActivity: ListActivity<ActivityListBinding, ListViewModel, TextDet
     override fun init() {
         super.init()
         IMGlobal.init()
+        IMWebSocketServer.registerServerListener(object : IMWebSocketServer.ServerListener {
+
+            override fun onLog(log: String) {
+
+            }
+
+            override fun onStarted(url: String) {
+                IMConfig.saveWebsocketUrl(url)
+            }
+
+            override fun onStopped() {
+            }
+        })
+        LocalHttpServer.registerListener(object : LocalHttpServer.HttpServerListener {
+            override fun onLog(log: String) {
+
+            }
+
+            override fun onStarted(url: String) {
+                IMConfig.saveHttpBaseUrl(url)
+            }
+
+            override fun onStopped() {
+
+            }
+
+            override fun onError(msg: String) {
+            }
+        })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        IMWebSocketServer.unregisterServerListener()
+        LocalHttpServer.unregisterListener()
     }
 }
