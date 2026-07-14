@@ -1,28 +1,30 @@
 package com.allever.android.card.text.pic.text.util
 
+import app.allever.android.lib.core.store.StoreCore
+
 object StoreManager {
 
     fun putString(key: String, value: String) {
-        PreferenceStore.putData(key, value)
+        StoreCore.putString(key, value)
     }
 
     fun getString(key: String, default: String = ""): String {
-        return PreferenceStore.getData(key, default)
+        return StoreCore.getString(key, default)?:""
     }
 
     fun putBoolean(key: String, value: Boolean) {
-        PreferenceStore.putData(key, value)
+        StoreCore.putBoolean(key, value)
     }
 
     fun getBoolean(key: String, default: Boolean = false): Boolean {
-        return PreferenceStore.getData(key, default)
+        return StoreCore.getBoolean(key, default)
     }
 
     fun putInt(key: String, value: Int) {
-        PreferenceStore.putData(key, value)
+        StoreCore.putInt(key, value)
     }
 
     fun getInt(key: String, default: Int = 0): Int {
-        return PreferenceStore.getData(key, default)
+        return StoreCore.getInt(key, default)
     }
 }

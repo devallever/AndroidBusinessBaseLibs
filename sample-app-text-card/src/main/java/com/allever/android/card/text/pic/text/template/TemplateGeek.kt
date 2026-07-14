@@ -9,11 +9,11 @@ import com.allever.android.card.text.pic.text.model.ColorData
 import com.allever.android.card.text.pic.text.model.TemplateBgColor
 import com.allever.android.card.text.pic.text.model.TemplateModel
 import com.allever.android.card.text.pic.text.model.TextCardCore
-import com.allever.android.card.text.pic.text.databinding.TemplateGeekBinding
+import com.allever.android.card.text.pic.text.databinding.TcTemplateGeekBinding
 import com.allever.android.card.text.pic.text.util.log
 import com.allever.android.card.text.pic.text.view.widget.GradientBackgroundDrawable
 
-class TemplateGeek : TemplateModel<TemplateGeekBinding>() {
+class TemplateGeek : TemplateModel<TcTemplateGeekBinding>() {
     private val colorList = mutableListOf(
         TemplateBgColor(
             //light color
@@ -55,7 +55,7 @@ class TemplateGeek : TemplateModel<TemplateGeekBinding>() {
         )
     )
 
-    override fun inflateView() = TemplateGeekBinding.inflate(LayoutInflater.from(App.context))
+    override fun inflateView() = TcTemplateGeekBinding.inflate(LayoutInflater.from(App.context))
     override fun getTemplateName(): String {
         return "Geek"
     }
@@ -142,7 +142,7 @@ class TemplateGeek : TemplateModel<TemplateGeekBinding>() {
             cardView.setCardBackgroundColor(cardBgColor)
 
             //icon
-            iconContainer.setBackgroundResource(if (isDark) R.drawable.shape_geek_item_bg_dark else R.drawable.shape_geek_item_bg)
+            iconContainer.setBackgroundResource(if (isDark) R.drawable.tc_shape_geek_item_bg_dark else R.drawable.tc_shape_geek_item_bg)
             ivIcon.setColorFilter(
                 ContextCompat.getColor(
                     App.context,
@@ -151,11 +151,11 @@ class TemplateGeek : TemplateModel<TemplateGeekBinding>() {
             )
             TextCardCore.cardData.getBgColorName()
 
-            iconEmpty1.setBackgroundResource(if (isDark) R.drawable.shape_geek_empty_text_dark else R.drawable.shape_geek_empty_text)
-            iconEmpty2.setBackgroundResource(if (isDark) R.drawable.shape_geek_empty_text_dark else R.drawable.shape_geek_empty_text)
+            iconEmpty1.setBackgroundResource(if (isDark) R.drawable.tc_shape_geek_empty_text_dark else R.drawable.tc_shape_geek_empty_text)
+            iconEmpty2.setBackgroundResource(if (isDark) R.drawable.tc_shape_geek_empty_text_dark else R.drawable.tc_shape_geek_empty_text)
 
 
-            mainContainer.setBackgroundResource(if (isDark) R.drawable.shape_geek_item_bg_dark else R.drawable.shape_geek_item_bg)
+            mainContainer.setBackgroundResource(if (isDark) R.drawable.tc_shape_geek_item_bg_dark else R.drawable.tc_shape_geek_item_bg)
             //Date
             tvDate.setTextColor(App.getColor(if (isDark) R.color.color_40ffffff else R.color.color_60000000))
 //            tvDate.setBackgroundResource(if (isDark) R.drawable.shape_bento_item_bg_dark else R.drawable.shape_geek_item_bg)
@@ -180,16 +180,16 @@ class TemplateGeek : TemplateModel<TemplateGeekBinding>() {
 //            tvWordCount.setBackgroundResource(if (isDark) R.drawable.shape_bento_item_bg_dark else R.drawable.shape_geek_item_bg)
 
             //qrcode
-            qrCode.setBackgroundResource(if (isDark) R.drawable.shape_geek_item_bg_dark else R.drawable.shape_geek_item_bg)
+            qrCode.setBackgroundResource(if (isDark) R.drawable.tc_shape_geek_item_bg_dark else R.drawable.tc_shape_geek_item_bg)
             ivQrCode.setColorFilter(App.getColor(if (isDark) R.color.color_60ffffff else R.color.color_60000000))
             tvQrCodeTitle.setTextColor(App.getColor(if (isDark) R.color.color_60ffffff else R.color.color_60000000))
             tvQrCodeDesc.setTextColor(App.getColor(if (isDark) R.color.color_40ffffff else R.color.color_40000000))
 
             //water mark
             tvWater.setTextColor(App.getColor(if (isDark) R.color.color_60ffffff else R.color.color_60000000))
-            waterMarkContainer.setBackgroundResource(if (isDark) R.drawable.shape_geek_item_bg_dark else R.drawable.shape_geek_item_bg)
-            markEmpty1.setBackgroundResource(if (isDark) R.drawable.shape_geek_empty_text_dark else R.drawable.shape_geek_empty_text)
-            markEmpty2.setBackgroundResource(if (isDark) R.drawable.shape_geek_empty_text_dark else R.drawable.shape_geek_empty_text)
+            waterMarkContainer.setBackgroundResource(if (isDark) R.drawable.tc_shape_geek_item_bg_dark else R.drawable.tc_shape_geek_item_bg)
+            markEmpty1.setBackgroundResource(if (isDark) R.drawable.tc_shape_geek_empty_text_dark else R.drawable.tc_shape_geek_empty_text)
+            markEmpty2.setBackgroundResource(if (isDark) R.drawable.tc_shape_geek_empty_text_dark else R.drawable.tc_shape_geek_empty_text)
 
             //bottom gradient
             val gradientEnd = TextCardCore.cardData.getBgColor().replace("#", "#")

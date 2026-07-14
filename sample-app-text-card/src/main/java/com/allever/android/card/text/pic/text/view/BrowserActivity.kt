@@ -8,9 +8,9 @@ import android.webkit.WebViewClient
 import com.allever.android.card.text.pic.text.util.StatusBarUtil
 import com.allever.android.card.text.pic.text.base.AbsViewModel
 import com.allever.android.card.text.pic.text.base.AppActivity
-import com.allever.android.card.text.pic.text.databinding.ActivityWebViewBinding
+import com.allever.android.card.text.pic.text.databinding.TcActivityWebViewBinding
 
-class BrowserActivity : AppActivity<ActivityWebViewBinding, AbsViewModel>() {
+class BrowserActivity : AppActivity<TcActivityWebViewBinding, AbsViewModel>() {
     companion object {
         fun start(context: Context, title: String, url: String) {
             val intent = Intent(context, com.allever.android.card.text.pic.text.view.BrowserActivity::class.java)
@@ -20,7 +20,7 @@ class BrowserActivity : AppActivity<ActivityWebViewBinding, AbsViewModel>() {
         }
     }
 
-    override fun inflate() = ActivityWebViewBinding.inflate(layoutInflater)
+    override fun inflate() = TcActivityWebViewBinding.inflate(layoutInflater)
 
     override fun init() {
 

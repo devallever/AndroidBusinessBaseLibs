@@ -10,11 +10,11 @@ import com.allever.android.card.text.pic.text.model.ColorData
 import com.allever.android.card.text.pic.text.model.TemplateBgColor
 import com.allever.android.card.text.pic.text.model.TemplateModel
 import com.allever.android.card.text.pic.text.model.TextCardCore
-import com.allever.android.card.text.pic.text.databinding.TemplateBentoBinding
+import com.allever.android.card.text.pic.text.databinding.TcTemplateBentoBinding
 import com.allever.android.card.text.pic.text.util.log
 import com.allever.android.card.text.pic.text.view.widget.GradientBackgroundDrawable
 
-class TemplateBento : TemplateModel<TemplateBentoBinding>() {
+class TemplateBento : TemplateModel<TcTemplateBentoBinding>() {
     private val colorList = mutableListOf(
         TemplateBgColor(
             //light color
@@ -59,7 +59,7 @@ class TemplateBento : TemplateModel<TemplateBentoBinding>() {
         )
     )
 
-    override fun inflateView() = TemplateBentoBinding.inflate(LayoutInflater.from(App.context))
+    override fun inflateView() = TcTemplateBentoBinding.inflate(LayoutInflater.from(App.context))
     override fun getTemplateName(): String {
         return "Bento"
     }
@@ -129,7 +129,7 @@ class TemplateBento : TemplateModel<TemplateBentoBinding>() {
             cardView.setCardBackgroundColor(cardBgColor)
 
             //icon
-            ivIcon.setBackgroundResource(if (isDark) R.drawable.shape_bento_item_bg_dark else R.drawable.shape_bento_item_bg)
+            ivIcon.setBackgroundResource(if (isDark) R.drawable.tc_shape_bento_item_bg_dark else R.drawable.tc_shape_bento_item_bg)
             ivIcon.setColorFilter(
                 Color.parseColor(TextCardCore.cardData.getBgColor())
             )
@@ -137,36 +137,36 @@ class TemplateBento : TemplateModel<TemplateBentoBinding>() {
 
             //Date
             tvDate.setTextColor(App.getColor(if (isDark) R.color.color_80ffffff else R.color.color_80000000))
-            tvDate.setBackgroundResource(if (isDark) R.drawable.shape_bento_item_bg_dark else R.drawable.shape_bento_item_bg)
+            tvDate.setBackgroundResource(if (isDark) R.drawable.tc_shape_bento_item_bg_dark else R.drawable.tc_shape_bento_item_bg)
 
 
             //title
             etTitle.setTextColor(Color.parseColor(TextCardCore.cardData.getBgColor()))
             etTitle.setHintTextColor(App.getColor(if (isDark) R.color.color_40ffffff else R.color.color_40000000))
-            etTitle.setBackgroundResource(if (isDark) R.drawable.shape_bento_item_bg_dark else R.drawable.shape_bento_item_bg)
+            etTitle.setBackgroundResource(if (isDark) R.drawable.tc_shape_bento_item_bg_dark else R.drawable.tc_shape_bento_item_bg)
             //content
             etContent.setTextColor(App.getColor(if (isDark) R.color.white else R.color.black))
             etContent.setHintTextColor(App.getColor(if (isDark) R.color.color_40ffffff else R.color.color_40000000))
-            etContent.setBackgroundResource(if (isDark) R.drawable.shape_bento_item_bg_dark else R.drawable.shape_bento_item_bg)
+            etContent.setBackgroundResource(if (isDark) R.drawable.tc_shape_bento_item_bg_dark else R.drawable.tc_shape_bento_item_bg)
 
 
             //author
             etAuthor.setTextColor(App.getColor(if (isDark) R.color.color_80ffffff else R.color.color_80000000))
             etAuthor.setHintTextColor(App.getColor(if (isDark) R.color.color_40ffffff else R.color.color_40000000))
-            etAuthor.setBackgroundResource(if (isDark) R.drawable.shape_bento_item_bg_dark else R.drawable.shape_bento_item_bg)
+            etAuthor.setBackgroundResource(if (isDark) R.drawable.tc_shape_bento_item_bg_dark else R.drawable.tc_shape_bento_item_bg)
             //word
             tvWordCount.setTextColor(App.getColor(if (isDark) R.color.color_80ffffff else R.color.color_80000000))
-            tvWordCount.setBackgroundResource(if (isDark) R.drawable.shape_bento_item_bg_dark else R.drawable.shape_bento_item_bg)
+            tvWordCount.setBackgroundResource(if (isDark) R.drawable.tc_shape_bento_item_bg_dark else R.drawable.tc_shape_bento_item_bg)
 
             //qrcode
-            qrCode.setBackgroundResource(if (isDark) R.drawable.shape_bento_item_bg_dark else R.drawable.shape_bento_item_bg)
+            qrCode.setBackgroundResource(if (isDark) R.drawable.tc_shape_bento_item_bg_dark else R.drawable.tc_shape_bento_item_bg)
             ivQrCode.setColorFilter(App.getColor(if (isDark) R.color.color_60ffffff else R.color.color_60000000))
             tvQrCodeTitle.setTextColor(App.getColor(if (isDark) R.color.color_80ffffff else R.color.color_80000000))
             tvQrCodeDesc.setTextColor(App.getColor(if (isDark) R.color.color_60ffffff else R.color.color_60000000))
 
             //water mark
             tvWater.setTextColor(App.getColor(if (isDark) R.color.color_80ffffff else R.color.color_80000000))
-            waterMarkContainer.setBackgroundResource(if (isDark) R.drawable.shape_bento_item_bg_dark else R.drawable.shape_bento_item_bg)
+            waterMarkContainer.setBackgroundResource(if (isDark) R.drawable.tc_shape_bento_item_bg_dark else R.drawable.tc_shape_bento_item_bg)
 
         }
     }

@@ -5,17 +5,17 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.allever.android.card.text.pic.text.model.ColorData
-import com.allever.android.card.text.pic.text.databinding.RvColorBinding
+import com.allever.android.card.text.pic.text.databinding.TcRvColorBinding
 
 class ColorAdapter(val data: MutableList<ColorData> = mutableListOf()) :
     RecyclerView.Adapter<ColorAdapter.VH>() {
 
     var itemClick: ItemClick? = null
 
-    class VH(val binding: RvColorBinding) : RecyclerView.ViewHolder(binding.root)
+    class VH(val binding: TcRvColorBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val binding = RvColorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = TcRvColorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return VH(binding)
     }
 

@@ -8,30 +8,30 @@
     </style>
 
     <!-- default textview style -->
-    <style name="defaultTextStyle">
+    <style name="tc_defaultTextStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="smallTextStyle" parent="defaultTextStyle">
+    <style name="tc_smallTextStyle" parent="tc_defaultTextStyle">
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="superSmallTextStyle" parent="defaultTextStyle">
+    <style name="tc_superSmallTextStyle" parent="tc_defaultTextStyle">
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="bigTextStyle" parent="defaultTextStyle">
+    <style name="tc_bigTextStyle" parent="tc_defaultTextStyle">
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="superBigTextStyle" parent="defaultTextStyle">
+    <style name="tc_superBigTextStyle" parent="tc_defaultTextStyle">
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+    <style name="tc_BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/Theme.Design.BottomSheetDialog</item>
         <item name="android:background">@android:color/transparent</item>
     </style>

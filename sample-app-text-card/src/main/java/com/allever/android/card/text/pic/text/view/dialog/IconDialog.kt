@@ -14,13 +14,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.allever.android.card.text.pic.text.R
 import com.allever.android.card.text.pic.text.model.IconTypeData
 import com.allever.android.card.text.pic.text.model.TextCardCore
-import com.allever.android.card.text.pic.text.databinding.DialogIconBinding
+import com.allever.android.card.text.pic.text.databinding.TcDialogIconBinding
 import com.allever.android.card.text.pic.text.util.DisplayHelper
 import com.allever.android.card.text.pic.text.view.adapter.IconTypeAdapter
 
 class IconDialog(val block: (iconId: Int) -> Unit = {}) : BottomSheetDialogFragment() {
 
-    protected lateinit var mBinding: DialogIconBinding
+    protected lateinit var mBinding: TcDialogIconBinding
 
     private val mAdapter = IconTypeAdapter(TextCardCore.iconTypeData).apply {
         iconTypeListener = object : IconTypeAdapter.Listener {
@@ -43,7 +43,7 @@ class IconDialog(val block: (iconId: Int) -> Unit = {}) : BottomSheetDialogFragm
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.BottomSheetDialog)
+        setStyle(STYLE_NORMAL, R.style.tc_BottomSheetDialog)
     }
 
     override fun onCreateView(
@@ -51,7 +51,7 @@ class IconDialog(val block: (iconId: Int) -> Unit = {}) : BottomSheetDialogFragm
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mBinding = DialogIconBinding.inflate(layoutInflater)
+        mBinding = TcDialogIconBinding.inflate(layoutInflater)
         return mBinding.root
     }
 

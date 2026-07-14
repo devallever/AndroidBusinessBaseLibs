@@ -76,5 +76,6 @@ class RouterPath {
         const val PATH_SAMPLE_APP_FFMPEG_COMMAND = "/appffmpegcommand/main"
 
         const val PATH_SAMPLE_APP_TEXT_TRANSLATOR =  "/apptexttranslator/main"
+        const val PATH_SAMPLE_APP_TEXT_CARD = "/apptextcard/main"
     }
 }

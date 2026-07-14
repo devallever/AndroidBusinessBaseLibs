@@ -8,12 +8,12 @@ import com.allever.android.card.text.pic.text.R
 import com.allever.android.card.text.pic.text.model.ColorData
 import com.allever.android.card.text.pic.text.model.TemplateBgColor
 import com.allever.android.card.text.pic.text.model.TemplateModel
-import com.allever.android.card.text.pic.text.databinding.TemplateTicketBinding
+import com.allever.android.card.text.pic.text.databinding.TcTemplateTicketBinding
 import com.allever.android.card.text.pic.text.util.log
 import com.allever.android.card.text.pic.text.view.widget.GradientBackgroundDrawable
 import com.allever.android.card.text.pic.text.view.widget.GradientBackgroundRoundDrawable
 
-class TemplateTicket : TemplateModel<TemplateTicketBinding>() {
+class TemplateTicket : TemplateModel<TcTemplateTicketBinding>() {
     private val colorList = mutableListOf(
         TemplateBgColor(
             //light color
@@ -56,7 +56,7 @@ class TemplateTicket : TemplateModel<TemplateTicketBinding>() {
         )
     )
 
-    override fun inflateView() = TemplateTicketBinding.inflate(LayoutInflater.from(App.context))
+    override fun inflateView() = TcTemplateTicketBinding.inflate(LayoutInflater.from(App.context))
     override fun getTemplateName(): String {
         return "Ticket"
     }
@@ -159,13 +159,13 @@ class TemplateTicket : TemplateModel<TemplateTicketBinding>() {
 //                if (isDark) R.color.color_A0000000 else R.color.white
 //            )
 //            cardView.setCardBackgroundColor(cardBgColor)
-            topBg.setBackgroundResource( if (isDark) R.drawable.shape_ticket_top_bg_dark else R.drawable.shape_ticket_top_bg)
+            topBg.setBackgroundResource( if (isDark) R.drawable.tc_shape_ticket_top_bg_dark else R.drawable.tc_shape_ticket_top_bg)
             iconContainer.setBackgroundColor(App.getColor(if (isDark) R.color.template_ticket_card_bg_color_dark else R.color.template_ticket_card_bg_color))
             mainContainer.setBackgroundColor(App.getColor(if (isDark) R.color.template_ticket_card_bg_color_dark else R.color.template_ticket_card_bg_color))
             authorContainer.setBackgroundColor(App.getColor(if (isDark) R.color.template_ticket_card_bg_color_dark else R.color.template_ticket_card_bg_color))
             authorLine.setBackgroundColor(App.getColor(if (isDark) R.color.template_ticket_card_bg_color_dark else R.color.template_ticket_card_bg_color))
             qrCode.setBackgroundColor(App.getColor(if (isDark) R.color.template_ticket_card_bg_color_dark else R.color.template_ticket_card_bg_color))
-            bottomBg.setBackgroundResource( if (isDark) R.drawable.shape_ticket_bottom_bg_dark else R.drawable.shape_ticket_bottom_bg)
+            bottomBg.setBackgroundResource( if (isDark) R.drawable.tc_shape_ticket_bottom_bg_dark else R.drawable.tc_shape_ticket_bottom_bg)
             iconBottomLine.setImageResource(if (isDark) R.drawable.icon_ticket_bg_line_dark else R.drawable.icon_ticket_bg_line)
             mainBottomLine.setImageResource(if (isDark) R.drawable.icon_ticket_bg_line_dark else R.drawable.icon_ticket_bg_line)
 

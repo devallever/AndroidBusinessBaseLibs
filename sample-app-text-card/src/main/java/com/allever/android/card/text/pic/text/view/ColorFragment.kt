@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.allever.android.card.text.pic.text.model.ColorData
-import com.allever.android.card.text.pic.text.databinding.FragmentColorBinding
+import com.allever.android.card.text.pic.text.databinding.TcFragmentColorBinding
 import com.allever.android.card.text.pic.text.view.adapter.ColorAdapter
 
 class ColorFragment(val pageIndex: Int) : Fragment() {
-    private lateinit var mBinding: FragmentColorBinding
+    private lateinit var mBinding: TcFragmentColorBinding
     private val colorDataList = mutableListOf<ColorData>()
 
     var colorListener: ColorListener? = null
@@ -42,7 +42,7 @@ class ColorFragment(val pageIndex: Int) : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mBinding = FragmentColorBinding.inflate(layoutInflater, container, false)
+        mBinding = TcFragmentColorBinding.inflate(layoutInflater, container, false)
         mBinding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 8)
         mBinding.recyclerView.adapter = colorAdapter
         return mBinding.root

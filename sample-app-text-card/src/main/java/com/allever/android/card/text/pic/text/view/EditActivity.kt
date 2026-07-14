@@ -13,9 +13,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
-import app.allever.android.lib.recommend.ui.RecommendDialog
-import app.allever.android.lib.recommend.ui.RecommendListActivity
-import app.allever.android.lib.recommend.util.ShakeViewContainer
 import com.allever.android.card.text.pic.text.util.StatusBarUtil
 import com.allever.android.card.text.pic.text.R
 import com.allever.android.card.text.pic.text.base.AppActivity
@@ -25,8 +22,8 @@ import com.allever.android.card.text.pic.text.model.SwitchItem
 import com.allever.android.card.text.pic.text.model.TemplateManager
 import com.allever.android.card.text.pic.text.model.TemplateModel
 import com.allever.android.card.text.pic.text.model.TextCardCore
-import com.allever.android.card.text.pic.text.databinding.ActivityEditBinding
-import com.allever.android.card.text.pic.text.databinding.PopExportBinding
+import com.allever.android.card.text.pic.text.databinding.TcActivityEditBinding
+import com.allever.android.card.text.pic.text.databinding.TcPopExportBinding
 import com.allever.android.card.text.pic.text.util.ActivityHelper
 import com.allever.android.card.text.pic.text.util.DisplayHelper
 import com.allever.android.card.text.pic.text.util.KeyboardUtils
@@ -42,13 +39,12 @@ import com.allever.android.card.text.pic.text.view.dialog.DateTimeFormatDialog
 import com.allever.android.card.text.pic.text.view.dialog.IconDialog
 import com.allever.android.card.text.pic.text.view.dialog.WordCountFormatDialog
 import com.allever.android.card.text.pic.text.viewmodel.EditViewMode
-import com.allever.android.lib.admob.AdManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
 
-class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
+class EditActivity : AppActivity<TcActivityEditBinding, EditViewMode>() {
 
     private val RC_PERMISSION = 1000
     private val mPermissionsList = ArrayList<String>().apply {
@@ -59,16 +55,8 @@ class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
         }
     }
 
-    private lateinit var mPopBinding: PopExportBinding
+    private lateinit var mPopBinding: TcPopExportBinding
     private lateinit var mPopExport: PopupWindow
-
-    private val mRecommendDialog by lazy {
-        RecommendDialog(this) {
-            finish()
-        }
-    }
-
-    private lateinit var mShakeViewContainer: ShakeViewContainer
 
     private val mIconDialog by lazy {
         IconDialog {
@@ -102,14 +90,7 @@ class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
             data.addAll(TemplateManager.templateData)
             itemClick = object : TemplateItemAdapter.ItemClick {
                 override fun onItemClick(position: Int, item: TemplateModel<*>) {
-                    if (mViewModel.checkCanShowAd()) {
-                        AdManager.showInter(this@EditActivity) {
-                            handleTemplateClick(this@apply, item)
-                        }
-                    } else {
-                        handleTemplateClick(this@apply, item)
-                    }
-
+                    handleTemplateClick(this@apply, item)
                 }
             }
         }
@@ -242,7 +223,7 @@ class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
 
     override fun viewModelClass() = EditViewMode::class.java
 
-    override fun inflate() = ActivityEditBinding.inflate(layoutInflater)
+    override fun inflate() = TcActivityEditBinding.inflate(layoutInflater)
 
     override fun init() {
         TemplateManager.initTemplateView()
@@ -295,12 +276,12 @@ class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
                     TextCardCore.cardData.setBgColorType(position)
                     TextCardCore.saveCardData()
                     if (position == 0) {
-                        indicateFirst.setBackgroundResource(R.drawable.shape_google_blue_r45)
+                        indicateFirst.setBackgroundResource(R.drawable.tc_shape_google_blue_r45)
                         indicateSecond.setBackgroundResource(R.drawable.shape_999999_r45)
                         tvColorStyle.text = "Light"
                     } else {
                         indicateFirst.setBackgroundResource(R.drawable.shape_999999_r45)
-                        indicateSecond.setBackgroundResource(R.drawable.shape_google_blue_r45)
+                        indicateSecond.setBackgroundResource(R.drawable.tc_shape_google_blue_r45)
                         tvColorStyle.text = "Dark"
                     }
                 }
@@ -316,15 +297,15 @@ class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
 
         initClickListener()
 
-        mShakeViewContainer = ShakeViewContainer(mBinding.ivRecommend)
-        mShakeViewContainer.start()
-        mBinding.ivRecommend.setOnClickListener {
-            ActivityHelper.startActivity(this, RecommendListActivity::class.java)
-        }
+//        mShakeViewContainer = ShakeViewContainer(mBinding.ivRecommend)
+//        mShakeViewContainer.start()
+//        mBinding.ivRecommend.setOnClickListener {
+//            ActivityHelper.startActivity(this, RecommendListActivity::class.java)
+//        }
     }
 
     private fun initPopMenu() {
-        mPopBinding = PopExportBinding.inflate(layoutInflater)
+        mPopBinding = TcPopExportBinding.inflate(layoutInflater)
 
         mPopExport = PopupWindow(
             mPopBinding.root,
@@ -338,20 +319,12 @@ class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
     override fun onDestroy() {
         super.onDestroy()
         TemplateManager.destroyTemplate()
-        mShakeViewContainer.stop()
     }
 
     override fun onBackPressed() {
         if (mBinding.menuContainer.isVisible) {
             mBinding.btnEditStyle.performClick()
         } else {
-            if (mRecommendDialog.isShowing) {
-                mRecommendDialog.dismiss()
-            } else  {
-                mRecommendDialog.show()
-            }
-            return
-            super.onBackPressed()
         }
     }
 
@@ -376,13 +349,11 @@ class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
     }
 
     private fun handleSaveView() {
-        AdManager.showInter(this) {
-            mViewModel.saveView { result, path ->
-                if (result) {
-                    toast("save success: $path")
-                } else {
-                    toast("save fail")
-                }
+        mViewModel.saveView { result, path ->
+            if (result) {
+                toast("save success: $path")
+            } else {
+                toast("save fail")
             }
         }
     }
@@ -403,7 +374,7 @@ class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
                     btnEditStyle.setCardBackgroundColor(
                         ContextCompat.getColor(
                             this@EditActivity,
-                            R.color.page_bg
+                            R.color.tc_page_bg
                         )
                     )
                     tvEditStyle.visibility = View.INVISIBLE
@@ -428,7 +399,7 @@ class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
                 ivTemplate.isVisible = true
                 tvTemplate.setTextColor(selectTextColor)
                 btnTemplate.background =
-                    ContextCompat.getDrawable(this@EditActivity, R.drawable.shape_edit_page_btn_bg)
+                    ContextCompat.getDrawable(this@EditActivity, R.drawable.tc_shape_edit_page_btn_bg)
                 templateContent.isVisible = true
 
                 ivBgColor.isVisible = false
@@ -455,7 +426,7 @@ class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
                 ivBgColor.isVisible = true
                 tvBgColor.setTextColor(selectTextColor)
                 btnBgColor.background =
-                    ContextCompat.getDrawable(this@EditActivity, R.drawable.shape_edit_page_btn_bg)
+                    ContextCompat.getDrawable(this@EditActivity, R.drawable.tc_shape_edit_page_btn_bg)
                 bgColorContent.isVisible = true
 
                 ivSwitch.isVisible = false
@@ -480,7 +451,7 @@ class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
                 ivSwitch.isVisible = true
                 tvSwitch.setTextColor(selectTextColor)
                 btnSwitch.background =
-                    ContextCompat.getDrawable(this@EditActivity, R.drawable.shape_edit_page_btn_bg)
+                    ContextCompat.getDrawable(this@EditActivity, R.drawable.tc_shape_edit_page_btn_bg)
                 switchContent.isVisible = true
 
                 updateContentMarginBottom()
@@ -495,9 +466,9 @@ class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
                 } else {
                     AlertDialog.Builder(this@EditActivity)
                         .apply {
-                            setMessage(R.string.request_permission_message)
-                            setTitle(R.string.permission_tips_title)
-                            setPositiveButton(getString(R.string.agree)) { dialog, which ->
+                            setMessage(R.string.tc_request_permission_message)
+                            setTitle(R.string.tc_permission_tips_title)
+                            setPositiveButton(getString(R.string.tc_agree)) { dialog, which ->
                                 dialog.dismiss()
                                 val array: Array<String> =
                                     mPermissionsList.toArray(arrayOfNulls<String>(mPermissionsList.size))
@@ -507,7 +478,7 @@ class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
                                     RC_PERMISSION
                                 );
                             }
-                            setNegativeButton(getString(R.string.reject)) { dialog, which ->
+                            setNegativeButton(getString(R.string.tc_reject)) { dialog, which ->
                                 dialog.dismiss()
                             }
                         }.show()
@@ -540,9 +511,9 @@ class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
 
             ivClearText.setOnClickListener {
                 AlertDialog.Builder(this@EditActivity)
-                    .setMessage(R.string.clear_text_tips)
-                    .setTitle(R.string.clear_all_text)
-                    .setPositiveButton(R.string.clear) { dialog, which ->
+                    .setMessage(R.string.tc_clear_text_tips)
+                    .setTitle(R.string.tc_clear_all_text)
+                    .setPositiveButton(R.string.tc_clear) { dialog, which ->
                         TemplateManager.currentTemplate.getTitleView().setText("")
                         TemplateManager.currentTemplate.getContentView().setText("")
                         TemplateManager.currentTemplate.getAuthorView().setText("")
@@ -552,7 +523,7 @@ class EditActivity : AppActivity<ActivityEditBinding, EditViewMode>() {
                         TextCardCore.saveCardData()
                         dialog.dismiss()
                     }
-                    .setNegativeButton(R.string.cancle) { dialog, which ->
+                    .setNegativeButton(R.string.tc_cancle) { dialog, which ->
                         dialog.dismiss()
                     }
                     .show()

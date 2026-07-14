@@ -8,11 +8,11 @@ import com.allever.android.card.text.pic.text.R
 import com.allever.android.card.text.pic.text.model.ColorData
 import com.allever.android.card.text.pic.text.model.TemplateBgColor
 import com.allever.android.card.text.pic.text.model.TemplateModel
-import com.allever.android.card.text.pic.text.databinding.TemplateMediaBinding
+import com.allever.android.card.text.pic.text.databinding.TcTemplateMediaBinding
 import com.allever.android.card.text.pic.text.util.log
 import com.allever.android.card.text.pic.text.view.widget.GradientBackgroundDrawable
 
-class TemplateMedia : TemplateModel<TemplateMediaBinding>() {
+class TemplateMedia : TemplateModel<TcTemplateMediaBinding>() {
     private val colorList = mutableListOf(
         TemplateBgColor(
             //light color
@@ -55,7 +55,7 @@ class TemplateMedia : TemplateModel<TemplateMediaBinding>() {
         )
     )
 
-    override fun inflateView() = TemplateMediaBinding.inflate(LayoutInflater.from(App.context))
+    override fun inflateView() = TcTemplateMediaBinding.inflate(LayoutInflater.from(App.context))
     override fun getTemplateName(): String {
         return "Media"
     }
@@ -119,12 +119,12 @@ class TemplateMedia : TemplateModel<TemplateMediaBinding>() {
             //cardView
             val cardBgColor = ContextCompat.getColor(
                 App.context,
-                if (isDark) R.color.card_drak_bg_color else R.color.white
+                if (isDark) R.color.tc_card_drak_bg_color else R.color.white
             )
             cardView.setCardBackgroundColor(cardBgColor)
 
             //icon
-            ivIcon.setBackgroundResource(if (isDark) R.drawable.shape100f17_r45 else R.drawable.shape_999999_r45)
+            ivIcon.setBackgroundResource(if (isDark) R.drawable.shape_100f17_r45 else R.drawable.shape_999999_r45)
             ivIcon.setColorFilter(
                 ContextCompat.getColor(
                     App.context,

@@ -6,18 +6,18 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.allever.android.card.text.pic.text.App
 import com.allever.android.card.text.pic.text.model.WordFormatItem
-import com.allever.android.card.text.pic.text.databinding.RvWordCountFormatBinding
+import com.allever.android.card.text.pic.text.databinding.TcRvWordCountFormatBinding
 
 class WordFormatAdapter(val data: MutableList<WordFormatItem>) :
     RecyclerView.Adapter<WordFormatAdapter.VH>() {
 
     var listener: Listener? = null
 
-    class VH(val binding: RvWordCountFormatBinding) : RecyclerView.ViewHolder(binding.root)
+    class VH(val binding: TcRvWordCountFormatBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val binding =
-            RvWordCountFormatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            TcRvWordCountFormatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return VH(binding)
     }
 

@@ -1,10 +1,10 @@
 package com.allever.android.card.text.pic.text.util
 
 import android.util.Log
-import com.allever.android.card.text.pic.text.BuildConfig
+import app.allever.android.lib.core.app.App
 
 fun log(msg: String) {
-    if (BuildConfig.DEBUG) {
+    if (App.DEBUG) {
         Log.d("TextCardApp", msg)
     }
 }

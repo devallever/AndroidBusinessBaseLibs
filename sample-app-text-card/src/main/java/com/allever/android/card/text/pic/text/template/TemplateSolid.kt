@@ -8,11 +8,11 @@ import com.allever.android.card.text.pic.text.R
 import com.allever.android.card.text.pic.text.model.ColorData
 import com.allever.android.card.text.pic.text.model.TemplateBgColor
 import com.allever.android.card.text.pic.text.model.TemplateModel
-import com.allever.android.card.text.pic.text.databinding.TemplateSolidBinding
+import com.allever.android.card.text.pic.text.databinding.TcTemplateSolidBinding
 import com.allever.android.card.text.pic.text.util.log
 import com.allever.android.card.text.pic.text.view.widget.GradientBackgroundDrawable
 
-class TemplateSolid : TemplateModel<TemplateSolidBinding>() {
+class TemplateSolid : TemplateModel<TcTemplateSolidBinding>() {
     private val colorList = mutableListOf(
         TemplateBgColor(
             //light color
@@ -57,7 +57,7 @@ class TemplateSolid : TemplateModel<TemplateSolidBinding>() {
         )
     )
 
-    override fun inflateView() = TemplateSolidBinding.inflate(LayoutInflater.from(App.context))
+    override fun inflateView() = TcTemplateSolidBinding.inflate(LayoutInflater.from(App.context))
     override fun getTemplateName(): String {
         return "Solid"
     }
@@ -121,7 +121,7 @@ class TemplateSolid : TemplateModel<TemplateSolidBinding>() {
             }
 
             //cardView
-            cardView.setBackgroundResource(if (isDark) R.drawable.shape_solid_bg_dark else R.drawable.shape_solid_bg)
+            cardView.setBackgroundResource(if (isDark) R.drawable.tc_shape_solid_bg_dark else R.drawable.tc_shape_solid_bg)
 
             //icon
 //            ivIcon.setBackgroundResource(if (isDark) R.drawable.shape100f17_r45 else R.drawable.shape_999999_r45)

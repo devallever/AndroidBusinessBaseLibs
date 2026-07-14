@@ -6,7 +6,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.allever.android.card.text.pic.text.model.DateFormat
 import com.allever.android.card.text.pic.text.model.DateTimeItem
-import com.allever.android.card.text.pic.text.databinding.RvDateTimeFormatBinding
+import com.allever.android.card.text.pic.text.databinding.TcRvDateTimeFormatBinding
 
 class DateTimeFormatAdapter(val data: MutableList<DateTimeItem>) :
     RecyclerView.Adapter<DateTimeFormatAdapter.VH>() {
@@ -14,11 +14,11 @@ class DateTimeFormatAdapter(val data: MutableList<DateTimeItem>) :
 
     var listener: Listener? = null
 
-    class VH(val binding: RvDateTimeFormatBinding) : RecyclerView.ViewHolder(binding.root)
+    class VH(val binding: TcRvDateTimeFormatBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val bindng =
-            RvDateTimeFormatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            TcRvDateTimeFormatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return VH(bindng)
     }
 

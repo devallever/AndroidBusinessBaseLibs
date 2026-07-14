@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.allever.android.card.text.pic.text.App
 import com.allever.android.card.text.pic.text.R
 import com.allever.android.card.text.pic.text.model.TemplateModel
-import com.allever.android.card.text.pic.text.databinding.RvTemplateBinding
+import com.allever.android.card.text.pic.text.databinding.TcRvTemplateBinding
 import com.allever.android.card.text.pic.text.util.log
 
 class TemplateItemAdapter(val data: MutableList<TemplateModel<*>> = mutableListOf()) :
@@ -16,10 +16,10 @@ class TemplateItemAdapter(val data: MutableList<TemplateModel<*>> = mutableListO
 
     var itemClick: ItemClick? = null
 
-    class VH(val binding: RvTemplateBinding) : RecyclerView.ViewHolder(binding.root)
+    class VH(val binding: TcRvTemplateBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val binding = RvTemplateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = TcRvTemplateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return VH(binding)
     }
 
@@ -29,7 +29,7 @@ class TemplateItemAdapter(val data: MutableList<TemplateModel<*>> = mutableListO
         holder.binding.apply {
             val item = data[position]
             ivIcon.setImageResource(item.cover)
-            tvName.setTextColor(App.getColor(if (item.selected) R.color.theme_color else R.color.white))
+            tvName.setTextColor(App.getColor(if (item.selected) R.color.tc_theme_color else R.color.white))
             tvName.text = item.getTemplateName()
             log("${item.getTemplateName()} is selected = ${item.selected}")
             bgFrame.isVisible = item.selected

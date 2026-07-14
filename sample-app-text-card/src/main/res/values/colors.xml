@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
+    <color name="tc_purple_200">#FFBB86FC</color>
+    <color name="tc_purple_500">#FF6200EE</color>
+    <color name="tc_purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="theme_color">@color/googleBleu</color>
-    <color name="page_bg">#000000</color>
-    <color name="card_drak_bg_color">@color/color_080510</color>
+    <color name="tc_theme_color">@color/googleBleu</color>
+    <color name="tc_page_bg">#000000</color>
+    <color name="tc_card_drak_bg_color">@color/color_080510</color>
 
     <color name="template_ticket_card_bg_color_dark">@color/color_80000000</color>
     <color name="template_ticket_card_bg_color">@color/white</color>

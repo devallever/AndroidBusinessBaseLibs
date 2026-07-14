@@ -6,16 +6,15 @@ import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import com.allever.android.card.text.pic.text.util.StatusBarUtil
-import com.allever.android.card.text.pic.text.BuildConfig
 import com.allever.android.card.text.pic.text.base.AbsViewModel
 import com.allever.android.card.text.pic.text.base.AppActivity
-import com.allever.android.card.text.pic.text.databinding.ActivitySettingBinding
+import com.allever.android.card.text.pic.text.databinding.TcActivitySettingBinding
 import com.allever.android.card.text.pic.text.util.toast
 
-class SettingActivity : AppActivity<ActivitySettingBinding, AbsViewModel>() {
+class SettingActivity : AppActivity<TcActivitySettingBinding, AbsViewModel>() {
     override fun viewModelClass() = AbsViewModel::class.java
 
-    override fun inflate() = ActivitySettingBinding.inflate(layoutInflater)
+    override fun inflate() = TcActivitySettingBinding.inflate(layoutInflater)
 
     override fun init() {
         mBinding.apply {
@@ -37,7 +36,7 @@ class SettingActivity : AppActivity<ActivitySettingBinding, AbsViewModel>() {
                 startWebView(this@SettingActivity, "https://www.privacypolicies.com/live/01bbffb5-0610-43dc-8a1a-ef18de59b3b5")
             }
 
-            tvVersion.text = BuildConfig.VERSION_NAME
+            tvVersion.text = "v1.0"
         }
     }
 

@@ -4,33 +4,17 @@
 
 
     <!-- Required to maintain app compatibility. -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+<!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"-->
+<!--        android:maxSdkVersion="32" />-->
+<!--    <uses-permission android:name="android.permission.INTERNET"/>-->
 
-    <application
-        android:name="com.allever.android.card.text.pic.text.App"
-        android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.TextCard"
-        tools:targetApi="31">
+    <application>
         <activity
             android:name=".view.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.TextCard"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.allever.android.card.text.pic.text.view.EditActivity"
@@ -40,18 +24,19 @@
             android:screenOrientation="portrait"/>
         <activity android:name="com.allever.android.card.text.pic.text.view.BrowserActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name="app.allever.android.sample.app.text.card.SampleTextCardActivity" />
 
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.allever.android.card.text.pic.text.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
+        <!--        <provider-->
+<!--            android:name="androidx.core.content.FileProvider"-->
+<!--            android:authorities="com.allever.android.card.text.pic.text.fileprovider"-->
+<!--            android:exported="false"-->
+<!--            android:grantUriPermissions="true">-->
 
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+<!--            <meta-data-->
+<!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
+<!--                android:resource="@xml/file_paths" />-->
 
-        </provider>
+<!--        </provider>-->
     </application>
 
 </manifest>

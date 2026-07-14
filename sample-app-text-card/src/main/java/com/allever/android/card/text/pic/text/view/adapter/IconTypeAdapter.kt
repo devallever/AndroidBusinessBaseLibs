@@ -8,17 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.allever.android.card.text.pic.text.App
 import com.allever.android.card.text.pic.text.model.IconData
 import com.allever.android.card.text.pic.text.model.IconTypeData
-import com.allever.android.card.text.pic.text.databinding.RvIconTeypeBinding
+import com.allever.android.card.text.pic.text.databinding.TcRvIconTeypeBinding
 
 class IconTypeAdapter(val data: MutableList<IconTypeData>) :
     RecyclerView.Adapter<IconTypeAdapter.VH>() {
 
     var iconTypeListener: Listener? = null
 
-    class VH(val binding: RvIconTeypeBinding) : RecyclerView.ViewHolder(binding.root)
+    class VH(val binding: TcRvIconTeypeBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val binding = RvIconTeypeBinding.inflate(LayoutInflater.from(App.context), parent, false)
+        val binding = TcRvIconTeypeBinding.inflate(LayoutInflater.from(App.context), parent, false)
         return VH(binding)
     }
 

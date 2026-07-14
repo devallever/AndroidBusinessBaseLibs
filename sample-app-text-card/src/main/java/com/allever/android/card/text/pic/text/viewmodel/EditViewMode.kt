@@ -43,7 +43,7 @@ class EditViewMode : AbsViewModel() {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 90, out)
                 out.flush()
                 out.close()
-                file.copyToAlbum(App.context, fileName, App.context.getString(R.string.app_name))
+                file.copyToAlbum(App.context, fileName, App.context.getString(R.string.tc_app_name))
                 file.delete()
                 return@withContext true
             } catch (e: Exception) {

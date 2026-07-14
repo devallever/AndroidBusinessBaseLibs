@@ -15,14 +15,14 @@ import com.allever.android.card.text.pic.text.R
 import com.allever.android.card.text.pic.text.model.DateFormat
 import com.allever.android.card.text.pic.text.model.DateTimeItem
 import com.allever.android.card.text.pic.text.model.TextCardCore
-import com.allever.android.card.text.pic.text.databinding.DialogDateTimeFormatBinding
+import com.allever.android.card.text.pic.text.databinding.TcDialogDateTimeFormatBinding
 import com.allever.android.card.text.pic.text.util.DisplayHelper
 import com.allever.android.card.text.pic.text.view.adapter.DateTimeFormatAdapter
 
 class DateTimeFormatDialog(val block: (text: String, format: String) -> Unit = { t, f -> }) :
     BottomSheetDialogFragment() {
 
-    protected lateinit var mBinding: DialogDateTimeFormatBinding
+    protected lateinit var mBinding: TcDialogDateTimeFormatBinding
 
     private val mAdapter = DateTimeFormatAdapter(TextCardCore.dateTimeFormatData).apply {
 
@@ -44,7 +44,7 @@ class DateTimeFormatDialog(val block: (text: String, format: String) -> Unit = {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.BottomSheetDialog)
+        setStyle(STYLE_NORMAL, R.style.tc_BottomSheetDialog)
     }
 
     override fun onCreateView(
@@ -52,7 +52,7 @@ class DateTimeFormatDialog(val block: (text: String, format: String) -> Unit = {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mBinding = DialogDateTimeFormatBinding.inflate(layoutInflater)
+        mBinding = TcDialogDateTimeFormatBinding.inflate(layoutInflater)
         return mBinding.root
     }
 

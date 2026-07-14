@@ -6,17 +6,17 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.allever.android.card.text.pic.text.R
 import com.allever.android.card.text.pic.text.model.SwitchItem
-import com.allever.android.card.text.pic.text.databinding.RvSwitchBinding
+import com.allever.android.card.text.pic.text.databinding.TcRvSwitchBinding
 
 class SwitchItemAdapter(val data: MutableList<SwitchItem> = mutableListOf()) :
     RecyclerView.Adapter<SwitchItemAdapter.VH>() {
 
     var itemClick: ItemClick? = null
 
-    class VH(val binding: RvSwitchBinding) : RecyclerView.ViewHolder(binding.root)
+    class VH(val binding: TcRvSwitchBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val binding = RvSwitchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = TcRvSwitchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return VH(binding)
     }
 
@@ -30,7 +30,7 @@ class SwitchItemAdapter(val data: MutableList<SwitchItem> = mutableListOf()) :
             ivIcon.setImageResource(item.icon)
 
             if (item.show) {
-                ivIcon.setColorFilter(ContextCompat.getColor(root.context, R.color.theme_color))
+                ivIcon.setColorFilter(ContextCompat.getColor(root.context, R.color.tc_theme_color))
             } else {
                 ivIcon.setColorFilter(ContextCompat.getColor(root.context, R.color.color_999999))
             }

@@ -14,14 +14,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.allever.android.card.text.pic.text.R
 import com.allever.android.card.text.pic.text.model.TextCardCore
 import com.allever.android.card.text.pic.text.model.WordFormatItem
-import com.allever.android.card.text.pic.text.databinding.DialogWordCountFormatBinding
+import com.allever.android.card.text.pic.text.databinding.TcDialogWordCountFormatBinding
 import com.allever.android.card.text.pic.text.util.DisplayHelper
 import com.allever.android.card.text.pic.text.view.adapter.WordFormatAdapter
 
 class WordCountFormatDialog(val block: (format: Int) -> Unit = { }) :
     BottomSheetDialogFragment() {
 
-    protected lateinit var mBinding: DialogWordCountFormatBinding
+    protected lateinit var mBinding: TcDialogWordCountFormatBinding
 
     private val mAdapter = WordFormatAdapter(TextCardCore.wordCountFormatData).apply {
 
@@ -40,7 +40,7 @@ class WordCountFormatDialog(val block: (format: Int) -> Unit = { }) :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.BottomSheetDialog)
+        setStyle(STYLE_NORMAL, R.style.tc_BottomSheetDialog)
     }
 
     override fun onCreateView(
@@ -48,7 +48,7 @@ class WordCountFormatDialog(val block: (format: Int) -> Unit = { }) :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mBinding = DialogWordCountFormatBinding.inflate(layoutInflater)
+        mBinding = TcDialogWordCountFormatBinding.inflate(layoutInflater)
         return mBinding.root
     }
 
