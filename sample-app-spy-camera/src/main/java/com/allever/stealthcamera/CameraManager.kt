@@ -62,35 +62,44 @@ object CameraManager {
     }
 
 
-    fun takePicture() {
-        if (!isPreviewing || isCapturing) {
+    fun takePicture(block: (Boolean) -> Unit) {
+        if (!isPreviewing || isCapturing || mCamera == null) {
             return
         }
 
         isCapturing = true
-        mCamera?.takePicture(null, null, Camera.PictureCallback { data, camera ->
-            Log.d(TAG, "onPictureTaken: ")
-            val b: Bitmap?
-            if (null != data) {
-                // data是字节数据，将其解析成位图
-                b = BitmapFactory.decodeByteArray(data, 0, data.size)
-                val cameraId = getCameraInfoId(mCameraId)
-                val degree = getRotationOnTakePickPic(cameraId)
-                val rotaBitmap = ImageUtil.getRotateBitmap(b, degree.toFloat())
-                if (rotaBitmap != null) {
-                    FileUtil.saveBitmap(rotaBitmap)
+        try {
+            mCamera?.takePicture(null, null, Camera.PictureCallback { data, camera ->
+                Log.d(TAG, "onPictureTaken: ")
+                val b: Bitmap?
+                if (null != data) {
+                    // data是字节数据，将其解析成位图
+                    b = BitmapFactory.decodeByteArray(data, 0, data.size)
+                    val cameraId = getCameraInfoId(mCameraId)
+                    val degree = getRotationOnTakePickPic(cameraId)
+                    val rotaBitmap = ImageUtil.getRotateBitmap(b, degree.toFloat())
+                    if (rotaBitmap != null) {
+                        FileUtil.saveBitmap(rotaBitmap)
+                        block.invoke(true)
+                    }
                 }
-            }
-            // 一般Camera在pictureCallBack后会暂停PreView，发现三星手机在底层封装能自动重启PreView功能
-            try {
-                mCamera?.startPreview()
-                isPreviewing = true
-                isCapturing = false
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+                // 一般Camera在pictureCallBack后会暂停PreView，发现三星手机在底层封装能自动重启PreView功能
+                try {
+                    mCamera?.startPreview()
+                    isPreviewing = true
+                    isCapturing = false
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    isCapturing = false
+                }
 
-        })
+            })
+        } catch (e: RuntimeException) {
+            e.printStackTrace()
+            isCapturing = false
+            isPreviewing = false
+            block(false)
+        }
     }
 
     /**
@@ -147,11 +156,11 @@ object CameraManager {
         try {
             mCamera?.setPreviewDisplay(holder)
             mCamera?.startPreview()// 开启预览
+            isPreviewing = true
         } catch (e: IOException) {
             e.printStackTrace()
+            isPreviewing = false
         }
-
-        isPreviewing = true
 
         // 重新get一次
         mParams = mCamera?.parameters

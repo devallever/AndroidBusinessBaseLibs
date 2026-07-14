@@ -30,8 +30,11 @@ class CameraActivity : AbstractActivity() {
 
     private fun initView() {
         findViewById<View>(R.id.id_camera_iv_take).setOnClickListener {
-            CameraManager.takePicture()
-            Toast.makeText(this@CameraActivity, "Done", Toast.LENGTH_SHORT).show()
+            CameraManager.takePicture() {
+                if (it) {
+                    Toast.makeText(this@CameraActivity, "Done", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
         mFl = findViewById(R.id.id_camera_fl_preview_container)

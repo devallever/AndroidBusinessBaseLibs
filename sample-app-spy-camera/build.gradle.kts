@@ -25,11 +25,13 @@ android {
 dependencies {
     implementation(project(":sample-common"))
     implementation(project(":lib-media-core"))
+    //lib-camera-proxy-camerax
+    implementation(project(":lib-camera-proxy-camerax"))
 
-    val aarList = mutableListOf(
-        "toolkit-v1-1.1.aar"
-    )
-    implementation(fileTree(mapOf("dir" to "libs", "include" to aarList)))
+//    val aarList = mutableListOf(
+//        "toolkit-v1-1.1.aar"
+//    )
+//    implementation(fileTree(mapOf("dir" to "libs", "include" to aarList)))
 
     //android
     implementation(libs.androidx.cardview)

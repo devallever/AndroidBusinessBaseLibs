@@ -3,12 +3,12 @@ package com.allever.stealthcamera.ui.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import app.allever.android.lib.core.helper.DisplayHelper
 import com.allever.stealthcamera.ui.recycler.BaseRecyclerViewAdapter
 import com.allever.stealthcamera.ui.recycler.BaseViewHolder
 
 import com.bumptech.glide.Glide
 import org.xm.stealth.camera.R
-import com.android.absbase.utils.DeviceUtils
 import kotlin.math.roundToInt
 
 /**
@@ -20,9 +20,9 @@ class PicAdapter(mContext: Context, resId: Int, mFilePathList: MutableList<Strin
     private var mItemWidth = 0
 
     init {
-        val screenWidth = DeviceUtils.SCREEN_WIDTH_PX.toFloat()
-        val margin = DeviceUtils.dip2px(4f)
-        mItemWidth = ((screenWidth - margin * 4) / 3).roundToInt()
+        val screenWidth = DisplayHelper.getScreenWidth()
+        val margin = DisplayHelper.dip2px(4f)
+        mItemWidth = ((screenWidth - margin * 4) / 3f).roundToInt()
 
     }
 

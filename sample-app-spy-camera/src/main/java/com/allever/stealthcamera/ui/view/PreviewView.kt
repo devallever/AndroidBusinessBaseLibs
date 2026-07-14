@@ -113,14 +113,12 @@ class PreviewView(private val mContext: Context) : FrameLayout(mContext) {
             MotionEvent.ACTION_UP ->
                 // 如果手指离开屏幕时，xDownInScreen和xInScreen相等，且yDownInScreen和yInScreen相等，则视为触发了单击事件。
                 if (abs(xDownInScreen - xInScreen) <= 20 && Math.abs(yDownInScreen - yInScreen) <= 20) {
-                    try {
-                        CameraManager.takePicture()
-                        Toast.makeText(mContext, "Done",
-                            Toast.LENGTH_SHORT).show()
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+                    CameraManager.takePicture {
+                        if (it) {
+                            Toast.makeText(mContext, "Done",
+                                Toast.LENGTH_SHORT).show()
+                        }
                     }
-
 
                 }
             else -> {
