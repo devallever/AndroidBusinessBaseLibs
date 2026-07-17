@@ -17,7 +17,7 @@ object ReferrerHelper {
     var facebookReferrerDecryption: FacebookReferrerDecryption? = null
         private set
     private const val REFERRER_KEY =
-        "aa4716dfad4595af45640a42ac085a9bebf746c0d5e1112fd80b1545b6f0f39a"
+        "aa4716dfad4595af45640a42ac085a9bebf746c0d5e1112fd80b150000000000"
     private const val HEX_STR = "0123456789abcdef"
     private const val FB_REFERRER_DATA_KEY = "FLASH_TUNNEL_FB_REFERRER_DATA_KEY"
 
