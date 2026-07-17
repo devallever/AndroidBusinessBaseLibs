@@ -58,14 +58,17 @@ class PreviewView(private val mContext: Context) : FrameLayout(mContext) {
     private var yInView: Float = 0.toFloat()
 
     init {
-        if (SPUtil.getShowPreview(mContext)) {
-            viewWidth = DisplayUtil.dip2px(mContext, 80f)
-            val rate = DisplayUtil.getScreenRate(mContext)
-            viewHeight = (viewWidth * rate).toInt()
-        } else {
-            viewWidth = DisplayUtil.dip2px(mContext, 60f)
-            viewHeight = DisplayUtil.dip2px(mContext, 60f)
-        }
+//        if (SPUtil.getShowPreview(mContext)) {
+//            viewWidth = DisplayUtil.dip2px(mContext, 80f)
+//            val rate = DisplayUtil.getScreenRate(mContext)
+//            viewHeight = (viewWidth * rate).toInt()
+//        } else {
+//            viewWidth = DisplayUtil.dip2px(mContext, 60f)
+//            viewHeight = DisplayUtil.dip2px(mContext, 60f)
+//        }
+
+        viewWidth = DisplayUtil.dip2px(mContext, 60f)
+        viewHeight = DisplayUtil.dip2px(mContext, 60f)
 
         val surfaceView = CameraSurfaceView(mContext)
         val params = LayoutParams(
@@ -94,17 +97,17 @@ class PreviewView(private val mContext: Context) : FrameLayout(mContext) {
                 xInView = event.x
                 yInView = event.y
                 xInScreen = event.rawX
-                //yInScreen = event.getRawY() - DisplayUtil.getStatusBarHeight(mContext);
-                yInScreen = event.rawY
+                yInScreen = event.getRawY() - DisplayUtil.getStatusBarHeight(mContext);
+//                yInScreen = event.rawY
                 xDownInScreen = xInScreen
                 yDownInScreen = yInScreen
                 Log.d(TAG, "x = $xDownInScreen, y = $yDownInScreen")
             }
             MotionEvent.ACTION_MOVE -> {
                 xInScreen = event.rawX
-                //yInScreen = event.getRawY() - DisplayUtil.getStatusBarHeight(mContext);
+                yInScreen = event.getRawY() - DisplayUtil.getStatusBarHeight(mContext);
                 //全屏不需要减去状态了高度
-                yInScreen = event.rawY
+//                yInScreen = event.rawY
                 // 手指移动距离大于20的时候更新悬浮窗的位置
                 if (Math.abs(xInScreen - xDownInScreen) > 20 || Math.abs(yInScreen - yDownInScreen) > 20) {
                     updateViewPosition()
