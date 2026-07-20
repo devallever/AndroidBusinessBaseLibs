@@ -12,7 +12,7 @@ android {
 }
 
 dependencies {
-    api(project(":core"))
+    api(project(":lib-camera-core"))
     // CameraX core library
     // CameraX core library
     api (libs.androidx.camera.core)
