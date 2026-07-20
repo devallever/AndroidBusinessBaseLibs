@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
 
-    <app.allever.android.lib.core.camera.CameraSurfaceView
+    <app.allever.android.lib.core.camera.proxy.CameraSurfaceView
         android:id="@+id/surfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

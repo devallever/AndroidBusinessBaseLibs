@@ -1,4 +1,4 @@
-package app.allever.android.lib.core.camera
+package app.allever.android.lib.core.camera.proxy
 
 import android.content.Context
 import android.graphics.Canvas

@@ -21,13 +21,13 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.LifecycleOwner
 import app.allever.android.lib.core.app.App
-import app.allever.android.lib.core.camera.AutoFitSurfaceView
-import app.allever.android.lib.core.camera.CameraFacing
-import app.allever.android.lib.core.camera.CameraListener
-import app.allever.android.lib.core.camera.ICameraProxy
-import app.allever.android.lib.core.camera.Size
+import app.allever.android.lib.core.camera.proxy.AutoFitSurfaceView
+import app.allever.android.lib.core.camera.proxy.CameraFacing
+import app.allever.android.lib.core.camera.proxy.CameraListener
+import app.allever.android.lib.core.camera.proxy.ICameraProxy
+import app.allever.android.lib.core.camera.proxy.Size
+import app.allever.android.lib.core.camera.proxy.CameraProxyManager
 import app.allever.android.lib.core.camera.util.getPreviewOutputSize
-import app.allever.android.lib.core.camera.*
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import kotlinx.coroutines.CoroutineScope
@@ -191,7 +191,7 @@ class Camera2ProxyImpl : ICameraProxy {
                 CameraFacing.FACE_BACK -> 90f
                 else -> 270f
             }
-            val rotateBitmap = app.allever.android.lib.core.camera.CameraManager.getRotateBitmap(bitmap, degree)
+            val rotateBitmap = CameraProxyManager.getRotateBitmap(bitmap, degree)
             mListener?.onTakePicture(bytes, rotateBitmap, mImageReader.imageFormat)
 
         }, mImageReaderHandler)

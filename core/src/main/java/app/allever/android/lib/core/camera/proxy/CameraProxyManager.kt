@@ -1,4 +1,4 @@
-package app.allever.android.lib.core.camera
+package app.allever.android.lib.core.camera.proxy
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -7,7 +7,9 @@ import android.hardware.camera2.CameraManager
 import android.os.Environment
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
-import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.camera.proxy.CameraFacing
+import app.allever.android.lib.core.camera.proxy.CameraListener
+import app.allever.android.lib.core.camera.proxy.Size
 import app.allever.android.lib.core.ext.log
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -15,7 +17,7 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 
-object CameraManager : ICameraProxy {
+object CameraProxyManager : ICameraProxy {
 
     private var cameraProxy: ICameraProxy? = null
 

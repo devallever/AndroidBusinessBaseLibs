@@ -1,15 +1,8 @@
 package app.allever.android.sample.camera.core
 
 import androidx.fragment.app.Fragment
-import app.allever.android.lib.camera.proxy.camera2.Camera2ProxyImpl
-import app.allever.android.lib.camera.proxy.camerax.CameraXProxyImpl
 import app.allever.android.lib.common.SampleMainActivity
-import app.allever.android.lib.common.TabActivity
-import app.allever.android.lib.common.TabViewModel
 import app.allever.android.lib.common.databinding.ActivitySampleMainBinding
-import app.allever.android.lib.common.databinding.ActivityTabBinding
-import app.allever.android.lib.core.camera.CameraManager
-import app.allever.android.lib.core.camera.CameraProxyImpl
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.therouter.router.Route
 

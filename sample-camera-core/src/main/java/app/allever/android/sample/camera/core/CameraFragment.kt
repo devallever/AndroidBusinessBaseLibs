@@ -2,10 +2,9 @@ package app.allever.android.sample.camera.core
 
 import android.graphics.Bitmap
 import androidx.lifecycle.lifecycleScope
-import app.allever.android.lib.core.camera.CameraListener
-import app.allever.android.lib.core.camera.CameraManager
-import app.allever.android.lib.core.camera.CameraProxyImpl
-import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.camera.proxy.CameraListener
+import app.allever.android.lib.core.camera.proxy.CameraProxyManager
+import app.allever.android.lib.core.camera.proxy.CameraProxyImpl
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.imageloader.core.load
 import app.allever.android.lib.mvvm.base.BaseMvvmFragment
@@ -13,7 +12,6 @@ import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.camera.core.databinding.FragmentCameraBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
 
 class CameraFragment : BaseMvvmFragment<FragmentCameraBinding, CameraViewModel>() {
 
@@ -21,36 +19,36 @@ class CameraFragment : BaseMvvmFragment<FragmentCameraBinding, CameraViewModel>(
 
     override fun init() {
         //inject
-        CameraManager.injectProxy(CameraProxyImpl())
+        CameraProxyManager.injectProxy(CameraProxyImpl())
         mBinding.btnOpenFrontCamera.setOnClickListener {
-            CameraManager.openCamera(1)
+            CameraProxyManager.openCamera(1)
         }
 
         mBinding.btnOpenCamera.setOnClickListener {
-            CameraManager.openCamera()
+            CameraProxyManager.openCamera()
         }
 
         mBinding.btnCloseCamera.setOnClickListener {
-            CameraManager.closeCamera()
+            CameraProxyManager.closeCamera()
         }
 
         mBinding.btnTackPicture.setOnClickListener {
-            CameraManager.takePicture()
+            CameraProxyManager.takePicture()
         }
     }
 
     override fun onResume() {
         super.onResume()
         mBinding.surfaceView.post {
-            CameraManager.setPreview(mBinding.surfaceView)
+            CameraProxyManager.setPreview(mBinding.surfaceView)
         }
-        CameraManager.setCameraListener(object : CameraListener {
+        CameraProxyManager.setCameraListener(object : CameraListener {
             override fun onPreview(data: ByteArray, imageFormat: Int) {
             }
 
             override fun onTakePicture(data: ByteArray?, bitmap: Bitmap?, imageFormat: Int) {
                 lifecycleScope.launch(Dispatchers.IO) {
-                    val result = CameraManager.saveBitmap2File(
+                    val result = CameraProxyManager.saveBitmap2File(
                         bitmap
                     )
                     val msg = if (result?.isNotEmpty() == true) {
@@ -69,8 +67,8 @@ class CameraFragment : BaseMvvmFragment<FragmentCameraBinding, CameraViewModel>(
 
     override fun onDestroy() {
         super.onDestroy()
-        CameraManager.closeCamera()
-        CameraManager.release()
+        CameraProxyManager.closeCamera()
+        CameraProxyManager.release()
     }
 }
 

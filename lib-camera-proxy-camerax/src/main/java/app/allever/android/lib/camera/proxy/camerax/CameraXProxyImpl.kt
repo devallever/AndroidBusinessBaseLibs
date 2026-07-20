@@ -8,10 +8,10 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
-import app.allever.android.lib.core.camera.CameraFacing
-import app.allever.android.lib.core.camera.CameraListener
-import app.allever.android.lib.core.camera.ICameraProxy
-import app.allever.android.lib.core.camera.Size
+import app.allever.android.lib.core.camera.proxy.CameraFacing
+import app.allever.android.lib.core.camera.proxy.CameraListener
+import app.allever.android.lib.core.camera.proxy.ICameraProxy
+import app.allever.android.lib.core.camera.proxy.Size
 import app.allever.android.lib.core.ext.log
 import com.google.common.util.concurrent.ListenableFuture
 import java.io.File

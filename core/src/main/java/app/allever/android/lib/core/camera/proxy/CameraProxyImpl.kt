@@ -1,4 +1,4 @@
-package app.allever.android.lib.core.camera
+package app.allever.android.lib.core.camera.proxy
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,17 +7,19 @@ import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
 import android.graphics.Point
 import android.hardware.Camera
-import android.hardware.Camera.CameraInfo
 import android.view.Surface
 import android.view.SurfaceView
 import android.view.View
 import android.view.WindowManager
 import androidx.lifecycle.LifecycleOwner
+import app.allever.android.lib.core.camera.proxy.CameraListener
+import app.allever.android.lib.core.camera.proxy.Size
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import java.lang.ref.WeakReference
-import java.util.*
+import java.util.Arrays
 import java.util.concurrent.Executors
+import kotlin.collections.forEach
 import kotlin.math.abs
 
 class CameraProxyImpl : ICameraProxy {
@@ -31,7 +33,7 @@ class CameraProxyImpl : ICameraProxy {
     /**
      * 相机id， 默认使用后置
      */
-    private var mCameraId = CameraInfo.CAMERA_FACING_BACK
+    private var mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK
 
     private lateinit var mPreviewRef: WeakReference<View>
 
@@ -56,14 +58,14 @@ class CameraProxyImpl : ICameraProxy {
 
         mExecutor.execute {
             var additionalDegree = 0
-            if (mCameraId == CameraInfo.CAMERA_FACING_FRONT) {
+            if (mCameraId == Camera.CameraInfo.CAMERA_FACING_FRONT) {
                 additionalDegree = 180
             }
             val bitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
             val degree: Int =
                 getDisplayOrientation(mPreviewRef.get()?.context, mCameraId) + additionalDegree
 
-            val rotateBitmap: Bitmap? = CameraManager.getRotateBitmap(bitmap, degree.toFloat())
+            val rotateBitmap: Bitmap? = CameraProxyManager.getRotateBitmap(bitmap, degree.toFloat())
             mListener?.onTakePicture(data, rotateBitmap, mCamera?.parameters?.pictureFormat!!)
             closeCamera()
             openCamera(mCameraId)
@@ -85,10 +87,10 @@ class CameraProxyImpl : ICameraProxy {
             return
         }
         mCameraId = when (cameraFacing) {
-            CameraFacing.FACE_BACK -> CameraInfo.CAMERA_FACING_BACK
-            else -> CameraInfo.CAMERA_FACING_FRONT
+            CameraFacing.Companion.FACE_BACK -> Camera.CameraInfo.CAMERA_FACING_BACK
+            else -> Camera.CameraInfo.CAMERA_FACING_FRONT
         }
-        val cameraIdList = CameraManager.getCameraIdList(mPreviewRef.get()?.context)
+        val cameraIdList = CameraProxyManager.getCameraIdList(mPreviewRef.get()?.context)
         val cameraCount = cameraIdList.size
         log("相机数 = $cameraCount")
         cameraIdList.forEach {
@@ -226,9 +228,9 @@ class CameraProxyImpl : ICameraProxy {
         additionalRotation *= 90
         degrees += additionalRotation
         var result: Int
-        val info = CameraInfo()
+        val info = Camera.CameraInfo()
         Camera.getCameraInfo(mCameraId, info)
-        if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
             result = (info.orientation + degrees) % 360
             result = (360 - result) % 360
         } else {
@@ -263,7 +265,7 @@ class CameraProxyImpl : ICameraProxy {
     }
 
     private fun getCameraFacing(): Int {
-        return CameraFacing.FACE_BACK
+        return CameraFacing.Companion.FACE_BACK
     }
 
     private fun getBestSupportedSize(
