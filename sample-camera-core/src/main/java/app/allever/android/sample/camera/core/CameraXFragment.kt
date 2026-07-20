@@ -21,7 +21,7 @@ class CameraXFragment : BaseMvvmFragment<FragmentCameraXBinding, CameraXViewMode
     override fun init() {
         CameraProxyManager.injectProxy(CameraXProxyImpl())
         mBinding.btnOpenFrontCamera.setOnClickListener {
-            CameraProxyManager.openCamera(CameraFacing.Companion.FACE_BACK)
+            CameraProxyManager.openCamera(CameraFacing.Companion.FACE_FRONT)
         }
 
         mBinding.btnOpenCamera.setOnClickListener {

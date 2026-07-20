@@ -121,7 +121,6 @@ class CameraXProxyImpl : ICameraProxy {
     }
 
     override fun closeCamera() {
-
     }
 
     override fun release() {

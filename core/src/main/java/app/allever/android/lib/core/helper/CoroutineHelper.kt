@@ -2,11 +2,11 @@ package app.allever.android.lib.core.helper
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 
 object CoroutineHelper {
     private val mJob by lazy {
-        Job()
+        SupervisorJob()
     }
 
     val MAIN by lazy {
