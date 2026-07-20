@@ -3,7 +3,7 @@ package app.allever.android.sample.ad.pangle
 import app.allever.android.lib.common.BaseActivity
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.ad.pangle.databinding.ActivityAdPangleMainBinding
-import com.alibaba.android.arouter.facade.annotation.Route
+import com.therouter.router.Route
 
 @Route(path = "/pangle/main")
 class AdPangleMainActivity : BaseActivity<ActivityAdPangleMainBinding, BaseViewModel>() {

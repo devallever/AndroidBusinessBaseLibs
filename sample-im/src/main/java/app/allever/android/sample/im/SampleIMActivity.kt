@@ -13,7 +13,7 @@ import app.allever.android.sample.im.http.LocalHttpServer
 import app.allever.android.sample.im.websocket.SampleHttpMainFragment
 import app.allever.android.sample.im.websocket.SampleWebSocketMainFragment
 import app.allever.android.sample.im.websocket.server.IMWebSocketServer
-import com.alibaba.android.arouter.facade.annotation.Route
+import com.therouter.router.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 @Route(path = "/im/main")

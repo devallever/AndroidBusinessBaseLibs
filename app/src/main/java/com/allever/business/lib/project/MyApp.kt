@@ -5,11 +5,11 @@ import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.helper.CoroutineHelper
 import app.allever.android.lib.core.helper.ProcessHelper
 import app.flash.tunnel.vpn.TunnelApp
-import com.alibaba.android.arouter.launcher.ARouter
 import com.allever.video.editor.app.AppApplication
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.ShadowsSocksConfig
 import com.step.wincash.base.BaseApplication
+import com.therouter.TheRouter
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -26,20 +26,13 @@ class MyApp: App() {
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
+        // TheRouter 推荐在 attachBaseContext 中尽早设置 Debug 模式
+        // 框架具备自动初始化能力，无需手动调用 init
+        TheRouter.isDebug = (DEBUG)
         base?.let { BaseApplication.attachBaseContext(it) }
     }
 
     override fun init() {
-        ProcessHelper.executeOnMain(this) {
-            CoroutineHelper.IO.launch {
-                if (DEBUG) {
-                    ARouter.openLog()
-                    ARouter.openDebug()
-                }
-                ARouter.init(this@MyApp)
-            }
-        }
-
     }
 
     @Suppress("MISSING_DEPENDENCY_SUPERCLASS_WARNING")

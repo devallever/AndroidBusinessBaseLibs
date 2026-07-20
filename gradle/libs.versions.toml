@@ -55,7 +55,7 @@ kotlinParcelizeRuntime = "2.0.21"
 kotlinxCoroutinesPlayServices = "1.6.4"
 
 # third party
-arouter = "1.5.2"
+therouter = "1.3.2"
 okhttp = "4.9.3"
 retrofit = "2.9.0"
 mmkv = "1.2.14"
@@ -234,8 +234,8 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 retrofit-converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit" }
 retrofit-adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofitRxjava2Adapter" }
-arouter-api = { group = "com.alibaba", name = "arouter-api", version.ref = "arouter" }
-arouter-compiler = { group = "com.alibaba", name = "arouter-compiler", version.ref = "arouter" }
+therouter-router = { module = "cn.therouter:router", version.ref = "therouter" }
+therouter-apt = { module = "cn.therouter:apt", version.ref = "therouter" }
 mmkv-static = { group = "com.tencent", name = "mmkv-static", version.ref = "mmkv" }
 basepopup = { group = "io.github.razerdp", name = "BasePopup", version.ref = "basepopup" }
 baserecyclerviewadapterhelper = { group = "com.github.CymChad", name = "BaseRecyclerViewAdapterHelper", version.ref = "baserecyclerviewadapterhelper" }

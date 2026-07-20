@@ -13,7 +13,7 @@ import app.flash.tunnel.vpn.helper.TunnelHelper
 import app.flash.tunnel.vpn.helper.ad.AdHelper
 import app.flash.tunnel.vpn.page.HomeActivity
 import app.flash.tunnel.vpn.page.SplashActivity
-import com.alibaba.android.arouter.facade.annotation.Route
+import com.therouter.router.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 import kotlinx.coroutines.launch
 

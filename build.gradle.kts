@@ -11,6 +11,7 @@ buildscript {
     dependencies {
 //        classpath (libs.applovinqualityservicegradleplugin)
 //        classpath(libs.butterknife.gradle.plugin)
+        classpath ("cn.therouter:plugin:1.3.2")
     }
 }
 
@@ -67,15 +68,15 @@ fun Project.configureAndroidLibrary() {
         }
     }
     
-    // 如果使用了 kapt，检查是否需要 ARouter 配置
+    // 如果使用了 kapt，配置 TheRouter 注解处理器
     plugins.withId("org.jetbrains.kotlin.kapt") {
-        configureArouter()
+        configureTheRouter()
     }
 }
 
 fun Project.configureAndroidApplication() {
     val libs = the<VersionCatalogsExtension>().named("libs")
-    
+
     extensions.configure<com.android.build.api.dsl.ApplicationExtension> {
         compileSdk = libs.findVersion("compileSdk").get().requiredVersion.toInt()
 
@@ -105,7 +106,7 @@ fun Project.configureAndroidApplication() {
             buildConfig = true
         }
     }
-    
+
     // 配置 Kotlin 编译选项
     plugins.withId("org.jetbrains.kotlin.android") {
         extensions.configure<org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension> {
@@ -114,43 +115,17 @@ fun Project.configureAndroidApplication() {
             }
         }
     }
-    
-    // 如果使用了 kapt，检查是否需要 ARouter 配置
+
+    // 如果使用了 kapt，配置 TheRouter 注解处理器
     plugins.withId("org.jetbrains.kotlin.kapt") {
-        configureArouter(true)
+        configureTheRouter()
     }
 }
 
-fun Project.configureArouter(isApplication: Boolean = false) {
+fun Project.configureTheRouter() {
     val libs = the<VersionCatalogsExtension>().named("libs")
-    
-    // 添加 ARouter 依赖
     dependencies {
-        "implementation"(libs.findLibrary("arouter.api").get())
-        "kapt"(libs.findLibrary("arouter.compiler").get())
-    }
-    
-    // 配置 ARouter 编译参数
-    if (isApplication) {
-        extensions.configure<com.android.build.api.dsl.ApplicationExtension> {
-            defaultConfig {
-                buildConfigField("boolean", "AROUTER_DEBUG", "true")
-                javaCompileOptions {
-                    annotationProcessorOptions {
-                        arguments["AROUTER_MODULE_NAME"] = project.name
-                    }
-                }
-            }
-        }
-    } else {
-        extensions.configure<com.android.build.api.dsl.LibraryExtension> {
-            defaultConfig {
-                javaCompileOptions {
-                    annotationProcessorOptions {
-                        arguments["AROUTER_MODULE_NAME"] = project.name
-                    }
-                }
-            }
-        }
+        "implementation"(libs.findLibrary("therouter.router").get())
+        "kapt"(libs.findLibrary("therouter.apt").get())
     }
 }

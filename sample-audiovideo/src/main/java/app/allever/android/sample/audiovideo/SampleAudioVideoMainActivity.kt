@@ -20,7 +20,7 @@ import app.allever.android.sample.audiovideo.core.PlayerCoreSampleFragment
 import app.allever.android.sample.audiovideo.knowledge.AudioVideoKnowledgeFragment
 import app.allever.android.sample.audiovideo.lib.AudioVideoLibFragment
 import app.allever.android.sample.audiovideo.sdk.SDKAudioVideoFragment
-import com.alibaba.android.arouter.facade.annotation.Route
+import com.therouter.router.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 @Route(path = "/audiovideo/main")

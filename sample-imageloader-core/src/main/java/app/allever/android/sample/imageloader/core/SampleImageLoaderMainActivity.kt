@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import app.allever.android.lib.common.SampleMainActivity
 import app.allever.android.lib.common.databinding.ActivitySampleMainBinding
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import com.alibaba.android.arouter.facade.annotation.Route
+import com.therouter.router.Route
 
 /**
  * 图片加载组件示例入口

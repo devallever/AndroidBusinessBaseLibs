@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
 //    id("applovin-quality-service")//编译时检查key安全
+    id("therouter")
 }
 
 //applovin {

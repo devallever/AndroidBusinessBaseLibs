@@ -4,7 +4,7 @@ import app.allever.android.lib.common.BaseActivity
 import app.allever.android.lib.core.helper.FragmentHelper
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.ad.core.databinding.ActivityAdCoreMainBinding
-import com.alibaba.android.arouter.facade.annotation.Route
+import com.therouter.router.Route
 
 @Route(path = "/adCore/main")
 class AdCoreMainActivity : BaseActivity<ActivityAdCoreMainBinding, BaseViewModel>() {

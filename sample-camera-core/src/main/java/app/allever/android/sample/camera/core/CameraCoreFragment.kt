@@ -35,7 +35,7 @@ class CameraCoreFragment : BaseFragment<FragmentCameraCoreBinding, BaseViewModel
             "camera2" -> Camera2Manager(requireContext(), mBinding.previewContainer)
             else -> CameraXManager(requireContext(), this, mBinding.previewContainer)
         }
-        CameraXManager(requireContext(), this, mBinding.previewContainer)
+//        CameraXManager(requireContext(), this, mBinding.previewContainer)
     }
 
     override fun inflate() = FragmentCameraCoreBinding.inflate(layoutInflater)

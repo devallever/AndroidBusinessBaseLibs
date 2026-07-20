@@ -11,7 +11,7 @@ import app.allever.android.lib.common.databinding.ActivityTabBinding
 import app.allever.android.lib.core.camera.CameraManager
 import app.allever.android.lib.core.camera.CameraProxyImpl
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import com.alibaba.android.arouter.facade.annotation.Route
+import com.therouter.router.Route
 
 @Route(path = "/camera/main")
 class CameraSampleTabActivity : SampleMainActivity<ActivitySampleMainBinding, BaseViewModel>() {

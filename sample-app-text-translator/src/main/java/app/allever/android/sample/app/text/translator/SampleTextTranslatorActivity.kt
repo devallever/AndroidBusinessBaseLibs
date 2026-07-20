@@ -9,7 +9,7 @@ import app.allever.android.lib.common.databinding.ActivityListBinding
 import app.allever.android.lib.core.helper.ActivityHelper
 import app.android.gp.ai.translator.app.MyApp
 import app.android.gp.ai.translator.ui.SplashPage
-import com.alibaba.android.arouter.facade.annotation.Route
+import com.therouter.router.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 @Route(path = "/apptexttranslator/main")

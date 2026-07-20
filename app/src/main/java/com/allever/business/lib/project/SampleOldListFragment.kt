@@ -5,7 +5,7 @@ import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
-import com.alibaba.android.arouter.launcher.ARouter
+import com.therouter.TheRouter
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 class SampleOldListFragment: ListFragment<FragmentListBinding, ListViewModel, TextClickItem>() {
@@ -13,58 +13,58 @@ class SampleOldListFragment: ListFragment<FragmentListBinding, ListViewModel, Te
 
     override fun getList(): MutableList<TextClickItem> = mutableListOf(
         TextClickItem("谷歌内购订阅支付") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_BILLING).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_BILLING).navigation()
         },
         TextClickItem("清理工具(Demo)") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_CLEANER).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_CLEANER).navigation()
         },
         TextClickItem("设计模式") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_DESIGN_PATTERN).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_DESIGN_PATTERN).navigation()
         },
         TextClickItem("功能实现") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_FUNCTION).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_FUNCTION).navigation()
         },
         TextClickItem("Jetpack") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_JETPACK).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_JETPACK).navigation()
         },
         TextClickItem("JNI") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_JNI).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_JNI).navigation()
         },
         TextClickItem("JNI-MK") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_JNI_MK).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_JNI_MK).navigation()
         },
         TextClickItem("Kotlin") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_KOTLIN).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_KOTLIN).navigation()
         },
         TextClickItem("LearningAndroid") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_LEARNING_ANDROID).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_LEARNING_ANDROID).navigation()
         },
         TextClickItem("登录") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_LOGIN).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_LOGIN).navigation()
         },
         TextClickItem("MaterialDesign") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_MATERIAL_DESIGN).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_MATERIAL_DESIGN).navigation()
         },
         TextClickItem("MicrosoftSpeech") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_MICROSOFT_SPEECH).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_MICROSOFT_SPEECH).navigation()
         },
         TextClickItem("Safe") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_SAFE).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_SAFE).navigation()
         },
         TextClickItem("ThirtyPart") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_THIRTY_PART).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_THIRTY_PART).navigation()
         },
         TextClickItem("Toolbox") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_TOOLBOX).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_TOOLBOX).navigation()
         },
         TextClickItem("UI") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_UI).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_UI).navigation()
         },
         TextClickItem("VideoEditor") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_VIDEO_EDITOR).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_VIDEO_EDITOR).navigation()
         },
         TextClickItem("音视频") {
-            ARouter.getInstance().build(RouterPath.PATH_Z_SAMPLE_AUDIO_VIDEO).navigation()
+            TheRouter.build(RouterPath.PATH_Z_SAMPLE_AUDIO_VIDEO).navigation()
         },
     )
 }

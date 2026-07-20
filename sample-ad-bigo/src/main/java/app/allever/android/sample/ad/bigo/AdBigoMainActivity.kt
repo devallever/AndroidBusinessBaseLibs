@@ -3,7 +3,7 @@ package app.allever.android.sample.ad.bigo
 import app.allever.android.lib.common.BaseActivity
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.ad.bigo.databinding.ActivityAdBigoMainBinding
-import com.alibaba.android.arouter.facade.annotation.Route
+import com.therouter.router.Route
 
 @Route(path = "/bigo/main")
 class AdBigoMainActivity : BaseActivity<ActivityAdBigoMainBinding, BaseViewModel>() {

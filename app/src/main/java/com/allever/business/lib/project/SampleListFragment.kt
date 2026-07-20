@@ -7,7 +7,7 @@ import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextDetailClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextDetailClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
-import com.alibaba.android.arouter.launcher.ARouter
+import com.therouter.TheRouter
 
 class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, TextDetailClickItem>() {
 
@@ -24,25 +24,25 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
             FragmentActivity.start<ReferrerFragment>(it.title)
         },
         TextDetailClickItem("音视频", "sample-audiovideo") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_AUDIO_VIDEO).navigation()
+            TheRouter.build(RouterPath.PATH_SAMPLE_AUDIO_VIDEO).navigation()
         },
         TextDetailClickItem("Unity", "sample-unity") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_UNITY).navigation()
+            TheRouter.build(RouterPath.PATH_SAMPLE_UNITY).navigation()
         },
         TextDetailClickItem("VPN", "sample-vpn") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_VPN).navigation()
+            TheRouter.build(RouterPath.PATH_SAMPLE_VPN).navigation()
         },
         TextDetailClickItem("清理", "sample-cleaner") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_CLEANER).navigation()
+            TheRouter.build(RouterPath.PATH_SAMPLE_CLEANER).navigation()
         },
         TextDetailClickItem("多进程通信-IPC", "sample-ipc") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_IPC).navigation()
+            TheRouter.build(RouterPath.PATH_SAMPLE_IPC).navigation()
         },
         TextDetailClickItem("IM", "sample-im") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_IM).navigation()
+            TheRouter.build(RouterPath.PATH_SAMPLE_IM).navigation()
         },
         TextDetailClickItem("蓝牙", "sample-bluetooth") {
-            ARouter.getInstance().build(RouterPath.PATH_SAMPLE_BLUETOOTH).navigation()
+            TheRouter.build(RouterPath.PATH_SAMPLE_BLUETOOTH).navigation()
         },
     )
 }

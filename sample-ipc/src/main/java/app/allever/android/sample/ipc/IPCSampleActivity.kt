@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import app.allever.android.lib.common.TabActivity
 import app.allever.android.lib.common.TabViewModel
 import app.allever.android.lib.common.databinding.ActivityTabBinding
-import com.alibaba.android.arouter.facade.annotation.Route
+import com.therouter.router.Route
 
 @Route(path = "/ipc/main")
 class IPCSampleActivity : TabActivity<ActivityTabBinding, TabViewModel>() {
