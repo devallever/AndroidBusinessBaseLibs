@@ -7,7 +7,6 @@ import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextDetailClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextDetailClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
-import com.therouter.TheRouter
 
 class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, TextDetailClickItem>() {
 
@@ -18,31 +17,31 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
             FragmentActivity.start<BasicFragment>(it.title)
         },
         TextDetailClickItem("广告组件", "sample-ad-core") {
-            FragmentActivity.start<AdFragment>(it.title)
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_AD_CORE)
         },
         TextDetailClickItem("归因-Referrer", "sample-adjust/sample-appsflyer") {
-            FragmentActivity.start<ReferrerFragment>(it.title)
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_APPS_FLYER)
         },
         TextDetailClickItem("音视频", "sample-audiovideo") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_AUDIO_VIDEO).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_AUDIO_VIDEO)
         },
         TextDetailClickItem("Unity", "sample-unity") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_UNITY).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_UNITY)
         },
         TextDetailClickItem("VPN", "sample-vpn") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_VPN).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_VPN)
         },
         TextDetailClickItem("清理", "sample-cleaner") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_CLEANER).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_CLEANER)
         },
         TextDetailClickItem("多进程通信-IPC", "sample-ipc") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_IPC).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_IPC)
         },
         TextDetailClickItem("IM", "sample-im") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_IM).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_IM)
         },
         TextDetailClickItem("蓝牙", "sample-bluetooth") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_BLUETOOTH).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_BLUETOOTH)
         },
     )
 }

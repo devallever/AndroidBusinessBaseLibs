@@ -1,0 +1,387 @@
+[
+  {
+    "path": "/zvideoeditor/main",
+    "className": "z.app.allever.android.sample.videoeditor.VideoEditorMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zui/main",
+    "className": "z.app.allever.android.sample.ui.UIMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/ztoolbox/main",
+    "className": "z.app.allever.android.sample.toolbox.ToolBoxMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zthirtypart/main",
+    "className": "z.app.allever.android.sample.thirtypart.ThirtyPartMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zsafe/main",
+    "className": "z.app.allever.android.sample.safe.SafeMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zmicrosoftspeech/main",
+    "className": "z.app.allever.android.sample.microsoft.speech.MicrosoftSpeechMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zmaterialdesign/main",
+    "className": "z.app.allever.android.sample.material.design.MaterialDesignMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zlogin/main",
+    "className": "z.app.allever.android.sample.login.LoginMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zlearningandroid/main",
+    "className": "z.app.allever.android.sample.learning.android.LearningAndroidMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zkotlin/main",
+    "className": "z.app.allever.android.sample.kotlin.KotlinMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zjnimk/main",
+    "className": "z.app.allever.android.sample.jni.mk.JniMkMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zjni/main",
+    "className": "z.app.allever.android.sample.jni.JniMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zjetpack/main",
+    "className": "z.app.allever.android.sample.jetpack.JetpackMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zfunction/main",
+    "className": "z.app.allever.android.sample.function.FunctionMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zdesignpattern/main",
+    "className": "z.app.allever.android.sample.designpattern.DesignPatternMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zcleaner/main",
+    "className": "z.app.allever.android.sample.cleaner.CleanerMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zbilling/main",
+    "className": "z.app.allever.android.sample.billing.BillingMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/zaudiovideo/main",
+    "className": "z.app.allever.android.learning.audiovideo.AudioVideoMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/flashtunnel/main",
+    "className": "app.allever.android.sample.vpn.flash.tunnel.SampleVpnFlashTunnelMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/vpn/main",
+    "className": "app.allever.android.sample.vpn.VPNSampleMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/videoeditor/main",
+    "className": "app.allever.android.sample.video.editor.SampleVideoEditorActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/unity/main",
+    "className": "app.allever.android.sample.unity.UnitySampleMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/store/main",
+    "className": "app.allever.android.sample.store.core.SampleStoreMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/steptool/main",
+    "className": "app.allever.android.sample.step.tool.SampleStepToolActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/player/main",
+    "className": "app.allever.android.sample.player.core.SamplePlayMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/permission/main",
+    "className": "app.allever.android.sample.permission.PermissionMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/network/main",
+    "className": "app.allever.android.sample.network.core.NetworkSampleMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/netspeedtest/main",
+    "className": "app.allever.android.sample.net.speed.test.SampleNetSpeedTestActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/mvvm/main",
+    "className": "app.allever.android.sample.mvvm.MvvmActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/media/main",
+    "className": "app.allever.android.sample.media.core.MediaSampleMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/ipc/main",
+    "className": "app.allever.android.sample.ipc.IPCSampleActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/imageloader/main",
+    "className": "app.allever.android.sample.imageloader.core.SampleImageLoaderMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/im/main",
+    "className": "app.allever.android.sample.im.SampleIMActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/cleanerwood/main",
+    "className": "app.allever.android.sample.cleaner.wood.CleanerWoodSampleActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/cleaner/main",
+    "className": "app.allever.android.sample.cleaner.SampleCleanerMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/chargereward/main",
+    "className": "app.allever.android.sample.charge.reward.SampleChargeActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/camera/main",
+    "className": "app.allever.android.sample.camera.core.CameraSampleTabActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/bluetooth/main",
+    "className": "app.allever.android.sample.bluetooth.SampleBluetoothActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/audiovideo/main",
+    "className": "app.allever.android.sample.audiovideo.SampleAudioVideoMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/appsflyer/main",
+    "className": "app.allever.android.sample.appsflyer.AppsFlyerMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/appvirtualcall/main",
+    "className": "app.allever.android.sample.app.virtual.call.SampleAppVirtualCallActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/apptexttranslator/main",
+    "className": "app.allever.android.sample.app.text.translator.SampleTextTranslatorActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/apptextcard/main",
+    "className": "app.allever.android.sample.app.text.card.SampleTextCardActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/appstickercamera/main",
+    "className": "app.allever.android.sample.app.sticker.camera.SampleAppStickerCamera",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/appspycamera/main",
+    "className": "app.allever.android.sample.app.spy.camera.SampleAppSypCameraActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/secretalbum/main",
+    "className": "app.allever.android.sample.app.secret.album.SampleAppSecretAlbumActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/apploseweight/main",
+    "className": "app.allever.android.sample.app.lose.weight.SampleAppLoseWeightActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/appgifsearch/main",
+    "className": "app.allever.android.sample.app.gif.search.SampleAppGifSearchActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/appffmpegcommand/main",
+    "className": "app.allever.android.sample.app.ffmpeg.command.SampleFFMpegCommandActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/appdaymatter/main",
+    "className": "app.allever.android.sample.app.day.matter.SampleAppDayMatterActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/adjust/main",
+    "className": "app.allever.android.sample.adjust.AdJustMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/pangle/main",
+    "className": "app.allever.android.sample.ad.pangle.AdPangleMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/adCore/main",
+    "className": "app.allever.android.sample.ad.core.AdCoreMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/bigo/main",
+    "className": "app.allever.android.sample.ad.bigo.AdBigoMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/admob/main",
+    "className": "app.allever.android.sample.ad.admob.AdAdMobMainActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  }
+]

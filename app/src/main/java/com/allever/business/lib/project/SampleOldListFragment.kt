@@ -5,7 +5,6 @@ import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
-import com.therouter.TheRouter
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 class SampleOldListFragment: ListFragment<FragmentListBinding, ListViewModel, TextClickItem>() {
@@ -13,58 +12,58 @@ class SampleOldListFragment: ListFragment<FragmentListBinding, ListViewModel, Te
 
     override fun getList(): MutableList<TextClickItem> = mutableListOf(
         TextClickItem("谷歌内购订阅支付") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_BILLING).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_BILLING)
         },
         TextClickItem("清理工具(Demo)") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_CLEANER).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_CLEANER)
         },
         TextClickItem("设计模式") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_DESIGN_PATTERN).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_DESIGN_PATTERN)
         },
         TextClickItem("功能实现") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_FUNCTION).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_FUNCTION)
         },
         TextClickItem("Jetpack") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_JETPACK).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_JETPACK)
         },
         TextClickItem("JNI") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_JNI).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_JNI)
         },
         TextClickItem("JNI-MK") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_JNI_MK).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_JNI_MK)
         },
         TextClickItem("Kotlin") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_KOTLIN).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_KOTLIN)
         },
         TextClickItem("LearningAndroid") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_LEARNING_ANDROID).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_LEARNING_ANDROID)
         },
         TextClickItem("登录") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_LOGIN).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_LOGIN)
         },
         TextClickItem("MaterialDesign") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_MATERIAL_DESIGN).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_MATERIAL_DESIGN)
         },
         TextClickItem("MicrosoftSpeech") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_MICROSOFT_SPEECH).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_MICROSOFT_SPEECH)
         },
         TextClickItem("Safe") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_SAFE).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_SAFE)
         },
         TextClickItem("ThirtyPart") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_THIRTY_PART).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_THIRTY_PART)
         },
         TextClickItem("Toolbox") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_TOOLBOX).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_TOOLBOX)
         },
         TextClickItem("UI") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_UI).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_UI)
         },
         TextClickItem("VideoEditor") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_VIDEO_EDITOR).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_VIDEO_EDITOR)
         },
         TextClickItem("音视频") {
-            TheRouter.build(RouterPath.PATH_Z_SAMPLE_AUDIO_VIDEO).navigation()
+            Navi.navigateTo(RouterPath.PATH_Z_SAMPLE_AUDIO_VIDEO)
         },
     )
 }

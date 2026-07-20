@@ -5,25 +5,24 @@ import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
-import com.therouter.TheRouter
 
 class AdFragment : ListFragment<FragmentListBinding, ListViewModel, TextClickItem>() {
     override fun getAdapter() = TextClickAdapter()
     override fun getList(): MutableList<TextClickItem> = mutableListOf(
         TextClickItem("AdMob") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_AD_ADMOB).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_AD_ADMOB)
         },
         TextClickItem("Pangle") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_AD_PANGLE).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_AD_PANGLE)
         },
         TextClickItem("Bigo") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_AD_BIGO).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_AD_BIGO)
         },
         TextClickItem("AppLovin") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_AD_APPLOVIN).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_AD_APPLOVIN)
         },
         TextClickItem("AdCore") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_AD_CORE).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_AD_CORE)
         },
     )
 }

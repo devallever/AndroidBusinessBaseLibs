@@ -6,7 +6,6 @@ import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextDetailClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextDetailClickItem
 import app.allever.android.lib.common.databinding.FragmentListBinding
-import com.therouter.TheRouter
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 class AppListFragment: ListFragment<FragmentListBinding, ListViewModel, TextDetailClickItem>() {
@@ -15,56 +14,56 @@ class AppListFragment: ListFragment<FragmentListBinding, ListViewModel, TextDeta
 
     override fun getList(): MutableList<TextDetailClickItem> = mutableListOf(
         TextDetailClickItem("TextCard", "sample-app-text-card") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_APP_TEXT_CARD).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_TEXT_CARD)
         },
         TextDetailClickItem("文本翻译器", "sample-app-text-translator") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_APP_TEXT_TRANSLATOR).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_TEXT_TRANSLATOR)
         },
         TextDetailClickItem("FFMpegCommand", "sample-app-ffmpeg-command") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_APP_FFMPEG_COMMAND).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_FFMPEG_COMMAND)
         },
         TextDetailClickItem("30天减肥", "sample-app-lose-weight") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_APP_LOSE_WEIGHT).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_LOSE_WEIGHT)
         },
         TextDetailClickItem("倒数日", "sample-app-day-matter") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_APP_DAY_MATTER).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_DAY_MATTER)
         },
         TextDetailClickItem("虚拟来电", "sample-app-virtual-call") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_APP_VIRTUAL_CALL).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_VIRTUAL_CALL)
         },
         TextDetailClickItem("Gif图搜索", "sample-app-gif-search") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_APP_GIF_SEARCH).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_GIF_SEARCH)
         },
         TextDetailClickItem("贴纸相机", "sample-app-sticker-camera") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_APP_STICKER_CAMERA).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_STICKER_CAMERA)
         },
         TextDetailClickItem("隐私相机", "sample-app-syp-camera\n(部分机型后台相机运行中报错)") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_APP_SPY_CAMERA).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_SPY_CAMERA)
         },
         TextDetailClickItem("私密相册", "sample-app-secret-album") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_SECRET_ALBUM).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_SECRET_ALBUM)
         },
         TextDetailClickItem("视频编辑", "sample-app-video-editor") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_VIDEO_EDITOR).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_VIDEO_EDITOR)
         },
         TextDetailClickItem("网络测速", "sample-app-net-speed-test") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_NET_SPEED_TEST).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_NET_SPEED_TEST)
         },
 
         TextDetailClickItem("清理-Wood", "sample-app-cleaner-wood") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_CLEANER_WOOD).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_CLEANER_WOOD)
         },
         TextDetailClickItem("网赚-ChargeReward", "sample-app-chargereward") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_CHARGE_REWARD).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_CHARGE_REWARD)
         },
         TextDetailClickItem("网赚-记录步数", "sample-app-step-tool") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_STEP_TOOL).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_STEP_TOOL)
         },
         TextDetailClickItem("短剧-穿山甲", "sample-djcsj") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_DJ_CSJ).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_DJ_CSJ)
         },
         TextDetailClickItem("VPN-FlashTunnel", "sample-app-vpn-flashtunnel") {
-            TheRouter.build(RouterPath.PATH_SAMPLE_VPN_FLASH_TUNNEL).navigation()
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_VPN_FLASH_TUNNEL)
         },
     )
 }
