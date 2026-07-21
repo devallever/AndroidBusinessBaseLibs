@@ -20,10 +20,9 @@ import android.view.TextureView
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import app.allever.android.lib.core.camera.AspectRatio
-import app.allever.android.lib.core.camera.BaseCameraManager
+import app.allever.android.lib.core.camera.manager.BaseCameraManager
 import app.allever.android.lib.core.camera.CameraResultCallback
 import app.allever.android.lib.core.camera.FlashMode
-import app.allever.android.lib.core.camera.RecordCallback
 import app.allever.android.lib.core.camera.VideoQuality
 import java.io.File
 import java.util.Timer
@@ -41,7 +40,7 @@ class Camera2Manager(context: Context, container: ViewGroup) :
     private var previewSize: Size = Size(1080, 1920)
     private var characteristics: CameraCharacteristics? = null
     private var zoomRect: Rect? = null
-    private var recordCallback: RecordCallback? = null
+    private var recordCallback: CameraResultCallback? = null
     private var recordTimer: Timer? = null
     private var recordStartTime = 0L
     private var videoFile: File? = null
@@ -269,7 +268,7 @@ class Camera2Manager(context: Context, container: ViewGroup) :
         captureSession?.capture(reqBuilder.build(), null, bgHandler)
     }
 
-    override fun doStartRecording(file: File, maxDurationMillis: Long, callback: RecordCallback) {
+    override fun doStartRecording(file: File, maxDurationMillis: Long, callback: CameraResultCallback) {
         this.recordCallback = callback; this.videoFile = file
         captureSession?.close(); captureSession = null
         mediaRecorder = MediaRecorder().apply {

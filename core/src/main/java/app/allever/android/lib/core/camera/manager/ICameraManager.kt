@@ -1,5 +1,9 @@
-package app.allever.android.lib.core.camera
+package app.allever.android.lib.core.camera.manager
 
+import app.allever.android.lib.core.camera.AspectRatio
+import app.allever.android.lib.core.camera.CameraResultCallback
+import app.allever.android.lib.core.camera.FlashMode
+import app.allever.android.lib.core.camera.VideoQuality
 import java.io.File
 
 /** 统一相机管理接口 */
@@ -26,7 +30,7 @@ interface ICameraManager {
     fun takePhoto(file: File, callback: CameraResultCallback)
 
     /** 开始录视频 */
-    fun startRecording(file: File, maxDurationMillis: Long, callback: RecordCallback)
+    fun startRecording(file: File, maxDurationMillis: Long, callback: CameraResultCallback)
 
     /** 停止录视频 */
     fun stopRecording()

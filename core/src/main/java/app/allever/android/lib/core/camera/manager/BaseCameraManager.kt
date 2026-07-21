@@ -1,9 +1,14 @@
-package app.allever.android.lib.core.camera
+package app.allever.android.lib.core.camera.manager
 
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import app.allever.android.lib.core.camera.AspectRatio
+import app.allever.android.lib.core.camera.CameraResultCallback
+import app.allever.android.lib.core.camera.CameraState
+import app.allever.android.lib.core.camera.FlashMode
+import app.allever.android.lib.core.camera.VideoQuality
 import java.io.File
 
 /** 相机管理基类，负责状态拦截与防重入 */
@@ -101,10 +106,11 @@ abstract class BaseCameraManager(
         doTakePhoto(file, object : CameraResultCallback {
             override fun onSuccess(file: File) { state = CameraState.OPENED; callback.onSuccess(file) }
             override fun onError(message: String) { state = CameraState.OPENED; callback.onError(message) }
+
         })
     }
 
-    override fun startRecording(file: File, maxDurationMillis: Long, callback: RecordCallback) {
+    override fun startRecording(file: File, maxDurationMillis: Long, callback: CameraResultCallback) {
         if (state != CameraState.OPENED) {
             callback.onError("Cannot start recording in current state: $state")
             return
@@ -126,6 +132,6 @@ abstract class BaseCameraManager(
     protected abstract fun doSetAspectRatio(ratio: AspectRatio)
     protected abstract fun doSetVideoQuality(quality: VideoQuality)
     protected abstract fun doTakePhoto(file: File, callback: CameraResultCallback)
-    protected abstract fun doStartRecording(file: File, maxDurationMillis: Long, callback: RecordCallback)
+    protected abstract fun doStartRecording(file: File, maxDurationMillis: Long, callback: CameraResultCallback)
     protected abstract fun doStopRecording()
 }

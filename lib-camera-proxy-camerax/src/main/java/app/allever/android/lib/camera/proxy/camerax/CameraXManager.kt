@@ -24,10 +24,9 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import app.allever.android.lib.core.camera.AspectRatio
-import app.allever.android.lib.core.camera.BaseCameraManager
+import app.allever.android.lib.core.camera.manager.BaseCameraManager
 import app.allever.android.lib.core.camera.CameraResultCallback
 import app.allever.android.lib.core.camera.FlashMode
-import app.allever.android.lib.core.camera.RecordCallback
 import app.allever.android.lib.core.camera.VideoQuality
 import java.io.File
 import java.util.concurrent.Executor
@@ -147,7 +146,7 @@ class CameraXManager(
     }
 
     @SuppressLint("MissingPermission")
-    override fun doStartRecording(file: File, maxDurationMillis: Long, callback: RecordCallback) {
+    override fun doStartRecording(file: File, maxDurationMillis: Long, callback: CameraResultCallback) {
         val options = FileOutputOptions.Builder(file).build()
         currentRecording = videoCapture?.output
             ?.prepareRecording(context, options)

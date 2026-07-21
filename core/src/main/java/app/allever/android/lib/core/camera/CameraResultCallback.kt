@@ -6,4 +6,5 @@ import java.io.File
 interface CameraResultCallback {
     fun onSuccess(file: File)
     fun onError(message: String)
+    fun onProgress(millis: Long) { } // 当前录制时长(毫秒)
 }

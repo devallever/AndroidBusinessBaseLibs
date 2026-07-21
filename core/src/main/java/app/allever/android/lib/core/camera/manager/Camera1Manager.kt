@@ -1,6 +1,7 @@
-package app.allever.android.lib.core.camera
+package app.allever.android.lib.core.camera.manager
 
 import android.content.Context
+import android.graphics.Rect
 import android.hardware.Camera
 import android.media.MediaRecorder
 import android.view.GestureDetector
@@ -10,9 +11,17 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import app.allever.android.lib.core.camera.AspectRatio
+import app.allever.android.lib.core.camera.CameraResultCallback
+import app.allever.android.lib.core.camera.FlashMode
+import app.allever.android.lib.core.camera.VideoQuality
+import app.allever.android.lib.core.helper.CoroutineHelper
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Timer
 import java.util.TimerTask
+
 class Camera1Manager(context: Context, container: ViewGroup) : BaseCameraManager(context, container) {
     private var camera: Camera? = null
     private var mediaRecorder: MediaRecorder? = null
@@ -20,38 +29,41 @@ class Camera1Manager(context: Context, container: ViewGroup) : BaseCameraManager
     private var surfaceView: SurfaceView = SurfaceView(context).apply {
         layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
-    private var recordCallback: RecordCallback? = null
+    private var recordCallback: CameraResultCallback? = null
     private var recordTimer: Timer? = null
     private var recordStartTime = 0L
     private var videoFile: File? = null
     private var maxZoom = 0
 
-    private val scaleDetector = ScaleGestureDetector(context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-        override fun onScale(detector: ScaleGestureDetector): Boolean {
-            val params = camera?.parameters
-            maxZoom = params?.maxZoom ?: 0
-            val currentZoom = params?.zoom ?: 0
-            val newZoom = (currentZoom + (detector.scaleFactor - 1) * 10).toInt().coerceIn(0, maxZoom)
-            params?.zoom = newZoom
-            camera?.parameters = params
-            return true
-        }
-    })
+    private val scaleDetector =
+        ScaleGestureDetector(context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            override fun onScale(detector: ScaleGestureDetector): Boolean {
+                val params = camera?.parameters
+                maxZoom = params?.maxZoom ?: 0
+                val currentZoom = params?.zoom ?: 0
+                val newZoom =
+                    (currentZoom + (detector.scaleFactor - 1) * 10).toInt().coerceIn(0, maxZoom)
+                params?.zoom = newZoom
+                camera?.parameters = params
+                return true
+            }
+        })
 
-    private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-            camera?.setOneShotPreviewCallback(null)
-            val focusRect = calculateTapArea(e.x, e.y, 1f)
-            val meteringRect = calculateTapArea(e.x, e.y, 1.5f)
-            val params = camera?.parameters
-            params?.focusAreas = listOf(Camera.Area(focusRect.rect, 1000))
-            params?.meteringAreas = listOf(meteringRect, 1000) as List<Camera.Area?>?
-            params?.focusMode = Camera.Parameters.FOCUS_MODE_AUTO
-            camera?.parameters = params
-            camera?.autoFocus { success, _ -> }
-            return true
-        }
-    })
+    private val gestureDetector =
+        GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                camera?.setOneShotPreviewCallback(null)
+                val focusRect = calculateTapArea(e.x, e.y, 1f)
+                val meteringRect = calculateTapArea(e.x, e.y, 1.5f)
+                val params = camera?.parameters
+                params?.focusAreas = listOf(Camera.Area(focusRect.rect, 1000))
+                params?.meteringAreas = listOf(meteringRect, 1000) as List<Camera.Area?>?
+                params?.focusMode = Camera.Parameters.FOCUS_MODE_AUTO
+                camera?.parameters = params
+                camera?.autoFocus { success, _ -> }
+                return true
+            }
+        })
 
     init {
         container.addView(surfaceView)
@@ -75,10 +87,11 @@ class Camera1Manager(context: Context, container: ViewGroup) : BaseCameraManager
         val top = (centerY - focusAreaSize * coefficient).toInt().coerceIn(-1000, 1000)
         val right = (centerX + focusAreaSize * coefficient).toInt().coerceIn(-1000, 1000)
         val bottom = (centerY + focusAreaSize * coefficient).toInt().coerceIn(-1000, 1000)
-        return Camera.Area(android.graphics.Rect(left, top, right, bottom), 1000)
+        return Camera.Area(Rect(left, top, right, bottom), 1000)
     }
 
     override fun doOpenCamera() {
+        if (camera != null) return
         try {
             camera = Camera.open(currentCameraId)
             setupCameraParams()
@@ -121,12 +134,18 @@ class Camera1Manager(context: Context, container: ViewGroup) : BaseCameraManager
     }
 
     override fun doCloseCamera() {
-        camera?.stopPreview(); camera?.release(); camera = null
+        camera?.stopPreview();
+        camera?.release();
+        camera = null
     }
 
     override fun doSwitchCamera() {
         currentCameraId = if (currentCameraId == Camera.CameraInfo.CAMERA_FACING_BACK) Camera.CameraInfo.CAMERA_FACING_FRONT else Camera.CameraInfo.CAMERA_FACING_BACK
-        doCloseCamera(); doOpenCamera()
+        CoroutineHelper.IO.launch {
+            doCloseCamera()
+            delay(1000)
+            doOpenCamera()
+        }
     }
 
     override fun doSetFlashMode(mode: FlashMode) {
@@ -158,7 +177,7 @@ class Camera1Manager(context: Context, container: ViewGroup) : BaseCameraManager
         })
     }
 
-    override fun doStartRecording(file: File, maxDurationMillis: Long, callback: RecordCallback) {
+    override fun doStartRecording(file: File, maxDurationMillis: Long, callback: CameraResultCallback) {
         this.recordCallback = callback
         this.videoFile = file
         camera?.unlock()

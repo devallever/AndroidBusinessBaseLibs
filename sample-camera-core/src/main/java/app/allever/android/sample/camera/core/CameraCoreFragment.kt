@@ -6,10 +6,9 @@ import app.allever.android.lib.camera.proxy.camera2.Camera2Manager
 import app.allever.android.lib.camera.proxy.camerax.CameraXManager
 import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.camera.AspectRatio
-import app.allever.android.lib.core.camera.Camera1Manager
+import app.allever.android.lib.core.camera.manager.Camera1Manager
 import app.allever.android.lib.core.camera.CameraResultCallback
 import app.allever.android.lib.core.camera.FlashMode
-import app.allever.android.lib.core.camera.RecordCallback
 import app.allever.android.lib.core.camera.VideoQuality
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
@@ -87,7 +86,7 @@ class CameraCoreFragment : BaseFragment<FragmentCameraCoreBinding, BaseViewModel
                                 "yyyyMMddHHmmss"
                             )
                         }.mp4"
-                    ), 0, object : RecordCallback {
+                    ), 0, object : CameraResultCallback {
                         override fun onProgress(millis: Long) {
                             val time = TimeUtils.formatTime(millis, "mm:ss")
                             tvRecordTime.text = time

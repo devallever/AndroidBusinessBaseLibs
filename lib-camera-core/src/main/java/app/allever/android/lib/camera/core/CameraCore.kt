@@ -1,38 +1,38 @@
 package app.allever.android.lib.camera.core
 
 
-object CameraManager: ICameraEngine {
+object CameraCore: ICameraEngine {
     private var engine: ICameraEngine = CameraEngine()
     fun setupEngine(engine: ICameraEngine) {
         this.engine = engine
     }
 
     override fun openCamera(cameraFacing: CameraFacing) {
-        engine?.openCamera(cameraFacing)
+        engine.openCamera(cameraFacing)
     }
 
     override fun closeCamera() {
-        engine?.closeCamera()
+        engine.closeCamera()
     }
 
     override fun switchCamera() {
-        engine?.switchCamera()
+        engine.switchCamera()
     }
 
     override fun takePicture(resultCallback: ResultCallback?) {
-        engine?.takePicture(resultCallback)
+        engine.takePicture(resultCallback)
     }
 
     override fun startRecordVideo(resultCallback: ResultCallback?) {
-        engine?.startRecordVideo(resultCallback)
+        engine.startRecordVideo(resultCallback)
     }
 
     override fun stopRecordVideo() {
-        engine?.stopRecordVideo()
+        engine.stopRecordVideo()
     }
 
     override fun release() {
-
+        engine.release()
     }
 
 }
