@@ -1,14 +1,18 @@
 package app.allever.android.sample.video.editor
 
+import androidx.lifecycle.lifecycleScope
 import app.allever.android.lib.common.ListActivity
 import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.ActivityListBinding
 import app.allever.android.lib.core.helper.ActivityHelper
+import com.allever.video.editor.app.AppApplication
 import com.therouter.router.Route
 import com.allever.video.editor.ui.AlbumActivity
 import com.chad.library.adapter.base.BaseQuickAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Route(path = "/videoeditor/main")
 class SampleVideoEditorActivity: ListActivity<ActivityListBinding, ListViewModel, TextClickItem>() {
@@ -23,4 +27,11 @@ class SampleVideoEditorActivity: ListActivity<ActivityListBinding, ListViewModel
             ActivityHelper.startActivity<AlbumActivity>()
         })
     )
+
+    override fun init() {
+        super.init()
+        lifecycleScope.launch(Dispatchers.IO) {
+            AppApplication.onCreate()
+        }
+    }
 }

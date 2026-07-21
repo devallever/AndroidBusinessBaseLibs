@@ -32,7 +32,12 @@ object AppApplication {
      * 首次启动，数据延时初始化时间
      */
     private val DATA_INIT_DELAY_TIME = 2000
+    private var isInit = false
     fun onCreate() {
+        if (isInit) {
+            return
+        }
+        isInit = true
         try {
             com.android.absbase.App.setContext(App.context)
             AppUtils.getVersionCode(App.context)

@@ -75,9 +75,9 @@ data class Profile(
         var rx: Long = 0,
         var userOrder: Long = 0,
 
-        @Ignore // not persisted in db, only used by direct boot
-        var dirty: Boolean = false
 ) : Parcelable, Serializable {
+    @Ignore // not persisted in db, only used by direct boot
+    var dirty: Boolean = false
     enum class SubscriptionStatus(val persistedValue: Int) {
         UserConfigured(0),
         Active(1),

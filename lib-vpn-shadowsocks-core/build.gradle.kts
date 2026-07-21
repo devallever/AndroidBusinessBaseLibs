@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
     id("kotlin-parcelize")
 //    id("org.jetbrains.kotlin.plugin.parcelize")
 }
@@ -14,14 +14,9 @@ android {
     namespace = modelPkg
 
     defaultConfig {
-        kapt {
-            //kapt 处理 AIDL 生成的 TrafficStats.java 时，遇到 Kotlin 元数据注解中引用的类不存在（ @error.NonExistentClass() ），导致编译失败。
-            //kapt 在处理 AIDL 生成的 Java 文件时，遇到了不存在的注解类。最简单的修复方式是启用 correctErrorTypes ：
-            correctErrorTypes = true
-            arguments {
-                arg("room.incremental", true)
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+            arg("room.incremental", "true")
         }
     }
 
@@ -51,7 +46,7 @@ dependencies {
     //room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
     //work
     api(libs.androidx.work.multiprocess)
     api(libs.androidx.work.runtime.ktx)

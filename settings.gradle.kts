@@ -151,3 +151,7 @@ include(":sample-app-ffmpeg-command")
 include(":sample-app-text-translator")
 include(":sample-app-text-card")
 include(":lib-camera-core")
+
+
+// 开启文件系统监听，加速增量构建
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") // 类型安全的项目访问器（可选，方便写代码）

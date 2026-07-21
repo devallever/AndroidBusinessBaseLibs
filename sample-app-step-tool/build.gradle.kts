@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
 //    id("org.jetbrains.kotlin.plugin.serialization")
     alias(libs.plugins.kotlin.serialization)
 }
@@ -50,7 +50,7 @@ dependencies {
     //Room
     implementation (libs.androidx.room.runtime)
     implementation (libs.androidx.room.ktx)
-    kapt (libs.androidx.room.compiler)
+    ksp (libs.androidx.room.compiler)
 
     implementation(libs.ktx.serialization)
 

@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.android.library) apply false
+// ✅ 改用版本目录别名，不要再硬编码版本号
+    alias(libs.plugins.ksp) apply false
 }
 
 buildscript {
@@ -28,7 +30,7 @@ subprojects {
 
 fun Project.configureAndroidLibrary() {
     val libs = the<VersionCatalogsExtension>().named("libs")
-    
+
     extensions.configure<com.android.build.api.dsl.LibraryExtension> {
         compileSdk = libs.findVersion("compileSdk").get().requiredVersion.toInt()
 
@@ -58,7 +60,7 @@ fun Project.configureAndroidLibrary() {
             buildConfig = true
         }
     }
-    
+
     // 配置 Kotlin 编译选项
     plugins.withId("org.jetbrains.kotlin.android") {
         extensions.configure<org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension> {
@@ -67,10 +69,10 @@ fun Project.configureAndroidLibrary() {
             }
         }
     }
-    
-    // 如果使用了 kapt，配置 TheRouter 注解处理器
-    plugins.withId("org.jetbrains.kotlin.kapt") {
-        configureTheRouter()
+
+    // ✅ 如果使用了 KSP，配置 TheRouter KSP 处理器
+    plugins.withId("com.google.devtools.ksp") {
+        configureTheRouterWithKsp()
     }
 }
 
@@ -87,6 +89,12 @@ fun Project.configureAndroidApplication() {
         }
 
         buildTypes {
+            debug {
+                isMinifyEnabled = false
+                // ✅ TheRouter 增量编译开关
+                extra["enableTheRouterIncremental"] = true
+            }
+
             release {
                 isMinifyEnabled = false
                 proguardFiles(
@@ -104,6 +112,7 @@ fun Project.configureAndroidApplication() {
         buildFeatures {
             viewBinding = true
             buildConfig = true
+            prefab = false
         }
     }
 
@@ -116,16 +125,19 @@ fun Project.configureAndroidApplication() {
         }
     }
 
-    // 如果使用了 kapt，配置 TheRouter 注解处理器
-    plugins.withId("org.jetbrains.kotlin.kapt") {
-        configureTheRouter()
+    // ✅ 如果使用了 KSP，配置 TheRouter KSP 处理器
+    plugins.withId("com.google.devtools.ksp") {
+        configureTheRouterWithKsp()
     }
 }
 
-fun Project.configureTheRouter() {
+// ✅ 新的 KSP 配置函数（替代原来的 configureTheRouter）
+fun Project.configureTheRouterWithKsp() {
     val libs = the<VersionCatalogsExtension>().named("libs")
     dependencies {
+        // TheRouter 核心库
         "implementation"(libs.findLibrary("therouter.router").get())
-        "kapt"(libs.findLibrary("therouter.apt").get())
+        // ✅ 使用 KSP 替代 KAPT
+        "ksp"(libs.findLibrary("therouter.apt").get())
     }
 }
