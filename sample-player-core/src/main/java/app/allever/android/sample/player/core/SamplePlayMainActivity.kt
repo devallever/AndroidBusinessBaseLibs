@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import app.allever.android.lib.common.SampleMainActivity
 import app.allever.android.lib.common.databinding.ActivitySampleMainBinding
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import com.therouter.router.Route
+import app.allever.android.lib.router.annotation.Route
 
 @Route(path = "/player/main")
 class SamplePlayMainActivity: SampleMainActivity<ActivitySampleMainBinding, BaseViewModel>() {

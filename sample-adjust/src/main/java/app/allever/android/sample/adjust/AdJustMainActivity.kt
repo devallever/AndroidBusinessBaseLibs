@@ -5,7 +5,7 @@ import androidx.lifecycle.lifecycleScope
 import app.allever.android.lib.common.BaseActivity
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.adjust.databinding.ActivityAdjustMainBinding
-import com.therouter.router.Route
+import app.allever.android.lib.router.annotation.Route
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

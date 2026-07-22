@@ -7,7 +7,7 @@ import app.allever.android.lib.core.app.App
 import app.allever.android.lib.imageloader.core.ImageLoaderCore
 import app.allever.android.lib.imageloader.engine.glide.GlideLoader
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import com.therouter.router.Route
+import app.allever.android.lib.router.annotation.Route
 import com.vanniktech.emoji.EmojiManager
 import skin.support.SkinCompatManager
 import skin.support.app.SkinAppCompatViewInflater

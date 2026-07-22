@@ -8,7 +8,7 @@ import app.allever.android.lib.common.adapter.bean.TextClickItem
 import app.allever.android.lib.common.databinding.ActivityListBinding
 import app.allever.android.lib.core.helper.ActivityHelper
 import com.allever.video.editor.app.AppApplication
-import com.therouter.router.Route
+import app.allever.android.lib.router.annotation.Route
 import com.allever.video.editor.ui.AlbumActivity
 import com.chad.library.adapter.base.BaseQuickAdapter
 import kotlinx.coroutines.Dispatchers

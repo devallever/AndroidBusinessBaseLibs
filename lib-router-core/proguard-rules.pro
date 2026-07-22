@@ -1,0 +1,4 @@
+-keep class app.allever.android.lib.router.** { *; }
+-keep class app.allever.android.lib.router.annotation.** { *; }
+-keep class app.allever.android.lib.router.module.** { *; }
+-keep class app.allever.android.lib.router.RouterInitializerImpl { *; }

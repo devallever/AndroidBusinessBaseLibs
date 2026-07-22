@@ -6,7 +6,6 @@ import app.flash.tunnel.vpn.TunnelApp
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.ShadowsSocksConfig
 import com.step.wincash.base.BaseApplication
-import com.therouter.TheRouter
 
 class MyApp: App() {
 
@@ -18,9 +17,6 @@ class MyApp: App() {
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
-        // TheRouter 推荐在 attachBaseContext 中尽早设置 Debug 模式
-        // 框架具备自动初始化能力，无需手动调用 init
-        TheRouter.isDebug = (DEBUG)
         base?.let { BaseApplication.attachBaseContext(it) }
     }
 

@@ -2,7 +2,7 @@ package app.allever.android.sample.mvvm
 
 import app.allever.android.lib.mvvm.base.BaseMvvmActivity
 import app.allever.android.sample.mvvm.databinding.ActivityMvvmMainBinding
-import com.therouter.router.Route
+import app.allever.android.lib.router.annotation.Route
 
 @Route(path = "/mvvm/main")
 class MvvmActivity : BaseMvvmActivity<ActivityMvvmMainBinding, MainViewModel>() {

@@ -10,7 +10,7 @@ import app.allever.android.lib.core.helper.ActivityHelper
 import app.android.allever.gp.quick.project.NSTLoadingActivity
 import app.android.allever.gp.quick.project.MyApp
 import app.android.allever.gp.quick.project.ui.NSTHomeActivity
-import com.therouter.router.Route
+import app.allever.android.lib.router.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 @Route(path = "/netspeedtest/main")

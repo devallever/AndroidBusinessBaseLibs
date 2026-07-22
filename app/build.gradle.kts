@@ -1,9 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-//    id("com.google.devtools.ksp")
-//    id("applovin-quality-service")//编译时检查key安全
-    id("therouter")
     id("com.google.devtools.ksp")
 }
 

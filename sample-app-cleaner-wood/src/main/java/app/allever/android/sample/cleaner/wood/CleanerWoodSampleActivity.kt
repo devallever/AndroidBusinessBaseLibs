@@ -7,7 +7,7 @@ import app.allever.android.lib.common.adapter.TextDetailClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextDetailClickItem
 import app.allever.android.lib.common.databinding.ActivityListBinding
 import app.allever.android.lib.core.helper.ActivityHelper
-import com.therouter.router.Route
+import app.allever.android.lib.router.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.clean.wood.MainActivity
 import com.clean.wood.SplashActivity

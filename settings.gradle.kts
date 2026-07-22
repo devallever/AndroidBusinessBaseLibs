@@ -64,6 +64,9 @@ dependencyResolutionManagement {
 rootProject.name = "AndroidBusinessBaseLibs"
 include(":app")
 include(":core")
+include(":lib-router-annotation")
+include(":lib-router-core")
+include(":lib-router-compiler")
 include(":lib-mvvm")
 include(":lib-ad-core")
 include(":lib-ad-provider-admob")

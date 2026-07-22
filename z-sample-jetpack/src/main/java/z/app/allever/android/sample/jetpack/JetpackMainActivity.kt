@@ -7,7 +7,7 @@ import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.lib.network.core.NetCore
 import app.allever.android.lib.network.core.engine.huc.UrlConnectionConfig
 import app.allever.android.lib.network.core.engine.huc.UrlConnectionEngine
-import com.therouter.router.Route
+import app.allever.android.lib.router.annotation.Route
 import z.app.allever.android.sample.jetpack.network.BaseResponse
 
 @Route(path = "/zjetpack/main")

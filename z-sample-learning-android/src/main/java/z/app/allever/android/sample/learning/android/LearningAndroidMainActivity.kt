@@ -6,7 +6,7 @@ import app.allever.android.lib.common.SampleMainActivity
 import app.allever.android.lib.common.databinding.ActivitySampleMainBinding
 import app.allever.android.lib.core.helper.FragmentHelper
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import com.therouter.router.Route
+import app.allever.android.lib.router.annotation.Route
 
 @Route(path = "/zlearningandroid/main")
 class LearningAndroidMainActivity :
