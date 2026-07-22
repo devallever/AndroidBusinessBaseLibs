@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import app.allever.android.lib.core.ext.toast
 
 object Router {
 
@@ -100,7 +101,8 @@ class RouteRequest(private val path: String) {
                 context.overridePendingTransition(enterAnim, exitAnim)
             }
         } else {
-            throw RouteNotFoundException(path)
+//            throw RouteNotFoundException(path)
+            toast("未找到该页面: $path")
         }
     }
 
