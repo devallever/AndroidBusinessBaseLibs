@@ -1,23 +1,15 @@
 package com.allever.business.lib.project
 
-import android.content.Context
 import app.allever.android.lib.core.app.App
 import app.flash.tunnel.vpn.TunnelApp
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.ShadowsSocksConfig
-import com.step.wincash.base.BaseApplication
 
 class MyApp: App() {
 
     override fun onCreate() {
         super.onCreate()
         TunnelApp.onCreate()
-        BaseApplication.onCreate()
-    }
-
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-        base?.let { BaseApplication.attachBaseContext(it) }
     }
 
     override fun init() {

@@ -14,7 +14,7 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
 
     override fun getList() = mutableListOf(
         TextDetailClickItem("基础组件示例代码") {
-            FragmentActivity.start<BasicFragment>(it.title)
+            FragmentActivity.start<LibListFragment>(it.title)
         },
         TextDetailClickItem("广告组件", "sample-ad-core") {
             Navi.navigateTo(RouterPath.PATH_SAMPLE_AD_CORE)

@@ -33,7 +33,9 @@ object BaseApplication {
     lateinit var instance: Application
     val timer by lazy { TimerUtil() }
 
-    fun attachBaseContext(base: Context) {
+    var isInit = false
+
+    private fun attachBaseContext(base: Context) {
         SpUtil.init(base)
         // 初始化语言设置
         val context = LanguageUtils.initLanguage(base)
@@ -41,6 +43,11 @@ object BaseApplication {
     }
 
     fun onCreate() {
+        if (isInit) {
+             return
+        }
+        isInit = true
+        attachBaseContext(App.context)
         // 为不同进程设置不同的WebView数据目录，避免多进程冲突
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val processName = Application.getProcessName()

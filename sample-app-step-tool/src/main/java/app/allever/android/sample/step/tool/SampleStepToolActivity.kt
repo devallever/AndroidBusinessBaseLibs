@@ -8,6 +8,7 @@ import app.allever.android.lib.common.databinding.ActivityListBinding
 import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.router.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.step.wincash.base.BaseApplication
 import com.step.wincash.ui.activity.STLaunchActivity
 import com.step.wincash.ui.activity.STMainActivity
 
@@ -25,4 +26,9 @@ class SampleStepToolActivity : ListActivity<ActivityListBinding, ListViewModel, 
             ActivityHelper.startActivity<STMainActivity>()
         }),
     )
+
+    override fun init() {
+        super.init()
+        BaseApplication.onCreate()
+    }
 }
