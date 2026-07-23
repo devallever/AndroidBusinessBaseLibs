@@ -31,7 +31,7 @@ import java.util.LinkedList
 object ActivityHelper {
 
     private val activityList = LinkedList<WeakReference<Activity>?>()
-    private var weakReference: WeakReference<Activity>? = null
+    private var topActivity: WeakReference<Activity>? = null
 
     fun size(): Int {
         return activityList.size
@@ -51,9 +51,14 @@ object ActivityHelper {
         log("remove activity reference $result")
     }
 
-    @Deprecated("")
-    fun setCurrent(activity: Activity) {
-        weakReference = WeakReference(activity)
+    fun onResume(activity: Activity) {
+        topActivity = WeakReference(activity)
+        log("top activity = ${activity.javaClass.simpleName}")
+    }
+
+    fun onStoped() {
+        topActivity?.clear()
+        topActivity = null
     }
 
     fun finishAll() {
@@ -93,7 +98,7 @@ object ActivityHelper {
     }
 
     fun getTopActivity(): Activity? {
-        return weakReference?.get() ?: if (activityList.isNotEmpty()) {
+        return topActivity?.get() ?: if (activityList.isNotEmpty()) {
             return activityList[0]?.get()
         } else {
             null

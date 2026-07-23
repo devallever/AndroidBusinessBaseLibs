@@ -13,6 +13,7 @@ import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.ext.toastDebug
 import app.allever.android.lib.core.function.crash.Cockroach
 import app.allever.android.lib.core.function.crash.ExceptionHandler
+import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.core.helper.ProcessHelper
 import app.allever.android.lib.core.widget.swipebacklayout.BGASwipeBackHelper
 
@@ -122,6 +123,7 @@ abstract class App : Application() {
 
             override fun onActivityResumed(activity: Activity) {
                 log("onActivityResumed: ${activity::class.java.simpleName}")
+                ActivityHelper.onResume(activity)
             }
 
             override fun onActivityPaused(activity: Activity) {
@@ -132,6 +134,7 @@ abstract class App : Application() {
                 activityCount--
                 log("onActivityStopped: ${p0.javaClass.simpleName}, count = ${activityCount}")
                 alreadyInBackground = activityCount == 0
+                ActivityHelper.onStoped()
             }
 
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
