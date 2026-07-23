@@ -48,6 +48,7 @@ import java.io.FileInputStream
  * 支持的数据源：String(URL/文件路径), Int(ResId), Uri, File, Bitmap, Drawable
  */
 @SuppressLint("StaticFieldLeak")
+@Deprecated("使用CoilLoader")
 object DefaultLoader : ILoader {
 
     private val TAG = "ImageLoader-DefaultLoader"

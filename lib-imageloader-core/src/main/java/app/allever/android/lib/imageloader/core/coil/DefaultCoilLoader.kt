@@ -1,27 +1,21 @@
-package app.allever.android.lib.imageloader.engine.coil
+package app.allever.android.lib.imageloader.core.coil
 
 import android.app.Application
 import android.content.Context
 import android.graphics.Color
-import android.os.Build.VERSION.SDK_INT
 import android.widget.ImageView
 import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.imageloader.core.ILoader
-import app.allever.android.lib.imageloader.core.coil.BlurTransformation
-import app.allever.android.lib.imageloader.core.coil.BorderCircleTransformation
 import coil.Coil
 import coil.ImageLoader
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
-import coil.decode.SvgDecoder
 import coil.load
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import java.io.File
 
-object CoilLoader : ILoader {
+object DefaultCoilLoader : ILoader {
 
-    private val TAG = "ImageLoader-CoilLoader"
+    private val TAG = "ImageLoader-DefaultCoilLoader"
     private var isInit = false;
 
     override fun init(context: Context) {
@@ -110,13 +104,13 @@ object CoilLoader : ILoader {
 fun Application.initCoil(): ImageLoader {
     return ImageLoader.Builder(this)
         .components {
-            if (SDK_INT >= 28) {
-                add(ImageDecoderDecoder.Factory())
-            } else {
-                add(GifDecoder.Factory())
-            }
+//            if (SDK_INT >= 28) {
+//                add(ImageDecoderDecoder.Factory())
+//            } else {
+//                add(GifDecoder.Factory())
+//            }
 
-            add(SvgDecoder.Factory())
+//            add(SvgDecoder.Factory())
 //            add(VideoFrameDecoder.Factory())
         }
         .crossfade(true)

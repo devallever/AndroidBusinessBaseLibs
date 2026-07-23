@@ -12,6 +12,5 @@ android {
 
 dependencies {
     api(project(":core"))
-    implementation(libs.androidx.appcompat)
-    implementation(libs.kotlinx.coroutines.android)
+    api(libs.coil)
 }

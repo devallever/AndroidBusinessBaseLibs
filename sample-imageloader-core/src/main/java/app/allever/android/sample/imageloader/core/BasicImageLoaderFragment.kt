@@ -5,6 +5,7 @@ import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.imageloader.core.internal.DefaultLoader
 import app.allever.android.lib.imageloader.core.ImageLoaderCore
+import app.allever.android.lib.imageloader.core.coil.DefaultCoilLoader
 import app.allever.android.lib.imageloader.core.load
 import app.allever.android.lib.imageloader.core.loadBlur
 import app.allever.android.lib.imageloader.core.loadCircle
@@ -48,10 +49,10 @@ class BasicImageLoaderFragment: BaseFragment<FragmentBasicLoaderBinding, BaseVie
             ImageLoaderCore.init(requireContext(), CoilLoader, ImageLoaderCore.Builder.create())
             loadAllImage()
         }
-//        mBinding.btnDefault.setOnClickListener {
-//            ImageLoaderCore.init(requireContext(), DefaultLoader, ImageLoaderCore.Builder.create())
-//            loadAllImage()
-//        }
+        mBinding.btnDefault.setOnClickListener {
+            ImageLoaderCore.init(requireContext(), DefaultCoilLoader, ImageLoaderCore.Builder.create())
+            loadAllImage()
+        }
 
         mBinding.btnSelectFile.setOnClickListener {
             MediaPickerCore.launchImage(imageLauncher)
@@ -75,7 +76,7 @@ class BasicImageLoaderFragment: BaseFragment<FragmentBasicLoaderBinding, BaseVie
             // 圆角
             ivNetRound.loadRound(TEST_IMAGE_URL, 20f)
             // 圆形
-            ivNetCircle.loadCircle(TEST_IMAGE_URL, 20, Color.parseColor("#000000"))
+            ivNetCircle.loadCircle(TEST_IMAGE_URL, 1, Color.parseColor("#ffffff"))
             // 模糊
             ivBlur.loadBlur(TEST_IMAGE_URL, 20f)
             //gif

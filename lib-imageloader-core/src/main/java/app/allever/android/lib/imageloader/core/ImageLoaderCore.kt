@@ -11,7 +11,7 @@ import app.allever.android.lib.core.helper.CoroutineHelper
 import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.core.util.FileUtils
 import app.allever.android.lib.core.util.MD5
-import app.allever.android.lib.imageloader.core.internal.DefaultLoader
+import app.allever.android.lib.imageloader.core.coil.DefaultCoilLoader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,7 +19,7 @@ import java.io.File
 
 object ImageLoaderCore {
 
-    private var mLoaderEngine: ILoader = DefaultLoader
+    private var mLoaderEngine: ILoader = DefaultCoilLoader
     private var mBuilder: Builder? = Builder()
 
     private val mDownloadRequestSet = mutableSetOf<String>()
