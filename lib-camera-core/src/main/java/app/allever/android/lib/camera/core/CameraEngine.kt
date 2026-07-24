@@ -1,6 +1,13 @@
 package app.allever.android.lib.camera.core
 
+import android.view.View
+
 class CameraEngine: BaseCameraEngine() {
+    override fun bindPreview(view: View) {
+
+    }
+
+
     override fun openCamera(cameraFacing: CameraFacing) {
 
     }
