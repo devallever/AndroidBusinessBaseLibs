@@ -1,32 +1,20 @@
 package app.allever.android.lib.camera.core
 
 import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
 import android.graphics.Point
 import android.graphics.SurfaceTexture
 import android.hardware.Camera
 import android.hardware.Camera.CameraInfo
-import android.media.CamcorderProfile
 import android.media.MediaRecorder
-import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
 import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.TextureView
-import android.view.View
 import android.view.WindowManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Suppress("DEPRECATION")
 class CameraEngine : BaseCameraEngine() {
@@ -36,8 +24,6 @@ class CameraEngine : BaseCameraEngine() {
     private var mSurfaceTexture: SurfaceTexture? = null
     private var mPreviewSize: Camera.Size? = null
     private var mPreviewSurface: Surface? = null
-    private var mVideoCallback: ResultCallback? = null
-    private var mCurrentVideoFile: File? = null
 
     override fun openCamera(cameraFacing: CameraFacing) {
         currentFacing = cameraFacing
@@ -49,14 +35,13 @@ class CameraEngine : BaseCameraEngine() {
             }
 
             val cameraId = if (cameraFacing == CameraFacing.FACE_BACK) {
-                Camera.CameraInfo.CAMERA_FACING_BACK
+                CameraInfo.CAMERA_FACING_BACK
             } else {
-                Camera.CameraInfo.CAMERA_FACING_FRONT
+                CameraInfo.CAMERA_FACING_FRONT
             }
 
             try {
                 mCamera = Camera.open(cameraId)
-
                 if (mCamera == null) {
                     updateState(CameraState.IDLE)
                     return@launchCameraTask
@@ -64,7 +49,6 @@ class CameraEngine : BaseCameraEngine() {
 
                 val camera = mCamera!!
                 val params = camera.parameters
-
                 params.previewFormat = ImageFormat.NV21
 
                 val bestPreviewSize = getBestSupportedSize(params.supportedPreviewSizes, Point(1920, 1080))
@@ -76,15 +60,12 @@ class CameraEngine : BaseCameraEngine() {
                 val supportedFocusModes = params.supportedFocusModes
                 if (supportedFocusModes.isNotEmpty()) {
                     when {
-                        supportedFocusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE) -> {
+                        supportedFocusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE) ->
                             params.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
-                        }
-                        supportedFocusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO) -> {
+                        supportedFocusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO) ->
                             params.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO
-                        }
-                        supportedFocusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO) -> {
+                        supportedFocusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO) ->
                             params.focusMode = Camera.Parameters.FOCUS_MODE_AUTO
-                        }
                     }
                 }
 
@@ -97,8 +78,7 @@ class CameraEngine : BaseCameraEngine() {
 
                 camera.parameters = params
 
-                val view = getPreviewView()
-                when (view) {
+                when (val view = getPreviewView()) {
                     is SurfaceView -> {
                         mSurfaceHolder = view.holder
                         camera.setPreviewDisplay(mSurfaceHolder)
@@ -136,11 +116,6 @@ class CameraEngine : BaseCameraEngine() {
         }
     }
 
-    override fun switchCamera() {
-        val newFacing = if (currentFacing == CameraFacing.FACE_BACK) CameraFacing.FACE_FRONT else CameraFacing.FACE_BACK
-        openCamera(newFacing)
-    }
-
     override fun takePicture(resultCallback: ResultCallback?) {
         if (!isPreviewing || mCamera == null || isCapturing) {
             resultCallback?.onFailure("Camera not ready")
@@ -151,40 +126,35 @@ class CameraEngine : BaseCameraEngine() {
         updateState(CameraState.TAKING_PHOTO)
 
         val cameraId = if (currentFacing == CameraFacing.FACE_BACK) {
-            Camera.CameraInfo.CAMERA_FACING_BACK
+            CameraInfo.CAMERA_FACING_BACK
         } else {
-            Camera.CameraInfo.CAMERA_FACING_FRONT
+            CameraInfo.CAMERA_FACING_FRONT
         }
 
-        mCamera?.takePicture(
-            null,
-            null,
-            null,
-            Camera.PictureCallback { data, camera ->
-                launchCameraTask {
-                    try {
-                        var additionalDegree = 0
-                        if (currentFacing == CameraFacing.FACE_FRONT) {
-                            additionalDegree = 180
-                        }
-                        val degree = getDisplayOrientation(cameraId) + additionalDegree
-                        val rotatedData = rotateImage(data, degree)
-                        val photoFile = savePhotoToGallery(rotatedData)
-                        withContext(Dispatchers.Main) {
-                            resultCallback?.onSuccess(photoFile)
-                        }
-                    } catch (e: IOException) {
-                        withContext(Dispatchers.Main) {
-                            resultCallback?.onFailure("Failed to save photo: ${e.message}")
-                        }
-                    } finally {
-                        isCapturing = false
-                        updateState(CameraState.OPENED)
-                        camera.startPreview()
+        mCamera?.takePicture(null, null, null, Camera.PictureCallback { data, camera ->
+            launchCameraTask {
+                try {
+                    var additionalDegree = 0
+                    if (currentFacing == CameraFacing.FACE_FRONT) {
+                        additionalDegree = 180
                     }
+                    val degree = getDisplayOrientation(cameraId) + additionalDegree
+                    val rotatedData = rotateImageBytes(data, degree)
+                    val photoFile = savePhotoToGallery(rotatedData)
+                    withContext(Dispatchers.Main) {
+                        resultCallback?.onSuccess(photoFile)
+                    }
+                } catch (e: IOException) {
+                    withContext(Dispatchers.Main) {
+                        resultCallback?.onFailure("Failed to save photo: ${e.message}")
+                    }
+                } finally {
+                    isCapturing = false
+                    updateState(CameraState.OPENED)
+                    camera.startPreview()
                 }
             }
-        )
+        })
     }
 
     override fun startRecordVideo(resultCallback: ResultCallback?) {
@@ -193,8 +163,8 @@ class CameraEngine : BaseCameraEngine() {
             return
         }
 
-        mVideoCallback = resultCallback
-        mCurrentVideoFile = createVideoFile()
+        videoCallback = resultCallback
+        currentVideoFile = createVideoFile()
 
         if (!prepareMediaRecorder()) {
             resultCallback?.onFailure("Failed to prepare media recorder")
@@ -212,24 +182,22 @@ class CameraEngine : BaseCameraEngine() {
     }
 
     override fun stopRecordVideo() {
-        if (!isRecording || mMediaRecorder == null) {
-            return
-        }
+        if (!isRecording || mMediaRecorder == null) return
 
         try {
             mMediaRecorder?.stop()
-            mCurrentVideoFile?.let { file ->
+            currentVideoFile?.let { file ->
                 scanVideoToGallery(file)
-                mVideoCallback?.onSuccess(file)
+                videoCallback?.onSuccess(file)
             }
         } catch (e: Exception) {
-            mVideoCallback?.onFailure("Failed to stop recording: ${e.message}")
+            videoCallback?.onFailure("Failed to stop recording: ${e.message}")
         } finally {
             releaseMediaRecorder()
             isRecording = false
             updateState(CameraState.OPENED)
-            mVideoCallback = null
-            mCurrentVideoFile = null
+            videoCallback = null
+            currentVideoFile = null
         }
     }
 
@@ -240,8 +208,6 @@ class CameraEngine : BaseCameraEngine() {
         mSurfaceHolder = null
         mSurfaceTexture = null
         mPreviewSurface = null
-        mVideoCallback = null
-        mCurrentVideoFile = null
         resetState()
     }
 
@@ -263,50 +229,37 @@ class CameraEngine : BaseCameraEngine() {
     }
 
     private fun prepareMediaRecorder(): Boolean {
-        mCamera?.let { camera ->
-            mCurrentVideoFile?.let { videoFile ->
-                mMediaRecorder = MediaRecorder().apply {
-                    camera.unlock()
-                    setCamera(camera)
+        val camera = mCamera ?: return false
+        val videoFile = currentVideoFile ?: return false
 
-                    setAudioSource(MediaRecorder.AudioSource.CAMCORDER)
-                    setVideoSource(MediaRecorder.VideoSource.CAMERA)
+        mMediaRecorder = MediaRecorder().apply {
+            camera.unlock()
+            setCamera(camera)
+            setAudioSource(MediaRecorder.AudioSource.CAMCORDER)
+            setVideoSource(MediaRecorder.VideoSource.CAMERA)
 
-                    val profile = when (mConfig.videoQuality) {
-                        VideoQuality.SD_480P -> CamcorderProfile.get(CamcorderProfile.QUALITY_480P)
-                        VideoQuality.HD_720P -> CamcorderProfile.get(CamcorderProfile.QUALITY_720P)
-                        VideoQuality.FHD_1080P -> CamcorderProfile.get(CamcorderProfile.QUALITY_1080P)
-                        VideoQuality.UHD_4K -> CamcorderProfile.get(CamcorderProfile.QUALITY_2160P)
-                    }
-                    setProfile(profile)
+            val profile = getCamcorderProfile(mConfig.videoQuality)
+            setProfile(profile)
+            setOutputFile(videoFile.absolutePath)
 
-                    setOutputFile(videoFile.absolutePath)
+            mPreviewSurface?.let { setPreviewDisplay(it) }
 
-                    mPreviewSurface?.let {
-                        setPreviewDisplay(it)
-                    }
-
-                    if (mConfig.maxVideoDuration > 0) {
-                        setMaxDuration(mConfig.maxVideoDuration.toInt())
-                    }
-                }
-
-                try {
-                    mMediaRecorder?.prepare()
-                    return true
-                } catch (e: IOException) {
-                    releaseMediaRecorder()
-                    return false
-                }
+            if (mConfig.maxVideoDuration > 0) {
+                setMaxDuration(mConfig.maxVideoDuration.toInt())
             }
         }
-        return false
+
+        return try {
+            mMediaRecorder?.prepare()
+            true
+        } catch (e: IOException) {
+            releaseMediaRecorder()
+            false
+        }
     }
 
     private fun getBestSupportedSize(sizes: List<Camera.Size>, targetSize: Point): Camera.Size {
-        if (sizes.isEmpty()) {
-            return mCamera!!.parameters.previewSize
-        }
+        if (sizes.isEmpty()) return mCamera!!.parameters.previewSize
 
         val sortedSizes = sizes.sortedWith(compareByDescending { it.width * it.height })
         var bestSize = sortedSizes[0]
@@ -318,14 +271,12 @@ class CameraEngine : BaseCameraEngine() {
                 bestSize = size
             }
         }
-
         return bestSize
     }
 
     private fun getDisplayOrientation(cameraId: Int): Int {
         val view = getPreviewView() ?: return 90
-        val context = view.context
-        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val windowManager = view.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val rotation = windowManager.defaultDisplay.rotation
 
         var degrees = 0
@@ -339,106 +290,11 @@ class CameraEngine : BaseCameraEngine() {
         val info = CameraInfo()
         Camera.getCameraInfo(cameraId, info)
 
-        val result: Int
-        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-            result = (info.orientation + degrees) % 360
-            return (360 - result) % 360
+        return if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+            val result = (info.orientation + degrees) % 360
+            (360 - result) % 360
         } else {
-            return (info.orientation - degrees + 360) % 360
-        }
-    }
-
-    private fun rotateImage(data: ByteArray, degree: Int): ByteArray {
-        if (degree % 360 == 0) {
-            return data
-        }
-
-        val bitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
-        val matrix = android.graphics.Matrix()
-        matrix.postRotate(degree.toFloat())
-
-        val rotatedBitmap = Bitmap.createBitmap(
-            bitmap,
-            0,
-            0,
-            bitmap.width,
-            bitmap.height,
-            matrix,
-            true
-        )
-
-        bitmap.recycle()
-
-        val outputStream = java.io.ByteArrayOutputStream()
-        rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
-        rotatedBitmap.recycle()
-
-        return outputStream.toByteArray()
-    }
-
-    private fun createPhotoFile(): File {
-        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        return File(mConfig.photoSavePath, "IMG_$timestamp.jpg")
-    }
-
-    private fun createVideoFile(): File {
-        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        return File(mConfig.videoSavePath, "VID_$timestamp.mp4")
-    }
-
-    @Throws(IOException::class)
-    private fun savePhotoToGallery(data: ByteArray): File {
-        val view = getPreviewView() ?: throw IOException("Preview view is null")
-        val context = view.context
-        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val fileName = "IMG_$timestamp.jpg"
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val values = android.content.ContentValues().apply {
-                put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-                put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-                put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures/CameraCore")
-            }
-            context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)?.let { uri ->
-                context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                    outputStream.write(data)
-                }
-                val cursor = context.contentResolver.query(uri, arrayOf(MediaStore.MediaColumns.DATA), null, null, null)
-                cursor?.moveToFirst()?.let {
-                    val path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA))
-                    cursor.close()
-                    return File(path)
-                }
-                cursor?.close()
-            }
-        }
-
-        val photoFile = File(mConfig.photoSavePath, fileName)
-        FileOutputStream(photoFile).use { fos ->
-            fos.write(data)
-        }
-        val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-        mediaScanIntent.data = Uri.fromFile(photoFile)
-        context.sendBroadcast(mediaScanIntent)
-        return photoFile
-    }
-
-    private fun scanVideoToGallery(file: File) {
-        val view = getPreviewView() ?: return
-        val context = view.context
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val values = android.content.ContentValues().apply {
-                put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
-                put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4")
-                put(MediaStore.MediaColumns.RELATIVE_PATH, "Movies/CameraCore")
-                put(MediaStore.MediaColumns.DATA, file.absolutePath)
-            }
-            context.contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values)
-        } else {
-            val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-            mediaScanIntent.data = Uri.fromFile(file)
-            context.sendBroadcast(mediaScanIntent)
+            (info.orientation - degrees + 360) % 360
         }
     }
 }
