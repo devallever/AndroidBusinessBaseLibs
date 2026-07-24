@@ -43,6 +43,7 @@ class Camera2Engine : BaseCameraEngine() {
     private var cameraDevice: CameraDevice? = null
     private var captureSession: CameraCaptureSession? = null
     private var imageReader: ImageReader? = null
+    private var dummyReader: ImageReader? = null
     private var mediaRecorder: MediaRecorder? = null
     private var characteristics: CameraCharacteristics? = null
 
@@ -277,9 +278,19 @@ class Camera2Engine : BaseCameraEngine() {
             imageReader = ImageReader.newInstance(jpegSize.width, jpegSize.height, ImageFormat.JPEG, MAX_IMAGES)
             imageReader?.setOnImageAvailableListener({ reader -> handleImageAvailable(reader) }, imageHandler)
 
-            // 无预览时只加 ImageReader surface
             val targets = mutableListOf<Surface>()
-            getPreviewSurface()?.let { targets.add(it) }
+            val previewSurface = getPreviewSurface()
+            if (previewSurface != null) {
+                targets.add(previewSurface)
+            } else {
+                // 无预览：创建 dummy ImageReader 用于 AE/AF 收敛
+                dummyReader?.close()
+                dummyReader = ImageReader.newInstance(640, 480, ImageFormat.YUV_420_888, 2)
+                dummyReader?.setOnImageAvailableListener({ reader ->
+                    reader.acquireLatestImage()?.close()
+                }, imageHandler)
+                targets.add(dummyReader!!.surface)
+            }
             targets.add(imageReader!!.surface)
 
             camera.createCaptureSession(
@@ -305,17 +316,19 @@ class Camera2Engine : BaseCameraEngine() {
 
     private fun startPreview(session: CameraCaptureSession) {
         val previewSurface = getPreviewSurface()
-        if (previewSurface == null) {
-            // 无预览：不启动 repeating request，仅标记已就绪
-            isPreviewing = true
-            updateState(CameraState.OPENED)
+        val targetSurface = previewSurface ?: dummyReader?.surface
+
+        if (targetSurface == null) {
+            isPreviewing = false
+            updateState(CameraState.IDLE)
             return
         }
 
         try {
             val request = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)?.apply {
-                addTarget(previewSurface)
+                addTarget(targetSurface)
                 set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
+                set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON)
             }
             session.setRepeatingRequest(request!!.build(), null, mainHandler)
 
@@ -350,7 +363,18 @@ class Camera2Engine : BaseCameraEngine() {
         val camera = cameraDevice ?: return
         try {
             val targets = mutableListOf<Surface>()
-            getPreviewSurface()?.let { targets.add(it) }
+            val previewSurface = getPreviewSurface()
+            if (previewSurface != null) {
+                targets.add(previewSurface)
+            } else {
+                // 无预览：重建 dummy ImageReader
+                dummyReader?.close()
+                dummyReader = ImageReader.newInstance(640, 480, ImageFormat.YUV_420_888, 2)
+                dummyReader?.setOnImageAvailableListener({ reader ->
+                    reader.acquireLatestImage()?.close()
+                }, imageHandler)
+                targets.add(dummyReader!!.surface)
+            }
             imageReader?.surface?.let { targets.add(it) }
 
             camera.createCaptureSession(targets, object : CameraCaptureSession.StateCallback() {
@@ -416,6 +440,8 @@ class Camera2Engine : BaseCameraEngine() {
 
         imageReader?.close()
         imageReader = null
+        dummyReader?.close()
+        dummyReader = null
         characteristics = null
         isPreviewing = false
     }
