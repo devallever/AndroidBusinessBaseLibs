@@ -89,6 +89,11 @@ class CameraEngine : BaseCameraEngine() {
                         camera.setPreviewTexture(mSurfaceTexture)
                         mPreviewSurface = Surface(mSurfaceTexture)
                     }
+                    null -> {
+                        // 无预览：用 dummy SurfaceTexture 接收预览帧但不显示
+                        mSurfaceTexture = SurfaceTexture(0)
+                        camera.setPreviewTexture(mSurfaceTexture)
+                    }
                 }
 
                 camera.setDisplayOrientation(getDisplayOrientation(cameraId))

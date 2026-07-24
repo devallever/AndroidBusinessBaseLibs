@@ -94,6 +94,12 @@ class Camera2Engine : BaseCameraEngine() {
         currentFacing = cameraFacing
         closeCameraInternal()
 
+        // 无预览 View 时直接打开相机
+        if (getPreviewView() == null) {
+            doOpenCamera(cameraFacing)
+            return
+        }
+
         if (!isSurfaceReady) {
             pendingCameraFacing = cameraFacing
             return
@@ -263,11 +269,6 @@ class Camera2Engine : BaseCameraEngine() {
 
     private fun createPreviewSession(camera: CameraDevice) {
         try {
-            val previewSurface = getPreviewSurface() ?: run {
-                updateState(CameraState.IDLE)
-                return
-            }
-
             val configMap = characteristics?.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
             val jpegSize = configMap?.getOutputSizes(ImageFormat.JPEG)
                 ?.maxByOrNull { it.width * it.height } ?: Size(1920, 1080)
@@ -276,8 +277,13 @@ class Camera2Engine : BaseCameraEngine() {
             imageReader = ImageReader.newInstance(jpegSize.width, jpegSize.height, ImageFormat.JPEG, MAX_IMAGES)
             imageReader?.setOnImageAvailableListener({ reader -> handleImageAvailable(reader) }, imageHandler)
 
+            // 无预览时只加 ImageReader surface
+            val targets = mutableListOf<Surface>()
+            getPreviewSurface()?.let { targets.add(it) }
+            targets.add(imageReader!!.surface)
+
             camera.createCaptureSession(
-                listOf(previewSurface, imageReader!!.surface),
+                targets,
                 object : CameraCaptureSession.StateCallback() {
                     override fun onConfigured(session: CameraCaptureSession) {
                         captureSession = session
@@ -298,13 +304,15 @@ class Camera2Engine : BaseCameraEngine() {
     }
 
     private fun startPreview(session: CameraCaptureSession) {
-        try {
-            val previewSurface = getPreviewSurface() ?: run {
-                isPreviewing = false
-                updateState(CameraState.IDLE)
-                return
-            }
+        val previewSurface = getPreviewSurface()
+        if (previewSurface == null) {
+            // 无预览：不启动 repeating request，仅标记已就绪
+            isPreviewing = true
+            updateState(CameraState.OPENED)
+            return
+        }
 
+        try {
             val request = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)?.apply {
                 addTarget(previewSurface)
                 set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)

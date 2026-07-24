@@ -1,5 +1,6 @@
 package app.allever.android.lib.camera.core
 
+import android.content.Context
 import android.view.View
 
 interface ICameraEngine {
@@ -13,6 +14,9 @@ interface ICameraEngine {
     fun release()
     fun setConfig(config: CameraConfig)
     fun getState(): CameraState
+
+    /** 设置 Context，用于无预览场景。默认空实现，子类按需覆盖。 */
+    fun setContext(context: Context) {}
 
     /** 运行时切换闪光灯模式，无需重新打开相机。默认空实现，子类按需覆盖。 */
     fun setFlashMode(mode: FlashMode) {}

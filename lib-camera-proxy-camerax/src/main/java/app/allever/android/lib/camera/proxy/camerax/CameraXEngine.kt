@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.View
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.UseCase
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
@@ -48,8 +49,18 @@ class CameraXEngine : BaseCameraEngine() {
 
     override fun bindPreview(view: View) {
         super.bindPreview(view)
-        mLifecycleOwner = view.context as? LifecycleOwner
         mCameraExecutor = ContextCompat.getMainExecutor(view.context)
+        if (mLifecycleOwner == null) {
+            mLifecycleOwner = view.context as? LifecycleOwner
+        }
+    }
+
+    override fun setContext(context: android.content.Context) {
+        super.setContext(context)
+        mCameraExecutor = ContextCompat.getMainExecutor(context)
+        if (mLifecycleOwner == null) {
+            mLifecycleOwner = context as? LifecycleOwner
+        }
     }
 
     override fun openCamera(cameraFacing: CameraFacing) {
@@ -83,19 +94,25 @@ class CameraXEngine : BaseCameraEngine() {
             CameraSelector.DEFAULT_FRONT_CAMERA
         }
 
-        val previewView = getPreviewView() as? PreviewView ?: return
         val aspectRatio = AspectRatio.RATIO_16_9
+        val useCases = mutableListOf<UseCase>()
 
-        mPreview = Preview.Builder()
-            .setTargetAspectRatio(aspectRatio)
-            .build()
-            .also { it.setSurfaceProvider(previewView.surfaceProvider) }
+        // Preview 仅在有 PreviewView 时创建
+        val previewView = getPreviewView() as? PreviewView
+        if (previewView != null) {
+            mPreview = Preview.Builder()
+                .setTargetAspectRatio(aspectRatio)
+                .build()
+                .also { it.setSurfaceProvider(previewView.surfaceProvider) }
+            useCases.add(mPreview!!)
+        }
 
         mImageCapture = ImageCapture.Builder()
             .setTargetAspectRatio(aspectRatio)
             .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
             .setFlashMode(convertFlashMode(mConfig.flashMode))
             .build()
+        useCases.add(mImageCapture!!)
 
         val quality = when (mConfig.videoQuality) {
             VideoQuality.SD_480P -> Quality.SD
@@ -108,9 +125,10 @@ class CameraXEngine : BaseCameraEngine() {
             .setQualitySelector(QualitySelector.from(quality))
             .build()
         mVideoCapture = VideoCapture.withOutput(recorder)
+        useCases.add(mVideoCapture!!)
 
         try {
-            provider.bindToLifecycle(lifecycleOwner, mCameraSelector!!, mPreview, mImageCapture, mVideoCapture)
+            provider.bindToLifecycle(lifecycleOwner, mCameraSelector!!, *useCases.toTypedArray())
             isPreviewing = true
             updateState(CameraState.OPENED)
         } catch (e: Exception) {

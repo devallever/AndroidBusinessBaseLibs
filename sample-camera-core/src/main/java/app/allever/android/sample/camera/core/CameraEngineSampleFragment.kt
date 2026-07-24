@@ -11,6 +11,7 @@ import app.allever.android.lib.camera.core.PhotoResultCallback
 import app.allever.android.lib.camera.core.VideoResultCallback
 import app.allever.android.lib.camera.proxy.camera2.Camera2Engine
 import app.allever.android.lib.camera.proxy.camerax.CameraXEngine
+import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.imageloader.core.load
 import app.allever.android.lib.mvvm.base.BaseMvvmFragment
@@ -42,6 +43,7 @@ class CameraEngineSampleFragment : BaseMvvmFragment<FragmentCameraEngineBinding,
             .setCameraFacing(CameraFacing.FACE_BACK)
             .build()
         CameraCore.setConfig(config)
+        CameraCore.setContext(App.context)
 
         mBinding.btnOpenCamera.setOnClickListener {
             CameraCore.openCamera(CameraFacing.FACE_BACK)
@@ -82,13 +84,13 @@ class CameraEngineSampleFragment : BaseMvvmFragment<FragmentCameraEngineBinding,
 
     override fun onResume() {
         super.onResume()
-        mBinding.surfaceView.post {
-            if (engine == "camerax") {
-                CameraCore.bindPreview(mBinding.preview)
-            } else {
-                CameraCore.bindPreview(mBinding.surfaceView)
-            }
-        }
+//        mBinding.surfaceView.post {
+//            if (engine == "camerax") {
+//                CameraCore.bindPreview(mBinding.preview)
+//            } else {
+//                CameraCore.bindPreview(mBinding.surfaceView)
+//            }
+//        }
     }
 
     private fun takePicture() {

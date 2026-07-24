@@ -1,5 +1,6 @@
 package app.allever.android.lib.camera.core
 
+import android.content.Context
 import android.view.View
 
 object CameraCore : ICameraEngine {
@@ -55,5 +56,9 @@ object CameraCore : ICameraEngine {
 
     override fun setZoom(zoom: Float) {
         engine.setZoom(zoom)
+    }
+
+    override fun setContext(context: Context) {
+        engine.setContext(context)
     }
 }

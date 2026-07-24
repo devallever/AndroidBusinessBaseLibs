@@ -45,6 +45,9 @@ abstract class BaseCameraEngine : ICameraEngine {
     /** 媒体文件管理（组合） */
     protected var mediaSaver: MediaSaver? = null
 
+    /** 无预览场景下存储的 Context */
+    protected var appContext: Context? = null
+
     // ==================== 协程 ====================
 
     protected fun launchCameraTask(block: suspend () -> Unit) {
@@ -64,7 +67,15 @@ abstract class BaseCameraEngine : ICameraEngine {
 
     override fun bindPreview(view: View) {
         previewRef = WeakReference(view)
+        appContext = view.context
         mediaSaver = MediaSaver(view.context)
+    }
+
+    override fun setContext(context: Context) {
+        appContext = context
+        if (mediaSaver == null) {
+            mediaSaver = MediaSaver(context)
+        }
     }
 
     override fun setConfig(config: CameraConfig) {
@@ -105,7 +116,7 @@ abstract class BaseCameraEngine : ICameraEngine {
     }
 
     protected fun getContext(): Context? {
-        return previewRef?.get()?.context
+        return previewRef?.get()?.context ?: appContext
     }
 
     // ==================== 文件创建（委托 MediaSaver）====================
