@@ -147,9 +147,9 @@ class CameraXEngine : BaseCameraEngine() {
         isPreviewing = false
     }
 
-    override fun takePicture(resultCallback: PhotoResultCallback?) {
+    override fun takePicture(callback: PhotoResultCallback?) {
         if (!isPreviewing || mImageCapture == null || isCapturing) {
-            resultCallback?.onFailure("Camera not ready")
+            callback?.onFailure("Camera not ready")
             return
         }
 
@@ -165,11 +165,11 @@ class CameraXEngine : BaseCameraEngine() {
                     try {
                         scanPhotoToGallery(photoFile)
                         withContext(Dispatchers.Main) {
-                            resultCallback?.onSuccess(photoFile)
+                            callback?.onSuccess(photoFile)
                         }
                     } catch (e: Exception) {
                         withContext(Dispatchers.Main) {
-                            resultCallback?.onFailure("Failed to save photo: ${e.message}")
+                            callback?.onFailure("Failed to save photo: ${e.message}")
                         }
                     } finally {
                         isCapturing = false
@@ -181,20 +181,20 @@ class CameraXEngine : BaseCameraEngine() {
             override fun onError(exc: ImageCaptureException) {
                 isCapturing = false
                 updateState(CameraState.OPENED)
-                resultCallback?.onFailure(exc.message ?: "Capture failed")
+                callback?.onFailure(exc.message ?: "Capture failed")
             }
         })
     }
 
     @SuppressLint("MissingPermission")
-    override fun startRecordVideo(resultCallback: VideoResultCallback?) {
+    override fun startRecordVideo(callback: VideoResultCallback?) {
         if (!isPreviewing || mVideoCapture == null || isRecording) {
-            resultCallback?.onFailure("Camera not ready")
+            callback?.onFailure("Camera not ready")
             return
         }
 
         val context = getContext() ?: return
-        videoCallback = resultCallback
+        videoCallback = callback
         currentVideoFile = createVideoFile()
 
         try {
@@ -231,7 +231,7 @@ class CameraXEngine : BaseCameraEngine() {
             isRecording = true
             updateState(CameraState.RECORDING)
         } catch (e: Exception) {
-            resultCallback?.onFailure("Failed to start recording: ${e.message}")
+            callback?.onFailure("Failed to start recording: ${e.message}")
             mCurrentRecording = null
             videoCallback = null
             currentVideoFile = null

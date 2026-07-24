@@ -11,15 +11,15 @@ import app.allever.android.lib.camera.core.PhotoResultCallback
 import app.allever.android.lib.camera.core.VideoResultCallback
 import app.allever.android.lib.camera.proxy.camera2.Camera2Engine
 import app.allever.android.lib.camera.proxy.camerax.CameraXEngine
+import app.allever.android.lib.common.BaseFragment
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.imageloader.core.load
-import app.allever.android.lib.mvvm.base.BaseMvvmFragment
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import app.allever.android.sample.camera.core.databinding.FragmentCameraEngineBinding
 import java.io.File
 
-class CameraEngineSampleFragment : BaseMvvmFragment<FragmentCameraEngineBinding, CameraEngineViewModel>() {
+class CameraEngineSampleFragment : BaseFragment<FragmentCameraEngineBinding, BaseViewModel>() {
 
     private var lastPhotoFile: File? = null
     private var lastVideoFile: File? = null
@@ -84,13 +84,13 @@ class CameraEngineSampleFragment : BaseMvvmFragment<FragmentCameraEngineBinding,
 
     override fun onResume() {
         super.onResume()
-//        mBinding.surfaceView.post {
-//            if (engine == "camerax") {
-//                CameraCore.bindPreview(mBinding.preview)
-//            } else {
-//                CameraCore.bindPreview(mBinding.surfaceView)
-//            }
-//        }
+        mBinding.surfaceView.post {
+            if (engine == "camerax") {
+                CameraCore.bindPreview(mBinding.preview)
+            } else {
+                CameraCore.bindPreview(mBinding.surfaceView)
+            }
+        }
     }
 
     private fun takePicture() {
@@ -148,8 +148,4 @@ class CameraEngineSampleFragment : BaseMvvmFragment<FragmentCameraEngineBinding,
         super.onDestroy()
         CameraCore.release()
     }
-}
-
-class CameraEngineViewModel : BaseViewModel() {
-    override fun init() {}
 }
