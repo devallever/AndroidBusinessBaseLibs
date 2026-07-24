@@ -4,8 +4,11 @@ import android.content.Intent
 import android.net.Uri
 import app.allever.android.lib.camera.core.CameraConfig
 import app.allever.android.lib.camera.core.CameraCore
+import app.allever.android.lib.camera.core.CameraEngine
 import app.allever.android.lib.camera.core.CameraFacing
 import app.allever.android.lib.camera.core.ResultCallback
+import app.allever.android.lib.camera.proxy.camera2.Camera2Engine
+import app.allever.android.lib.camera.proxy.camerax.CameraXEngine
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.imageloader.core.load
 import app.allever.android.lib.mvvm.base.BaseMvvmFragment
@@ -18,9 +21,19 @@ class CameraEngineSampleFragment : BaseMvvmFragment<FragmentCameraEngineBinding,
     private var lastPhotoFile: File? = null
     private var lastVideoFile: File? = null
 
+    private var engine = "camera"
+
     override fun inflate() = FragmentCameraEngineBinding.inflate(layoutInflater)
 
     override fun init() {
+        engine = arguments?.getString("engine") ?: "camera"
+        val cameraEngine = when (engine) {
+            "camera" -> CameraEngine()
+            "camera2" -> Camera2Engine()
+            "camerax" -> CameraXEngine()
+            else -> CameraEngine()
+        }
+        CameraCore.setupEngine(cameraEngine)
         val config = CameraConfig.Builder()
             .setCameraFacing(CameraFacing.FACE_BACK)
             .build()
@@ -66,7 +79,11 @@ class CameraEngineSampleFragment : BaseMvvmFragment<FragmentCameraEngineBinding,
     override fun onResume() {
         super.onResume()
         mBinding.surfaceView.post {
-            CameraCore.bindPreview(mBinding.surfaceView)
+            if (engine == "camerax") {
+                CameraCore.bindPreview(mBinding.preview)
+            } else {
+                CameraCore.bindPreview(mBinding.surfaceView)
+            }
         }
     }
 

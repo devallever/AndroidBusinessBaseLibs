@@ -21,8 +21,20 @@ class CameraSampleListFragment: ListFragment<FragmentListBinding, ListViewModel,
         TextClickItem("CameraX") {
             FragmentActivity.start<CameraXFragment>(it.title)
         },
-        TextClickItem("CameraEngine") {
-            FragmentActivity.start<CameraEngineSampleFragment>(it.title)
+        TextClickItem("CameraEngine-Camera") {
+            FragmentActivity.start<CameraEngineSampleFragment>(it.title) {
+                it.putString("engine", "camera")
+            }
+        },
+        TextClickItem("CameraEngine-Camera2") {
+            FragmentActivity.start<CameraEngineSampleFragment>(it.title) {
+                it.putString("engine", "camera2")
+            }
+        },
+        TextClickItem("CameraEngine-CameraX") {
+            FragmentActivity.start<CameraEngineSampleFragment>(it.title) {
+                it.putString("engine", "camerax")
+            }
         },
     )
 }
