@@ -20,17 +20,16 @@ import android.view.SurfaceView
 import android.view.TextureView
 import android.view.View
 import android.view.WindowManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.Executors
 
 @Suppress("DEPRECATION")
 class CameraEngine : BaseCameraEngine() {
-    private val mExecutor = Executors.newSingleThreadExecutor()
-
     private var mCamera: Camera? = null
     private var mMediaRecorder: MediaRecorder? = null
     private var mSurfaceHolder: SurfaceHolder? = null
@@ -43,7 +42,7 @@ class CameraEngine : BaseCameraEngine() {
     override fun openCamera(cameraFacing: CameraFacing) {
         currentFacing = cameraFacing
 
-        mExecutor.execute {
+        launchCameraTask {
             if (mCamera != null) {
                 stopPreview()
                 releaseCamera()
@@ -60,7 +59,7 @@ class CameraEngine : BaseCameraEngine() {
 
                 if (mCamera == null) {
                     updateState(CameraState.IDLE)
-                    return@execute
+                    return@launchCameraTask
                 }
 
                 val camera = mCamera!!
@@ -128,7 +127,7 @@ class CameraEngine : BaseCameraEngine() {
     }
 
     override fun closeCamera() {
-        mExecutor.execute {
+        launchCameraTask {
             if (mCamera != null) {
                 stopPreview()
                 releaseCamera()
@@ -162,7 +161,7 @@ class CameraEngine : BaseCameraEngine() {
             null,
             null,
             Camera.PictureCallback { data, camera ->
-                mExecutor.execute {
+                launchCameraTask {
                     try {
                         var additionalDegree = 0
                         if (currentFacing == CameraFacing.FACE_FRONT) {
@@ -171,9 +170,13 @@ class CameraEngine : BaseCameraEngine() {
                         val degree = getDisplayOrientation(cameraId) + additionalDegree
                         val rotatedData = rotateImage(data, degree)
                         val photoFile = savePhotoToGallery(rotatedData)
-                        resultCallback?.onSuccess(photoFile)
+                        withContext(Dispatchers.Main) {
+                            resultCallback?.onSuccess(photoFile)
+                        }
                     } catch (e: IOException) {
-                        resultCallback?.onFailure("Failed to save photo: ${e.message}")
+                        withContext(Dispatchers.Main) {
+                            resultCallback?.onFailure("Failed to save photo: ${e.message}")
+                        }
                     } finally {
                         isCapturing = false
                         updateState(CameraState.OPENED)
@@ -233,7 +236,7 @@ class CameraEngine : BaseCameraEngine() {
     override fun release() {
         stopRecordVideo()
         closeCamera()
-        mExecutor.shutdown()
+        cancelCameraScope()
         mSurfaceHolder = null
         mSurfaceTexture = null
         mPreviewSurface = null
