@@ -2,6 +2,7 @@ package app.allever.android.sample.camera.core
 
 import android.content.Intent
 import android.net.Uri
+import androidx.core.view.isVisible
 import app.allever.android.lib.camera.core.CameraConfig
 import app.allever.android.lib.camera.core.CameraCore
 import app.allever.android.lib.camera.core.CameraEngine
@@ -33,6 +34,8 @@ class CameraEngineSampleFragment : BaseMvvmFragment<FragmentCameraEngineBinding,
             "camerax" -> CameraXEngine()
             else -> CameraEngine()
         }
+        mBinding.preview.isVisible = engine == "camerax"
+        mBinding.surfaceView.isVisible = engine != "camerax"
         CameraCore.setupEngine(cameraEngine)
         val config = CameraConfig.Builder()
             .setCameraFacing(CameraFacing.FACE_BACK)
