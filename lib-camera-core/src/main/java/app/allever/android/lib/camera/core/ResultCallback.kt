@@ -2,8 +2,13 @@ package app.allever.android.lib.camera.core
 
 import java.io.File
 
-interface ResultCallback {
+interface PhotoResultCallback {
     fun onSuccess(file: File)
     fun onFailure(message: String)
-    fun onVideoProgress(progress: Long) {}
+}
+
+interface VideoResultCallback {
+    fun onSuccess(file: File)
+    fun onFailure(message: String)
+    fun onProgress(durationMillis: Long) {}
 }

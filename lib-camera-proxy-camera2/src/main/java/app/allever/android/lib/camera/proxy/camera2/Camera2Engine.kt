@@ -23,8 +23,8 @@ import android.view.View
 import app.allever.android.lib.camera.core.BaseCameraEngine
 import app.allever.android.lib.camera.core.CameraFacing
 import app.allever.android.lib.camera.core.CameraState
-import app.allever.android.lib.camera.core.ResultCallback
-import java.io.File
+import app.allever.android.lib.camera.core.PhotoResultCallback
+import app.allever.android.lib.camera.core.VideoResultCallback
 import java.io.FileOutputStream
 
 /**
@@ -125,7 +125,7 @@ class Camera2Engine : BaseCameraEngine() {
         updateState(CameraState.IDLE)
     }
 
-    override fun takePicture(resultCallback: ResultCallback?) {
+    override fun takePicture(resultCallback: PhotoResultCallback?) {
         if (!isPreviewing || cameraDevice == null || isCapturing) {
             resultCallback?.onFailure("Camera not ready")
             return
@@ -150,7 +150,7 @@ class Camera2Engine : BaseCameraEngine() {
         }
     }
 
-    override fun startRecordVideo(resultCallback: ResultCallback?) {
+    override fun startRecordVideo(resultCallback: VideoResultCallback?) {
         if (!isPreviewing || cameraDevice == null || isRecording) {
             resultCallback?.onFailure("Camera not ready")
             return
@@ -393,6 +393,7 @@ class Camera2Engine : BaseCameraEngine() {
     }
 
     private fun closeCameraInternal() {
+        pendingCameraFacing = null
         val session = captureSession
         captureSession = null
         val camera = cameraDevice
@@ -407,6 +408,7 @@ class Camera2Engine : BaseCameraEngine() {
 
         imageReader?.close()
         imageReader = null
+        characteristics = null
         isPreviewing = false
     }
 

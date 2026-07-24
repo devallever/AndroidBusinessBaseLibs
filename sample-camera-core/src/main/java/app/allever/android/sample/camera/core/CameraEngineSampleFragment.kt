@@ -7,7 +7,8 @@ import app.allever.android.lib.camera.core.CameraConfig
 import app.allever.android.lib.camera.core.CameraCore
 import app.allever.android.lib.camera.core.CameraEngine
 import app.allever.android.lib.camera.core.CameraFacing
-import app.allever.android.lib.camera.core.ResultCallback
+import app.allever.android.lib.camera.core.PhotoResultCallback
+import app.allever.android.lib.camera.core.VideoResultCallback
 import app.allever.android.lib.camera.proxy.camera2.Camera2Engine
 import app.allever.android.lib.camera.proxy.camerax.CameraXEngine
 import app.allever.android.lib.core.ext.toast
@@ -91,7 +92,7 @@ class CameraEngineSampleFragment : BaseMvvmFragment<FragmentCameraEngineBinding,
     }
 
     private fun takePicture() {
-        CameraCore.takePicture(object : ResultCallback {
+        CameraCore.takePicture(object : PhotoResultCallback {
             override fun onSuccess(file: File) {
                 lastPhotoFile = file
                 toast("拍照成功: ${file.absolutePath}")
@@ -105,7 +106,7 @@ class CameraEngineSampleFragment : BaseMvvmFragment<FragmentCameraEngineBinding,
     }
 
     private fun startRecordVideo() {
-        CameraCore.startRecordVideo(object : ResultCallback {
+        CameraCore.startRecordVideo(object : VideoResultCallback {
             override fun onSuccess(file: File) {
                 lastVideoFile = file
                 toast("录像保存成功: ${file.absolutePath}")
@@ -113,6 +114,10 @@ class CameraEngineSampleFragment : BaseMvvmFragment<FragmentCameraEngineBinding,
 
             override fun onFailure(message: String) {
                 toast("录像失败: $message")
+            }
+
+            override fun onProgress(durationMillis: Long) {
+                // 可在此更新 UI 进度
             }
         })
         toast("开始录制视频")

@@ -19,17 +19,22 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import app.allever.android.lib.camera.core.BaseCameraEngine
+import app.allever.android.lib.camera.core.CameraConfig
 import app.allever.android.lib.camera.core.CameraFacing
 import app.allever.android.lib.camera.core.CameraState
 import app.allever.android.lib.camera.core.FlashMode
-import app.allever.android.lib.camera.core.ResultCallback
+import app.allever.android.lib.camera.core.PhotoResultCallback
+import app.allever.android.lib.camera.core.VideoResultCallback
 import app.allever.android.lib.camera.core.VideoQuality
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.concurrent.Executor
 
 class CameraXEngine : BaseCameraEngine() {
-    private val TAG = "CameraXEngine"
+
+    companion object {
+        private const val TAG = "CameraXEngine"
+    }
 
     private var mLifecycleOwner: LifecycleOwner? = null
     private var mCameraProvider: ProcessCameraProvider? = null
@@ -66,10 +71,6 @@ class CameraXEngine : BaseCameraEngine() {
                 updateState(CameraState.IDLE)
             }
         }
-    }
-
-    fun openCamera() {
-        openCamera(mConfig.cameraFacing)
     }
 
     private fun bindUseCases(lifecycleOwner: LifecycleOwner) {
@@ -128,7 +129,7 @@ class CameraXEngine : BaseCameraEngine() {
         isPreviewing = false
     }
 
-    override fun takePicture(resultCallback: ResultCallback?) {
+    override fun takePicture(resultCallback: PhotoResultCallback?) {
         if (!isPreviewing || mImageCapture == null || isCapturing) {
             resultCallback?.onFailure("Camera not ready")
             return
@@ -168,7 +169,7 @@ class CameraXEngine : BaseCameraEngine() {
     }
 
     @SuppressLint("MissingPermission")
-    override fun startRecordVideo(resultCallback: ResultCallback?) {
+    override fun startRecordVideo(resultCallback: VideoResultCallback?) {
         if (!isPreviewing || mVideoCapture == null || isRecording) {
             resultCallback?.onFailure("Camera not ready")
             return
@@ -245,6 +246,14 @@ class CameraXEngine : BaseCameraEngine() {
         mLifecycleOwner = null
         cancelCameraScope()
         resetState()
+    }
+
+    override fun setFlashMode(mode: FlashMode) {
+        mConfig = CameraConfig.Builder()
+            .setCameraFacing(currentFacing)
+            .setFlashMode(mode)
+            .build()
+        mImageCapture?.flashMode = convertFlashMode(mode)
     }
 
     private fun convertFlashMode(flashMode: FlashMode): Int {

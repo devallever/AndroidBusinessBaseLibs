@@ -102,10 +102,6 @@ class CameraEngine : BaseCameraEngine() {
         }
     }
 
-    fun openCamera() {
-        openCamera(mConfig.cameraFacing)
-    }
-
     override fun closeCamera() {
         launchCameraTask {
             if (mCamera != null) {
@@ -116,7 +112,7 @@ class CameraEngine : BaseCameraEngine() {
         }
     }
 
-    override fun takePicture(resultCallback: ResultCallback?) {
+    override fun takePicture(resultCallback: PhotoResultCallback?) {
         if (!isPreviewing || mCamera == null || isCapturing) {
             resultCallback?.onFailure("Camera not ready")
             return
@@ -140,7 +136,7 @@ class CameraEngine : BaseCameraEngine() {
                     }
                     val degree = getDisplayOrientation(cameraId) + additionalDegree
                     val rotatedData = rotateImageBytes(data, degree)
-                    val photoFile = savePhotoToGallery(rotatedData)
+                    val photoFile = mediaSaver!!.savePhotoBytes(rotatedData, mConfig.photoSavePath)
                     withContext(Dispatchers.Main) {
                         resultCallback?.onSuccess(photoFile)
                     }
@@ -157,7 +153,7 @@ class CameraEngine : BaseCameraEngine() {
         })
     }
 
-    override fun startRecordVideo(resultCallback: ResultCallback?) {
+    override fun startRecordVideo(resultCallback: VideoResultCallback?) {
         if (!isPreviewing || mCamera == null || isRecording) {
             resultCallback?.onFailure("Camera not ready")
             return
@@ -209,6 +205,26 @@ class CameraEngine : BaseCameraEngine() {
         mSurfaceTexture = null
         mPreviewSurface = null
         resetState()
+    }
+
+    override fun setFlashMode(mode: FlashMode) {
+        mConfig = CameraConfig.Builder()
+            .setCameraFacing(currentFacing)
+            .setFlashMode(mode)
+            .build()
+        try {
+            val camera = mCamera ?: return
+            val params = camera.parameters
+            params.flashMode = when (mode) {
+                FlashMode.OFF -> Camera.Parameters.FLASH_MODE_OFF
+                FlashMode.ON -> Camera.Parameters.FLASH_MODE_ON
+                FlashMode.AUTO -> Camera.Parameters.FLASH_MODE_AUTO
+                FlashMode.TORCH -> Camera.Parameters.FLASH_MODE_TORCH
+            }
+            camera.parameters = params
+        } catch (e: Exception) {
+            // 某些设备不支持闪光灯
+        }
     }
 
     private fun stopPreview() {

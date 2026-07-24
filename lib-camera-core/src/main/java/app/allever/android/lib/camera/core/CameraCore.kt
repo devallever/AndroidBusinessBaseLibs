@@ -25,12 +25,12 @@ object CameraCore : ICameraEngine {
         engine.switchCamera()
     }
 
-    override fun takePicture(resultCallback: ResultCallback?) {
-        engine.takePicture(resultCallback)
+    override fun takePicture(callback: PhotoResultCallback?) {
+        engine.takePicture(callback)
     }
 
-    override fun startRecordVideo(resultCallback: ResultCallback?) {
-        engine.startRecordVideo(resultCallback)
+    override fun startRecordVideo(callback: VideoResultCallback?) {
+        engine.startRecordVideo(callback)
     }
 
     override fun stopRecordVideo() {
@@ -47,5 +47,13 @@ object CameraCore : ICameraEngine {
 
     override fun getState(): CameraState {
         return engine.getState()
+    }
+
+    override fun setFlashMode(mode: FlashMode) {
+        engine.setFlashMode(mode)
+    }
+
+    override fun setZoom(zoom: Float) {
+        engine.setZoom(zoom)
     }
 }
