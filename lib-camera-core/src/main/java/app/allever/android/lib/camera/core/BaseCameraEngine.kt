@@ -2,9 +2,14 @@ package app.allever.android.lib.camera.core
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Handler
-import android.os.HandlerThread
 import android.view.View
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 
 abstract class BaseCameraEngine : ICameraEngine {
@@ -16,30 +21,21 @@ abstract class BaseCameraEngine : ICameraEngine {
     protected var isCapturing = false
     protected var isRecording = false
 
-    private var cameraThread: HandlerThread? = null
-    protected var cameraHandler: Handler? = null
+    protected var cameraScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    protected fun startCameraThread() {
-        cameraThread = HandlerThread("CameraThread").apply {
-            start()
+    protected fun launchCameraTask(block: suspend () -> Unit) {
+        if (!cameraScope.coroutineContext.isActive) {
+            cameraScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
         }
-        cameraThread?.looper?.let {
-            cameraHandler = Handler(it)
+        cameraScope.launch {
+            block()
         }
     }
 
-    protected fun stopCameraThread() {
-        cameraThread?.quitSafely()
-        try {
-            cameraThread?.join()
-        } catch (e: InterruptedException) {
+    protected suspend fun runOnCameraThread(block: () -> Unit) {
+        withContext(Dispatchers.IO) {
+            block()
         }
-        cameraThread = null
-        cameraHandler = null
-    }
-
-    protected fun postCameraTask(runnable: Runnable) {
-        cameraHandler?.post(runnable) ?: runnable.run()
     }
 
     override fun bindPreview(view: View) {
@@ -81,5 +77,9 @@ abstract class BaseCameraEngine : ICameraEngine {
         isCapturing = false
         isRecording = false
         currentState = CameraState.IDLE
+    }
+
+    protected fun cancelCameraScope() {
+        cameraScope.cancel()
     }
 }

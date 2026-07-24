@@ -2,6 +2,10 @@ package app.allever.android.lib.camera.core
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageFormat
+import android.graphics.Point
 import android.graphics.SurfaceTexture
 import android.hardware.Camera
 import android.hardware.Camera.CameraInfo
@@ -21,9 +25,12 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.Executors
 
 @Suppress("DEPRECATION")
 class CameraEngine : BaseCameraEngine() {
+    private val mExecutor = Executors.newSingleThreadExecutor()
+
     private var mCamera: Camera? = null
     private var mMediaRecorder: MediaRecorder? = null
     private var mSurfaceHolder: SurfaceHolder? = null
@@ -34,22 +41,83 @@ class CameraEngine : BaseCameraEngine() {
     private var mCurrentVideoFile: File? = null
 
     override fun openCamera(cameraFacing: CameraFacing) {
-        if (isPreviewing) {
-            closeCamera()
-        }
-
         currentFacing = cameraFacing
-        startCameraThread()
 
-        postCameraTask {
-            val cameraId = if (cameraFacing == CameraFacing.FACE_BACK) 0 else 1
+        mExecutor.execute {
+            if (mCamera != null) {
+                stopPreview()
+                releaseCamera()
+            }
+
+            val cameraId = if (cameraFacing == CameraFacing.FACE_BACK) {
+                Camera.CameraInfo.CAMERA_FACING_BACK
+            } else {
+                Camera.CameraInfo.CAMERA_FACING_FRONT
+            }
 
             try {
                 mCamera = Camera.open(cameraId)
-                configureCamera()
-                startPreview()
+
+                if (mCamera == null) {
+                    updateState(CameraState.IDLE)
+                    return@execute
+                }
+
+                val camera = mCamera!!
+                val params = camera.parameters
+
+                params.previewFormat = ImageFormat.NV21
+
+                val bestPreviewSize = getBestSupportedSize(params.supportedPreviewSizes, Point(1920, 1080))
+                params.setPreviewSize(bestPreviewSize.width, bestPreviewSize.height)
+
+                val bestPictureSize = getBestSupportedSize(params.supportedPictureSizes, Point(1920, 1080))
+                params.setPictureSize(bestPictureSize.width, bestPictureSize.height)
+
+                val supportedFocusModes = params.supportedFocusModes
+                if (supportedFocusModes.isNotEmpty()) {
+                    when {
+                        supportedFocusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE) -> {
+                            params.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
+                        }
+                        supportedFocusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO) -> {
+                            params.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO
+                        }
+                        supportedFocusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO) -> {
+                            params.focusMode = Camera.Parameters.FOCUS_MODE_AUTO
+                        }
+                    }
+                }
+
+                when (mConfig.flashMode) {
+                    FlashMode.OFF -> params.flashMode = Camera.Parameters.FLASH_MODE_OFF
+                    FlashMode.ON -> params.flashMode = Camera.Parameters.FLASH_MODE_ON
+                    FlashMode.AUTO -> params.flashMode = Camera.Parameters.FLASH_MODE_AUTO
+                    FlashMode.TORCH -> params.flashMode = Camera.Parameters.FLASH_MODE_TORCH
+                }
+
+                camera.parameters = params
+
+                val view = getPreviewView()
+                when (view) {
+                    is SurfaceView -> {
+                        mSurfaceHolder = view.holder
+                        camera.setPreviewDisplay(mSurfaceHolder)
+                        mPreviewSurface = mSurfaceHolder?.surface
+                    }
+                    is TextureView -> {
+                        mSurfaceTexture = view.surfaceTexture
+                        camera.setPreviewTexture(mSurfaceTexture)
+                        mPreviewSurface = Surface(mSurfaceTexture)
+                    }
+                }
+
+                camera.setDisplayOrientation(getDisplayOrientation(cameraId))
+                camera.startPreview()
+                isPreviewing = true
                 updateState(CameraState.OPENED)
             } catch (e: Exception) {
+                isPreviewing = false
                 updateState(CameraState.IDLE)
             }
         }
@@ -60,11 +128,12 @@ class CameraEngine : BaseCameraEngine() {
     }
 
     override fun closeCamera() {
-        postCameraTask {
-            stopPreview()
-            releaseCamera()
-            stopCameraThread()
-            updateState(CameraState.IDLE)
+        mExecutor.execute {
+            if (mCamera != null) {
+                stopPreview()
+                releaseCamera()
+                updateState(CameraState.IDLE)
+            }
         }
     }
 
@@ -82,20 +151,34 @@ class CameraEngine : BaseCameraEngine() {
         isCapturing = true
         updateState(CameraState.TAKING_PHOTO)
 
+        val cameraId = if (currentFacing == CameraFacing.FACE_BACK) {
+            Camera.CameraInfo.CAMERA_FACING_BACK
+        } else {
+            Camera.CameraInfo.CAMERA_FACING_FRONT
+        }
+
         mCamera?.takePicture(
             null,
             null,
             null,
             Camera.PictureCallback { data, camera ->
-                try {
-                    val photoFile = savePhotoToGallery(data)
-                    resultCallback?.onSuccess(photoFile)
-                } catch (e: IOException) {
-                    resultCallback?.onFailure("Failed to save photo: ${e.message}")
-                } finally {
-                    isCapturing = false
-                    updateState(CameraState.OPENED)
-                    camera.startPreview()
+                mExecutor.execute {
+                    try {
+                        var additionalDegree = 0
+                        if (currentFacing == CameraFacing.FACE_FRONT) {
+                            additionalDegree = 180
+                        }
+                        val degree = getDisplayOrientation(cameraId) + additionalDegree
+                        val rotatedData = rotateImage(data, degree)
+                        val photoFile = savePhotoToGallery(rotatedData)
+                        resultCallback?.onSuccess(photoFile)
+                    } catch (e: IOException) {
+                        resultCallback?.onFailure("Failed to save photo: ${e.message}")
+                    } finally {
+                        isCapturing = false
+                        updateState(CameraState.OPENED)
+                        camera.startPreview()
+                    }
                 }
             }
         )
@@ -150,66 +233,13 @@ class CameraEngine : BaseCameraEngine() {
     override fun release() {
         stopRecordVideo()
         closeCamera()
+        mExecutor.shutdown()
         mSurfaceHolder = null
         mSurfaceTexture = null
         mPreviewSurface = null
         mVideoCallback = null
         mCurrentVideoFile = null
         resetState()
-    }
-
-    private fun configureCamera() {
-        mCamera?.let { camera ->
-            val parameters = camera.parameters
-
-            parameters.focusMode = Camera.Parameters.FOCUS_MODE_AUTO
-
-            when (mConfig.flashMode) {
-                FlashMode.OFF -> parameters.flashMode = Camera.Parameters.FLASH_MODE_OFF
-                FlashMode.ON -> parameters.flashMode = Camera.Parameters.FLASH_MODE_ON
-                FlashMode.AUTO -> parameters.flashMode = Camera.Parameters.FLASH_MODE_AUTO
-                FlashMode.TORCH -> parameters.flashMode = Camera.Parameters.FLASH_MODE_TORCH
-            }
-
-            mPreviewSize = getOptimalPreviewSize(parameters.supportedPreviewSizes)
-            mPreviewSize?.let {
-                parameters.setPreviewSize(it.width, it.height)
-            }
-
-            val pictureSize = getOptimalPictureSize(parameters.supportedPictureSizes)
-            pictureSize?.let {
-                parameters.setPictureSize(it.width, it.height)
-            }
-
-            camera.parameters = parameters
-
-            val displayOrientation = getDisplayOrientation()
-            camera.setDisplayOrientation(displayOrientation)
-        }
-    }
-
-    private fun startPreview() {
-        val view = getPreviewView() ?: return
-
-        try {
-            when (view) {
-                is SurfaceView -> {
-                    mSurfaceHolder = view.holder
-                    mSurfaceHolder?.addCallback(SurfaceCallback())
-                    mCamera?.setPreviewDisplay(mSurfaceHolder)
-                    mPreviewSurface = mSurfaceHolder?.surface
-                }
-                is TextureView -> {
-                    mSurfaceTexture = view.surfaceTexture
-                    mCamera?.setPreviewTexture(mSurfaceTexture)
-                    mPreviewSurface = Surface(mSurfaceTexture)
-                }
-            }
-            mCamera?.startPreview()
-            isPreviewing = true
-        } catch (e: IOException) {
-            isPreviewing = false
-        }
     }
 
     private fun stopPreview() {
@@ -270,53 +300,30 @@ class CameraEngine : BaseCameraEngine() {
         return false
     }
 
-    private fun getOptimalPreviewSize(sizes: List<Camera.Size>): Camera.Size? {
-        val targetRatio = when (mConfig.aspectRatio) {
-            AspectRatio.RATIO_1_1 -> 1.0
-            AspectRatio.RATIO_3_4 -> 3.0 / 4.0
-            AspectRatio.RATIO_16_9 -> 16.0 / 9.0
-            AspectRatio.FULL_SCREEN -> 9.0 / 16.0
+    private fun getBestSupportedSize(sizes: List<Camera.Size>, targetSize: Point): Camera.Size {
+        if (sizes.isEmpty()) {
+            return mCamera!!.parameters.previewSize
         }
 
-        var optimalSize: Camera.Size? = null
-        var minDiff = java.lang.Double.MAX_VALUE
+        val sortedSizes = sizes.sortedWith(compareByDescending { it.width * it.height })
+        var bestSize = sortedSizes[0]
+        val targetRatio = targetSize.x.toFloat() / targetSize.y.toFloat()
 
-        for (size in sizes) {
-            val ratio = size.width.toDouble() / size.height.toDouble()
-            val diff = Math.abs(ratio - targetRatio)
-            if (diff < minDiff) {
-                minDiff = diff
-                optimalSize = size
+        for (size in sortedSizes) {
+            val sizeRatio = size.width.toFloat() / size.height.toFloat()
+            if (Math.abs(sizeRatio - targetRatio) < Math.abs(bestSize.width.toFloat() / bestSize.height.toFloat() - targetRatio)) {
+                bestSize = size
             }
         }
 
-        return optimalSize ?: sizes.firstOrNull()
+        return bestSize
     }
 
-    private fun getOptimalPictureSize(sizes: List<Camera.Size>): Camera.Size? {
-        var largestSize: Camera.Size? = null
-        var maxArea = 0
-
-        for (size in sizes) {
-            val area = size.width * size.height
-            if (area > maxArea) {
-                maxArea = area
-                largestSize = size
-            }
-        }
-
-        return largestSize
-    }
-
-    private fun getDisplayOrientation(): Int {
+    private fun getDisplayOrientation(cameraId: Int): Int {
         val view = getPreviewView() ?: return 90
         val context = view.context
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val rotation = windowManager.defaultDisplay.rotation
-
-        val cameraId = if (currentFacing == CameraFacing.FACE_BACK) 0 else 1
-        val info = CameraInfo()
-        Camera.getCameraInfo(cameraId, info)
 
         var degrees = 0
         when (rotation) {
@@ -326,15 +333,44 @@ class CameraEngine : BaseCameraEngine() {
             Surface.ROTATION_270 -> degrees = 270
         }
 
-        var result: Int
+        val info = CameraInfo()
+        Camera.getCameraInfo(cameraId, info)
+
+        val result: Int
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
             result = (info.orientation + degrees) % 360
-            result = (360 - result) % 360
+            return (360 - result) % 360
         } else {
-            result = (info.orientation - degrees + 360) % 360
+            return (info.orientation - degrees + 360) % 360
+        }
+    }
+
+    private fun rotateImage(data: ByteArray, degree: Int): ByteArray {
+        if (degree % 360 == 0) {
+            return data
         }
 
-        return result
+        val bitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
+        val matrix = android.graphics.Matrix()
+        matrix.postRotate(degree.toFloat())
+
+        val rotatedBitmap = Bitmap.createBitmap(
+            bitmap,
+            0,
+            0,
+            bitmap.width,
+            bitmap.height,
+            matrix,
+            true
+        )
+
+        bitmap.recycle()
+
+        val outputStream = java.io.ByteArrayOutputStream()
+        rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
+        rotatedBitmap.recycle()
+
+        return outputStream.toByteArray()
     }
 
     private fun createPhotoFile(): File {
@@ -400,33 +436,6 @@ class CameraEngine : BaseCameraEngine() {
             val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
             mediaScanIntent.data = Uri.fromFile(file)
             context.sendBroadcast(mediaScanIntent)
-        }
-    }
-
-    private inner class SurfaceCallback : SurfaceHolder.Callback {
-        override fun surfaceCreated(holder: SurfaceHolder) {
-            try {
-                mCamera?.setPreviewDisplay(holder)
-                mCamera?.startPreview()
-            } catch (e: IOException) {
-            }
-        }
-
-        override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-            if (holder.surface == null) {
-                return
-            }
-
-            try {
-                mCamera?.stopPreview()
-                configureCamera()
-                mCamera?.setPreviewDisplay(holder)
-                mCamera?.startPreview()
-            } catch (e: IOException) {
-            }
-        }
-
-        override fun surfaceDestroyed(holder: SurfaceHolder) {
         }
     }
 }

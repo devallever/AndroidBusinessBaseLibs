@@ -28,22 +28,18 @@ class CameraEngineSampleFragment : BaseMvvmFragment<FragmentCameraEngineBinding,
 
         mBinding.btnOpenCamera.setOnClickListener {
             CameraCore.openCamera(CameraFacing.FACE_BACK)
-            toast("已打开后置相机")
         }
 
         mBinding.btnOpenFrontCamera.setOnClickListener {
             CameraCore.openCamera(CameraFacing.FACE_FRONT)
-            toast("已打开前置相机")
         }
 
         mBinding.btnCloseCamera.setOnClickListener {
             CameraCore.closeCamera()
-            toast("已关闭相机")
         }
 
         mBinding.btnSwitchCamera.setOnClickListener {
             CameraCore.switchCamera()
-            toast("已切换相机")
         }
 
         mBinding.btnTackPicture.setOnClickListener {
