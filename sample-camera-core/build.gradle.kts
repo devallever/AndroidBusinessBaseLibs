@@ -14,6 +14,7 @@ android {
 
 dependencies {
     implementation(project(":sample-common"))
+    implementation(project(":lib-camera-core"))
     implementation(project(":lib-camera-proxy-camerax"))
     implementation(project(":lib-camera-proxy-camera2"))
     implementation(project(":lib-imageloader-core"))

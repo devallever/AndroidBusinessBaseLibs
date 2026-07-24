@@ -2,9 +2,9 @@ package app.allever.android.lib.camera.core
 
 import android.view.View
 
-
-object CameraCore: ICameraEngine {
+object CameraCore : ICameraEngine {
     private var engine: ICameraEngine = CameraEngine()
+
     fun setupEngine(engine: ICameraEngine) {
         this.engine = engine
     }
@@ -41,4 +41,11 @@ object CameraCore: ICameraEngine {
         engine.release()
     }
 
+    override fun setConfig(config: CameraConfig) {
+        engine.setConfig(config)
+    }
+
+    override fun getState(): CameraState {
+        return engine.getState()
+    }
 }
