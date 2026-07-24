@@ -13,7 +13,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.lifecycle.LifecycleOwner
 import app.allever.android.lib.core.camera.proxy.CameraListener
-import app.allever.android.lib.core.camera.proxy.Size
+import app.allever.android.lib.core.camera.Size
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import java.lang.ref.WeakReference

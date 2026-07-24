@@ -25,7 +25,7 @@ import app.allever.android.lib.core.camera.proxy.AutoFitSurfaceView
 import app.allever.android.lib.core.camera.proxy.CameraFacing
 import app.allever.android.lib.core.camera.proxy.CameraListener
 import app.allever.android.lib.core.camera.proxy.ICameraProxy
-import app.allever.android.lib.core.camera.proxy.Size
+import app.allever.android.lib.core.camera.Size
 import app.allever.android.lib.core.camera.proxy.CameraProxyManager
 import app.allever.android.lib.core.camera.util.getPreviewOutputSize
 import app.allever.android.lib.core.ext.log

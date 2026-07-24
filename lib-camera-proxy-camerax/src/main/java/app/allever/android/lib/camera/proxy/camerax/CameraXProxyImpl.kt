@@ -11,7 +11,7 @@ import androidx.lifecycle.LifecycleOwner
 import app.allever.android.lib.core.camera.proxy.CameraFacing
 import app.allever.android.lib.core.camera.proxy.CameraListener
 import app.allever.android.lib.core.camera.proxy.ICameraProxy
-import app.allever.android.lib.core.camera.proxy.Size
+import app.allever.android.lib.core.camera.Size
 import app.allever.android.lib.core.ext.log
 import com.google.common.util.concurrent.ListenableFuture
 import java.io.File

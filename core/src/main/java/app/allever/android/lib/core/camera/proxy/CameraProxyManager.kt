@@ -9,7 +9,7 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import app.allever.android.lib.core.camera.proxy.CameraFacing
 import app.allever.android.lib.core.camera.proxy.CameraListener
-import app.allever.android.lib.core.camera.proxy.Size
+import app.allever.android.lib.core.camera.Size
 import app.allever.android.lib.core.ext.log
 import java.io.ByteArrayOutputStream
 import java.io.File

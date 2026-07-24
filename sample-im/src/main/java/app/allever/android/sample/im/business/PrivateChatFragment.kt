@@ -30,7 +30,7 @@ class PrivateChatFragment: BaseFragment<ImPrivateChatFragmentBinding, BaseViewMo
         }
 
         override fun onMessage(message: Message) {
-            log("收到消息[${message.type}][${message.contentType}]: ${message.fromUser} -> ${message.toUser}: ${message.content}")
+//            log("收到消息[${message.type}][${message.contentType}]: ${message.fromUser} -> ${message.toUser}: ${message.content}")
             when (message) {
                 is TextMessage -> {
                     if (message.fromUser == toUsername) {
