@@ -491,19 +491,21 @@ class Camera2Engine : BaseCameraEngine() {
         val image = reader.acquireLatestImage() ?: return
         try {
             if (!isCapturing) return
-            savePhoto(image)
+
+            // 必须在 image.close() 之前提取字节数据
+            val buffer = image.planes[0].buffer
+            val bytes = ByteArray(buffer.remaining())
+            buffer.get(bytes)
+
+            savePhotoBytes(bytes)
         } finally {
             image.close()
         }
     }
 
-    private fun savePhoto(image: Image) {
+    private fun savePhotoBytes(bytes: ByteArray) {
         launchCameraTask {
             try {
-                val buffer = image.planes[0].buffer
-                val bytes = ByteArray(buffer.remaining())
-                buffer.get(bytes)
-
                 val photoFile = currentPhotoFile ?: return@launchCameraTask
 
                 FileOutputStream(photoFile).use { fos ->
@@ -529,25 +531,23 @@ class Camera2Engine : BaseCameraEngine() {
     }
 
     private fun closeCameraInternal() {
-        try {
-            captureSession?.stopRepeating()
-            captureSession?.abortCaptures()
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to stop session", e)
-        }
-        try {
-            captureSession?.close()
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to close session", e)
-        }
+        // 先置 null 防止其他方法引用已关闭的对象
+        val session = captureSession
         captureSession = null
 
-        try {
-            cameraDevice?.close()
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to close camera", e)
-        }
+        val camera = cameraDevice
         cameraDevice = null
+
+        // 每个操作独立 try-catch，任一失败不影响后续清理
+        session?.let { s ->
+            try { s.stopRepeating() } catch (e: Exception) { Log.w(TAG, "stopRepeating", e) }
+            try { s.abortCaptures() } catch (e: Exception) { Log.w(TAG, "abortCaptures", e) }
+            try { s.close() } catch (e: Exception) { Log.w(TAG, "close session", e) }
+        }
+
+        camera?.let { c ->
+            try { c.close() } catch (e: Exception) { Log.w(TAG, "close camera", e) }
+        }
 
         imageReader?.close()
         imageReader = null
