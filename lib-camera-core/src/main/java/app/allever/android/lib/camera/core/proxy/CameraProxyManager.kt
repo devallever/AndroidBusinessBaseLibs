@@ -1,4 +1,4 @@
-package app.allever.android.lib.core.camera.proxy
+package app.allever.android.lib.camera.core.proxy
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -7,9 +7,7 @@ import android.hardware.camera2.CameraManager
 import android.os.Environment
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
-import app.allever.android.lib.core.camera.proxy.CameraFacing
-import app.allever.android.lib.core.camera.proxy.CameraListener
-import app.allever.android.lib.core.camera.Size
+import app.allever.android.lib.camera.core.Size
 import app.allever.android.lib.core.ext.log
 import java.io.ByteArrayOutputStream
 import java.io.File

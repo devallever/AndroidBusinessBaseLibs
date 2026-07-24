@@ -3,9 +3,9 @@ package app.allever.android.sample.camera.core
 import android.graphics.Bitmap
 import androidx.lifecycle.lifecycleScope
 import app.allever.android.lib.camera.proxy.camerax.CameraXProxyImpl
-import app.allever.android.lib.core.camera.proxy.CameraFacing
-import app.allever.android.lib.core.camera.proxy.CameraListener
-import app.allever.android.lib.core.camera.proxy.CameraProxyManager
+import app.allever.android.lib.camera.core.proxy.CameraFacing
+import app.allever.android.lib.camera.core.proxy.CameraListener
+import app.allever.android.lib.camera.core.proxy.CameraProxyManager
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.imageloader.core.load
 import app.allever.android.lib.mvvm.base.BaseMvvmFragment

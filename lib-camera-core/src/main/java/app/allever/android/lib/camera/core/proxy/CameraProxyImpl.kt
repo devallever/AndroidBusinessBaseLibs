@@ -1,4 +1,4 @@
-package app.allever.android.lib.core.camera.proxy
+package app.allever.android.lib.camera.core.proxy
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -12,8 +12,7 @@ import android.view.SurfaceView
 import android.view.View
 import android.view.WindowManager
 import androidx.lifecycle.LifecycleOwner
-import app.allever.android.lib.core.camera.proxy.CameraListener
-import app.allever.android.lib.core.camera.Size
+import app.allever.android.lib.camera.core.Size
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.logE
 import java.lang.ref.WeakReference

@@ -1,10 +1,11 @@
 package app.allever.android.sample.camera.core
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import androidx.lifecycle.lifecycleScope
-import app.allever.android.lib.core.camera.proxy.CameraListener
-import app.allever.android.lib.core.camera.proxy.CameraProxyManager
-import app.allever.android.lib.core.camera.proxy.CameraProxyImpl
+import app.allever.android.lib.camera.core.proxy.CameraListener
+import app.allever.android.lib.camera.core.proxy.CameraProxyManager
+import app.allever.android.lib.camera.core.proxy.CameraProxyImpl
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.imageloader.core.load
 import app.allever.android.lib.mvvm.base.BaseMvvmFragment
@@ -17,6 +18,7 @@ class CameraFragment : BaseMvvmFragment<FragmentCameraBinding, CameraViewModel>(
 
     override fun inflate() = FragmentCameraBinding.inflate(layoutInflater)
 
+    @SuppressLint("WrongConstant")
     override fun init() {
         //inject
         CameraProxyManager.injectProxy(CameraProxyImpl())

@@ -1,4 +1,4 @@
-package app.allever.android.lib.core.camera.proxy
+package app.allever.android.lib.camera.core.proxy
 
 import androidx.annotation.IntDef
 

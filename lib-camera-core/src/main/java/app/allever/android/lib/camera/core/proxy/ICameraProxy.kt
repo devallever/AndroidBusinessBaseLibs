@@ -1,11 +1,9 @@
-package app.allever.android.lib.core.camera.proxy
+package app.allever.android.lib.camera.core.proxy
 
 import android.content.Context
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
-import app.allever.android.lib.core.camera.proxy.CameraFacing
-import app.allever.android.lib.core.camera.proxy.CameraListener
-import app.allever.android.lib.core.camera.Size
+import app.allever.android.lib.camera.core.Size
 
 interface ICameraProxy {
 

@@ -1,10 +1,11 @@
 package app.allever.android.sample.camera.core
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import androidx.lifecycle.lifecycleScope
 import app.allever.android.lib.camera.proxy.camera2.Camera2ProxyImpl
-import app.allever.android.lib.core.camera.proxy.CameraListener
-import app.allever.android.lib.core.camera.proxy.CameraProxyManager
+import app.allever.android.lib.camera.core.proxy.CameraListener
+import app.allever.android.lib.camera.core.proxy.CameraProxyManager
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.imageloader.core.load
 import app.allever.android.lib.mvvm.base.BaseMvvmFragment
@@ -17,6 +18,7 @@ class Camera2Fragment : BaseMvvmFragment<FragmentCamera2Binding, Camera2ViewMode
 
     override fun inflate() = FragmentCamera2Binding.inflate(layoutInflater)
 
+    @SuppressLint("WrongConstant")
     override fun init() {
         CameraProxyManager.injectProxy(Camera2ProxyImpl())
         mBinding.btnOpenFrontCamera.setOnClickListener {
