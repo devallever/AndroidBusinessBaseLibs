@@ -23,6 +23,11 @@ class RouterProcessor(private val environment: SymbolProcessorEnvironment) : Sym
     private val routeMap = mutableMapOf<String, RouteInfo>()
     private val moduleRoutes = mutableMapOf<String, MutableList<RouteInfo>>()
 
+    private val moduleName = environment.options["routerModuleName"]
+        ?.replace(Regex("[^a-zA-Z0-9_]"), "_")
+        ?.takeIf { it.isNotEmpty() }
+        ?: "default"
+
     override fun process(resolver: Resolver): List<KSAnnotated> {
         val routeSymbols = resolver.getSymbolsWithAnnotation(Route::class.qualifiedName!!)
         val invalidSymbols = mutableListOf<KSAnnotated>()
@@ -53,7 +58,7 @@ class RouterProcessor(private val environment: SymbolProcessorEnvironment) : Sym
                         name = name,
                         export = export,
                         className = symbol.qualifiedName?.asString() ?: "",
-                        moduleName = getModuleName(symbol),
+                        moduleName = moduleName,
                         sourceFile = symbol.containingFile
                     )
 
@@ -90,15 +95,6 @@ class RouterProcessor(private val environment: SymbolProcessorEnvironment) : Sym
                 logger.error("Duplicate route path: ${routeInfo.path}, already defined in ${existing.className}", symbol)
             }
         }
-    }
-
-    private fun getModuleName(symbol: KSClassDeclaration): String {
-        val file = symbol.containingFile
-        val filePath = file?.filePath ?: ""
-        val parts = filePath.split("/").filter { it.isNotEmpty() }
-        val moduleName = parts.firstOrNull { it.startsWith("lib-") || it.startsWith("sample-") || it.startsWith("z-") }
-            ?: parts.firstOrNull() ?: "default"
-        return moduleName.replace("-", "_").takeIf { it.isNotEmpty() } ?: "default"
     }
 
     private fun generateModuleRegistries() {

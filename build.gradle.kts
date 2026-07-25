@@ -131,4 +131,7 @@ fun Project.configureRouter() {
         "implementation"(project(":lib-router-core"))
         "ksp"(project(":lib-router-compiler"))
     }
+    extensions.configure<com.google.devtools.ksp.gradle.KspExtension> {
+        arg("routerModuleName", project.name)
+    }
 }
