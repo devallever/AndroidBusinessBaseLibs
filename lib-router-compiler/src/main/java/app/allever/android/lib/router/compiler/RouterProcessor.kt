@@ -32,6 +32,16 @@ class RouterProcessor(private val environment: SymbolProcessorEnvironment) : Sym
         val routeSymbols = resolver.getSymbolsWithAnnotation(Route::class.qualifiedName!!)
         val invalidSymbols = mutableListOf<KSAnnotated>()
 
+        logger.info("[Router] ========== KSP Process Start ==========")
+        logger.info("[Router] Module: $moduleName")
+        logger.info("[Router] Options: ${environment.options}")
+        logger.info("[Router] Incremental: ${environment.options["ksp.incremental"] ?: "unknown"}")
+        val allFiles = resolver.getAllFiles().toList()
+        logger.info("[Router] Total source files in resolver: ${allFiles.size}")
+
+        val routeCount = routeSymbols.count()
+        logger.info("[Router] Found @Route symbols: $routeCount")
+
         routeSymbols.forEach { symbol ->
             if (!symbol.validate()) {
                 invalidSymbols.add(symbol)
@@ -62,6 +72,8 @@ class RouterProcessor(private val environment: SymbolProcessorEnvironment) : Sym
                         sourceFile = symbol.containingFile
                     )
 
+                    logger.info("[Router] Route mapping: ${routeInfo.path} -> ${routeInfo.className} (export=${routeInfo.export}, source=${routeInfo.sourceFile?.fileName ?: "unknown"})")
+
                     validateRoute(routeInfo, symbol)
 
                     if (routeInfo.export) {
@@ -74,7 +86,14 @@ class RouterProcessor(private val environment: SymbolProcessorEnvironment) : Sym
             }
         }
 
+        logger.info("[Router] Registered routes: ${routeMap.size}, Modules: ${moduleRoutes.size}")
+        moduleRoutes.forEach { (mod, routes) ->
+            logger.info("[Router] Module '$mod' routes: ${routes.joinToString { "${it.path} -> ${it.className}" }}")
+        }
+
         generateModuleRegistries()
+
+        logger.info("[Router] ========== KSP Process End ==========")
 
         return invalidSymbols
     }
@@ -118,6 +137,8 @@ class RouterProcessor(private val environment: SymbolProcessorEnvironment) : Sym
 
             val sourceFiles = routes.mapNotNull { it.sourceFile }.toTypedArray()
 
+            logger.info("[Router] Generating: app.allever.android.lib.router.module.$className (routes: ${routes.size}, incremental deps: ${sourceFiles.size})")
+
             try {
                 codeGenerator.createNewFile(
                     dependencies = Dependencies(true, *sourceFiles),
@@ -127,6 +148,7 @@ class RouterProcessor(private val environment: SymbolProcessorEnvironment) : Sym
                     it.write(fileSpec.toString().toByteArray())
                 }
             } catch (e: kotlin.io.FileAlreadyExistsException) {
+                logger.info("[Router] File already exists, skipped: $className")
             }
 
             val registryClassName = "RouterModuleRegistry_${moduleName}"
