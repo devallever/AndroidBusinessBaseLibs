@@ -67,7 +67,7 @@ public class ShareItemInput extends LinearLayout {
     }
 
     private void initView() {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.share_item_input,this,true);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.qr_share_item_input,this,true);
         mEtContent = view.findViewById(R.id.id_et_content);
         mTvTitle = view.findViewById(R.id.id_tv_title);
         mTvTips = view.findViewById(R.id.id_tv_length_tip);
@@ -83,7 +83,7 @@ public class ShareItemInput extends LinearLayout {
         mTvTitle.setText(mTitle);
         mTvTips.setText(mEtContent.getText().length() + "/" + mMaxLength);
         mEtContent.setHint(mHint);
-        mEtContent.setHintTextColor(mContext.getResources().getColor(R.color.share_item_input_hint));
+        mEtContent.setHintTextColor(mContext.getResources().getColor(R.color.qr_share_item_input_hint));
         //设置最大长度
         mEtContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(mMaxLength)});
 
@@ -115,7 +115,7 @@ public class ShareItemInput extends LinearLayout {
                 if (contentLength > mMaxLength){
                     mTvTips.setTextColor(getResources().getColor(R.color.red));
                 }else {
-                    mTvTips.setTextColor(getResources().getColor(R.color.share_item_tv_input_index));
+                    mTvTips.setTextColor(getResources().getColor(R.color.qr_share_item_tv_input_index));
                 }
             }
 

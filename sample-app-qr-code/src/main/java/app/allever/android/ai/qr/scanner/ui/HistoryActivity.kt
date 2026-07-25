@@ -8,17 +8,17 @@ import android.widget.TextView
 import app.allever.android.ai.qr.scanner.AppActivity
 import app.allever.android.lib.core.function.notchcompat.NotchCompat
 import com.allever.app.qr.code.scaner.R
-import com.allever.app.qr.code.scaner.databinding.ActivityHistoryBinding
+import com.allever.app.qr.code.scaner.databinding.QrActivityHistoryBinding
 
 /**
  */
 
 class HistoryActivity : AppActivity(), View.OnClickListener {
-    private lateinit var mBinding: ActivityHistoryBinding
+    private lateinit var mBinding: QrActivityHistoryBinding
     @SuppressLint("CommitTransaction")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityHistoryBinding.inflate(layoutInflater)
+        mBinding = QrActivityHistoryBinding.inflate(layoutInflater)
         setContentView(mBinding.rootLayout)
         initView()
         if (savedInstanceState == null) {
@@ -33,7 +33,7 @@ class HistoryActivity : AppActivity(), View.OnClickListener {
             addStatusBar(mBinding.rootLayout, v)
         })
         findViewById<View>(R.id.iv_back).setOnClickListener(this)
-        findViewById<TextView>(R.id.tv_label).text = getString(R.string.tab_name_history)
+        findViewById<TextView>(R.id.tv_label).text = getString(R.string.qr_tab_name_history)
     }
 
     override fun onClick(v: View?) {

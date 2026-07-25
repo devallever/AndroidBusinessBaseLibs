@@ -17,7 +17,7 @@ class TabAndPagerHelper(val tabs: TabLayout, val viewPager: androidx.viewpager.w
                     val tv = TextView(tabs.context)
                     tv.text = value.getTitle(i)
                     tv.gravity = Gravity.CENTER
-                    tv.setTextColor(ResourcesUtils.getColor(R.color.main_tab_unselect_color))
+                    tv.setTextColor(ResourcesUtils.getColor(R.color.qr_main_tab_unselect_color))
                     val tab = tabs.newTab()
                             .setCustomView(tv)
                     tabs.addTab(tab)
@@ -49,9 +49,9 @@ class TabAndPagerHelper(val tabs: TabLayout, val viewPager: androidx.viewpager.w
             if (tabAt != null) {
                 val textView = tabAt.customView as? TextView
                 if (tabAt == tab) {
-                    textView?.setTextColor(ResourcesUtils.getColor(R.color.main_tab_highlight))
+                    textView?.setTextColor(ResourcesUtils.getColor(R.color.qr_main_tab_highlight))
                 } else {
-                    textView?.setTextColor(ResourcesUtils.getColor(R.color.main_tab_unselect_color))
+                    textView?.setTextColor(ResourcesUtils.getColor(R.color.qr_main_tab_unselect_color))
                 }
             }
         }

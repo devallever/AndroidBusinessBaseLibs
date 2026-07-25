@@ -8,16 +8,16 @@ import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.function.notchcompat.NotchCompat
 import app.allever.android.lib.core.helper.SystemHelper
 import com.allever.app.qr.code.scaner.R
-import com.allever.app.qr.code.scaner.databinding.ActivityAboutBinding
+import com.allever.app.qr.code.scaner.databinding.QrActivityAboutBinding
 
 /**
  */
 
 class AboutActivity : AppActivity(), View.OnClickListener {
-    private lateinit var mBinding: ActivityAboutBinding
+    private lateinit var mBinding: QrActivityAboutBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityAboutBinding.inflate(layoutInflater)
+        mBinding = QrActivityAboutBinding.inflate(layoutInflater)
         setContentView(mBinding.rootLayout)
         initView()
     }
@@ -29,7 +29,7 @@ class AboutActivity : AppActivity(), View.OnClickListener {
             addStatusBar(mBinding.rootLayout, v)
         })
         findViewById<View>(R.id.iv_back).setOnClickListener(this)
-        findViewById<TextView>(R.id.tv_label).text = getString(R.string.about)
+        findViewById<TextView>(R.id.tv_label).text = getString(R.string.qr_about)
         mBinding.aboutPrivacy.setOnClickListener(this)
         val channel = "GooglePlay"
         findViewById<TextView>(R.id.about_app_version).text = "v1.0"

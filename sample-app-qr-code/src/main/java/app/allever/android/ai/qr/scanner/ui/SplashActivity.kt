@@ -20,7 +20,7 @@ class SplashActivity : AppActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        setContentView(R.layout.qr_activity_splash)
 
         NotchCompat.adaptNotchWithFullScreen(window)
 

@@ -12,7 +12,7 @@ import app.allever.android.ai.qr.scanner.AppActivity
 import app.android.base.lib.tab.TabLayout
 import com.allever.app.qr.code.scaner.R
 import app.allever.android.ai.qr.scanner.core.RateGuide
-import com.allever.app.qr.code.scaner.databinding.ActivityMainBinding
+import com.allever.app.qr.code.scaner.databinding.QrActivityMainBinding
 import app.allever.android.lib.core.function.notchcompat.NotchCompat
 
 
@@ -27,18 +27,18 @@ class MainActivity : AppActivity(), TabLayout.OnTabSelectedListener, View.OnClic
     private var mainTabHighlight: Int = 0
     private var mainTabUnSelectColor: Int = 0
 
-    private lateinit var mBinding: ActivityMainBinding
+    private lateinit var mBinding: QrActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityMainBinding.inflate(layoutInflater)
+        mBinding = QrActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
         // 解决Fragment使用SurfaceView出现闪屏的问题（启动页进入会闪屏一次）
 //        window.setFormat(PixelFormat.TRANSLUCENT)
 
-        mainTabHighlight = resources.getColor(R.color.main_tab_highlight)
-        mainTabUnSelectColor = resources.getColor(R.color.main_tab_unselect_color)
+        mainTabHighlight = resources.getColor(R.color.qr_main_tab_highlight)
+        mainTabUnSelectColor = resources.getColor(R.color.qr_main_tab_unselect_color)
 
         mSectionsPagerAdapter = FragmentTabPagerAdapter(this, supportFragmentManager)
 
@@ -113,7 +113,7 @@ class MainActivity : AppActivity(), TabLayout.OnTabSelectedListener, View.OnClic
     }
 
     private fun getTabView(position: Int): View {
-        val view = LayoutInflater.from(this).inflate(R.layout.tab_item, null)
+        val view = LayoutInflater.from(this).inflate(R.layout.qr_tab_item, null)
         val imageView = view.findViewById<ImageView>(R.id.icon)
         val textView = view.findViewById<TextView>(R.id.text1)
         val tab = TabModel.getTab(position)

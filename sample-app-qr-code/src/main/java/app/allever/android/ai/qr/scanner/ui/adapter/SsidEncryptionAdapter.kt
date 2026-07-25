@@ -16,7 +16,7 @@ class SsidEncryptionAdapter(context: Context, data: List<String>) : BaseAdapter(
         val viewHolder: MyViewHolder
         val itemView: View
         if (convertView == null){
-            itemView = LayoutInflater.from(mContext).inflate(R.layout.item_ssid_encryption, parent, false)
+            itemView = LayoutInflater.from(mContext).inflate(R.layout.qr_item_ssid_encryption, parent, false)
             viewHolder = MyViewHolder(itemView)
             itemView.tag = viewHolder
         }else{

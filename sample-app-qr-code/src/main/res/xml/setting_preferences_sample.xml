@@ -29,25 +29,25 @@
             android:defaultValue="false"
             android:key="preferences_auto_open_web"
             android:title="@string/preferences_auto_open_web_title"
-            app:cpTitleTextColor="@color/preference_title_color" />
+            app:cpTitleTextColor="@color/qr_preference_title_color" />
 
         <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomSwitchPreference
             android:defaultValue="true"
             android:key="preferences_copy_to_clipboard"
             android:title="@string/preferences_copy_to_clipboard_title"
-            app:cpTitleTextColor="@color/preference_title_color" />
+            app:cpTitleTextColor="@color/qr_preference_title_color" />
 
         <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomSwitchPreference
             android:defaultValue="true"
             android:key="preferences_play_beep"
             android:title="@string/preferences_play_beep_title"
-            app:cpTitleTextColor="@color/preference_title_color" />
+            app:cpTitleTextColor="@color/qr_preference_title_color" />
 
         <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomSwitchPreference
             android:defaultValue="true"
             android:key="preferences_vibrate"
             android:title="@string/preferences_vibrate_title"
-            app:cpTitleTextColor="@color/preference_title_color" />
+            app:cpTitleTextColor="@color/qr_preference_title_color" />
     </app.allever.android.ai.qr.scanner.ui.widget.preference.CustomPreferenceCategory>
 
 
@@ -65,7 +65,7 @@
         <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomPreference
             android:key="preferences_about"
             android:title="@string/preferences_about"
-            app:cpTitleTextColor="@color/preference_title_color" />
+            app:cpTitleTextColor="@color/qr_preference_title_color" />
 
 <!--        <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomPreference-->
 <!--            android:key="preferences_support"-->

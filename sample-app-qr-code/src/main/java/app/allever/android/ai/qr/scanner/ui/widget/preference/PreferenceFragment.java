@@ -99,7 +99,7 @@ public abstract class PreferenceFragment extends BaseFragment implements
     @Override
     public View onCreateView(LayoutInflater paramLayoutInflater, ViewGroup paramViewGroup,
                              Bundle paramBundle) {
-        return paramLayoutInflater.inflate(R.layout.preference_list_fragment, paramViewGroup,
+        return paramLayoutInflater.inflate(R.layout.qr_preference_list_fragment, paramViewGroup,
                 false);
     }
 

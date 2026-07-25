@@ -67,7 +67,7 @@ class SettingFragment : PreferenceFragment(), SharedPreferences.OnSharedPreferen
         val view = super.onCreateView(paramLayoutInflater, paramViewGroup, paramBundle)
         (view?.findViewById(android.R.id.list) as? ListView)?.let {
             it.setBackgroundResource(R.color.white)
-            it.divider = ColorDrawable(ResourcesUtils.resources.getColor(R.color.history_list_item_dividing))
+            it.divider = ColorDrawable(ResourcesUtils.resources.getColor(R.color.qr_history_list_item_dividing))
             it.dividerHeight = DeviceUtils.dip2px(1f)
             it
 

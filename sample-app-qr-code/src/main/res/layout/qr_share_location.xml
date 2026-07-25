@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/qr_share_type_container_padding"
+    android:id="@+id/share_location_container">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <!-- 纬度 latitude -->
+        <TextView
+
+            style="@style/qr_ShareItemTvTitleStyle"
+            android:text="@string/qr_latitude"/>
+        <EditText
+            android:id="@+id/et_latitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="@string/input_latitude"/>
+
+        <!-- 经度 longitude -->
+        <TextView
+            style="@style/qr_ShareItemTvTitleStyle"
+            android:text="@string/qr_longitude"
+            android:layout_marginTop="20dp"/>
+        <EditText
+            android:id="@+id/et_longitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType=""
+            android:hint="@string/input_longitude"/>
+
+        <!-- 海拔 altitude -->
+        <TextView
+            style="@style/qr_ShareItemTvTitleStyle"
+            android:text="@string/qr_altitude"
+            android:layout_marginTop="20dp"/>
+        <EditText
+            android:id="@+id/et_altitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType=""
+            android:hint="@string/input_altitude"/>
+    </LinearLayout>
+</ScrollView>

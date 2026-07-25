@@ -2,38 +2,38 @@
 <resources>
     <string name="qr_app_name">QR Scanner</string>
 
-    <string name="menu_about">About</string>
-    <string name="about">About</string>
-    <string name="about_ad_choice">AD Choice</string>
-    <string name="about_privacy">Privacy Policy</string>
-    <string name="copyright_info"></string>
-    <string name="action_settings">Setting</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="qr_menu_about">About</string>
+    <string name="qr_about">About</string>
+    <string name="qr_about_ad_choice">AD Choice</string>
+    <string name="qr_about_privacy">Privacy Policy</string>
+    <string name="qr_copyright_info"></string>
+    <string name="qr_action_settings">Setting</string>
+    <string name="qr_section_format">Hello World from section: %1$d</string>
 
-    <string name="main_exit_toase">Press again to exit</string>
-    <string name="main_scan_tips">Align the QR code barcode with the frame for scanning</string>
+    <string name="qr_main_exit_toase">Press again to exit</string>
+    <string name="qr_main_scan_tips">Align the QR code barcode with the frame for scanning</string>
 
-    <string name="tab_name_capture">Scanner</string>
-    <string name="tab_name_history">History</string>
-    <string name="tab_name_share">Generator</string>
-    <string name="tab_name_setting">Setting</string>
+    <string name="qr_tab_name_capture">Scanner</string>
+    <string name="qr_tab_name_history">History</string>
+    <string name="qr_tab_name_share">Generator</string>
+    <string name="qr_tab_name_setting">Setting</string>
 
-    <string name="history_select_all">all</string>
-    <string name="history_empty_title">There is no results yet</string>
+    <string name="qr_history_select_all">all</string>
+    <string name="qr_history_empty_title">There is no results yet</string>
 
-    <string name="history_tab_scan">Scan History</string>
-    <string name="history_tab_generate">Create History</string>
+    <string name="qr_history_tab_scan">Scan History</string>
+    <string name="qr_history_tab_generate">Create History</string>
 
     <!--  Strings for possible PreferenceActivity Back/Next buttons -->
-    <string name="back_button_label">Back</string>
-    <string name="next_button_label">Next</string>
+    <string name="qr_back_button_label">Back</string>
+    <string name="qr_next_button_label">Next</string>
     <!-- Optional button to Skip a PreferenceActivity [CHAR LIMIT=20] -->
-    <string name="skip_button_label">Skip</string>
+    <string name="qr_skip_button_label">Skip</string>
 
 
-    <string name="privacy_start">START</string>
-    <string name="privacy_message_pre">Understand and agree to the&#160;</string>
-    <string name="privacy_message">Terms and Privacy</string>
+    <string name="qr_privacy_start">START</string>
+    <string name="qr_privacy_message_pre">Understand and agree to the&#160;</string>
+    <string name="qr_privacy_message">Terms and Privacy</string>
 
 
     <string name="preferences_share">Share</string>
@@ -47,22 +47,22 @@
     <string name="preferences_vibrate_title">Vibrate</string>
 
     <!--premium-->
-    <string name="premium_unlimited">Unlimited scanning and generation times.</string>
-    <string name="premium_support">Support over 300+ types and scenarios.</string>
-    <string name="premium_custom">Custom your own QR Code for share.</string>
-    <string name="premium_no">No Ads forever.</string>
-    <string name="purchase_state">purchase success</string>
+    <string name="qr_premium_unlimited">Unlimited scanning and generation times.</string>
+    <string name="qr_premium_support">Support over 300+ types and scenarios.</string>
+    <string name="qr_premium_custom">Custom your own QR Code for share.</string>
+    <string name="qr_premium_no">No Ads forever.</string>
+    <string name="qr_purchase_state">purchase success</string>
 
     <!--vip-->
-    <string name="vip_tip">Speed your Study &amp; Business.</string>
-    <string name="vip_month_tip">1 Month: %s/Month.</string>
-    <string name="vip_month_tip2">3-days free trial, then %s/Month. Cancel anytime</string>
-    <string name="vip_year_tip">12 Month: %s/Month</string>
-    <string name="vip_year_tip2">3-days free trial, save %s/Year. Cancel anytime</string>
+    <string name="qr_vip_tip">Speed your Study &amp; Business.</string>
+    <string name="qr_vip_month_tip">1 Month: %s/Month.</string>
+    <string name="qr_vip_month_tip2">3-days free trial, then %s/Month. Cancel anytime</string>
+    <string name="qr_vip_year_tip">12 Month: %s/Month</string>
+    <string name="qr_vip_year_tip2">3-days free trial, save %s/Year. Cancel anytime</string>
 
-    <string name="premium_start_buy">START 3 DAYS FOR FREE</string>
-    <string name="premium_start_upgrade">Upgrade</string>
-    <string name="premium_watch_video">Watch video to share</string>
+    <string name="qr_premium_start_buy">START 3 DAYS FOR FREE</string>
+    <string name="qr_premium_start_upgrade">Upgrade</string>
+    <string name="qr_premium_watch_video">Watch video to share</string>
 
     <!-- ResultTypeUIData -->
     <string name="result_type_name_addressbook">Contacts</string>
@@ -143,60 +143,60 @@
     <string name="scene_edit_hint_phone_number">Input phone</string>
 
 
-    <string name="share_tips">share tips \n sss</string>
-    <string name="generate">Generate</string>
-    <string name="next">Next</string>
-    <string name="url">URL:</string>
-    <string name="ssid">SSID:</string>
-    <string name="hidden_network">Hide network</string>
-    <string name="encryption_type">Encription type</string>
-    <string name="password">Password:</string>
-    <string name="contact_name">Name:</string>
-    <string name="share_contact_tips">Share contacts in the address book to generate directly in QR Scanner</string>
-    <string name="email">Email:</string>
-    <string name="text">Text:</string>
-    <string name="message_content">Message content: </string>
-    <string name="recipient_phone">Recipient phone</string>
+    <string name="qr_share_tips">share tips \n sss</string>
+    <string name="qr_generate">Generate</string>
+    <string name="qr_next">Next</string>
+    <string name="qr_url">URL:</string>
+    <string name="qr_ssid">SSID:</string>
+    <string name="qr_hidden_network">Hide network</string>
+    <string name="qr_encryption_type">Encription type</string>
+    <string name="qr_password">Password:</string>
+    <string name="qr_contact_name">Name:</string>
+    <string name="qr_share_contact_tips">Share contacts in the address book to generate directly in QR Scanner</string>
+    <string name="qr_email">Email:</string>
+    <string name="qr_text">Text:</string>
+    <string name="qr_message_content">Message content: </string>
+    <string name="qr_recipient_phone">Recipient phone</string>
 
-    <string name="share_type_clipboard">Clipboard</string>
-    <string name="share_type_url">Url</string>
-    <string name="share_type_wifi">WIFI</string>
-    <string name="share_type_text">Text</string>
-    <string name="share_type_contact">Contact</string>
-    <string name="share_type_phone">Phone</string>
-    <string name="share_type_email">Email</string>
-    <string name="share_type_sms">SMS</string>
-    <string name="share_type_location">Location</string>
-    <string name="share_type_bar_code">Barcode</string>
-    <string name="save">Save</string>
-    <string name="share">Share</string>
-    <string name="input_ssid_manually">Input manually</string>
-    <string name="cancel">Cancel</string>
-    <string name="confirm">Confirm</string>
-    <string name="file_name">File name</string>
-    <string name="longitude">Longitude</string>
-    <string name="latitude">Latitude</string>
-    <string name="barcode">Barcode</string>
-    <string name="altitude">Altitude</string>
-    <string name="content">Content:</string>
-    <string name="clipboard">Clipboard:</string>
-    <string name="username">Username:</string>
+    <string name="qr_share_type_clipboard">Clipboard</string>
+    <string name="qr_share_type_url">Url</string>
+    <string name="qr_share_type_wifi">WIFI</string>
+    <string name="qr_share_type_text">Text</string>
+    <string name="qr_share_type_contact">Contact</string>
+    <string name="qr_share_type_phone">Phone</string>
+    <string name="qr_share_type_email">Email</string>
+    <string name="qr_share_type_sms">SMS</string>
+    <string name="qr_share_type_location">Location</string>
+    <string name="qr_share_type_bar_code">Barcode</string>
+    <string name="qr_save">Save</string>
+    <string name="qr_share">Share</string>
+    <string name="qr_input_ssid_manually">Input manually</string>
+    <string name="qr_cancel">Cancel</string>
+    <string name="qr_confirm">Confirm</string>
+    <string name="qr_file_name">File name</string>
+    <string name="qr_longitude">Longitude</string>
+    <string name="qr_latitude">Latitude</string>
+    <string name="qr_barcode">Barcode</string>
+    <string name="qr_altitude">Altitude</string>
+    <string name="qr_content">Content:</string>
+    <string name="qr_clipboard">Clipboard:</string>
+    <string name="qr_username">Username:</string>
 
-    <string name="wifi_not_enable">Wifi not enable</string>
-    <string name="not_found_connnected_wifi">Unable to find connected WiFi</string>
+    <string name="qr_wifi_not_enable">Wifi not enable</string>
+    <string name="qr_not_found_connnected_wifi">Unable to find connected WiFi</string>
 
-    <string name="jump_setting_dialog_default_title">Help</string>
-    <string name="jump_setting_dialog_default_content">You can manually authorize the app</string>
-    <string name="jump_setting_dialog_default_cancel_text">Cancel</string>
-    <string name="jump_setting_dialog_default_ok_text">Start</string>
+    <string name="qr_jump_setting_dialog_default_title">Help</string>
+    <string name="qr_jump_setting_dialog_default_content">You can manually authorize the app</string>
+    <string name="qr_jump_setting_dialog_default_cancel_text">Cancel</string>
+    <string name="qr_jump_setting_dialog_default_ok_text">Start</string>
 
-    <string name="tips_no_camera_permission">No camera permissions</string>
-    <string name="tips_no_read_storage_permission">No Read Storage Permissions</string>
+    <string name="qr_tips_no_camera_permission">No camera permissions</string>
+    <string name="qr_tips_no_read_storage_permission">No Read Storage Permissions</string>
 
-    <string name="tips_ration_camera">We need camera permission to scan QR codes and barcodes</string>
-    <string name="tips_ration_storate">We need storage permissions to save the QR code image</string>
-    <string name="tips_ration_read">We need storage permissions to read images</string>
-    <string name="input_file_name">Enter file name</string>
+    <string name="qr_tips_ration_camera">We need camera permission to scan QR codes and barcodes</string>
+    <string name="qr_tips_ration_storate">We need storage permissions to save the QR code image</string>
+    <string name="qr_tips_ration_read">We need storage permissions to read images</string>
+    <string name="qr_input_file_name">Enter file name</string>
 
     <!--续订提示-->
     <string name="grace_period_expiring_tip">Grace Period is Expiring </string>
@@ -205,18 +205,18 @@
     <string name="grace_period_expiring_discount_eighty_percent_tip">20% discount for Update your info to complete Google payment.</string>
     <string name="grace_period_expiring_discount_seventy_percent_tip">I will give you the lowest discount. 30% discount only for you! Bargaining Master</string>
     <!--retain-->
-    <string name="gp_retain_title">Really wanna quit Free Trail ?</string>
-    <string name="gp_retain_title_watch_noad">Premium features below are Free to Try now!</string>
-    <string name="gp_retain_descript">Premium features below are FREE to TRY now. You can CANCEL ANYTIME.</string>
-    <string name="gp_retain_try_for_free">Try for Free</string>
-    <string name="gp_retain_quit">Quit</string>
-    <string name="gp_retain_i_know">I Know</string>
+    <string name="qr_gp_retain_title">Really wanna quit Free Trail ?</string>
+    <string name="qr_gp_retain_title_watch_noad">Premium features below are Free to Try now!</string>
+    <string name="qr_gp_retain_descript">Premium features below are FREE to TRY now. You can CANCEL ANYTIME.</string>
+    <string name="qr_gp_retain_try_for_free">Try for Free</string>
+    <string name="qr_gp_retain_quit">Quit</string>
+    <string name="qr_gp_retain_i_know">I Know</string>
 
-    <string name="gp_month_title">MONTHLY</string>
-    <string name="gp_month_desp">FREE 3-days trial, %s/month</string>
-    <string name="gp_year_title">START FREE TRIAL</string>
-    <string name="gp_year_desp">yearly, cancel anytime</string>
-    <string name="gp_bottom_tip">3-days free trial. Cancel anytime. Automatically extends to an annual subscription for %s/year.</string>
+    <string name="qr_gp_month_title">MONTHLY</string>
+    <string name="qr_gp_month_desp">FREE 3-days trial, %s/month</string>
+    <string name="qr_gp_year_title">START FREE TRIAL</string>
+    <string name="qr_gp_year_desp">yearly, cancel anytime</string>
+    <string name="qr_gp_bottom_tip">3-days free trial. Cancel anytime. Automatically extends to an annual subscription for %s/year.</string>
 
 
     <string name="dialog_rewarded_video_or_vip_title">Watch videos to unlock 3 times scan? </string>
@@ -224,8 +224,8 @@
     <string name="dialog_rewarded_video_or_vip_button_getvip">GET VIP</string>
 
 
-    <string name="about_right"></string>
-    <string name="privacy">Privacy Policy</string>
-    <string name="recommend_app">Recommend</string>
+    <string name="qr_about_right"></string>
+    <string name="qr_privacy">Privacy Policy</string>
+    <string name="qr_recommend_app">Recommend</string>
 
 </resources>

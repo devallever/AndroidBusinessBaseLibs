@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/share_contact_container">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <app.allever.android.ai.qr.scanner.ui.widget.ShareItemInput
+            android:id="@+id/id_share_item_input_contact_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/qr_share_item_input_margin_right_left"
+            android:layout_marginLeft="@dimen/qr_share_item_input_margin_right_left"
+            app:siiMaxContentLength="100"
+            app:siiHint="@string/input_contact_name"
+            app:siiTitle="@string/qr_contact_name"/>
+
+        <app.allever.android.ai.qr.scanner.ui.widget.ShareItemInput
+            android:id="@+id/id_share_item_input_contact_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/qr_share_item_input_margin_right_left"
+            android:layout_marginLeft="@dimen/qr_share_item_input_margin_right_left"
+            app:siiMaxContentLength="20"
+            app:siiHint="@string/scene_edit_hint_phone_number"
+            app:siiTitle="@string/scene_edit_title_phone_number"
+            app:siiInputType="number"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="@dimen/qr_share_item_input_margin_right_left"
+            android:layout_marginLeft="@dimen/qr_share_item_input_margin_right_left"
+            android:textColor="@color/qr_share_item_tv_color"
+            android:text="@string/qr_share_contact_tips"
+            android:textSize="12sp"
+            android:singleLine="false"/>
+    </LinearLayout>
+</ScrollView>

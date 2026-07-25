@@ -28,9 +28,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import app.allever.android.lib.core.helper.MediaHelper;
 import app.allever.android.lib.core.helper.MediaHelperKt;
-import app.allever.android.lib.media.core.MediaCore;
 
 @SuppressLint("ValidFragment")
 public class SaveQRCodeImgDialog extends DialogFragment {
@@ -50,7 +48,7 @@ public class SaveQRCodeImgDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_save_qr_code_image,null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.qr_dialog_save_qr_code_image,null);
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                 .setView(view)
                 .create();
@@ -78,7 +76,7 @@ public class SaveQRCodeImgDialog extends DialogFragment {
                 if (mListener != null){
                     String fileName = etFileName.getText().toString();
                     if (TextUtils.isEmpty(fileName)){
-                        ToastUtils.INSTANCE.show(getString(R.string.input_file_name));
+                        ToastUtils.INSTANCE.show(getString(R.string.qr_input_file_name));
                     }else {
                         //java调用kotlin的扩展方法
                         //saveToAlbum(App.context, fileName, App.context.getString(R.string.app_name))

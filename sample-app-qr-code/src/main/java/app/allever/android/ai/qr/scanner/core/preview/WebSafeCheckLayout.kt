@@ -35,9 +35,9 @@ class WebSafeCheckLayout : LinearLayout {
             mRotateAnimation?.cancel()
             when (value) {
                 TYPE_CHECKING -> {
-                    mCheckIcon?.setImageResource(R.drawable.icon_check_web_loading)
+                    mCheckIcon?.setImageResource(R.drawable.qr_icon_check_web_loading)
                     mCheckText?.setText(R.string.result_website_detecting)
-                    mCheckText?.setTextColor(resources.getColor(R.color.result_website_check_detecting))
+                    mCheckText?.setTextColor(resources.getColor(R.color.qr_result_website_check_detecting))
 
                     val rotateAnimation = RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
                     rotateAnimation.fillAfter = true
@@ -48,20 +48,20 @@ class WebSafeCheckLayout : LinearLayout {
                     mCheckIcon?.startAnimation(mRotateAnimation)
                 }
                 TYPE_SECURE -> {
-                    mCheckIcon?.setImageResource(R.drawable.icon_check_web_safe)
+                    mCheckIcon?.setImageResource(R.drawable.qr_icon_check_web_safe)
                     mCheckText?.setText(R.string.result_website_secure)
-                    mCheckText?.setTextColor(resources.getColor(R.color.result_website_check_secure))
+                    mCheckText?.setTextColor(resources.getColor(R.color.qr_result_website_check_secure))
                 }
                 TYPE_MALICIOUS -> {
-                    mCheckIcon?.setImageResource(R.drawable.icon_check_web_dangerous)
+                    mCheckIcon?.setImageResource(R.drawable.qr_icon_check_web_dangerous)
                     mCheckText?.setText(R.string.result_website_malicious)
-                    mCheckText?.setTextColor(resources.getColor(R.color.result_website_check_malicious))
+                    mCheckText?.setTextColor(resources.getColor(R.color.qr_result_website_check_malicious))
 
                 }
                 else -> {
-                    mCheckIcon?.setImageResource(R.drawable.icon_check_web_unknown)
+                    mCheckIcon?.setImageResource(R.drawable.qr_icon_check_web_unknown)
                     mCheckText?.setText(R.string.result_website_unknown)
-                    mCheckText?.setTextColor(resources.getColor(R.color.result_website_check_unknown))
+                    mCheckText?.setTextColor(resources.getColor(R.color.qr_result_website_check_unknown))
 
                 }
             }
@@ -90,7 +90,7 @@ class WebSafeCheckLayout : LinearLayout {
     override fun onFinishInflate() {
         super.onFinishInflate()
         mCheckIcon = findViewById(R.id.check_icon) as? ImageView?
-        mCheckIcon?.setImageResource(R.drawable.icon_check_web_loading)
+        mCheckIcon?.setImageResource(R.drawable.qr_icon_check_web_loading)
         mCheckIcon?.drawable?.mutate()
 
         mCheckText = findViewById(R.id.check_text) as? TextView?

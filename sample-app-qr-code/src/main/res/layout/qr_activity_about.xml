@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:id="@+id/rootLayout">
+
+    <include layout="@layout/qr_include_top_bar"/>
+
+    <ImageView
+        android:id="@+id/about_iv_logo"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_below="@+id/top_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/qr_ic_logo"/>
+
+    <TextView
+        android:id="@+id/about_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/qr_default_tv_color"
+        android:layout_below="@id/about_iv_logo"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/qr_app_name"
+        android:textStyle="bold"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/about_app_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/qr_default_tv_color"
+        android:layout_below="@id/about_app_name"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:text="V1.0"
+        android:textStyle="bold"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/about_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:text="@string/qr_about_right"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/qr_default_tv_color"/>
+
+    <TextView
+        android:id="@+id/about_privacy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/qr_privacy"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/about_right"
+        android:layout_marginBottom="60dp"
+        android:drawableLeft="@drawable/qr_ic_google_play_privacy"
+        android:drawableStart="@drawable/qr_ic_google_play_privacy"
+        android:drawablePadding="10dp"
+        android:padding="5dp"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:textColor="@color/qr_default_tv_color"
+        android:visibility="visible"/>
+
+
+</RelativeLayout>

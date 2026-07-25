@@ -18,7 +18,7 @@ abstract class AppActivity: AbstractActivity() {
     protected fun addStatusBar(rootLayout: ViewGroup, toolBar: View) {
         val statusBarView = View(this)
         statusBarView.id = statusBarView.hashCode()
-        statusBarView.setBackgroundResource(R.drawable.top_bar_bg)
+        statusBarView.setBackgroundResource(R.drawable.qr_top_bar_bg)
         val statusBarHeight = SystemHelper.getStatusBarHeight(this)
         val lp = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight)
 

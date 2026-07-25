@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/qr_history_list_item_height"
+    android:layout_marginStart="@dimen/qr_history_list_margin"
+    android:layout_marginLeft="@dimen/qr_history_list_margin"
+    android:layout_marginEnd="@dimen/qr_history_list_margin"
+    android:layout_marginRight="@dimen/qr_history_list_margin"
+    android:orientation="vertical">
+
+    <CheckBox
+        android:id="@+id/cb_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="27dp"
+        android:layout_marginRight="27dp"
+        android:button="@drawable/qr_checkbox_style" />
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/cb_select"
+        android:layout_toRightOf="@+id/cb_select"
+        android:background="@drawable/qr_history_item_icon_bg"
+        android:scaleType="centerInside"
+        android:src="@drawable/qr_icon_gp" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginStart="@dimen/qr_history_list_margin"
+        android:layout_marginLeft="@dimen/qr_history_list_margin"
+        android:layout_toEndOf="@+id/iv_icon"
+        android:layout_toRightOf="@+id/iv_icon"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:text="@string/zxing_history_empty"
+        android:textColor="@color/qr_history_list_item_title"
+        android:textIsSelectable="false"
+        android:textSize="15sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title"
+        android:layout_marginStart="@dimen/qr_history_list_margin"
+        android:layout_marginLeft="@dimen/qr_history_list_margin"
+        android:layout_marginTop="6dp"
+        android:layout_toEndOf="@+id/iv_icon"
+        android:layout_toRightOf="@+id/iv_icon"
+        android:orientation="horizontal">
+
+        <app.allever.android.ai.qr.scanner.core.preview.WebSafeCheckLayout
+            android:id="@+id/web_safe_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/check_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:src="@drawable/qr_icon_check_web_loading" />
+
+        </app.allever.android.ai.qr.scanner.core.preview.WebSafeCheckLayout>
+
+        <TextView
+            android:id="@+id/tv_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="top"
+            android:singleLine="true"
+            android:text="@string/zxing_history_empty_detail"
+            android:textColor="@color/qr_history_list_item_detail"
+            android:textIsSelectable="false"
+            android:textSize="12sp" />
+
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/qr_history_list_margin"
+            android:layout_marginLeft="@dimen/qr_history_list_margin"
+            android:gravity="center_vertical"
+            android:text="00:00:00"
+            android:textColor="@color/qr_history_list_item_time"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignStart="@+id/tv_title"
+        android:layout_alignLeft="@+id/tv_title"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/iv_icon"
+        android:layout_toRightOf="@+id/iv_icon"
+        android:background="@color/qr_history_list_item_dividing" />
+
+</RelativeLayout>

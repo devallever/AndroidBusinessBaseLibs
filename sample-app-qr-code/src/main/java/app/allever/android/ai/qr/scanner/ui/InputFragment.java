@@ -1,6 +1,5 @@
 package app.allever.android.ai.qr.scanner.ui;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -33,7 +32,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.allever.app.qr.code.scaner.databinding.FragmentShareQrcodeBinding;
+import com.allever.app.qr.code.scaner.databinding.QrFragmentShareQrcodeBinding;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.android.Contents;
 import com.google.zxing.client.android.Intents;
@@ -61,8 +60,6 @@ import app.allever.android.ai.qr.scanner.core.encode.Constant;
 import app.allever.android.ai.qr.scanner.core.encode.EncodeActivity;
 import app.allever.android.ai.qr.scanner.core.preview.ResultUIModel;
 import app.allever.android.ai.qr.scanner.ui.widget.ShareItemInput;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function0;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -115,7 +112,7 @@ public class InputFragment extends AppCompatDialogFragment {
     //wifi ssid列表 弹窗;
     private ListPopupWindow mListPopupWindowSSID;
 
-    private FragmentShareQrcodeBinding mBinding;
+    private QrFragmentShareQrcodeBinding mBinding;
 
     public InputFragment() {
     }
@@ -135,7 +132,7 @@ public class InputFragment extends AppCompatDialogFragment {
             //设置dialog在屏幕底部
 //            window.setGravity(Gravity.BOTTOM);
             //设置dialog弹出时的动画效果，从屏幕底部向上弹出
-            window.setWindowAnimations(R.style.ActivityStyle);
+            window.setWindowAnimations(R.style.qr_ActivityStyle);
             //获得window窗口的属性
             WindowManager.LayoutParams lp = window.getAttributes();
             //设置窗口宽度为充满全屏
@@ -150,7 +147,7 @@ public class InputFragment extends AppCompatDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        mBinding = FragmentShareQrcodeBinding.inflate(getLayoutInflater());
+        mBinding = QrFragmentShareQrcodeBinding.inflate(getLayoutInflater());
         AlertDialog alertDialog = new AlertDialog.Builder(getContext())
                 .setView(mBinding.getRoot())
                 .create();
@@ -174,7 +171,7 @@ public class InputFragment extends AppCompatDialogFragment {
             //设置空图标
             mBinding.btnNext.setCompoundDrawables(null, null, null, null);
         } else {
-            Drawable drawable = getResources().getDrawable(R.drawable.icon_crown);
+            Drawable drawable = getResources().getDrawable(R.drawable.qr_icon_crown);
             int width = drawable.getIntrinsicWidth() >> 1;
             int height = drawable.getIntrinsicHeight() >> 1;
             drawable.setBounds(0, 0, width, height);
@@ -305,7 +302,7 @@ public class InputFragment extends AppCompatDialogFragment {
 
         //判断wifi是否可用
         if (wifiManager.getWifiState() != WifiManager.WIFI_STATE_ENABLED) {
-            Toast.makeText(getActivity(), R.string.wifi_not_enable, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.qr_wifi_not_enable, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -404,7 +401,7 @@ public class InputFragment extends AppCompatDialogFragment {
 
                 //使用了自带的布局，文本颜色为黑色,需要修改为指定颜色
                 TextView textView = (TextView) view;
-                textView.setTextColor(getResources().getColor(R.color.share_item_tv_color));
+                textView.setTextColor(getResources().getColor(R.color.qr_share_item_tv_color));
 
                 //如果选择最后一个，None ,密码输入框设置为不可见状态
                 if (position == mWifiEncryptionList.size() - 1) {
@@ -467,7 +464,7 @@ public class InputFragment extends AppCompatDialogFragment {
                         //展开布局
                         mListPopupWindowSSID.show();
                         if (mConnectedWifiList.size() == 0) {
-                            Toast.makeText(getActivity(), R.string.not_found_connnected_wifi, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.qr_not_found_connnected_wifi, Toast.LENGTH_SHORT).show();
                         }
                         return true;
                     }

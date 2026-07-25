@@ -19,7 +19,6 @@ import app.allever.android.ai.qr.scanner.core.history.GenerateHistoryManager
 import app.allever.android.ai.qr.scanner.core.history.HistoryAdapter
 import app.allever.android.ai.qr.scanner.core.history.HistoryDataModel
 import app.allever.android.ai.qr.scanner.core.history.HistoryItem
-import app.allever.android.ai.qr.scanner.core.preview.PreviewResultFragment
 import app.allever.android.ai.qr.scanner.ui.widget.TabAndPagerHelper
 
 
@@ -33,8 +32,8 @@ class HistoryFragment : BaseFragment(), View.OnClickListener {
         internal const val HISTORY_TYPE_SCAN = 0
         internal const val HISTORY_TYPE_GENERATE = 1
 
-        val HISTORY_DATA_ITEM_SCAN = HistoryDataItem(HISTORY_TYPE_SCAN, ResourcesUtils.getString(R.string.history_tab_scan))
-        val HISTORY_DATA_ITEM_GENERATE = HistoryDataItem(HISTORY_TYPE_GENERATE, ResourcesUtils.getString(R.string.history_tab_generate))
+        val HISTORY_DATA_ITEM_SCAN = HistoryDataItem(HISTORY_TYPE_SCAN, ResourcesUtils.getString(R.string.qr_history_tab_scan))
+        val HISTORY_DATA_ITEM_GENERATE = HistoryDataItem(HISTORY_TYPE_GENERATE, ResourcesUtils.getString(R.string.qr_history_tab_generate))
 
         const val EXTRA_HISTORY_ITEM_TYPE = "hf_ehit_dkkdkkf"
         const val EXTRA_HISTORY_SHOW_TAGS = "hf_ehst_jekdkf"
@@ -79,7 +78,7 @@ class HistoryFragment : BaseFragment(), View.OnClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_history, container, false)
+        val rootView = inflater.inflate(R.layout.qr_fragment_history, container, false)
 
         mContainer = rootView.findViewById(R.id.container)
         mTabs = rootView.findViewById(R.id.tabs)
@@ -140,8 +139,8 @@ class HistoryFragment : BaseFragment(), View.OnClickListener {
             override fun getTitle(position: Int): String {
                 val historyDataItem = historyDataItems[position]
                 return when (historyDataItem.type) {
-                    HISTORY_TYPE_SCAN -> ResourcesUtils.getString(R.string.history_tab_scan)
-                    HISTORY_TYPE_GENERATE -> ResourcesUtils.getString(R.string.history_tab_generate)
+                    HISTORY_TYPE_SCAN -> ResourcesUtils.getString(R.string.qr_history_tab_scan)
+                    HISTORY_TYPE_GENERATE -> ResourcesUtils.getString(R.string.qr_history_tab_generate)
                     else -> ""
                 }
             }

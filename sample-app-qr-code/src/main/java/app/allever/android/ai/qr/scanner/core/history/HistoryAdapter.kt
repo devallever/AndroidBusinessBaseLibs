@@ -20,9 +20,9 @@ import app.allever.android.ai.qr.scanner.core.result.URIResultHandler
 import java.text.SimpleDateFormat
 import java.util.*
 
-val ITEM_TYPE_DATE = R.layout.history_list_item_date
-val ITEM_TYPE_HISTORY = R.layout.history_list_item_data
-val ITEM_TYPE_NO_DATA = R.layout.history_list_item_empty
+val ITEM_TYPE_DATE = R.layout.qr_history_list_item_date
+val ITEM_TYPE_HISTORY = R.layout.qr_history_list_item_data
+val ITEM_TYPE_NO_DATA = R.layout.qr_history_list_item_empty
 
 open class Item<T>(val type: Int, val obj: T, val id: Int = -1, var checked: Boolean? = null) {
 
@@ -165,7 +165,7 @@ class HistoryAdapter(val context: Context) : androidx.recyclerview.widget.Recycl
                         time = ""
                     }
                     if (resultTypeUIData.iconHasBackground) {
-                        val background = ResourcesCompat.getDrawable(context.resources, R.drawable.history_item_icon_bg, null)
+                        val background = ResourcesCompat.getDrawable(context.resources, R.drawable.qr_history_item_icon_bg, null)
                         ivIcon?.background = background
                         ivIcon?.scaleType = ImageView.ScaleType.CENTER_INSIDE
                         ResultUIModel.changeBackground(qrType, ivIcon, false)

@@ -42,7 +42,7 @@ public class GeneratorFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_share, container, false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.qr_fragment_share, container, false);
         RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.rv_share_type);
         ShareTypeAdapter adapter = new ShareTypeAdapter(mShareItemList);
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), MAX_COL));
@@ -81,14 +81,14 @@ public class GeneratorFragment extends BaseFragment {
 
     private void initData(){
         mShareItemList = Arrays.asList(
-                new ShareItem(R.drawable.icon_clipboard, R.string.share_type_clipboard, ShareItem.TYPE_CLIPBOARD, ParsedResultType.TEXT, false, true),
-                new ShareItem(R.drawable.icon_url, R.string.result_type_name_uri, ShareItem.TYPE_URL, ParsedResultType.URI, false, true),
+                new ShareItem(R.drawable.qr_icon_clipboard, R.string.qr_share_type_clipboard, ShareItem.TYPE_CLIPBOARD, ParsedResultType.TEXT, false, true),
+                new ShareItem(R.drawable.qr_icon_url, R.string.result_type_name_uri, ShareItem.TYPE_URL, ParsedResultType.URI, false, true),
 //                new ShareItem(R.drawable.icon_wifi, R.string.result_type_name_wifi, ShareItem.TYPE_WIFI, ParsedResultType.WIFI, false, true),
-                new ShareItem(R.drawable.icon_word, R.string.result_type_name_text, ShareItem.TYPE_TEXT, ParsedResultType.TEXT, false, true),
-                new ShareItem(R.drawable.icon_user, R.string.result_type_name_addressbook, ShareItem.TYPE_CONTACT, ParsedResultType.ADDRESSBOOK, false, true),
-                new ShareItem(R.drawable.icon_number, R.string.result_type_name_tel, ShareItem.TYPE_PHONE, ParsedResultType.TEL, false, true),
+                new ShareItem(R.drawable.qr_icon_word, R.string.result_type_name_text, ShareItem.TYPE_TEXT, ParsedResultType.TEXT, false, true),
+                new ShareItem(R.drawable.qr_icon_user, R.string.result_type_name_addressbook, ShareItem.TYPE_CONTACT, ParsedResultType.ADDRESSBOOK, false, true),
+                new ShareItem(R.drawable.qr_icon_number, R.string.result_type_name_tel, ShareItem.TYPE_PHONE, ParsedResultType.TEL, false, true),
 //                new ShareItem(R.drawable.icon_email, R.string.result_type_name_email_address, ShareItem.TYPE_EMAIL, ParsedResultType.EMAIL_ADDRESS, false, true),
-                new ShareItem(R.drawable.icon_message, R.string.result_type_name_sms, ShareItem.TYPE_SMS, ParsedResultType.SMS, false, true)
+                new ShareItem(R.drawable.qr_icon_message, R.string.result_type_name_sms, ShareItem.TYPE_SMS, ParsedResultType.SMS, false, true)
 
 //                new ShareItem(R.drawable.icon_instagram, R.string.result_type_name_instagram, ShareItem.TYPE_INSTAGRAM, ParsedResultType.INSTAGRAM, true, false),
 //                new ShareItem(R.drawable.icon_facebook, R.string.result_type_name_facebook, ShareItem.TYPE_FACEBOOK, ParsedResultType.FACEBOOK, true, false),
@@ -111,7 +111,7 @@ public class GeneratorFragment extends BaseFragment {
 
         @Override
         public ShareViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(requireContext()).inflate(R.layout.share_type_item, parent, false);
+            View view = LayoutInflater.from(requireContext()).inflate(R.layout.qr_share_type_item, parent, false);
             ShareViewHolder shareViewHolder = new ShareViewHolder(view);
             return shareViewHolder;
         }

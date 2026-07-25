@@ -41,13 +41,13 @@ object CustomQrCodeManager {
     )
 
     val Social_ICONS = mapOf<Int, Int>(
-            Pair(ShareItem.TYPE_FACEBOOK, R.drawable.icon_facebook),
-            Pair(ShareItem.TYPE_INSTAGRAM, R.drawable.icon_instagram),
-            Pair(ShareItem.TYPE_SPOTIFY, R.drawable.icon_spotify),
-            Pair(ShareItem.TYPE_TWITTER, R.drawable.icon_twitter),
-            Pair(ShareItem.TYPE_VIBER, R.drawable.icon_viber),
-            Pair(ShareItem.TYPE_WHATSAPP, R.drawable.icon_whatsapp),
-            Pair(ShareItem.TYPE_YOUTUBE, R.drawable.icon_youtube)
+            Pair(ShareItem.TYPE_FACEBOOK, R.drawable.qr_icon_facebook),
+            Pair(ShareItem.TYPE_INSTAGRAM, R.drawable.qr_icon_instagram),
+            Pair(ShareItem.TYPE_SPOTIFY, R.drawable.qr_icon_spotify),
+            Pair(ShareItem.TYPE_TWITTER, R.drawable.qr_icon_twitter),
+            Pair(ShareItem.TYPE_VIBER, R.drawable.qr_icon_viber),
+            Pair(ShareItem.TYPE_WHATSAPP, R.drawable.qr_icon_whatsapp),
+            Pair(ShareItem.TYPE_YOUTUBE, R.drawable.qr_icon_youtube)
     )
     var mCustomStyleQrCodeMap = mutableMapOf<String, CustomEncodeParamsBean>()
     var mCustomStyleQrCodes = mutableListOf<CustomEncodeParamsBean>()
@@ -56,22 +56,22 @@ object CustomQrCodeManager {
 
     init {
         val defaultCustomDatas = arrayOf(
-                DefaultCustomQrData("$PRE_PACKETNAME.white", 0xFF000000.toInt(), R.drawable.code_white),
-                DefaultCustomQrData("$PRE_PACKETNAME.beach", 0xFF3F52C2.toInt(), R.drawable.code_beach),
-                DefaultCustomQrData("$PRE_PACKETNAME.bread", 0xFF5d2f0b.toInt(), R.drawable.code_bread),
-                DefaultCustomQrData("$PRE_PACKETNAME.grass", 0xFF36cfa1.toInt(), R.drawable.code_grass),
-                DefaultCustomQrData("$PRE_PACKETNAME.melon", 0xFF2d0e08.toInt(), R.drawable.code_melon),
-                DefaultCustomQrData("$PRE_PACKETNAME.prince", 0xFF21263b.toInt(), R.drawable.code_prince),
-                DefaultCustomQrData("$PRE_PACKETNAME.yellow", 0xFF181616.toInt(), R.drawable.code_yellow),
+                DefaultCustomQrData("$PRE_PACKETNAME.white", 0xFF000000.toInt(), R.drawable.qr_code_white),
+                DefaultCustomQrData("$PRE_PACKETNAME.beach", 0xFF3F52C2.toInt(), R.drawable.qr_code_beach),
+                DefaultCustomQrData("$PRE_PACKETNAME.bread", 0xFF5d2f0b.toInt(), R.drawable.qr_code_bread),
+                DefaultCustomQrData("$PRE_PACKETNAME.grass", 0xFF36cfa1.toInt(), R.drawable.qr_code_grass),
+                DefaultCustomQrData("$PRE_PACKETNAME.melon", 0xFF2d0e08.toInt(), R.drawable.qr_code_melon),
+                DefaultCustomQrData("$PRE_PACKETNAME.prince", 0xFF21263b.toInt(), R.drawable.qr_code_prince),
+                DefaultCustomQrData("$PRE_PACKETNAME.yellow", 0xFF181616.toInt(), R.drawable.qr_code_yellow),
 
                 // Instagram > Facebook >  Whatsapp > Youtube > Twitter > Spotify > Viber
-                DefaultCustomQrData("$PRE_PACKETNAME.instagram", 0xFF2A062C.toInt(), R.drawable.code_instagram),
-                DefaultCustomQrData("$PRE_PACKETNAME.facebook", 0xFF030A1A.toInt(), R.drawable.code_facebook),
-                DefaultCustomQrData("$PRE_PACKETNAME.whatsapp", 0xFF192308.toInt(), R.drawable.code_whatsapp),
-                DefaultCustomQrData("$PRE_PACKETNAME.youtube", 0xFF2E070B.toInt(), R.drawable.code_youtube),
-                DefaultCustomQrData("$PRE_PACKETNAME.twitter", 0xFF151B42.toInt(), R.drawable.code_twitter),
-                DefaultCustomQrData("$PRE_PACKETNAME.spotify", 0xFF0B2603.toInt(), R.drawable.code_spotify),
-                DefaultCustomQrData("$PRE_PACKETNAME.viber", 0xFF1F0B26.toInt(), R.drawable.code_viber)
+                DefaultCustomQrData("$PRE_PACKETNAME.instagram", 0xFF2A062C.toInt(), R.drawable.qr_code_instagram),
+                DefaultCustomQrData("$PRE_PACKETNAME.facebook", 0xFF030A1A.toInt(), R.drawable.qr_code_facebook),
+                DefaultCustomQrData("$PRE_PACKETNAME.whatsapp", 0xFF192308.toInt(), R.drawable.qr_code_whatsapp),
+                DefaultCustomQrData("$PRE_PACKETNAME.youtube", 0xFF2E070B.toInt(), R.drawable.qr_code_youtube),
+                DefaultCustomQrData("$PRE_PACKETNAME.twitter", 0xFF151B42.toInt(), R.drawable.qr_code_twitter),
+                DefaultCustomQrData("$PRE_PACKETNAME.spotify", 0xFF0B2603.toInt(), R.drawable.qr_code_spotify),
+                DefaultCustomQrData("$PRE_PACKETNAME.viber", 0xFF1F0B26.toInt(), R.drawable.qr_code_viber)
 
         )
 

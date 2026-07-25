@@ -48,9 +48,9 @@ internal object TabModel {
         /**
          *
          */
-        CAPTURE(ScannerFragment::class.java, R.drawable.tab_icon_scan, R.string.tab_name_capture),
+        CAPTURE(ScannerFragment::class.java, R.drawable.qr_tab_icon_scan, R.string.qr_tab_name_capture),
 //        HISTORY(HistoryFragment::class.java, R.drawable.tab_icon_history, R.string.tab_name_history, Bundle()),
-        SHARE(GeneratorFragment::class.java, R.drawable.tab_icon_category, R.string.tab_name_share);
+        SHARE(GeneratorFragment::class.java, R.drawable.qr_tab_icon_category, R.string.qr_tab_name_share);
 //        SETTING(SettingFragment::class.java, R.drawable.tab_icon_setting, R.string.tab_name_setting);
 
         val fragmentClassName: String
@@ -59,7 +59,7 @@ internal object TabModel {
         init {
             fragmentClassName = fragmentClass.name
 
-            if (labelResId == R.string.tab_name_history) {
+            if (labelResId == R.string.qr_tab_name_history) {
                 bundle?.putIntegerArrayList(
                     HistoryFragment.EXTRA_HISTORY_ITEM_TYPE, arrayListOf(
                         HistoryFragment.HISTORY_TYPE_SCAN, HistoryFragment.HISTORY_TYPE_GENERATE))

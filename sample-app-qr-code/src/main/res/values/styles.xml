@@ -2,78 +2,78 @@
 <resources
     xmlns:tools="http://schemas.android.com/apk/res-auto">
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="qr_AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/qr_colorAccent</item>
 
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="qr_AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="qr_AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!-- 弹出框动画 由下至上 -->
-    <style name="DialogStyle" parent="@android:style/Animation.Dialog">
-        <item name="@android:windowEnterAnimation">@anim/dialog_enter</item>
+    <style name="qr_DialogStyle" parent="@android:style/Animation.Dialog">
+        <item name="@android:windowEnterAnimation">@anim/qr_dialog_enter</item>
         <!-- 进入时的动画 -->
-        <item name="@android:windowExitAnimation">@anim/dialog_exit</item>
+        <item name="@android:windowExitAnimation">@anim/qr_dialog_exit</item>
         <!-- 退出时的动画 -->
     </style>
 
     <!-- 弹出框动画 由下至上 -->
-    <style name="ActivityStyle" parent="@android:style/Animation.Dialog">
-        <item name="@android:windowEnterAnimation">@anim/activity_enter</item>
+    <style name="qr_ActivityStyle" parent="@android:style/Animation.Dialog">
+        <item name="@android:windowEnterAnimation">@anim/qr_activity_enter</item>
         <!-- 进入时的动画 -->
-        <item name="@android:windowExitAnimation">@anim/activity_exit</item>
+        <item name="@android:windowExitAnimation">@anim/qr_activity_exit</item>
         <!-- 退出时的动画 -->
     </style>
 
-    <style name="ShareItemTvTitleStyle">
+    <style name="qr_ShareItemTvTitleStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/share_item_tv_title_color</item>
+        <item name="android:textColor">@color/qr_share_item_tv_title_color</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <!-- EditText下划线 -->
-    <style name="MyShareItemEditText" parent="Theme.AppCompat.Light">
-        <item name="colorControlNormal">@color/share_item_et_colorControlActivated</item>
-        <item name="colorControlActivated">@color/share_item_et_colorControlActivated</item>
+    <style name="qr_MyShareItemEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/qr_share_item_et_colorControlActivated</item>
+        <item name="colorControlActivated">@color/qr_share_item_et_colorControlActivated</item>
     </style>
 
-    <style name="ShareItemEtInputStyle">
+    <style name="qr_ShareItemEtInputStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">48dp</item>
-        <item name="android:textColor">@color/share_item_tv_title_color</item>
+        <item name="android:textColor">@color/qr_share_item_tv_title_color</item>
         <item name="android:textSize">15sp</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textCursorDrawable">@drawable/share_edit_cursor_color</item>
+        <item name="android:textCursorDrawable">@drawable/qr_share_edit_cursor_color</item>
     </style>
 
-    <style name="ShareItemLongEtStyle">
+    <style name="qr_ShareItemLongEtStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@drawable/edit_text_bg</item>
+        <item name="android:background">@drawable/qr_edit_text_bg</item>
         <item name="android:padding">5dp</item>
         <item name="android:gravity">left</item>
     </style>
 
-    <style name="ShareItemInputEtFgStyle">
+    <style name="qr_ShareItemInputEtFgStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
     </style>
 
-    <style name="PermissionActivityStyle" parent="Theme.AppCompat.Light.NoActionBar"> >
+    <style name="qr_PermissionActivityStyle" parent="Theme.AppCompat.Light.NoActionBar"> >
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>

@@ -18,7 +18,7 @@ class CustomQrCodeCoverView  : RelativeLayout ,View.OnClickListener{
     private var mContentView:View ?= null
     var mDefaultClickListener: DefaultClickListener?=null
     init {
-        mContentView = View.inflate(context, R.layout.custom_qrcode_cover_layout, this)
+        mContentView = View.inflate(context, R.layout.qr_custom_qrcode_cover_layout, this)
         mRelativeDefault = mContentView?.findViewById(R.id.rl_qrcode_select_default)
         mRelativeDownload = mContentView?.findViewById(R.id.rl_qrcode_select_download)
         mRelativeProgressBar = mContentView?.findViewById(R.id.rl_qrcode_select_progress_bar)

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_qrcode_select_default"
+        android:layout_width="@dimen/qr_custom_qrcode_cover_item"
+        android:layout_height="@dimen/qr_custom_qrcode_cover_item"
+        android:alpha="0.6"
+        android:background="@drawable/qr_shape_rectangle_qrcode_select_bg"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/qrcode_select_default"
+            android:layout_width="@dimen/qr_custom_qrcode_cover_item"
+            android:layout_height="@dimen/qr_custom_qrcode_cover_item"
+            android:src="@drawable/qr_customize_icon_sel"
+            android:scaleType="centerInside"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_qrcode_select_download"
+        android:layout_width="@dimen/qr_custom_qrcode_cover_item"
+        android:layout_height="@dimen/qr_custom_qrcode_cover_item"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/qrcode_select_download"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_qrcode_select_progress_bar"
+        android:layout_width="@dimen/qr_custom_qrcode_cover_item"
+        android:layout_height="@dimen/qr_custom_qrcode_cover_item"
+        android:visibility="gone">
+        <ProgressBar
+            android:id="@+id/qrcode_select_progress_bar"
+            style="@android:style/Widget.ProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:max="100"
+            android:progress="10"
+            android:scaleType="centerInside"/>
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -4,9 +4,14 @@ import android.os.StrictMode
 import app.allever.android.lib.core.app.App
 
 object QRCodeApp {
+    private var isInit = false
     fun onCreate() {
+        if (isInit) {
+            return
+        }
         com.android.absbase.App.setContext(App.context)
         handler()
+        isInit = true
     }
 
     private fun handler() {

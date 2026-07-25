@@ -13,6 +13,9 @@ class AppListFragment: ListFragment<FragmentListBinding, ListViewModel, TextDeta
         Gravity.CENTER)
 
     override fun getList(): MutableList<TextDetailClickItem> = mutableListOf(
+        TextDetailClickItem("二维码", "sample-app-qr-code") {
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_QR_CODE)
+        },
         TextDetailClickItem("TextCard", "sample-app-text-card") {
             Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_TEXT_CARD)
         },

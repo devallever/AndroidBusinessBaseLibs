@@ -144,9 +144,9 @@ class ScannerFragment() : BaseFragment(), SurfaceHolder.Callback, CaptureHolder,
         ambientLightManager = AmbientLightManager(activity)
         cameraManager = CameraManager(activity?.application, true)
 
-        val topMargin = resources.getDimensionPixelSize(R.dimen.main_scan_frame_top_margin)
+        val topMargin = resources.getDimensionPixelSize(R.dimen.qr_main_scan_frame_top_margin)
         cameraManager.setFrameTopMargin(topMargin)
-        val frameWidth = resources.getDimensionPixelSize(R.dimen.main_scan_frame_width)
+        val frameWidth = resources.getDimensionPixelSize(R.dimen.qr_main_scan_frame_width)
         cameraManager.setFrameSize(frameWidth, frameWidth)
 
         PreferenceManager.setDefaultValues(activity, R.xml.setting_preferences, false)
@@ -166,15 +166,15 @@ class ScannerFragment() : BaseFragment(), SurfaceHolder.Callback, CaptureHolder,
                               savedInstanceState: Bundle?): View? {
 
 
-        mainToneColor = resources.getColor(R.color.main_tone_color)
+        mainToneColor = resources.getColor(R.color.qr_main_tone_color)
 
-        mContainer = inflater.inflate(R.layout.fragment_capture, container, false)
+        mContainer = inflater.inflate(R.layout.qr_fragment_capture, container, false)
         surfaceView = mContainer?.findViewById<View>(com.google.zxing.client.android.R.id.preview_view) as SurfaceView
         surfaceView?.holder?.addCallback(this)
         viewfinderView = mContainer?.findViewById<View>(R.id.viewfinder_view) as ViewfinderView
-        viewfinderView?.setLaserColor(resources.getColor(R.color.main_scan_laser_color), resources.getColor(R.color.main_scan_laser_tail_color))
+        viewfinderView?.setLaserColor(resources.getColor(R.color.qr_main_scan_laser_color), resources.getColor(R.color.qr_main_scan_laser_tail_color))
         viewfinderView?.setFrameBorderCornersColor(mainToneColor)
-        viewfinderView?.setMaskColor(resources.getColor(R.color.main_scan_mask))
+        viewfinderView?.setMaskColor(resources.getColor(R.color.qr_main_scan_mask))
 
 //        resultView = mContainer?.findViewById<View>(R.id.result_view)
         statusView = mContainer?.findViewById<View>(R.id.status_view) as TextView
@@ -241,8 +241,8 @@ class ScannerFragment() : BaseFragment(), SurfaceHolder.Callback, CaptureHolder,
                 val viewfinderView = viewfinderView ?: return false
                 viewfinderView.viewTreeObserver?.removeOnPreDrawListener(this)
                 val height = viewfinderView.height
-                val bottomFunHeight = resources.getDimensionPixelSize(R.dimen.main_scan_frame_bottom_fun_height)
-                val frameWidth = resources.getDimensionPixelSize(R.dimen.main_scan_frame_width)
+                val bottomFunHeight = resources.getDimensionPixelSize(R.dimen.qr_main_scan_frame_bottom_fun_height)
+                val frameWidth = resources.getDimensionPixelSize(R.dimen.qr_main_scan_frame_width)
                 val top = (height - bottomFunHeight - frameWidth) shr 1
                 cameraManager.setFrameTopMargin(top)
                 cameraManager.setFrameSize(frameWidth, frameWidth)
@@ -1044,7 +1044,7 @@ class ScannerFragment() : BaseFragment(), SurfaceHolder.Callback, CaptureHolder,
 //            resultView?.visibility = View.VISIBLE
         } else {
 //            resultView?.visibility = View.GONE
-            statusView?.setText(R.string.main_scan_tips)
+            statusView?.setText(R.string.qr_main_scan_tips)
             statusView?.visibility = View.VISIBLE
             viewfinderView?.visibility = View.VISIBLE
             flashlight?.visibility = View.VISIBLE

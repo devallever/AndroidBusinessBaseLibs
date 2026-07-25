@@ -20,7 +20,7 @@ class CustomEncodeParamsBean {
             }
             val customBean = CustomEncodeParamsBean()
             //外边框背景
-            val bitmap = BitmapFactory.decodeResource(App.getContext().resources, R.drawable.code_white)
+            val bitmap = BitmapFactory.decodeResource(App.getContext().resources, R.drawable.qr_code_white)
             customBean.backgroundBitmap = bitmap
             customBean.outRingWidth = DeviceUtils.dip2px(268f)
             customBean.outRingHeight = DeviceUtils.dip2px(268f)

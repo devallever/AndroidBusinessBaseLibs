@@ -84,7 +84,7 @@ class PreviewResultFragment : AppCompatDialogFragment() {
             //设置dialog在屏幕底部
             window.setGravity(Gravity.BOTTOM)
             //设置dialog弹出时的动画效果，从屏幕底部向上弹出
-            window.setWindowAnimations(R.style.DialogStyle)
+            window.setWindowAnimations(R.style.qr_DialogStyle)
             //获得window窗口的属性
             val lp = window.attributes
             //设置窗口宽度为充满全屏
@@ -189,14 +189,14 @@ class PreviewResultFragment : AppCompatDialogFragment() {
 
     internal class DecodeBrowser2(historyManager: HistoryManager) : DecodeBrowser(historyManager) {
         override fun getLayoutId(): Int {
-            return R.layout.layout_preview_result
+            return R.layout.qr_layout_preview_result
         }
     }
 
     internal open class DecodeBrowser(private val historyManager: HistoryManager) {
 
         open fun getLayoutId(): Int {
-            return R.layout.layout_preview_result_old
+            return R.layout.qr_layout_preview_result_old
         }
 
         fun handleDecodeInternally(activity: Activity, mContentView: View, rawResult: Result, barcode: Bitmap?) {
@@ -220,7 +220,7 @@ class PreviewResultFragment : AppCompatDialogFragment() {
             val barcodeImageView = mContentView.findViewById<View>(R.id.barcode_image_view) as ImageView
             if (barcode == null) {
                 barcodeImageView.setImageBitmap(BitmapFactory.decodeResource(resources,
-                        R.drawable.ic_logo))
+                        R.drawable.qr_ic_logo))
             } else {
                 barcodeImageView.setImageBitmap(barcode)
             }

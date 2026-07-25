@@ -141,7 +141,7 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
             mLock = intent.getBooleanExtra(INTENT_KEY_LOCK, false);
             shareType = intent.getIntExtra(Constant.EXTRA_SHARE_TYPE, ShareItem.TYPE_TEXT);
             if (Intents.Encode.ACTION.equals(action) || Intent.ACTION_SEND.equals(action)) {
-                setContentView(com.allever.app.qr.code.scaner.R.layout.activity_encode);
+                setContentView(com.allever.app.qr.code.scaner.R.layout.qr_activity_encode);
                 initView();
             } else {
                 finish();
@@ -182,7 +182,7 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
             }
         }
         mCurrentCustomEncodeParamsBean = mCustomStyleQrCodes.get(0);
-        mCommonAdapter = new CommonAdapter<CustomEncodeParamsBean>(this, mCustomStyleQrCodes, com.allever.app.qr.code.scaner.R.layout.custom_qrcode_list_item) {
+        mCommonAdapter = new CommonAdapter<CustomEncodeParamsBean>(this, mCustomStyleQrCodes, com.allever.app.qr.code.scaner.R.layout.qr_custom_qrcode_list_item) {
 
             @Override
             protected void convert(ViewHolder vh, final CustomEncodeParamsBean item) {
@@ -280,9 +280,9 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
             ivLock.setVisibility(View.VISIBLE);
             btnPurchase.setVisibility(View.VISIBLE);
             if (mNeedVideoAd) {
-                btnPurchase.setText(com.allever.app.qr.code.scaner.R.string.premium_watch_video);
+                btnPurchase.setText(com.allever.app.qr.code.scaner.R.string.qr_premium_watch_video);
             } else {
-                btnPurchase.setText(com.allever.app.qr.code.scaner.R.string.premium_start_buy);
+                btnPurchase.setText(com.allever.app.qr.code.scaner.R.string.qr_premium_start_buy);
             }
         } else {
             ivLock.setVisibility(View.GONE);
@@ -302,7 +302,7 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
     private void updateInfo(int share_type, String rawDataStr, String showContents) {
         switch (share_type) {
             case ShareItem.TYPE_CLIPBOARD:
-                mTvType.setText(getResources().getString(com.allever.app.qr.code.scaner.R.string.share_type_clipboard));
+                mTvType.setText(getResources().getString(com.allever.app.qr.code.scaner.R.string.qr_share_type_clipboard));
                 mTvContent.setText(showContents);
                 break;
             case ShareItem.TYPE_URL:
@@ -322,7 +322,7 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
                 mTvContent.setText(parseRawData(rawDataStr, new TelResultParser()));
                 break;
             case ShareItem.TYPE_CONTACT:
-                mTvType.setText(getResources().getString(com.allever.app.qr.code.scaner.R.string.share_type_contact));
+                mTvType.setText(getResources().getString(com.allever.app.qr.code.scaner.R.string.qr_share_type_contact));
                 mTvContent.setText(showContents);
                 break;
             case ShareItem.TYPE_EMAIL:
@@ -367,13 +367,13 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
 
     private int[] foreColors = {0xFF000000,0xFF3F52C2, 0xFF5d2f0b, 0xFF36cfa1, 0xFF2d0e08, 0xFF21263b, 0xFF181616};
     private int[] baseBitmap = {
-            com.allever.app.qr.code.scaner.R.drawable.code_white,
-            com.allever.app.qr.code.scaner.R.drawable.code_beach,
-            com.allever.app.qr.code.scaner.R.drawable.code_bread,
-            com.allever.app.qr.code.scaner.R.drawable.code_grass,
-            com.allever.app.qr.code.scaner.R.drawable.code_melon,
-            com.allever.app.qr.code.scaner.R.drawable.code_prince,
-            com.allever.app.qr.code.scaner.R.drawable.code_yellow
+            com.allever.app.qr.code.scaner.R.drawable.qr_code_white,
+            com.allever.app.qr.code.scaner.R.drawable.qr_code_beach,
+            com.allever.app.qr.code.scaner.R.drawable.qr_code_bread,
+            com.allever.app.qr.code.scaner.R.drawable.qr_code_grass,
+            com.allever.app.qr.code.scaner.R.drawable.qr_code_melon,
+            com.allever.app.qr.code.scaner.R.drawable.qr_code_prince,
+            com.allever.app.qr.code.scaner.R.drawable.qr_code_yellow
     };
 
 
@@ -683,7 +683,7 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
                     public void onClick(DialogInterface dialog, int which) {
                         CustomQrCodeManager.setCustomStyleIcon(mCustomStyleQrCodes, null, null);
                         mCommonAdapter.setDatas(mCustomStyleQrCodes);
-                        mPickPhoto.setImageResource(com.allever.app.qr.code.scaner.R.drawable.customize_icon_photo);
+                        mPickPhoto.setImageResource(com.allever.app.qr.code.scaner.R.drawable.qr_customize_icon_photo);
                         try {
                             if (mPreCustomEncodeParamsBean != null) {
                                 mPreCustomEncodeParamsBean.setBitmapPath(null);

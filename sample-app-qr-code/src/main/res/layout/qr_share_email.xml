@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/share_email_container">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <app.allever.android.ai.qr.scanner.ui.widget.ShareItemInput
+            android:id="@+id/id_share_item_input_email_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/qr_share_item_input_margin_right_left"
+            android:layout_marginLeft="@dimen/qr_share_item_input_margin_right_left"
+            app:siiMaxContentLength="50"
+            app:siiHint="@string/input_email_address"
+            app:siiTitle="@string/qr_email"/>
+
+        <app.allever.android.ai.qr.scanner.ui.widget.ShareItemInput
+            android:id="@+id/id_share_item_input_email_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/qr_share_item_input_margin_right_left"
+            android:layout_marginLeft="@dimen/qr_share_item_input_margin_right_left"
+            app:siiMaxContentLength="300"
+            app:siiHint="@string/input_email_content"
+            app:siiTitle="@string/qr_content"/>
+    </LinearLayout>
+</ScrollView>
