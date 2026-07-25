@@ -4,26 +4,32 @@ import android.content.ContentProvider
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
+import app.allever.android.lib.core.helper.CoroutineHelper
 import dalvik.system.DexFile
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class RouterAutoInitializer : ContentProvider() {
 
     override fun onCreate(): Boolean {
-        try {
-            val context = context ?: return true
-            val applicationInfo = context.applicationInfo
-            val dexFile = DexFile(applicationInfo.sourceDir)
-            val entries = dexFile.entries()
-            while (entries.hasMoreElements()) {
-                val className = entries.nextElement()
-                if (className.startsWith("app.allever.android.lib.router.module.RouterModule_")) {
-                    try {
-                        Class.forName(className)
-                    } catch (_: Exception) {
+        CoroutineScope(Dispatchers.IO) .launch {
+            try {
+                val context = context ?: return@launch
+                val applicationInfo = context.applicationInfo
+                val dexFile = DexFile(applicationInfo.sourceDir)
+                val entries = dexFile.entries()
+                while (entries.hasMoreElements()) {
+                    val className = entries.nextElement()
+                    if (className.startsWith("app.allever.android.lib.router.module.RouterModule_")) {
+                        try {
+                            Class.forName(className)
+                        } catch (_: Exception) {
+                        }
                     }
                 }
+            } catch (_: Exception) {
             }
-        } catch (_: Exception) {
         }
         return true
     }
