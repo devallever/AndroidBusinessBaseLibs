@@ -29,8 +29,8 @@ import android.app.Activity;
  */
 public final class TelResultHandler extends ResultHandler {
   private static final int[] buttons = {
-      R.string.button_dial,
-      R.string.button_add_contact
+      R.string.zxing_button_dial,
+      R.string.zxing_button_add_contact
   };
 
   public TelResultHandler(Activity activity, ParsedResult result) {
@@ -76,6 +76,6 @@ public final class TelResultHandler extends ResultHandler {
 
   @Override
   public int getDisplayTitle() {
-    return R.string.result_tel;
+    return R.string.zxing_result_tel;
   }
 }

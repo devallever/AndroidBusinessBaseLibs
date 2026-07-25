@@ -31,9 +31,9 @@ import com.google.zxing.client.result.ParsedResult;
  */
 public final class ISBNResultHandler extends ResultHandler {
   private static final int[] buttons = {
-      R.string.button_product_search,
-      R.string.button_book_search,
-      R.string.button_search_book_contents,
+      R.string.zxing_button_product_search,
+      R.string.zxing_button_book_search,
+      R.string.zxing_button_search_book_contents,
       com.allever.app.qr.code.scaner.R.string.button_share
   };
 
@@ -72,6 +72,6 @@ public final class ISBNResultHandler extends ResultHandler {
 
   @Override
   public int getDisplayTitle() {
-    return R.string.result_isbn;
+    return R.string.zxing_result_isbn;
   }
 }

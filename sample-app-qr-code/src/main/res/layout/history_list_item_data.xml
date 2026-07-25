@@ -39,7 +39,7 @@
         android:layout_toRightOf="@+id/iv_icon"
         android:gravity="bottom"
         android:singleLine="true"
-        android:text="@string/history_empty"
+        android:text="@string/zxing_history_empty"
         android:textColor="@color/history_list_item_title"
         android:textIsSelectable="false"
         android:textSize="15sp" />
@@ -82,7 +82,7 @@
             android:ellipsize="end"
             android:gravity="top"
             android:singleLine="true"
-            android:text="@string/history_empty_detail"
+            android:text="@string/zxing_history_empty_detail"
             android:textColor="@color/history_list_item_detail"
             android:textIsSelectable="false"
             android:textSize="12sp" />

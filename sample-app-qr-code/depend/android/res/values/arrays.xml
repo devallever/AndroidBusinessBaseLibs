@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string-array name="country_codes" tools:ignore="MissingTranslation">
+  <string-array name="zxing_country_codes" tools:ignore="MissingTranslation">
     <item>-</item>
     <item>AR</item>
     <item>AU</item>

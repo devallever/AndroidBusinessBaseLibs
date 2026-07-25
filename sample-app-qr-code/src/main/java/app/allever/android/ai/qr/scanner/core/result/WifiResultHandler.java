@@ -78,7 +78,7 @@ public final class WifiResultHandler extends ResultHandler {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(activity.getApplicationContext(), R.string.wifi_changing_network, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(), R.string.zxing_wifi_changing_network, Toast.LENGTH_SHORT).show();
                     }
                 });
                 new WifiConfigManager(wifiManager).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, wifiResult);
@@ -116,6 +116,6 @@ public final class WifiResultHandler extends ResultHandler {
 
     @Override
     public int getDisplayTitle() {
-        return R.string.result_wifi;
+        return R.string.zxing_result_wifi;
     }
 }

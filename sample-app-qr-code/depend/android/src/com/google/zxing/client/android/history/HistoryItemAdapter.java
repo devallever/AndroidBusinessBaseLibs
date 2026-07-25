@@ -34,7 +34,7 @@ final class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
   private final Context activity;
 
   HistoryItemAdapter(Context activity) {
-    super(activity, R.layout.history_list_item, new ArrayList<HistoryItem>());
+    super(activity, R.layout.zxing_history_list_item, new ArrayList<HistoryItem>());
     this.activity = activity;
   }
 
@@ -45,7 +45,7 @@ final class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
       layout = view;
     } else {
       LayoutInflater factory = LayoutInflater.from(activity);
-      layout = factory.inflate(R.layout.history_list_item, viewGroup, false);
+      layout = factory.inflate(R.layout.zxing_history_list_item, viewGroup, false);
     }
 
     HistoryItem item = getItem(position);
@@ -58,8 +58,8 @@ final class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
       detail = item.getDisplayAndDetails();      
     } else {
       Resources resources = getContext().getResources();
-      title = resources.getString(R.string.history_empty);
-      detail = resources.getString(R.string.history_empty_detail);
+      title = resources.getString(R.string.zxing_history_empty);
+      detail = resources.getString(R.string.zxing_history_empty_detail);
     }
 
     ((TextView) layout.findViewById(R.id.history_title)).setText(title);    

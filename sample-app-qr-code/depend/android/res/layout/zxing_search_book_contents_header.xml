@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2012 ZXing authors
+ Copyright (C) 2008 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -14,15 +14,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:id="@+id/menu_history_send"
-        android:title="@string/history_send"
-        android:icon="@android:drawable/ic_menu_share"
-        android:orderInCategory="1"
-        android:showAsAction="withText|ifRoom"/>
-  <item android:id="@+id/menu_history_clear_text"
-        android:title="@string/history_clear_text"
-        android:icon="@android:drawable/ic_menu_delete"
-        android:orderInCategory="2"
-        android:showAsAction="withText|ifRoom"/>
-</menu>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:paddingLeft="@dimen/zxing_standard_padding"
+          android:paddingBottom="@dimen/zxing_half_padding"
+          android:enabled="false"
+          android:singleLine="true"
+          android:textIsSelectable="false"/>

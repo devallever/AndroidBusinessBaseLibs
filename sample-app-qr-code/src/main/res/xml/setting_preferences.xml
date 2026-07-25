@@ -143,8 +143,8 @@
             app:cpTitleTextColor="@color/preference_title_color" />
         <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomListPreference
             android:defaultValue="-"
-            android:entries="@array/country_codes"
-            android:entryValues="@array/country_codes"
+            android:entries="@array/zxing_country_codes"
+            android:entryValues="@array/zxing_country_codes"
             android:key="preferences_search_country"
             android:title="@string/preferences_search_country"
             app:cpTitleTextColor="@color/preference_title_color" />

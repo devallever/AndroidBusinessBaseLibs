@@ -38,10 +38,10 @@ public final class URIResultHandler extends ResultHandler {
   };
 
   private static final int[] buttons = {
-      R.string.button_open_browser,
-      R.string.button_share_by_email,
-      R.string.button_share_by_sms,
-      R.string.button_search_book_contents,
+      R.string.zxing_button_open_browser,
+      R.string.zxing_button_share_by_email,
+      R.string.zxing_button_share_by_sms,
+      R.string.zxing_button_search_book_contents,
   };
 
   public URIResultHandler(Activity activity, ParsedResult result) {
@@ -88,7 +88,7 @@ public final class URIResultHandler extends ResultHandler {
 
   @Override
   public int getDisplayTitle() {
-    return R.string.result_uri;
+    return R.string.zxing_result_uri;
   }
 
   @Override

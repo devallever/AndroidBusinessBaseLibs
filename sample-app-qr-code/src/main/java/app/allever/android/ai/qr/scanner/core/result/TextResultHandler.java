@@ -64,6 +64,6 @@ public final class TextResultHandler extends ResultHandler {
 
     @Override
     public int getDisplayTitle() {
-        return com.google.zxing.client.android.R.string.result_text;
+        return com.google.zxing.client.android.R.string.zxing_result_text;
     }
 }

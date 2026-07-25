@@ -9,7 +9,7 @@
         android:id="@+id/result_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/result_view"
+        android:background="@color/zxing_result_view"
         android:baselineAligned="false"
         android:orientation="vertical"
         android:visibility="visible">
@@ -20,7 +20,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="@dimen/standard_padding">
+            android:padding="@dimen/zxing_standard_padding">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -32,7 +32,7 @@
                     android:id="@+id/barcode_image_view"
                     android:layout_width="160dip"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/half_padding"
+                    android:layout_marginBottom="@dimen/zxing_half_padding"
                     android:adjustViewBounds="true"
                     android:maxHeight="160dip"
                     android:maxWidth="160dip"
@@ -47,16 +47,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingRight="@dimen/half_padding"
-                        android:text="@string/msg_default_format"
-                        android:textColor="@color/result_minor_text"
+                        android:paddingRight="@dimen/zxing_half_padding"
+                        android:text="@string/zxing_msg_default_format"
+                        android:textColor="@color/zxing_result_minor_text"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/format_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/result_minor_text" />
+                        android:textColor="@color/zxing_result_minor_text" />
 
                 </LinearLayout>
 
@@ -68,16 +68,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingRight="@dimen/half_padding"
-                        android:text="@string/msg_default_type"
-                        android:textColor="@color/result_minor_text"
+                        android:paddingRight="@dimen/zxing_half_padding"
+                        android:text="@string/zxing_msg_default_type"
+                        android:textColor="@color/zxing_result_minor_text"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/type_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/result_minor_text" />
+                        android:textColor="@color/zxing_result_minor_text" />
 
                 </LinearLayout>
 
@@ -89,16 +89,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingRight="@dimen/half_padding"
-                        android:text="@string/msg_default_time"
-                        android:textColor="@color/result_minor_text"
+                        android:paddingRight="@dimen/zxing_half_padding"
+                        android:text="@string/zxing_msg_default_time"
+                        android:textColor="@color/zxing_result_minor_text"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/time_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/result_minor_text" />
+                        android:textColor="@color/zxing_result_minor_text" />
 
                 </LinearLayout>
 
@@ -111,16 +111,16 @@
                         android:id="@+id/meta_text_view_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingRight="@dimen/half_padding"
-                        android:text="@string/msg_default_meta"
-                        android:textColor="@color/result_minor_text"
+                        android:paddingRight="@dimen/zxing_half_padding"
+                        android:text="@string/zxing_msg_default_meta"
+                        android:textColor="@color/zxing_result_minor_text"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/meta_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/result_minor_text" />
+                        android:textColor="@color/zxing_result_minor_text" />
 
                 </LinearLayout>
 
@@ -141,8 +141,8 @@
                         android:layout_height="wrap_content"
                         android:autoLink="web"
                         android:paddingLeft="12dip"
-                        android:textColor="@color/result_text"
-                        android:textColorLink="@color/result_text"
+                        android:textColor="@color/zxing_result_text"
+                        android:textColorLink="@color/zxing_result_text"
                         android:textIsSelectable="true"
                         android:textSize="22sp" />
 
@@ -152,8 +152,8 @@
                         android:layout_height="wrap_content"
                         android:autoLink="web"
                         android:paddingLeft="12dip"
-                        android:textColor="@color/result_text"
-                        android:textColorLink="@color/result_text"
+                        android:textColor="@color/zxing_result_text"
+                        android:textColorLink="@color/zxing_result_text"
                         android:textIsSelectable="true" />
 
                 </LinearLayout>
@@ -170,19 +170,19 @@
             android:orientation="horizontal">
 
             <Button
-                style="@style/ResultButton"
+                style="@style/zxing_ResultButton"
                 android:visibility="visible" />
 
             <Button
-                style="@style/ResultButton"
+                style="@style/zxing_ResultButton"
                 android:visibility="visible" />
 
             <Button
-                style="@style/ResultButton"
+                style="@style/zxing_ResultButton"
                 android:visibility="visible" />
 
             <Button
-                style="@style/ResultButton"
+                style="@style/zxing_ResultButton"
                 android:visibility="visible" />
 
         </LinearLayout>

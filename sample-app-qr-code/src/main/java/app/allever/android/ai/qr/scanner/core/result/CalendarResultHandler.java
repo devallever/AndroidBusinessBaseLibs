@@ -39,7 +39,7 @@ public final class CalendarResultHandler extends ResultHandler {
   private static final String TAG = CalendarResultHandler.class.getSimpleName();
 
   private static final int[] buttons = {
-      R.string.button_add_calendar
+      R.string.zxing_button_add_calendar
   };
 
   public CalendarResultHandler(Activity activity, ParsedResult result) {
@@ -177,6 +177,6 @@ public final class CalendarResultHandler extends ResultHandler {
 
   @Override
   public int getDisplayTitle() {
-    return R.string.result_calendar;
+    return R.string.zxing_result_calendar;
   }
 }

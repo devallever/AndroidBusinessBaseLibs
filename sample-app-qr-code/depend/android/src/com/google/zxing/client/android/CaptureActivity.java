@@ -143,7 +143,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     Window window = getWindow();
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    setContentView(R.layout.capture);
+    setContentView(R.layout.zxing_capture);
 
     hasSurface = false;
     inactivityTimer = new InactivityTimer(this);
@@ -364,7 +364,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater menuInflater = getMenuInflater();
-    menuInflater.inflate(R.menu.capture, menu);
+    menuInflater.inflate(R.menu.zxing_capture, menu);
     return super.onCreateOptionsMenu(menu);
   }
 
@@ -531,7 +531,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (fromLiveScan && prefs.getBoolean(PreferencesActivity.KEY_BULK_MODE, false)) {
           Toast.makeText(getApplicationContext(),
-                         getResources().getString(R.string.msg_bulk_mode_scanned) + " (" + rawResult.getText() + ')',
+                         getResources().getString(R.string.zxing_msg_bulk_mode_scanned) + " (" + rawResult.getText() + ')',
                          Toast.LENGTH_SHORT).show();
           maybeSetClipboard(resultHandler);
           // Wait a moment or else it will scan the same barcode continuously about 3 times
@@ -555,7 +555,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     if (points != null && points.length > 0) {
       Canvas canvas = new Canvas(barcode);
       Paint paint = new Paint();
-      paint.setColor(getResources().getColor(R.color.result_points));
+      paint.setColor(getResources().getColor(R.color.zxing_result_points));
       if (points.length == 2) {
         paint.setStrokeWidth(4.0f);
         drawLine(canvas, paint, points[0], points[1], scaleFactor);
@@ -803,8 +803,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private void displayFrameworkBugMessageAndExit() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle(getString(R.string.z_xing_app_name));
-    builder.setMessage(getString(R.string.msg_camera_framework_bug));
-    builder.setPositiveButton(R.string.button_ok, new FinishListener(this));
+    builder.setMessage(getString(R.string.zxing_msg_camera_framework_bug));
+    builder.setPositiveButton(R.string.zxing_button_ok, new FinishListener(this));
     builder.setOnCancelListener(new FinishListener(this));
     builder.show();
   }
@@ -819,7 +819,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private void resetStatusView() {
     resultView.setVisibility(View.GONE);
-    statusView.setText(R.string.msg_default_status);
+    statusView.setText(R.string.zxing_msg_default_status);
     statusView.setVisibility(View.VISIBLE);
     viewfinderView.setVisibility(View.VISIBLE);
     lastResult = null;

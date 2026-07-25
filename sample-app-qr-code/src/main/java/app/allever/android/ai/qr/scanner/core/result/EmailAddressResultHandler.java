@@ -77,6 +77,6 @@ public final class EmailAddressResultHandler extends ResultHandler {
 
     @Override
     public int getDisplayTitle() {
-        return com.google.zxing.client.android.R.string.result_email_address;
+        return com.google.zxing.client.android.R.string.zxing_result_email_address;
     }
 }

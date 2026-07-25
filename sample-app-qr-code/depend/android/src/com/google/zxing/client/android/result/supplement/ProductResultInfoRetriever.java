@@ -51,7 +51,7 @@ final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
   ProductResultInfoRetriever(TextView textView, String productID, HistoryManager historyManager, Context context) {
     super(textView, historyManager);
     this.productID = productID;
-    this.source = context.getString(R.string.msg_google_product);
+    this.source = context.getString(R.string.zxing_msg_google_product);
     this.context = context;
   }
 

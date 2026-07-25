@@ -118,7 +118,7 @@ public final class ShareActivity extends Activity {
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
-    setContentView(R.layout.share);
+    setContentView(R.layout.zxing_share);
 
     findViewById(R.id.share_contact_button).setOnClickListener(contactListener);
     if (Build.VERSION.SDK_INT >= 23) { // Marshmallow / 6.0

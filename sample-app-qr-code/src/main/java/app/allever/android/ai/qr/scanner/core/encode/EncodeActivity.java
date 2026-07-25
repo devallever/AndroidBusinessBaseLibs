@@ -68,15 +68,12 @@ import app.allever.android.ai.qr.scanner.core.result.ResultHandlerFactory;
 import app.allever.android.ai.qr.scanner.ui.widget.HorizontalListView;
 import app.allever.android.lib.core.app.App;
 import app.allever.android.lib.core.function.notchcompat.NotchCompat;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function0;
 
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -567,7 +564,7 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
                     }
                     if (mBitmapQRCode == null) {
                         Log.w(TAG, "Could not encode barcode");
-                        showErrorMessage(R.string.msg_encode_contents_failed);
+                        showErrorMessage(R.string.zxing_msg_encode_contents_failed);
                         qrCodeEncoder = null;
                         return;
                     }
@@ -580,7 +577,7 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
                     }
                 } catch (WriterException e) {
                     Log.w(TAG, "Could not encode barcode", e);
-                    showErrorMessage(R.string.msg_encode_contents_failed);
+                    showErrorMessage(R.string.zxing_msg_encode_contents_failed);
                     qrCodeEncoder = null;
                 }
             }
@@ -619,7 +616,7 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
     private void showErrorMessage(int message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(message);
-        builder.setPositiveButton(R.string.button_ok, new FinishListener(this));
+        builder.setPositiveButton(R.string.zxing_button_ok, new FinishListener(this));
         builder.setOnCancelListener(new FinishListener(this));
         builder.show();
     }

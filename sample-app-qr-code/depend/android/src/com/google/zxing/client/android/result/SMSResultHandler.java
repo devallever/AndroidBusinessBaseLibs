@@ -29,8 +29,8 @@ import android.app.Activity;
  */
 public final class SMSResultHandler extends ResultHandler {
   private static final int[] buttons = {
-      R.string.button_sms,
-      R.string.button_mms
+      R.string.zxing_button_sms,
+      R.string.zxing_button_mms
   };
 
   public SMSResultHandler(Activity activity, ParsedResult result) {
@@ -79,6 +79,6 @@ public final class SMSResultHandler extends ResultHandler {
 
   @Override
   public int getDisplayTitle() {
-    return R.string.result_sms;
+    return R.string.zxing_result_sms;
   }
 }

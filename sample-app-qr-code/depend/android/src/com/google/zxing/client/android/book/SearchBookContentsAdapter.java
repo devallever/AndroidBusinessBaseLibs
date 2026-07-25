@@ -34,7 +34,7 @@ import com.google.zxing.client.android.R;
 final class SearchBookContentsAdapter extends ArrayAdapter<SearchBookContentsResult> {
 
   SearchBookContentsAdapter(Context context, List<SearchBookContentsResult> items) {
-    super(context, R.layout.search_book_contents_list_item, 0, items);
+    super(context, R.layout.zxing_search_book_contents_list_item, 0, items);
   }
 
   @Override
@@ -44,7 +44,7 @@ final class SearchBookContentsAdapter extends ArrayAdapter<SearchBookContentsRes
     if (view == null) {
       LayoutInflater factory = LayoutInflater.from(getContext());
       listItem = (SearchBookContentsListItem) factory.inflate(
-          R.layout.search_book_contents_list_item, viewGroup, false);
+          R.layout.zxing_search_book_contents_list_item, viewGroup, false);
     } else {
       if (view instanceof SearchBookContentsListItem) {
         listItem = (SearchBookContentsListItem) view;

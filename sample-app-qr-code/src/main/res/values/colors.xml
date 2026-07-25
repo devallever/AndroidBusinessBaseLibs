@@ -2,7 +2,7 @@
 <resources>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
-    <color name="transparent">#00000000</color>
+    <color name="zxing_transparent">#00000000</color>
     <color name="main_tone_color">#0288d1</color>
     <color name="colorAccent">@color/main_tone_color</color>
     <drawable name="store_top_panel_bg">#FFFFFF</drawable>

@@ -19,13 +19,13 @@
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/standard_padding">
+    android:padding="@dimen/zxing_standard_padding">
 
   <TextView android:id="@+id/page_number_view"
             android:layout_width="75dip"
             android:layout_height="wrap_content"
             android:layout_gravity="left|top"
-            android:layout_marginRight="@dimen/standard_padding"
+            android:layout_marginRight="@dimen/zxing_standard_padding"
             android:singleLine="false"
             android:textStyle="bold"
             android:textIsSelectable="false"/>

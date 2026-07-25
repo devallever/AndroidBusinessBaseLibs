@@ -29,8 +29,8 @@ import android.app.Activity;
  */
 public final class EmailAddressResultHandler extends ResultHandler {
   private static final int[] buttons = {
-      R.string.button_email,
-      R.string.button_add_contact
+      R.string.zxing_button_email,
+      R.string.zxing_button_add_contact
   };
 
   public EmailAddressResultHandler(Activity activity, ParsedResult result) {
@@ -66,6 +66,6 @@ public final class EmailAddressResultHandler extends ResultHandler {
 
   @Override
   public int getDisplayTitle() {
-    return R.string.result_email_address;
+    return R.string.zxing_result_email_address;
   }
 }

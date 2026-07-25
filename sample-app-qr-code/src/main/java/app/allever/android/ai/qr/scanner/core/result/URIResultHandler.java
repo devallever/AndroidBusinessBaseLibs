@@ -42,7 +42,7 @@ public final class URIResultHandler extends ResultHandler {
             R.string.button_browse_website,
             R.string.button_copy_link,
             R.string.button_share,
-            com.google.zxing.client.android.R.string.button_search_book_contents,
+            com.google.zxing.client.android.R.string.zxing_button_search_book_contents,
     };
 
     public URIResultHandler(Activity activity, ParsedResult result) {
@@ -89,7 +89,7 @@ public final class URIResultHandler extends ResultHandler {
 
     @Override
     public int getDisplayTitle() {
-        return com.google.zxing.client.android.R.string.result_uri;
+        return com.google.zxing.client.android.R.string.zxing_result_uri;
     }
 
     @Override

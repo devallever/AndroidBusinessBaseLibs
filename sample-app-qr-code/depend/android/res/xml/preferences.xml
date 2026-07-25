@@ -109,8 +109,8 @@
     <ListPreference
         android:key="preferences_search_country"
         android:defaultValue="-"
-        android:entries="@array/country_codes"
-        android:entryValues="@array/country_codes"
+        android:entries="@array/zxing_country_codes"
+        android:entryValues="@array/zxing_country_codes"
         android:title="@string/preferences_search_country"/>
   </PreferenceCategory>
   <PreferenceCategory android:title="@string/preferences_device_bug_workarounds_title">

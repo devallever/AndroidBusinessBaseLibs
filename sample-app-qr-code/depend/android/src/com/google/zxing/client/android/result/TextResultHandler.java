@@ -30,10 +30,10 @@ import android.app.Activity;
 public final class TextResultHandler extends ResultHandler {
 
   private static final int[] buttons = {
-      R.string.button_web_search,
-      R.string.button_share_by_email,
-      R.string.button_share_by_sms,
-      R.string.button_custom_product_search,
+      R.string.zxing_button_web_search,
+      R.string.zxing_button_share_by_email,
+      R.string.zxing_button_share_by_sms,
+      R.string.zxing_button_custom_product_search,
   };
 
   public TextResultHandler(Activity activity, ParsedResult result, Result rawResult) {
@@ -71,6 +71,6 @@ public final class TextResultHandler extends ResultHandler {
 
   @Override
   public int getDisplayTitle() {
-    return R.string.result_text;
+    return R.string.zxing_result_text;
   }
 }

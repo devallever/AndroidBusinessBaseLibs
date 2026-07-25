@@ -68,7 +68,7 @@ final class BookmarkAdapter extends BaseAdapter {
       layout = view;
     } else {
       LayoutInflater factory = LayoutInflater.from(context);
-      layout = factory.inflate(R.layout.bookmark_picker_list_item, viewGroup, false);
+      layout = factory.inflate(R.layout.zxing_bookmark_picker_list_item, viewGroup, false);
     }
     String[] titleURL = titleURLs.get(index);
     ((TextView) layout.findViewById(R.id.bookmark_title)).setText(titleURL[0]);

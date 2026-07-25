@@ -30,10 +30,10 @@ import android.app.Activity;
  */
 public final class ISBNResultHandler extends ResultHandler {
   private static final int[] buttons = {
-      R.string.button_product_search,
-      R.string.button_book_search,
-      R.string.button_search_book_contents,
-      R.string.button_custom_product_search
+      R.string.zxing_button_product_search,
+      R.string.zxing_button_book_search,
+      R.string.zxing_button_search_book_contents,
+      R.string.zxing_button_custom_product_search
   };
 
   public ISBNResultHandler(Activity activity, ParsedResult result, Result rawResult) {
@@ -71,6 +71,6 @@ public final class ISBNResultHandler extends ResultHandler {
 
   @Override
   public int getDisplayTitle() {
-    return R.string.result_isbn;
+    return R.string.zxing_result_isbn;
   }
 }

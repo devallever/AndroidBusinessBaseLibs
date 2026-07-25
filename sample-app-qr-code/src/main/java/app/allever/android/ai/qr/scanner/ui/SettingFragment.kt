@@ -149,7 +149,7 @@ class SettingFragment : PreferenceFragment(), SharedPreferences.OnSharedPreferen
         override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
             if (!isValid(newValue)) {
                 val builder = AlertDialog.Builder(preference.context)
-                builder.setTitle(com.google.zxing.client.android.R.string.msg_error)
+                builder.setTitle(com.google.zxing.client.android.R.string.zxing_msg_error)
                 builder.setMessage(com.google.zxing.client.android.R.string.msg_invalid_value)
                 builder.setCancelable(true)
                 builder.show()

@@ -382,7 +382,7 @@ public abstract class ResultHandler {
     Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
     // The Messaging app needs to see a valid subject or else it will treat this an an SMS.
     if (subject == null || subject.isEmpty()) {
-      putExtra(intent, "subject", activity.getString(R.string.msg_default_mms_subject));
+      putExtra(intent, "subject", activity.getString(R.string.zxing_msg_default_mms_subject));
     } else {
       putExtra(intent, "subject", subject);
     }
@@ -503,7 +503,7 @@ public abstract class ResultHandler {
       AlertDialog.Builder builder = new AlertDialog.Builder(activity);
       builder.setTitle(R.string.z_xing_app_name);
       builder.setMessage(R.string.msg_intent_failed);
-      builder.setPositiveButton(R.string.button_ok, null);
+      builder.setPositiveButton(R.string.zxing_button_ok, null);
       builder.show();
     }
   }

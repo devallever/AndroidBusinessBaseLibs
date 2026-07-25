@@ -147,7 +147,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/msg_default_format"
+                            android:text="@string/zxing_msg_default_format"
                             android:textColor="#99000000"
                             android:textStyle="bold" />
 
@@ -167,7 +167,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/msg_default_type"
+                            android:text="@string/zxing_msg_default_type"
                             android:textColor="#99000000"
                             android:textStyle="bold" />
 
@@ -187,7 +187,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/msg_default_time"
+                            android:text="@string/zxing_msg_default_time"
                             android:textColor="#99000000"
                             android:textStyle="bold" />
 
@@ -208,7 +208,7 @@
                             android:id="@+id/meta_text_view_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/msg_default_meta"
+                            android:text="@string/zxing_msg_default_meta"
                             android:textColor="#99000000"
                             android:textStyle="bold" />
 

@@ -160,8 +160,8 @@ class HistoryAdapter(val context: Context) : androidx.recyclerview.widget.Recycl
                         time = TimeUtils.getTime(historyItem.result.timestamp, SimpleDateFormat("HH:mm:ss", Locale.getDefault()))
                     } else {
                         val resources = App.getContext().resources
-                        title = resources.getString(com.google.zxing.client.android.R.string.history_empty)
-                        detail = resources.getString(com.google.zxing.client.android.R.string.history_empty_detail)
+                        title = resources.getString(com.google.zxing.client.android.R.string.zxing_history_empty)
+                        detail = resources.getString(com.google.zxing.client.android.R.string.zxing_history_empty_detail)
                         time = ""
                     }
                     if (resultTypeUIData.iconHasBackground) {

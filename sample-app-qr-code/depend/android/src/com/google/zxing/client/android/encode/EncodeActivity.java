@@ -69,7 +69,7 @@ public final class EncodeActivity extends Activity {
     } else {
       String action = intent.getAction();
       if (Intents.Encode.ACTION.equals(action) || Intent.ACTION_SEND.equals(action)) {
-        setContentView(R.layout.encode);
+        setContentView(R.layout.zxing_encode);
       } else {
         finish();
       }
@@ -79,9 +79,9 @@ public final class EncodeActivity extends Activity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater menuInflater = getMenuInflater();
-    menuInflater.inflate(R.menu.encode, menu);
+    menuInflater.inflate(R.menu.zxing_encode, menu);
     boolean useVcard = qrCodeEncoder != null && qrCodeEncoder.isUseVCard();
-    int encodeNameResource = useVcard ? R.string.menu_encode_mecard : R.string.menu_encode_vcard;
+    int encodeNameResource = useVcard ? R.string.zxing_menu_encode_mecard : R.string.zxing_menu_encode_vcard;
     MenuItem encodeItem = menu.findItem(R.id.menu_encode);
     encodeItem.setTitle(encodeNameResource);
     Intent intent = getIntent();
@@ -198,7 +198,7 @@ public final class EncodeActivity extends Activity {
       Bitmap bitmap = qrCodeEncoder.encodeAsBitmap();
       if (bitmap == null) {
         Log.w(TAG, "Could not encode barcode");
-        showErrorMessage(R.string.msg_encode_contents_failed);
+        showErrorMessage(R.string.zxing_msg_encode_contents_failed);
         qrCodeEncoder = null;
         return;
       }
@@ -216,7 +216,7 @@ public final class EncodeActivity extends Activity {
       }
     } catch (WriterException e) {
       Log.w(TAG, "Could not encode barcode", e);
-      showErrorMessage(R.string.msg_encode_contents_failed);
+      showErrorMessage(R.string.zxing_msg_encode_contents_failed);
       qrCodeEncoder = null;
     }
   }
@@ -224,7 +224,7 @@ public final class EncodeActivity extends Activity {
   private void showErrorMessage(int message) {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setMessage(message);
-    builder.setPositiveButton(R.string.button_ok, new FinishListener(this));
+    builder.setPositiveButton(R.string.zxing_button_ok, new FinishListener(this));
     builder.setOnCancelListener(new FinishListener(this));
     builder.show();
   }

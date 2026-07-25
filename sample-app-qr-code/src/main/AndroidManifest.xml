@@ -219,7 +219,7 @@
         <activity
             android:name="com.google.zxing.client.android.book.SearchBookContentsActivity"
             android:exported="true"
-            android:label="@string/sbc_name"
+            android:label="@string/zxing_sbc_name"
             android:screenOrientation="sensorLandscape"
             android:stateNotNeeded="true">
             <intent-filter>
@@ -241,19 +241,19 @@
         </activity>
         <activity
             android:name="com.google.zxing.client.android.history.HistoryActivity"
-            android:label="@string/history_title"
+            android:label="@string/zxing_history_title"
             android:stateNotNeeded="true" />
         <activity
             android:name="com.google.zxing.client.android.share.BookmarkPickerActivity"
-            android:label="@string/bookmark_picker_name"
+            android:label="@string/zxing_bookmark_picker_name"
             android:stateNotNeeded="true" />
         <activity
             android:name="com.google.zxing.client.android.share.AppPickerActivity"
-            android:label="@string/app_picker_name"
+            android:label="@string/zxing_app_picker_name"
             android:stateNotNeeded="true" />
         <activity
             android:name="com.google.zxing.client.android.HelpActivity"
-            android:label="@string/menu_help"
+            android:label="@string/zxing_menu_help"
             android:screenOrientation="user"
             android:stateNotNeeded="true" />
         <activity

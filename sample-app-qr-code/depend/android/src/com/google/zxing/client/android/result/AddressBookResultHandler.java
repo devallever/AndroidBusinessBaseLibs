@@ -51,10 +51,10 @@ public final class AddressBookResultHandler extends ResultHandler {
   }
 
   private static final int[] BUTTON_TEXTS = {
-    R.string.button_add_contact,
-    R.string.button_show_map,
-    R.string.button_dial,
-    R.string.button_email,
+    R.string.zxing_button_add_contact,
+    R.string.zxing_button_show_map,
+    R.string.zxing_button_dial,
+    R.string.zxing_button_email,
   };
 
   private final boolean[] fields;
@@ -210,6 +210,6 @@ public final class AddressBookResultHandler extends ResultHandler {
 
   @Override
   public int getDisplayTitle() {
-    return R.string.result_address_book;
+    return R.string.zxing_result_address_book;
   }
 }

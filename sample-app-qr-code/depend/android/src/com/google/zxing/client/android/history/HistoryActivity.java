@@ -94,7 +94,7 @@ public final class HistoryActivity extends ListActivity {
                                   ContextMenu.ContextMenuInfo menuInfo) {
     int position = ((AdapterView.AdapterContextMenuInfo) menuInfo).position;
     if (position >= adapter.getCount() || adapter.getItem(position).getResult() != null) {
-      menu.add(Menu.NONE, position, position, R.string.history_clear_one_history_text);
+      menu.add(Menu.NONE, position, position, R.string.zxing_history_clear_one_history_text);
     } // else it's just that dummy "Empty" message
   }
 
@@ -110,7 +110,7 @@ public final class HistoryActivity extends ListActivity {
   public boolean onCreateOptionsMenu(Menu menu) {
     if (historyManager.hasHistoryItems()) {
       MenuInflater menuInflater = getMenuInflater();
-      menuInflater.inflate(R.menu.history, menu);
+      menuInflater.inflate(R.menu.zxing_history, menu);
     }
     return super.onCreateOptionsMenu(menu);
   }
@@ -124,12 +124,12 @@ public final class HistoryActivity extends ListActivity {
       if (historyFile == null) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.msg_unmount_usb);
-        builder.setPositiveButton(R.string.button_ok, null);
+        builder.setPositiveButton(R.string.zxing_button_ok, null);
         builder.show();
       } else {
         Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
         intent.addFlags(Intents.FLAG_NEW_DOC);
-        String subject = getResources().getString(R.string.history_email_title);
+        String subject = getResources().getString(R.string.zxing_history_email_title);
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
         intent.putExtra(Intent.EXTRA_TEXT, subject);
         intent.putExtra(Intent.EXTRA_STREAM, historyFile);
@@ -145,7 +145,7 @@ public final class HistoryActivity extends ListActivity {
       AlertDialog.Builder builder = new AlertDialog.Builder(this);
       builder.setMessage(R.string.msg_sure);
       builder.setCancelable(true);
-      builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+      builder.setPositiveButton(R.string.zxing_button_ok, new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int i2) {
           historyManager.clearHistory();
@@ -153,7 +153,7 @@ public final class HistoryActivity extends ListActivity {
           finish();
         }
       });
-      builder.setNegativeButton(R.string.button_cancel, null);
+      builder.setNegativeButton(R.string.zxing_button_cancel, null);
       builder.show();
 
     } else {

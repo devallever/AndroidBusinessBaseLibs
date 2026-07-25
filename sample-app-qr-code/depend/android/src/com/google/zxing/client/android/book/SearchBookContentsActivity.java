@@ -98,12 +98,12 @@ public final class SearchBookContentsActivity extends Activity {
 
     isbn = intent.getStringExtra(Intents.SearchBookContents.ISBN);
     if (LocaleManager.isBookSearchUrl(isbn)) {
-      setTitle(getString(R.string.sbc_name));
+      setTitle(getString(R.string.zxing_sbc_name));
     } else {
-      setTitle(getString(R.string.sbc_name) + ": ISBN " + isbn);
+      setTitle(getString(R.string.zxing_sbc_name) + ": ISBN " + isbn);
     }
 
-    setContentView(R.layout.search_book_contents);
+    setContentView(R.layout.zxing_search_book_contents);
     queryTextView = (EditText) findViewById(R.id.query_text_view);
 
     String initialQuery = intent.getStringExtra(Intents.SearchBookContents.QUERY);
@@ -118,7 +118,7 @@ public final class SearchBookContentsActivity extends Activity {
 
     resultListView = (ListView) findViewById(R.id.result_list_view);
     LayoutInflater factory = LayoutInflater.from(this);
-    headerView = (TextView) factory.inflate(R.layout.search_book_contents_header,
+    headerView = (TextView) factory.inflate(R.layout.zxing_search_book_contents_header,
         resultListView, false);
     resultListView.addHeaderView(headerView);
   }

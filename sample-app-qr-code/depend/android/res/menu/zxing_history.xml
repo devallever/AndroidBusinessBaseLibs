@@ -15,14 +15,14 @@
  limitations under the License.
  -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:id="@+id/menu_share"
-        android:title="@string/menu_share"
+  <item android:id="@+id/menu_history_send"
+        android:title="@string/zxing_history_send"
         android:icon="@android:drawable/ic_menu_share"
         android:orderInCategory="1"
         android:showAsAction="withText|ifRoom"/>
-  <item android:id="@+id/menu_encode"
-        android:title="@string/menu_encode_vcard"
-        android:icon="@android:drawable/ic_menu_sort_alphabetically"
+  <item android:id="@+id/menu_history_clear_text"
+        android:title="@string/zxing_history_clear_text"
+        android:icon="@android:drawable/ic_menu_delete"
         android:orderInCategory="2"
         android:showAsAction="withText|ifRoom"/>
 </menu>

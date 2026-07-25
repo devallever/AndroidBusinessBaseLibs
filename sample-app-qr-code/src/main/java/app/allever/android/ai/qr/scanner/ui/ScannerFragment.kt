@@ -5,7 +5,6 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
@@ -781,7 +780,7 @@ class ScannerFragment() : BaseFragment(), SurfaceHolder.Callback, CaptureHolder,
                 val prefs = PreferenceManager.getDefaultSharedPreferences(context)
                 if (fromLiveScan && prefs.getBoolean(PreferencesActivity.KEY_BULK_MODE, false)) {
                     Toast.makeText(activity?.applicationContext,
-                            resources.getString(com.google.zxing.client.android.R.string.msg_bulk_mode_scanned) + " (" + rawResult.text + ')'.toString(),
+                            resources.getString(com.google.zxing.client.android.R.string.zxing_msg_bulk_mode_scanned) + " (" + rawResult.text + ')'.toString(),
                             Toast.LENGTH_SHORT).show()
                     maybeSetClipboard(resultHandler)
                     // Wait a moment or else it will scan the same barcode continuously about 3 times
@@ -807,7 +806,7 @@ class ScannerFragment() : BaseFragment(), SurfaceHolder.Callback, CaptureHolder,
         if (points != null && points.size > 0) {
             val canvas = Canvas(barcode!!)
             val paint = Paint()
-            paint.color = resources.getColor(com.google.zxing.client.android.R.color.result_points)
+            paint.color = resources.getColor(com.google.zxing.client.android.R.color.zxing_result_points)
             if (points.size == 2) {
                 paint.strokeWidth = 4.0f
                 drawLine(canvas, paint, points[0], points[1], scaleFactor)
@@ -1018,8 +1017,8 @@ class ScannerFragment() : BaseFragment(), SurfaceHolder.Callback, CaptureHolder,
     private fun displayFrameworkBugMessageAndExit() {
         val builder = AlertDialog.Builder(context)
         builder.setTitle(getString(R.string.qr_app_name))
-        builder.setMessage(getString(com.google.zxing.client.android.R.string.msg_camera_framework_bug))
-        builder.setPositiveButton(com.google.zxing.client.android.R.string.button_ok, FinishListener(activity))
+        builder.setMessage(getString(com.google.zxing.client.android.R.string.zxing_msg_camera_framework_bug))
+        builder.setPositiveButton(com.google.zxing.client.android.R.string.zxing_button_ok, FinishListener(activity))
         builder.setOnCancelListener(FinishListener(activity))
         builder.show()
     }

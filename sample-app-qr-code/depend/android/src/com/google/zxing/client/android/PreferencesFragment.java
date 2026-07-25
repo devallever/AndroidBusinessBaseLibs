@@ -94,7 +94,7 @@ public final class PreferencesFragment
       if (!isValid(newValue)) {
         AlertDialog.Builder builder =
             new AlertDialog.Builder(PreferencesFragment.this.getActivity());
-        builder.setTitle(R.string.msg_error);
+        builder.setTitle(R.string.zxing_msg_error);
         builder.setMessage(R.string.msg_invalid_value);
         builder.setCancelable(true);
         builder.show();

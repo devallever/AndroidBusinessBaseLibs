@@ -53,12 +53,12 @@
         android:orientation="vertical">
 
       <Button android:id="@+id/share_app_button"
-              style="@style/ShareButton"
-              android:text="@string/button_share_app"/>
+              style="@style/zxing_ShareButton"
+              android:text="@string/zxing_button_share_app"/>
 
       <Button android:id="@+id/share_contact_button"
-              style="@style/ShareButton"
-              android:text="@string/button_share_contact"/>
+              style="@style/zxing_ShareButton"
+              android:text="@string/zxing_button_share_contact"/>
 
     </LinearLayout>
 
@@ -69,12 +69,12 @@
         android:orientation="vertical">
 
       <Button android:id="@+id/share_bookmark_button"
-              style="@style/ShareButton"
-              android:text="@string/button_share_bookmark"/>
+              style="@style/zxing_ShareButton"
+              android:text="@string/zxing_button_share_bookmark"/>
 
       <Button android:id="@+id/share_clipboard_button"
-              style="@style/ShareButton"
-              android:text="@string/button_share_clipboard"/>
+              style="@style/zxing_ShareButton"
+              android:text="@string/zxing_button_share_clipboard"/>
 
     </LinearLayout>
 

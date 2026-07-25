@@ -29,8 +29,8 @@ import android.app.Activity;
  */
 public final class GeoResultHandler extends ResultHandler {
   private static final int[] buttons = {
-      R.string.button_show_map,
-      R.string.button_get_directions
+      R.string.zxing_button_show_map,
+      R.string.zxing_button_get_directions
   };
 
   public GeoResultHandler(Activity activity, ParsedResult result) {
@@ -62,6 +62,6 @@ public final class GeoResultHandler extends ResultHandler {
 
   @Override
   public int getDisplayTitle() {
-    return R.string.result_geo;
+    return R.string.zxing_result_geo;
   }
 }

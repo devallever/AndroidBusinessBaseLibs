@@ -46,7 +46,7 @@ final class BookResultInfoRetriever extends SupplementalInfoRetriever {
   BookResultInfoRetriever(TextView textView, String isbn, HistoryManager historyManager, Context context) {
     super(textView, historyManager);
     this.isbn = isbn;
-    this.source = context.getString(R.string.msg_google_books);
+    this.source = context.getString(R.string.zxing_msg_google_books);
     this.context = context;
   }
 

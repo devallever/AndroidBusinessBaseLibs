@@ -19,31 +19,31 @@
         android:id="@+id/menu_decode_img"
         android:icon="@android:drawable/ic_menu_share"
         android:orderInCategory="1"
-        android:title="@string/menu_decode_img"
+        android:title="@string/zxing_menu_decode_img"
         app:showAsAction="withText|ifRoom" />
     <item
         android:id="@+id/menu_share"
         android:icon="@android:drawable/ic_menu_share"
         android:orderInCategory="1"
-        android:title="@string/menu_share"
+        android:title="@string/zxing_menu_share"
         app:showAsAction="withText|ifRoom" />
     <item
         android:id="@+id/menu_history"
         android:icon="@android:drawable/ic_menu_recent_history"
         android:orderInCategory="2"
-        android:title="@string/menu_history"
+        android:title="@string/zxing_menu_history"
         app:showAsAction="withText|ifRoom" />
     <item
         android:id="@+id/menu_settings"
         android:icon="@android:drawable/ic_menu_preferences"
         android:orderInCategory="3"
-        android:title="@string/menu_settings"
+        android:title="@string/zxing_menu_settings"
         app:showAsAction="withText" />
     <item
         android:id="@+id/menu_help"
         android:icon="@android:drawable/ic_menu_help"
         android:orderInCategory="4"
-        android:title="@string/menu_help"
+        android:title="@string/zxing_menu_help"
         app:showAsAction="withText" />
 
     <!--<item

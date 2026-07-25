@@ -31,9 +31,9 @@ import android.app.Activity;
  */
 public final class ProductResultHandler extends ResultHandler {
   private static final int[] buttons = {
-      R.string.button_product_search,
-      R.string.button_web_search,
-      R.string.button_custom_product_search
+      R.string.zxing_button_product_search,
+      R.string.zxing_button_web_search,
+      R.string.zxing_button_custom_product_search
   };
 
   public ProductResultHandler(Activity activity, ParsedResult result, Result rawResult) {
@@ -78,6 +78,6 @@ public final class ProductResultHandler extends ResultHandler {
 
   @Override
   public int getDisplayTitle() {
-    return R.string.result_product;
+    return R.string.zxing_result_product;
   }
 }
