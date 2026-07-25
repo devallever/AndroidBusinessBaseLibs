@@ -31,6 +31,9 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        flatDir {
+            dirs(File(settingsDir, "sample-app-qr-code/libs"))
+        }
         maven( url = "https://maven.aliyun.com/nexus/content/groups/public/")
         maven( url = "https://maven.aliyun.com/nexus/content/repositories/jcenter")
         maven( url = "https://maven.aliyun.com/repository/google")
@@ -159,3 +162,5 @@ include(":lib-camera-core")
 // 开启文件系统监听，加速增量构建
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") // 类型安全的项目访问器（可选，方便写代码）
 include(":sample-app-qr-code")
+include (":qrcode")
+project(":qrcode").projectDir = File(settingsDir, "sample-app-qr-code/depend/android")

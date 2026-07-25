@@ -10,11 +10,12 @@ import android.os.Message
 import android.view.KeyEvent
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import app.allever.android.lib.core.base.AbstractFragment
 import com.android.absbase.ui.BaseApplication
 import com.android.absbase.ui.BaseFragment
 import kotlin.jvm.internal.Intrinsics
 
-open class BaseFragment : Fragment,Handler.Callback {
+open class BaseFragment : AbstractFragment,Handler.Callback {
 
     protected var mApplication: Application? = null
     protected var mMainThread: Thread
@@ -276,7 +277,7 @@ open class BaseFragment : Fragment,Handler.Callback {
 //        // $FF: Couldn't be decompiled
 //    }
 
-    open fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         return false
     }
 

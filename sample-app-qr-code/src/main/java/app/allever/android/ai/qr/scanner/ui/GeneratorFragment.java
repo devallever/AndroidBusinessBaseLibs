@@ -1,10 +1,10 @@
 package app.allever.android.ai.qr.scanner.ui;
 
+import android.annotation.SuppressLint;
 import android.graphics.Rect;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 
-import com.android.absbase.App;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.absbase.utils.DeviceUtils;
+import com.google.zxing.client.android.DeviceUtils;
 import com.google.zxing.client.result.ParsedResultType;
 import com.allever.app.qr.code.scaner.R;
 import app.allever.android.ai.qr.scanner.bean.ShareItem;
@@ -45,10 +45,10 @@ public class GeneratorFragment extends BaseFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_share, container, false);
         RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.rv_share_type);
         ShareTypeAdapter adapter = new ShareTypeAdapter(mShareItemList);
-        recyclerView.setLayoutManager(new GridLayoutManager(App.getContext(), MAX_COL));
-        final int spacingInPixels = DeviceUtils.dip2px(16);
-        final int firstTopSpacing = DeviceUtils.dip2px(20);
-        final int bottomSpacing = DeviceUtils.dip2px(8);
+        recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), MAX_COL));
+        final int spacingInPixels = DeviceUtils.dip2px(requireContext(), 16);
+        final int firstTopSpacing = DeviceUtils.dip2px(requireContext(), 20);
+        final int bottomSpacing = DeviceUtils.dip2px(requireContext(), 8);
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view,
@@ -111,13 +111,13 @@ public class GeneratorFragment extends BaseFragment {
 
         @Override
         public ShareViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(App.getContext()).inflate(R.layout.share_type_item, parent, false);
+            View view = LayoutInflater.from(requireContext()).inflate(R.layout.share_type_item, parent, false);
             ShareViewHolder shareViewHolder = new ShareViewHolder(view);
             return shareViewHolder;
         }
 
         @Override
-        public void onBindViewHolder(ShareViewHolder holder, final int position) {
+        public void onBindViewHolder(ShareViewHolder holder, @SuppressLint("RecyclerView") final int position) {
             ShareItem shareItem = shareItemList.get(position);
             holder.tvTitle.setText(shareItem.getTitle());
             holder.ivLogo.setImageResource(shareItem.getResId());

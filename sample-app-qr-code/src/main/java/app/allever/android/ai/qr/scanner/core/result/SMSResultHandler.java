@@ -91,6 +91,6 @@ public final class SMSResultHandler extends ResultHandler {
 
     @Override
     public int getDisplayTitle() {
-        return R.string.result_sms;
+        return com.google.zxing.client.android.R.string.result_sms;
     }
 }

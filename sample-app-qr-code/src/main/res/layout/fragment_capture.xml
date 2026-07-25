@@ -93,7 +93,7 @@
             android:layout_marginHorizontal="14dp"
             android:background="@drawable/main_bottom_btn_background"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_recommend" />
+            android:visibility="gone"/>
 
         <ImageView
             android:visibility="gone"

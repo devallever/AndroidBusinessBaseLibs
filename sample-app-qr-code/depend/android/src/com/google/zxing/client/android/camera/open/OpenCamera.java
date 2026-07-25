@@ -18,7 +18,6 @@ package com.google.zxing.client.android.camera.open;
 
 import android.hardware.Camera;
 
-import com.android.absbase.helper.log.DLog;
 
 /**
  * Represents an open {@link Camera} and its metadata, like facing direction and orientation.
@@ -64,7 +63,7 @@ public final class OpenCamera {
         camera.setParameters(parameters);
       }
     } catch (Exception e) {
-      DLog.printStackTrace(e);
+      e.printStackTrace();
     }
   }
 

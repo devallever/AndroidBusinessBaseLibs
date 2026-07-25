@@ -79,6 +79,6 @@ public final class TelResultHandler extends ResultHandler {
 
     @Override
     public int getDisplayTitle() {
-        return R.string.result_tel;
+        return com.google.zxing.client.android.R.string.result_tel;
     }
 }

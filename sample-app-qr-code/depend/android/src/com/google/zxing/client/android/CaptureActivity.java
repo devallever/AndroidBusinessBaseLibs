@@ -16,7 +16,6 @@
 
 package com.google.zxing.client.android;
 
-import com.android.absbase.utils.ToastUtils;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.QRReader;
@@ -428,13 +427,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                 bitmap.recycle();
               }
             } else {
-              ToastUtils.INSTANCE.show("Not recognized");
+              Toast.makeText(CaptureActivity.this, "Not recognized", Toast.LENGTH_SHORT).show();
             }
             qrReader.destroy();
           }
         });
       } else {
-        ToastUtils.INSTANCE.show("img is null");
+        Toast.makeText(this, "img is null", Toast.LENGTH_SHORT).show();
       }
     }
   }

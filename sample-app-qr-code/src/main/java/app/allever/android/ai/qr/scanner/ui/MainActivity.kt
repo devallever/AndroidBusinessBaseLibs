@@ -12,9 +12,8 @@ import app.allever.android.ai.qr.scanner.AppActivity
 import app.android.base.lib.tab.TabLayout
 import com.allever.app.qr.code.scaner.R
 import app.allever.android.ai.qr.scanner.core.RateGuide
-import app.allever.android.lib.recommend.ui.RecommendDialog
 import com.allever.app.qr.code.scaner.databinding.ActivityMainBinding
-import app.android.base.lib.notchcompat.NotchCompat
+import app.allever.android.lib.core.function.notchcompat.NotchCompat
 
 
 class MainActivity : AppActivity(), TabLayout.OnTabSelectedListener, View.OnClickListener {
@@ -29,12 +28,6 @@ class MainActivity : AppActivity(), TabLayout.OnTabSelectedListener, View.OnClic
     private var mainTabUnSelectColor: Int = 0
 
     private lateinit var mBinding: ActivityMainBinding
-
-    private val mRecommendDialog by lazy {
-        RecommendDialog(this) {
-            finish()
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -167,11 +160,7 @@ class MainActivity : AppActivity(), TabLayout.OnTabSelectedListener, View.OnClic
     }
 
     override fun onBackPressed() {
-        if (mRecommendDialog.isShowing) {
-            mRecommendDialog.dismiss()
-        } else {
-            mRecommendDialog.show()
-        }
+        finish()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -185,10 +174,5 @@ class MainActivity : AppActivity(), TabLayout.OnTabSelectedListener, View.OnClic
 
     override fun onDestroy() {
         super.onDestroy()
-    }
-
-
-    companion object {
-        private const val RC_RECOMMEND_BACK = 0x01
     }
 }

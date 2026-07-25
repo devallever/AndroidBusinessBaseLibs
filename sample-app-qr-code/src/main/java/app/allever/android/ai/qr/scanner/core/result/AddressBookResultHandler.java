@@ -212,6 +212,6 @@ public final class AddressBookResultHandler extends ResultHandler {
 
   @Override
   public int getDisplayTitle() {
-    return R.string.result_address_book;
+    return com.google.zxing.client.android.R.string.result_address_book;
   }
 }

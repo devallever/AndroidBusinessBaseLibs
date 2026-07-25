@@ -60,7 +60,7 @@ class PreviewResultFragment : AppCompatDialogFragment() {
     }
 
     private fun initView(): Dialog {
-        val builder = AlertDialog.Builder(context!!)
+        val builder = AlertDialog.Builder(requireContext())
         mContentView = LayoutInflater.from(context).inflate(mDecodeBrowser.getLayoutId(), null)
         val dialog = builder.setView(mContentView).create()
         dialog.setOnShowListener(object : DialogInterface.OnShowListener {
@@ -149,7 +149,7 @@ class PreviewResultFragment : AppCompatDialogFragment() {
             return
         }
         mNeedRefresh = false
-        mDecodeBrowser.handleDecodeInternally(activity!!, mContentView, mRawResult!!, mBarcode)
+        mDecodeBrowser.handleDecodeInternally(requireActivity(), mContentView, mRawResult!!, mBarcode)
     }
 
     companion object {
@@ -220,7 +220,7 @@ class PreviewResultFragment : AppCompatDialogFragment() {
             val barcodeImageView = mContentView.findViewById<View>(R.id.barcode_image_view) as ImageView
             if (barcode == null) {
                 barcodeImageView.setImageBitmap(BitmapFactory.decodeResource(resources,
-                        R.drawable.launcher_icon))
+                        R.drawable.ic_logo))
             } else {
                 barcodeImageView.setImageBitmap(barcode)
             }

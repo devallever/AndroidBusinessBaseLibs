@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 
-import app.android.base.lib.util.MediaHelper;
 import com.android.absbase.utils.ToastUtils;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
@@ -28,6 +27,10 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import app.allever.android.lib.core.helper.MediaHelper;
+import app.allever.android.lib.core.helper.MediaHelperKt;
+import app.allever.android.lib.media.core.MediaCore;
 
 @SuppressLint("ValidFragment")
 public class SaveQRCodeImgDialog extends DialogFragment {
@@ -79,7 +82,7 @@ public class SaveQRCodeImgDialog extends DialogFragment {
                     }else {
                         //java调用kotlin的扩展方法
                         //saveToAlbum(App.context, fileName, App.context.getString(R.string.app_name))
-                        MediaHelper.INSTANCE.saveToAlbum(mContext, bitmap, fileName + ".jpg", ContextCompat.getString(mContext, R.string.app_name), 75);
+                        MediaHelperKt.saveToAlbum(bitmap, mContext, fileName + ".jpg", ContextCompat.getString(mContext, R.string.qr_app_name), 75);
 //                        String resultFileName = saveFile(bitmap, fileName + ".jpg");
                         mListener.onConfirmClick(SaveQRCodeImgDialog.this, fileName + ".jpg");
                     }

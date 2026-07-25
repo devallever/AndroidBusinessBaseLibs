@@ -33,10 +33,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import app.android.base.lib.util.PermissionHelper;
-
-import com.allever.android.lib.admob.AdManager;
 import com.allever.app.qr.code.scaner.databinding.FragmentShareQrcodeBinding;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.android.Contents;
@@ -57,7 +53,6 @@ import com.google.zxing.client.result.WifiParsedResult;
 import com.google.zxing.client.result.YoutubeParsedResult;
 import app.allever.android.ai.qr.scanner.Config;
 import com.allever.app.qr.code.scaner.R;
-import com.permissionx.guolindev.PermissionX;
 
 import app.allever.android.ai.qr.scanner.ui.adapter.SsidEncryptionAdapter;
 import app.allever.android.ai.qr.scanner.bean.ShareItem;
@@ -314,18 +309,6 @@ public class InputFragment extends AppCompatDialogFragment {
             return;
         }
 
-        List<String> pList = new ArrayList<>();
-        pList.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        pList.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (!PermissionHelper.INSTANCE.hasPermissionOrigin(requireContext(), pList)) {
-            PermissionX.init(this).permissions(pList).request((allGranted, grantedList, deniedList) -> {
-                if (allGranted) {
-                    scanWifi();
-                }
-            });
-            return;
-        }
-
         scanWifi();
     }
 
@@ -532,20 +515,12 @@ public class InputFragment extends AppCompatDialogFragment {
 
     public void initListener() {
         mBinding.topBack.setOnClickListener(v -> dismiss());
-        mBinding.btnNext.setOnClickListener(v -> AdManager.INSTANCE.showInter(getActivity(), new Function0<Unit>() {
-            @Override
-            public Unit invoke() {
-                doNext();
-                return null;
-            }
-        }));
-        mBinding.topNext.setOnClickListener(v -> AdManager.INSTANCE.showInter(getActivity(), new Function0<Unit>() {
-            @Override
-            public Unit invoke() {
-                doNext();
-                return null;
-            }
-        }));
+        mBinding.btnNext.setOnClickListener(v -> {
+            doNext();
+        });
+        mBinding.topNext.setOnClickListener(v -> {
+            doNext();
+        });
     }
 
     private void doNext() {

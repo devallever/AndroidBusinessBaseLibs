@@ -1,21 +1,12 @@
 package app.allever.android.ai.qr.scanner
 
-import android.content.Context
 import android.os.StrictMode
-import androidx.multidex.MultiDex
-import app.allever.android.lib.recommend.data.RecommendHelper
-import app.android.base.lib.App
-import com.allever.android.lib.admob.AdDevManager
-import com.allever.android.lib.admob.AdManager
+import app.allever.android.lib.core.app.App
 
-class QRCodeApp : App() {
-    override fun onCreate() {
-        super.onCreate()
-        com.android.absbase.App.setContext(this)
+object QRCodeApp {
+    fun onCreate() {
+        com.android.absbase.App.setContext(App.context)
         handler()
-        AdManager.init(AdConfig(), this)
-        AdDevManager.init(this)
-        RecommendHelper.init(this)
     }
 
     private fun handler() {
@@ -29,10 +20,5 @@ class QRCodeApp : App() {
         } catch (e: Throwable) {
             e.printStackTrace()
         }
-    }
-
-    override fun attachBaseContext(base: Context) {
-        super.attachBaseContext(base)
-        MultiDex.install(this)
     }
 }

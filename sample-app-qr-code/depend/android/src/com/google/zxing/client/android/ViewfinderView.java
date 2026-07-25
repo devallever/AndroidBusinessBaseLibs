@@ -16,7 +16,6 @@
 
 package com.google.zxing.client.android;
 
-import com.android.absbase.utils.DeviceUtils;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.camera.CameraManager;
 
@@ -89,10 +88,10 @@ public final class ViewfinderView extends View {
     lastPossibleResultPoints = null;
 
     frameBorderLineColor = Color.parseColor("#7fffffff");
-    frameBorderLineWidht = DeviceUtils.dip2px(1);
+    frameBorderLineWidht = DeviceUtils.dip2px(context, 1);
     frameBorderCornersColor = Color.YELLOW;
-    frameBorderCornersWidht = DeviceUtils.dip2px(5);
-    frameBorderCornersLength = DeviceUtils.dip2px(20);
+    frameBorderCornersWidht = DeviceUtils.dip2px(context, 5);
+    frameBorderCornersLength = DeviceUtils.dip2px(context, 20);
     frameBorderCornersRect = new Rect(0, 0, frameBorderCornersLength, frameBorderCornersWidht);
 
     laserColor = Color.parseColor("#ffffaa00");

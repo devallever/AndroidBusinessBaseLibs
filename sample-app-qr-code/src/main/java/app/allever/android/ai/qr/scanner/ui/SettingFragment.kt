@@ -9,17 +9,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import com.allever.app.qr.code.scaner.BuildConfig
-import app.android.base.lib.util.ActivityCollector
-import app.android.base.lib.util.FeedbackHelper
 import com.android.absbase.utils.DeviceUtils
 import com.android.absbase.utils.ResourcesUtils
 import com.google.zxing.client.android.PreferencesActivity
 import app.allever.android.ai.qr.scanner.Config
 import com.allever.app.qr.code.scaner.R
 import app.allever.android.ai.qr.scanner.ui.widget.preference.PreferenceFragment
-import app.android.base.lib.util.ShareHelper
-import app.android.base.lib.util.toast
+import app.allever.android.lib.core.helper.ActivityHelper
+import app.allever.android.lib.core.helper.FeedbackHelper
+import app.allever.android.lib.core.helper.ShareHelper
 import java.net.URI
 import java.net.URISyntaxException
 import java.util.ArrayList
@@ -84,7 +82,7 @@ class SettingFragment : PreferenceFragment(), SharedPreferences.OnSharedPreferen
     override fun onPreferenceClick(preference: Preference?): Boolean {
         return when (preference?.key) {
             KEY_ABOUT -> {
-                ActivityCollector.startActivity(activity!!, AboutActivity::class.java)
+                ActivityHelper.startActivity(AboutActivity::class.java)
                 true
             }
             KEY_FEEDBACK -> {

@@ -2,10 +2,12 @@ package com.google.zxing
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.android.absbase.utils.TaskRunnable
 import com.google.zxing.common.HybridBinarizer
 import kotlin.collections.ArrayList
 import com.google.zxing.utils.BitmapUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 interface QRReaderListener {
@@ -77,12 +79,9 @@ class QRReader {
 
     @JvmOverloads
     fun startAsync(imgPath: String, listener: QRReaderListener, numberOfRetries: Int = 5) {
-        TaskRunnable.run(object : Runnable {
-            override fun run() {
-                start(imgPath, listener, numberOfRetries)
-            }
-
-        }, 0, TaskRunnable.TYPE_ASYNC)
+        CoroutineScope(Dispatchers.IO).launch {
+            start(imgPath, listener, numberOfRetries)
+        }
     }
 
     fun getBitmap(): Bitmap? {

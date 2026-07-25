@@ -1,5 +1,6 @@
 package app.allever.android.ai.qr.scanner.core
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 
@@ -42,6 +43,7 @@ class RateGuide {
         private val TYPE_NO_RATE = 0
         private val TYPE_MAIN_RATE = 1
 
+        @SuppressLint("MissingPermission")
         private fun isNetWorkAvailable(context: Context?): Boolean {
             var result = false
             if (context != null) {

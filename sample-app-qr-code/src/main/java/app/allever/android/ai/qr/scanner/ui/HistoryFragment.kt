@@ -21,7 +21,6 @@ import app.allever.android.ai.qr.scanner.core.history.HistoryDataModel
 import app.allever.android.ai.qr.scanner.core.history.HistoryItem
 import app.allever.android.ai.qr.scanner.core.preview.PreviewResultFragment
 import app.allever.android.ai.qr.scanner.ui.widget.TabAndPagerHelper
-import com.allever.android.lib.admob.AdManager
 
 
 class HistoryFragment : BaseFragment(), View.OnClickListener {
@@ -179,14 +178,14 @@ class HistoryFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun createHistoryView(type: Int): HistoryData {
-        val recyclerView = RecyclerView(context!!)
+        val recyclerView = RecyclerView(requireContext())
         recyclerView.isClickable = false
         recyclerView.clipToPadding = false
         recyclerView.scrollBarStyle = View.SCROLLBARS_OUTSIDE_OVERLAY
         recyclerView.isVerticalScrollBarEnabled = true
 
 
-        val historyAdapter = HistoryAdapter(activity!!)
+        val historyAdapter = HistoryAdapter(requireActivity())
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = historyAdapter
         historyAdapter.itemClickListener = object : HistoryAdapter.OnItemClickListener {
@@ -204,10 +203,6 @@ class HistoryFragment : BaseFragment(), View.OnClickListener {
                 val currentTimeMillis = System.currentTimeMillis()
                 if (currentTimeMillis - prevClickTime < 500) {
                     return
-                }
-                AdManager.showInter(requireActivity()) {
-                    PreviewResultFragment.show(this@HistoryFragment, (item as HistoryItem).obj.result, null)
-                    prevClickTime = currentTimeMillis
                 }
             }
 
@@ -229,7 +224,7 @@ class HistoryFragment : BaseFragment(), View.OnClickListener {
             else -> HistoryManager(activity)
         }
 
-    val dataModel = HistoryDataModel(activity!!, historyManager)
+    val dataModel = HistoryDataModel(requireActivity(), historyManager)
         dataModel.dataChangeListner = object : HistoryDataModel.OnDataChangeLisenter {
             override fun onChange() {
                 val formatDatas = dataModel.getFormatDatas()

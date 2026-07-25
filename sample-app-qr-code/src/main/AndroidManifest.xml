@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.allever.app.qr.code.scaner"
     android:installLocation="auto">
 
 <!--    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
@@ -29,18 +28,7 @@
         android:name="android.hardware.wifi"
         android:required="false" />
 
-    <application
-        android:name="app.allever.android.ai.qr.scanner.QRCodeApp"
-        android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:logo="@mipmap/ic_launcher"
-        tools:replace="android:allowBackup,android:logo,android:icon"
-        android:theme="@style/AppTheme">
-
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-6971932974635976~1312601450"/>
+    <application>
 
         <receiver
             android:name="com.android.absbase.receiver.MultipleInstallBroadcastReceiver"
@@ -53,17 +41,11 @@
         <activity
             android:name="app.allever.android.ai.qr.scanner.ui.SplashActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:label="@string/qr_app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="app.allever.android.ai.qr.scanner.ui.MainActivity"
@@ -311,24 +293,15 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
 
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
-        </provider>
-
-        <!-- Include the AdActivity and InAppPurchaseActivity configChanges and themes. -->
-        <activity
-            android:name="com.google.android.gms.ads.AdActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:exported="false"
-            android:theme="@style/AppTheme"
-            tools:replace="android:theme"
-            tools:ignore="MissingClass" />
+<!--        <provider-->
+<!--            android:name="androidx.core.content.FileProvider"-->
+<!--            android:authorities="${applicationId}.fileprovider"-->
+<!--            android:exported="false"-->
+<!--            android:grantUriPermissions="true">-->
+<!--            <meta-data-->
+<!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
+<!--                android:resource="@xml/filepaths" />-->
+<!--        </provider>-->
 
     </application>
 

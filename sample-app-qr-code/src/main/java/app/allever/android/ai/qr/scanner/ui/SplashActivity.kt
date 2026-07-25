@@ -11,7 +11,7 @@ import android.os.Message
 import androidx.lifecycle.lifecycleScope
 import app.allever.android.ai.qr.scanner.AppActivity
 import com.allever.app.qr.code.scaner.R
-import app.android.base.lib.notchcompat.NotchCompat
+import app.allever.android.lib.core.function.notchcompat.NotchCompat
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

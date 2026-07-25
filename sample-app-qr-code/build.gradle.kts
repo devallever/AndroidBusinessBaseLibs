@@ -25,6 +25,7 @@ android {
 dependencies {
     implementation(project(":sample-common"))
     implementation(project(":lib-media-core"))
+    implementation(project(":qrcode"))
 
     val aarList = mutableListOf(
         "toolkit-v1-1.1.aar"

@@ -29,6 +29,8 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
 
+
+
         // AGP 8.x 默认 useLegacyPackaging=false，导致 SO 不被提取到文件系统
         // 必须设为 true，否则 nativeLibraryDir 下找不到 .so 文件
         //fix: /lib/x86_64/libsslocal.so" (in directory "/data/user_de/0/com.swimpp.proxysafeline.application/no_backup"): error=2, No such file or directory
@@ -111,6 +113,8 @@ dependencies {
     implementation(project(":z-sample-videoeditor"))
     implementation(project(":z-sample-microsoft-speech"))
     implementation(project(":z-sample-audiovideo"))
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

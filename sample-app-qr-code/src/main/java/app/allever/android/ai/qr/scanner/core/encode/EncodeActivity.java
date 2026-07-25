@@ -16,7 +16,6 @@
 
 package app.allever.android.ai.qr.scanner.core.encode;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
@@ -28,12 +27,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 
-import app.android.base.lib.util.PermissionHelper;
-import app.android.base.lib.notchcompat.NotchCompat;
-
-import com.allever.android.lib.admob.AdManager;
 import com.android.absbase.ui.BaseActivity;
 import com.android.absbase.utils.ToastUtils;
 
@@ -60,9 +54,6 @@ import com.google.zxing.client.result.SMSTOMMSTOResultParser;
 import com.google.zxing.client.result.SMTPResultParser;
 import com.google.zxing.client.result.TelResultParser;
 import com.google.zxing.client.result.WifiResultParser;
-import com.allever.app.qr.code.scaner.BuildConfig;
-import com.permissionx.guolindev.PermissionX;
-import com.permissionx.guolindev.callback.RequestCallback;
 
 import app.allever.android.ai.qr.scanner.Config;
 import app.allever.android.ai.qr.scanner.bean.ShareItem;
@@ -75,6 +66,8 @@ import app.allever.android.ai.qr.scanner.core.encode.custom.CustomQrCodeUtils;
 import app.allever.android.ai.qr.scanner.core.encode.custom.ViewHolder;
 import app.allever.android.ai.qr.scanner.core.result.ResultHandlerFactory;
 import app.allever.android.ai.qr.scanner.ui.widget.HorizontalListView;
+import app.allever.android.lib.core.app.App;
+import app.allever.android.lib.core.function.notchcompat.NotchCompat;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 
@@ -158,24 +151,12 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-
-        } else {
-            mPermissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-
         updateLockState();
 
         getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                AdManager.INSTANCE.showInter(EncodeActivity.this, new Function0<Unit>() {
-                    @Override
-                    public Unit invoke() {
-                        finish();
-                        return null;
-                    }
-                });
+                finish();
             }
         });
     }
@@ -249,13 +230,7 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AdManager.INSTANCE.showInter(EncodeActivity.this, new Function0<Unit>() {
-                    @Override
-                    public Unit invoke() {
-                        finish();
-                        return null;
-                    }
-                });
+                finish();
             }
         });
         TextView tvSave = (TextView) findViewById(com.allever.app.qr.code.scaner.R.id.top_save);
@@ -265,12 +240,7 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
                 if (needLock()) {
                     return;
                 }
-                if (checkPermission()) {
-                    showSaveDialog();
-                } else {
-                    requestStoragePermission();
-                }
-
+                showSaveDialog();
             }
         });
 
@@ -278,12 +248,7 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
         mBtnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //申请存储权限
-                if (checkPermission()) {
-                    share();
-                } else {
-                    requestStoragePermission();
-                }
+                share();
             }
         });
 
@@ -491,16 +456,6 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-    //getResources().getString(R.string.tips_ration_camera)
-    private void requestStoragePermission() {
-        PermissionX.init(this).permissions(mPermissionList).request(new RequestCallback() {
-            @Override
-            public void onResult(boolean allGranted, @NonNull List<String> grantedList, @NonNull List<String> deniedList) {
-
-            }
-        });
-    }
-
     private void share() {
         QRCodeEncoder encoder = qrCodeEncoder;
         if (encoder == null) { // Odd
@@ -555,7 +510,7 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
 
         Uri shareFileUri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            shareFileUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileprovider", barcodeFile);
+            shareFileUri = FileProvider.getUriForFile(this, App.context.getPackageName() + ".fileprovider", barcodeFile);
         } else {
             shareFileUri = Uri.fromFile(barcodeFile);
         }
@@ -717,55 +672,41 @@ public final class EncodeActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case com.allever.app.qr.code.scaner.R.id.iv_custom_select_photo:
-                if (checkPermission()) {
-                    if(mPreCustomEncodeParamsBean == null
-                            || (mPreCustomEncodeParamsBean.getBitmapPath() == null && mPreCustomEncodeParamsBean.getIconResId() == null)
-                    ){
-                        SystemAlbumHelper.INSTANCE.start(EncodeActivity.this);
-                    }else{
-                        AlertDialog.Builder builder = new AlertDialog.Builder(EncodeActivity.this);
-                        builder.setTitle(null);
-                        builder.setMessage("Choose from Library or reset ?");
-                        builder.setNegativeButton("reset", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                CustomQrCodeManager.setCustomStyleIcon(mCustomStyleQrCodes, null, null);
-                                mCommonAdapter.setDatas(mCustomStyleQrCodes);
-                                mPickPhoto.setImageResource(com.allever.app.qr.code.scaner.R.drawable.customize_icon_photo);
-                                try {
-                                    if(mPreCustomEncodeParamsBean!=null){
-                                        mPreCustomEncodeParamsBean.setBitmapPath(null);
-                                        mPreCustomEncodeParamsBean.setIconResId(null);
-                                        mIvQRCode.setImageBitmap(qrCodeEncoder.encodeAsBitmap(mPreCustomEncodeParamsBean));
-                                    }
-                                } catch (WriterException e) {
-                                    e.printStackTrace();
-                                }
+        if (v.getId() == com.allever.app.qr.code.scaner.R.id.iv_custom_select_photo) {
+            if (mPreCustomEncodeParamsBean == null
+                    || (mPreCustomEncodeParamsBean.getBitmapPath() == null && mPreCustomEncodeParamsBean.getIconResId() == null)
+            ) {
+                SystemAlbumHelper.INSTANCE.start(EncodeActivity.this);
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(EncodeActivity.this);
+                builder.setTitle(null);
+                builder.setMessage("Choose from Library or reset ?");
+                builder.setNegativeButton("reset", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        CustomQrCodeManager.setCustomStyleIcon(mCustomStyleQrCodes, null, null);
+                        mCommonAdapter.setDatas(mCustomStyleQrCodes);
+                        mPickPhoto.setImageResource(com.allever.app.qr.code.scaner.R.drawable.customize_icon_photo);
+                        try {
+                            if (mPreCustomEncodeParamsBean != null) {
+                                mPreCustomEncodeParamsBean.setBitmapPath(null);
+                                mPreCustomEncodeParamsBean.setIconResId(null);
+                                mIvQRCode.setImageBitmap(qrCodeEncoder.encodeAsBitmap(mPreCustomEncodeParamsBean));
                             }
-                        });
-                        builder.setPositiveButton("Choose from Library", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                SystemAlbumHelper.INSTANCE.start(EncodeActivity.this);
-                            }
-                        });
-                        builder.show();
+                        } catch (WriterException e) {
+                            e.printStackTrace();
+                        }
                     }
-                } else {
-                    requestStoragePermission();
-                }
-                break;
-            default:
-                break;
+                });
+                builder.setPositiveButton("Choose from Library", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SystemAlbumHelper.INSTANCE.start(EncodeActivity.this);
+                    }
+                });
+                builder.show();
+            }
         }
-    }
-
-    private final List<String> mPermissionList = new ArrayList<>();
-    private boolean checkPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) return true;
-        else return PermissionHelper.INSTANCE.hasPermissionOrigin( this, mPermissionList);
     }
 
 }

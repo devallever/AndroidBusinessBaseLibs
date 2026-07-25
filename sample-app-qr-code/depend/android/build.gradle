@@ -3,22 +3,8 @@ apply plugin: 'kotlin-android'
 def configInfo = rootProject.ext
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion "26.0.1"
-    defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        //      umeng 提示：
-//      andriod 6.0之后，设备信息部分获取有所变动，请参考官网：
-//      https://developer.android.com/training/permissions/requesting.html
-//      小技巧：当xml中的targetSdkVersion=x(x<23)时候, 可以正常获取信息(相当于跳过了6.0权限检查)
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
 
-
-    }
+    namespace "com.google.zxing.client.android"
 
     sourceSets {
         main {
@@ -35,34 +21,28 @@ android {
         }
     }
 
-
-}
-
-
-repositories {
-    mavenCentral()
-    maven {
-        url "https://maven.google.com"
+    buildFeatures {
+        buildConfig true
     }
+
+
 }
 
 //引入aar包需加
-repositories {
-    flatDir {
-        dirs '../../libs'
-    }
-}
+//repositories {
+//    flatDir {
+//        dirs '../../libs'
+//    }
+//}
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.multidex:multidex:2.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.google.android.material:material:1.13.0'
 
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.21"
 
-    implementation(name: "toolkit-v1-1.1", ext: 'aar')
-//    compile(name: "Toolkit${rootProject.ext.toolkitLib}", ext: 'aar')
+//    api(name: "toolkit-v1-1.1", ext: 'aar')
 }
 

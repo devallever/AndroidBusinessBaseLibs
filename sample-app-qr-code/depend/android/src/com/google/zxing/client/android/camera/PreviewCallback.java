@@ -22,7 +22,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.android.absbase.helper.log.DLog;
+import com.google.zxing.client.android.DLog;
 import com.google.zxing.utils.BitmapUtils;
 
 @SuppressWarnings("deprecation") // camera APIs
@@ -69,7 +69,7 @@ final class PreviewCallback implements Camera.PreviewCallback {
         default:
       }
     } catch (Exception e) {
-      DLog.printStackTrace(e);
+      e.printStackTrace();
     }
 
     Handler thePreviewHandler = previewHandler;

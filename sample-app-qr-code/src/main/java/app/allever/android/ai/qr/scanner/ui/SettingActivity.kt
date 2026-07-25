@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.TextView
 import app.allever.android.ai.qr.scanner.AppActivity
 import com.allever.app.qr.code.scaner.R
-import app.android.base.lib.notchcompat.NotchCompat
+import app.allever.android.lib.core.function.notchcompat.NotchCompat
 import com.allever.app.qr.code.scaner.databinding.ActivitySettingBinding
 
 /**

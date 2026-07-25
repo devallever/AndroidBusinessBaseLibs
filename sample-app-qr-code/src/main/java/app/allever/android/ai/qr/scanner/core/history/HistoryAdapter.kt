@@ -20,9 +20,9 @@ import app.allever.android.ai.qr.scanner.core.result.URIResultHandler
 import java.text.SimpleDateFormat
 import java.util.*
 
-const val ITEM_TYPE_DATE = R.layout.history_list_item_date
-const val ITEM_TYPE_HISTORY = R.layout.history_list_item_data
-const val ITEM_TYPE_NO_DATA = R.layout.history_list_item_empty
+val ITEM_TYPE_DATE = R.layout.history_list_item_date
+val ITEM_TYPE_HISTORY = R.layout.history_list_item_data
+val ITEM_TYPE_NO_DATA = R.layout.history_list_item_empty
 
 open class Item<T>(val type: Int, val obj: T, val id: Int = -1, var checked: Boolean? = null) {
 

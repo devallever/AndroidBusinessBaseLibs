@@ -33,12 +33,6 @@ import com.allever.app.qr.code.scaner.R
 import app.allever.android.ai.qr.scanner.core.preview.PreviewResultFragment
 import app.allever.android.ai.qr.scanner.core.result.ResultHandlerFactory
 import app.allever.android.ai.qr.scanner.ui.widget.LoadingView
-import app.allever.android.lib.recommend.ui.RecommendDialog
-import app.allever.android.lib.recommend.ui.RecommendListActivity
-import app.allever.android.lib.recommend.util.ShakeViewContainer
-import app.android.base.lib.util.PermissionHelper
-import com.permissionx.guolindev.PermissionX
-import com.permissionx.guolindev.callback.RequestCallback
 import java.io.IOException
 import java.util.*
 
@@ -128,18 +122,6 @@ class ScannerFragment() : BaseFragment(), SurfaceHolder.Callback, CaptureHolder,
     private val mCameraPermissions = ArrayList<String>().apply {
         add(Manifest.permission.CAMERA)
     }
-
-
-    private lateinit var mShakeViewContainer: ShakeViewContainer
-
-    private fun checkStorePermission(): Boolean {
-        return PermissionHelper.hasPermissionOrigin(activity, mStorePermissionsList)
-    }
-
-    private fun checkCameraPermission(): Boolean {
-        return PermissionHelper.hasPermissionOrigin(activity, mCameraPermissions)
-    }
-
     override fun getViewfinderView(): ViewfinderView? {
         return viewfinderView
     }
@@ -175,44 +157,10 @@ class ScannerFragment() : BaseFragment(), SurfaceHolder.Callback, CaptureHolder,
 
     override fun onStart() {
         super.onStart()
-        //申请相机权限
-//        requestCameraPermission()
-        PermissionX.init(this).permissions(mCameraPermissions).request(object : RequestCallback {
-            override fun onResult(allGranted: Boolean, grantedList: List<String>, deniedList: List<String>) {
-                if (allGranted) {
-                    //申请成功
-                    mMainHandler.removeMessages(WHAT_RESUME)
-                    mMainHandler.removeMessages(WHAT_PAUSE)
-                    mMainHandler.sendEmptyMessage(WHAT_RESUME)
-                } else {
-                    //申请失败
-                    //判断是否总是拒绝权限
-                    if (PermissionHelper.hasAlwaysDeniedPermissionOrigin(activity, deniedList)) {
-                        ToastUtils.show(getString(R.string.tips_no_camera_permission))
-                        //弹窗引导用户去设置界面打开权限
-                        AlertDialog.Builder(activity)
-                            .setTitle("Tips")
-                            .setMessage(getString(R.string.tips_no_camera_permission) + " ,go setting")
-                            .setNegativeButton("Cancel", object : DialogInterface.OnClickListener {
-                                override fun onClick(dialog: DialogInterface?, which: Int) {
-                                    dialog?.dismiss()
-                                    requireActivity().finish()
-                                }
-                            })
-                            .setPositiveButton("Go", object : DialogInterface.OnClickListener {
-                            override fun onClick(dialog: DialogInterface?, which: Int) {
-                                dialog?.dismiss()
-                                PermissionHelper.gotoSettingOrigin(requireActivity())
-                            }
-                        }).show()
-                    } else {
-                        ToastUtils.show(getString(R.string.tips_no_camera_permission))
-                        activity?.finish()
-                    }
-
-                }
-            }
-        })
+        //申请成功
+        mMainHandler.removeMessages(WHAT_RESUME)
+        mMainHandler.removeMessages(WHAT_PAUSE)
+        mMainHandler.sendEmptyMessage(WHAT_RESUME)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -234,8 +182,6 @@ class ScannerFragment() : BaseFragment(), SurfaceHolder.Callback, CaptureHolder,
         flashlight = mContainer?.findViewById<ImageView>(R.id.btn_flashlight)
         album = mContainer?.findViewById<ImageView>(R.id.btn_album)
         recommend = mContainer?.findViewById<ImageView>(R.id.btnRecommend)
-        mShakeViewContainer = ShakeViewContainer(recommend!!)
-        mShakeViewContainer.start()
         val btnPremium = mContainer?.findViewById<ImageView>(R.id.btn_premium)
         btnPremium?.setOnClickListener(this)
         if(Config.purchaseSubSize >0){
@@ -364,9 +310,7 @@ class ScannerFragment() : BaseFragment(), SurfaceHolder.Callback, CaptureHolder,
         // 不使用异步，使用异步后从启动页进入会闪一下，设置window.setFormat(PixelFormat.TRANSLUCENT)也不起作用，暂未找到原因
         when (message?.what) {
             WHAT_RESUME -> {
-                if (PermissionHelper.hasPermissionOrigin(requireActivity(), mCameraPermissions)) {
-                    onResumeImpl()
-                }
+                onResumeImpl()
             }
             WHAT_PAUSE -> onPauseImpl()
             WHAT_FLAHLIGHT_ANIM -> startFlashlightAnim()
@@ -577,7 +521,6 @@ class ScannerFragment() : BaseFragment(), SurfaceHolder.Callback, CaptureHolder,
         super.onDestroyView()
         isInit = false
         surfaceView?.holder?.removeCallback(this)
-        mShakeViewContainer.stop()
 
     }
 
@@ -596,33 +539,9 @@ class ScannerFragment() : BaseFragment(), SurfaceHolder.Callback, CaptureHolder,
             }
             R.id.btn_premium -> { }
             R.id.btn_album -> {
-                if (checkStorePermission()) {
-                    SystemAlbumHelper.start(this)
-                } else {
-                    PermissionX.init(this).permissions(mStorePermissionsList).request(object: RequestCallback {
-                        override fun onResult(
-                            allGranted: Boolean,
-                            grantedList: MutableList<String>,
-                            deniedList: MutableList<String>
-                        ) {
-                            if (allGranted) {
-                                SystemAlbumHelper.start(this)
-                            } else {
-                                ToastUtils.show(getString(R.string.tips_no_read_storage_permission))
-                            }
-                        }
-
-                    })
-//                    permissionManager?.requestPermission(this,
-//                            null,
-//                            resources.getString(R.string.tips_ration_read),
-//                            RC_PERMISSION_READ_EXTERNAL_STORAGE,
-//                            *permissions)
-                }
+                SystemAlbumHelper.start(this)
             }
             R.id.btnRecommend -> {
-                //跳转RecommendActivity
-                startActivity(Intent(activity, RecommendListActivity::class.java))
             }
             R.id.camera_zoom_far -> {
                 currentCameraZoomValue -= CAMERA_ZOOM_STEP
@@ -1098,7 +1017,7 @@ class ScannerFragment() : BaseFragment(), SurfaceHolder.Callback, CaptureHolder,
 
     private fun displayFrameworkBugMessageAndExit() {
         val builder = AlertDialog.Builder(context)
-        builder.setTitle(getString(R.string.app_name))
+        builder.setTitle(getString(R.string.qr_app_name))
         builder.setMessage(getString(com.google.zxing.client.android.R.string.msg_camera_framework_bug))
         builder.setPositiveButton(com.google.zxing.client.android.R.string.button_ok, FinishListener(activity))
         builder.setOnCancelListener(FinishListener(activity))

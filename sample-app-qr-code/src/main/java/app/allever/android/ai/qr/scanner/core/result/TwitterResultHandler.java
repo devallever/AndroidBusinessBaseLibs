@@ -81,7 +81,7 @@ public final class TwitterResultHandler extends ResultHandler {
 
     @Override
     public int getDisplayTitle() {
-        return R.string.result_uri;
+        return com.google.zxing.client.android.R.string.result_uri;
     }
 
     @Override
