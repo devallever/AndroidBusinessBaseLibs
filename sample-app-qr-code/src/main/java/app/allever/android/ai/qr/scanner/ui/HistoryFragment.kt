@@ -19,6 +19,7 @@ import app.allever.android.ai.qr.scanner.core.history.GenerateHistoryManager
 import app.allever.android.ai.qr.scanner.core.history.HistoryAdapter
 import app.allever.android.ai.qr.scanner.core.history.HistoryDataModel
 import app.allever.android.ai.qr.scanner.core.history.HistoryItem
+import app.allever.android.ai.qr.scanner.core.preview.PreviewResultFragment
 import app.allever.android.ai.qr.scanner.ui.widget.TabAndPagerHelper
 
 
@@ -203,6 +204,9 @@ class HistoryFragment : BaseFragment(), View.OnClickListener {
                 if (currentTimeMillis - prevClickTime < 500) {
                     return
                 }
+
+                PreviewResultFragment.show(this@HistoryFragment, (item as HistoryItem).obj.result, null)
+                prevClickTime = currentTimeMillis
             }
 
             override fun onItemLongClick(position: Int, item: AnyItem?): Boolean {
