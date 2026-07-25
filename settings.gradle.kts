@@ -158,3 +158,4 @@ include(":lib-camera-core")
 
 // 开启文件系统监听，加速增量构建
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") // 类型安全的项目访问器（可选，方便写代码）
+include(":sample-app-qr-code")

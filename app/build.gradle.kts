@@ -90,6 +90,7 @@ dependencies {
     implementation(project(":sample-app-ffmpeg-command"))
     implementation(project(":sample-app-text-translator"))
     implementation(project(":sample-app-text-card"))
+    implementation(project(":sample-app-qr-code"))
 
 
     implementation(project(":z-sample-billing"))

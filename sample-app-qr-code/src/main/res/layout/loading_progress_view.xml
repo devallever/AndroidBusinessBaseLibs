@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<app.allever.android.ai.qr.scanner.ui.widget.LoadingView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/loading_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    android:visibility="gone">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/anim_view"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        custom:lottie_autoPlay="false"
+        custom:lottie_fileName="loading.json"
+        custom:lottie_loop="true" />
+</app.allever.android.ai.qr.scanner.ui.widget.LoadingView>

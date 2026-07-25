@@ -1,0 +1,33 @@
+<resources>
+    <!-- default -->
+    <dimen name="default_top_bar_height">56dp</dimen>
+    <dimen name="default_image_button_size">48dp</dimen>
+    <dimen name="default_icon_width">48dp</dimen>
+    <dimen name="default_icon_height">48dp</dimen>
+
+    <dimen name="main_scan_frame_width">260dp</dimen>
+    <dimen name="main_scan_frame_top_margin">90dp</dimen>
+    <dimen name="main_scan_frame_bottom_fun_height">160dp</dimen>
+
+    <!-- Preference fragment padding, bottom -->
+    <dimen name="preference_fragment_padding_bottom">0dp</dimen>
+    <!-- Preference fragment padding, sides -->
+    <dimen name="preference_fragment_padding_side">16dp</dimen>
+    <integer name="preference_fragment_scrollbarStyle">0x02000000</integer> <!-- outsideOverlay -->
+
+
+    <!-- history -->
+    <dimen name="history_list_margin">16dp</dimen>
+    <dimen name="history_list_date_height">36dp</dimen>
+    <dimen name="history_list_item_height">70dp</dimen>
+
+    <dimen name="scan_result_dialog_margin">20dp</dimen>
+
+    <dimen name="share_type_container_padding">15dp</dimen>
+
+    <dimen name="share_item_et_fg_margin_left_right">16dp</dimen>
+    <dimen name="share_item_input_margin_right_left">16dp</dimen>
+
+    <!--custom qrcode-->
+    <dimen name="custom_qrcode_cover_item">48dp</dimen>
+</resources>

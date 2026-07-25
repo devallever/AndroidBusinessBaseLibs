@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomPreference">
+        <attr name="cpTitleTextColor" format="reference|color" />
+        <attr name="cpTitleTextStyle" format="integer" />
+        <attr name="cpTitleTextSize" format="dimension" />
+        <attr name="cpTitleTextAllCaps" format="boolean" />
+        <attr name="cpTitleTextDrawableRight" format="reference|color" />
+        <attr name="cpTitleTextDrawablePadding" format="dimension" />
+        <attr name="cpSummaryTextColor" format="reference|color" />
+        <attr name="cpSummaryTextStyle" format="integer" />
+        <attr name="cpSummaryTextSize" format="dimension" />
+        <attr name="cpSummaryTextAllCaps" format="boolean" />
+        <attr name="cpBackground" format="reference|color" />
+    </declare-styleable>
+
+    <string-array name="wifi_encryption">
+        <item>WPA</item>
+        <item>WEP</item>
+        <item>None</item>
+    </string-array>
+
+    <declare-styleable name="ShareItemInput">
+        <attr name="siiTitle" format="reference|string" />
+        <attr name="siiHint" format="reference|string" />
+        <attr name="siiMaxContentLength" format="reference|integer" />
+        <attr name="siiInputType" format="integer">
+            <flag name="text" value="0"/>
+            <flag name="number" value="1"/>
+        </attr>
+    </declare-styleable>
+
+    <!-- Defines the custom XML attributes supported for a HorizontalListView -->
+    <declare-styleable name="HorizontalListView">
+        <attr name="dividerWidth" format="dimension" />
+        <attr name="android:divider" />
+        <attr name="android:requiresFadingEdge" />
+        <attr name="android:fadingEdgeLength" />
+    </declare-styleable>
+
+</resources>

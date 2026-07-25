@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@drawable/detail_banner"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/top_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/icon_return"
+        android:tint="@color/black"/>
+
+    <CheckBox
+        android:id="@+id/top_next"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_alignParentRight="true"
+        android:button="@null"
+        android:drawableRight="@drawable/icon_crown"
+        android:drawablePadding="8dp"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/next"
+        android:textColor="@color/top_next_color"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:visibility="gone"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/top_back"
+        android:layout_above="@id/btnNext">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_share_type_logo"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/history_item_icon_bg"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_wifi" />
+
+            <TextView
+                android:id="@+id/tv_share_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_share_type_logo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="20dp"
+                android:text="Wi-Fi"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <FrameLayout
+                android:id="@+id/adContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_share_title"
+                android:background="@drawable/ad_container_bg"
+                android:padding="0.5dp"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/adContainer"
+                android:layout_marginTop="16dp">
+
+                <!-- 剪贴板 -->
+                <ViewStub
+                    android:id="@+id/viewstub_share_clipboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inflatedId="@+id/share_clipboard_container"
+                    android:layout="@layout/share_clipboard" />
+
+                <!-- 链接 -->
+                <ViewStub
+                    android:id="@+id/viewstub_share_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inflatedId="@+id/share_url_container"
+                    android:layout="@layout/share_url" />
+
+                <!-- WIFI -->
+                <ViewStub
+                    android:id="@+id/viewstub_share_wifi"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inflatedId="@+id/share_wifi_container"
+                    android:layout="@layout/share_wifi" />
+
+                <!-- TEXT -->
+                <ViewStub
+                    android:id="@+id/viewstub_share_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inflatedId="@+id/share_text_container"
+                    android:layout="@layout/share_text" />
+
+                <!-- Contact -->
+                <ViewStub
+                    android:id="@+id/viewstub_share_contact"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inflatedId="@+id/share_contact_container"
+                    android:layout="@layout/share_contact" />
+
+                <!-- Phone -->
+                <ViewStub
+                    android:id="@+id/viewstub_share_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inflatedId="@+id/share_phone_container"
+                    android:layout="@layout/share_phone" />
+
+                <!-- Email -->
+                <ViewStub
+                    android:id="@+id/viewstub_share_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inflatedId="@+id/share_email_container"
+                    android:layout="@layout/share_email" />
+
+                <!-- SMS -->
+                <ViewStub
+                    android:id="@+id/viewstub_share_sms"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inflatedId="@+id/share_sms_container"
+                    android:layout="@layout/share_sms" />
+
+                <!-- LOCATION -->
+                <ViewStub
+                    android:id="@+id/viewstub_share_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inflatedId="@+id/share_location_container"
+                    android:layout="@layout/share_location" />
+
+                <!-- BARCODE -->
+                <ViewStub
+                    android:id="@+id/viewstub_share_barcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inflatedId="@+id/share_barcode_container"
+                    android:layout="@layout/share_barcode" />
+
+
+                <ViewStub
+                    android:id="@+id/viewstub_share_facebook"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout="@layout/share_facebook" />
+
+                <ViewStub
+                    android:id="@+id/viewstub_share_instagram"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout="@layout/share_instagram" />
+
+                <ViewStub
+                    android:id="@+id/viewstub_share_spotify"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout="@layout/share_spotify" />
+
+                <ViewStub
+                    android:id="@+id/viewstub_share_twitter"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout="@layout/share_twitter" />
+
+                <ViewStub
+                    android:id="@+id/viewstub_share_viber"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout="@layout/share_viber" />
+
+                <ViewStub
+                    android:id="@+id/viewstub_share_whatsapp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout="@layout/share_whatsapp" />
+
+                <ViewStub
+                    android:id="@+id/viewstub_share_youtube"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout="@layout/share_youtube" />
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="300dp"
+        android:layout_height="56dp"
+        android:layout_margin="20dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/btn_share_bg"
+        android:text="@string/next"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_above="@+id/tempView"/>
+
+    <View
+        android:id="@+id/tempView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"/>
+
+
+</RelativeLayout>

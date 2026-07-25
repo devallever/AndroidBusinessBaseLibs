@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (C) 2008 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomPreferenceCategory
+            android:title=" ">
+        <!--<com.allever.app.qr.code.scaner.ui.widget.preference.CustomPreferenc-->
+            <!--android:key="preferences_premium"-->
+            <!--android:title="@string/preferences_premium"-->
+            <!--app:cpTitleTextColor="@color/preference_title_color"-->
+            <!--app:cpTitleTextDrawableRight="@drawable/icon_crown"-->
+            <!--app:cpTitleTextDrawablePadding="@dimen/preference_fragment_padding_side"/>-->
+        <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomSwitchPreference
+            android:defaultValue="false"
+            android:key="preferences_auto_open_web"
+            android:title="@string/preferences_auto_open_web_title"
+            app:cpTitleTextColor="@color/preference_title_color" />
+
+        <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomSwitchPreference
+            android:defaultValue="true"
+            android:key="preferences_copy_to_clipboard"
+            android:title="@string/preferences_copy_to_clipboard_title"
+            app:cpTitleTextColor="@color/preference_title_color" />
+
+        <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomSwitchPreference
+            android:defaultValue="true"
+            android:key="preferences_play_beep"
+            android:title="@string/preferences_play_beep_title"
+            app:cpTitleTextColor="@color/preference_title_color" />
+
+        <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomSwitchPreference
+            android:defaultValue="true"
+            android:key="preferences_vibrate"
+            android:title="@string/preferences_vibrate_title"
+            app:cpTitleTextColor="@color/preference_title_color" />
+    </app.allever.android.ai.qr.scanner.ui.widget.preference.CustomPreferenceCategory>
+
+
+    <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomPreferenceCategory android:title="">
+<!--        <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomPreference-->
+<!--            android:key="preferences_share"-->
+<!--            android:title="@string/preferences_share"-->
+<!--            app:cpTitleTextColor="@color/preference_title_color"-->
+<!--            />-->
+<!--        <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomPreference-->
+<!--            android:key="preferences_feedback"-->
+<!--            android:title="@string/preferences_feedback"-->
+<!--            app:cpTitleTextColor="@color/preference_title_color"-->
+<!--            />-->
+        <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomPreference
+            android:key="preferences_about"
+            android:title="@string/preferences_about"
+            app:cpTitleTextColor="@color/preference_title_color" />
+
+<!--        <app.allever.android.ai.qr.scanner.ui.widget.preference.CustomPreference-->
+<!--            android:key="preferences_support"-->
+<!--            android:title="@string/preferences_support"-->
+<!--            app:cpTitleTextColor="@color/preference_title_color" />-->
+
+    </app.allever.android.ai.qr.scanner.ui.widget.preference.CustomPreferenceCategory>
+
+</PreferenceScreen>

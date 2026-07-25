@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/share_clipboard_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <app.allever.android.ai.qr.scanner.ui.widget.ShareItemInput
+            android:id="@+id/id_share_item_input1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/share_item_input_margin_right_left"
+            android:layout_marginRight="@dimen/share_item_input_margin_right_left"
+            app:siiInputType="text"
+            app:siiMaxContentLength="100"
+            app:siiTitle="@string/scene_edit_title_artist"
+            app:siiHint="@string/scene_edit_hint_soptify_artist" />
+
+        <app.allever.android.ai.qr.scanner.ui.widget.ShareItemInput
+            android:id="@+id/id_share_item_input2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/share_item_input_margin_right_left"
+            android:layout_marginRight="@dimen/share_item_input_margin_right_left"
+            app:siiInputType="text"
+            app:siiMaxContentLength="100"
+            app:siiTitle="@string/scene_edit_title_song"
+            app:siiHint="@string/scene_edit_hint_soptify_song" />
+
+
+    </LinearLayout>
+
+
+</ScrollView>

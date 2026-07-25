@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="main_tone_color">#0288d1</color>
+    <color name="colorAccent">@color/main_tone_color</color>
+    <drawable name="store_top_panel_bg">#FFFFFF</drawable>
+    <color name="title_color">#e6455a64</color>
+    <color name="default_background">#1b1b1b</color>
+
+    <color name="main_tab_background_color">@color/white</color>
+    <color name="main_tab_dividing_line">#0dffffff</color>
+    <color name="main_tab_highlight">@color/main_tone_color</color>
+    <color name="main_tab_unselect_color">#606060</color>
+
+    <color name="fragment_bg">@color/main_tab_background_color</color>
+
+    <color name="main_status_text_color">#99ffffff</color>
+    <color name="main_scan_mask">#b3000000</color>
+    <color name="main_scan_laser_color">@color/main_tone_color</color>
+    <color name="main_scan_laser_tail_color">#5000efb3</color>
+
+    <!-- history -->
+    <color name="history_tab_background">#ffffff</color>
+    <color name="history_list_date">#80000000</color>
+    <color name="history_list_item_title">#cc000000</color>
+    <color name="history_list_item_detail">#80000000</color>
+    <color name="history_list_item_time">#33000000</color>
+    <color name="history_list_item_dividing">#0c000000</color>
+    <color name="history_bottom_background">#313131</color>
+
+    <color name="scan_result_background">@color/white</color>
+
+
+    <color name="preference_title_color">#000000</color>
+    <color name="preference_summary_color">#000000</color>
+
+    <color name="result_website_check_detecting">#000000</color>
+    <color name="result_website_check_secure">#22b400</color>
+    <color name="result_website_check_malicious">#ff0000</color>
+    <color name="result_website_check_unknown">#f39700</color>
+
+    <color name="share_item_tv_color">#cc000000</color>
+    <color name="top_next_color">@color/main_tone_color</color>
+    <color name="share_item_tv_title_color">#cc000000</color>
+    <color name="share_item_tv_input_index">#4d000000</color>
+    <color name="share_item_et_colorControlActivated">#1a000000</color>
+    <color name="red">#ff0000</color>
+
+    <color name="share_item_input_hint">#80000000</color>
+
+
+    <color name="start_color_red">#ff706c</color>
+    <color name="end_color_red">#ff3942</color>
+
+    <color name="start_color_dark_blue">#5589cc</color>
+    <color name="end_color_dark_blue">#0075c1</color>
+
+    <color name="start_color_green">#92d957</color>
+    <color name="end_color_green">#7cc43a</color>
+
+    <color name="start_color_blue">#00c8e1</color>
+    <color name="end_color_blue">#00bbdc</color>
+
+    <color name="start_color_purple">#5462b5</color>
+    <color name="end_color_purple">#4b4ab2</color>
+
+    <color name="start_color_dark_green">#a5cb00</color>
+    <color name="end_color_dark_green">#7fbf00</color>
+
+    <color name="start_color_orange">#ffa564</color>
+    <color name="end_color_orange">#ff8f30</color>
+
+    <color name="start_color_pink">#e57ab9</color>
+    <color name="end_color_pink">#de49a4</color>
+
+    <color name="start_color_gray">#a1adb8</color>
+    <color name="end_color_gray">#7b8996</color>
+    
+    <!--premium-->
+    <color name="premium_normal_title_gray">#4dffffff</color>
+    <color name="premium_check_title_gray">#0097fe</color>
+    <color name="premium_normal_desp_gray">#1affffff</color>
+    <color name="premium_check_desp_gray">#800097fe</color>
+    <!--permium other-->
+    <color name="premium_other_normal_title_gray">#cc000000</color>
+    <color name="premium_other_normal_desp_gray">#7F000000</color>
+    <color name="premium_other_normal_buttom_gray">#2f000000</color>
+    <color name="premium_other_normal_arrow_color">#330097fe</color>
+
+    <!--渐变色-->
+    <color name="gradient_start_color">#00e4ff</color>
+    <color name="gradient_end_color">#0097fe</color>
+
+    <!--自定义二维码-->
+    <color name="custom_pick_photo_background_color">#272727</color>
+    <color name="custom_retain_desp_color">#8a8b97</color>
+    <color name="custom_retain_btn_try_color">#0097fe</color>
+    
+    <!--评分引导颜色-->
+    <color name="rate_confirm_text_color">#00cffe</color>
+
+    <!-- default -->
+
+    <color name="default_theme_color">@color/colorPrimary</color>
+    <color name="default_top_bar_background_color">@color/main_tone_color</color>
+    <color name="default_icon_color_filter">@color/white</color>
+    <color name="default_btn_color_filter">#ff000000</color>
+    <color name="default_btn_background">@color/default_theme_color</color>
+    <color name="default_tv_color">@color/black</color>
+    <color name="fab_btn_background">#992196f3</color>
+
+
+    <color name="default_gray">#eeeeee</color>
+    <color name="default_gray_alpha">#aaeeeeee</color>
+
+    <color name="start_color">#181818</color>
+    <color name="end_color">#1e1e1e</color>
+
+
+</resources>

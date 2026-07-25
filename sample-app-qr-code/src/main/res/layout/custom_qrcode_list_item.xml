@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/iv_custom_qrcode"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="centerInside"
+        android:layout_marginEnd="8dp"/>
+    <app.allever.android.ai.qr.scanner.ui.widget.CustomQrCodeCoverView
+        android:id="@+id/custom_qrcode_cover_view"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:visibility="gone"/>
+</FrameLayout>
