@@ -1,0 +1,22 @@
+{
+  "code": 200,
+  "msg": "操作成功",
+  "data": {
+    "drinksTakeoutTax": {
+      "rate": 0.19,
+      "sign": "B1"
+    },
+    "foodTakeoutTax": {
+      "rate": 0.07,
+      "sign": "B2"
+    },
+    "drinksInhausTax": {
+      "rate": 0.19,
+      "sign": "A1"
+    },
+    "foodInhausTax": {
+      "rate": 0.19,
+      "sign": "A2"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "createTime": 1234567890,
+  "billCode": 1,
+  "userId": 1,
+  "tableCode": 1,
+  "amount": 34.9,
+  "payType": 1,
+  "payTotal": 35.9,
+  "tipsTotal": 1.0,
+  "orderType": 1,
+  "cancel": false,
+  "dishesList": [
+    {
+      "dishesId": 1,
+      "code": "123",
+      "count": 1
+    }
+  ]
+}

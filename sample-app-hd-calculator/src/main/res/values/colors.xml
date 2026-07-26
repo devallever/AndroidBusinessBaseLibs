@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="colorPrimaryDark">#3848A8</color>
+    <color name="colorPrimary">#485ABE</color>
+    <color name="actionBarColor">@color/colorPrimary</color>
+    <color name="color_EDCCFD">#EDCCFD</color>
+    <color name="color_CCF8FD">#CCF8FD</color>
+    <color name="color_E5FCFF">#E5FCFF</color>
+
+    <color name="color_calc_line_color">#DCDFE0</color>
+    <color name="color_FF7E3E">#FF7E3E</color>
+    <color name="color_576BD5">#576BD5</color>
+    <color name="color_DCDFE0">#DCDFE0</color>
+    <color name="color_646566">#646566</color>
+    <color name="color_3848A8">#3848A8</color>
+    <color name="color_C3C6C7">#C3C6C7</color>
+    <color name="color_DEE3FF">#DEE3FF</color>
+    <color name="color_485ABE">#485ABE</color>
+    <color name="color_32863B">#32863B</color>
+    <color name="color_969799">#969799</color>
+    <color name="color_F5F7FA">#F5F7FA</color>
+    <color name="color_414242">#414242</color>
+    <color name="color_5469DC">#5469DC</color>
+    <color name="color_E12B2B">#E12B2B</color>
+    <color name="color_3D3D3D">#3D3D3D</color>
+</resources>

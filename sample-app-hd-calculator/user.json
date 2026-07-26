@@ -1,0 +1,90 @@
+{
+  "code": 200,
+  "msg": "操作成功",
+  "data": [
+    {
+      "id": 1,
+      "username": "boss-1",
+      "password": "6688",
+      "moveTable": true,
+      "cancelTable": true,
+      "recoverTable": true,
+      "cancelFoodDrinks": true,
+      "cancelBill": true,
+      "viewDayBill": true,
+      "localMode": true,
+      "onlineSync": true,
+      "boss": true
+    },
+    {
+      "id": 101,
+      "username": "Kellner-A",
+      "password": "321366",
+      "moveTable": true,
+      "cancelTable": true,
+      "recoverTable": false,
+      "cancelFoodDrinks": false,
+      "cancelBill": false,
+      "viewDayBill": false,
+      "localMode": false,
+      "onlineSync": false,
+      "boss": false
+    },
+    {
+      "id": 102,
+      "username": "Kellner-B",
+      "password": "565656",
+      "moveTable": true,
+      "cancelTable": true,
+      "recoverTable": true,
+      "cancelFoodDrinks": true,
+      "cancelBill": true,
+      "viewDayBill": false,
+      "localMode": false,
+      "onlineSync": false,
+      "boss": false
+    },
+    {
+      "id": 103,
+      "username": "Kellner-C",
+      "password": "321363",
+      "moveTable": true,
+      "cancelTable": true,
+      "recoverTable": true,
+      "cancelFoodDrinks": true,
+      "cancelBill": true,
+      "viewDayBill": true,
+      "localMode": true,
+      "onlineSync": true,
+      "boss": false
+    },
+    {
+      "id": 104,
+      "username": "Kellner-4",
+      "password": "321364",
+      "moveTable": true,
+      "cancelTable": true,
+      "recoverTable": true,
+      "cancelFoodDrinks": true,
+      "cancelBill": true,
+      "viewDayBill": true,
+      "localMode": true,
+      "onlineSync": true,
+      "boss": false
+    },
+    {
+      "id": 105,
+      "username": "Kellner-5",
+      "password": "321365",
+      "moveTable": true,
+      "cancelTable": true,
+      "recoverTable": true,
+      "cancelFoodDrinks": true,
+      "cancelBill": true,
+      "viewDayBill": true,
+      "localMode": true,
+      "onlineSync": true,
+      "boss": false
+    }
+  ]
+}

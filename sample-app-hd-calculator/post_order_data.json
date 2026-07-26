@@ -1,0 +1,18 @@
+{
+  "createTime": 12345678910,
+  "tableCode": 1,
+  "orderUserId": 1,
+  "orderType": 1,
+  "dishesList": [
+    {
+      "dishesCode":"123",
+      "count": 1,
+      "remark": ""
+    },
+    {
+      "dishesCode":"801",
+      "count": 2,
+      "remark": ""
+    }
+  ]
+}

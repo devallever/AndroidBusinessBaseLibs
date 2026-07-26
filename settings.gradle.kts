@@ -164,3 +164,4 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") // 类型安全的项目访�
 include(":sample-app-qr-code")
 include (":qrcode")
 project(":qrcode").projectDir = File(settingsDir, "sample-app-qr-code/depend/android")
+include(":sample-app-hd-calculator")

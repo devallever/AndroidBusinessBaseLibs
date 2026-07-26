@@ -1,0 +1,102 @@
+{
+  "code": 200,
+  "msg": "操作成功",
+  "data": [
+    {
+      "id": 1,
+      "areaId": 1,
+      "tableNo": 1,
+      "tableName": "T-1",
+      "createTime": "2025-07-16 17:27:54",
+      "updateTime": "2025-07-16 20:26:11"
+    },
+    {
+      "id": 2,
+      "areaId": 1,
+      "tableNo": 2,
+      "tableName": "T-2",
+      "createTime": "2025-07-16 17:30:16",
+      "updateTime": ""
+    },
+    {
+      "id": 3,
+      "areaId": 1,
+      "tableNo": 3,
+      "tableName": "T-3",
+      "createTime": "2025-07-16 17:37:12",
+      "updateTime": ""
+    },
+    {
+      "id": 4,
+      "areaId": 1,
+      "tableNo": 4,
+      "tableName": "T-4",
+      "createTime": "2025-07-16 17:37:16",
+      "updateTime": ""
+    },
+    {
+      "id": 5,
+      "areaId": 1,
+      "tableNo": 5,
+      "tableName": "T-5",
+      "createTime": "2025-07-16 17:37:20",
+      "updateTime": ""
+    },
+    {
+      "id": 6,
+      "areaId": 1,
+      "tableNo": 6,
+      "tableName": "T-6",
+      "createTime": "2025-07-16 17:37:26",
+      "updateTime": ""
+    },
+    {
+      "id": 7,
+      "areaId": 1,
+      "tableNo": 7,
+      "tableName": "T-7",
+      "createTime": "2025-07-16 17:37:30",
+      "updateTime": ""
+    },
+    {
+      "id": 8,
+      "areaId": 1,
+      "tableNo": 8,
+      "tableName": "T-8",
+      "createTime": "2025-07-16 17:37:36",
+      "updateTime": ""
+    },
+    {
+      "id": 9,
+      "areaId": 1,
+      "tableNo": 9,
+      "tableName": "T-9",
+      "createTime": "2025-07-16 17:37:41",
+      "updateTime": ""
+    },
+    {
+      "id": 10,
+      "areaId": 1,
+      "tableNo": 10,
+      "tableName": "T-10",
+      "createTime": "2025-07-16 17:37:45",
+      "updateTime": ""
+    },
+    {
+      "id": 11,
+      "areaId": 1,
+      "tableNo": 11,
+      "tableName": "T-11",
+      "createTime": "2025-07-16 17:37:58",
+      "updateTime": ""
+    },
+    {
+      "id": 12,
+      "areaId": 1,
+      "tableNo": 12,
+      "tableName": "T-12",
+      "createTime": "2025-07-16 17:38:03",
+      "updateTime": ""
+    }
+  ]
+}

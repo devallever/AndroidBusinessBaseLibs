@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="295dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/dialog_bg_white"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvConflictTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="T-1 Conflict"
+        android:textColor="@color/color_282929"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/table_order_conflict_tips_boss"
+        android:textColor="@color/color_646566"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvConflictTitle" />
+
+    <TextView
+        android:id="@+id/btnLocal"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_marginHorizontal="6dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/shape_blue_frame_r45"
+        android:gravity="center"
+        android:text="@string/local"
+        android:textColor="@color/color_485ABE"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/btnCloud"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTips" />
+
+    <TextView
+        android:id="@+id/btnCloud"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_marginHorizontal="6dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/shape_gray_frame_r45"
+        android:gravity="center"
+        android:text="@string/select_cloud"
+        android:textColor="@color/color_646566"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnLocal"
+        app:layout_constraintTop_toBottomOf="@+id/tvTips" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

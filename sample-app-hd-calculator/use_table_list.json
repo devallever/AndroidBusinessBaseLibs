@@ -1,0 +1,212 @@
+{
+  "1": {
+    "createTime": "2025-08-01 18:32:17",
+    "id": 73,
+    "tableCode": 1,
+    "tableData": {
+      "order": {
+        "dishesList": [
+          {
+            "count": 2,
+            "dishesCode": "802",
+            "id": 8,
+            "orderId": 4,
+            "remark": ""
+          }
+        ],
+        "order": {
+          "createTime": 1754044346891,
+          "id": 4,
+          "orderType": 1,
+          "orderUserId": 101,
+          "tableCode": 1
+        }
+      }
+    },
+    "useStatus": 1,
+    "userId": 101
+  },
+  "2": {
+    "createTime": "2025-08-01 15:13:21",
+    "id": 45,
+    "tableCode": 2,
+    "tableData": {},
+    "useStatus": 1,
+    "userId": 102
+  },
+  "3": {
+    "createTime": "2025-08-01 17:30:23",
+    "id": 69,
+    "tableCode": 3,
+    "tableData": {
+      "order": {
+        "dishesList": [
+          {
+            "count": 5,
+            "dishesCode": "123",
+            "id": 3,
+            "orderId": 3,
+            "remark": ""
+          }
+        ],
+        "order": {
+          "createTime": 1754043690707,
+          "id": 3,
+          "orderType": 1,
+          "orderUserId": 102,
+          "tableCode": 3
+        }
+      }
+    },
+    "useStatus": 1,
+    "userId": 102
+  },
+  "4": {
+    "createTime": "2025-08-01 18:27:06",
+    "id": 72,
+    "tableCode": 4,
+    "tableData": {
+      "order": {
+        "dishesList": [
+          {
+            "count": 5,
+            "dishesCode": "123",
+            "id": 6,
+            "orderId": 6,
+            "remark": ""
+          }
+        ],
+        "order": {
+          "createTime": 1754044055788,
+          "id": 6,
+          "orderType": 1,
+          "orderUserId": 102,
+          "tableCode": 4
+        }
+      }
+    },
+    "useStatus": 1,
+    "userId": 102
+  },
+  "5": {
+    "createTime": "2025-08-01 18:49:46",
+    "id": 79,
+    "tableCode": 5,
+    "tableData": {},
+    "useStatus": 1,
+    "userId": 102
+  },
+  "6": {
+    "createTime": "2025-08-01 16:51:08",
+    "id": 63,
+    "tableCode": 6,
+    "tableData": {},
+    "useStatus": 1,
+    "userId": 102
+  },
+  "7": {
+    "createTime": "2025-08-01 14:53:43",
+    "id": 39,
+    "tableCode": 7,
+    "tableData": {
+      "order": {
+        "dishesList": [
+          {
+            "count": 1,
+            "dishesCode": "802",
+            "id": 9,
+            "orderId": 5,
+            "remark": ""
+          }
+        ],
+        "order": {
+          "createTime": 1754044431822,
+          "id": 5,
+          "orderType": 1,
+          "orderUserId": 101,
+          "tableCode": 7
+        }
+      }
+    },
+    "useStatus": 1,
+    "userId": 101
+  },
+  "8": {
+    "createTime": "2025-08-01 18:57:52",
+    "id": 84,
+    "tableCode": 8,
+    "tableData": {
+      "order": {
+        "dishesList": [
+          {
+            "count": 2,
+            "dishesCode": "802",
+            "id": 10,
+            "orderId": 9,
+            "remark": ""
+          }
+        ],
+        "order": {
+          "createTime": 1754044445635,
+          "id": 9,
+          "orderType": 1,
+          "orderUserId": 102,
+          "tableCode": 8
+        }
+      }
+    },
+    "useStatus": 1,
+    "userId": 102
+  },
+  "11": {
+    "createTime": "2025-08-01 17:14:00",
+    "id": 64,
+    "tableCode": 11,
+    "tableData": {},
+    "useStatus": 1,
+    "userId": 101
+  },
+  "12": {
+    "createTime": "2025-08-01 15:33:24",
+    "id": 49,
+    "tableCode": 12,
+    "tableData": {},
+    "useStatus": 1,
+    "userId": 101
+  },
+  "13": {
+    "createTime": "2025-08-01 18:34:17",
+    "id": 74,
+    "tableCode": 13,
+    "tableData": {
+      "order": {
+        "dishesList": [
+          {
+            "count": 10,
+            "dishesCode": "803",
+            "id": 11,
+            "orderId": 10,
+            "remark": ""
+          }
+        ],
+        "order": {
+          "createTime": 1754044462101,
+          "id": 10,
+          "orderType": 1,
+          "orderUserId": 102,
+          "tableCode": 13
+        }
+      }
+    },
+    "useStatus": 1,
+    "userId": 102
+  },
+  "14": {
+    "createTime": "2025-08-01 17:56:22",
+    "id": 70,
+    "tableCode": 14,
+    "tableData": {},
+    "useStatus": 1,
+    "userId": 102
+  }
+}
