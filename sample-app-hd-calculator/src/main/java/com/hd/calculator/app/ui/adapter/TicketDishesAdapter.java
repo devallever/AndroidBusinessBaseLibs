@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hd.calculator.app.databinding.ItemTicketDishesBinding;
+import com.hd.calculator.app.databinding.HdcItemTicketDishesBinding;
 import com.hd.calculator.app.ui.item.TicketDishesItem;
 import com.hd.calculator.app.util.MoneyUtils;
 
@@ -25,14 +25,14 @@ public class TicketDishesAdapter extends RecyclerView.Adapter<TicketDishesAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemTicketDishesBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemTicketDishesBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TicketDishesItem item = data.get(position);
-        ItemTicketDishesBinding binding = holder.getBinding();
+        HdcItemTicketDishesBinding binding = holder.getBinding();
         binding.tvCost.setText(MoneyUtils.formatMoney(item.getCost()));
         binding.tvTitle.setText(item.getName());
         binding.tvTaxSign.setText(item.getTaxSign());
@@ -46,13 +46,13 @@ public class TicketDishesAdapter extends RecyclerView.Adapter<TicketDishesAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //binding
-        public ItemTicketDishesBinding binding;
-        public ViewHolder(ItemTicketDishesBinding binding) {
+        public HdcItemTicketDishesBinding binding;
+        public ViewHolder(HdcItemTicketDishesBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public ItemTicketDishesBinding getBinding() {
+        public HdcItemTicketDishesBinding getBinding() {
             return binding;
         }
     }

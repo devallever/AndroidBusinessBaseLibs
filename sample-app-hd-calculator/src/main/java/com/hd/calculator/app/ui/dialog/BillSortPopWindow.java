@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.hd.calculator.app.MyApp;
 import com.hd.calculator.app.base.BasePopWindow;
 import com.hd.calculator.app.constant.OrderSortType;
-import com.hd.calculator.app.databinding.PopOrderSortBinding;
+import com.hd.calculator.app.databinding.HdcPopOrderSortBinding;
 import com.hd.calculator.app.function.db.OrderBy;
 import com.hd.calculator.app.function.db.entity.operation.BillRecordEntity;
 import com.hd.calculator.app.ui.adapter.OrderSortAdapter;
@@ -18,7 +18,7 @@ import com.hd.calculator.app.ui.item.BillSortItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BillSortPopWindow extends BasePopWindow<PopOrderSortBinding> {
+public class BillSortPopWindow extends BasePopWindow<HdcPopOrderSortBinding> {
 
     //adapter
     private OrderSortAdapter mOrderSortAdapter;
@@ -39,8 +39,8 @@ public class BillSortPopWindow extends BasePopWindow<PopOrderSortBinding> {
     }
 
     @Override
-    public PopOrderSortBinding intBinding() {
-        return PopOrderSortBinding.inflate(LayoutInflater.from(context));
+    public HdcPopOrderSortBinding intBinding() {
+        return HdcPopOrderSortBinding.inflate(LayoutInflater.from(context));
     }
 
     @Override

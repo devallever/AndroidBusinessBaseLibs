@@ -15,7 +15,7 @@ import com.hd.calculator.app.constant.ExtraKey;
 import com.hd.calculator.app.constant.OrderType;
 import com.hd.calculator.app.constant.PayType;
 import com.hd.calculator.app.constant.log.ActionType;
-import com.hd.calculator.app.databinding.ActivityPayConfirmBinding;
+import com.hd.calculator.app.databinding.HdcActivityPayConfirmBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.operation.BillDishesRecordEntity;
 import com.hd.calculator.app.function.db.entity.operation.BillRecordEntity;
@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * 付款
  */
-public class PayConfirmActivity extends BaseActivity<ActivityPayConfirmBinding> {
+public class PayConfirmActivity extends BaseActivity<HdcActivityPayConfirmBinding> {
 
     private final MutableLiveData<String> mPayTotalLiveData = new MutableLiveData<>();
     private final StringBuilder mPayTotalBuilder = new StringBuilder();
@@ -60,8 +60,8 @@ public class PayConfirmActivity extends BaseActivity<ActivityPayConfirmBinding> 
     }
 
     @Override
-    protected ActivityPayConfirmBinding getViewBinding() {
-        return ActivityPayConfirmBinding.inflate(getLayoutInflater());
+    protected HdcActivityPayConfirmBinding getViewBinding() {
+        return HdcActivityPayConfirmBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -72,9 +72,9 @@ public class PayConfirmActivity extends BaseActivity<ActivityPayConfirmBinding> 
         updatePayTotalValue();
         mBinding.includeTopBar.ivBack.setOnClickListener(v -> finish());
         if (mPayType == PayType.PAY_TYPE_CASH) {
-            mBinding.includeTopBar.tvTitle.setText(getString(R.string.payment_cash));
+            mBinding.includeTopBar.tvTitle.setText(getString(R.string.hdc_payment_cash));
         } else {
-            mBinding.includeTopBar.tvTitle.setText(getString(R.string.payment_card));
+            mBinding.includeTopBar.tvTitle.setText(getString(R.string.hdc_payment_card));
         }
         mBinding.tvCost.setText(MoneyUtils.formatMoney(mAmount));
         initListener();
@@ -290,9 +290,9 @@ public class PayConfirmActivity extends BaseActivity<ActivityPayConfirmBinding> 
         mBinding.tvOk.setClickable(enable);
 
         if (enable) {
-            mBinding.tvOk.setBackgroundResource(R.drawable.shape_keyboard_make_order_bg);
+            mBinding.tvOk.setBackgroundResource(R.drawable.hdc_shape_keyboard_make_order_bg);
         } else {
-            mBinding.tvOk.setBackgroundResource(R.drawable.shape_keyboard_ok_bg_disable);
+            mBinding.tvOk.setBackgroundResource(R.drawable.hdc_shape_keyboard_ok_bg_disable);
         }
     }
 

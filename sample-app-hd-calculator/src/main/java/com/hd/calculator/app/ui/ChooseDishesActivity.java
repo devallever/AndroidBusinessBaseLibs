@@ -21,8 +21,7 @@ import com.hd.calculator.app.business.TakeoutTableManager;
 import com.hd.calculator.app.constant.DishesFirstSortType;
 import com.hd.calculator.app.constant.ExtraKey;
 import com.hd.calculator.app.constant.OrderType;
-import com.hd.calculator.app.databinding.ActivityChooseDishesBinding;
-import com.hd.calculator.app.function.UserLog;
+import com.hd.calculator.app.databinding.HdcActivityChooseDishesBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.AccountEntity;
 import com.hd.calculator.app.function.db.entity.DishesEntity;
@@ -64,7 +63,7 @@ import java.util.Set;
  * <p>
  * 这比较负责，有空整理
  */
-public class ChooseDishesActivity extends BaseActivity<ActivityChooseDishesBinding> {
+public class ChooseDishesActivity extends BaseActivity<HdcActivityChooseDishesBinding> {
 
     public static final int FROM_CREATE = 0;
     public static final int FROM_APPEND = 1;
@@ -108,8 +107,8 @@ public class ChooseDishesActivity extends BaseActivity<ActivityChooseDishesBindi
     }
 
     @Override
-    protected ActivityChooseDishesBinding getViewBinding() {
-        return ActivityChooseDishesBinding.inflate(getLayoutInflater());
+    protected HdcActivityChooseDishesBinding getViewBinding() {
+        return HdcActivityChooseDishesBinding.inflate(getLayoutInflater());
     }
 
     @SuppressLint("SetTextI18n")
@@ -832,13 +831,13 @@ public class ChooseDishesActivity extends BaseActivity<ActivityChooseDishesBindi
                     mBinding.tvDishesName.setText(mSearchResultDishes.getName());
                     mBinding.tvDishesName.setVisibility(View.VISIBLE);
                     mBinding.tvInputTips.setVisibility(View.GONE);
-                    mBinding.tvRemark.setBackgroundResource(R.drawable.shape_keyboard_remark_enable_bg);
-                    mBinding.tvOk.setBackgroundResource(R.drawable.shape_keyboard_ok_bg_enable);
+                    mBinding.tvRemark.setBackgroundResource(R.drawable.hdc_shape_keyboard_remark_enable_bg);
+                    mBinding.tvOk.setBackgroundResource(R.drawable.hdc_shape_keyboard_ok_bg_enable);
                 } else {
                     mBinding.tvDishesName.setVisibility(View.GONE);
                     mBinding.tvInputTips.setVisibility(View.VISIBLE);
-                    mBinding.tvRemark.setBackgroundResource(R.drawable.shape_keyboard_remark_disable_bg);
-                    mBinding.tvOk.setBackgroundResource(R.drawable.shape_keyboard_ok_bg_disable);
+                    mBinding.tvRemark.setBackgroundResource(R.drawable.hdc_shape_keyboard_remark_disable_bg);
+                    mBinding.tvOk.setBackgroundResource(R.drawable.hdc_shape_keyboard_ok_bg_disable);
                 }
             });
         });
@@ -898,7 +897,7 @@ public class ChooseDishesActivity extends BaseActivity<ActivityChooseDishesBindi
         mBinding.tvInput.setVisibility(View.GONE);
         mBinding.tvInputTips.setVisibility(View.VISIBLE);
         mBinding.tvDishesName.setVisibility(View.GONE);
-        mBinding.tvRemark.setBackgroundResource(R.drawable.shape_keyboard_remark_disable_bg);
+        mBinding.tvRemark.setBackgroundResource(R.drawable.hdc_shape_keyboard_remark_disable_bg);
         mBinding.tvOk.setVisibility(View.GONE);
         mBinding.tvMakeOrder.setVisibility(View.VISIBLE);
     }
@@ -963,25 +962,25 @@ public class ChooseDishesActivity extends BaseActivity<ActivityChooseDishesBindi
         if (mIsSelectorMode) {
             mBinding.selectorInputContainer.setVisibility(View.VISIBLE);
             mBinding.keyboardInputContainer.setVisibility(View.GONE);
-            mBinding.ivInputType.setImageResource(R.drawable.ic_choose_dishes_menu_input_type_keyboard);
+            mBinding.ivInputType.setImageResource(R.drawable.hdc_ic_choose_dishes_menu_input_type_keyboard);
         } else {
             mBinding.selectorInputContainer.setVisibility(View.GONE);
             mBinding.keyboardInputContainer.setVisibility(View.VISIBLE);
-            mBinding.ivInputType.setImageResource(R.drawable.ic_choose_dishes_menu_input_type_selector);
+            mBinding.ivInputType.setImageResource(R.drawable.hdc_ic_choose_dishes_menu_input_type_selector);
         }
     }
 
     private void updateEmptyStyleConfirm() {
         mBinding.tvOk.setVisibility(View.VISIBLE);
-        mBinding.tvOk.setBackgroundResource(R.drawable.shape_keyboard_ok_bg_disable);
+        mBinding.tvOk.setBackgroundResource(R.drawable.hdc_shape_keyboard_ok_bg_disable);
         mBinding.tvMakeOrder.setVisibility(View.GONE);
     }
 
     private void updatePrintSwitchUI() {
         if (Config.getPrintSwitch()) {
-            mBinding.ivPrintTicket.setImageResource(R.drawable.ic_choose_dishes_menu_print_ticket_enable);
+            mBinding.ivPrintTicket.setImageResource(R.drawable.hdc_ic_choose_dishes_menu_print_ticket_enable);
         } else {
-            mBinding.ivPrintTicket.setImageResource(R.drawable.ic_choose_dishes_menu_print_ticket_disable);
+            mBinding.ivPrintTicket.setImageResource(R.drawable.hdc_ic_choose_dishes_menu_print_ticket_disable);
         }
     }
 
@@ -1007,18 +1006,18 @@ public class ChooseDishesActivity extends BaseActivity<ActivityChooseDishesBindi
             if (mSearchResultDishes == null) {
                 mBinding.tvMakeOrder.setVisibility(View.GONE);
                 mBinding.tvOk.setVisibility(View.VISIBLE);
-                mBinding.tvOk.setBackgroundResource(R.drawable.shape_keyboard_ok_bg_disable);
-                mBinding.tvSelectorMakeOrder.setBackgroundResource(R.drawable.shape_gray_r45);
+                mBinding.tvOk.setBackgroundResource(R.drawable.hdc_shape_keyboard_ok_bg_disable);
+                mBinding.tvSelectorMakeOrder.setBackgroundResource(R.drawable.hdc_shape_gray_r45);
             } else {
                 //首次搜索出菜牌
                 mBinding.tvMakeOrder.setVisibility(View.GONE);
                 mBinding.tvOk.setVisibility(View.VISIBLE);
-                mBinding.tvOk.setBackgroundResource(R.drawable.shape_keyboard_ok_bg_enable);
-                mBinding.tvSelectorMakeOrder.setBackgroundResource(R.drawable.shape_gray_r45);
+                mBinding.tvOk.setBackgroundResource(R.drawable.hdc_shape_keyboard_ok_bg_enable);
+                mBinding.tvSelectorMakeOrder.setBackgroundResource(R.drawable.hdc_shape_gray_r45);
             }
 
         } else {
-            mBinding.tvSelectorMakeOrder.setBackgroundResource(R.drawable.shape_blue_r45);
+            mBinding.tvSelectorMakeOrder.setBackgroundResource(R.drawable.hdc_shape_blue_r45);
 
             //输入中
             String input = mBinding.tvInput.getText().toString();
@@ -1030,11 +1029,11 @@ public class ChooseDishesActivity extends BaseActivity<ActivityChooseDishesBindi
                 if (mSearchResultDishes == null) {
                     //搜不到//ok 灰色
                     mBinding.tvOk.setVisibility(View.VISIBLE);
-                    mBinding.tvOk.setBackgroundResource(R.drawable.shape_keyboard_ok_bg_disable);
+                    mBinding.tvOk.setBackgroundResource(R.drawable.hdc_shape_keyboard_ok_bg_disable);
                 } else {
                     //搜到，ok 绿色
                     mBinding.tvOk.setVisibility(View.VISIBLE);
-                    mBinding.tvOk.setBackgroundResource(R.drawable.shape_keyboard_ok_bg_enable);
+                    mBinding.tvOk.setBackgroundResource(R.drawable.hdc_shape_keyboard_ok_bg_enable);
                 }
             }
         }

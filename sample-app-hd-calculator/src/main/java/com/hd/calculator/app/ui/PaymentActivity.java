@@ -9,7 +9,7 @@ import com.hd.calculator.app.base.BaseActivity;
 import com.hd.calculator.app.constant.ExtraKey;
 import com.hd.calculator.app.constant.OrderType;
 import com.hd.calculator.app.constant.PayType;
-import com.hd.calculator.app.databinding.ActivityPaymentBinding;
+import com.hd.calculator.app.databinding.HdcActivityPaymentBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.DishesEntity;
 import com.hd.calculator.app.function.db.entity.operation.OrderDishesRecordEntity;
@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * 预付款页 -
  */
-public class PaymentActivity extends BaseActivity<ActivityPaymentBinding> {
+public class PaymentActivity extends BaseActivity<HdcActivityPaymentBinding> {
 
     private long mOrderId;
     private long mOriginOrderId;
@@ -45,8 +45,8 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding> {
 
 
     @Override
-    protected ActivityPaymentBinding getViewBinding() {
-        return ActivityPaymentBinding.inflate(getLayoutInflater());
+    protected HdcActivityPaymentBinding getViewBinding() {
+        return HdcActivityPaymentBinding.inflate(getLayoutInflater());
     }
 
     @Override

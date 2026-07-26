@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hd.calculator.app.MyApp;
 import com.hd.calculator.app.R;
-import com.hd.calculator.app.databinding.ItemDishesSecondSortBinding;
+import com.hd.calculator.app.databinding.HdcItemDishesSecondSortBinding;
 import com.hd.calculator.app.ui.item.SecondSortItem;
 
 import java.util.List;
@@ -30,13 +30,13 @@ public class SecondSortAdapter extends RecyclerView.Adapter<SecondSortAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemDishesSecondSortBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemDishesSecondSortBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SecondSortItem item = data.get(position);
-        ItemDishesSecondSortBinding binding = holder.getBinding();
+        HdcItemDishesSecondSortBinding binding = holder.getBinding();
         binding.tvTitle.setText(item.getName());
         if (item.isSelect()) {
             binding.tvTitle.setTextColor(MyApp.context.getResources().getColor(R.color.color_485ABE));
@@ -61,14 +61,14 @@ public class SecondSortAdapter extends RecyclerView.Adapter<SecondSortAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final ItemDishesSecondSortBinding binding;
+        private final HdcItemDishesSecondSortBinding binding;
 
-        public ViewHolder(ItemDishesSecondSortBinding binding) {
+        public ViewHolder(HdcItemDishesSecondSortBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public ItemDishesSecondSortBinding getBinding() {
+        public HdcItemDishesSecondSortBinding getBinding() {
             return binding;
         }
     }

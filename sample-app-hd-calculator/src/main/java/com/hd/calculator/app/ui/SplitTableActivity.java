@@ -14,7 +14,7 @@ import com.hd.calculator.app.constant.DishesFirstSortType;
 import com.hd.calculator.app.constant.ExtraKey;
 import com.hd.calculator.app.constant.OrderType;
 import com.hd.calculator.app.constant.log.ActionType;
-import com.hd.calculator.app.databinding.ActivitySplitTableBinding;
+import com.hd.calculator.app.databinding.HdcActivitySplitTableBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.DishesEntity;
 import com.hd.calculator.app.function.db.entity.operation.OrderDishesRecordEntity;
@@ -32,7 +32,7 @@ import java.util.Map;
 /**
  * 待结账-拆分订单
  */
-public class SplitTableActivity extends BaseActivity<ActivitySplitTableBinding> {
+public class SplitTableActivity extends BaseActivity<HdcActivitySplitTableBinding> {
     //curret list
     private final List<DishesItem> mFromList = new ArrayList<>();
     //target list
@@ -57,8 +57,8 @@ public class SplitTableActivity extends BaseActivity<ActivitySplitTableBinding> 
 
 
     @Override
-    protected ActivitySplitTableBinding getViewBinding() {
-        return ActivitySplitTableBinding.inflate(getLayoutInflater());
+    protected HdcActivitySplitTableBinding getViewBinding() {
+        return HdcActivitySplitTableBinding.inflate(getLayoutInflater());
     }
 
     @SuppressLint("SetTextI18n")

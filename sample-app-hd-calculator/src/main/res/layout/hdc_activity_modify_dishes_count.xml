@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/includeTopBar"
+        layout="@layout/hdc_include_top_bar" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tafelwasser 0,4l"
+        android:textColor="@color/color_646566"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnAdd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/includeTopBar" />
+
+    <TextView
+        android:id="@+id/tvCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:textColor="@color/color_32863B"
+        android:textSize="54sp"
+        android:textStyle="bold"
+        android:maxLength="6"
+        app:layout_constraintBottom_toTopOf="@+id/tvDesc"
+        app:layout_constraintEnd_toStartOf="@+id/btnAdd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/includeTopBar"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tvDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Artikel Anz"
+        android:textColor="@color/color_646566"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/keyBoardContainer"
+        app:layout_constraintEnd_toStartOf="@+id/btnAdd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCount" />
+
+    <TextView
+        android:id="@+id/btnAdd"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="42dp"
+        android:background="@drawable/hdc_shape_white_gray_frame_w0_5"
+        android:gravity="center"
+        android:text="+"
+        android:textColor="@color/color_282929"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btnDel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/includeTopBar"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/btnDel"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="42dp"
+        android:background="@drawable/hdc_shape_white_gray_frame_w0_5"
+        android:gravity="center"
+        android:text="-"
+        android:textColor="@color/color_282929"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/keyBoardContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAdd"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/keyBoardContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/tvZero"
+            style="@style/hdc_modify_dishes_keyboard_text_style"
+            android:text="@string/hdc_zero"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvNight"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvNight"
+            style="@style/hdc_modify_dishes_keyboard_text_style"
+            android:text="@string/hdc_night"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvOk"
+            app:layout_constraintStart_toEndOf="@+id/tvZero" />
+
+        <TextView
+            android:id="@+id/tvOk"
+            style="@style/hdc_modify_dishes_keyboard_text_style"
+            android:layout_height="0dp"
+            android:background="@drawable/hdc_shape_keyboard_ok_bg"
+            android:text="@string/hdc_ok"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvNight"
+            app:layout_constraintTop_toTopOf="@+id/tvEight" />
+
+        <TextView
+            android:id="@+id/tvSeven"
+            style="@style/hdc_modify_dishes_keyboard_text_style"
+            android:text="@string/hdc_seven"
+            app:layout_constraintBottom_toTopOf="@+id/tvZero"
+            app:layout_constraintEnd_toStartOf="@+id/tvNight"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvEight"
+            style="@style/hdc_modify_dishes_keyboard_text_style"
+            android:text="@string/hdc_eight"
+            app:layout_constraintBottom_toTopOf="@+id/tvZero"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvOk"
+            app:layout_constraintStart_toEndOf="@+id/tvZero" />
+
+        <TextView
+            android:id="@+id/tvFour"
+            style="@style/hdc_modify_dishes_keyboard_text_style"
+            android:text="@string/hdc_four"
+            app:layout_constraintBottom_toTopOf="@+id/tvSeven"
+            app:layout_constraintEnd_toStartOf="@+id/tvNight"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvFive"
+            style="@style/hdc_modify_dishes_keyboard_text_style"
+            android:text="@string/hdc_five"
+            app:layout_constraintBottom_toTopOf="@+id/tvSeven"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvOk"
+            app:layout_constraintStart_toEndOf="@+id/tvZero" />
+
+        <TextView
+            android:id="@+id/tvSix"
+            style="@style/hdc_modify_dishes_keyboard_text_style"
+            android:text="@string/hdc_six"
+            app:layout_constraintBottom_toTopOf="@+id/tvSeven"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvFive" />
+
+        <TextView
+            android:id="@+id/tvOne"
+            style="@style/hdc_modify_dishes_keyboard_text_style"
+            android:text="@string/hdc_one"
+            app:layout_constraintBottom_toTopOf="@+id/tvFour"
+            app:layout_constraintEnd_toStartOf="@+id/tvNight"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTwo"
+            style="@style/hdc_modify_dishes_keyboard_text_style"
+            android:text="@string/hdc_two"
+            app:layout_constraintBottom_toTopOf="@+id/tvFour"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvOk"
+            app:layout_constraintStart_toEndOf="@+id/tvZero" />
+
+        <TextView
+            android:id="@+id/tvThree"
+            style="@style/hdc_modify_dishes_keyboard_text_style"
+            android:text="@string/hdc_three"
+            app:layout_constraintBottom_toTopOf="@+id/tvFour"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvFive" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

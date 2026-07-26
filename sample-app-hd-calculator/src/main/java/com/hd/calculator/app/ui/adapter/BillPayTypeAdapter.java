@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hd.calculator.app.MyApp;
 import com.hd.calculator.app.R;
-import com.hd.calculator.app.databinding.ItemOrderPayTypeBinding;
+import com.hd.calculator.app.databinding.HdcItemOrderPayTypeBinding;
 import com.hd.calculator.app.ui.item.BillPayTypeItem;
 import com.hd.calculator.app.util.MoneyUtils;
 
@@ -33,14 +33,14 @@ public class BillPayTypeAdapter extends RecyclerView.Adapter<BillPayTypeAdapter.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemOrderPayTypeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemOrderPayTypeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         BillPayTypeItem item = data.get(position);
-        ItemOrderPayTypeBinding binding = holder.getBinding();
+        HdcItemOrderPayTypeBinding binding = holder.getBinding();
 
         //set title 格式：Bargeld (1x) (46,30 €)
         binding.tvTitle.setText(item.getPayTypeName() + " (" + item.getCount() + "x) (" + MoneyUtils.formatMoney(item.getCost()) + ")");
@@ -48,11 +48,11 @@ public class BillPayTypeAdapter extends RecyclerView.Adapter<BillPayTypeAdapter.
         if (item.isSelect()) {
             binding.ivSelect.setVisibility(View.VISIBLE);
             binding.tvTitle.setTextColor(ContextCompat.getColor(MyApp.context, R.color.white));
-            binding.getRoot().setBackgroundResource(R.drawable.shape_blue_r45);
+            binding.getRoot().setBackgroundResource(R.drawable.hdc_shape_blue_r45);
         } else {
             binding.ivSelect.setVisibility(View.GONE);
             binding.tvTitle.setTextColor(ContextCompat.getColor(MyApp.context, R.color.color_646566));
-            binding.getRoot().setBackgroundResource(R.drawable.shape_gray_646566_r45);
+            binding.getRoot().setBackgroundResource(R.drawable.hdc_shape_gray_646566_r45);
         }
         binding.getRoot().setOnClickListener(v -> {
             if (itemClickListener != null) {
@@ -67,14 +67,14 @@ public class BillPayTypeAdapter extends RecyclerView.Adapter<BillPayTypeAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ItemOrderPayTypeBinding binding;
+        public HdcItemOrderPayTypeBinding binding;
 
-        public ViewHolder(ItemOrderPayTypeBinding binding) {
+        public ViewHolder(HdcItemOrderPayTypeBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public ItemOrderPayTypeBinding getBinding() {
+        public HdcItemOrderPayTypeBinding getBinding() {
             return binding;
         }
 

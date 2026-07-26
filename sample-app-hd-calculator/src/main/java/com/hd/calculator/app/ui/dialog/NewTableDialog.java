@@ -7,10 +7,10 @@ import androidx.annotation.NonNull;
 import com.hd.calculator.app.MyApp;
 import com.hd.calculator.app.R;
 import com.hd.calculator.app.base.BaseDialog;
-import com.hd.calculator.app.databinding.DialogNewTableBinding;
+import com.hd.calculator.app.databinding.HdcDialogNewTableBinding;
 import com.hd.calculator.app.util.ToastUtils;
 
-public class NewTableDialog extends BaseDialog<DialogNewTableBinding> {
+public class NewTableDialog extends BaseDialog<HdcDialogNewTableBinding> {
     private int zoomId = 1;
 
     public NewTableDialog(@NonNull Context context) {
@@ -18,8 +18,8 @@ public class NewTableDialog extends BaseDialog<DialogNewTableBinding> {
     }
 
     @Override
-    protected DialogNewTableBinding getViewBinding() {
-        return DialogNewTableBinding.inflate(getLayoutInflater());
+    protected HdcDialogNewTableBinding getViewBinding() {
+        return HdcDialogNewTableBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -47,16 +47,16 @@ public class NewTableDialog extends BaseDialog<DialogNewTableBinding> {
         zoomId = zoom;
         switch (zoomId) {
             case 1:
-                mBinding.tvZoom1.setBackgroundResource(R.drawable.shape_blue_r45);
-                mBinding.tvZoom2.setBackgroundResource(R.drawable.shape_gray_r45);
+                mBinding.tvZoom1.setBackgroundResource(R.drawable.hdc_shape_blue_r45);
+                mBinding.tvZoom2.setBackgroundResource(R.drawable.hdc_shape_gray_r45);
                 //设置颜色
                 mBinding.tvZoom1.setTextColor(MyApp.context.getResources().getColor(R.color.white));
                 mBinding.tvZoom2.setTextColor(MyApp.context.getResources().getColor(R.color.color_646566));
 
                 break;
             case 2:
-                mBinding.tvZoom1.setBackgroundResource(R.drawable.shape_gray_r45);
-                mBinding.tvZoom2.setBackgroundResource(R.drawable.shape_blue_r45);
+                mBinding.tvZoom1.setBackgroundResource(R.drawable.hdc_shape_gray_r45);
+                mBinding.tvZoom2.setBackgroundResource(R.drawable.hdc_shape_blue_r45);
                 //设置颜色
                 mBinding.tvZoom1.setTextColor(MyApp.context.getResources().getColor(R.color.color_646566));
                 mBinding.tvZoom2.setTextColor(MyApp.context.getResources().getColor(R.color.white));

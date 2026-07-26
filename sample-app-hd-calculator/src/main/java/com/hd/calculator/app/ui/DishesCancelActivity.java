@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hd.calculator.app.R;
 import com.hd.calculator.app.base.BaseActivity;
-import com.hd.calculator.app.databinding.ActivityCancelRecordBinding;
+import com.hd.calculator.app.databinding.HdcActivityCancelRecordBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.AccountEntity;
 import com.hd.calculator.app.function.db.entity.DishesEntity;
@@ -24,7 +24,7 @@ import java.util.List;
  * 取消记录
  * 出单后，减少数量
  */
-public class DishesCancelActivity extends BaseActivity<ActivityCancelRecordBinding> {
+public class DishesCancelActivity extends BaseActivity<HdcActivityCancelRecordBinding> {
     private final List<DishesCancelItem> mDishesCancelItemList = new ArrayList<>();
     //orderCancelAdapter
     private DishesCancelAdapter mDishesCancelAdapter;
@@ -34,14 +34,14 @@ public class DishesCancelActivity extends BaseActivity<ActivityCancelRecordBindi
 
 
     @Override
-    protected ActivityCancelRecordBinding getViewBinding() {
-        return ActivityCancelRecordBinding.inflate(getLayoutInflater());
+    protected HdcActivityCancelRecordBinding getViewBinding() {
+        return HdcActivityCancelRecordBinding.inflate(getLayoutInflater());
     }
 
     @Override
     protected void initView() {
         mBinding.includeTopBar.ivBack.setOnClickListener(v -> finish());
-        mBinding.includeTopBar.tvTitle.setText(getString(R.string.already_cancel_dishes));
+        mBinding.includeTopBar.tvTitle.setText(getString(R.string.hdc_already_cancel_dishes));
         mSelectedDate = TimeUtils.getCurrentDay7amTimestamps()[0];
         initOrderCancelList();
         initDatePickerDialog();

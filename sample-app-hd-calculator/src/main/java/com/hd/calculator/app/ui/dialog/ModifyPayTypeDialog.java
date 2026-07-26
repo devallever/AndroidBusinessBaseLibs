@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 import com.hd.calculator.app.R;
 import com.hd.calculator.app.base.BaseDialog;
 import com.hd.calculator.app.constant.PayType;
-import com.hd.calculator.app.databinding.DialogModifyPayTypeBinding;
+import com.hd.calculator.app.databinding.HdcDialogModifyPayTypeBinding;
 
-public class ModifyPayTypeDialog extends BaseDialog<DialogModifyPayTypeBinding> {
+public class ModifyPayTypeDialog extends BaseDialog<HdcDialogModifyPayTypeBinding> {
 
     private final ItemChangedListener listener;
     private final int mOldPayType;
@@ -22,8 +22,8 @@ public class ModifyPayTypeDialog extends BaseDialog<DialogModifyPayTypeBinding> 
     }
 
     @Override
-    protected DialogModifyPayTypeBinding getViewBinding() {
-        return DialogModifyPayTypeBinding.inflate(getLayoutInflater());
+    protected HdcDialogModifyPayTypeBinding getViewBinding() {
+        return HdcDialogModifyPayTypeBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -52,11 +52,11 @@ public class ModifyPayTypeDialog extends BaseDialog<DialogModifyPayTypeBinding> 
     private void updatePayType(int payType) {
         mNewPayType = payType;
         if (payType == PayType.PAY_TYPE_CASH) {
-            mBinding.ivCheckCash.setImageResource(R.drawable.ic_check_2_checked);
-            mBinding.ivCheckCard.setImageResource(R.drawable.ic_check_2_uncheck);
+            mBinding.ivCheckCash.setImageResource(R.drawable.hdc_ic_check_2_checked);
+            mBinding.ivCheckCard.setImageResource(R.drawable.hdc_ic_check_2_uncheck);
         } else {
-            mBinding.ivCheckCash.setImageResource(R.drawable.ic_check_2_uncheck);
-            mBinding.ivCheckCard.setImageResource(R.drawable.ic_check_2_checked);
+            mBinding.ivCheckCash.setImageResource(R.drawable.hdc_ic_check_2_uncheck);
+            mBinding.ivCheckCard.setImageResource(R.drawable.hdc_ic_check_2_checked);
         }
     }
 

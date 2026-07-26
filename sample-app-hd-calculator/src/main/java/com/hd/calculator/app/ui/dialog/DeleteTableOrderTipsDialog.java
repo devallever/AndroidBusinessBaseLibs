@@ -5,9 +5,9 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.hd.calculator.app.base.BaseDialog;
-import com.hd.calculator.app.databinding.DialogDeleteTableOrderBinding;
+import com.hd.calculator.app.databinding.HdcDialogDeleteTableOrderBinding;
 
-public class DeleteTableOrderTipsDialog extends BaseDialog<DialogDeleteTableOrderBinding> {
+public class DeleteTableOrderTipsDialog extends BaseDialog<HdcDialogDeleteTableOrderBinding> {
     //listener
     private final ClickListener clickListener;
 
@@ -18,8 +18,8 @@ public class DeleteTableOrderTipsDialog extends BaseDialog<DialogDeleteTableOrde
     }
 
     @Override
-    protected DialogDeleteTableOrderBinding getViewBinding() {
-        return DialogDeleteTableOrderBinding.inflate(getLayoutInflater(), null, false);
+    protected HdcDialogDeleteTableOrderBinding getViewBinding() {
+        return HdcDialogDeleteTableOrderBinding.inflate(getLayoutInflater(), null, false);
     }
 
     @Override

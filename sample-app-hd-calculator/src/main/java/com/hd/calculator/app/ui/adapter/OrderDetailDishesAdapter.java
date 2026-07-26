@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hd.calculator.app.MyApp;
 import com.hd.calculator.app.R;
-import com.hd.calculator.app.databinding.ItemOrderDetailDishesBinding;
+import com.hd.calculator.app.databinding.HdcItemOrderDetailDishesBinding;
 import com.hd.calculator.app.ui.item.DishesItem;
 import com.hd.calculator.app.util.MoneyUtils;
 
@@ -43,33 +43,33 @@ public class OrderDetailDishesAdapter extends RecyclerView.Adapter<OrderDetailDi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemOrderDetailDishesBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemOrderDetailDishesBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DishesItem item = data.get(position);
-        ItemOrderDetailDishesBinding binding = holder.getBinding();
+        HdcItemOrderDetailDishesBinding binding = holder.getBinding();
         if (item.isOrdered()) {
             binding.tvCount.setText(item.getCount() + "x");
-            binding.tvCount.setBackgroundResource(R.drawable.shape_gray);
+            binding.tvCount.setBackgroundResource(R.drawable.hdc_shape_gray);
             binding.tvCount.setTextColor(MyApp.context.getColor(R.color.color_282929));
             binding.ivDel.setVisibility(View.GONE);
             if (item.isCanceled()) {
-                binding.tvCount.setBackgroundResource(R.drawable.shape_red);
+                binding.tvCount.setBackgroundResource(R.drawable.hdc_shape_red);
                 //binding.tvCost 删除线
                 binding.tvCost.setPaintFlags(binding.tvCost.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 binding.ivAdd.setVisibility(View.GONE);
                 binding.tvCount.setTextColor(MyApp.context.getColor(R.color.white));
             } else {
-                binding.tvCount.setBackgroundResource(R.drawable.shape_gray);
+                binding.tvCount.setBackgroundResource(R.drawable.hdc_shape_gray);
                 binding.tvCost.setPaintFlags(binding.tvCost.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                 binding.ivAdd.setVisibility(View.VISIBLE);
                 binding.tvCount.setTextColor(MyApp.context.getColor(R.color.color_282929));
             }
         } else {
             binding.tvCount.setText("+" + item.getCount());
-            binding.tvCount.setBackgroundResource(R.drawable.shape_green);
+            binding.tvCount.setBackgroundResource(R.drawable.hdc_shape_green);
             binding.tvCount.setTextColor(MyApp.context.getColor(R.color.white));
             binding.ivDel.setVisibility(View.VISIBLE);
         }
@@ -124,14 +124,14 @@ public class OrderDetailDishesAdapter extends RecyclerView.Adapter<OrderDetailDi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ItemOrderDetailDishesBinding binding;
+        public HdcItemOrderDetailDishesBinding binding;
 
-        public ViewHolder(ItemOrderDetailDishesBinding binding) {
+        public ViewHolder(HdcItemOrderDetailDishesBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public ItemOrderDetailDishesBinding getBinding() {
+        public HdcItemOrderDetailDishesBinding getBinding() {
             return binding;
         }
     }

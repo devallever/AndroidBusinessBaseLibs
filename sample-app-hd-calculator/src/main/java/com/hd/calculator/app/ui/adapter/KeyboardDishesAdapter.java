@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hd.calculator.app.R;
-import com.hd.calculator.app.databinding.ItemChooseDishesBinding;
+import com.hd.calculator.app.databinding.HdcItemChooseDishesBinding;
 import com.hd.calculator.app.ui.item.DishesItem;
 import com.hd.calculator.app.util.MoneyUtils;
 
@@ -32,25 +32,25 @@ public class KeyboardDishesAdapter extends RecyclerView.Adapter<KeyboardDishesAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemChooseDishesBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemChooseDishesBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DishesItem item = data.get(position);
-        ItemChooseDishesBinding binding = holder.getBinding();
+        HdcItemChooseDishesBinding binding = holder.getBinding();
         binding.tvTitle.setText(item.getCode() + " " + item.getName());
         //此处是价格
         binding.tvCost.setText(MoneyUtils.formatMoney(item.getPrice()));
 
         //设置count背景
         if (item.isOrdered()) {
-            binding.tvCount.setBackgroundResource(R.drawable.shape_gray);
+            binding.tvCount.setBackgroundResource(R.drawable.hdc_shape_gray);
             binding.tvCount.setText(item.getCount() + "x");
             binding.ivDel.setVisibility(View.GONE);
         } else {
-            binding.tvCount.setBackgroundResource(R.drawable.shape_green);
+            binding.tvCount.setBackgroundResource(R.drawable.hdc_shape_green);
             binding.tvCount.setText("+" + item.getCount());
             binding.ivDel.setVisibility(View.VISIBLE);
         }
@@ -88,7 +88,7 @@ public class KeyboardDishesAdapter extends RecyclerView.Adapter<KeyboardDishesAd
     }
 
     @SuppressLint("SetTextI18n")
-    private void onUpdateCount(ItemChooseDishesBinding binding, DishesItem item) {
+    private void onUpdateCount(HdcItemChooseDishesBinding binding, DishesItem item) {
         binding.tvCount.setText("+" + item.getCount());
         binding.tvCost.setText(MoneyUtils.formatMoney(item.getPrice() * item.getCount()));
     }
@@ -107,14 +107,14 @@ public class KeyboardDishesAdapter extends RecyclerView.Adapter<KeyboardDishesAd
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final ItemChooseDishesBinding mBinding;
+        private final HdcItemChooseDishesBinding mBinding;
 
-        public ViewHolder(ItemChooseDishesBinding binding) {
+        public ViewHolder(HdcItemChooseDishesBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
         }
 
-        public ItemChooseDishesBinding getBinding() {
+        public HdcItemChooseDishesBinding getBinding() {
             return mBinding;
         }
     }

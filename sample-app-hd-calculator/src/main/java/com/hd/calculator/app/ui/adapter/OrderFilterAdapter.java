@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hd.calculator.app.R;
-import com.hd.calculator.app.databinding.ItemOrderFilterBinding;
+import com.hd.calculator.app.databinding.HdcItemOrderFilterBinding;
 import com.hd.calculator.app.ui.item.BillFilterItem;
 
 import java.util.List;
@@ -31,19 +31,19 @@ public class OrderFilterAdapter extends RecyclerView.Adapter<OrderFilterAdapter.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemOrderFilterBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemOrderFilterBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         BillFilterItem item = data.get(position);
-        ItemOrderFilterBinding binding = holder.getBinding();
+        HdcItemOrderFilterBinding binding = holder.getBinding();
         //set title
         binding.tvTitle.setText(item.getName());
         if (item.isSelect()) {
-            binding.ivSelect.setImageResource(R.drawable.ic_check_2_checked);
+            binding.ivSelect.setImageResource(R.drawable.hdc_ic_check_2_checked);
         } else {
-            binding.ivSelect.setImageResource(R.drawable.ic_check_2_uncheck);
+            binding.ivSelect.setImageResource(R.drawable.hdc_ic_check_2_uncheck);
         }
 
         binding.getRoot().setOnClickListener(v -> {
@@ -60,15 +60,15 @@ public class OrderFilterAdapter extends RecyclerView.Adapter<OrderFilterAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //binding
-        private final ItemOrderFilterBinding binding;
+        private final HdcItemOrderFilterBinding binding;
 
-        public ViewHolder(ItemOrderFilterBinding binding) {
+        public ViewHolder(HdcItemOrderFilterBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
         //getbinding
-        public ItemOrderFilterBinding getBinding() {
+        public HdcItemOrderFilterBinding getBinding() {
             return binding;
         }
 

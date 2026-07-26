@@ -5,9 +5,9 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.hd.calculator.app.base.BaseDialog;
-import com.hd.calculator.app.databinding.DialogBillOptionBinding;
+import com.hd.calculator.app.databinding.HdcDialogBillOptionBinding;
 
-public class BillOptionDialog extends BaseDialog<DialogBillOptionBinding> {
+public class BillOptionDialog extends BaseDialog<HdcDialogBillOptionBinding> {
 
     //listener
     private final OptionClickListener optionClickListener;
@@ -18,8 +18,8 @@ public class BillOptionDialog extends BaseDialog<DialogBillOptionBinding> {
     }
 
     @Override
-    protected DialogBillOptionBinding getViewBinding() {
-        return DialogBillOptionBinding.inflate(getLayoutInflater());
+    protected HdcDialogBillOptionBinding getViewBinding() {
+        return HdcDialogBillOptionBinding.inflate(getLayoutInflater());
     }
 
     @Override

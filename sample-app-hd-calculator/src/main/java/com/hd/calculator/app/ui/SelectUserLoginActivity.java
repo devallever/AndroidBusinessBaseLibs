@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import com.hd.calculator.app.base.BaseActivity;
 import com.hd.calculator.app.business.AccountManager;
 import com.hd.calculator.app.constant.ExtraKey;
-import com.hd.calculator.app.databinding.ActivitySelectUserLoginBinding;
+import com.hd.calculator.app.databinding.HdcActivitySelectUserLoginBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.AccountEntity;
 import com.hd.calculator.app.ui.dialog.SelectUserDialog;
@@ -17,7 +17,7 @@ import com.hd.calculator.app.ui.item.UserItem;
 import com.hd.calculator.app.util.RippleHelper;
 import com.hd.calculator.app.util.ThreadUtils;
 
-public class SelectUserLoginActivity extends BaseActivity<ActivitySelectUserLoginBinding> {
+public class SelectUserLoginActivity extends BaseActivity<HdcActivitySelectUserLoginBinding> {
     private SelectUserDialog mSelectUserDialog;
     private UserItem mSelecgtUserItem;
 
@@ -31,8 +31,8 @@ public class SelectUserLoginActivity extends BaseActivity<ActivitySelectUserLogi
 
 
     @Override
-    protected ActivitySelectUserLoginBinding getViewBinding() {
-        return ActivitySelectUserLoginBinding.inflate(getLayoutInflater());
+    protected HdcActivitySelectUserLoginBinding getViewBinding() {
+        return HdcActivitySelectUserLoginBinding.inflate(getLayoutInflater());
     }
 
     @Override

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hd.calculator.app.MyApp;
 import com.hd.calculator.app.R;
-import com.hd.calculator.app.databinding.ItemSelectorDishesBinding;
+import com.hd.calculator.app.databinding.HdcItemSelectorDishesBinding;
 import com.hd.calculator.app.ui.item.DishesItem;
 import com.hd.calculator.app.util.MoneyUtils;
 
@@ -34,13 +34,13 @@ public class SelectorDishesAdapter extends RecyclerView.Adapter<SelectorDishesAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemSelectorDishesBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemSelectorDishesBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DishesItem item = data.get(position);
-        ItemSelectorDishesBinding binding = holder.getBinding();
+        HdcItemSelectorDishesBinding binding = holder.getBinding();
         binding.tvCount.setText("+" + item.getCount());
         binding.tvTitle.setText(item.getName());
         //此处是价格
@@ -76,14 +76,14 @@ public class SelectorDishesAdapter extends RecyclerView.Adapter<SelectorDishesAd
         return data.size();
     }
 
-    private void onCountUpdate(ItemSelectorDishesBinding binding, DishesItem item) {
+    private void onCountUpdate(HdcItemSelectorDishesBinding binding, DishesItem item) {
         binding.tvCount.setText("+" + item.getCount());
 //        binding.tvCost.setText(MoneyUtils.formatMoney(item.getPrice() * item.getCount()));
         if (item.getCount() == 0) {
-            binding.tvCount.setBackgroundResource(R.drawable.shape_gray);
+            binding.tvCount.setBackgroundResource(R.drawable.hdc_shape_gray);
             binding.tvCost.setTextColor(MyApp.context.getResources().getColor(R.color.color_969799));
         } else {
-            binding.tvCount.setBackgroundResource(R.drawable.shape_green);
+            binding.tvCount.setBackgroundResource(R.drawable.hdc_shape_green);
             binding.tvCost.setTextColor(MyApp.context.getResources().getColor(R.color.color_3848A8));
         }
     }
@@ -94,14 +94,14 @@ public class SelectorDishesAdapter extends RecyclerView.Adapter<SelectorDishesAd
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final ItemSelectorDishesBinding binding;
+        private final HdcItemSelectorDishesBinding binding;
 
-        public ViewHolder(ItemSelectorDishesBinding binding) {
+        public ViewHolder(HdcItemSelectorDishesBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public ItemSelectorDishesBinding getBinding() {
+        public HdcItemSelectorDishesBinding getBinding() {
             return binding;
         }
 

@@ -6,19 +6,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hd.calculator.app.R;
 import com.hd.calculator.app.base.BaseActivity;
-import com.hd.calculator.app.databinding.ActivityDailyReportBinding;
+import com.hd.calculator.app.databinding.HdcActivityDailyReportBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.operation.BillDailyReportEntity;
 import com.hd.calculator.app.function.db.entity.operation.BillWithDishesRef;
 import com.hd.calculator.app.ui.adapter.DailyReportAdapter;
 import com.hd.calculator.app.ui.item.DailyReportItem;
-import com.hd.calculator.app.util.GsonUtils;
-import com.hd.calculator.app.util.LogUtils;
-import com.hd.calculator.app.util.MoneyUtils;
 import com.hd.calculator.app.util.ThreadUtils;
 import com.hd.calculator.app.util.TimeUtils;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,7 +25,7 @@ import java.util.Locale;
 /**
  * Boss日报表或者有权限的员工查看日报表
  */
-public class ReportBossActivity extends BaseActivity<ActivityDailyReportBinding> {
+public class ReportBossActivity extends BaseActivity<HdcActivityDailyReportBinding> {
 
     //list
     private final List<DailyReportItem> mDailyReportList = new ArrayList<>();
@@ -38,14 +34,14 @@ public class ReportBossActivity extends BaseActivity<ActivityDailyReportBinding>
     private DatePickerDialog dialog;
 
     @Override
-    protected ActivityDailyReportBinding getViewBinding() {
-        return ActivityDailyReportBinding.inflate(getLayoutInflater());
+    protected HdcActivityDailyReportBinding getViewBinding() {
+        return HdcActivityDailyReportBinding.inflate(getLayoutInflater());
     }
 
     @Override
     protected void initView() {
         mBinding.includeTopBar.ivBack.setOnClickListener(v -> finish());
-        mBinding.includeTopBar.tvTitle.setText(getString(R.string.daily_report));
+        mBinding.includeTopBar.tvTitle.setText(getString(R.string.hdc_daily_report));
         initReportList();
         initDatePickerDialog();
         mBinding.dateContainer.setOnClickListener(v -> {

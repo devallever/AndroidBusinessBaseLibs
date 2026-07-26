@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.hd.calculator.app.MyApp;
 import com.hd.calculator.app.R;
 import com.hd.calculator.app.base.BaseDialog;
-import com.hd.calculator.app.databinding.DialogRemarkBinding;
+import com.hd.calculator.app.databinding.HdcDialogRemarkBinding;
 import com.hd.calculator.app.ui.adapter.RemarkAdapter;
 import com.hd.calculator.app.ui.item.RemarkItem;
 import com.hd.calculator.app.util.LogUtils;
@@ -19,7 +19,7 @@ import com.hd.calculator.app.util.ThreadUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RemarkDialog extends BaseDialog<DialogRemarkBinding> {
+public class RemarkDialog extends BaseDialog<HdcDialogRemarkBinding> {
 
     //adapter
     private RemarkAdapter mAdapter;
@@ -34,8 +34,8 @@ public class RemarkDialog extends BaseDialog<DialogRemarkBinding> {
     }
 
     @Override
-    protected DialogRemarkBinding getViewBinding() {
-        return DialogRemarkBinding.inflate(getLayoutInflater(), null, false);
+    protected HdcDialogRemarkBinding getViewBinding() {
+        return HdcDialogRemarkBinding.inflate(getLayoutInflater(), null, false);
     }
 
     @Override
@@ -105,10 +105,10 @@ public class RemarkDialog extends BaseDialog<DialogRemarkBinding> {
         mBinding.btnAdd.setEnabled(!remark.isEmpty());
         mBinding.btnAdd.setClickable(!remark.isEmpty());
         if (remark.isEmpty()) {
-            mBinding.btnAdd.setBackgroundResource(R.drawable.shape_gray_disable_frame_r45);
+            mBinding.btnAdd.setBackgroundResource(R.drawable.hdc_shape_gray_disable_frame_r45);
             mBinding.btnAdd.setTextColor(MyApp.context.getResources().getColor(R.color.color_C3C6C7));
         } else {
-            mBinding.btnAdd.setBackgroundResource(R.drawable.shape_blue_frame_r45);
+            mBinding.btnAdd.setBackgroundResource(R.drawable.hdc_shape_blue_frame_r45);
             mBinding.btnAdd.setTextColor(MyApp.context.getResources().getColor(R.color.color_485ABE));
         }
     }

@@ -10,14 +10,12 @@ import com.hd.calculator.app.R;
 import com.hd.calculator.app.base.BaseActivity;
 import com.hd.calculator.app.business.AccountManager;
 import com.hd.calculator.app.constant.ExtraKey;
-import com.hd.calculator.app.databinding.ActivityModifyDishesCountBinding;
-import com.hd.calculator.app.function.UserLog;
-import com.hd.calculator.app.constant.log.ActionType;
+import com.hd.calculator.app.databinding.HdcActivityModifyDishesCountBinding;
 
 /**
  * 待结账界面->修改数量
  */
-public class ModifyDishesCountActivity extends BaseActivity<ActivityModifyDishesCountBinding> {
+public class ModifyDishesCountActivity extends BaseActivity<HdcActivityModifyDishesCountBinding> {
     private int mCount = 10;
     private String mName;
     private boolean mIsOrdered;
@@ -31,15 +29,15 @@ public class ModifyDishesCountActivity extends BaseActivity<ActivityModifyDishes
     }
 
     @Override
-    protected ActivityModifyDishesCountBinding getViewBinding() {
-        return ActivityModifyDishesCountBinding.inflate(getLayoutInflater());
+    protected HdcActivityModifyDishesCountBinding getViewBinding() {
+        return HdcActivityModifyDishesCountBinding.inflate(getLayoutInflater());
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void initView() {
         initExtraData();
-        mBinding.includeTopBar.tvTitle.setText(getString(R.string.modify_count));
+        mBinding.includeTopBar.tvTitle.setText(getString(R.string.hdc_modify_count));
         mBinding.includeTopBar.ivBack.setOnClickListener(v -> finish());
 
         mBinding.tvCount.setText(mCount + "");

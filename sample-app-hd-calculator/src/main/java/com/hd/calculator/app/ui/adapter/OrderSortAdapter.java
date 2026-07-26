@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hd.calculator.app.R;
-import com.hd.calculator.app.databinding.ItemOrderSortBinding;
+import com.hd.calculator.app.databinding.HdcItemOrderSortBinding;
 import com.hd.calculator.app.ui.item.BillSortItem;
 
 import java.util.List;
@@ -31,19 +31,19 @@ public class OrderSortAdapter extends RecyclerView.Adapter<OrderSortAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemOrderSortBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemOrderSortBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         BillSortItem item = data.get(position);
-        ItemOrderSortBinding binding = holder.getBinding();
+        HdcItemOrderSortBinding binding = holder.getBinding();
         //set title
         binding.tvTitle.setText(item.getSortName());
         if (item.isSelect()) {
-            binding.ivSelect.setImageResource(R.drawable.ic_check_2_checked);
+            binding.ivSelect.setImageResource(R.drawable.hdc_ic_check_2_checked);
         } else {
-            binding.ivSelect.setImageResource(R.drawable.ic_check_2_uncheck);
+            binding.ivSelect.setImageResource(R.drawable.hdc_ic_check_2_uncheck);
         }
 
         binding.getRoot().setOnClickListener(v -> {
@@ -60,15 +60,15 @@ public class OrderSortAdapter extends RecyclerView.Adapter<OrderSortAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //binding
-        private final ItemOrderSortBinding binding;
+        private final HdcItemOrderSortBinding binding;
 
-        public ViewHolder(ItemOrderSortBinding binding) {
+        public ViewHolder(HdcItemOrderSortBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
         //getbinding
-        public ItemOrderSortBinding getBinding() {
+        public HdcItemOrderSortBinding getBinding() {
             return binding;
         }
 

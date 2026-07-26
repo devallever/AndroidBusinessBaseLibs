@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.hd.calculator.app.R;
 import com.hd.calculator.app.base.BaseActivity;
-import com.hd.calculator.app.databinding.ActivityTableManageBinding;
+import com.hd.calculator.app.databinding.HdcActivityTableManageBinding;
 import com.hd.calculator.app.ui.adapter.TableManageAdapter;
 import com.hd.calculator.app.ui.dialog.DeleteTableDialog;
 import com.hd.calculator.app.ui.dialog.DeleteTableUsedTipsDialog;
@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * 功能区-桌台增删改，不过应该不用了，改在后台管理
  */
-public class TableManageActivity extends BaseActivity<ActivityTableManageBinding> {
+public class TableManageActivity extends BaseActivity<HdcActivityTableManageBinding> {
 
     private final List<TableManageItem> mLokal1List = new ArrayList<>();
     private final List<TableManageItem> mLokal2List = new ArrayList<>();
@@ -32,8 +32,8 @@ public class TableManageActivity extends BaseActivity<ActivityTableManageBinding
     private int mCurrentTable = 1;
 
     @Override
-    protected ActivityTableManageBinding getViewBinding() {
-        return ActivityTableManageBinding.inflate(getLayoutInflater());
+    protected HdcActivityTableManageBinding getViewBinding() {
+        return HdcActivityTableManageBinding.inflate(getLayoutInflater());
     }
 
     @Override

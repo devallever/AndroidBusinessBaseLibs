@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hd.calculator.app.base.BaseDialog;
 import com.hd.calculator.app.business.AccountManager;
-import com.hd.calculator.app.databinding.DialogUserListBinding;
+import com.hd.calculator.app.databinding.HdcDialogUserListBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.AccountEntity;
 import com.hd.calculator.app.ui.adapter.UserAdapter;
@@ -17,7 +17,7 @@ import com.hd.calculator.app.util.ThreadUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectUserDialog extends BaseDialog<DialogUserListBinding> {
+public class SelectUserDialog extends BaseDialog<HdcDialogUserListBinding> {
     private UserAdapter mAdapter;
     //data
     private List<UserItem> mUserList = new ArrayList<>();
@@ -37,8 +37,8 @@ public class SelectUserDialog extends BaseDialog<DialogUserListBinding> {
     }
 
     @Override
-    protected DialogUserListBinding getViewBinding() {
-        return DialogUserListBinding.inflate(getLayoutInflater());
+    protected HdcDialogUserListBinding getViewBinding() {
+        return HdcDialogUserListBinding.inflate(getLayoutInflater());
     }
 
     @Override

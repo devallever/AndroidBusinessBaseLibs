@@ -3,7 +3,7 @@ package com.hd.calculator.app;
 import android.content.Intent;
 
 import com.hd.calculator.app.base.BaseActivity;
-import com.hd.calculator.app.databinding.ActivityNavigationBinding;
+import com.hd.calculator.app.databinding.HdcActivityNavigationBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.AccountEntity;
 import com.hd.calculator.app.function.network.NetworkCallback;
@@ -37,10 +37,10 @@ import com.hd.calculator.app.util.ToastUtils;
 
 import java.util.List;
 
-public class NavigationActivity extends BaseActivity<ActivityNavigationBinding> {
+public class NavigationActivity extends BaseActivity<HdcActivityNavigationBinding> {
     @Override
-    protected ActivityNavigationBinding getViewBinding() {
-        return ActivityNavigationBinding.inflate(getLayoutInflater());
+    protected HdcActivityNavigationBinding getViewBinding() {
+        return HdcActivityNavigationBinding.inflate(getLayoutInflater());
     }
 
     @Override

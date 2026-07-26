@@ -5,10 +5,10 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.hd.calculator.app.base.BaseDialog;
-import com.hd.calculator.app.databinding.DialogDeleteTableBinding;
+import com.hd.calculator.app.databinding.HdcDialogDeleteTableBinding;
 import com.hd.calculator.app.util.ToastUtils;
 
-public class DeleteTableDialog extends BaseDialog<DialogDeleteTableBinding> {
+public class DeleteTableDialog extends BaseDialog<HdcDialogDeleteTableBinding> {
     //listener
     private final ClickListener clickListener;
 
@@ -18,8 +18,8 @@ public class DeleteTableDialog extends BaseDialog<DialogDeleteTableBinding> {
     }
 
     @Override
-    protected DialogDeleteTableBinding getViewBinding() {
-        return DialogDeleteTableBinding.inflate(getLayoutInflater(), null, false);
+    protected HdcDialogDeleteTableBinding getViewBinding() {
+        return HdcDialogDeleteTableBinding.inflate(getLayoutInflater(), null, false);
     }
 
     @Override

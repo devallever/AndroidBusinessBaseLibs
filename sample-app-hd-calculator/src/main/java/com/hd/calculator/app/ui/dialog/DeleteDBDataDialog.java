@@ -5,9 +5,9 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.hd.calculator.app.base.BaseDialog;
-import com.hd.calculator.app.databinding.DialogDeleteDataBinding;
+import com.hd.calculator.app.databinding.HdcDialogDeleteDataBinding;
 
-public class DeleteDBDataDialog extends BaseDialog<DialogDeleteDataBinding> {
+public class DeleteDBDataDialog extends BaseDialog<HdcDialogDeleteDataBinding> {
 
     private OptionClickListener mOptionClickListener;
 
@@ -21,8 +21,8 @@ public class DeleteDBDataDialog extends BaseDialog<DialogDeleteDataBinding> {
     }
 
     @Override
-    protected DialogDeleteDataBinding getViewBinding() {
-        return DialogDeleteDataBinding.inflate(getLayoutInflater());
+    protected HdcDialogDeleteDataBinding getViewBinding() {
+        return HdcDialogDeleteDataBinding.inflate(getLayoutInflater());
     }
 
     @Override

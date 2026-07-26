@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hd.calculator.app.MyApp;
 import com.hd.calculator.app.R;
-import com.hd.calculator.app.databinding.ItemDishesThirdSortBinding;
+import com.hd.calculator.app.databinding.HdcItemDishesThirdSortBinding;
 import com.hd.calculator.app.ui.item.ThirdSortItem;
 
 import java.util.List;
@@ -31,13 +31,13 @@ public class ThirdSortAdapter extends RecyclerView.Adapter<ThirdSortAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemDishesThirdSortBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemDishesThirdSortBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ThirdSortItem item = data.get(position);
-        ItemDishesThirdSortBinding binding = holder.getBinding();
+        HdcItemDishesThirdSortBinding binding = holder.getBinding();
         binding.tvTitle.setText(item.getName());
         if (item.isSelect()) {
             //indicator
@@ -64,14 +64,14 @@ public class ThirdSortAdapter extends RecyclerView.Adapter<ThirdSortAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final ItemDishesThirdSortBinding binding;
+        private final HdcItemDishesThirdSortBinding binding;
 
-        public ViewHolder(ItemDishesThirdSortBinding binding) {
+        public ViewHolder(HdcItemDishesThirdSortBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public ItemDishesThirdSortBinding getBinding() {
+        public HdcItemDishesThirdSortBinding getBinding() {
             return binding;
         }
 

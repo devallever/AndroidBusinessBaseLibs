@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="285dp"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_gravity="center"
+    android:background="@drawable/hdc_dialog_bg_white"
+    android:minHeight="500dp">
+
+
+    <EditText
+        android:id="@+id/etRemark"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/hdc_shape_et_remark_bg"
+        android:gravity="center_vertical"
+        android:hint="@string/hdc_input_custom_remark"
+        android:lines="1"
+        android:paddingHorizontal="8dp"
+        android:textColor="@color/color_282929"
+        android:textColorHint="@color/color_969799"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/btnAdd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/btnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/hdc_shape_blue_frame_r45"
+        android:gravity="center"
+        android:paddingHorizontal="16dp"
+        android:text="@string/hdc_add"
+        android:textColor="@color/color_485ABE"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRemark"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:listitem="@layout/hdc_item_remark"
+        app:layout_constraintBottom_toTopOf="@+id/line"
+        app:layout_constraintTop_toBottomOf="@+id/etRemark" />
+
+    <TextView
+        android:id="@+id/tvCancel"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:gravity="center"
+        android:text="@string/hdc_remark_cancel"
+        android:textColor="@color/color_3848A8"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tvContinue"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvContinue"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:gravity="center"
+        android:text="@string/hdc_remark_continue"
+        android:textColor="@color/color_3848A8"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvCancel" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/hdc_shadow_line"
+        app:layout_constraintBottom_toTopOf="@+id/tvCancel" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

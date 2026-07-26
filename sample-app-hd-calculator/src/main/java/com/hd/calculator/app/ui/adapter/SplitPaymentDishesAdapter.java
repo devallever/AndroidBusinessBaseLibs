@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hd.calculator.app.databinding.ItemSplitDishesBinding;
+import com.hd.calculator.app.databinding.HdcItemSplitDishesBinding;
 import com.hd.calculator.app.ui.item.DishesItem;
 import com.hd.calculator.app.util.MoneyUtils;
 
@@ -40,14 +40,14 @@ public class SplitPaymentDishesAdapter extends RecyclerView.Adapter<SplitPayment
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemSplitDishesBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemSplitDishesBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DishesItem item = data.get(position);
-        ItemSplitDishesBinding binding = holder.getBinding();
+        HdcItemSplitDishesBinding binding = holder.getBinding();
         binding.tvCount.setText(item.getCount() + "x");
         binding.tvTitle.setText(item.getName());
         binding.tvCost.setText(MoneyUtils.formatMoney(item.getPrice()));
@@ -71,14 +71,14 @@ public class SplitPaymentDishesAdapter extends RecyclerView.Adapter<SplitPayment
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final ItemSplitDishesBinding binding;
+        private final HdcItemSplitDishesBinding binding;
 
-        public ViewHolder(ItemSplitDishesBinding binding) {
+        public ViewHolder(HdcItemSplitDishesBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public ItemSplitDishesBinding getBinding() {
+        public HdcItemSplitDishesBinding getBinding() {
             return binding;
         }
     }

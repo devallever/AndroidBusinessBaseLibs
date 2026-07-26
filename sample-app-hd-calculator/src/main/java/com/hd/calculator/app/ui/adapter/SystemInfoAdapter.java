@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hd.calculator.app.databinding.ItemSystemInfoBinding;
+import com.hd.calculator.app.databinding.HdcItemSystemInfoBinding;
 import com.hd.calculator.app.ui.item.SystemInfoItem;
 
 import java.util.List;
@@ -23,13 +23,13 @@ public class SystemInfoAdapter extends RecyclerView.Adapter<SystemInfoAdapter.Vi
     @NonNull
     @Override
     public SystemInfoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemSystemInfoBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemSystemInfoBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SystemInfoItem item = data.get(position);
-        ItemSystemInfoBinding binding = holder.getBinding();
+        HdcItemSystemInfoBinding binding = holder.getBinding();
         binding.tvTitle.setText(item.getTitle());
         binding.tvDesc.setText(item.getDesc());
 
@@ -41,15 +41,15 @@ public class SystemInfoAdapter extends RecyclerView.Adapter<SystemInfoAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final ItemSystemInfoBinding binding;
+        private final HdcItemSystemInfoBinding binding;
 
 
-        public ViewHolder(ItemSystemInfoBinding binding) {
+        public ViewHolder(HdcItemSystemInfoBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public ItemSystemInfoBinding getBinding() {
+        public HdcItemSystemInfoBinding getBinding() {
             return binding;
         }
 

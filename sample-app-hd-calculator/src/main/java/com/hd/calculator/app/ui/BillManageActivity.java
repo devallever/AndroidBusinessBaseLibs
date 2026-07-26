@@ -14,7 +14,7 @@ import com.hd.calculator.app.constant.DishesFirstSortType;
 import com.hd.calculator.app.constant.ExtraKey;
 import com.hd.calculator.app.constant.OrderType;
 import com.hd.calculator.app.constant.PayType;
-import com.hd.calculator.app.databinding.ActivityBillManageBinding;
+import com.hd.calculator.app.databinding.HdcActivityBillManageBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.AccountEntity;
 import com.hd.calculator.app.function.db.entity.DishesEntity;
@@ -46,7 +46,7 @@ import java.util.List;
 /**
  * 账单管理
  */
-public class BillManageActivity extends BaseActivity<ActivityBillManageBinding> {
+public class BillManageActivity extends BaseActivity<HdcActivityBillManageBinding> {
 
     //list
     private final List<BillManageItem> mBillManageList = new ArrayList<>();
@@ -83,8 +83,8 @@ public class BillManageActivity extends BaseActivity<ActivityBillManageBinding> 
     private BillManageItem mSelectedBillItem;
 
     @Override
-    protected ActivityBillManageBinding getViewBinding() {
-        return ActivityBillManageBinding.inflate(getLayoutInflater());
+    protected HdcActivityBillManageBinding getViewBinding() {
+        return HdcActivityBillManageBinding.inflate(getLayoutInflater());
     }
 
     @Override

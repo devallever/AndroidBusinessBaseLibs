@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hd.calculator.app.R;
-import com.hd.calculator.app.databinding.ItemRemarkBinding;
+import com.hd.calculator.app.databinding.HdcItemRemarkBinding;
 import com.hd.calculator.app.ui.item.RemarkItem;
 
 import java.util.List;
@@ -29,18 +29,18 @@ public class RemarkAdapter extends RecyclerView.Adapter<RemarkAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemRemarkBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemRemarkBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RemarkItem item = data.get(position);
-        ItemRemarkBinding binding = holder.getBinding();
+        HdcItemRemarkBinding binding = holder.getBinding();
         binding.tvRemark.setText(item.getRemark());
         if (item.isSelect()) {
-            binding.ivSelect.setImageResource(R.drawable.ic_frame_checked);
+            binding.ivSelect.setImageResource(R.drawable.hdc_ic_frame_checked);
         } else {
-            binding.ivSelect.setImageResource(R.drawable.ic_frame_uncheck);
+            binding.ivSelect.setImageResource(R.drawable.hdc_ic_frame_uncheck);
         }
         binding.getRoot().setOnClickListener(v -> {
             item.setSelect(!item.isSelect());
@@ -58,14 +58,14 @@ public class RemarkAdapter extends RecyclerView.Adapter<RemarkAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final ItemRemarkBinding binding;
+        private final HdcItemRemarkBinding binding;
 
-        public ViewHolder(ItemRemarkBinding binding) {
+        public ViewHolder(HdcItemRemarkBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public ItemRemarkBinding getBinding() {
+        public HdcItemRemarkBinding getBinding() {
             return binding;
         }
     }

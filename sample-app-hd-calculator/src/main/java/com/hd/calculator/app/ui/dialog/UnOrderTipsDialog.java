@@ -6,13 +6,13 @@ import androidx.annotation.NonNull;
 
 import com.hd.calculator.app.base.BaseDialog;
 import com.hd.calculator.app.constant.log.ActionType;
-import com.hd.calculator.app.databinding.DialogUnOrderTipsBinding;
+import com.hd.calculator.app.databinding.HdcDialogUnOrderTipsBinding;
 import com.hd.calculator.app.function.UserLog;
 
 /***
  * 增加餐品退出提示
  */
-public class UnOrderTipsDialog extends BaseDialog<DialogUnOrderTipsBinding> {
+public class UnOrderTipsDialog extends BaseDialog<HdcDialogUnOrderTipsBinding> {
     //optionClickListener
     private OptionClickListener optionClickListener;
 
@@ -26,8 +26,8 @@ public class UnOrderTipsDialog extends BaseDialog<DialogUnOrderTipsBinding> {
     }
 
     @Override
-    protected DialogUnOrderTipsBinding getViewBinding() {
-        return DialogUnOrderTipsBinding.inflate(getLayoutInflater());
+    protected HdcDialogUnOrderTipsBinding getViewBinding() {
+        return HdcDialogUnOrderTipsBinding.inflate(getLayoutInflater());
     }
 
     @Override

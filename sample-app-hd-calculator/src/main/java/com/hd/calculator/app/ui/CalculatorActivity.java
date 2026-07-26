@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.hd.calculator.app.R;
 import com.hd.calculator.app.base.BaseActivity;
 import com.hd.calculator.app.business.AccountManager;
-import com.hd.calculator.app.databinding.ActivityCalculatorBinding;
+import com.hd.calculator.app.databinding.HdcActivityCalculatorBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.util.LogUtils;
 import com.hd.calculator.app.util.ThreadUtils;
@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 计算器&启动页
  */
-public class CalculatorActivity extends BaseActivity<ActivityCalculatorBinding> {
+public class CalculatorActivity extends BaseActivity<HdcActivityCalculatorBinding> {
 
 
     private final List<String> mExpressionParts = new ArrayList<>();
@@ -62,8 +62,8 @@ public class CalculatorActivity extends BaseActivity<ActivityCalculatorBinding> 
 
 
     @Override
-    protected ActivityCalculatorBinding getViewBinding() {
-        return ActivityCalculatorBinding.inflate(getLayoutInflater());
+    protected HdcActivityCalculatorBinding getViewBinding() {
+        return HdcActivityCalculatorBinding.inflate(getLayoutInflater());
     }
 
     @Override

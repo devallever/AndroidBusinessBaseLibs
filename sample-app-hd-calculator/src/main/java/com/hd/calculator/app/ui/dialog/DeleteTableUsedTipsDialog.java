@@ -5,17 +5,17 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.hd.calculator.app.base.BaseDialog;
-import com.hd.calculator.app.databinding.DialogDeleteTableUsedTipsBinding;
+import com.hd.calculator.app.databinding.HdcDialogDeleteTableUsedTipsBinding;
 
-public class DeleteTableUsedTipsDialog extends BaseDialog<DialogDeleteTableUsedTipsBinding> {
+public class DeleteTableUsedTipsDialog extends BaseDialog<HdcDialogDeleteTableUsedTipsBinding> {
     //listener
     public DeleteTableUsedTipsDialog(@NonNull Context context) {
         super(context);
     }
 
     @Override
-    protected DialogDeleteTableUsedTipsBinding getViewBinding() {
-        return DialogDeleteTableUsedTipsBinding.inflate(getLayoutInflater(), null, false);
+    protected HdcDialogDeleteTableUsedTipsBinding getViewBinding() {
+        return HdcDialogDeleteTableUsedTipsBinding.inflate(getLayoutInflater(), null, false);
     }
 
     @Override

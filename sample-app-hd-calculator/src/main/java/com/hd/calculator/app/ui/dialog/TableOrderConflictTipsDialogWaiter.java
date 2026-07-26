@@ -8,10 +8,10 @@ import androidx.annotation.NonNull;
 import com.hd.calculator.app.base.BaseDialog;
 import com.hd.calculator.app.business.TableManager;
 import com.hd.calculator.app.constant.OrderType;
-import com.hd.calculator.app.databinding.DialogTableOrderConflictTipsBossBinding;
-import com.hd.calculator.app.databinding.DialogTableOrderConflictTipsWaiterBinding;
+import com.hd.calculator.app.databinding.HdcDialogTableOrderConflictTipsBossBinding;
+import com.hd.calculator.app.databinding.HdcDialogTableOrderConflictTipsWaiterBinding;
 
-public class TableOrderConflictTipsDialogWaiter extends BaseDialog<DialogTableOrderConflictTipsWaiterBinding> {
+public class TableOrderConflictTipsDialogWaiter extends BaseDialog<HdcDialogTableOrderConflictTipsWaiterBinding> {
     private int mTableCode;
     private OptionClickListener mOptionClickListener;
 
@@ -24,8 +24,8 @@ public class TableOrderConflictTipsDialogWaiter extends BaseDialog<DialogTableOr
     }
 
     @Override
-    protected DialogTableOrderConflictTipsWaiterBinding getViewBinding() {
-        return DialogTableOrderConflictTipsWaiterBinding.inflate(getLayoutInflater());
+    protected HdcDialogTableOrderConflictTipsWaiterBinding getViewBinding() {
+        return HdcDialogTableOrderConflictTipsWaiterBinding.inflate(getLayoutInflater());
     }
 
     @SuppressLint("SetTextI18n")

@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hd.calculator.app.constant.OrderType;
-import com.hd.calculator.app.databinding.ItemOrderCancelBinding;
+import com.hd.calculator.app.databinding.HdcItemOrderCancelBinding;
 import com.hd.calculator.app.ui.item.DishesCancelItem;
 import com.hd.calculator.app.util.MoneyUtils;
 import com.hd.calculator.app.util.TimeUtils;
@@ -26,14 +26,14 @@ public class DishesCancelAdapter extends RecyclerView.Adapter<DishesCancelAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemOrderCancelBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemOrderCancelBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DishesCancelItem item = data.get(position);
-        ItemOrderCancelBinding binding = holder.getBinding();
+        HdcItemOrderCancelBinding binding = holder.getBinding();
         binding.tvTitle.setText(item.getDishesName());
         //cost
         binding.tvCost.setText(MoneyUtils.formatMoney(item.getCost()));
@@ -52,14 +52,14 @@ public class DishesCancelAdapter extends RecyclerView.Adapter<DishesCancelAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final ItemOrderCancelBinding binding;
+        private final HdcItemOrderCancelBinding binding;
 
-        public ViewHolder(ItemOrderCancelBinding binding) {
+        public ViewHolder(HdcItemOrderCancelBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public ItemOrderCancelBinding getBinding() {
+        public HdcItemOrderCancelBinding getBinding() {
             return binding;
         }
     }

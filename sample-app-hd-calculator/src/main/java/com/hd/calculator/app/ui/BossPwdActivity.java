@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.hd.calculator.app.base.BaseActivity;
 import com.hd.calculator.app.constant.ExtraKey;
-import com.hd.calculator.app.databinding.ActivityBossPwdBinding;
+import com.hd.calculator.app.databinding.HdcActivityBossPwdBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.AccountEntity;
 import com.hd.calculator.app.util.ThreadUtils;
@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class BossPwdActivity extends BaseActivity<ActivityBossPwdBinding> {
+public class BossPwdActivity extends BaseActivity<HdcActivityBossPwdBinding> {
 
     //stringBuilder
     private final StringBuilder mPwdBuilder = new StringBuilder();
@@ -32,8 +32,8 @@ public class BossPwdActivity extends BaseActivity<ActivityBossPwdBinding> {
     }
 
     @Override
-    protected ActivityBossPwdBinding getViewBinding() {
-        return ActivityBossPwdBinding.inflate(getLayoutInflater());
+    protected HdcActivityBossPwdBinding getViewBinding() {
+        return HdcActivityBossPwdBinding.inflate(getLayoutInflater());
     }
 
     @Override

@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/topBar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@color/hdc_actionBarColor"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivMenu"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="8dp"
+                android:padding="8dp"
+                android:src="@drawable/hdc_ic_main_menu"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Kellner"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivMenu"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivState"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginEnd="8dp"
+                android:padding="8dp"
+                android:src="@drawable/hdc_ic_main_table_state_all"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- state all -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/stateAll"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/bottomContainer"
+            app:layout_constraintTop_toBottomOf="@+id/topBar">
+
+            <TextView
+                android:id="@+id/tvZoom1"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:background="@color/color_576BD5"
+                android:gravity="center"
+                android:text="@string/hdc_lokal_1"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tvZoom2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvZoom2"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:background="@color/color_DCDFE0"
+                android:gravity="center"
+                android:text="@string/hdc_lokal_2"
+                android:textColor="@color/color_646566"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvZoom1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTable1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvZoom1"
+                app:spanCount="3"
+                tools:itemCount="6"
+                tools:listitem="@layout/hdc_item_main_table" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTable2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvZoom1"
+                app:spanCount="3"
+                tools:itemCount="6"
+                tools:listitem="@layout/hdc_item_main_table" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- state unpaid -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/stateUnpaid"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/bottomContainer"
+            app:layout_constraintTop_toBottomOf="@+id/topBar">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTableUnpaid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:itemCount="3"
+                tools:listitem="@layout/hdc_item_main_table_unpaid" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@drawable/hdc_shadow_line"
+            app:layout_constraintBottom_toTopOf="@+id/bottomContainer" />
+
+        <!-- -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottomContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingHorizontal="12dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/btnTakeout"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginVertical="16dp"
+                android:background="@drawable/hdc_shape_blue_r45"
+                android:gravity="center"
+                android:text="@string/hdc_takeout"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnDining"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/btnDining"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginVertical="16dp"
+                android:background="@drawable/hdc_shape_green_r45"
+                android:gravity="center"
+                android:text="@string/hdc_dining"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnTakeout"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="0dp"
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_gravity="start">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/menuTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:background="@color/color_485ABE"
+            android:paddingVertical="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tvUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kellner-B"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvUserType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Waiter"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivPower"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:padding="10dp"
+                android:src="@drawable/hdc_ic_menu_power"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/menuTop">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/menuLocalModeSwitch"
+                style="@style/hdc_main_menu_item_container">
+
+                <ImageView
+                    android:id="@+id/ivMenuSync"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/hdc_ic_menu_sync"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSync"
+                    android:text="@string/hdc_menu_cloud_sync"
+                    style="@style/hdc_main_menu_text_style"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMenuSync"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/switchSync"
+                    android:layout_width="44dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/hdc_ic_menu_switch_open"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tvSync"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/color_DCDFE0" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/menuOrderManage"
+                style="@style/hdc_main_menu_item_container">
+
+                <ImageView
+                    android:id="@+id/ivMenuOrder"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/hdc_ic_menu_order_manage"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvOrderManage"
+                    android:text="@string/hdc_menu_order_manage"
+                    style="@style/hdc_main_menu_text_style"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMenuOrder"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/menuCancelRecord"
+                style="@style/hdc_main_menu_item_container">
+
+                <ImageView
+                    android:id="@+id/ivMenuCancelRecord"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/hdc_ic_menu_cancel_record"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvMenuCancelRecord"
+                    android:text="@string/hdc_menu_cancel_record"
+                    style="@style/hdc_main_menu_text_style"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMenuCancelRecord"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <!-- 未打印表 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:visibility="gone"
+                android:id="@+id/menuPrinter"
+                style="@style/hdc_main_menu_item_container">
+
+                <ImageView
+                    android:id="@+id/ivMenuPrinter"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/hdc_ic_menu_printer"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:text="@string/hdc_menu_un_print"
+                    style="@style/hdc_main_menu_text_style"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMenuPrinter"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/color_DCDFE0" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:visibility="gone"
+                android:id="@+id/menuMenuManage"
+                style="@style/hdc_main_menu_item_container">
+
+                <ImageView
+                    android:id="@+id/ivMenuMenuManage"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/hdc_ic_menu_menu_manage"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:text="@string/hdc_menu_menu_manage"
+                    style="@style/hdc_main_menu_text_style"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMenuMenuManage"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/menuReport"
+                style="@style/hdc_main_menu_item_container">
+
+                <ImageView
+                    android:id="@+id/ivMenuReport"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/hdc_ic_menu_report"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:text="@string/hdc_menu_report"
+                    style="@style/hdc_main_menu_text_style"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMenuReport"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/color_DCDFE0" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/menuSetting"
+                style="@style/hdc_main_menu_item_container">
+
+                <ImageView
+                    android:id="@+id/ivMenuSetting"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/hdc_ic_menu_setting"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:text="@string/hdc_menu_setting"
+                    style="@style/hdc_main_menu_text_style"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMenuSetting"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/menuDeleteData"
+                style="@style/hdc_main_menu_item_container">
+
+                <ImageView
+                    android:id="@+id/ivMenuDeleteData"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    app:tint="@color/black"
+                    android:src="@drawable/hdc_ic_un_order_dialog_delete"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:text="删除数据"
+                    style="@style/hdc_main_menu_text_style"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMenuDeleteData"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/menuService"
+                style="@style/hdc_main_menu_item_container">
+
+                <ImageView
+                    android:id="@+id/ivMenuService"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/hdc_ic_menu_service"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:text="@string/hdc_menu_service"
+                    style="@style/hdc_main_menu_text_style"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMenuService"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/menuLogout"
+                style="@style/hdc_main_menu_item_container">
+
+                <ImageView
+                    android:id="@+id/ivMenuLogout"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/hdc_ic_menu_logout"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:text="@string/hdc_menu_logout"
+                    style="@style/hdc_main_menu_text_style"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMenuLogout"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/menuBleMac"
+                style="@style/hdc_main_menu_item_container">
+
+                <ImageView
+                    android:id="@+id/ivMenuBleMac"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/hdc_ic_menu_printer"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:text="@string/hdc_menu_ble_mac"
+                    style="@style/hdc_main_menu_text_style"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMenuBleMac"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

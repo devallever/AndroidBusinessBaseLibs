@@ -8,9 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="colorPrimaryDark">#3848A8</color>
-    <color name="colorPrimary">#485ABE</color>
-    <color name="actionBarColor">@color/colorPrimary</color>
+    <color name="hdc_colorPrimaryDark">#3848A8</color>
+    <color name="hdc_colorPrimary">#485ABE</color>
+    <color name="hdc_actionBarColor">@color/hdc_colorPrimary</color>
     <color name="color_EDCCFD">#EDCCFD</color>
     <color name="color_CCF8FD">#CCF8FD</color>
     <color name="color_E5FCFF">#E5FCFF</color>

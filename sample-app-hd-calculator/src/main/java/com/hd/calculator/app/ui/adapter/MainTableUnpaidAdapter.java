@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hd.calculator.app.business.TableManager;
-import com.hd.calculator.app.databinding.ItemMainTableUnpaidBinding;
+import com.hd.calculator.app.databinding.HdcItemMainTableUnpaidBinding;
 import com.hd.calculator.app.ui.item.MainUnpaidTableItem;
 import com.hd.calculator.app.util.MoneyUtils;
 import com.hd.calculator.app.util.TimeUtils;
@@ -33,14 +33,14 @@ public class MainTableUnpaidAdapter extends RecyclerView.Adapter<MainTableUnpaid
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemMainTableUnpaidBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemMainTableUnpaidBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MainUnpaidTableItem item = data.get(position);
-        ItemMainTableUnpaidBinding binding = holder.getBinding();
+        HdcItemMainTableUnpaidBinding binding = holder.getBinding();
         binding.tvTimeAndWaiter.setText(item.getWaiter() + " (" + TimeUtils.formatTimestampToHHmm(item.getTime()) + ")");
         //id
         binding.tvId.setText(TableManager.getIns().getDisplayTableName(item.getTableCode(), item.getOrderType()));
@@ -63,14 +63,14 @@ public class MainTableUnpaidAdapter extends RecyclerView.Adapter<MainTableUnpaid
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final ItemMainTableUnpaidBinding binding;
+        private final HdcItemMainTableUnpaidBinding binding;
 
-        public ViewHolder(ItemMainTableUnpaidBinding binding) {
+        public ViewHolder(HdcItemMainTableUnpaidBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public ItemMainTableUnpaidBinding getBinding() {
+        public HdcItemMainTableUnpaidBinding getBinding() {
             return binding;
         }
     }

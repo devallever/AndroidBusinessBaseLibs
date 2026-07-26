@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hd.calculator.app.databinding.ItemDailyReportBinding;
+import com.hd.calculator.app.databinding.HdcItemDailyReportBinding;
 import com.hd.calculator.app.ui.item.DailyReportItem;
 import com.hd.calculator.app.util.MoneyUtils;
 import com.hd.calculator.app.util.TimeUtils;
@@ -35,13 +35,13 @@ public class DailyReportAdapter extends RecyclerView.Adapter<DailyReportAdapter.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemDailyReportBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemDailyReportBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DailyReportItem item = data.get(position);
-        ItemDailyReportBinding binding = holder.getBinding();
+        HdcItemDailyReportBinding binding = holder.getBinding();
         binding.tvTitle.setText(item.getTitle());
         binding.tvCost.setText(MoneyUtils.formatMoney(item.getCost()));
         binding.tvTime.setText(TimeUtils.formatTimestampToHHmm(item.getTime()));
@@ -60,15 +60,15 @@ public class DailyReportAdapter extends RecyclerView.Adapter<DailyReportAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //binding
-        private final ItemDailyReportBinding binding;
+        private final HdcItemDailyReportBinding binding;
 
-        public ViewHolder(ItemDailyReportBinding binding) {
+        public ViewHolder(HdcItemDailyReportBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
         //getbinding
-        public ItemDailyReportBinding getBinding() {
+        public HdcItemDailyReportBinding getBinding() {
             return binding;
         }
     }

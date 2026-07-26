@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hd.calculator.app.databinding.ItemMainTableBinding;
+import com.hd.calculator.app.databinding.HdcItemMainTableBinding;
 import com.hd.calculator.app.ui.item.MainTableItem;
 import com.hd.calculator.app.util.MoneyUtils;
 import com.hd.calculator.app.util.TimeUtils;
@@ -37,7 +37,7 @@ public class MainTableAdapter extends RecyclerView.Adapter<MainTableAdapter.View
     @NonNull
     @Override
     public MainTableAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemMainTableBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemMainTableBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @SuppressLint("SetTextI18n")
@@ -49,7 +49,7 @@ public class MainTableAdapter extends RecyclerView.Adapter<MainTableAdapter.View
         }
         
         MainTableItem item = data.get(position);
-        ItemMainTableBinding binding = holder.getBinding();
+        HdcItemMainTableBinding binding = holder.getBinding();
         // 显示时间和菜品数量 22:00 (20)
         binding.tvTimeAndCount.setText(TimeUtils.formatTimestampToHHmm(item.getTime()) + " (" + item.getDishesCount() + ")");
         //显示id
@@ -85,14 +85,14 @@ public class MainTableAdapter extends RecyclerView.Adapter<MainTableAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final ItemMainTableBinding binding;
+        private final HdcItemMainTableBinding binding;
 
-        public ViewHolder(ItemMainTableBinding binding) {
+        public ViewHolder(HdcItemMainTableBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public ItemMainTableBinding getBinding() {
+        public HdcItemMainTableBinding getBinding() {
             return binding;
         }
     }

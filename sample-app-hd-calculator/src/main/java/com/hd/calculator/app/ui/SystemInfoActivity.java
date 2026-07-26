@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hd.calculator.app.R;
 import com.hd.calculator.app.base.BaseActivity;
-import com.hd.calculator.app.databinding.ActivitySystemInfoBinding;
+import com.hd.calculator.app.databinding.HdcActivitySystemInfoBinding;
 import com.hd.calculator.app.ui.adapter.SystemInfoAdapter;
 import com.hd.calculator.app.ui.item.SystemInfoItem;
 
@@ -14,7 +14,7 @@ import java.util.List;
 /***
  *
  */
-public class SystemInfoActivity extends BaseActivity<ActivitySystemInfoBinding> {
+public class SystemInfoActivity extends BaseActivity<HdcActivitySystemInfoBinding> {
 
     //list
     private final List<SystemInfoItem> mList = new ArrayList<>();
@@ -22,14 +22,14 @@ public class SystemInfoActivity extends BaseActivity<ActivitySystemInfoBinding> 
     private SystemInfoAdapter mAdapter;
 
     @Override
-    protected ActivitySystemInfoBinding getViewBinding() {
-        return ActivitySystemInfoBinding.inflate(getLayoutInflater());
+    protected HdcActivitySystemInfoBinding getViewBinding() {
+        return HdcActivitySystemInfoBinding.inflate(getLayoutInflater());
     }
 
     @Override
     protected void initView() {
         mBinding.includeTopBar.ivBack.setOnClickListener(v -> finish());
-        mBinding.includeTopBar.tvTitle.setText(getString(R.string.menu_service));
+        mBinding.includeTopBar.tvTitle.setText(getString(R.string.hdc_menu_service));
         initReportDetail();
     }
 

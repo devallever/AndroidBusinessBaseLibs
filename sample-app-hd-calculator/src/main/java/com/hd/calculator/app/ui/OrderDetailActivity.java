@@ -17,7 +17,7 @@ import com.hd.calculator.app.business.TableManager;
 import com.hd.calculator.app.constant.DishesFirstSortType;
 import com.hd.calculator.app.constant.ExtraKey;
 import com.hd.calculator.app.constant.OrderType;
-import com.hd.calculator.app.databinding.ActivityOrderDetailBinding;
+import com.hd.calculator.app.databinding.HdcActivityOrderDetailBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.DishesEntity;
 import com.hd.calculator.app.function.db.entity.operation.OrderDishesRecordEntity;
@@ -44,7 +44,7 @@ import java.util.Map;
 /**
  * 订单详情-待结账
  */
-public class OrderDetailActivity extends BaseActivity<ActivityOrderDetailBinding> {
+public class OrderDetailActivity extends BaseActivity<HdcActivityOrderDetailBinding> {
 
     //list
     private final List<DishesItem> mDishesList = new ArrayList<>();
@@ -69,8 +69,8 @@ public class OrderDetailActivity extends BaseActivity<ActivityOrderDetailBinding
     }
 
     @Override
-    protected ActivityOrderDetailBinding getViewBinding() {
-        return ActivityOrderDetailBinding.inflate(getLayoutInflater());
+    protected HdcActivityOrderDetailBinding getViewBinding() {
+        return HdcActivityOrderDetailBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -381,9 +381,9 @@ public class OrderDetailActivity extends BaseActivity<ActivityOrderDetailBinding
 
     private void updatePrintSwitchUI() {
         if (Config.getPrintSwitch()) {
-            mBinding.ivPrintTicket.setImageResource(R.drawable.ic_choose_dishes_menu_print_ticket_enable);
+            mBinding.ivPrintTicket.setImageResource(R.drawable.hdc_ic_choose_dishes_menu_print_ticket_enable);
         } else {
-            mBinding.ivPrintTicket.setImageResource(R.drawable.ic_choose_dishes_menu_print_ticket_disable);
+            mBinding.ivPrintTicket.setImageResource(R.drawable.hdc_ic_choose_dishes_menu_print_ticket_disable);
         }
     }
 

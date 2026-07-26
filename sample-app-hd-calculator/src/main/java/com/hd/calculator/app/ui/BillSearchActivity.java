@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.hd.calculator.app.R;
 import com.hd.calculator.app.base.BaseActivity;
 import com.hd.calculator.app.constant.DishesFirstSortType;
-import com.hd.calculator.app.databinding.ActivityBillSearchBinding;
+import com.hd.calculator.app.databinding.HdcActivityBillSearchBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.AccountEntity;
 import com.hd.calculator.app.function.db.entity.DishesEntity;
@@ -28,21 +28,21 @@ import java.util.List;
 /***
  * 搜索账单
  */
-public class BillSearchActivity extends BaseActivity<ActivityBillSearchBinding> {
+public class BillSearchActivity extends BaseActivity<HdcActivityBillSearchBinding> {
     //adapter
     private BillManageAdapter mBillManageAdapter;
 
     private final List<BillManageItem> mBillManageList = new ArrayList<>();
 
     @Override
-    protected ActivityBillSearchBinding getViewBinding() {
-        return ActivityBillSearchBinding.inflate(getLayoutInflater());
+    protected HdcActivityBillSearchBinding getViewBinding() {
+        return HdcActivityBillSearchBinding.inflate(getLayoutInflater());
     }
 
     @Override
     protected void initView() {
         mBinding.includeTopBar.ivBack.setOnClickListener(v -> finish());
-        mBinding.includeTopBar.tvTitle.setText(getString(R.string.search_order));
+        mBinding.includeTopBar.tvTitle.setText(getString(R.string.hdc_search_order));
         initOrderList();
         mBinding.etTableCode.addTextChangedListener(new TextWatcher() {
 

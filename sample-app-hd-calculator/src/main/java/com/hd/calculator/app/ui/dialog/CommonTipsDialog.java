@@ -6,9 +6,9 @@ import android.content.DialogInterface;
 import androidx.annotation.NonNull;
 
 import com.hd.calculator.app.base.BaseDialog;
-import com.hd.calculator.app.databinding.DialogCommonTipsBinding;
+import com.hd.calculator.app.databinding.HdcDialogCommonTipsBinding;
 
-public class CommonTipsDialog extends BaseDialog<DialogCommonTipsBinding> {
+public class CommonTipsDialog extends BaseDialog<HdcDialogCommonTipsBinding> {
     //listener
     private final ClickListener clickListener;
     private String mTitle = "";
@@ -48,8 +48,8 @@ public class CommonTipsDialog extends BaseDialog<DialogCommonTipsBinding> {
     }
 
     @Override
-    protected DialogCommonTipsBinding getViewBinding() {
-        return DialogCommonTipsBinding.inflate(getLayoutInflater(), null, false);
+    protected HdcDialogCommonTipsBinding getViewBinding() {
+        return HdcDialogCommonTipsBinding.inflate(getLayoutInflater(), null, false);
     }
 
     @Override

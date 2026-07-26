@@ -15,7 +15,7 @@ import com.hd.calculator.app.constant.DishesFirstSortType;
 import com.hd.calculator.app.constant.ExtraKey;
 import com.hd.calculator.app.constant.OrderType;
 import com.hd.calculator.app.constant.TaxType;
-import com.hd.calculator.app.databinding.ActivityPreivewTicketBinding;
+import com.hd.calculator.app.databinding.HdcActivityPreivewTicketBinding;
 import com.hd.calculator.app.ui.adapter.TicketDishesAdapter;
 import com.hd.calculator.app.ui.adapter.TicketTaxAdapter;
 import com.hd.calculator.app.ui.item.DishesItem;
@@ -30,7 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PreviewTicketActivity extends BaseActivity<ActivityPreivewTicketBinding> {
+public class PreviewTicketActivity extends BaseActivity<HdcActivityPreivewTicketBinding> {
 
     //adapter
     private TicketDishesAdapter mTicketDishesAdapter;
@@ -57,8 +57,8 @@ public class PreviewTicketActivity extends BaseActivity<ActivityPreivewTicketBin
     }
 
     @Override
-    protected ActivityPreivewTicketBinding getViewBinding() {
-        return ActivityPreivewTicketBinding.inflate(getLayoutInflater());
+    protected HdcActivityPreivewTicketBinding getViewBinding() {
+        return HdcActivityPreivewTicketBinding.inflate(getLayoutInflater());
     }
 
     @SuppressLint("SetTextI18n")

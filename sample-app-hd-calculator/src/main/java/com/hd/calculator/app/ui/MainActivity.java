@@ -25,7 +25,7 @@ import com.hd.calculator.app.business.TableManager;
 import com.hd.calculator.app.business.TakeoutTableManager;
 import com.hd.calculator.app.constant.ExtraKey;
 import com.hd.calculator.app.constant.OrderType;
-import com.hd.calculator.app.databinding.ActivityMainBinding;
+import com.hd.calculator.app.databinding.HdcActivityMainBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.AccountEntity;
 import com.hd.calculator.app.function.db.entity.DishesEntity;
@@ -62,7 +62,7 @@ import java.util.Set;
 /***
  * 主界面
  */
-public class MainActivity extends BaseActivity<ActivityMainBinding> {
+public class MainActivity extends BaseActivity<HdcActivityMainBinding> {
     private final List<MainTableItem> mTable1List = new ArrayList<>();
     private final List<MainTableItem> mTable2List = new ArrayList<>();
     private final List<MainUnpaidTableItem> mLokalUnPaidList = new ArrayList<>();
@@ -91,8 +91,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
 
     @Override
-    protected ActivityMainBinding getViewBinding() {
-        return ActivityMainBinding.inflate(getLayoutInflater());
+    protected HdcActivityMainBinding getViewBinding() {
+        return HdcActivityMainBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -920,11 +920,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         if (showUnPaid) {
             mBinding.stateUnpaid.setVisibility(View.VISIBLE);
             mBinding.stateAll.setVisibility(View.GONE);
-            mBinding.ivState.setImageResource(R.drawable.ic_main_table_state_unpaid);
+            mBinding.ivState.setImageResource(R.drawable.hdc_ic_main_table_state_unpaid);
         } else {
             mBinding.stateUnpaid.setVisibility(View.GONE);
             mBinding.stateAll.setVisibility(View.VISIBLE);
-            mBinding.ivState.setImageResource(R.drawable.ic_main_table_state_all);
+            mBinding.ivState.setImageResource(R.drawable.hdc_ic_main_table_state_all);
         }
     }
 
@@ -948,9 +948,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         Config.setLocalMode(localMode);
         if (localMode) {
             //setImageRes
-            mBinding.switchSync.setImageResource(R.drawable.ic_menu_switch_open);
+            mBinding.switchSync.setImageResource(R.drawable.hdc_ic_menu_switch_open);
         } else {
-            mBinding.switchSync.setImageResource(R.drawable.ic_menu_switch_close);
+            mBinding.switchSync.setImageResource(R.drawable.hdc_ic_menu_switch_close);
         }
     }
 

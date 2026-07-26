@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hd.calculator.app.databinding.ItemOrderManageDishesBinding;
+import com.hd.calculator.app.databinding.HdcItemOrderManageDishesBinding;
 import com.hd.calculator.app.ui.item.DishesItem;
 import com.hd.calculator.app.util.MoneyUtils;
 
@@ -25,13 +25,13 @@ public class OrderManageDishesAdapter extends RecyclerView.Adapter<OrderManageDi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemOrderManageDishesBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(HdcItemOrderManageDishesBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DishesItem item = data.get(position);
-        ItemOrderManageDishesBinding binding = holder.getBinding();
+        HdcItemOrderManageDishesBinding binding = holder.getBinding();
         binding.tvCount.setText(item.getCount() + "x");
         binding.tvTitle.setText(item.getCode() + " " + item.getName());
         binding.tvCost.setText(MoneyUtils.formatMoney(item.getPrice() * item.getCount()));
@@ -59,14 +59,14 @@ public class OrderManageDishesAdapter extends RecyclerView.Adapter<OrderManageDi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ItemOrderManageDishesBinding binding;
+        public HdcItemOrderManageDishesBinding binding;
 
-        public ViewHolder(ItemOrderManageDishesBinding binding) {
+        public ViewHolder(HdcItemOrderManageDishesBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public ItemOrderManageDishesBinding getBinding() {
+        public HdcItemOrderManageDishesBinding getBinding() {
             return binding;
         }
     }

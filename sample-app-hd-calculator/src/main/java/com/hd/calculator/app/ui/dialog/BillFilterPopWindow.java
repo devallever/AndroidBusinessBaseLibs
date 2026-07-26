@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hd.calculator.app.MyApp;
 import com.hd.calculator.app.base.BasePopWindow;
-import com.hd.calculator.app.databinding.PopOrderFilterBinding;
+import com.hd.calculator.app.databinding.HdcPopOrderFilterBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.AccountEntity;
 import com.hd.calculator.app.ui.adapter.OrderFilterAdapter;
@@ -18,7 +18,7 @@ import com.hd.calculator.app.util.ThreadUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BillFilterPopWindow extends BasePopWindow<PopOrderFilterBinding> {
+public class BillFilterPopWindow extends BasePopWindow<HdcPopOrderFilterBinding> {
 
     //adapter
     private OrderFilterAdapter mBillFilterAdapter;
@@ -39,8 +39,8 @@ public class BillFilterPopWindow extends BasePopWindow<PopOrderFilterBinding> {
     }
 
     @Override
-    public PopOrderFilterBinding intBinding() {
-        return PopOrderFilterBinding.inflate(LayoutInflater.from(context));
+    public HdcPopOrderFilterBinding intBinding() {
+        return HdcPopOrderFilterBinding.inflate(LayoutInflater.from(context));
     }
 
     @Override

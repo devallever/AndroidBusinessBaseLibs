@@ -5,9 +5,9 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.hd.calculator.app.base.BaseDialog;
-import com.hd.calculator.app.databinding.DialogRestoreTableUsedTipsBinding;
+import com.hd.calculator.app.databinding.HdcDialogRestoreTableUsedTipsBinding;
 
-public class RestoreTableUsedTipsDialog extends BaseDialog<DialogRestoreTableUsedTipsBinding> {
+public class RestoreTableUsedTipsDialog extends BaseDialog<HdcDialogRestoreTableUsedTipsBinding> {
 
     private final OptionClickListener clickListener;
 
@@ -17,8 +17,8 @@ public class RestoreTableUsedTipsDialog extends BaseDialog<DialogRestoreTableUse
     }
 
     @Override
-    protected DialogRestoreTableUsedTipsBinding getViewBinding() {
-        return DialogRestoreTableUsedTipsBinding.inflate(getLayoutInflater());
+    protected HdcDialogRestoreTableUsedTipsBinding getViewBinding() {
+        return HdcDialogRestoreTableUsedTipsBinding.inflate(getLayoutInflater());
     }
 
     @Override

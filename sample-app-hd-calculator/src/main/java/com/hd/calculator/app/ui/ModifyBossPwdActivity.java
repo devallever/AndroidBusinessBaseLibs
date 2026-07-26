@@ -6,14 +6,14 @@ import android.content.Intent;
 import com.hd.calculator.app.R;
 import com.hd.calculator.app.base.BaseActivity;
 import com.hd.calculator.app.constant.ExtraKey;
-import com.hd.calculator.app.databinding.ActivityModifyBossPwdBinding;
+import com.hd.calculator.app.databinding.HdcActivityModifyBossPwdBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.AccountEntity;
 import com.hd.calculator.app.util.StringUtils;
 import com.hd.calculator.app.util.ThreadUtils;
 import com.hd.calculator.app.util.ToastUtils;
 
-public class ModifyBossPwdActivity extends BaseActivity<ActivityModifyBossPwdBinding> {
+public class ModifyBossPwdActivity extends BaseActivity<HdcActivityModifyBossPwdBinding> {
 
     AccountEntity bossAccount;
 
@@ -23,15 +23,15 @@ public class ModifyBossPwdActivity extends BaseActivity<ActivityModifyBossPwdBin
     }
 
     @Override
-    protected ActivityModifyBossPwdBinding getViewBinding() {
-        return ActivityModifyBossPwdBinding.inflate(getLayoutInflater());
+    protected HdcActivityModifyBossPwdBinding getViewBinding() {
+        return HdcActivityModifyBossPwdBinding.inflate(getLayoutInflater());
     }
 
     @Override
     protected void initView() {
         //back
         mBinding.includeTopBar.ivBack.setOnClickListener(v -> finish());
-        mBinding.includeTopBar.tvTitle.setText(getString(R.string.modify_pin_title));
+        mBinding.includeTopBar.tvTitle.setText(getString(R.string.hdc_modify_pin_title));
 
         mBinding.btnOk.setOnClickListener(v -> {
             handleModifyPwd();
@@ -56,15 +56,15 @@ public class ModifyBossPwdActivity extends BaseActivity<ActivityModifyBossPwdBin
             String newPwd = mBinding.etNewPin.getText().toString();
             String confirmPwd = mBinding.etNewPinConfirm.getText().toString();
             if (oldPwd.isEmpty()) {
-                ToastUtils.show(getString(R.string.old_pin_hint));
+                ToastUtils.show(getString(R.string.hdc_old_pin_hint));
                 return;
             }
             if (newPwd.isEmpty()) {
-                ToastUtils.show(getString(R.string.new_pin_hint));
+                ToastUtils.show(getString(R.string.hdc_new_pin_hint));
                 return;
             }
             if (confirmPwd.isEmpty()) {
-                ToastUtils.show(getString(R.string.new_pin_confirm_hint));
+                ToastUtils.show(getString(R.string.hdc_new_pin_confirm_hint));
                 return;
             }
 

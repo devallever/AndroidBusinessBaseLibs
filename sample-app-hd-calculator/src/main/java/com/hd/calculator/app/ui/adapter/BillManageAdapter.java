@@ -11,27 +11,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.hd.calculator.app.MyApp;
 import com.hd.calculator.app.R;
 import com.hd.calculator.app.constant.OrderType;
-import com.hd.calculator.app.databinding.ItemOrderManageBinding;
+import com.hd.calculator.app.databinding.HdcItemOrderManageBinding;
 import com.hd.calculator.app.ui.item.BillManageItem;
 import com.hd.calculator.app.util.MoneyUtils;
 import com.hd.calculator.app.util.TimeUtils;
 
 import java.util.List;
 
-public class BillManageAdapter extends AbsAdapter<BillManageItem, ItemOrderManageBinding> {
+public class BillManageAdapter extends AbsAdapter<BillManageItem, HdcItemOrderManageBinding> {
 
     public BillManageAdapter(List<BillManageItem> data) {
         super(data);
     }
 
     @Override
-    public ItemOrderManageBinding getBinding(ViewGroup parent) {
-        return ItemOrderManageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+    public HdcItemOrderManageBinding getBinding(ViewGroup parent) {
+        return HdcItemOrderManageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindingViewHolder(BillManageItem item, ItemOrderManageBinding binding, int position) {
+    public void onBindingViewHolder(BillManageItem item, HdcItemOrderManageBinding binding, int position) {
         if (item.getOrderType() == OrderType.ORDER_TYPE_IN_HOUSE) {
             binding.tvTitle.setText("RE-" + item.getBillCode() + "(Tisch" + item.getTableCode() + ")");
         } else {

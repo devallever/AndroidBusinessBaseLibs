@@ -5,9 +5,9 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.hd.calculator.app.base.BaseDialog;
-import com.hd.calculator.app.databinding.DialogTransformTableBinding;
+import com.hd.calculator.app.databinding.HdcDialogTransformTableBinding;
 
-public class TransformTableTipsDialog extends BaseDialog<DialogTransformTableBinding> {
+public class TransformTableTipsDialog extends BaseDialog<HdcDialogTransformTableBinding> {
     //listener
     private final ClickListener clickListener;
 
@@ -17,8 +17,8 @@ public class TransformTableTipsDialog extends BaseDialog<DialogTransformTableBin
     }
 
     @Override
-    protected DialogTransformTableBinding getViewBinding() {
-        return DialogTransformTableBinding.inflate(getLayoutInflater(), null, false);
+    protected HdcDialogTransformTableBinding getViewBinding() {
+        return HdcDialogTransformTableBinding.inflate(getLayoutInflater(), null, false);
     }
 
     @Override

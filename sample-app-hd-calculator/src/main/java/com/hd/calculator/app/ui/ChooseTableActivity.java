@@ -11,8 +11,7 @@ import com.hd.calculator.app.business.AccountManager;
 import com.hd.calculator.app.business.TableManager;
 import com.hd.calculator.app.constant.ExtraKey;
 import com.hd.calculator.app.constant.OrderType;
-import com.hd.calculator.app.databinding.ActivityChooseTableBinding;
-import com.hd.calculator.app.function.UserLog;
+import com.hd.calculator.app.databinding.HdcActivityChooseTableBinding;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.TableEntity;
 import com.hd.calculator.app.function.db.entity.operation.OrderRecordEntity;
@@ -24,7 +23,7 @@ import com.hd.calculator.app.util.ToastUtils;
 /**
  * 转移/创建/拆分/恢复功能选桌
  */
-public class ChooseTableActivity extends BaseActivity<ActivityChooseTableBinding> {
+public class ChooseTableActivity extends BaseActivity<HdcActivityChooseTableBinding> {
 
     //创建
     public static final int FROM_CREATE = 0;
@@ -58,8 +57,8 @@ public class ChooseTableActivity extends BaseActivity<ActivityChooseTableBinding
     }
 
     @Override
-    protected ActivityChooseTableBinding getViewBinding() {
-        return ActivityChooseTableBinding.inflate(getLayoutInflater());
+    protected HdcActivityChooseTableBinding getViewBinding() {
+        return HdcActivityChooseTableBinding.inflate(getLayoutInflater());
     }
 
     @Override
@@ -277,9 +276,9 @@ public class ChooseTableActivity extends BaseActivity<ActivityChooseTableBinding
 
     private void updateFromCreateInputTips() {
         if (mInputText.toString().equals("0")) {
-            mBinding.tvNewOrderTips.setText(getString(R.string.choose_table_from_create_empty_tips));
+            mBinding.tvNewOrderTips.setText(getString(R.string.hdc_choose_table_from_create_empty_tips));
         } else {
-            mBinding.tvNewOrderTips.setText(getString(R.string.choose_table_from_create_inputed));
+            mBinding.tvNewOrderTips.setText(getString(R.string.hdc_choose_table_from_create_inputed));
         }
     }
 
@@ -288,20 +287,20 @@ public class ChooseTableActivity extends BaseActivity<ActivityChooseTableBinding
         //update title
         switch (mFrom) {
             case FROM_CREATE:
-                mBinding.includeTopBar.tvTitle.setText(R.string.choose_table);
+                mBinding.includeTopBar.tvTitle.setText(R.string.hdc_choose_table);
                 mBinding.tvNewOrderTips.setVisibility(View.VISIBLE);
                 mBinding.tvTips.setVisibility(View.GONE);
                 mBinding.tvCurrentTable.setVisibility(View.GONE);
                 break;
             case FROM_TRANSFER:
-                mBinding.includeTopBar.tvTitle.setText(R.string.transform);
+                mBinding.includeTopBar.tvTitle.setText(R.string.hdc_transform);
                 mBinding.tvNewOrderTips.setVisibility(View.GONE);
                 mBinding.tvTips.setVisibility(View.VISIBLE);
                 mBinding.tvCurrentTable.setVisibility(View.VISIBLE);
                 mBinding.tvCurrentTable.setText("Aktuell：Tisch " + mTableCode);
                 break;
             case FROM_RESTORE:
-                mBinding.includeTopBar.tvTitle.setText(R.string.restore_table);
+                mBinding.includeTopBar.tvTitle.setText(R.string.hdc_restore_table);
                 mBinding.tvNewOrderTips.setVisibility(View.GONE);
                 mBinding.tvTips.setVisibility(View.VISIBLE);
                 mBinding.tvCurrentTable.setVisibility(View.VISIBLE);
@@ -321,11 +320,11 @@ public class ChooseTableActivity extends BaseActivity<ActivityChooseTableBinding
         if (mResultTableCode == 0) {
             mBinding.btnOk.setEnabled(false);
             //setBackgroundResource
-            mBinding.btnOk.setBackgroundResource(R.drawable.shape_gray_r45);
+            mBinding.btnOk.setBackgroundResource(R.drawable.hdc_shape_gray_r45);
         } else {
             mBinding.btnOk.setEnabled(true);
             //setBackgroundResource
-            mBinding.btnOk.setBackgroundResource(R.drawable.shape_green_r45);
+            mBinding.btnOk.setBackgroundResource(R.drawable.hdc_shape_green_r45);
         }
     }
 }

@@ -4,13 +4,13 @@ import android.annotation.SuppressLint;
 
 import com.hd.calculator.app.base.BaseActivity;
 import com.hd.calculator.app.business.Config;
-import com.hd.calculator.app.databinding.ActivityBleMacSettingBinding;
+import com.hd.calculator.app.databinding.HdcActivityBleMacSettingBinding;
 import com.hd.calculator.app.util.ToastUtils;
 
-public class BleMacAddressSettingActivity extends BaseActivity<ActivityBleMacSettingBinding> {
+public class BleMacAddressSettingActivity extends BaseActivity<HdcActivityBleMacSettingBinding> {
     @Override
-    protected ActivityBleMacSettingBinding getViewBinding() {
-        return ActivityBleMacSettingBinding.inflate(getLayoutInflater());
+    protected HdcActivityBleMacSettingBinding getViewBinding() {
+        return HdcActivityBleMacSettingBinding.inflate(getLayoutInflater());
     }
 
     @SuppressLint("SetTextI18n")
