@@ -23,6 +23,10 @@ android {
 }
 
 dependencies {
+    val aarList = mutableListOf(
+        "ePOS2.jar"
+    )
+    implementation(fileTree(mapOf("dir" to "libs", "include" to aarList)))
     implementation(project(":sample-common"))
     implementation(libs.androidx.cardview)
 

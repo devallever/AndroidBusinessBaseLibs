@@ -16,12 +16,10 @@ import com.hd.calculator.app.constant.OrderType;
 import com.hd.calculator.app.constant.PayType;
 import com.hd.calculator.app.constant.log.ActionType;
 import com.hd.calculator.app.databinding.ActivityPayConfirmBinding;
-import com.hd.calculator.app.function.UserLog;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.operation.BillDishesRecordEntity;
 import com.hd.calculator.app.function.db.entity.operation.BillRecordEntity;
 import com.hd.calculator.app.function.db.entity.operation.OrderDishesRecordEntity;
-import com.hd.calculator.app.util.EventUtils;
 import com.hd.calculator.app.util.GsonUtils;
 import com.hd.calculator.app.util.LogUtils;
 import com.hd.calculator.app.util.MoneyUtils;
@@ -270,8 +268,6 @@ public class PayConfirmActivity extends BaseActivity<ActivityPayConfirmBinding> 
                 printAllBillRecord();
             }
 
-            // 添加删除订单日志
-            EventUtils.logDeleteOrderEvent(mOrderId, "订单支付成功后删除订单");
             //删除订单
             DataBaseRepository.getInstance().deleteOrderByOrderId(mOrderId);
 

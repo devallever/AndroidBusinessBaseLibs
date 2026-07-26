@@ -18,7 +18,6 @@ import com.hd.calculator.app.function.db.entity.TableEntity;
 import com.hd.calculator.app.function.db.entity.operation.OrderRecordEntity;
 import com.hd.calculator.app.constant.log.ActionType;
 import com.hd.calculator.app.ui.dialog.RestoreTableUsedTipsDialog;
-import com.hd.calculator.app.util.EventUtils;
 import com.hd.calculator.app.util.ThreadUtils;
 import com.hd.calculator.app.util.ToastUtils;
 
@@ -178,8 +177,6 @@ public class ChooseTableActivity extends BaseActivity<ActivityChooseTableBinding
                                     DataBaseRepository.getInstance().updateOrderDishes(orderDishesRecordEntity);
                                 });
                                 TableManager.getIns().postOrderRecord(mResultTableCode, ActionType.TRANSFER, false, null);
-                                // 添加删除订单日志
-                                EventUtils.logDeleteOrderEvent(mOrderId, "换桌操作后删除原桌订单");
                                 //2. 删除旧号桌的订单(目前先删除，后期可能只改变状态)
                                 DataBaseRepository.getInstance().deleteOrderByOrderId(mOrderId);
                                 TableManager.getIns().postOrderRecord(mTableCode,  ActionType.TRANSFER, false, null);
@@ -199,8 +196,6 @@ public class ChooseTableActivity extends BaseActivity<ActivityChooseTableBinding
                                     DataBaseRepository.getInstance().updateOrderDishes(oldDishes);
                                 });
                                 TableManager.getIns().postOrderRecord(mResultTableCode,  ActionType.TRANSFER, false, null);
-                                // 添加删除订单日志
-                                EventUtils.logDeleteOrderEvent(mOrderId, "换桌到空桌后删除原桌订单");
                                 //3. 删除旧号桌的订单(目前先删除，后期可能只改变状态)
                                 DataBaseRepository.getInstance().deleteOrderByOrderId(mOrderId);
                                 TableManager.getIns().postOrderRecord(mTableCode,  ActionType.TRANSFER, false, null);

@@ -18,7 +18,6 @@ import com.hd.calculator.app.constant.DishesFirstSortType;
 import com.hd.calculator.app.constant.ExtraKey;
 import com.hd.calculator.app.constant.OrderType;
 import com.hd.calculator.app.databinding.ActivityOrderDetailBinding;
-import com.hd.calculator.app.function.UserLog;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.DishesEntity;
 import com.hd.calculator.app.function.db.entity.operation.OrderDishesRecordEntity;
@@ -31,7 +30,6 @@ import com.hd.calculator.app.ui.adapter.OrderDetailDishesAdapter;
 import com.hd.calculator.app.ui.dialog.CommonTipsDialog;
 import com.hd.calculator.app.ui.dialog.UnOrderTipsDialog;
 import com.hd.calculator.app.ui.item.DishesItem;
-import com.hd.calculator.app.util.EventUtils;
 import com.hd.calculator.app.util.GsonUtils;
 import com.hd.calculator.app.util.LogUtils;
 import com.hd.calculator.app.util.MoneyUtils;
@@ -472,15 +470,11 @@ public class OrderDetailActivity extends BaseActivity<ActivityOrderDetailBinding
 
                             //新增一条取消记录，
                             DataBaseRepository.getInstance().addReduceDishesRecord(reduceDishesRecordEntity);
-                            // 添加删除订单菜品日志
-                            EventUtils.logDeleteOrderEvent(mOrderId, "菜品数量减少至0删除菜品");
                             //删除订单菜牌这条记录，根据id
                             DataBaseRepository.getInstance().deleteOrderDishesById(dishesItem.getId());
 
                             orderWithDishesRef = DataBaseRepository.getInstance().getOrderById(mOrderId);
                             if (orderWithDishesRef.getDishesList().isEmpty()) {
-                                // 添加删除订单日志
-                                EventUtils.logDeleteOrderEvent(mOrderId, "所有菜品清空后删除订单");
                                 //删除订单
                                 DataBaseRepository.getInstance().deleteOrderByOrderId(mOrderId);
                                 finish();

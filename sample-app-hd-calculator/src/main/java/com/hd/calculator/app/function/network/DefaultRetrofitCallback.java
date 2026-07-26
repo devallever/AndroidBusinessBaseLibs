@@ -1,7 +1,6 @@
 package com.hd.calculator.app.function.network;
 
 import com.hd.calculator.app.util.ThreadUtils;
-import com.tencent.bugly.crashreport.CrashReport;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,6 +39,5 @@ public class DefaultRetrofitCallback<R> implements Callback<R> {
                 }
             }
         });
-        CrashReport.postCatchedException(t);
     }
 }

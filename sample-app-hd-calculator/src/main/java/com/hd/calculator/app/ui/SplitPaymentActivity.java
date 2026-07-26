@@ -15,16 +15,13 @@ import com.hd.calculator.app.constant.ExtraKey;
 import com.hd.calculator.app.constant.OrderType;
 import com.hd.calculator.app.constant.log.ActionType;
 import com.hd.calculator.app.databinding.ActivitySplitPaymentBinding;
-import com.hd.calculator.app.function.UserLog;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.DishesEntity;
 import com.hd.calculator.app.function.db.entity.operation.OrderDishesRecordEntity;
 import com.hd.calculator.app.function.db.entity.operation.OrderRecordEntity;
 import com.hd.calculator.app.function.db.entity.operation.OrderWithDishesRef;
-import com.hd.calculator.app.ui.adapter.ItemClickListener;
 import com.hd.calculator.app.ui.adapter.SplitPaymentDishesAdapter;
 import com.hd.calculator.app.ui.item.DishesItem;
-import com.hd.calculator.app.util.EventUtils;
 import com.hd.calculator.app.util.MoneyUtils;
 import com.hd.calculator.app.util.ThreadUtils;
 
@@ -152,16 +149,12 @@ public class SplitPaymentActivity extends BaseActivity<ActivitySplitPaymentBindi
                     //更新数量
                     DataBaseRepository.getInstance().updateOrderDishes(dishesRecord);
                 } else {
-                    // 添加删除订单菜品日志
-                    EventUtils.logDeleteOrderEvent(mOrderId, "分账时删除转移的菜品");
                     //删除记录
                     DataBaseRepository.getInstance().deleteOrderDishesById(dishesRecord.getId());
                 }
             }
             TableManager.getIns().postOrderRecord(mTableCode, ActionType.SPLIT_BILL, false, () -> {
                 if (mFromList.isEmpty()) {
-                    // 添加删除订单日志
-                    EventUtils.logDeleteOrderEvent(mOrderId, "分账后原订单菜品为空删除订单");
                     //删除订单
                     DataBaseRepository.getInstance().deleteOrderByOrderId(mOrderId);
                 }

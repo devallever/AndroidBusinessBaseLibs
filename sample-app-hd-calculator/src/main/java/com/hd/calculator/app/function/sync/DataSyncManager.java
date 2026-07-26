@@ -1,6 +1,5 @@
 package com.hd.calculator.app.function.sync;
 
-import com.hd.calculator.app.BuildConfig;
 import com.hd.calculator.app.business.TaxManager;
 import com.hd.calculator.app.constant.DishesSortLevelType;
 import com.hd.calculator.app.constant.TaxType;
@@ -21,6 +20,8 @@ import com.hd.calculator.app.util.ThreadUtils;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import app.allever.android.lib.core.app.App;
 
 public class DataSyncManager {
     public static DataSyncManager getInstance() {
@@ -88,7 +89,7 @@ public class DataSyncManager {
                     finishTask.run();
                 }
 
-                if (BuildConfig.DEBUG) {
+                if (App.Companion.getDEBUG()) {
                     printAllAccount();
                 }
             });
@@ -195,7 +196,7 @@ public class DataSyncManager {
                     });
                 });
 
-                if (BuildConfig.DEBUG) {
+                if (App.Companion.getDEBUG()) {
                     printAllDishesSort();
                     printAllDishes();
                 }
@@ -241,7 +242,7 @@ public class DataSyncManager {
 
                 TaxManager.getIns().updateTaxData();
 
-                if (BuildConfig.DEBUG) {
+                if (App.Companion.getDEBUG()) {
                     printAllTax();
                 }
 
@@ -313,7 +314,7 @@ public class DataSyncManager {
                 DataBaseRepository.getInstance().addTable(tableEntity);
             }
 
-            if (BuildConfig.DEBUG) {
+            if (App.Companion.getDEBUG()) {
                 printAllTable();
             }
         });

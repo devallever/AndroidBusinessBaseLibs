@@ -26,7 +26,6 @@ import com.hd.calculator.app.business.TakeoutTableManager;
 import com.hd.calculator.app.constant.ExtraKey;
 import com.hd.calculator.app.constant.OrderType;
 import com.hd.calculator.app.databinding.ActivityMainBinding;
-import com.hd.calculator.app.function.UserLog;
 import com.hd.calculator.app.function.db.DataBaseRepository;
 import com.hd.calculator.app.function.db.entity.AccountEntity;
 import com.hd.calculator.app.function.db.entity.DishesEntity;
@@ -47,13 +46,11 @@ import com.hd.calculator.app.ui.dialog.DeleteTableOrderTipsDialog;
 import com.hd.calculator.app.ui.dialog.TransformTableTipsDialog;
 import com.hd.calculator.app.ui.item.MainTableItem;
 import com.hd.calculator.app.ui.item.MainUnpaidTableItem;
-import com.hd.calculator.app.util.EventUtils;
 import com.hd.calculator.app.util.GsonUtils;
 import com.hd.calculator.app.util.IntervalTimer;
 import com.hd.calculator.app.util.LogUtils;
 import com.hd.calculator.app.util.ThreadUtils;
 import com.hd.calculator.app.util.ToastUtils;
-import com.tencent.bugly.crashreport.CrashReport;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -411,9 +408,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                     for (OrderDishesRecordEntity orderDishesRecordEntity : orderDishesRecordEntities) {
                         int count = orderDishesRecordEntity.getCount();
                         DishesEntity dishes = DataBaseRepository.getInstance().getDishesByCode(orderDishesRecordEntity.getDishesCode());
-                        if (dishes == null) {
-                            CrashReport.postCatchedException(new Exception("Dishes is null: dishesCode = " + orderDishesRecordEntity.getDishesCode()));
-                        }
                         float price = 0;
                         if (dishes != null) {
                             price = dishes.getPrice();
@@ -692,8 +686,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 if (onlineOrderEntity == null) {
                     //占用，但是没数据
                     if (dbOrder != null) {
-                        // 添加删除订单日志
-                        EventUtils.logDeleteOrderEvent(dbOrder.getId(), "桌台占用无数据删除订单");
                         DataBaseRepository.getInstance().deleteOrderByOrderId(dbOrder.getId());
                         needUpdateMainTableList = true;
                     }
@@ -720,7 +712,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                         List<OrderDishesRecordEntity> dbOrderDishesRecordEntities = DataBaseRepository.getInstance().getOrderDishesListByOrderId(dbOrder.getId());
                         for (OrderDishesRecordEntity dbOrderDishesRecordEntity : dbOrderDishesRecordEntities) {
                             // 添加删除订单菜品日志
-                            EventUtils.logDeleteOrderEvent(dbOrder.getId(), "同用户操作更新订单删除旧菜品");
                             DataBaseRepository.getInstance().deleteOrderDishesById(dbOrderDishesRecordEntity.getId());
                             needUpdateMainTableList = true;
                         }
@@ -866,9 +857,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 if (item.isUsed()) {
                     ThreadUtils.runOnIoThreadDelayed(() -> {
                         List<OrderDishesRecordEntity> list = DataBaseRepository.getInstance().getOrderDishesListByOrderId(item.getOrderId());
-                        if (list.isEmpty()) {
-                            EventUtils.logExceptionOrderId(item.getOrderId());
-                        }
                     });
                     //detail
                     OrderDetailActivity.startActivity(MainActivity.this, item.getOrderId(), OrderType.ORDER_TYPE_IN_HOUSE, item.getTableCode());
@@ -1118,8 +1106,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 printAllBillRecord();
             }
 
-            // 添加删除订单日志
-            EventUtils.logDeleteOrderEvent(item.getOrderId(), "订单结算后删除订单");
             DataBaseRepository.getInstance().deleteOrderByOrderId(item.getOrderId());
 
             TableManager.getIns().postOrderRecord(item.getTableCode(), ActionType.DELETE_ORDER, false, () -> {
@@ -1133,7 +1119,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     private void deleteTodayBeforeData(Runnable finish) {
         ThreadUtils.runOnIoThreadDelayed(() -> {
             //deleteOrder
-            EventUtils.logDeleteOrderEvent(0, "删除今日之前所有数据");
             DataBaseRepository.getInstance().deleteTodayBeforeOrder();
             //deleteBill
             DataBaseRepository.getInstance().deleteTodayBeforeBill();
@@ -1148,7 +1133,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     private void deleteTodayData(Runnable finish) {
         ThreadUtils.runOnIoThreadDelayed(() -> {
             //deleteOrder
-            EventUtils.logDeleteOrderEvent(0, "删除今日所有数据");
             DataBaseRepository.getInstance().deleteTodayOrder();
             //deleteBill
             DataBaseRepository.getInstance().deleteTodayBill();

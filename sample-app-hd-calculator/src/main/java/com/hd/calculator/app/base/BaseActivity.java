@@ -2,12 +2,13 @@ package com.hd.calculator.app.base;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewbinding.ViewBinding;
 
 import com.hd.calculator.app.util.LogUtils;
 
-public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActivity {
+import app.allever.android.lib.core.base.AbstractActivity;
+
+public abstract class BaseActivity<VB extends ViewBinding> extends AbstractActivity {
     protected VB mBinding;
 
     @Override
