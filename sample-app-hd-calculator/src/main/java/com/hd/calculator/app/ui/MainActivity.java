@@ -75,12 +75,6 @@ public class MainActivity extends BaseActivity<HdcActivityMainBinding> {
     private boolean mShowUnPaid = false;
     private List<OrderWithDishesRef> mAllOrderRecord = new ArrayList<>();
 
-    private IntervalTimer mTimerTask;
-
-    private IntervalTimer mCheckLocalUnloadTableDataTimerTask;
-
-    private IntervalTimer mUpdateAccountTimerTask;
-
     private MainTableItem mSelectTableItem;
     private boolean mSelectTableItemFromInputBossPwd = false;
 
@@ -96,33 +90,12 @@ public class MainActivity extends BaseActivity<HdcActivityMainBinding> {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (mUpdateAccountTimerTask != null) {
-            mUpdateAccountTimerTask.start(3, () -> {
-                DataSyncManager.getInstance().fetchAccountData( () -> {
-                    if (AccountManager.getIns().getAccount() != null) {
-                        long userId = AccountManager.getIns().getAccount().getUserId();
-                        AccountEntity accountEntity = DataBaseRepository.getInstance().getAccountByUserId(userId);
-                        if (accountEntity != null) {
-                            AccountManager.getIns().updateAccount(accountEntity);
-                        }
-                    }
-                });
-            });
-        }
-    }
-
-    @Override
     protected void initView() {
         if (mAccount == null) {
             ToastUtils.show("Login first");
             finish();
             return;
         }
-        mTimerTask = new IntervalTimer();
-        mCheckLocalUnloadTableDataTimerTask = new IntervalTimer();
-        mUpdateAccountTimerTask = new IntervalTimer();
         PrinterManager.getInstance().init(this);
 
         initMainAllTable();
@@ -154,88 +127,6 @@ public class MainActivity extends BaseActivity<HdcActivityMainBinding> {
             TableManager.getIns().unLockTableUse(mSelectTableItem.getTableCode(), null);
             mSelectTableItem = null;
         }
-        mTimerTask.start(2, () -> {
-//            LogUtils.log("timer task ");
-            TableManager.getIns().getUseTableList(data -> {
-//                LogUtils.log("getUseTableList = " + GsonUtils.toJson(data));
-                if (data.isEmpty()) {
-                    return;
-                }
-
-                ThreadUtils.runOnIoThreadDelayed(() -> {
-                    insertTableUseData(data);
-//                    syncTableData(data);
-                    LogUtils.log("needUpdateMainTableList = " + needUpdateMainTableList);
-                    if (needUpdateMainTableList) {
-                        initAllData();
-                        needUpdateMainTableList = false;
-                    }
-                    Map<Integer, OrderWithDishesRef> usedTableOrderMap = new HashMap<>();
-                    data.forEach((key, value) -> {
-//                        if (value.getTableData().getOrder() != null) {
-                            usedTableOrderMap.put(key, value.getTableData().getOrder());
-//                        }
-                    });
-//                    replaceTableUseData(usedTableOrderMap, mTable1List);
-//                    runOnUiThread(() -> mTable1Adapter.notifyDataSetChanged());
-//                    replaceTableUseData(usedTableOrderMap, mTable2List);
-//                    runOnUiThread(() -> mTable2Adapter.notifyDataSetChanged());
-                });
-            });
-        });
-
-        mCheckLocalUnloadTableDataTimerTask.start(10, () -> {
-            if (TableManager.getIns().checkHasLocalUnloadTableData()) {
-                runOnUiThread(() -> {
-                    if (!mIgnoreUnloadLocalTableData) {
-                        initUnLoadLocalTableDataDialog();
-                        mUnLoadLocalTableDataDialog.setMessage("有未上传数据, 是否上传或舍弃\n" + TableManager.getIns().getLocalUnloadTableDataTableCode());
-                        mUnLoadLocalTableDataDialog.show();
-                    }
-                });
-            } else {
-                LogUtils.log("没有未上传数据");
-            }
-        });
-    }
-
-    private CommonTipsDialog mUnLoadLocalTableDataDialog;
-    private boolean mIgnoreUnloadLocalTableData = false;
-    private void initUnLoadLocalTableDataDialog() {
-        mIgnoreUnloadLocalTableData = false;
-        if (mUnLoadLocalTableDataDialog != null) {
-            return;
-        }
-        mUnLoadLocalTableDataDialog = new CommonTipsDialog(this, "有未上传数据, 是否上传或舍弃", new CommonTipsDialog.ClickListener() {
-            @Override
-            public void onClickOk(DialogInterface dialog) {
-                //上传
-                TableManager.getIns().uploadLocalUnloadTableData();
-                dialog.dismiss();
-            }
-
-            @Override
-            public void onClickCancel(DialogInterface dialog) {
-                //舍弃
-                TableManager.getIns().removeAllLocalUnloadTableData();
-                dialog.dismiss();
-            }
-
-            @Override
-            public void onClickClose(DialogInterface dialog) {
-//                mUnLoadLocalTableDataDialog = null;
-//                mIgnoreUnloadLocalTableData = true;
-            }
-        });
-        mUnLoadLocalTableDataDialog.setCancelable(false);
-        mUnLoadLocalTableDataDialog.setBtnText("上传", "舍弃");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mTimerTask.stop();
-        mCheckLocalUnloadTableDataTimerTask.stop();
     }
 
     private void initAllData() {
@@ -449,9 +340,6 @@ public class MainActivity extends BaseActivity<HdcActivityMainBinding> {
     protected void onDestroy() {
         super.onDestroy();
         PrinterManager.getInstance().release();
-        if (mUpdateAccountTimerTask != null) {
-            mUpdateAccountTimerTask.stop();
-        }
     }
 
     private void initListener() {

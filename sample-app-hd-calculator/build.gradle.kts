@@ -32,15 +32,6 @@ dependencies {
 
     implementation ("com.google.android.gms:play-services-location:17.1.0")
 
-    // okhttp
-    implementation(libs.okhttp)
-    implementation(libs.okhttp.logging.interceptor)
-
-    // retrofit
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.retrofit.converter.scalars)
-
     //room
     implementation ("androidx.room:room-common:2.6.1")
     implementation(libs.androidx.room.runtime)

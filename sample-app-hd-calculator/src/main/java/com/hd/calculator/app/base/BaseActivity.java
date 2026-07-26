@@ -17,6 +17,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AbstractActiv
         super.onCreate(savedInstanceState);
         mBinding = getViewBinding();
         setContentView(mBinding.getRoot());
+        adaptStatusBar(mBinding.getRoot());
         initView();
         initData();
     }

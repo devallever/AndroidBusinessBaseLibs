@@ -1,0 +1,542 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 1,
+      "tableName": "T-1",
+      "tableNo": 1,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 2,
+      "tableName": "T-2",
+      "tableNo": 2,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 3,
+      "tableName": "T-3",
+      "tableNo": 3,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 4,
+      "tableName": "T-4",
+      "tableNo": 4,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 5,
+      "tableName": "T-5",
+      "tableNo": 5,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 6,
+      "tableName": "T-6",
+      "tableNo": 6,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 7,
+      "tableName": "T-7",
+      "tableNo": 7,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 8,
+      "tableName": "T-8",
+      "tableNo": 8,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-08-16 22:03:30",
+      "id": 145,
+      "tableName": "T-9",
+      "tableNo": 9,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 11,
+      "tableName": "T-11",
+      "tableNo": 11,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 12,
+      "tableName": "T-12",
+      "tableNo": 12,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 13,
+      "tableName": "T-13",
+      "tableNo": 13,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 14,
+      "tableName": "T-14",
+      "tableNo": 14,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 15,
+      "tableName": "T-15",
+      "tableNo": 15,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 16,
+      "tableName": "T-16",
+      "tableNo": 16,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 17,
+      "tableName": "T-17",
+      "tableNo": 17,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 18,
+      "tableName": "T-18",
+      "tableNo": 18,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 19,
+      "tableName": "T-19",
+      "tableNo": 19,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 21,
+      "tableName": "T-21",
+      "tableNo": 21,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 22,
+      "tableName": "T-22",
+      "tableNo": 22,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 23,
+      "tableName": "T-23",
+      "tableNo": 23,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 24,
+      "tableName": "T-24",
+      "tableNo": 24,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 25,
+      "tableName": "T-25",
+      "tableNo": 25,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 26,
+      "tableName": "T-26",
+      "tableNo": 26,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 27,
+      "tableName": "T-27",
+      "tableNo": 27,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 28,
+      "tableName": "T-28",
+      "tableNo": 28,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 31,
+      "tableName": "T-31",
+      "tableNo": 31,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 32,
+      "tableName": "T-32",
+      "tableNo": 32,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 33,
+      "tableName": "T-33",
+      "tableNo": 33,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 34,
+      "tableName": "T-34",
+      "tableNo": 34,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 35,
+      "tableName": "T-35",
+      "tableNo": 35,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 36,
+      "tableName": "T-36",
+      "tableNo": 36,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 37,
+      "tableName": "T-37",
+      "tableNo": 37,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 38,
+      "tableName": "T-38",
+      "tableNo": 38,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 41,
+      "tableName": "T-41",
+      "tableNo": 41,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 42,
+      "tableName": "T-42",
+      "tableNo": 42,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 43,
+      "tableName": "T-43",
+      "tableNo": 43,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 44,
+      "tableName": "T-44",
+      "tableNo": 44,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 45,
+      "tableName": "T-45",
+      "tableNo": 45,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 46,
+      "tableName": "T-46",
+      "tableNo": 46,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 47,
+      "tableName": "T-47",
+      "tableNo": 47,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 48,
+      "tableName": "T-48",
+      "tableNo": 48,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 51,
+      "tableName": "T-51",
+      "tableNo": 51,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 52,
+      "tableName": "T-52",
+      "tableNo": 52,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 53,
+      "tableName": "T-53",
+      "tableNo": 53,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 54,
+      "tableName": "T-54",
+      "tableNo": 54,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 55,
+      "tableName": "T-55",
+      "tableNo": 55,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 56,
+      "tableName": "T-56",
+      "tableNo": 56,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 57,
+      "tableName": "T-57",
+      "tableNo": 57,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 58,
+      "tableName": "T-58",
+      "tableNo": 58,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 61,
+      "tableName": "T-61",
+      "tableNo": 61,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 62,
+      "tableName": "T-62",
+      "tableNo": 62,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 63,
+      "tableName": "T-63",
+      "tableNo": 63,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 64,
+      "tableName": "T-64",
+      "tableNo": 64,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 65,
+      "tableName": "T-65",
+      "tableNo": 65,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 66,
+      "tableName": "T-66",
+      "tableNo": 66,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 67,
+      "tableName": "T-67",
+      "tableNo": 67,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 68,
+      "tableName": "T-68",
+      "tableNo": 68,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 71,
+      "tableName": "T-71",
+      "tableNo": 71,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 72,
+      "tableName": "T-72",
+      "tableNo": 72,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 73,
+      "tableName": "T-73",
+      "tableNo": 73,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 74,
+      "tableName": "T-74",
+      "tableNo": 74,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 75,
+      "tableName": "T-75",
+      "tableNo": 75,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 76,
+      "tableName": "T-76",
+      "tableNo": 76,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 77,
+      "tableName": "T-77",
+      "tableNo": 77,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 78,
+      "tableName": "T-78",
+      "tableNo": 78,
+      "updateTime": ""
+    },
+    {
+      "areaId": 1,
+      "createTime": "2025-07-25 00:25:48",
+      "id": 79,
+      "tableName": "T-79",
+      "tableNo": 79,
+      "updateTime": ""
+    }
+  ],
+  "msg": "操作成功"
+}

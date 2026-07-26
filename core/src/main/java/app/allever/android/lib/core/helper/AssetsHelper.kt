@@ -17,6 +17,32 @@ import java.util.WeakHashMap
 object AssetsHelper {
     private val mAssetsRes = WeakHashMap<String, Any>()
 
+    fun getTextFile(context: Context, fileName: String?): String {
+        return try {
+            val stringBuilder = StringBuilder()
+            try {
+                val assetManager = context.assets
+                val bf = BufferedReader(
+                    InputStreamReader(
+                        assetManager.open(
+                            fileName!!
+                        )
+                    )
+                )
+                var line: String?
+                while (bf.readLine().also { line = it } != null) {
+                    stringBuilder.append(line)
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            stringBuilder.toString()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            ""
+        }
+    }
+
     suspend fun getJson(context: Context, fileName: String?): String = withContext(Dispatchers.IO) {
         val stringBuilder = StringBuilder()
         try {

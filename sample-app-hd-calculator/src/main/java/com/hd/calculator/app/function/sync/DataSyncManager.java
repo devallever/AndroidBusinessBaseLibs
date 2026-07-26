@@ -1,5 +1,7 @@
 package com.hd.calculator.app.function.sync;
 
+import androidx.annotation.NonNull;
+
 import com.hd.calculator.app.business.TaxManager;
 import com.hd.calculator.app.constant.DishesSortLevelType;
 import com.hd.calculator.app.constant.TaxType;
@@ -11,17 +13,26 @@ import com.hd.calculator.app.function.db.entity.DishesSortEntity;
 import com.hd.calculator.app.function.db.entity.TableEntity;
 import com.hd.calculator.app.function.db.entity.TaxEntity;
 import com.hd.calculator.app.function.network.NetworkRepository;
+import com.hd.calculator.app.function.network.response.AccountResponse;
+import com.hd.calculator.app.function.network.response.DishesCategoryResponse;
 import com.hd.calculator.app.function.network.response.RateData;
 import com.hd.calculator.app.function.network.response.TableData;
+import com.hd.calculator.app.function.network.response.TableResponse;
+import com.hd.calculator.app.function.network.response.TaxResponse;
 import com.hd.calculator.app.util.GsonUtils;
 import com.hd.calculator.app.util.LogUtils;
 import com.hd.calculator.app.util.ThreadUtils;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import app.allever.android.lib.core.app.App;
+import app.allever.android.lib.core.helper.AssetsHelper;
+import app.allever.android.lib.core.helper.ExecutorHelper;
+import app.allever.android.lib.core.helper.GsonHelper;
+import app.allever.android.lib.core.util.FileUtils;
 
 public class DataSyncManager {
     public static DataSyncManager getInstance() {
@@ -36,87 +47,92 @@ public class DataSyncManager {
     }
 
     public void fetchAccountData(Runnable finishTask) {
-        NetworkRepository.getInstance().getAccountList(data -> {
+        ExecutorHelper.INSTANCE.getCacheExecutor().execute(() -> {
+            String assetsAccountJson = AssetsHelper.INSTANCE.getTextFile(App.context, "hdc_account.json");
+            LogUtils.log("assetsAccountJson = " + assetsAccountJson);
+            AccountResponse data = GsonUtils.fromJson(assetsAccountJson, AccountResponse.class);
+
             if (data.getData().isEmpty()) {
                 return;
             }
+            AccountEntity bossAccount = DataBaseRepository.getInstance().getBossAccount();
             Set<Long> onLineUserIdSet = new HashSet<>();
-            ThreadUtils.runOnIoThreadDelayed(() -> {
-                AccountEntity bossAccount = DataBaseRepository.getInstance().getBossAccount();
-//                DataBaseRepository.getInstance().deleteWaiterAccount();
-                data.getData().forEach(account -> {
-                    onLineUserIdSet.add(account.getId());
-                    AccountEntity entity = DataBaseRepository.getInstance().getAccountByUserId(account.getId());
-                    boolean update = true;
-                    if (entity == null) {
-                        entity = new AccountEntity();
-                        update = false;
-                    }
-                    entity.setUserId(account.getId());
-                    entity.setUserName(account.getUsername());
-                    if (!account.isBoss()) {
+            data.getData().forEach(account -> {
+                onLineUserIdSet.add(account.getId());
+                AccountEntity entity = DataBaseRepository.getInstance().getAccountByUserId(account.getId());
+                boolean update = true;
+                if (entity == null) {
+                    entity = new AccountEntity();
+                    update = false;
+                }
+                entity.setUserId(account.getId());
+                entity.setUserName(account.getUsername());
+                if (!account.isBoss()) {
+                    entity.setPassword(account.getPassword());
+                }
+                entity.setTransTablePermission(account.isMoveTable());
+                entity.setDeleteTablePermission(account.isCancelTable());
+                entity.setRestoreTablePermission(account.isRecoverTable());
+                entity.setCancelOrderPermission(account.isCancelBill());
+                entity.setReduceDishesCountPermission(account.isCancelFoodDrinks());
+                entity.setViewDailyBillPermission(account.isViewDayBill());
+                entity.setLocalModePermission(account.isLocalMode());
+                entity.setBoss(account.isBoss());
+                if (account.isBoss()) {
+                    if (bossAccount == null) {
                         entity.setPassword(account.getPassword());
+                        DataBaseRepository.getInstance().addAccount(entity);
                     }
-                    entity.setTransTablePermission(account.isMoveTable());
-                    entity.setDeleteTablePermission(account.isCancelTable());
-                    entity.setRestoreTablePermission(account.isRecoverTable());
-                    entity.setCancelOrderPermission(account.isCancelBill());
-                    entity.setReduceDishesCountPermission(account.isCancelFoodDrinks());
-                    entity.setViewDailyBillPermission(account.isViewDayBill());
-                    entity.setLocalModePermission(account.isLocalMode());
-                    entity.setBoss(account.isBoss());
-                    if (account.isBoss()) {
-                        if (bossAccount == null) {
-                            entity.setPassword(account.getPassword());
-                            DataBaseRepository.getInstance().addAccount(entity);
-                        }
+                } else {
+                    if (update) {
+                        DataBaseRepository.getInstance().updateAccount(entity);
                     } else {
-                        if (update) {
-                            DataBaseRepository.getInstance().updateAccount(entity);
-                        } else {
-                            DataBaseRepository.getInstance().addAccount(entity);
-                        }
+                        DataBaseRepository.getInstance().addAccount(entity);
                     }
-                });
-
-                for (AccountEntity accountEntity : DataBaseRepository.getInstance().getAccountList()) {
-                    if (!onLineUserIdSet.contains(accountEntity.getUserId())) {
-                        DataBaseRepository.getInstance().deleteAccount(accountEntity.getUserId());
-                    }
-                }
-
-                if (finishTask != null) {
-                    finishTask.run();
-                }
-
-                if (App.Companion.getDEBUG()) {
-                    printAllAccount();
                 }
             });
+
+            for (AccountEntity accountEntity : DataBaseRepository.getInstance().getAccountList()) {
+                if (!onLineUserIdSet.contains(accountEntity.getUserId())) {
+                    DataBaseRepository.getInstance().deleteAccount(accountEntity.getUserId());
+                }
+            }
+
+            if (finishTask != null) {
+                finishTask.run();
+            }
+
+            if (App.Companion.getDEBUG()) {
+                printAllAccount();
+            }
         });
     }
 
     private void fetchTableData() {
-        int zone1 = ZoneType.ZONE_TYPE_ZONE_1;
-        NetworkRepository.getInstance().getTableList(zone1, data -> {
+        ExecutorHelper.INSTANCE.getCacheExecutor().execute(() -> {
+            int zone1 = ZoneType.ZONE_TYPE_ZONE_1;
+            String assetsTable1Json = AssetsHelper.INSTANCE.getTextFile(App.context, "hdc_table1.json");
+            LogUtils.log("assetsTable1Json = " + assetsTable1Json);
+            TableResponse data = GsonUtils.fromJson(assetsTable1Json, TableResponse.class);
+
             if (data.getData().isEmpty()) {
                 return;
             }
-            ThreadUtils.runOnIoThreadDelayed(() -> {
-                DataBaseRepository.getInstance().deleteTableByZone(zone1);
-                handleAddTableData(data.getData(), zone1);
-            });
+            DataBaseRepository.getInstance().deleteTableByZone(zone1);
+            handleAddTableData(data.getData(), zone1);
         });
 
-        int zone2 = ZoneType.ZONE_TYPE_ZONE_2;
-        NetworkRepository.getInstance().getTableList(zone2, data -> {
+        ExecutorHelper.INSTANCE.getCacheExecutor().execute(() -> {
+            int zone2 = ZoneType.ZONE_TYPE_ZONE_2;
+            String assetsTable2Json = AssetsHelper.INSTANCE.getTextFile(App.context, "hdc_table2.json");
+            LogUtils.log("assetsTable2Json = " + assetsTable2Json);
+            TableResponse data = GsonUtils.fromJson(assetsTable2Json, TableResponse.class);
+
             if (data.getData().isEmpty()) {
                 return;
             }
-            ThreadUtils.runOnIoThreadDelayed(() -> {
-                DataBaseRepository.getInstance().deleteTableByZone(zone2);
-                handleAddTableData(data.getData(), zone2);
-            });
+            DataBaseRepository.getInstance().deleteTableByZone(zone2);
+            handleAddTableData(data.getData(), zone2);
         });
     }
 
@@ -134,9 +150,13 @@ public class DataSyncManager {
     }
 
     private void fetchDishesData() {
-        NetworkRepository.getInstance().getDishesCategoryStructure(data -> {
+        ExecutorHelper.INSTANCE.getCacheExecutor().execute(() -> {
+            String assetsDishesJson = AssetsHelper.INSTANCE.getTextFile(App.context, "hdc_dishes.json");
+            LogUtils.log("assetsDishesJson = " + assetsDishesJson);
+            DishesCategoryResponse data = GsonUtils.fromJson(assetsDishesJson, DishesCategoryResponse.class);
+
             if (data.getData().isEmpty()) {
-//                LogUtils.log("getDishesCategoryStructure error");
+                LogUtils.log("getDishesCategoryStructure error");
                 return;
             }
             ThreadUtils.runOnIoThreadDelayed(() -> {
@@ -205,48 +225,63 @@ public class DataSyncManager {
         });
     }
 
+    private void saveResponse(Object data, String fileName) {
+        String path = App.context.getExternalCacheDir() + File.separator + fileName;
+        boolean result = FileUtils.saveStringToFile(GsonHelper.INSTANCE.toJson(data),  path);
+        if (result) {
+            LogUtils.log("保存成功");
+        } else {
+            LogUtils.log("保存失败");
+        }
+    }
+
     private void fetchTaxData() {
-        NetworkRepository.getInstance().getTaxData(data -> {
-            ThreadUtils.runOnIoThreadDelayed(() -> {
-                //deleteALLtAX
-                DataBaseRepository.getInstance().deleteAllTax();
+        ExecutorHelper.INSTANCE.getCacheExecutor().execute(() -> {
+            String assetsTaxJson = AssetsHelper.INSTANCE.getTextFile(App.context, "hdc_tax.json");
+            LogUtils.log("taxJson = " + assetsTaxJson);
+            TaxResponse data = GsonHelper.INSTANCE.fromJson(assetsTaxJson, TaxResponse.class);
+            if (data == null) {
+                LogUtils.log("taxJson error");
+                return;
+            }
 
-                RateData drinksInhausTax = data.getData().getDrinksInhausTax();
-                TaxEntity drinksInhausTaxEntity = new TaxEntity();
-                drinksInhausTaxEntity.setRate(drinksInhausTax.getRate());
-                drinksInhausTaxEntity.setSign(drinksInhausTax.getSign());
-                drinksInhausTaxEntity.setType(TaxType.DRINK_IN_HOUSE_RATE);
-                DataBaseRepository.getInstance().addTax(drinksInhausTaxEntity);
+            //deleteALLtAX
+            DataBaseRepository.getInstance().deleteAllTax();
 
-                RateData drinksTakeoutTax = data.getData().getDrinksTakeoutTax();
-                TaxEntity drinksTakeoutTaxEntity = new TaxEntity();
-                drinksTakeoutTaxEntity.setRate(drinksTakeoutTax.getRate());
-                drinksTakeoutTaxEntity.setSign(drinksTakeoutTax.getSign());
-                drinksTakeoutTaxEntity.setType(TaxType.DRINK_TAKEOUT_RATE);
-                DataBaseRepository.getInstance().addTax(drinksTakeoutTaxEntity);
+            RateData drinksInhausTax = data.getData().getDrinksInhausTax();
+            TaxEntity drinksInhausTaxEntity = new TaxEntity();
+            drinksInhausTaxEntity.setRate(drinksInhausTax.getRate());
+            drinksInhausTaxEntity.setSign(drinksInhausTax.getSign());
+            drinksInhausTaxEntity.setType(TaxType.DRINK_IN_HOUSE_RATE);
+            DataBaseRepository.getInstance().addTax(drinksInhausTaxEntity);
 
-                RateData foodInhausTax = data.getData().getFoodInhausTax();
-                TaxEntity foodInhausTaxEntity = new TaxEntity();
-                foodInhausTaxEntity.setRate(foodInhausTax.getRate());
-                foodInhausTaxEntity.setSign(foodInhausTax.getSign());
-                foodInhausTaxEntity.setType(TaxType.FOOD_IN_HOUSE_RATE);
-                DataBaseRepository.getInstance().addTax(foodInhausTaxEntity);
+            RateData drinksTakeoutTax = data.getData().getDrinksTakeoutTax();
+            TaxEntity drinksTakeoutTaxEntity = new TaxEntity();
+            drinksTakeoutTaxEntity.setRate(drinksTakeoutTax.getRate());
+            drinksTakeoutTaxEntity.setSign(drinksTakeoutTax.getSign());
+            drinksTakeoutTaxEntity.setType(TaxType.DRINK_TAKEOUT_RATE);
+            DataBaseRepository.getInstance().addTax(drinksTakeoutTaxEntity);
 
-                //foodTakeoutTax
-                RateData foodTakeoutTax = data.getData().getFoodTakeoutTax();
-                TaxEntity foodTakeoutTaxEntity = new TaxEntity();
-                foodTakeoutTaxEntity.setRate(foodTakeoutTax.getRate());
-                foodTakeoutTaxEntity.setSign(foodTakeoutTax.getSign());
-                foodTakeoutTaxEntity.setType(TaxType.FOOD_TAKEOUT_RATE);
-                DataBaseRepository.getInstance().addTax(foodTakeoutTaxEntity);
+            RateData foodInhausTax = data.getData().getFoodInhausTax();
+            TaxEntity foodInhausTaxEntity = new TaxEntity();
+            foodInhausTaxEntity.setRate(foodInhausTax.getRate());
+            foodInhausTaxEntity.setSign(foodInhausTax.getSign());
+            foodInhausTaxEntity.setType(TaxType.FOOD_IN_HOUSE_RATE);
+            DataBaseRepository.getInstance().addTax(foodInhausTaxEntity);
 
-                TaxManager.getIns().updateTaxData();
+            //foodTakeoutTax
+            RateData foodTakeoutTax = data.getData().getFoodTakeoutTax();
+            TaxEntity foodTakeoutTaxEntity = new TaxEntity();
+            foodTakeoutTaxEntity.setRate(foodTakeoutTax.getRate());
+            foodTakeoutTaxEntity.setSign(foodTakeoutTax.getSign());
+            foodTakeoutTaxEntity.setType(TaxType.FOOD_TAKEOUT_RATE);
+            DataBaseRepository.getInstance().addTax(foodTakeoutTaxEntity);
 
-                if (App.Companion.getDEBUG()) {
-                    printAllTax();
-                }
+            TaxManager.getIns().updateTaxData();
 
-            });
+            if (App.Companion.getDEBUG()) {
+                printAllTax();
+            }
         });
     }
 
