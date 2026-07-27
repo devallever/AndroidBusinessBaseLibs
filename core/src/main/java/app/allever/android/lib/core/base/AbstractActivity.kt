@@ -6,9 +6,10 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import app.allever.android.lib.core.R
@@ -16,7 +17,6 @@ import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.helper.ActivityHelper
-import app.allever.android.lib.core.helper.CoroutineHelper
 import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.core.helper.HandlerHelper
 import app.allever.android.lib.core.helper.LifecycleHelper
@@ -38,11 +38,6 @@ abstract class AbstractActivity : AppCompatActivity(), BGASwipeBackHelper.Delega
 
     private var mWeakRefActivity: WeakReference<Activity>? = null
 
-    protected val mainCoroutine by lazy {
-        CoroutineHelper.MAIN
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         // 「必须在 Application 的 onCreate 方法中执行 BGASwipeBackHelper.init 来初始化滑动返回」
         // 在 super.onCreate(savedInstanceState) 之前调用该方法
@@ -62,22 +57,18 @@ abstract class AbstractActivity : AppCompatActivity(), BGASwipeBackHelper.Delega
         val navController = WindowInsetsControllerCompat(window, window.decorView)
         navController.isAppearanceLightNavigationBars = !isDarkMode()
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            val controller = window.insetsController
-//            if (controller != null) {
-//                controller.hide(WindowInsets.Type.navigationBars()) // 隐藏导航栏
-//                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE // 允许通过滑动显示导航栏
-//            }
-//        }
-
-        //
-
 
         //状态栏颜色
         if (isDarkMode()) {
             StatusBarCompat.cancelLightStatusBar(this)
         } else {
             StatusBarCompat.changeToLightStatusBar(this)
+        }
+
+        if (hideSystemBar()) {
+            enableEdgeToEdge()
+            hideSystemUI()
+            fullActivity()
         }
 
         super.onCreate(savedInstanceState)
@@ -282,4 +273,34 @@ abstract class AbstractActivity : AppCompatActivity(), BGASwipeBackHelper.Delega
             insets
         }
     }
+
+    protected open fun hideSystemBar() = false
+
+    protected open fun hideSystemUI() {
+        val decorView = window.decorView
+        decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+    }
+
+    protected open fun fullActivity() {
+        val window = window
+        val lp = window.attributes
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            window.addFlags(WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES or WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            // 如果是 Android 9.0，则需要对刘海屏进行适配，否则也会导致 WindowManager 移动不到刘海屏的位置上面
+            lp.layoutInDisplayCutoutMode =
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            getWindow().decorView.systemUiVisibility =
+                (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+        }
+    }
+
 }

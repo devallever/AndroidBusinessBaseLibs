@@ -32,5 +32,15 @@ public abstract class BaseMvpActivity<V, P extends BasePresenter<V>> extends Abs
         super.onDestroy();
     }
 
+    @Override
+    protected boolean hideSystemBar() {
+        return true;
+    }
+
+    @Override
+    protected boolean enableAdaptNavigationBar() {
+        return false;
+    }
+
     protected abstract P createPresenter();
 }

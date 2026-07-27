@@ -39,6 +39,7 @@ abstract class BaseActivity<DB : ViewBinding, VM : BaseViewModel> :
 
     protected open fun enableAdaptStatusBar(): Boolean = true
 
+    override fun enableAdaptNavigationBar() = true
     protected open fun initTopBar(
         title: String?,
         showBackIcon: Boolean = true,

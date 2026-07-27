@@ -12,12 +12,12 @@ class SplashActivity : AbstractActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sa_activity_splash)
 
-        NotchCompat.adaptNotchWithFullScreen(window)
-
         mHandler.postDelayed({
             PasswordConfig.secretCheckPass = false
             ActivityHelper.startActivity<MainActivity>()
             finish()
         }, 500)
     }
+
+    override fun hideSystemBar() = true
 }

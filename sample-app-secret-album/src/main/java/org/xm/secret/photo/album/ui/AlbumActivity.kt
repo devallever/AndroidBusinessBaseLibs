@@ -36,7 +36,6 @@ class AlbumActivity : BaseActivity<AlbumView, AlbumPresenter>(), AlbumView, View
         R.layout.sa_activity_album
     override fun createPresenter(): AlbumPresenter = AlbumPresenter()
     override fun initView() {
-        NotchCompat.adaptNotchWithFullScreen(window)
         checkNotch(Runnable {
             addStatusBar(findViewById<ViewGroup>(R.id.rootLayout), findViewById<View>(R.id.top_bar))
         })

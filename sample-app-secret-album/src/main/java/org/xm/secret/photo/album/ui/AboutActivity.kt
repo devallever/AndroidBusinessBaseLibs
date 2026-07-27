@@ -17,7 +17,7 @@ class AboutActivity: BaseActivity<Any, BasePresenter<Any>>(), View.OnClickListen
 
     private val PRIVACY_URL = "https://baidu.com"
 
-    override fun createPresenter(): BasePresenter<Any>? = null
+    override fun createPresenter(): BasePresenter<Any> = object : BasePresenter<Any>() {}
 
     override fun initView() {
         NotchCompat.adaptNotchWithFullScreen(window)
@@ -26,7 +26,7 @@ class AboutActivity: BaseActivity<Any, BasePresenter<Any>>(), View.OnClickListen
         })
 
         findViewById<View>(R.id.about_privacy).setOnClickListener(this)
-        findViewById<View>(R.id.iv_back).setOnClickListener(this)
+        findViewById<View>(R.id.sa_iv_back).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_label).text = getString(R.string.about)
         findViewById<TextView>(R.id.about_app_version).text = "v1.0"
         findViewById<TextView>(R.id.about_right).text =
@@ -41,7 +41,7 @@ class AboutActivity: BaseActivity<Any, BasePresenter<Any>>(), View.OnClickListen
 
     override fun onClick(v: View?) {
         when(v?.id) {
-            R.id.iv_back -> {
+            R.id.sa_iv_back -> {
                 finish()
             }
             R.id.about_privacy -> {

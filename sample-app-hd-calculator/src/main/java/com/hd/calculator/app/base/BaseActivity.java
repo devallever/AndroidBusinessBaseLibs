@@ -17,9 +17,14 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AbstractActiv
         super.onCreate(savedInstanceState);
         mBinding = getViewBinding();
         setContentView(mBinding.getRoot());
-        adaptStatusBar(mBinding.getRoot());
+//        adaptStatusBar(mBinding.getRoot());
         initView();
         initData();
+    }
+
+    @Override
+    protected boolean hideSystemBar() {
+        return true;
     }
 
     protected abstract VB getViewBinding();

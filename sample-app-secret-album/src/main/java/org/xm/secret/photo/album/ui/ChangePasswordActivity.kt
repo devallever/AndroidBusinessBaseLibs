@@ -44,7 +44,6 @@ class ChangePasswordActivity : BaseActivity<ChangePasswordView, ChangePasswordPr
         super.onCreate(savedInstanceState)
     }
     override fun initView() {
-        NotchCompat.adaptNotchWithFullScreen(window)
         findViewById<ImageView>(R.id.iv_back).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_label).text = getString(R.string.setting_modify_password)
         mLlPwdContainer = findViewById(R.id.id_setting_secret_vault_pwd_container)

@@ -64,7 +64,6 @@ class GalleryActivity : BaseActivity<GalleryView, GalleryPresenter>(), GalleryVi
         super.onCreate(savedInstanceState)
     }
     override fun initView() {
-        NotchCompat.adaptNotchWithFullScreen(window)
         checkNotch(Runnable {
             addStatusBar(findViewById<ViewGroup>(R.id.rootLayout), findViewById<View>(R.id.top_bar))
         })

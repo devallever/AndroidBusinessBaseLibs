@@ -82,7 +82,6 @@ class PickActivity : BaseActivity<PickView, PickPresenter>(),
     override fun getContentView(): Int = R.layout.sa_activity_pick
     override fun createPresenter(): PickPresenter = PickPresenter()
     override fun initView() {
-        NotchCompat.adaptNotchWithFullScreen(window)
         checkNotch(Runnable {
             addStatusBar(findViewById<ViewGroup>(R.id.rootLayout), findViewById<View>(R.id.top_bar))
         })

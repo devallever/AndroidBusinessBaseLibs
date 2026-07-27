@@ -38,7 +38,6 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), MainView,
         R.layout.sa_activity_main
 
     override fun initView() {
-        NotchCompat.adaptNotchWithFullScreen(window)
         checkNotch(Runnable {
             addStatusBar(findViewById<ViewGroup>(R.id.rootLayout), findViewById<View>(R.id.top_bar))
         })
