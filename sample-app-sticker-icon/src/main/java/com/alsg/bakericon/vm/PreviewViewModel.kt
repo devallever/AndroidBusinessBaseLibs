@@ -33,15 +33,15 @@ class PreviewViewModel : BaseViewModel() {
         //紫色 purple: #c013e4;
         //金色 gold: #ffd700;
         //青色 cyan: #14ebeb;
-        add(PreviewItem(R.drawable.preview_white, R.drawable.preview_white_small))
-        add(PreviewItem(R.drawable.preview_red, R.drawable.preview_red_small))
-        add(PreviewItem(R.drawable.preview_blue, R.drawable.preview_blue_small))
-        add(PreviewItem(R.drawable.preview_black, R.drawable.preview_black_small))
-        add(PreviewItem(R.drawable.preview_green, R.drawable.preview_green_small))
-        add(PreviewItem(R.drawable.preview_orange, R.drawable.preview_orange_small))
-        add(PreviewItem(R.drawable.preview_purple, R.drawable.preview_purple_small))
-        add(PreviewItem(R.drawable.preview_goal, R.drawable.preview_goal_small))
-        add(PreviewItem(R.drawable.preview_cyan, R.drawable.preview_cyan_small))
+        add(PreviewItem(R.drawable.si_preview_white, R.drawable.si_preview_white_small))
+        add(PreviewItem(R.drawable.si_preview_red, R.drawable.si_preview_red_small))
+        add(PreviewItem(R.drawable.si_preview_blue, R.drawable.si_preview_blue_small))
+        add(PreviewItem(R.drawable.si_preview_black, R.drawable.si_preview_black_small))
+        add(PreviewItem(R.drawable.si_preview_green, R.drawable.si_preview_green_small))
+        add(PreviewItem(R.drawable.si_preview_orange, R.drawable.si_preview_orange_small))
+        add(PreviewItem(R.drawable.si_preview_purple, R.drawable.si_preview_purple_small))
+        add(PreviewItem(R.drawable.si_preview_goal, R.drawable.si_preview_goal_small))
+        add(PreviewItem(R.drawable.si_preview_cyan, R.drawable.si_preview_cyan_small))
     }
 
 

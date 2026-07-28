@@ -4,16 +4,16 @@ import androidx.viewpager2.widget.ViewPager2
 import app.allever.android.lib.core.base.adapter.Pager2Adapter
 import app.allever.android.lib.core.ext.modifyTouchSlop
 import com.alsg.bakericon.base.AppActivity
-import com.alsg.bakericon.databinding.ActivityMainBinding
+import com.alsg.bakericon.databinding.SiActivityMainBinding
 import com.alsg.bakericon.vm.MainViewModel
 import com.flyco.tablayout.listener.CustomTabEntity
 import com.flyco.tablayout.listener.OnTabSelectListener
 
 
-class MainActivity : AppActivity<ActivityMainBinding, MainViewModel>() {
+class MainActivity : AppActivity<SiActivityMainBinding, MainViewModel>() {
 
 
-    override fun inflate() = ActivityMainBinding.inflate(layoutInflater)
+    override fun inflate() = SiActivityMainBinding.inflate(layoutInflater)
 
     override fun init() {
         initTab()

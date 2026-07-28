@@ -8,15 +8,15 @@ import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.core.helper.KeyEventHelper
 import app.allever.android.lib.core.helper.ViewHelper
 import app.allever.android.lib.mvvm.base.BaseViewModel
-import com.alsg.bakericon.databinding.FragmentListBinding
+import com.alsg.bakericon.databinding.SiFragmentListBinding
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 abstract class BaseListFragment<DB : ViewBinding, VM : BaseViewModel, T> :
-    AppFragment<FragmentListBinding, ListViewModel>() {
+    AppFragment<SiFragmentListBinding, ListViewModel>() {
 
     protected var mAdapter: BaseQuickAdapter<T, *>? = null
 
-    override fun inflate() = FragmentListBinding.inflate(layoutInflater)
+    override fun inflate() = SiFragmentListBinding.inflate(layoutInflater)
 
     override fun init() {
 

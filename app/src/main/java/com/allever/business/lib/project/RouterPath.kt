@@ -79,5 +79,6 @@ class RouterPath {
         const val PATH_SAMPLE_APP_TEXT_CARD = "/apptextcard/main"
         const val PATH_SAMPLE_APP_QR_CODE = "/appqrcode/main"
         const val PATH_SAMPLE_APP_HD_CALCULATOR = "/apphdcalculator/main"
+        const val PATH_SAMPLE_APP_STICKER_ICON = "/appstickericon/main"
     }
 }

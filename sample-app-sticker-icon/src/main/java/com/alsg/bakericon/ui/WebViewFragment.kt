@@ -9,14 +9,14 @@ import android.webkit.WebViewClient
 import app.allever.android.lib.mvvm.base.BaseMvvmFragment
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alsg.bakericon.base.AppFragmentActivity
-import com.alsg.bakericon.databinding.FragmentWebViewBinding
+import com.alsg.bakericon.databinding.SiFragmentWebViewBinding
 
 /**
  *@Description
  *@author: zq
  *@date: 2023/10/16
  */
-class WebViewFragment : BaseMvvmFragment<FragmentWebViewBinding, BaseViewModel>() {
+class WebViewFragment : BaseMvvmFragment<SiFragmentWebViewBinding, BaseViewModel>() {
 
     companion object {
         private const val URL = "URL"
@@ -28,7 +28,7 @@ class WebViewFragment : BaseMvvmFragment<FragmentWebViewBinding, BaseViewModel>(
         }
     }
 
-    override fun inflate(): FragmentWebViewBinding = FragmentWebViewBinding.inflate(layoutInflater)
+    override fun inflate() = SiFragmentWebViewBinding.inflate(layoutInflater)
 
     override fun init() {
         val url = arguments?.getString(URL, "") ?: ""

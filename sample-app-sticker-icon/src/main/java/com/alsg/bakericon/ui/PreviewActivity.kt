@@ -12,7 +12,7 @@ import app.allever.android.lib.imageloader.core.load
 import com.alsg.bakericon.R
 import com.alsg.bakericon.base.AppActivity
 import com.alsg.bakericon.base.AppFragmentActivity
-import com.alsg.bakericon.databinding.ActivityPreviewBinding
+import com.alsg.bakericon.databinding.SiActivityPreviewBinding
 import com.alsg.bakericon.db.DBRepo
 import com.alsg.bakericon.vm.PreviewViewModel
 import kotlinx.coroutines.launch
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
  *@author: zq
  *@date: 2024/1/11
  */
-class PreviewActivity : AppActivity<ActivityPreviewBinding, PreviewViewModel>() {
+class PreviewActivity : AppActivity<SiActivityPreviewBinding, PreviewViewModel>() {
     companion object {
         private const val EXTRA_PATH = "path"
         fun start(path: String) {
@@ -32,7 +32,7 @@ class PreviewActivity : AppActivity<ActivityPreviewBinding, PreviewViewModel>() 
         }
     }
 
-    override fun inflate() = ActivityPreviewBinding.inflate(layoutInflater)
+    override fun inflate() = SiActivityPreviewBinding.inflate(layoutInflater)
 
     override fun init() {
         initObserver()
@@ -102,9 +102,9 @@ class PreviewActivity : AppActivity<ActivityPreviewBinding, PreviewViewModel>() 
         mViewModel.likeStateFlow.launchAndCollectIn(this) {
             mBinding.ivLike.setImageResource(
                 if (it) {
-                    R.drawable.liked
+                    R.drawable.si_liked
                 } else {
-                    R.drawable.like
+                    R.drawable.si_like
                 }
             )
         }
@@ -116,9 +116,9 @@ class PreviewActivity : AppActivity<ActivityPreviewBinding, PreviewViewModel>() 
         lifecycleScope.launch {
             mBinding.ivLike.setImageResource(
                 if (DBRepo.isLike(mViewModel.path)) {
-                    R.drawable.liked
+                    R.drawable.si_liked
                 } else {
-                    R.drawable.like
+                    R.drawable.si_like
                 }
             )
         }
@@ -131,10 +131,10 @@ class PreviewActivity : AppActivity<ActivityPreviewBinding, PreviewViewModel>() 
                 val isLike = DBRepo.isLike(mViewModel.path)
                 if (isLike) {
                     val success = DBRepo.disLike(mViewModel.path)
-                    if (success) ivLike.setImageResource(R.drawable.like)
+                    if (success) ivLike.setImageResource(R.drawable.si_like)
                 } else {
                     val success = DBRepo.like(mViewModel.path)
-                    if (success) ivLike.setImageResource(R.drawable.liked)
+                    if (success) ivLike.setImageResource(R.drawable.si_liked)
                 }
             }
         }

@@ -17,23 +17,23 @@ class SlideMainActivity: BaseSlideMenuActivityStyle2<ViewBinding, BaseViewModel>
     )
 
     override fun menuItemTitles() = mutableListOf(
-        getString(R.string.tab_icon),
-        getString(R.string.tab_sticker),
-        getString(R.string.tab_top),
-        getString(R.string.favourites),
-                getString(R.string.tab_more),
+        getString(R.string.si_tab_icon),
+        getString(R.string.si_tab_sticker),
+        getString(R.string.si_tab_top),
+        getString(R.string.si_favourites),
+                getString(R.string.si_tab_more),
     )
 
     override fun menuItemIcons() = mutableListOf(
-        R.drawable.home_selected,
-        R.drawable.doge_selected,
-        R.drawable.top_selected,
-        R.drawable.ic_favourite,
-        R.drawable.more_selected,
+        R.drawable.si_home_selected,
+        R.drawable.si_doge_selected,
+        R.drawable.si_top_selected,
+        R.drawable.si_ic_favourite,
+        R.drawable.si_more_selected,
 
     )
 
-    override fun menuIcon() = R.drawable.logo
+    override fun menuIcon() = R.drawable.si_logo
 
-    override fun menuTitle() = getString(R.string.app_name)
+    override fun menuTitle() = getString(R.string.si_app_name)
 }

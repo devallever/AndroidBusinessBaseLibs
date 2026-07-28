@@ -13,6 +13,9 @@ class AppListFragment: ListFragment<FragmentListBinding, ListViewModel, TextDeta
         Gravity.CENTER)
 
     override fun getList(): MutableList<TextDetailClickItem> = mutableListOf(
+        TextDetailClickItem("Sticker Icon", "sample-app-sticker-icon") {
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_STICKER_ICON)
+        },
         TextDetailClickItem("点餐(内部)", "sample-app-hd-calculator") {
             Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_HD_CALCULATOR)
         },

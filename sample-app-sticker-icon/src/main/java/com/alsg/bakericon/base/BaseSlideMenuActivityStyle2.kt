@@ -10,8 +10,8 @@ import app.allever.android.lib.core.util.BarUtils
 import app.allever.android.lib.imageloader.core.load
 import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alsg.bakericon.R
-import com.alsg.bakericon.databinding.ActivityBaseSlideMenuStyle2Binding
-import com.alsg.bakericon.databinding.RvSlideMenuBinding
+import com.alsg.bakericon.databinding.SiActivityBaseSlideMenuStyle2Binding
+import com.alsg.bakericon.databinding.SiRvSlideMenuBinding
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import kotlinx.coroutines.delay
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
  *@date: 2024/1/22
  */
 abstract class BaseSlideMenuActivityStyle2<DB : ViewBinding, VM : BaseViewModel> :
-    AppActivity<ActivityBaseSlideMenuStyle2Binding, VM>() {
+    AppActivity<SiActivityBaseSlideMenuStyle2Binding, VM>() {
 
     abstract fun menuFragments(): MutableList<Fragment>
     abstract fun menuItemTitles(): MutableList<String>
@@ -31,7 +31,7 @@ abstract class BaseSlideMenuActivityStyle2<DB : ViewBinding, VM : BaseViewModel>
     abstract fun menuIcon(): Int
     abstract fun menuTitle(): String
 
-    override fun inflate() = ActivityBaseSlideMenuStyle2Binding.inflate(layoutInflater)
+    override fun inflate() = SiActivityBaseSlideMenuStyle2Binding.inflate(layoutInflater)
 
     override fun init() {
         mBinding.apply {
@@ -83,9 +83,9 @@ abstract class BaseSlideMenuActivityStyle2<DB : ViewBinding, VM : BaseViewModel>
     class SlideMenuItem(val menu: String, val icon: Int)
 
     class SlideMenuAdapter :
-        BaseQuickAdapter<SlideMenuItem, BaseViewHolder>(R.layout.rv_slide_menu) {
+        BaseQuickAdapter<SlideMenuItem, BaseViewHolder>(R.layout.si_rv_slide_menu) {
         override fun convert(holder: BaseViewHolder, item: SlideMenuItem) {
-            val binding = RvSlideMenuBinding.bind(holder.itemView)
+            val binding = SiRvSlideMenuBinding.bind(holder.itemView)
             binding.apply {
                 tvMenu.text = item.menu
                 ivIcon.load(item.icon)

@@ -25,22 +25,22 @@ class MainViewModel : BaseViewModel() {
     }
 
     private val mTitles = arrayOf(
-        R.string.tab_icon,
-        R.string.tab_sticker,
-        R.string.tab_top,
-        R.string.tab_more
+        R.string.si_tab_icon,
+        R.string.si_tab_sticker,
+        R.string.si_tab_top,
+        R.string.si_tab_more
     )
     private val mIconUnselectIds = intArrayOf(
-        R.drawable.home,
-        R.drawable.doge,
-        R.drawable.top,
-        R.drawable.more
+        R.drawable.si_home,
+        R.drawable.si_doge,
+        R.drawable.si_top,
+        R.drawable.si_more
     )
     private val mIconSelectIds = intArrayOf(
-        R.drawable.home_selected,
-        R.drawable.doge_selected,
-        R.drawable.top_selected,
-        R.drawable.more_selected,
+        R.drawable.si_home_selected,
+        R.drawable.si_doge_selected,
+        R.drawable.si_top_selected,
+        R.drawable.si_more_selected,
     )
     val tabEntities: ArrayList<CustomTabEntity> =
         arrayListOf<CustomTabEntity>().apply {

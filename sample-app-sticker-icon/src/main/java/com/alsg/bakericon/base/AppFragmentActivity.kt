@@ -9,14 +9,14 @@ import app.allever.android.lib.core.util.BarUtils
 import app.allever.android.lib.mvvm.base.BaseViewModel
 
 import com.alsg.bakericon.R
-import com.alsg.bakericon.databinding.ActivityFragmentBinding
+import com.alsg.bakericon.databinding.SiActivityFragmentBinding
 
 /**
  *@Description
  *@author: zq
  *@date: 2024/1/11
  */
-class AppFragmentActivity : AppActivity<ActivityFragmentBinding, BaseViewModel>() {
+class AppFragmentActivity : AppActivity<SiActivityFragmentBinding, BaseViewModel>() {
 
 
     companion object {
@@ -78,7 +78,7 @@ class AppFragmentActivity : AppActivity<ActivityFragmentBinding, BaseViewModel>(
 
     private lateinit var mFragment: Fragment
 
-    override fun inflate() = ActivityFragmentBinding.inflate(layoutInflater)
+    override fun inflate() = SiActivityFragmentBinding.inflate(layoutInflater)
 
     override fun init() {
         ViewHelper.setMarginTop(mBinding.topBar, BarUtils.getStatusBarHeight())

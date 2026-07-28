@@ -7,7 +7,7 @@ import com.alsg.bakericon.Constant
 import com.alsg.bakericon.R
 import com.alsg.bakericon.base.AppFragment
 import com.alsg.bakericon.base.AppFragmentActivity
-import com.alsg.bakericon.databinding.FragmentMoreBinding
+import com.alsg.bakericon.databinding.SiFragmentMoreBinding
 import com.alsg.bakericon.vm.MoreViewModel
 
 /**
@@ -15,30 +15,30 @@ import com.alsg.bakericon.vm.MoreViewModel
  *@author: zq
  *@date: 2024/1/9
  */
-class MoreFragment : AppFragment<FragmentMoreBinding, MoreViewModel>() {
-    override fun inflate() = FragmentMoreBinding.inflate(layoutInflater)
+class MoreFragment : AppFragment<SiFragmentMoreBinding, MoreViewModel>() {
+    override fun inflate() = SiFragmentMoreBinding.inflate(layoutInflater)
 
     override fun init() {
 
         mBinding.apply {
             ViewHelper.setMarginTop(llContent, BarUtils.getStatusBarHeight())
 
-            ivLogo.loadCircle(R.drawable.logo)
+            ivLogo.loadCircle(R.drawable.si_logo)
 
             favouritesItem.setOnClickListener {
-                AppFragmentActivity.start<FavouritesFragment>(getString(R.string.my_favourites)) {
+                AppFragmentActivity.start<FavouritesFragment>(getString(R.string.si_my_favourites)) {
 
                 }
             }
             faqItem.setOnClickListener {
-                WebViewFragment.start(Constant.FAQ_URL, getString(R.string.faq))
+                WebViewFragment.start(Constant.FAQ_URL, getString(R.string.si_faq))
             }
             privacyItem.setOnClickListener {
-                WebViewFragment.start(Constant.PRIVACY_URL, getString(R.string.privacy))
+                WebViewFragment.start(Constant.PRIVACY_URL, getString(R.string.si_privacy))
             }
 
             tvVersion.text = "v1.0"
-            tvAboutBaker.text = getString(R.string.about_baker_icon, getString(R.string.app_name))
+            tvAboutBaker.text = getString(R.string.si_about_baker_icon, getString(R.string.si_app_name))
 
         }
     }

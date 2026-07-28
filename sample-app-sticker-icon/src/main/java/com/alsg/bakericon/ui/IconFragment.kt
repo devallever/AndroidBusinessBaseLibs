@@ -2,7 +2,7 @@ package com.alsg.bakericon.ui
 
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alsg.bakericon.base.AppFragment
-import com.alsg.bakericon.databinding.FragmentIconBinding
+import com.alsg.bakericon.databinding.SiFragmentIconBinding
 import com.alsg.bakericon.vm.IconViewModel
 
 /**
@@ -10,8 +10,8 @@ import com.alsg.bakericon.vm.IconViewModel
  *@author: Allever
  *@date: 2024/1/9
  */
-class IconFragment : AppFragment<FragmentIconBinding, IconViewModel>() {
-    override fun inflate() = FragmentIconBinding.inflate(layoutInflater)
+class IconFragment : AppFragment<SiFragmentIconBinding, IconViewModel>() {
+    override fun inflate() = SiFragmentIconBinding.inflate(layoutInflater)
 
     override fun init() {
         initObserver()

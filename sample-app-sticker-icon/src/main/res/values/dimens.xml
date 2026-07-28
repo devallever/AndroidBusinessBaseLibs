@@ -1,6 +1,6 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="si_fab_margin">16dp</dimen>
 
-    <dimen name="preview_r">30dp</dimen>
-    <dimen name="preview_r_small">4dp</dimen>
+    <dimen name="si_preview_r">30dp</dimen>
+    <dimen name="si_preview_r_small">4dp</dimen>
 </resources>

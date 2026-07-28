@@ -4,6 +4,7 @@ import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.helper.CoroutineHelper
 import com.alsg.bakericon.db.DBRepo
 import com.alsg.bakericon.local.LocalRepo
+import com.alsg.bakericon.util.PackageHelper
 import kotlinx.coroutines.launch
 import org.litepal.LitePal
 
@@ -23,6 +24,7 @@ object MyApp {
         CoroutineHelper.DEFAULT.launch {
             DBRepo.clearOutDateDownload()
         }
+        PackageHelper.preLoad()
         isInit = true
     }
 }

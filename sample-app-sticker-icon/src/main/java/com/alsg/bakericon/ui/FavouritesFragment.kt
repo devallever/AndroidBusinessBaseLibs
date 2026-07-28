@@ -2,7 +2,7 @@ package com.alsg.bakericon.ui
 
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alsg.bakericon.base.AppFragment
-import com.alsg.bakericon.databinding.FragmentFavouritesBinding
+import com.alsg.bakericon.databinding.SiFragmentFavouritesBinding
 import com.alsg.bakericon.vm.FavouritesViewModel
 
 /**
@@ -10,8 +10,8 @@ import com.alsg.bakericon.vm.FavouritesViewModel
  *@author: zq
  *@date: 2024/1/11
  */
-class FavouritesFragment : AppFragment<FragmentFavouritesBinding, FavouritesViewModel>() {
-    override fun inflate() = FragmentFavouritesBinding.inflate(layoutInflater)
+class FavouritesFragment : AppFragment<SiFragmentFavouritesBinding, FavouritesViewModel>() {
+    override fun inflate() = SiFragmentFavouritesBinding.inflate(layoutInflater)
 
     override fun init() {
         initObserver()

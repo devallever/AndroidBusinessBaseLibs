@@ -3,7 +3,7 @@ package com.alsg.bakericon.ui
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alsg.bakericon.base.AppFragment
 import com.alsg.bakericon.base.AppFragmentActivity
-import com.alsg.bakericon.databinding.FragmentPackDetailBinding
+import com.alsg.bakericon.databinding.SiFragmentPackDetailBinding
 import com.alsg.bakericon.ui.adapter.data.SingleItem
 import com.alsg.bakericon.vm.PackDetailViewModel
 
@@ -12,7 +12,7 @@ import com.alsg.bakericon.vm.PackDetailViewModel
  *@author: zq
  *@date: 2024/1/11
  */
-class PackDetailFragment : AppFragment<FragmentPackDetailBinding, PackDetailViewModel>() {
+class PackDetailFragment : AppFragment<SiFragmentPackDetailBinding, PackDetailViewModel>() {
     companion object {
         private const val EXTRA_PATH_LIST = "pathList"
         fun start(title: String, list: MutableList<String>) {
@@ -24,7 +24,7 @@ class PackDetailFragment : AppFragment<FragmentPackDetailBinding, PackDetailView
         }
     }
 
-    override fun inflate() = FragmentPackDetailBinding.inflate(layoutInflater)
+    override fun inflate() = SiFragmentPackDetailBinding.inflate(layoutInflater)
 
     override fun init() {
         val bundle = requireActivity().intent.getBundleExtra("fragmentArgs")

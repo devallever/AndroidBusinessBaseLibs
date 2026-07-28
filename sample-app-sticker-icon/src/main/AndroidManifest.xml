@@ -15,7 +15,7 @@
         <activity
             android:name=".ui.SplashActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:label="@string/si_app_name"
             android:screenOrientation="portrait">
         </activity>
         <activity
@@ -30,6 +30,7 @@
         <activity
             android:name="com.alsg.bakericon.SlideMainActivity"
             android:screenOrientation="portrait" />
+        <activity android:name="app.allever.android.sample.app.sticker.icon.SampleAppStickerIconActivity" />
     </application>
 
 </manifest>

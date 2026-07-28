@@ -7,7 +7,7 @@ import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alsg.bakericon.Constant
 import com.alsg.bakericon.SlideMainActivity
 import com.alsg.bakericon.base.AppActivity
-import com.alsg.bakericon.databinding.ActivitySplashBinding
+import com.alsg.bakericon.databinding.SiActivitySplashBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
  *@author: zq
  *@date: 2024/1/12
  */
-class SplashActivity : AppActivity<ActivitySplashBinding, BaseViewModel>() {
-    override fun inflate() = ActivitySplashBinding.inflate(layoutInflater)
+class SplashActivity : AppActivity<SiActivitySplashBinding, BaseViewModel>() {
+    override fun inflate() = SiActivitySplashBinding.inflate(layoutInflater)
 
     override fun init() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {

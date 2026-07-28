@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import app.allever.android.lib.core.helper.ViewHelper
 import app.allever.android.lib.core.util.BarUtils
 import com.alsg.bakericon.base.AppFragment
-import com.alsg.bakericon.databinding.FragmentStickerBinding
+import com.alsg.bakericon.databinding.SiFragmentStickerBinding
 import com.alsg.bakericon.vm.StickerViewModel
 
 /**
@@ -12,8 +12,8 @@ import com.alsg.bakericon.vm.StickerViewModel
  *@author: zq
  *@date: 2024/1/9
  */
-class StickerFragment : AppFragment<FragmentStickerBinding, StickerViewModel>() {
-    override fun inflate() = FragmentStickerBinding.inflate(layoutInflater)
+class StickerFragment : AppFragment<SiFragmentStickerBinding, StickerViewModel>() {
+    override fun inflate() = SiFragmentStickerBinding.inflate(layoutInflater)
 
     override fun init() {
         initObserver()

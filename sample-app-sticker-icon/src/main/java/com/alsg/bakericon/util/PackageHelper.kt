@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
+import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.helper.CoroutineHelper
 import com.alsg.bakericon.ui.adapter.data.AppItem
@@ -27,10 +28,9 @@ object PackageHelper {
 
     private var loadingJob: Job? = null
 
-    private lateinit var context: Context
+    private val context = App.context
 
-    fun preLoad(context: Context) {
-        this.context = context.applicationContext
+    fun preLoad() {
         CoroutineHelper.IO.launch {
             fetchLocalAppList2()
         }

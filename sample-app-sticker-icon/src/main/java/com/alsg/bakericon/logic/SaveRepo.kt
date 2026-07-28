@@ -4,7 +4,6 @@ import android.os.Environment
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.util.MD5
-import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.helper.CoroutineHelper
 import app.allever.android.lib.core.util.FileIOUtils
 import app.allever.android.lib.core.util.FileUtils
@@ -41,7 +40,7 @@ object SaveRepo {
         val fileName = "${MD5.getMD5Str(path)}.png"
         val savePath = "$SAVE_DIR${File.separator}${
             App.context.getString(
-                R.string.app_name
+                R.string.si_app_name
             )
         }${File.separator}${fileName}"
         if (FileUtils.checkExist(savePath)) {
@@ -78,7 +77,7 @@ object SaveRepo {
 
                     val success = downloadFile?.copyToAlbum(
                         App.context, fileName, App.context.getString(
-                            R.string.app_name
+                            R.string.si_app_name
                         )
                     )
 
@@ -104,7 +103,7 @@ object SaveRepo {
             val assetsPath = path.replace("${ACCEPT_FILE}/", "")
             val success = AssetsHelper.toInputStream(assetsPath)?.saveToAlbum(
                 App.context, fileName, App.context.getString(
-                    R.string.app_name
+                    R.string.si_app_name
                 )
             )
 
