@@ -13,8 +13,17 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
     override fun getAdapter() = TextDetailClickAdapter(Gravity.CENTER)
 
     override fun getList() = mutableListOf(
-        TextDetailClickItem("基础组件示例代码") {
+        TextDetailClickItem("基础组件") {
             FragmentActivity.start<LibListFragment>(it.title)
+        },
+        TextDetailClickItem("项目代码") {
+            FragmentActivity.start<AppListFragment>(it.title)
+        },
+        TextDetailClickItem("示例代码(旧)") {
+            FragmentActivity.start<SampleOldListFragment>(it.title)
+        },
+        TextDetailClickItem("Github") {
+            FragmentActivity.start<GithubListFragment>(it.title)
         },
         TextDetailClickItem("广告组件", "sample-ad-core") {
             Navi.navigateTo(RouterPath.PATH_SAMPLE_AD_CORE)
