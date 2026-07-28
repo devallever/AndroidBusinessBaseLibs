@@ -94,6 +94,7 @@ dependencies {
     implementation(project(":sample-app-text-card"))
     implementation(project(":sample-app-qr-code"))
     implementation(project(":sample-app-hd-calculator"))
+    implementation(project(":sample-app-sticker-icon"))
 
 
     implementation(project(":z-sample-billing"))

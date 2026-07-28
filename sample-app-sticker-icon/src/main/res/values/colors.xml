@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="themeColor">@color/color_497749</color>
+    <color name="preview_small_frame_color">#cccccc</color>
+    <color name="colorAccent">@color/white</color>
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="color_497749">#497749</color>
+    <color name="color_EDEAE6">#edeae6</color>
+    <color name="color_F0F0F0">#f0f0f0</color>
+    <color name="color_C75943">#C75943</color>
+    <color name="color_ee4518">#ee4518</color>
+    <color name="color_737373">#737373</color>
+    <color name="color_333333">#333333</color>
+
+</resources>
