@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/btnContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/src"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Src"/>
+            <Button
+                android:id="@+id/dst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dst"/>
+            <Button
+                android:id="@+id/clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear"/>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/src_in"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SRC IN"/>
+            <Button
+                android:id="@+id/dst_in"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DST_IN"/>
+
+            <Button
+                android:id="@+id/src_over"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SRCOVER"/>
+            <Button
+                android:id="@+id/dst_over"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DSTOVER"/>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/src_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SRC OUT"/>
+            <Button
+                android:id="@+id/dst_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DST_OUT"/>
+
+            <Button
+                android:id="@+id/src_atop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SRCATOP"/>
+            <Button
+                android:id="@+id/dst_atop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DSTATOP"/>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/darken"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DARKEN"/>
+            <Button
+                android:id="@+id/lighten"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LIGHTEN"/>
+
+            <Button
+                android:id="@+id/multiply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MULTIPLY"/>
+            <Button
+                android:id="@+id/screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SCREEN"/>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/xor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="XOR"/>
+            <Button
+                android:id="@+id/add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ADD"/>
+
+            <Button
+                android:id="@+id/overlay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OVERLAY"/>
+
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="src"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="dst"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@mipmap/hc_source"
+                    android:padding="10dp"/>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@mipmap/hc_destination"
+                    android:padding="10dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <app.allever.android.sample.demo.hen.coder.draw.PorterDuffXfermodeView
+            android:id="@+id/porterDuffXfermodeView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+        </app.allever.android.sample.demo.hen.coder.draw.PorterDuffXfermodeView>
+
+    </LinearLayout>
+
+</LinearLayout>

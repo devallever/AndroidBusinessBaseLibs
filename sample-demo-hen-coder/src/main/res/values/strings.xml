@@ -1,0 +1,4 @@
+<resources>
+    <string name="hc_app_name">Hand Coder Demo</string>
+    <string name="hc_action_settings">Settings</string>
+</resources>

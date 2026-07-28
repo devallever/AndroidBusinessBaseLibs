@@ -96,6 +96,8 @@ dependencies {
     implementation(project(":sample-app-hd-calculator"))
     implementation(project(":sample-app-sticker-icon"))
 
+    implementation(project(":sample-demo-hen-coder"))
+
 
     implementation(project(":z-sample-billing"))
     implementation(project(":z-sample-cleaner"))

@@ -25,6 +25,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextDetailClickItem("Github") {
             FragmentActivity.start<GithubListFragment>(it.title)
         },
+        TextDetailClickItem("Demo") {
+            FragmentActivity.start<DemoListFragment>(it.title)
+        },
         TextDetailClickItem("广告组件", "sample-ad-core") {
             Navi.navigateTo(RouterPath.PATH_SAMPLE_AD_CORE)
         },

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/hc_app_name"
+            android:theme="@style/hc_AppTheme.NoActionBar">
+        </activity>
+
+
+        <activity android:name=".draw.PorterDuffXfermodeDemoActivity"/>
+        <activity android:name=".draw.CustomDrawActivity"/>
+        <activity android:name=".CircleImageViewActivity"/>
+        <activity android:name=".SearchViewActivity"/>
+        <activity android:name=".AutoTagActivity"/>
+        <activity android:name="app.allever.android.sample.demo.hen.coder.SampleDemoHenCoderActivity" />
+    </application>
+
+</manifest>

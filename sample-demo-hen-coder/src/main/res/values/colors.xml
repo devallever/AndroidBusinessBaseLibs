@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="hc_colorPrimary">#008577</color>
+    <color name="hc_colorPrimaryDark">#00574B</color>
+    <color name="hc_colorAccent">#D81B60</color>
+
+    <color name="hc_search_view_text_color">#000000</color>
+    <color name="hc_search_view_cursor_color">@color/hc_search_view_text_color</color>
+    <color name="hc_search_view_hint_text_color">#666666</color>
+</resources>
