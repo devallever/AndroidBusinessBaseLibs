@@ -1,9 +1,8 @@
 package com.alsg.bakericon.ui
 
-import com.allever.lib.base.function.imageloader.loadCircle
-import com.allever.lib.base.helper.ViewHelper
-import com.allever.lib.base.util.BarUtils
-import com.alsg.bakericon.BuildConfig
+import app.allever.android.lib.imageloader.core.loadCircle
+import app.allever.android.lib.core.helper.ViewHelper
+import app.allever.android.lib.core.util.BarUtils
 import com.alsg.bakericon.Constant
 import com.alsg.bakericon.R
 import com.alsg.bakericon.base.AppFragment
@@ -38,13 +37,9 @@ class MoreFragment : AppFragment<FragmentMoreBinding, MoreViewModel>() {
                 WebViewFragment.start(Constant.PRIVACY_URL, getString(R.string.privacy))
             }
 
-            tvVersion.text = BuildConfig.VERSION_NAME
+            tvVersion.text = "v1.0"
             tvAboutBaker.text = getString(R.string.about_baker_icon, getString(R.string.app_name))
 
         }
-    }
-
-    override fun initObserver() {
-
     }
 }

@@ -39,15 +39,11 @@ class PackDetailFragment : AppFragment<FragmentPackDetailBinding, PackDetailView
         mBinding.apply {
             recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
             recyclerView.adapter = mViewModel.adapter
-            mViewModel.adapter.data = mViewModel.list
+            mViewModel.adapter.setList( mViewModel.list)
             mViewModel.adapter.setOnItemClickListener { adapter, view, position ->
                 val item = mViewModel.adapter.getItem(position)
                 PreviewActivity.start(item.url)
             }
         }
-    }
-
-    override fun initObserver() {
-
     }
 }

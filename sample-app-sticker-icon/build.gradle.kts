@@ -24,4 +24,6 @@ android {
 
 dependencies {
     implementation(project(":sample-common"))
+    implementation(libs.litepal.core)
+    implementation(project(":lib-imageloader-core"))
 }

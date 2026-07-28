@@ -1,10 +1,10 @@
 package com.alsg.bakericon.local
 
-import com.allever.lib.base.app.App
-import com.allever.lib.base.ext.log
-import com.allever.lib.base.ext.toJson
-import com.allever.lib.base.helper.CoroutineHelper
-import com.allever.lib.base.helper.GsonHelper
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toJson
+import app.allever.android.lib.core.helper.CoroutineHelper
+import app.allever.android.lib.core.helper.GsonHelper
 import com.alsg.bakericon.Constant
 import com.alsg.bakericon.network.response.PackLocalResponse
 import com.alsg.bakericon.network.response.ResponseData
@@ -57,21 +57,21 @@ object LocalRepo {
             localRandomIconPathList.clear()
         }
 
-        val json = AssetsHelper.getJson(App.context, "icon.json")
-        val localResponse = GsonHelper.toObj(json, PackLocalResponse::class.java)
+        val json = AssetsHelper.getJson(App.context, "si_icon.json")
+        val localResponse = GsonHelper.fromJson(json, PackLocalResponse::class.java)
         val responseData = localResponse?.data
         responseData?.map {
             val item = PackItem()
             item.name = it.topic
-            //拼接封面路径 file:///android_asset/icon/1/cover.jpg
-            val cover = "${Constant.ACCEPT_FILE}/icon${it.path}"
+            //拼接封面路径 file:///android_asset/si_icon/1/cover.jpg
+            val cover = "${Constant.ACCEPT_FILE}/si_icon${it.path}"
 //                log("local cover = $cover")
             item.cover = cover
             val path = it.path.substring(0, it.path.lastIndexOf("/"))
-            //拼接每张图片 file:///android_asset/icon/1/1.png
+            //拼接每张图片 file:///android_asset/si_icon/1/1.png
             val imageList = mutableListOf<String>()
             for (i in 1..it.count) {
-                val imageUrl = "${Constant.ACCEPT_FILE}/icon${path}/${i}.png"
+                val imageUrl = "${Constant.ACCEPT_FILE}/si_icon${path}/${i}.png"
 //                    log("local imageUrl = $imageUrl")
                 imageList.add(imageUrl)
                 localIconPathList.add(imageUrl)
@@ -108,21 +108,21 @@ object LocalRepo {
         }
 
         //本地数据
-        val json = AssetsHelper.getJson(App.context, "sticker.json")
-        val localResponse = GsonHelper.toObj(json, PackLocalResponse::class.java)
+        val json = AssetsHelper.getJson(App.context, "si_sticker.json")
+        val localResponse = GsonHelper.fromJson(json, PackLocalResponse::class.java)
         val responseData = localResponse?.data
         responseData?.map {
             val item = PackItem()
             item.name = it.topic
-            //拼接封面路径 file:///android_asset/icon/1/cover.jpg
-            val cover = "${Constant.ACCEPT_FILE}/sticker${it.path}"
+            //拼接封面路径 file:///android_asset/si_icon/1/cover.jpg
+            val cover = "${Constant.ACCEPT_FILE}/si_sticker${it.path}"
 //                log("local cover = $cover")
             item.cover = cover
             val path = it.path.substring(0, it.path.lastIndexOf("/"))
-            //拼接每张图片 file:///android_asset/icon/1/1.png
+            //拼接每张图片 file:///android_asset/si_icon/1/1.png
             val imageList = mutableListOf<String>()
             for (i in 1..it.count) {
-                val imageUrl = "${Constant.ACCEPT_FILE}/sticker${path}/${i}.png"
+                val imageUrl = "${Constant.ACCEPT_FILE}/si_sticker${path}/${i}.png"
 //                    log("local imageUrl = $imageUrl")
                 imageList.add(imageUrl)
                 localStickerPathList.add(imageUrl)
@@ -154,16 +154,16 @@ object LocalRepo {
         }
 
         //本地数据
-        val json = AssetsHelper.getJson(App.context, "top.json")
-        log("local top.json = ${json}")
-        val localResponse = GsonHelper.toObj(json, TopLocalResponse::class.java)
+        val json = AssetsHelper.getJson(App.context, "si_top.json")
+        log("local si_top.json = ${json}")
+        val localResponse = GsonHelper.fromJson(json, TopLocalResponse::class.java)
         log("localResponse = ${localResponse?.toJson()} ")
         val localCount = localResponse?.count ?: 0
         if (localCount > 0) {
             for (i in 1..localCount) {
                 val item = SingleItem()
-                val imageUrl = "${Constant.ACCEPT_FILE}/top/${i}.png"
-//                    log("local top imageUrl = $imageUrl")
+                val imageUrl = "${Constant.ACCEPT_FILE}/si_top/${i}.png"
+//                    log("local si_top imageUrl = $imageUrl")
                 item.url = imageUrl
                 localTopItemList.add(item)
             }

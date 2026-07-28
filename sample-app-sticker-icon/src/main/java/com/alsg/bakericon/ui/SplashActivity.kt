@@ -1,11 +1,10 @@
 package com.alsg.bakericon.ui
 
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
-import app.allever.lib.billing.BillingHelper
-import com.allever.lib.base.helper.ActivityHelper
-import com.allever.lib.base.mvvm.BaseViewModel
+import app.allever.android.lib.core.helper.ActivityHelper
+import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alsg.bakericon.Constant
-import com.alsg.bakericon.MainActivity
 import com.alsg.bakericon.SlideMainActivity
 import com.alsg.bakericon.base.AppActivity
 import com.alsg.bakericon.databinding.ActivitySplashBinding
@@ -21,19 +20,16 @@ class SplashActivity : AppActivity<ActivitySplashBinding, BaseViewModel>() {
     override fun inflate() = ActivitySplashBinding.inflate(layoutInflater)
 
     override fun init() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+
+            }
+
+        })
         lifecycleScope.launch {
             delay(1000)
-            BillingHelper.getProductDetails(Constant.PRODUCT_ID_LIST, finish = null)
             ActivityHelper.startActivity<SlideMainActivity> { }
             finish()
         }
-    }
-
-    override fun onBackPressed() {
-
-    }
-
-    override fun initObserver() {
-
     }
 }

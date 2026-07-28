@@ -1,8 +1,6 @@
 package com.alsg.bakericon.ui
 
 import androidx.recyclerview.widget.GridLayoutManager
-import com.allever.lib.base.helper.ViewHelper
-import com.allever.lib.base.util.BarUtils
 import com.alsg.bakericon.base.AppFragment
 import com.alsg.bakericon.databinding.FragmentIconBinding
 import com.alsg.bakericon.vm.IconViewModel
@@ -16,6 +14,7 @@ class IconFragment : AppFragment<FragmentIconBinding, IconViewModel>() {
     override fun inflate() = FragmentIconBinding.inflate(layoutInflater)
 
     override fun init() {
+        initObserver()
         mBinding.rvPack.layoutManager = GridLayoutManager(requireContext(), 2)
         mBinding.rvPack.adapter = mViewModel.packAdapter
         mViewModel.packAdapter.setOnItemClickListener { adapter, view, position ->
@@ -25,7 +24,7 @@ class IconFragment : AppFragment<FragmentIconBinding, IconViewModel>() {
 
         mBinding.rvPopular.layoutManager = GridLayoutManager(requireContext(), 3)
         mBinding.rvPopular.adapter = mViewModel.popularItemAdapter
-        mViewModel.popularItemAdapter.data = mViewModel.popularItemList
+        mViewModel.popularItemAdapter.setList( mViewModel.popularItemList)
         mViewModel.popularItemAdapter.setOnItemClickListener { adapter, view, position ->
             val item = mViewModel.popularItemAdapter.getItem(position)
             PreviewActivity.start(item.url)
@@ -37,7 +36,7 @@ class IconFragment : AppFragment<FragmentIconBinding, IconViewModel>() {
 
     }
 
-    override fun initObserver() {
+    private fun initObserver() {
         mViewModel.packItemListLiveData.observe(this) {
             mViewModel.packAdapter.setList(it)
         }

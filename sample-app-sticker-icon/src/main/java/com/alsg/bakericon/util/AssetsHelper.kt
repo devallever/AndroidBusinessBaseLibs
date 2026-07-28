@@ -5,8 +5,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
-import com.allever.lib.base.app.App
-import com.allever.lib.base.app.App.Companion.app
+import app.allever.android.lib.core.app.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader

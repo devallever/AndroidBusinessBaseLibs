@@ -12,11 +12,11 @@ object Constant {
     const val BASE_URL = "https://baker.app-lessfunc.uk/baker/sticker/icon/"
     const val ICON_URL = "icons.json"
     const val STICKER_URL = "stickers.json"
-    const val TOP_URL = "top.json"
+    const val TOP_URL = "si_top.json"
 
     const val ICON_PATH = "${BASE_URL}icons"
     const val STICKER_PATH = "${BASE_URL}stickers"
-    const val TOP_PATH = "${BASE_URL}top"
+    const val TOP_PATH = "${BASE_URL}si_top"
 
     const val ACCEPT_FILE = "file:///android_asset"
 

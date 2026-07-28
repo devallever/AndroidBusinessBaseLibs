@@ -1,14 +1,14 @@
 package com.alsg.bakericon.base
 
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewbinding.ViewBinding
-import com.allever.lib.base.function.imageloader.load
-import com.allever.lib.base.helper.ViewHelper
-import com.allever.lib.base.mvvm.BaseMvvmActivity
-import com.allever.lib.base.mvvm.BaseViewModel
-import com.allever.lib.base.util.BarUtils
+import app.allever.android.lib.core.helper.ViewHelper
+import app.allever.android.lib.core.util.BarUtils
+import app.allever.android.lib.imageloader.core.load
+import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alsg.bakericon.R
 import com.alsg.bakericon.databinding.ActivityBaseSlideMenuStyle2Binding
 import com.alsg.bakericon.databinding.RvSlideMenuBinding
@@ -39,7 +39,7 @@ abstract class BaseSlideMenuActivityStyle2<DB : ViewBinding, VM : BaseViewModel>
             ivLogo.load(menuIcon())
             tvTitleMenu.text = menuTitle()
             ivMenu.setOnClickListener {
-                drawer.open()
+                drawer.openDrawer(Gravity.LEFT)
             }
 
             val fragmentList = menuFragments()
@@ -49,12 +49,12 @@ abstract class BaseSlideMenuActivityStyle2<DB : ViewBinding, VM : BaseViewModel>
             supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, fragmentList[0])
                 .commit()
             val adapter = SlideMenuAdapter()
-            adapter.data = mutableListOf<SlideMenuItem>(
+            adapter.setList(mutableListOf<SlideMenuItem>(
             ).apply {
                 List(fragmentList.size) { index ->
                     add(SlideMenuItem(titles[index], icons[index]))
                 }
-            }
+            })
             adapter.setOnItemClickListener { adt, view, position ->
                 val item = adapter.getItem(position)
                 lifecycleScope.launch {
@@ -72,11 +72,8 @@ abstract class BaseSlideMenuActivityStyle2<DB : ViewBinding, VM : BaseViewModel>
         }
     }
 
-    override fun initObserver() {
-    }
-
     override fun onBackPressed() {
-        if (mBinding.drawer.isOpen) {
+        if (mBinding.drawer.isDrawerOpen(Gravity.LEFT)) {
             mBinding.drawer.closeDrawers()
         } else {
             super.onBackPressed()

@@ -30,7 +30,7 @@ class FavouritesFragment : AppFragment<FragmentFavouritesBinding, FavouritesView
         mViewModel.fetchFavouriteData()
     }
 
-    override fun initObserver() {
+    private fun initObserver() {
         mViewModel.listLiveData.observe(this) {
             mViewModel.adapter.setList(it)
         }

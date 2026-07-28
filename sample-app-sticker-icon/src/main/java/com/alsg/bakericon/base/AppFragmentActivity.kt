@@ -2,12 +2,12 @@ package com.alsg.bakericon.base
 
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.allever.lib.base.helper.ActivityHelper
-import com.allever.lib.base.helper.ViewHelper
-import com.allever.lib.base.mvvm.BaseViewModel
-import com.allever.lib.base.util.BarUtils
+import app.allever.android.lib.core.helper.ActivityHelper
+import app.allever.android.lib.core.helper.ViewHelper
+import app.allever.android.lib.core.util.BarUtils
+import app.allever.android.lib.mvvm.base.BaseViewModel
+
 import com.alsg.bakericon.R
 import com.alsg.bakericon.databinding.ActivityFragmentBinding
 
@@ -107,10 +107,6 @@ class AppFragmentActivity : AppActivity<ActivityFragmentBinding, BaseViewModel>(
             e.printStackTrace()
         }
         return null
-    }
-
-    override fun initObserver() {
-
     }
 
     override fun isDarkMode(): Boolean {

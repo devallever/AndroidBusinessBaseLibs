@@ -2,7 +2,7 @@ package com.alsg.bakericon
 
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.allever.lib.base.mvvm.BaseViewModel
+import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alsg.bakericon.base.BaseSlideMenuActivityStyle2
 import com.alsg.bakericon.ui.*
 

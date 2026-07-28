@@ -1,12 +1,13 @@
 package com.alsg.bakericon.logic
 
 import android.os.Environment
-import com.allever.lib.base.app.App
-import com.allever.lib.base.ext.toast
-import com.allever.lib.base.helper.CoroutineHelper
-import com.allever.lib.base.util.FileIOUtils
-import com.allever.lib.base.util.FileUtils
-import com.allever.lib.base.util.MD5
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.util.MD5
+import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.helper.CoroutineHelper
+import app.allever.android.lib.core.util.FileIOUtils
+import app.allever.android.lib.core.util.FileUtils
 import com.alsg.bakericon.Constant.ACCEPT_FILE
 import com.alsg.bakericon.R
 import com.alsg.bakericon.db.DBRepo

@@ -2,10 +2,8 @@ package com.alsg.bakericon.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.allever.lib.base.mvvm.BaseViewModel
-import com.alsg.bakericon.Constant
+import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alsg.bakericon.local.LocalRepo
-import com.alsg.bakericon.network.NetRepo
 import com.alsg.bakericon.ui.adapter.TopItemAdapter
 import com.alsg.bakericon.ui.adapter.data.SingleItem
 import kotlinx.coroutines.launch
@@ -31,7 +29,7 @@ class TopViewModel : BaseViewModel() {
 //                for (i in 1..count) {
 //                    val item = SingleItem()
 //                    val imageUrl = "${Constant.TOP_PATH}/${i}.png"
-////                    log("top imageUrl = $imageUrl")
+////                    log("si_top imageUrl = $imageUrl")
 //                    item.url = imageUrl
 //                    imageList.add(item)
 //                }

@@ -1,8 +1,8 @@
 package com.alsg.bakericon
 
 import androidx.viewpager2.widget.ViewPager2
-import com.allever.lib.base.base.adapter.Pager2Adapter
-import com.allever.lib.base.ext.modifyTouchSlop
+import app.allever.android.lib.core.base.adapter.Pager2Adapter
+import app.allever.android.lib.core.ext.modifyTouchSlop
 import com.alsg.bakericon.base.AppActivity
 import com.alsg.bakericon.databinding.ActivityMainBinding
 import com.alsg.bakericon.vm.MainViewModel
@@ -43,9 +43,6 @@ class MainActivity : AppActivity<ActivityMainBinding, MainViewModel>() {
 
     }
 
-    override fun initObserver() {
-
-    }
 }
 
 class TabEntity(var title: String, var selectedIcon: Int, var unSelectedIcon: Int) :

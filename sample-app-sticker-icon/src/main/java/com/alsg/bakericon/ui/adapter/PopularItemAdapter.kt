@@ -1,10 +1,9 @@
 package com.alsg.bakericon.ui.adapter
 
-import com.allever.lib.base.function.imageloader.load
+import app.allever.android.lib.imageloader.core.load
 import com.alsg.bakericon.R
 import com.alsg.bakericon.databinding.RvPopularImgBinding
 import com.alsg.bakericon.ui.adapter.data.SingleItem
-import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 

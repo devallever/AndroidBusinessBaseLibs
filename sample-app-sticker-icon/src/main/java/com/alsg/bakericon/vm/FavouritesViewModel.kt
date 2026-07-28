@@ -2,7 +2,7 @@ package com.alsg.bakericon.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.allever.lib.base.mvvm.BaseViewModel
+import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alsg.bakericon.db.DBRepo
 import com.alsg.bakericon.ui.adapter.BigFrameImgAdapter
 import com.alsg.bakericon.ui.adapter.data.SingleItem

@@ -1,8 +1,8 @@
 package com.alsg.bakericon.base
 
 import androidx.viewbinding.ViewBinding
-import com.allever.lib.base.mvvm.BaseMvvmFragment
-import com.allever.lib.base.mvvm.BaseViewModel
+import app.allever.android.lib.mvvm.base.BaseMvvmFragment
+import app.allever.android.lib.mvvm.base.BaseViewModel
 
 /**
  *@Description

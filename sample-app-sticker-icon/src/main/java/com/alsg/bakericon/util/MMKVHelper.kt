@@ -1,7 +1,7 @@
 package com.alsg.bakericon.util
 
 import android.content.Context
-import com.tencent.mmkv.MMKV
+import app.allever.android.lib.core.store.StoreCore
 
 /**
  *@Description
@@ -10,18 +10,14 @@ import com.tencent.mmkv.MMKV
  */
 object MMKVHelper {
     fun init(context: Context) {
-        MMKV.initialize(context)
-    }
 
-    private val mmkv by lazy {
-        MMKV.defaultMMKV()
     }
 
     fun putString(key: String, value: String?) {
-        mmkv.encode(key, value)
+        StoreCore.putString(key, value)
     }
 
     fun getString(key: String, default: String = ""):String {
-        return mmkv.getString(key, default)?:""
+        return StoreCore.getString(key, default)?:""
     }
 }

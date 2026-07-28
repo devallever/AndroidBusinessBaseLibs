@@ -6,8 +6,8 @@ import android.webkit.CookieManager
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.allever.lib.base.mvvm.BaseMvvmFragment
-import com.allever.lib.base.mvvm.BaseViewModel
+import app.allever.android.lib.mvvm.base.BaseMvvmFragment
+import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alsg.bakericon.base.AppFragmentActivity
 import com.alsg.bakericon.databinding.FragmentWebViewBinding
 
@@ -65,9 +65,5 @@ class WebViewFragment : BaseMvvmFragment<FragmentWebViewBinding, BaseViewModel>(
             webViewClient = WebViewClient()
         }
 
-    }
-
-    override fun initObserver() {
-        
     }
 }

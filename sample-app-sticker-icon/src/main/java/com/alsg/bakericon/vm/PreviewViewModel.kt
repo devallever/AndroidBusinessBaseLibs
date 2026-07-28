@@ -3,21 +3,14 @@ package com.alsg.bakericon.vm
 import android.Manifest
 import android.os.Build
 import androidx.lifecycle.viewModelScope
-import app.allever.lib.billing.BillingHelper
-import com.allever.lib.base.app.App
-import com.allever.lib.base.ext.toast
-import com.allever.lib.base.helper.PermissionHelper
-import com.allever.lib.base.mvvm.BaseViewModel
+import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alsg.bakericon.Constant
 import com.alsg.bakericon.R
-import com.alsg.bakericon.ad.AdConstants
-import com.alsg.bakericon.ad.AdRepository
 import com.alsg.bakericon.db.DBRepo
 import com.alsg.bakericon.ui.PreviewActivity
 import com.alsg.bakericon.ui.adapter.PreviewItemAdapter
 import com.alsg.bakericon.ui.adapter.data.PreviewItem
 import com.alsg.bakericon.logic.SaveRepo
-import com.permissionx.guolindev.PermissionX
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -70,37 +63,9 @@ class PreviewViewModel : BaseViewModel() {
     }
 
     fun handleClickSave(previewActivity: PreviewActivity) {
-        if (PermissionHelper.hasPermissionOrigin(previewActivity, permissionsList)) {
-            //save
-            viewModelScope.launch {
-                SaveRepo.save(path) {
-                    BillingHelper.checkScribeStatus { success, code, message ->
-                        if (!success) {
-                            AdRepository.instance.triggerShowInterAd(AdConstants.INTER_AD)
-                        }
-                    }
-                }
-            }
-        } else {
-            PermissionX
-                .init(previewActivity)
-                .permissions(permissionsList)
-                .request { allGranted, grantedList, deniedList ->
-                    if (allGranted) {
-//                                toast("同意权限")
-                        //save
-                        viewModelScope.launch {
-                            SaveRepo.save(path)
-                        }
-                    } else {
-                        if (PermissionHelper.hasAlwaysDeniedPermissionOrigin(previewActivity, permissionsList)) {
-                            toast(App.context.getString(R.string.grant_permission_manually))
-                            PermissionHelper.gotoSettingOrigin(previewActivity)
-                        } else {
-                            toast(App.context.getString(R.string.cant_save_without_permission))
-                        }
-                    }
-                }
+        //save
+        viewModelScope.launch {
+            SaveRepo.save(path)
         }
     }
 

@@ -1,8 +1,8 @@
 package com.alsg.bakericon.ui
 
 import androidx.recyclerview.widget.GridLayoutManager
-import com.allever.lib.base.helper.ViewHelper
-import com.allever.lib.base.util.BarUtils
+import app.allever.android.lib.core.helper.ViewHelper
+import app.allever.android.lib.core.util.BarUtils
 import com.alsg.bakericon.base.AppFragment
 import com.alsg.bakericon.databinding.FragmentStickerBinding
 import com.alsg.bakericon.vm.StickerViewModel
@@ -16,9 +16,10 @@ class StickerFragment : AppFragment<FragmentStickerBinding, StickerViewModel>() 
     override fun inflate() = FragmentStickerBinding.inflate(layoutInflater)
 
     override fun init() {
+        initObserver()
         mBinding.rvPack.layoutManager = GridLayoutManager(requireContext(), 2)
         mBinding.rvPack.adapter = mViewModel.packAdapter
-        mViewModel.packAdapter.data = mViewModel.packItemList
+        mViewModel.packAdapter.setList(mViewModel.packItemList)
         mViewModel.packAdapter.setOnItemClickListener { adapter, view, position ->
             val item = mViewModel.packAdapter.getItem(position)
             PackDetailFragment.start(item.name, item.imageList)
@@ -26,7 +27,7 @@ class StickerFragment : AppFragment<FragmentStickerBinding, StickerViewModel>() 
 
         mBinding.rvPopular.layoutManager = GridLayoutManager(requireContext(), 3)
         mBinding.rvPopular.adapter = mViewModel.popularItemAdapter
-        mViewModel.popularItemAdapter.data = mViewModel.popularItemList
+        mViewModel.popularItemAdapter.setList(mViewModel.popularItemList)
         mViewModel.popularItemAdapter.setOnItemClickListener { adapter, view, position ->
             val item = mViewModel.popularItemAdapter.getItem(position)
             PreviewActivity.start(item.url)
@@ -36,7 +37,7 @@ class StickerFragment : AppFragment<FragmentStickerBinding, StickerViewModel>() 
         mViewModel.fetchPopularData()
     }
 
-    override fun initObserver() {
+    private fun initObserver() {
         mViewModel.packItemListLiveData.observe(this) {
             mViewModel.packAdapter.setList(it)
         }

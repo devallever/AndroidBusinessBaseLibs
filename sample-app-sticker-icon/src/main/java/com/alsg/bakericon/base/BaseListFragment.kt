@@ -4,10 +4,10 @@ import android.text.TextUtils
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.allever.lib.base.helper.DisplayHelper
-import com.allever.lib.base.helper.KeyEventHelper
-import com.allever.lib.base.helper.ViewHelper
-import com.allever.lib.base.mvvm.BaseViewModel
+import app.allever.android.lib.core.helper.DisplayHelper
+import app.allever.android.lib.core.helper.KeyEventHelper
+import app.allever.android.lib.core.helper.ViewHelper
+import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alsg.bakericon.databinding.FragmentListBinding
 import com.chad.library.adapter.base.BaseQuickAdapter
 

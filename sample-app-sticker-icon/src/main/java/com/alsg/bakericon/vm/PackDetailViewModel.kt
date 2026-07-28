@@ -1,6 +1,6 @@
 package com.alsg.bakericon.vm
 
-import com.allever.lib.base.mvvm.BaseViewModel
+import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alsg.bakericon.ui.adapter.BigFrameImgAdapter
 import com.alsg.bakericon.ui.adapter.data.SingleItem
 

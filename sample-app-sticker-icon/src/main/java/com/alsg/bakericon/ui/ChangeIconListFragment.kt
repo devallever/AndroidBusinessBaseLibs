@@ -1,14 +1,14 @@
 package com.alsg.bakericon.ui
 
 import androidx.viewbinding.ViewBinding
-import com.allever.lib.base.ext.log
-import com.allever.lib.base.ext.toast
-import com.allever.lib.base.helper.AppHelper
-import com.allever.lib.base.helper.AppItem
-import com.allever.lib.base.mvvm.BaseViewModel
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
+import com.alsg.bakericon.ui.adapter.data.AppItem
+import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alsg.bakericon.base.BaseListFragment
 import com.alsg.bakericon.ui.adapter.AppItemAdapter
 import com.alsg.bakericon.util.AssetsHelper
+import com.alsg.bakericon.util.PackageHelper
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 /**
@@ -27,15 +27,12 @@ class ChangeIconListFragment() : BaseListFragment<ViewBinding, BaseViewModel, Ap
     override fun getAdapter(): BaseQuickAdapter<AppItem, *> = AppItemAdapter()
 
     override fun getList() = mutableListOf<AppItem>().apply {
-        addAll(AppHelper.fetchLocalAppList2())
+        addAll(PackageHelper.fetchLocalAppList2())
     }
 
-    override fun initObserver() {
-
-    }
 
     override fun onItemClick(position: Int, item: AppItem) {
-        val result = AppHelper.createShortcut(
+        val result = PackageHelper.createShortcut(
             item.pkg,
             item.launchActivity,
             item.name,
@@ -45,7 +42,7 @@ class ChangeIconListFragment() : BaseListFragment<ViewBinding, BaseViewModel, Ap
             toast("Create Shortcut success!")
             requireActivity().finish()
         } else {
-            toast("Fail to change icon!")
+            toast("Fail to change si_icon!")
         }
 
 

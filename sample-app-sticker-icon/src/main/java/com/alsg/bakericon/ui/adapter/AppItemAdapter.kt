@@ -1,6 +1,6 @@
 package com.alsg.bakericon.ui.adapter
 
-import com.allever.lib.base.helper.AppItem
+import com.alsg.bakericon.ui.adapter.data.AppItem
 import com.alsg.bakericon.R
 import com.alsg.bakericon.databinding.RvAppItemBinding
 import com.chad.library.adapter.base.BaseQuickAdapter

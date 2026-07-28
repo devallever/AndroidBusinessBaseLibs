@@ -3,17 +3,13 @@ package com.alsg.bakericon.ui
 import android.Manifest
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import app.allever.lib.billing.BillingHelper
-import com.allever.lib.base.ext.launchAndCollectIn
-import com.allever.lib.base.ext.log
-import com.allever.lib.base.ext.toast
-import com.allever.lib.base.function.imageloader.load
-import com.allever.lib.base.helper.ActivityHelper
-import com.allever.lib.base.helper.AppHelper
-import com.allever.lib.base.helper.PermissionHelper
+import app.allever.android.lib.core.ext.launchAndCollectIn
+import app.allever.android.lib.core.ext.log
+import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.helper.ActivityHelper
+import app.allever.android.lib.core.permission.internal.PermissionHelper
+import app.allever.android.lib.imageloader.core.load
 import com.alsg.bakericon.R
-import com.alsg.bakericon.ad.AdConstants
-import com.alsg.bakericon.ad.AdRepository
 import com.alsg.bakericon.base.AppActivity
 import com.alsg.bakericon.base.AppFragmentActivity
 import com.alsg.bakericon.databinding.ActivityPreviewBinding
@@ -39,13 +35,7 @@ class PreviewActivity : AppActivity<ActivityPreviewBinding, PreviewViewModel>() 
     override fun inflate() = ActivityPreviewBinding.inflate(layoutInflater)
 
     override fun init() {
-        AppHelper.preLoad(this)
-
-        BillingHelper.checkScribeStatus { success, code, message ->
-            if (!success) {
-                AdRepository.instance.loadInterAd(AdConstants.INTER_AD)
-            }
-        }
+        initObserver()
         mBinding.apply {
             mViewModel.path = intent?.getStringExtra(EXTRA_PATH) ?: ""
 //            log("preview path = ${mViewModel.path}")
@@ -58,47 +48,32 @@ class PreviewActivity : AppActivity<ActivityPreviewBinding, PreviewViewModel>() 
             }
 
             btnUse.setOnClickListener {
-                //仅订阅能够更改图标
-                BillingHelper.checkScribeStatus { success, code, message ->
-                    if (success) {
-                        val hasPermission = PermissionHelper.hasPermissionOrigin(
-                            this@PreviewActivity,
-                            listOf(Manifest.permission.INSTALL_SHORTCUT)
-                        )
+                val hasPermission = PermissionHelper.hasPermissions(
+                    this@PreviewActivity,
+                    listOf(Manifest.permission.INSTALL_SHORTCUT)
+                )
 
-                        if (hasPermission) {
-                            AppFragmentActivity.start<ChangeIconListFragment>("Select App") {
-                                // file:///android_asset/icon/2/6.png
-                                val path = mViewModel.path.split("android_asset/")[1]
-                                it.putString("path", path)
-                                log("put path = $path")
-                            }
-
-                        } else {
-                            toast("no permission")
-                        }
-                    } else {
-                        //弹出订阅界面
-                        ActivityHelper.startActivity<BillingActivity>(this@PreviewActivity) { }
+                if (hasPermission) {
+                    AppFragmentActivity.start<ChangeIconListFragment>("Select App") {
+                        // file:///android_asset/si_icon/2/6.png
+                        val path = mViewModel.path.split("android_asset/")[1]
+                        it.putString("path", path)
+                        log("put path = $path")
                     }
+
+                } else {
+                    toast("no permission")
                 }
             }
 
             btnSave.setOnClickListener {
-                //检查订阅状态
-                BillingHelper.checkScribeStatus { success, code, message ->
-                    if (success) {
+                //检查每天下载次数
+                lifecycleScope.launch {
+                    if (mViewModel.todayCanDownload()) {
                         mViewModel.handleClickSave(this@PreviewActivity)
                     } else {
-                        //检查每天下载次数
-                        lifecycleScope.launch {
-                            if (mViewModel.todayCanDownload()) {
-                                mViewModel.handleClickSave(this@PreviewActivity)
-                            } else {
-                                //弹出订阅界面
-                                ActivityHelper.startActivity<BillingActivity>(this@PreviewActivity) { }
-                            }
-                        }
+                        //弹出订阅界面
+                        toast("下载次数已达上限")
                     }
                 }
 
@@ -115,7 +90,7 @@ class PreviewActivity : AppActivity<ActivityPreviewBinding, PreviewViewModel>() 
             rvPreview.layoutManager =
                 LinearLayoutManager(this@PreviewActivity, LinearLayoutManager.HORIZONTAL, false)
             rvPreview.adapter = mViewModel.adapter
-            mViewModel.adapter.data = mViewModel.previewList
+            mViewModel.adapter.setList(mViewModel.previewList)
             mViewModel.adapter.setOnItemClickListener { adapter, view, position ->
                 val item = mViewModel.adapter.data[position]
                 centerPreview.setBackgroundResource(item.previewBackground)
@@ -123,7 +98,7 @@ class PreviewActivity : AppActivity<ActivityPreviewBinding, PreviewViewModel>() 
         }
     }
 
-    override fun initObserver() {
+    fun initObserver() {
         mViewModel.likeStateFlow.launchAndCollectIn(this) {
             mBinding.ivLike.setImageResource(
                 if (it) {

@@ -1,8 +1,8 @@
 package com.alsg.bakericon.vm
 
 import androidx.fragment.app.Fragment
-import com.allever.lib.base.app.App
-import com.allever.lib.base.mvvm.BaseViewModel
+import app.allever.android.lib.core.app.App
+import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alsg.bakericon.R
 import com.alsg.bakericon.TabEntity
 import com.alsg.bakericon.ui.IconFragment

@@ -2,16 +2,12 @@ package com.alsg.bakericon.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.allever.lib.base.ext.log
-import com.allever.lib.base.ext.toJson
-import com.allever.lib.base.mvvm.BaseViewModel
+import app.allever.android.lib.mvvm.base.BaseViewModel
 import com.alsg.bakericon.local.LocalRepo
-import com.alsg.bakericon.network.NetRepo
 import com.alsg.bakericon.ui.adapter.CommonPackItemAdapter
 import com.alsg.bakericon.ui.adapter.PopularItemAdapter
 import com.alsg.bakericon.ui.adapter.data.PackItem
 import com.alsg.bakericon.ui.adapter.data.SingleItem
-import com.alsg.bakericon.logic.DataParserRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
