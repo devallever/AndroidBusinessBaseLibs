@@ -167,3 +167,5 @@ project(":qrcode").projectDir = File(settingsDir, "sample-app-qr-code/depend/and
 include(":sample-app-hd-calculator")
 include(":sample-app-sticker-icon")
 include(":sample-demo-hen-coder")
+include(":app-compose")
+include(":core-compose")
