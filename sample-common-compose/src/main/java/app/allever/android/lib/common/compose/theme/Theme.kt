@@ -1,4 +1,4 @@
-package com.allever.compose.core.ui
+package app.allever.android.lib.common.compose.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -31,9 +31,6 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F),
     */
 )
-object ComposeProjectTheme {
-
-}
 
 @Composable
 fun ComposeProjectTheme(
@@ -43,12 +40,12 @@ fun ComposeProjectTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
+//        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+//            val context = LocalContext.current
+//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+//        }
+//
+//        darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
 

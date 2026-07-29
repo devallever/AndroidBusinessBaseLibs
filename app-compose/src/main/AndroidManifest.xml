@@ -5,9 +5,7 @@
     <application>
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/compose_app_name"
-            android:theme="@style/Theme.ComposeProject">
+            android:exported="true">
         </activity>
     </application>
 </manifest>

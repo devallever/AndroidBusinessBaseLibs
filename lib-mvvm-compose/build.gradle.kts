@@ -2,22 +2,17 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.devtools.ksp")
 }
 
-val modelPkg = "com.allever.business.lib.project.compose"
+val modelPkg = "app.allever.android.lib.mvvm.compose"
 
 group = modelPkg
 
 android {
     namespace = modelPkg
-
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {
+    api(project(":lib-mvvm"))
     api(project(":core-compose"))
-    implementation(project(":sample-common-compose"))
 }

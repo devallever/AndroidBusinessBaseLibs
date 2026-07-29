@@ -22,7 +22,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.allever.compose.core.ui.ComposeProjectTheme
+import app.allever.android.lib.common.compose.BaseComposeActivity
+import app.allever.android.lib.core.compose.base.AbstractComposeActivity
+import app.allever.android.lib.common.compose.theme.ComposeProjectTheme
 
 /**
  *@Description
@@ -30,17 +32,11 @@ import com.allever.compose.core.ui.ComposeProjectTheme
  *@date: 2024/1/5
  */
 
-class GoogleComposeMainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            ComposeProjectTheme {
-                MyApp()
-            }
-        }
+class GoogleComposeMainActivity : BaseComposeActivity() {
+    @Composable
+    override fun ContentPage() {
+        MyApp()
     }
-
-
 }
 
 @Composable()

@@ -21,6 +21,7 @@ android {
 
 dependencies {
     api(project(":core-compose"))
+    implementation(project(":sample-common-compose"))
     implementation("com.google.accompanist:accompanist-pager:0.23.1")
     implementation(libs.play.services.ads)
 }

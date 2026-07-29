@@ -1,9 +1,6 @@
 package com.allever.compose.project.compose.ad
 
 import android.annotation.SuppressLint
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,9 +20,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.view.isVisible
+import app.allever.android.lib.common.compose.BaseComposeActivity
+import app.allever.android.lib.core.ext.log
 import coil.load
-import com.allever.compose.core.log
-import com.allever.compose.core.ui.ComposeProjectTheme
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -33,68 +30,66 @@ import com.google.android.gms.ads.LoadAdError
 import z.compose.app.allever.android.sample.compose.project.databinding.ZcpNativeAdBannerBigBinding
 import z.compose.app.allever.android.sample.compose.project.databinding.ZcpNativeAdBannerSmallBinding
 
-class AdMobNativeActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            ComposeProjectTheme {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "原生 Banner广告",
-                        Modifier.padding(10.dp),
-                        fontWeight = FontWeight.Bold
-                    )
+class AdMobNativeActivity : BaseComposeActivity() {
 
-                    SmallNativeAd(Modifier.padding(horizontal = 10.dp))
 
-                    Text(
-                        text = "原生 Banner广告 Big",
-                        Modifier.padding(10.dp),
-                        fontWeight = FontWeight.Bold
-                    )
+    @Composable
+    override fun ContentPage() {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "原生 Banner广告",
+                Modifier.padding(10.dp),
+                fontWeight = FontWeight.Bold
+            )
 
-                    BigNativeAd(Modifier.padding(horizontal = 10.dp))
+            SmallNativeAd(Modifier.padding(horizontal = 10.dp))
 
-                    Text(
-                        text = "列表 Banner广告",
-                        Modifier.padding(10.dp),
-                        fontWeight = FontWeight.Bold
-                    )
+            Text(
+                text = "原生 Banner广告 Big",
+                Modifier.padding(10.dp),
+                fontWeight = FontWeight.Bold
+            )
 
-                    val list = mutableListOf<Product>().apply {
-                        add(Product("Banana"))
-                        add(Product("", true))
-                        add(Product("Orange"))
-                    }
-                    LazyColumn {
-                        itemsIndexed(list) { index, item ->
-                            if (item.isAd) {
-                                SmallNativeAd()
-                            } else {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(48.dp)
-                                        .background(Color(0x80ff0000))
-                                    , horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Center
-                                ) {
-                                    Text(
-                                        text = item.name,
-                                        modifier = Modifier
-                                    )
-                                }
+            BigNativeAd(Modifier.padding(horizontal = 10.dp))
 
-                            }
+            Text(
+                text = "列表 Banner广告",
+                Modifier.padding(10.dp),
+                fontWeight = FontWeight.Bold
+            )
+
+            val list = mutableListOf<Product>().apply {
+                add(Product("Banana"))
+                add(Product("", true))
+                add(Product("Orange"))
+            }
+            LazyColumn {
+                itemsIndexed(list) { index, item ->
+                    if (item.isAd) {
+                        SmallNativeAd()
+                    } else {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(48.dp)
+                                .background(Color(0x80ff0000))
+                            , horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = item.name,
+                                modifier = Modifier
+                            )
                         }
-                    }
 
+                    }
                 }
             }
+
         }
     }
 

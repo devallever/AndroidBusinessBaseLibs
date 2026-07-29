@@ -99,6 +99,7 @@ dependencies {
     implementation(project(":sample-demo-hen-coder"))
 
     implementation(project(":app-compose"))
+    implementation(project(":sample-common-compose"))
 
     implementation(project(":z-sample-billing"))
     implementation(project(":z-sample-cleaner"))

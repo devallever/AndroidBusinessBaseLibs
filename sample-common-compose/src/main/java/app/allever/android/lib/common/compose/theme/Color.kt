@@ -1,4 +1,4 @@
-package com.allever.business.lib.project.compose.theme
+package app.allever.android.lib.common.compose.theme
 
 import androidx.compose.ui.graphics.Color
 

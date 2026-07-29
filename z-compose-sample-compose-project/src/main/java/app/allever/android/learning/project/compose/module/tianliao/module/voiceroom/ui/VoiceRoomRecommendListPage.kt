@@ -30,7 +30,7 @@ import app.allever.android.learning.project.compose.module.tianliao.module.commo
 import app.allever.android.learning.project.compose.module.tianliao.module.voiceroom.viewmodel.HomeVoiceRoomViewModel
 import app.allever.android.learning.project.compose.module.tianliao.module.voiceroom.viewmodel.VoiceRoomListViewModel
 import coil.compose.AsyncImage
-import com.allever.compose.core.toast
+import app.allever.android.lib.core.ext.toast
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import z.compose.app.allever.android.sample.compose.project.R

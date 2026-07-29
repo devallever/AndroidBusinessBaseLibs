@@ -1,8 +1,5 @@
 package com.allever.compose.project.watch
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.allever.android.lib.common.compose.BaseComposeActivity
 import z.compose.app.allever.android.sample.compose.project.R
 
 /**
@@ -35,15 +33,14 @@ import z.compose.app.allever.android.sample.compose.project.R
  *@author: zq
  *@date: 2024/1/3
  */
-class WatchMainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            //纵向布局
-            Column {
-                Content()
-                NavBar()
-            }
+class WatchMainActivity : BaseComposeActivity() {
+
+    @Composable
+    override fun ContentPage() {
+        //纵向布局
+        Column {
+            Content()
+            NavBar()
         }
     }
 

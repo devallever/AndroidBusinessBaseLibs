@@ -17,7 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import app.allever.android.learning.project.compose.module.tianliao.module.common.ui.TabLayout
 import app.allever.android.learning.project.compose.module.tianliao.module.common.ui.ViewPager
 import app.allever.android.learning.project.compose.module.tianliao.module.voiceroom.viewmodel.HomeVoiceRoomViewModel
-import com.allever.compose.core.toast
+import app.allever.android.lib.core.ext.toast
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch

@@ -6,10 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.allever.android.learning.project.compose.module.tianliao.module.main.ui.MainPage
 import app.allever.android.learning.project.compose.module.tianliao.module.main.viewmodel.TLMainViewModel
-import com.allever.compose.core.ui.ComposeProjectTheme
+import app.allever.android.lib.core.compose.base.AbstractComposeActivity
+import app.allever.android.lib.common.compose.theme.ComposeProjectTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 
-class TLMainActivity : ComponentActivity() {
+class TLMainActivity : AbstractComposeActivity() {
     @OptIn(ExperimentalPagerApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
