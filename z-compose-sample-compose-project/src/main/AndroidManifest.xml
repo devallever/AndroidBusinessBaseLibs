@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application>
+
+        <activity android:name="z.compose.app.allever.android.sample.compose.project.ZComposeSampleComposeProjectActivity" />
+
+        <activity android:name="com.allever.compose.project.compose.basic.ComposeBasicMainActivity" />
+        <activity android:name="com.allever.compose.project.compose.basic.BasicWidgetActivity" />
+        <activity android:name="com.allever.compose.project.compose.basic.ListWidgetActivity" />
+        <activity android:name="com.allever.compose.project.compose.basic.GridWidgetActivity" />
+        <activity android:name="com.allever.compose.project.compose.basic.PagerWidgetActivity" />
+        <activity android:name="com.allever.compose.project.compose.basic.AppFrameBottomNaviActivity" />
+
+
+    </application>
+
+</manifest>

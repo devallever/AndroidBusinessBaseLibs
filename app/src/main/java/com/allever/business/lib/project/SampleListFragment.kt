@@ -16,6 +16,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextDetailClickItem("Compose Project") {
             Navi.navigateTo(RouterPath.PATH_APP_COMPOSE)
         },
+        TextDetailClickItem("Z Compose Project") {
+            Navi.navigateTo(RouterPath.PATH_Z_COMPOSE_SAMPLE_PROJECT)
+        },
         TextDetailClickItem("基础组件") {
             FragmentActivity.start<LibListFragment>(it.title)
         },

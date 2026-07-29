@@ -5,7 +5,7 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
-val modelPkg = "com.allever.business.lib.project.compose"
+val modelPkg = "z.compose.app.allever.android.sample.compose.project"
 
 group = modelPkg
 
@@ -14,9 +14,11 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
     api(project(":core-compose"))
+    implementation("com.google.accompanist:accompanist-pager:0.23.1")
 }
