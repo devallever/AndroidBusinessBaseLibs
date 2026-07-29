@@ -81,7 +81,7 @@ class ChangePasswordActivity : BaseActivity<ChangePasswordView, ChangePasswordPr
         mPasswordHelper?.modifyPasscode()
     }
 
-    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+    override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
 
     }
 

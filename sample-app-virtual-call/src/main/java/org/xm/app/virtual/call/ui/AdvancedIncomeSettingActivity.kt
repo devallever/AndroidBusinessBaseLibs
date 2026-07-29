@@ -160,7 +160,7 @@ class AdvancedIncomeSettingActivity :
         }
     }
 
-    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+    override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
         when (buttonView?.id) {
             R.id.setting_item_switch_repeat -> {
                 showRepeatSetting(isChecked)
