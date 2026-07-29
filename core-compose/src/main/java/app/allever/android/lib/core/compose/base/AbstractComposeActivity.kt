@@ -2,9 +2,9 @@ package app.allever.android.lib.core.compose.base
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import app.allever.android.lib.core.base.AbstractActivity
+import app.allever.android.lib.core.base.AbstractSwipeBackActivity
 
-abstract class AbstractComposeActivity: AbstractActivity() {
+abstract class AbstractComposeActivity: AbstractSwipeBackActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
