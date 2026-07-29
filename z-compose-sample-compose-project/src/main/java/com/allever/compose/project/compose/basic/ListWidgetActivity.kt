@@ -53,13 +53,13 @@ class ListWidgetActivity : ComponentActivity() {
                     )
 
                     val list = mutableListOf<User>().apply {
-                        add(User(System.currentTimeMillis(), "Allever", R.drawable.default_image))
-                        add(User(System.currentTimeMillis(), "Winchen", R.drawable.default_image))
+                        add(User(System.currentTimeMillis(), "Allever", R.drawable.zcp_default_image))
+                        add(User(System.currentTimeMillis(), "Winchen", R.drawable.zcp_default_image))
                         add(
                             User(
                                 System.currentTimeMillis(),
                                 "Devallever",
-                                R.drawable.default_image
+                                R.drawable.zcp_default_image
                             )
                         )
                     }
@@ -112,20 +112,20 @@ class ListWidgetActivity : ComponentActivity() {
                     )
 
                     val rowList = mutableListOf<Int>().apply {
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
                     }
                     LazyRow {
                         itemsIndexed(rowList) { index, item ->

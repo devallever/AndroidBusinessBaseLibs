@@ -1,6 +1,8 @@
 [versions]
 # android sdk versions
+coilCompose = "2.2.2"
 compileSdk = "36"
+lifecycleViewmodelCompose = "2.6.2"
 targetSdk = "36"
 minSdk = "24"
 
@@ -146,6 +148,7 @@ javaWebsocket = "1.6.0"
 kotlinReflectVersion = "1.5.10"
 nanohttpd = "2.3.1"
 places = "3.5.0"
+uiViewbinding = "1.11.4"
 
 
 
@@ -162,12 +165,14 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-emoji2-emojipicker = { module = "androidx.emoji2:emoji2-emojipicker", version.ref = "emoji2Emojipicker" }
 androidx-gridlayout = { module = "androidx.gridlayout:gridlayout", version.ref = "gridlayout" }
 androidx-legacy-support-v4 = { module = "androidx.legacy:legacy-support-v4", version.ref = "legacySupportV4" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 androidx-preference = { module = "androidx.preference:preference", version.ref = "preference" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 androidx-work-multiprocess = { module = "androidx.work:work-multiprocess", version.ref = "workMultiprocess" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 jetbrains-kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinReflectVersion" }
 getactivity-gsonfactory = { module = "com.github.getActivity:GsonFactory", version.ref = "gsonfactoryVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -328,6 +333,7 @@ litepal-core = { module = "org.litepal.guolindev:core", version.ref = "litepalCo
 easyhttp = { module = "com.github.getActivity:EasyHttp", version.ref = "easyhttp" }
 magic-viewpager = { module = "com.zhy:magic-viewpager", version.ref = "magicViewpager" }
 java-websocket = { module = "org.java-websocket:Java-WebSocket", version.ref = "javaWebsocket" }
+androidx-compose-ui-viewbinding = { group = "androidx.compose.ui", name = "ui-viewbinding", version.ref = "uiViewbinding" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

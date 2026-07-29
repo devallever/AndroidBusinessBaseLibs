@@ -1,6 +1,7 @@
 package com.allever.compose.core
 
 import android.widget.Toast
+import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.compose.BuildConfig
 
 class Toast

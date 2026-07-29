@@ -13,18 +13,21 @@ android {
 
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 }
 
 dependencies {
     api(project(":core"))
     api(libs.androidx.activity.compose)
+    api(libs.androidx.lifecycle.viewmodel.compose)
     api(platform(libs.androidx.compose.bom))
     api(libs.androidx.compose.ui)
     api(libs.androidx.compose.ui.graphics)
     api(libs.androidx.compose.ui.tooling.preview)
     api(libs.androidx.compose.material3)
-    api("io.coil-kt:coil-compose:2.2.2")
+    api(libs.androidx.compose.ui.viewbinding)
+    api(libs.coil.compose)
     //
     testApi(libs.junit)
     androidTestApi(libs.androidx.junit)

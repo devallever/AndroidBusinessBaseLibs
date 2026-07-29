@@ -49,12 +49,12 @@ class GridWidgetActivity : ComponentActivity() {
                     )
 
                     val list = mutableListOf<Int>().apply {
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
                     }
                     LazyVerticalGrid(columns = GridCells.Fixed(3)) {
                         itemsIndexed(list) { index, item ->
@@ -84,24 +84,24 @@ class GridWidgetActivity : ComponentActivity() {
                     )
 
                     val listH = mutableListOf<Int>().apply {
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
-                        add(R.drawable.default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
+                        add(R.drawable.zcp_default_image)
                     }
                     LazyHorizontalGrid(rows = GridCells.Fixed(2), modifier = Modifier.height(240.dp)) {
                         itemsIndexed(listH) {index, item ->

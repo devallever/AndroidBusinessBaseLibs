@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -194,7 +193,7 @@ class BasicWidgetActivity : ComponentActivity() {
                     onConfirmation = { showAlertDialog = false },
                     dialogTitle = "AlertDialogExample",
                     dialogText = "This is AlertDialogExample",
-                    icon = R.drawable.ic_menu
+                    icon = R.drawable.zcp_ic_menu
                 )
             }
 
@@ -255,7 +254,7 @@ class BasicWidgetActivity : ComponentActivity() {
                 Text(text = "本地图片 Image", Modifier.padding(10.dp))
 
                 Image(
-                    painter = painterResource(id = R.drawable.default_image),
+                    painter = painterResource(id = R.drawable.zcp_default_image),
                     contentDescription = ""
                 )
 
@@ -265,7 +264,7 @@ class BasicWidgetActivity : ComponentActivity() {
                 )
 
                 Image(
-                    painter = painterResource(id = R.drawable.default_image),
+                    painter = painterResource(id = R.drawable.zcp_default_image),
                     contentDescription = "",
                     modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
@@ -275,7 +274,7 @@ class BasicWidgetActivity : ComponentActivity() {
                 Text(text = "本地图片(圆形), clip(CircleShape)", Modifier.padding(10.dp))
 
                 Image(
-                    painter = painterResource(id = R.drawable.default_image),
+                    painter = painterResource(id = R.drawable.zcp_default_image),
                     contentDescription = "",
                     modifier = Modifier
                         .clip(CircleShape)
@@ -339,7 +338,7 @@ class BasicWidgetActivity : ComponentActivity() {
                 Text(text = "图标按钮 IconButton", Modifier.padding(10.dp))
                 IconButton(onClick = { toast("IconButton") }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_menu),
+                        painter = painterResource(id = R.drawable.zcp_ic_menu),
                         contentDescription = "",
                         modifier = Modifier
                             .size(42.dp)
@@ -352,7 +351,7 @@ class BasicWidgetActivity : ComponentActivity() {
                     toast("FloatingActionButton")
                 }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_menu),
+                        painter = painterResource(id = R.drawable.zcp_ic_menu),
                         contentDescription = "",
                         modifier = Modifier
                             .size(42.dp)
@@ -365,7 +364,7 @@ class BasicWidgetActivity : ComponentActivity() {
                     toast("ExtendedFloatingActionButton")
                 }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_menu),
+                        painter = painterResource(id = R.drawable.zcp_ic_menu),
                         contentDescription = "",
                         modifier = Modifier
                             .size(42.dp)
@@ -522,7 +521,7 @@ class BasicWidgetActivity : ComponentActivity() {
                         containerColor = Color(0x80333333)
                     ), navigationIcon = {
                         Image(
-                            painter = painterResource(id = R.drawable.ic_menu),
+                            painter = painterResource(id = R.drawable.zcp_ic_menu),
                             contentDescription = "",
                             modifier = Modifier
                                 .size(42.dp)
@@ -534,7 +533,7 @@ class BasicWidgetActivity : ComponentActivity() {
                             toast("menu1")
                         }) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_menu),
+                                painter = painterResource(id = R.drawable.zcp_ic_menu),
                                 contentDescription = "",
                                 modifier = Modifier
                                     .size(42.dp)
@@ -545,7 +544,7 @@ class BasicWidgetActivity : ComponentActivity() {
                             toast("menu2")
                         }) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_menu),
+                                painter = painterResource(id = R.drawable.zcp_ic_menu),
                                 contentDescription = "",
                                 modifier = Modifier
                                     .size(42.dp)
@@ -623,7 +622,7 @@ class BasicWidgetActivity : ComponentActivity() {
                             },
                             icon = {
                                 Icon(
-                                    painter = painterResource(id = R.drawable.ic_menu),
+                                    painter = painterResource(id = R.drawable.zcp_ic_menu),
                                     contentDescription = "",
                                     modifier = Modifier
                                         .size(32.dp)
@@ -649,7 +648,7 @@ class BasicWidgetActivity : ComponentActivity() {
                                 modifier = Modifier
                             ) {
                                 Icon(
-                                    painter = painterResource(id = R.drawable.ic_menu),
+                                    painter = painterResource(id = R.drawable.zcp_ic_menu),
                                     contentDescription = "",
                                     modifier = Modifier
                                         .size(32.dp)

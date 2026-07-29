@@ -15,10 +15,12 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+        viewBinding = true
     }
 }
 
 dependencies {
     api(project(":core-compose"))
     implementation("com.google.accompanist:accompanist-pager:0.23.1")
+    implementation(libs.play.services.ads)
 }

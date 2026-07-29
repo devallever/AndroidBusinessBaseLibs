@@ -67,9 +67,9 @@ class AppFrameBottomNaviActivity : ComponentActivity() {
                     }
 
                     val tabEntityList = mutableListOf<TabEntity>().apply {
-                        add(TabEntity("Tab1", R.drawable.ic_menu, R.drawable.ic_menu))
-                        add(TabEntity("Tab2", R.drawable.ic_menu, R.drawable.ic_menu))
-                        add(TabEntity("Tab3", R.drawable.ic_menu, R.drawable.ic_menu))
+                        add(TabEntity("Tab1", R.drawable.zcp_ic_menu, R.drawable.zcp_ic_menu))
+                        add(TabEntity("Tab2", R.drawable.zcp_ic_menu, R.drawable.zcp_ic_menu))
+                        add(TabEntity("Tab3", R.drawable.zcp_ic_menu, R.drawable.zcp_ic_menu))
                     }
                     BottomNavigationView(tabEntityList, tabIndexState) {
                         tabIndexState = it

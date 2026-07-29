@@ -13,6 +13,17 @@
         <activity android:name="com.allever.compose.project.compose.basic.PagerWidgetActivity" />
         <activity android:name="com.allever.compose.project.compose.basic.AppFrameBottomNaviActivity" />
 
+        <activity android:name="com.allever.compose.project.google.GoogleComposeMainActivity" />
+
+        <activity android:name="com.allever.compose.project.watch.WatchMainActivity" />
+
+        <activity android:name="app.allever.android.learning.project.compose.module.tianliao.module.main.TLMainActivity" />
+        <activity android:name="app.allever.android.learning.project.compose.module.wechat.ui.WechatComposeActivity" />
+
+        <activity android:name="com.allever.compose.project.compose.ad.AdMobBasicActivity" />
+        <activity android:name="com.allever.compose.project.compose.ad.ComposeAdMainActivity" />
+        <activity android:name="com.allever.compose.project.compose.ad.AdMobNativeActivity" />
+
 
     </application>
 
