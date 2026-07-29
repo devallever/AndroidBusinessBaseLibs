@@ -10,7 +10,7 @@ import app.allever.android.lib.core.helper.ActivityHelper
 /**
  * Compose 动态页面容器 Activity
  * 
- * 支持通过反射动态加载实现 [ComposeScreen] 接口的页面类，
+ * 支持通过反射动态加载实现 [ComposeContent] 接口的页面类，
  * 类似 FragmentActivity 动态加载 Fragment 的机制。
  * 
  * 使用方式：
@@ -24,7 +24,7 @@ import app.allever.android.lib.core.helper.ActivityHelper
  * }
  * ```
  */
-class ComposeScreenActivity : BaseComposeActivity() {
+class ComposeContentActivity : BaseComposeActivity() {
 
     companion object {
         /**
@@ -37,7 +37,7 @@ class ComposeScreenActivity : BaseComposeActivity() {
             title: String,
             clz: T
         ) {
-            ActivityHelper.startActivity<ComposeScreenActivity> {
+            ActivityHelper.startActivity<ComposeContentActivity> {
                 putExtra("screenClassName", clz.name)
                 putExtra("title", title)
             }
@@ -55,7 +55,7 @@ class ComposeScreenActivity : BaseComposeActivity() {
             showTopBar: Boolean = true,
             darkMode: Boolean = false
         ) {
-            ActivityHelper.startActivity<ComposeScreenActivity> {
+            ActivityHelper.startActivity<ComposeContentActivity> {
                 putExtra("screenClassName", T::class.java.name)
                 putExtra("title", title)
                 putExtra("showTopBar", showTopBar)
@@ -77,7 +77,7 @@ class ComposeScreenActivity : BaseComposeActivity() {
         ) {
             val args = Bundle()
             block.invoke(args)
-            ActivityHelper.startActivity<ComposeScreenActivity> {
+            ActivityHelper.startActivity<ComposeContentActivity> {
                 putExtra("screenClassName", T::class.java.name)
                 putExtra("title", title)
                 putExtra("showTopBar", showTopBar)
@@ -87,7 +87,7 @@ class ComposeScreenActivity : BaseComposeActivity() {
         }
     }
 
-    private var screenInstance: ComposeScreen? = null
+    private var screenInstance: ComposeContent? = null
     private var screenArgs: Bundle? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,7 +109,7 @@ class ComposeScreenActivity : BaseComposeActivity() {
             }
             log("screenClassName: $className")
             val instance = Class.forName(className!!).getConstructor().newInstance()
-            if (instance is ComposeScreen) {
+            if (instance is ComposeContent) {
                 screenInstance = instance
             } else {
                 log("Class does not implement ComposeScreen: $className")

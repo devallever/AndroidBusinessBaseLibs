@@ -26,7 +26,7 @@ import androidx.compose.runtime.Composable
  * ComposeActivity.start<MyComposeScreen>("标题")
  * ```
  */
-interface ComposeScreen {
+interface ComposeContent {
     /**
      * Compose 页面内容
      * 

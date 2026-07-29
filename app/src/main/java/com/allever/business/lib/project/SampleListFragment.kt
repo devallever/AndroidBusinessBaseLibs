@@ -6,8 +6,8 @@ import app.allever.android.lib.common.ListFragment
 import app.allever.android.lib.common.ListViewModel
 import app.allever.android.lib.common.adapter.TextDetailClickAdapter
 import app.allever.android.lib.common.adapter.bean.TextDetailClickItem
-import app.allever.android.lib.common.compose.ComposeScreenActivity
-import app.allever.android.lib.common.compose.SampleComposeScreen
+import app.allever.android.lib.common.compose.ComposeContentActivity
+import app.allever.android.lib.common.compose.SampleComposeContent
 import app.allever.android.lib.common.databinding.FragmentListBinding
 
 class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, TextDetailClickItem>() {
@@ -64,7 +64,7 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
             Navi.navigateTo(RouterPath.PATH_SAMPLE_BLUETOOTH)
         },
         TextDetailClickItem("测试ComposeScreen", ) { it ->
-            ComposeScreenActivity.start<SampleComposeScreen>(it.title) {
+            ComposeContentActivity.start<SampleComposeContent>(it.title) {
                 it.putString("message", "Hello Compose Android!")
             }
         },

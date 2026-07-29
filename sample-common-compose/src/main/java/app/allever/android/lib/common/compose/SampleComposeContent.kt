@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 /**
  * 示例 Compose 页面
  * 
- * 演示如何实现 [ComposeScreen] 接口来创建可动态加载的 Compose 页面。
+ * 演示如何实现 [ComposeContent] 接口来创建可动态加载的 Compose 页面。
  * 
  * 使用方式：
  * ```kotlin
@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
  * }
  * ```
  */
-class SampleComposeScreen : ComposeScreen {
+class SampleComposeContent : ComposeContent {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
