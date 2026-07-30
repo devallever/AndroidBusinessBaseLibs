@@ -1,14 +1,16 @@
 package com.allever.business.lib.project.compose
 
-import app.allever.android.lib.common.adapter.bean.TextDetailClickItem
 import app.allever.android.lib.common.compose.ComposeContentActivity
 import app.allever.android.lib.common.compose.ListComposeActivity
 import app.allever.android.lib.common.compose.SampleComposeContent
+import app.allever.android.lib.common.compose.widget.DefaultLayoutAdapter
+import app.allever.android.lib.common.compose.widget.LayoutAdapter
 import app.allever.android.lib.common.compose.widget.TextClickItem
+import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.router.annotation.Route
 
 @Route(path = "/appcompose/main")
-class MainActivity : ListComposeActivity() {
+class MainActivity : ListComposeActivity<TextClickItem>() {
     override fun getPageTitle() = "Compose Project"
 
     override fun getList(): MutableList<TextClickItem> = mutableListOf(
@@ -26,5 +28,17 @@ class MainActivity : ListComposeActivity() {
                 it.putString("message", "Hello Compose Android!")
             }
         },
+        TextClickItem("测试TextDetailClickItem") {
+            toast("点击了TextDetailClickItem")
+        },
+        TextClickItem("测试TextDetailClickItem2") {
+            toast("点击了TextDetailClickItem2")
+        },
+        TextClickItem("测试TextDetailClickItem3") {
+            toast("点击了TextDetailClickIte3")
+        },
+
     )
+
+    override fun getLayoutAdapter(): LayoutAdapter<TextClickItem> = DefaultLayoutAdapter()
 }

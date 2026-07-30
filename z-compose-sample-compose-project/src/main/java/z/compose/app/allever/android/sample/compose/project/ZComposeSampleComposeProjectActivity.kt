@@ -3,6 +3,8 @@ package z.compose.app.allever.android.sample.compose.project
 import app.allever.android.learning.project.compose.module.tianliao.module.main.TLMainActivity
 import app.allever.android.learning.project.compose.module.wechat.ui.WechatComposeActivity
 import app.allever.android.lib.common.compose.ListComposeActivity
+import app.allever.android.lib.common.compose.widget.DefaultLayoutAdapter
+import app.allever.android.lib.common.compose.widget.LayoutAdapter
 import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.router.annotation.Route
 import app.allever.android.lib.common.compose.widget.TextClickItem
@@ -12,7 +14,7 @@ import com.allever.compose.project.google.GoogleComposeMainActivity
 import com.allever.compose.project.watch.WatchMainActivity
 
 @Route(path = "/zcomposesampleproject/main")
-class ZComposeSampleComposeProjectActivity: ListComposeActivity(){
+class ZComposeSampleComposeProjectActivity: ListComposeActivity<TextClickItem>(){
     override fun getPageTitle() = "ComposeProject-旧项目代码"
 
     override fun getList(): MutableList<TextClickItem> = mutableListOf<TextClickItem>().apply {
@@ -35,4 +37,6 @@ class ZComposeSampleComposeProjectActivity: ListComposeActivity(){
             ActivityHelper.startActivity<ComposeAdMainActivity>()
         })
     }
+
+    override fun getLayoutAdapter(): LayoutAdapter<TextClickItem> = DefaultLayoutAdapter()
 }
