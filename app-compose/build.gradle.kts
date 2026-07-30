@@ -20,4 +20,6 @@ android {
 dependencies {
     api(project(":core-compose"))
     implementation(project(":sample-common-compose"))
+
+    implementation(project(":z-compose-sample-compose-project"))
 }

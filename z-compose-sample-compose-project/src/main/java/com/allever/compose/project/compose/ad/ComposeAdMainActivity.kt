@@ -2,11 +2,15 @@ package com.allever.compose.project.compose.ad
 
 import androidx.compose.runtime.Composable
 import app.allever.android.lib.common.compose.BaseComposeActivity
-import com.allever.compose.core.TextClickItem
+import app.allever.android.lib.common.compose.widget.FunctionList
+import app.allever.android.lib.common.compose.widget.TextClickItem
 import app.allever.android.lib.core.helper.ActivityHelper
-import com.allever.compose.core.ui.FunctionList
 
 class ComposeAdMainActivity: BaseComposeActivity() {
+    override fun init() {
+
+    }
+
     @Composable
     override fun ContentPage() {
         FunctionList(list = mutableListOf<TextClickItem>().apply {

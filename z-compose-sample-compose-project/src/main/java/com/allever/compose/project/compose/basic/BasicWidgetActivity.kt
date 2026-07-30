@@ -180,6 +180,10 @@ class BasicWidgetActivity : BaseComposeActivity() {
         }
     }
 
+    override fun init() {
+
+    }
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun ContentPage() {

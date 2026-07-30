@@ -33,6 +33,10 @@ import app.allever.android.lib.common.compose.theme.ComposeProjectTheme
  */
 
 class GoogleComposeMainActivity : BaseComposeActivity() {
+    override fun init() {
+
+    }
+
     @Composable
     override fun ContentPage() {
         MyApp()

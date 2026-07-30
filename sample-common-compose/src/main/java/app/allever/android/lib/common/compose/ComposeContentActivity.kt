@@ -28,42 +28,6 @@ class ComposeContentActivity : BaseComposeActivity() {
 
     companion object {
         /**
-         * 通过反射启动 Compose 页面
-         * 
-         * @param title 页面标题
-         * @param clz 页面类
-         */
-        fun <T : Class<*>> start(
-            title: String,
-            clz: T
-        ) {
-            ActivityHelper.startActivity<ComposeContentActivity> {
-                putExtra("screenClassName", clz.name)
-                putExtra("title", title)
-            }
-        }
-
-        /**
-         * 通过反射启动 Compose 页面（内联泛型版本）
-         * 
-         * @param title 页面标题
-         * @param showTopBar 是否显示顶部栏
-         * @param darkMode 深色模式
-         */
-        inline fun <reified T> start(
-            title: String,
-            showTopBar: Boolean = true,
-            darkMode: Boolean = false
-        ) {
-            ActivityHelper.startActivity<ComposeContentActivity> {
-                putExtra("screenClassName", T::class.java.name)
-                putExtra("title", title)
-                putExtra("showTopBar", showTopBar)
-                putExtra("darkMode", darkMode)
-            }
-        }
-
-        /**
          * 通过反射启动 Compose 页面（带参数版本）
          * 
          * @param title 页面标题
@@ -71,7 +35,8 @@ class ComposeContentActivity : BaseComposeActivity() {
          */
         inline fun <reified T> start(
             title: String,
-            showTopBar: Boolean = true,
+            showTopBar: Boolean = false,
+            showBackIcon: Boolean = false,
             darkMode: Boolean = false,
             block: (args: Bundle) -> Unit
         ) {
@@ -81,6 +46,7 @@ class ComposeContentActivity : BaseComposeActivity() {
                 putExtra("screenClassName", T::class.java.name)
                 putExtra("title", title)
                 putExtra("showTopBar", showTopBar)
+                putExtra("showBackIcon", showBackIcon)
                 putExtra("darkMode", darkMode)
                 putExtra("screenArgs", args)
             }
@@ -93,7 +59,13 @@ class ComposeContentActivity : BaseComposeActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         loadScreen()
         super.onCreate(savedInstanceState)
-        val title = intent?.getStringExtra("title") ?: "ComposeActivity"
+    }
+
+    override fun init() {
+        val title = intent?.getStringExtra("title") ?: "ComposeContentActivity"
+        val showBackIcon = intent?.getBooleanExtra("showBackIcon", false) ?: false
+        initTopBar(title, showBackIcon)
+        showTopBar = intent?.getBooleanExtra("showTopBar", true) ?: true
     }
 
     /**

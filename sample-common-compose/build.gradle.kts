@@ -15,4 +15,6 @@ android {
 dependencies {
     api(project(":lib-mvvm-compose"))
     api(project(":sample-common"))
+    api("com.google.accompanist:accompanist-pager:0.23.1")
+
 }

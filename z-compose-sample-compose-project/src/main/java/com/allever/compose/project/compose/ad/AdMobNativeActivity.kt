@@ -31,6 +31,9 @@ import z.compose.app.allever.android.sample.compose.project.databinding.ZcpNativ
 import z.compose.app.allever.android.sample.compose.project.databinding.ZcpNativeAdBannerSmallBinding
 
 class AdMobNativeActivity : BaseComposeActivity() {
+    override fun init() {
+
+    }
 
 
     @Composable

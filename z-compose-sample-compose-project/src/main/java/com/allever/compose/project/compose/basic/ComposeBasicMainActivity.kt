@@ -3,8 +3,8 @@ package com.allever.compose.project.compose.basic
 import androidx.compose.runtime.Composable
 import app.allever.android.lib.common.compose.BaseComposeActivity
 import app.allever.android.lib.core.helper.ActivityHelper
-import com.allever.compose.core.TextClickItem
-import com.allever.compose.core.ui.FunctionList
+import app.allever.android.lib.common.compose.widget.TextClickItem
+import app.allever.android.lib.common.compose.widget.FunctionList
 
 /**
  *@Description
@@ -12,6 +12,10 @@ import com.allever.compose.core.ui.FunctionList
  *@date: 2024/3/15
  */
 class ComposeBasicMainActivity : BaseComposeActivity() {
+
+    override fun init() {
+        initTopBar("Compose 组件")
+    }
 
     @Composable
     override fun ContentPage() {

@@ -3,6 +3,7 @@
 
     <application>
         <activity android:name=".ComposeContentActivity" />
+        <activity android:name="app.allever.android.lib.common.compose.ListComposeActivity" />
     </application>
 
 </manifest>

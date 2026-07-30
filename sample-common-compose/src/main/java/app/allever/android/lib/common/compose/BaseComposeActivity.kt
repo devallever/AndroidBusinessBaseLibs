@@ -32,9 +32,9 @@ import app.allever.android.lib.core.helper.DisplayHelper
 abstract class BaseComposeActivity : AbstractComposeActivity() {
 
     // 标题状态，修改此值会自动刷新 UI
-    protected var title by mutableStateOf("AppBar")
-        private set
+    protected var title by mutableStateOf("")
     protected var showBackIcon by mutableStateOf(false)
+    protected var showTopBar by mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +58,7 @@ abstract class BaseComposeActivity : AbstractComposeActivity() {
                                 )
                         )
                     }
-                    if (showTopBar()) {
+                    if (showTopBar) {
                         TopBar()
                     }
                     Box(
@@ -76,16 +76,12 @@ abstract class BaseComposeActivity : AbstractComposeActivity() {
         init()
     }
 
+    abstract fun init()
+
     @Composable
     abstract fun ContentPage()
 
-    protected open fun init() { }
-
     protected open fun adaptStatusBar(): Boolean {
-        return true
-    }
-
-    protected open fun showTopBar(): Boolean {
         return true
     }
 
@@ -96,6 +92,7 @@ abstract class BaseComposeActivity : AbstractComposeActivity() {
     protected fun initTopBar(title: String = "AppBar", showBackIcon: Boolean = false) {
         this.title = title
         this.showBackIcon = showBackIcon
+        this.showTopBar = true
     }
 
     @Preview

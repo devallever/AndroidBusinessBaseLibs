@@ -26,6 +26,10 @@ import com.google.accompanist.pager.rememberPagerState
  *@date: 2024/3/15
  */
 class PagerWidgetActivity : BaseComposeActivity() {
+    override fun init() {
+
+    }
+
     @OptIn(ExperimentalPagerApi::class)
     @Composable
     override fun ContentPage() {

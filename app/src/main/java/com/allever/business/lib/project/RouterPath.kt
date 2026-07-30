@@ -88,6 +88,5 @@ class RouterPath {
 
         //COMPOSE /////////////////////////////////////////////////////////////////////////////////////////
         const val PATH_APP_COMPOSE = "/appcompose/main"
-        const val PATH_Z_COMPOSE_SAMPLE_PROJECT = "/zcomposesampleproject/main"
     }
 }

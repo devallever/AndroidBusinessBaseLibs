@@ -1,8 +1,5 @@
 package com.allever.compose.project.compose.basic
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -17,17 +14,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import app.allever.android.lib.common.compose.BaseComposeActivity
-import app.allever.android.lib.core.compose.base.AbstractComposeActivity
-import app.allever.android.lib.common.compose.theme.ComposeProjectTheme
-import com.allever.compose.core.ui.widget.BottomNavigationView
-import com.allever.compose.core.ui.widget.TabEntity
-import com.allever.compose.core.ui.widget.ViewPager
+import app.allever.android.lib.common.compose.widget.BottomNavigationView
+import app.allever.android.lib.common.compose.widget.TabEntity
+import app.allever.android.lib.common.compose.widget.ViewPager
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import z.compose.app.allever.android.sample.compose.project.R
 
 class AppFrameBottomNaviActivity : BaseComposeActivity() {
+    override fun init() {
+
+    }
+
     @OptIn(ExperimentalPagerApi::class)
     @Composable
     override fun ContentPage() {

@@ -1,25 +1,16 @@
 package app.allever.android.learning.project.compose.module.tianliao.module.main
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.Composable
 import app.allever.android.learning.project.compose.module.tianliao.module.main.ui.MainPage
-import app.allever.android.learning.project.compose.module.tianliao.module.main.viewmodel.TLMainViewModel
-import app.allever.android.lib.core.compose.base.AbstractComposeActivity
-import app.allever.android.lib.common.compose.theme.ComposeProjectTheme
-import com.google.accompanist.pager.ExperimentalPagerApi
+import app.allever.android.lib.common.compose.BaseComposeActivity
 
-class TLMainActivity : AbstractComposeActivity() {
-    @OptIn(ExperimentalPagerApi::class)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+class TLMainActivity : BaseComposeActivity() {
+    override fun init() {
 
-        setContent {
-            ComposeProjectTheme {
-                val viewModel: TLMainViewModel = viewModel()
-                MainPage(this)
-            }
-        }
+    }
+
+    @Composable
+    override fun ContentPage() {
+        MainPage(this)
     }
 }

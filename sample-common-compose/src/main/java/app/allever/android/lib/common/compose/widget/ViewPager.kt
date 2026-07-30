@@ -1,4 +1,4 @@
-package com.allever.compose.core.ui.widget
+package app.allever.android.lib.common.compose.widget
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

@@ -119,6 +119,18 @@ object DisplayHelper {
     fun getNavigationBarHeight(context: Context): Int =
         getXBarHeight(context, NAVIGATION_BAR_HEIGHT)
 
+    /**
+     * 获取ActionBar高度
+     */
+    fun getActionBarHeight(context: Context): Int {
+        val styledAttributes = context.theme.obtainStyledAttributes(
+            intArrayOf(androidx.appcompat.R.attr.actionBarSize)
+        )
+        val actionBarHeight = styledAttributes.getDimension(0, 0f).toInt()
+        styledAttributes.recycle()
+        return actionBarHeight
+    }
+
     private fun getXBarHeight(context: Context, parameterName: String): Int {
         var height = 0
         val resourceId: Int =

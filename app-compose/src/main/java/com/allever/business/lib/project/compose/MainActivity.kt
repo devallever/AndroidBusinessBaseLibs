@@ -1,42 +1,30 @@
 package com.allever.business.lib.project.compose
 
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import app.allever.android.lib.common.compose.BaseComposeActivity
-import app.allever.android.lib.common.compose.theme.ComposeProjectTheme
+import app.allever.android.lib.common.adapter.bean.TextDetailClickItem
+import app.allever.android.lib.common.compose.ComposeContentActivity
+import app.allever.android.lib.common.compose.ListComposeActivity
+import app.allever.android.lib.common.compose.SampleComposeContent
+import app.allever.android.lib.common.compose.widget.TextClickItem
 import app.allever.android.lib.router.annotation.Route
 
 @Route(path = "/appcompose/main")
-class MainActivity : BaseComposeActivity() {
-    @Composable
-    override fun ContentPage() {
-//        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//
-//        }
-        Greeting(
-            name = "Android",
-        )
-    }
+class MainActivity : ListComposeActivity() {
+    override fun getPageTitle() = "Compose Project"
 
-    override fun init() {
-        initTopBar("Compose Project")
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
+    override fun getList(): MutableList<TextClickItem> = mutableListOf(
+        TextClickItem(
+            "ComposeProject-旧项目代码", "z-compose-sample-compose-project"
+        ) {
+            Navi.navigateTo(RouterPath.PATH_Z_COMPOSE_SAMPLE_PROJECT)
+        },
+        TextClickItem("测试ComposContent") { it ->
+            ComposeContentActivity.start<SampleComposeContent>(
+                it.title,
+                showTopBar = true,
+                showBackIcon = true
+            ) {
+                it.putString("message", "Hello Compose Android!")
+            }
+        },
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ComposeProjectTheme {
-        Greeting("Android")
-    }
 }

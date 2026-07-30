@@ -28,6 +28,10 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 
 class AdMobBasicActivity : BaseComposeActivity() {
 
+    override fun init() {
+
+    }
+
     @SuppressLint("MissingPermission")
     @Composable
     override fun ContentPage() {

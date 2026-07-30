@@ -30,6 +30,9 @@ import z.compose.app.allever.android.sample.compose.project.R
  *@date: 2024/3/15
  */
 class GridWidgetActivity : BaseComposeActivity() {
+    override fun init() {
+
+    }
 
     @Composable
     override fun ContentPage() {

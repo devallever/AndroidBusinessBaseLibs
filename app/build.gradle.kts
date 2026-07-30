@@ -120,8 +120,6 @@ dependencies {
     implementation(project(":z-sample-microsoft-speech"))
     implementation(project(":z-sample-audiovideo"))
 
-    implementation(project(":z-compose-sample-compose-project"))
-
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
 
     testImplementation(libs.junit)

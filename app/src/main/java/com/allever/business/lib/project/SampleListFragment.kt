@@ -15,11 +15,8 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
     override fun getAdapter() = TextDetailClickAdapter(Gravity.CENTER)
 
     override fun getList() = mutableListOf(
-        TextDetailClickItem("Compose Project") {
+        TextDetailClickItem("Compose Project", "app-compose") {
             Navi.navigateTo(RouterPath.PATH_APP_COMPOSE)
-        },
-        TextDetailClickItem("Z Compose Project") {
-            Navi.navigateTo(RouterPath.PATH_Z_COMPOSE_SAMPLE_PROJECT)
         },
         TextDetailClickItem("基础组件") {
             FragmentActivity.start<LibListFragment>(it.title)
@@ -62,11 +59,6 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         },
         TextDetailClickItem("蓝牙", "sample-bluetooth") {
             Navi.navigateTo(RouterPath.PATH_SAMPLE_BLUETOOTH)
-        },
-        TextDetailClickItem("测试ComposeScreen", ) { it ->
-            ComposeContentActivity.start<SampleComposeContent>(it.title) {
-                it.putString("message", "Hello Compose Android!")
-            }
         },
     )
 }

@@ -34,6 +34,9 @@ import z.compose.app.allever.android.sample.compose.project.R
  *@date: 2024/1/3
  */
 class WatchMainActivity : BaseComposeActivity() {
+    override fun init() {
+
+    }
 
     @Composable
     override fun ContentPage() {
