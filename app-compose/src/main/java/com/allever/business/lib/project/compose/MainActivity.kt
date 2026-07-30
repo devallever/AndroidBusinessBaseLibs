@@ -19,6 +19,10 @@ class MainActivity : BaseComposeActivity() {
             name = "Android",
         )
     }
+
+    override fun init() {
+        initTopBar("Compose Project")
+    }
 }
 
 @Composable

@@ -12,6 +12,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 
 /**
  * 示例 Compose 页面
@@ -31,6 +32,7 @@ import androidx.compose.ui.Modifier
  */
 class SampleComposeContent : ComposeContent {
 
+    @Preview
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content(args: Bundle?) {
