@@ -35,15 +35,17 @@ class ComposeContentActivity : BaseComposeActivity() {
          */
         inline fun <reified T> start(
             title: String,
+            adaptStatusBar: Boolean = true,
             showTopBar: Boolean = false,
             showBackIcon: Boolean = false,
             darkMode: Boolean = false,
-            block: (args: Bundle) -> Unit
+            block: (args: Bundle) -> Unit = {}
         ) {
             val args = Bundle()
             block.invoke(args)
             ActivityHelper.startActivity<ComposeContentActivity> {
                 putExtra("screenClassName", T::class.java.name)
+                putExtra("adaptStatusBar", adaptStatusBar)
                 putExtra("title", title)
                 putExtra("showTopBar", showTopBar)
                 putExtra("showBackIcon", showBackIcon)
@@ -90,6 +92,11 @@ class ComposeContentActivity : BaseComposeActivity() {
             e.printStackTrace()
             log("Failed to load screen: ${e.message}")
         }
+    }
+
+    override fun adaptStatusBar(): Boolean {
+        val adaptStatusBar = intent?.getBooleanExtra("adaptStatusBar", true) ?: true
+        return adaptStatusBar
     }
 
     @Composable

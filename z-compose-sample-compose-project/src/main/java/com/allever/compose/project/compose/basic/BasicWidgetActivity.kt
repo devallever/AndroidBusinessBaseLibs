@@ -181,7 +181,7 @@ class BasicWidgetActivity : BaseComposeActivity() {
     }
 
     override fun init() {
-
+        initTopBar("基础组件")
     }
 
     @OptIn(ExperimentalMaterial3Api::class)

@@ -2,7 +2,8 @@ package com.allever.business.lib.project.compose
 
 import app.allever.android.lib.common.compose.ComposeContentActivity
 import app.allever.android.lib.common.compose.ListComposeActivity
-import app.allever.android.lib.common.compose.SampleComposeContent
+import app.allever.android.lib.common.compose.ListComposeContent
+import com.allever.business.lib.project.compose.SampleComposeContent
 import app.allever.android.lib.common.compose.widget.DefaultLayoutAdapter
 import app.allever.android.lib.common.compose.widget.LayoutAdapter
 import app.allever.android.lib.common.compose.widget.TextClickItem
@@ -28,8 +29,8 @@ class MainActivity : ListComposeActivity<TextClickItem>() {
                 it.putString("message", "Hello Compose Android!")
             }
         },
-        TextClickItem("测试TextDetailClickItem") {
-            toast("点击了TextDetailClickItem")
+        TextClickItem("SampleListComposeContent") { it ->
+            ListComposeContent.start<SampleListComposeContent>(it.title, adaptStatusBar = true, showTopBar = true)
         },
         TextClickItem("测试TextDetailClickItem2") {
             toast("点击了TextDetailClickItem2")

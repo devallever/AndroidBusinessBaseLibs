@@ -89,7 +89,7 @@ abstract class BaseComposeActivity : AbstractComposeActivity() {
      * 初始化/修改标题栏文本
      * 调用后会自动刷新 Compose UI
      */
-    protected fun initTopBar(title: String = "AppBar", showBackIcon: Boolean = false) {
+    protected fun initTopBar(title: String = "AppBar", showBackIcon: Boolean = true) {
         this.title = title
         this.showBackIcon = showBackIcon
         this.showTopBar = true

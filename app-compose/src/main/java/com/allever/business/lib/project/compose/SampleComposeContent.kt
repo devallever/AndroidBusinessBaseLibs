@@ -1,4 +1,4 @@
-package app.allever.android.lib.common.compose
+package com.allever.business.lib.project.compose
 
 import android.os.Bundle
 import androidx.compose.foundation.layout.Box
@@ -13,17 +13,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import app.allever.android.lib.common.compose.ComposeContent
 
 /**
  * 示例 Compose 页面
- * 
- * 演示如何实现 [ComposeContent] 接口来创建可动态加载的 Compose 页面。
- * 
+ *
+ * 演示如何实现 [app.allever.android.lib.common.compose.ComposeContent] 接口来创建可动态加载的 Compose 页面。
+ *
  * 使用方式：
  * ```kotlin
  * // 启动页面
  * ComposeActivity.start<SampleComposeScreen>("示例页面")
- * 
+ *
  * // 带参数启动
  * ComposeActivity.start<SampleComposeScreen>("示例页面") { bundle ->
  *     bundle.putString("message", "Hello")
@@ -37,7 +38,7 @@ class SampleComposeContent : ComposeContent {
     @Composable
     override fun Content(args: Bundle?) {
         val message = args?.getString("message") ?: "Hello Compose!"
-        
+
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -46,10 +47,10 @@ class SampleComposeContent : ComposeContent {
             }
         ) { paddingValues ->
             Box(
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .fillMaxSize()
                     .padding(paddingValues),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Companion.Center
             ) {
                 Text(
                     text = message,
