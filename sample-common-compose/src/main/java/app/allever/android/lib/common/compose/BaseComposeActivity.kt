@@ -56,6 +56,7 @@ abstract class BaseComposeActivity : AbstractComposeActivity() {
                                         )
                                     ).dp
                                 )
+                                .background(color = Color(0xFFFFFFFF))
                         )
                     }
                     if (showTopBar) {
@@ -102,6 +103,7 @@ abstract class BaseComposeActivity : AbstractComposeActivity() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
+                .background(color = Color(0xFFFFFFFF))
         ) {
             if (showBackIcon) {
                 IconButton(onClick = {

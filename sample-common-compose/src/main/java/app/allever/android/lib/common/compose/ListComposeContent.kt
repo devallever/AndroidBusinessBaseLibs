@@ -36,7 +36,7 @@ abstract class ListComposeContent<T>: ComposeContent {
     companion object {
         inline fun <reified T> start(
             title: String,
-            adaptStatusBar: Boolean = true,
+            adaptStatusBar: Boolean = false,
             showTopBar: Boolean = false,
             showBackIcon: Boolean = true,
             darkMode: Boolean = false,
@@ -55,7 +55,7 @@ abstract class ListComposeContent<T>: ComposeContent {
     @Composable
     override fun Content(args: Bundle?) {
         title = args?.getString("title") ?: "ListComposeContent"
-        val adaptStatusBar = args?.getBoolean("adaptStatusBar", true) ?: true
+        val adaptStatusBar = args?.getBoolean("adaptStatusBar", false) ?: false
         val showTopBar = args?.getBoolean("showTopBar", false) ?: false
         showBackIcon = args?.getBoolean("showBackIcon", true) ?: true
 

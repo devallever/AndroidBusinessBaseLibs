@@ -1,19 +1,19 @@
 package com.allever.business.lib.project.compose
 
-import androidx.compose.runtime.Composable
+import app.allever.android.lib.common.compose.ComposeContent
 import app.allever.android.lib.common.compose.TabComposeActivity
 
-//class TestTabComposeActivity: TabComposeActivity() {
-//    override fun getPageTitle(): String {
-//
-//    }
-//
-//    override fun getTabTitles(): List<String> {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun getPages(): List<@Composable (() -> Unit)> {
-//        TODO("Not yet implemented")
-//    }
-//}
+class TestTabComposeActivity: TabComposeActivity() {
+    override fun getPageTitle(): String {
+        return "TestTabCompose"
+    }
+
+    override fun getTabTitles(): MutableList<String> = mutableListOf("SampleComposeContent", "SampleListComposeContent")
+
+    override fun getPages(): MutableList<ComposeContent>  = mutableListOf(
+        SampleComposeContent(),
+        SampleListComposeContent()
+    )
+
+}
 

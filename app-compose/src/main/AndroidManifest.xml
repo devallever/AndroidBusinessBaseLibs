@@ -7,5 +7,6 @@
             android:name=".MainActivity"
             android:exported="true">
         </activity>
+        <activity android:name="com.allever.business.lib.project.compose.TestTabComposeActivity" />
     </application>
 </manifest>

@@ -8,6 +8,7 @@ import app.allever.android.lib.common.compose.widget.DefaultLayoutAdapter
 import app.allever.android.lib.common.compose.widget.LayoutAdapter
 import app.allever.android.lib.common.compose.widget.TextClickItem
 import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.router.annotation.Route
 
 @Route(path = "/appcompose/main")
@@ -32,8 +33,8 @@ class MainActivity : ListComposeActivity<TextClickItem>() {
         TextClickItem("SampleListComposeContent") { it ->
             ListComposeContent.start<SampleListComposeContent>(it.title, adaptStatusBar = true, showTopBar = true)
         },
-        TextClickItem("测试TextDetailClickItem2") {
-            toast("点击了TextDetailClickItem2")
+        TextClickItem("TestTabComposeActivity") {
+            ActivityHelper.startActivity(TestTabComposeActivity::class.java)
         },
         TextClickItem("测试TextDetailClickItem3") {
             toast("点击了TextDetailClickIte3")
