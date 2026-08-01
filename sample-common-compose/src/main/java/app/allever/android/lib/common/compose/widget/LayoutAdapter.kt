@@ -1,8 +1,10 @@
 package app.allever.android.lib.common.compose.widget
 
-import android.util.Log
+import android.view.Gravity
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
@@ -39,31 +41,39 @@ abstract class LayoutAdapter<T> {
 /**
  * 默认文本列表适配器
  */
-class DefaultLayoutAdapter : LayoutAdapter<TextClickItem>() {
+class DefaultLayoutAdapter(val gravity: Int = Gravity.CENTER) : LayoutAdapter<TextClickItem>() {
 
     @Composable
     fun Content(item: TextClickItem) {
-        Column(Modifier
+        Box(Modifier
             .fillMaxWidth()
+            .defaultMinSize(minHeight = 48.dp)
             .clickable {
                 item.block.invoke(item)
             }
-            .padding(vertical = 10.dp, horizontal = 10.dp)) {
-            Text(
-                item.title,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Normal,
-                modifier = Modifier.align(
-                    Alignment.CenterHorizontally
+            .padding(vertical = 10.dp, horizontal = 10.dp), contentAlignment = Alignment.Center) {
+            Column(
+                Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    item.title,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.align(
+                        if (gravity == Gravity.CENTER) Alignment.CenterHorizontally else Alignment.Start
+                    )
                 )
-            )
-            Text(
-                item.desc,
-                fontSize = 12.sp,
-                color = Color.Gray,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
+                if (item.desc.isNotEmpty()) {
+                    Text(
+                        item.desc,
+                        fontSize = 12.sp,
+                        color = Color.Gray,
+                        modifier = Modifier.align(if (gravity == Gravity.CENTER) Alignment.CenterHorizontally else Alignment.Start)
+                    )
+                }
+            }
         }
+
     }
 
     override fun adapterContent(
