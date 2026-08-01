@@ -1,15 +1,18 @@
 package app.allever.android.lib.common.compose
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -71,20 +74,14 @@ abstract class TabComposeActivity : BaseComposeActivity() {
         Column(modifier = Modifier.fillMaxSize()) {
             // Tab 栏
             if (isScrollableTabs()) {
-
                 ScrollableTabRow(
                     indicator = { tabPositions ->
-                        if (pagerState.currentPage < tabPositions.size) {
-                            SecondaryIndicator(
-                                modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
-                                height = 3.dp,
-                                color = getIndicatorColor()
-                            )
-                        }
+                        TabIndicator(tabPositions, pagerState.currentPage)
                     },
                     selectedTabIndex = pagerState.currentPage,
-                    edgePadding = 0.dp,
+                    edgePadding = getTabEdgePadding(),
                     containerColor = getTabContainerColor(),
+                    contentColor = getTabContentColor(),
                     divider = {}) {
                     tabTitles.forEachIndexed { index, title ->
                         val selected = pagerState.currentPage == index
@@ -97,7 +94,6 @@ abstract class TabComposeActivity : BaseComposeActivity() {
                             },
                             text = { Text(text = title, color = if (selected) getSelectedColor() else getUnselectedColor()) })
                     }
-
                 }
             } else {
                 TabRow(
@@ -106,13 +102,7 @@ abstract class TabComposeActivity : BaseComposeActivity() {
                     containerColor = getTabContainerColor(),
                     contentColor = getTabContentColor(),
                     indicator = { tabPositions ->
-                        if (pagerState.currentPage < tabPositions.size) {
-                            SecondaryIndicator(
-                                modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
-                                height = 0.dp,
-                                color = getIndicatorColor()
-                            )
-                        }
+                        TabIndicator(tabPositions, pagerState.currentPage)
                     }
                 ) {
                     tabTitles.forEachIndexed { index, title ->
@@ -136,6 +126,28 @@ abstract class TabComposeActivity : BaseComposeActivity() {
                 modifier = Modifier.fillMaxSize()
             ) { page ->
                 pages[page].Content(null)
+            }
+        }
+    }
+
+    /**
+     * 自定义 Tab 指示器
+     * 当高度为 0 时不显示指示器
+     */
+    @Composable
+    private fun TabIndicator(
+        tabPositions: List<androidx.compose.material3.TabPosition>,
+        currentPage: Int
+    ) {
+        if (currentPage < tabPositions.size) {
+            val height = getIndicatorHeight()
+            if (height > 0.dp) {
+                Box(
+                    modifier = Modifier
+                        .tabIndicatorOffset(tabPositions[currentPage])
+                        .height(height)
+                        .background(getIndicatorColor())
+                )
             }
         }
     }
@@ -176,7 +188,7 @@ abstract class TabComposeActivity : BaseComposeActivity() {
     /**
      * 可滚动 Tab 的边缘间距
      */
-    protected open fun getTabEdgePadding(): Dp = 16.dp
+    protected open fun getTabEdgePadding(): Dp = 0.dp
 
     /**
      * Tab 容器颜色
@@ -188,8 +200,21 @@ abstract class TabComposeActivity : BaseComposeActivity() {
      */
     protected open fun getTabContentColor(): Color = Color.Black
 
+    /**
+     * Tab 选中颜色
+     */
     protected open fun getSelectedColor(): Color = Color.Black
+
+    /**
+     * Tab 未选中颜色
+     */
     protected open fun getUnselectedColor(): Color = Color(0xFF999999)
+
+    /**
+     * Tab 指示器高度
+     * 设置为 0.dp 可隐藏指示器
+     */
+    protected open fun getIndicatorHeight(): Dp = 2.dp
 
     /**
      * Tab 指示器颜色
