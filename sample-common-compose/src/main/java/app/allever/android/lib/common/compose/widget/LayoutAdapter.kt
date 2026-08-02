@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.allever.android.lib.common.compose.data.TextClickItem
 
 /**
  * 布局适配器 - 用于在 LazyListScope 中填充列表内容
@@ -41,7 +42,7 @@ abstract class LayoutAdapter<T> {
 /**
  * 默认文本列表适配器
  */
-class DefaultLayoutAdapter(val gravity: Int = Gravity.CENTER) : LayoutAdapter<TextClickItem>() {
+class TextClickAdapter(val gravity: Int = Gravity.CENTER) : LayoutAdapter<TextClickItem>() {
 
     @Composable
     fun Content(item: TextClickItem) {

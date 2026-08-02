@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.allever.android.lib.common.compose.data.TextClickItem
 
 /**
  *@Description
@@ -57,9 +58,3 @@ fun FunctionList(list: List<TextClickItem>) {
         }
     }
 }
-
-class TextClickItem(
-    val title: String,
-    val desc: String = "",
-    val block: (data: TextClickItem) -> Unit = {}
-)

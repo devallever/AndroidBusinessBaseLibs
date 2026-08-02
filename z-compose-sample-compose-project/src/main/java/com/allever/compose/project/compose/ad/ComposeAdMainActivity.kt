@@ -3,7 +3,7 @@ package com.allever.compose.project.compose.ad
 import androidx.compose.runtime.Composable
 import app.allever.android.lib.common.compose.BaseComposeActivity
 import app.allever.android.lib.common.compose.widget.FunctionList
-import app.allever.android.lib.common.compose.widget.TextClickItem
+import app.allever.android.lib.common.compose.data.TextClickItem
 import app.allever.android.lib.core.helper.ActivityHelper
 
 class ComposeAdMainActivity: BaseComposeActivity() {
