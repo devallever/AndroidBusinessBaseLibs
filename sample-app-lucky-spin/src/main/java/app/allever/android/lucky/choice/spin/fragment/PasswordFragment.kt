@@ -11,21 +11,20 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import app.allever.android.lucky.choice.spin.LuckSpinApplication
-import app.allever.android.lucky.choice.spin.databinding.FragmentPasswordBinding
+import app.allever.android.lib.core.base.AbstractFragment
+import app.allever.android.lucky.choice.spin.databinding.LsFragmentPasswordBinding
 import app.allever.android.lucky.choice.spin.utils.RandomPasswordHelper
 import app.allever.android.lucky.choice.spin.utils.copyToClipboard
 import app.allever.android.lucky.choice.spin.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
-class PasswordFragment : Fragment() {
+class PasswordFragment : AbstractFragment() {
 
-    private var _binding: FragmentPasswordBinding? = null
+    private var _binding: LsFragmentPasswordBinding? = null
     private val binding get() = _binding!!
     private val viewModel: MainViewModel by activityViewModel()
 
@@ -47,7 +46,7 @@ class PasswordFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPasswordBinding.inflate(inflater, container, false)
+        _binding = LsFragmentPasswordBinding.inflate(inflater, container, false)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())

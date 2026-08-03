@@ -9,24 +9,24 @@
         android:id="@+id/nav_wheel"
         android:name="app.allever.android.lucky.choice.spin.fragment.WheelFragment"
         android:label="Wheel"
-        tools:layout="@layout/fragment_wheel" />
+        tools:layout="@layout/ls_fragment_wheel" />
 
     <fragment
         android:id="@+id/nav_finger"
         android:name="app.allever.android.lucky.choice.spin.fragment.FingerFragment"
         android:label="Finger"
-        tools:layout="@layout/fragment_finger" />
+        tools:layout="@layout/ls_fragment_finger" />
 
     <fragment
         android:id="@+id/nav_number"
         android:name="app.allever.android.lucky.choice.spin.fragment.NumberFragment"
         android:label="Number"
-        tools:layout="@layout/fragment_number" />
+        tools:layout="@layout/ls_fragment_number" />
 
     <fragment
         android:id="@+id/nav_password"
         android:name="app.allever.android.lucky.choice.spin.fragment.PasswordFragment"
         android:label="Password"
-        tools:layout="@layout/fragment_password" />
+        tools:layout="@layout/ls_fragment_password" />
 
 </navigation>

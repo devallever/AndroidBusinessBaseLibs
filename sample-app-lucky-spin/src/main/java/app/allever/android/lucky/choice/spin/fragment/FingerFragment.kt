@@ -7,14 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.edit
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import app.allever.android.lucky.choice.spin.LuckSpinApplication
-import app.allever.android.lucky.choice.spin.databinding.FragmentFingerBinding
+import app.allever.android.lib.core.base.AbstractFragment
+import app.allever.android.lucky.choice.spin.databinding.LsFragmentFingerBinding
 import io.noties.markwon.Markwon
 
-class FingerFragment: Fragment() {
+class FingerFragment: AbstractFragment() {
 
-    private var _binding: FragmentFingerBinding? = null
+    private var _binding: LsFragmentFingerBinding? = null
     private val binding get() = _binding!!
     private val markwon by lazy { Markwon.create(requireContext()) }
 
@@ -29,7 +28,7 @@ class FingerFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFingerBinding.inflate(inflater, container, false)
+        _binding = LsFragmentFingerBinding.inflate(inflater, container, false)
         return binding.root
     }
 

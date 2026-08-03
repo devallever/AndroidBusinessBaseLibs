@@ -6,19 +6,18 @@ import android.media.AudioAttributes
 import android.media.SoundPool
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
+import app.allever.android.lib.core.base.AbstractActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import app.allever.android.lucky.choice.spin.LuckSpinApplication
 import app.allever.android.lucky.choice.spin.R
-import app.allever.android.lucky.choice.spin.databinding.ActivityWheelBinding
+import app.allever.android.lucky.choice.spin.databinding.LsActivityWheelBinding
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-class WheelActivity : AppCompatActivity() {
+class WheelActivity : AbstractActivity() {
 
     private lateinit var soundPool: SoundPool
     private var spinCompleteSoundId: Int = -1
@@ -36,13 +35,13 @@ class WheelActivity : AppCompatActivity() {
         }
     }
 
-    private lateinit var binding: ActivityWheelBinding
+    private lateinit var binding: LsActivityWheelBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding = ActivityWheelBinding.inflate(layoutInflater)
+        binding = LsActivityWheelBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { v, insets ->
@@ -85,7 +84,7 @@ class WheelActivity : AppCompatActivity() {
             .setMaxStreams(1)
             .build()
 
-        spinCompleteSoundId = soundPool.load(this, R.raw.wheel_ok , 1)
+        spinCompleteSoundId = soundPool.load(this, R.raw.ls_wheel_ok , 1)
     }
 
     private fun showResult(result : String) {

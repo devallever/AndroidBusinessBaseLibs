@@ -11,21 +11,20 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import app.allever.android.lucky.choice.spin.LuckSpinApplication
-import app.allever.android.lucky.choice.spin.databinding.FragmentNumberBinding
+import app.allever.android.lib.core.base.AbstractFragment
+import app.allever.android.lucky.choice.spin.databinding.LsFragmentNumberBinding
 import app.allever.android.lucky.choice.spin.utils.copyToClipboard
 import app.allever.android.lucky.choice.spin.viewmodel.MainViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
-class NumberFragment : Fragment() {
+class NumberFragment : AbstractFragment() {
 
-    private var _binding: FragmentNumberBinding? = null
+    private var _binding: LsFragmentNumberBinding? = null
     private val binding get() = _binding!!
     private val viewModel : MainViewModel by activityViewModel()
 
@@ -45,7 +44,7 @@ class NumberFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentNumberBinding.inflate(inflater, container, false)
+        _binding = LsFragmentNumberBinding.inflate(inflater, container, false)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

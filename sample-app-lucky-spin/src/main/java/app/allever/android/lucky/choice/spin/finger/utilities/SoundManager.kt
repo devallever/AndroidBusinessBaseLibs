@@ -26,9 +26,9 @@ class SoundManager(private val context: Context) {
             .setMaxStreams(1)
             .build()
 
-        fingerUpSound = soundPool.load(context, R.raw.finger_up, 1)
-        fingerDownSound = soundPool.load(context, R.raw.finger_down, 1)
-        fingerChosenSound = soundPool.load(context, R.raw.finger_chosen, 1)
+        fingerUpSound = soundPool.load(context, R.raw.ls_finger_up, 1)
+        fingerDownSound = soundPool.load(context, R.raw.ls_finger_down, 1)
+        fingerChosenSound = soundPool.load(context, R.raw.ls_finger_chosen, 1)
     }
 
     private fun playSound(soundId: Int) {

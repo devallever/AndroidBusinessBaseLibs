@@ -2,26 +2,24 @@ package app.allever.android.lucky.choice.spin.activity
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import app.allever.android.lucky.choice.spin.LuckSpinApplication
+import app.allever.android.lib.core.base.AbstractActivity
 import app.allever.android.lucky.choice.spin.R
-import app.allever.android.lucky.choice.spin.databinding.ActivityMainBinding
+import app.allever.android.lucky.choice.spin.databinding.LsActivityMainBinding
 import app.allever.android.lucky.choice.spin.fragment.FingerFragment
 import app.allever.android.lucky.choice.spin.fragment.NumberFragment
 import app.allever.android.lucky.choice.spin.fragment.PasswordFragment
 import app.allever.android.lucky.choice.spin.fragment.WheelFragment
 import app.allever.android.lucky.choice.spin.log
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AbstractActivity() {
 
-    private val binding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
+    private val binding: LsActivityMainBinding by lazy {
+        LsActivityMainBinding.inflate(layoutInflater)
     }
     private val wheelFragment by lazy {
         WheelFragment()
@@ -39,20 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         log("loadOpenAd: onCreate")
-
-        val startTime = System.currentTimeMillis()
-        val splashScreen = installSplashScreen()
-        splashScreen.setKeepOnScreenCondition {
-            false
-        }
-        splashScreen.setOnExitAnimationListener { splashScreenProvider ->
-            splashScreenProvider.view.animate().alpha(0f).withEndAction {
-                splashScreenProvider.remove()
-                enableEdgeToEdge()
-            }
-        }
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNavigationView) { v, insets ->

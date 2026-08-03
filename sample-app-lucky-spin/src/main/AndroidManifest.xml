@@ -5,42 +5,29 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <application
-        android:name="app.allever.android.lucky.choice.spin.LuckSpinApplication"
-        android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.LuckSpin"
-        tools:targetApi="31">
-
+    <application>
         <activity
-            android:theme="@style/Theme.App.Starting"
             android:name="app.allever.android.lucky.choice.spin.activity.MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.LuckSpin">
         </activity>
 
         <activity
             android:name="app.allever.android.lucky.choice.spin.activity.WheelCreateActivity"
             android:exported="false"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.LuckSpin"/>
 
         <activity
             android:name="app.allever.android.lucky.choice.spin.activity.WheelActivity"
             android:exported="false"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.LuckSpin"/>
+        <activity android:name="app.allever.android.sample.app.lucky.spin.SampleAppLuckySpinActivity" />
 
 
     </application>

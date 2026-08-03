@@ -17,7 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/menu_wheels"
+            app:menu="@menu/ls_menu_wheels"
             app:title="Wheels"
             app:titleCentered="true" />
 
@@ -43,7 +43,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/adViewContainer"
         app:spanCount="2"
-        tools:listitem="@layout/item_wheel_3" />
+        tools:listitem="@layout/ls_item_wheel_3" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/emptyImageView"
@@ -56,14 +56,14 @@
         app:layout_constraintTop_toBottomOf="@id/adViewContainer"
         app:layout_constraintVertical_bias="0.4"
         app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/empty" />
+        app:srcCompat="@drawable/ls_empty" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/emptyAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="180dp"
-        android:foreground="@drawable/ripple_default"
+        android:foreground="@drawable/ls_ripple_default"
         app:cardElevation="10dp"
         app:layout_constraintBottom_toTopOf="@+id/emptyTextView"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -76,7 +76,7 @@
             android:layout_height="200dp"
             android:alpha="0.98"
             android:background="@null"
-            android:src="@mipmap/icon_add" />
+            android:src="@mipmap/ls_icon_add" />
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -106,7 +106,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:src="@drawable/twotone_add_24"
+        android:src="@drawable/ls_twotone_add_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:ignore="ContentDescription" />

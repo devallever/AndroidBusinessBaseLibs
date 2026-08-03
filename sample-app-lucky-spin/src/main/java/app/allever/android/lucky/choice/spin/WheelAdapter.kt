@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import app.allever.android.lucky.choice.spin.data.WheelWithOptions
-import app.allever.android.lucky.choice.spin.databinding.ItemWheel3Binding
+import app.allever.android.lucky.choice.spin.databinding.LsItemWheel3Binding
 
 class WheelAdapter(
     private val onWheelClick: (WheelWithOptions) -> Unit,
@@ -14,7 +14,7 @@ class WheelAdapter(
 ) :
     ListAdapter<WheelWithOptions, WheelAdapter.ViewHolder>(WheelWithOptions.DIFF_CALLBACK) {
 
-    inner class ViewHolder(private val binding: ItemWheel3Binding) :
+    inner class ViewHolder(private val binding: LsItemWheel3Binding) :
         RecyclerView.ViewHolder(binding.root) {
             @SuppressLint("SetTextI18n")
             fun bind(wheelWithOptions: WheelWithOptions) {
@@ -36,7 +36,7 @@ class WheelAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ItemWheel3Binding.inflate(layoutInflater, parent, false)
+        val binding = LsItemWheel3Binding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding)
     }
 

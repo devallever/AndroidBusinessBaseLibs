@@ -24,8 +24,8 @@ enum class Mode {
     }
 
     fun drawable(): Int = when (this) {
-        SINGLE -> R.drawable.single_icon
-        GROUP -> R.drawable.group_icon
-        ORDER -> R.drawable.order_icon
+        SINGLE -> R.drawable.ls_single_icon
+        GROUP -> R.drawable.ls_group_icon
+        ORDER -> R.drawable.ls_order_icon
     }
 }

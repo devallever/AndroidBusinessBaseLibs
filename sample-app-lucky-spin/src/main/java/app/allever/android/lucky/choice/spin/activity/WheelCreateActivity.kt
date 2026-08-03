@@ -6,25 +6,24 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
 import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
+import app.allever.android.lib.core.base.AbstractActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textview.MaterialTextView
-import app.allever.android.lucky.choice.spin.LuckSpinApplication
 import app.allever.android.lucky.choice.spin.R
 import app.allever.android.lucky.choice.spin.WheelModel
-import app.allever.android.lucky.choice.spin.databinding.ActivityWheelCreateBinding
-import app.allever.android.lucky.choice.spin.databinding.ItemOptionBinding
+import app.allever.android.lucky.choice.spin.databinding.LsActivityWheelCreateBinding
+import app.allever.android.lucky.choice.spin.databinding.LsItemOptionBinding
 import app.allever.android.lucky.choice.spin.viewmodel.WheelViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class WheelCreateActivity : AppCompatActivity() {
+class WheelCreateActivity : AbstractActivity() {
 
-    private lateinit var binding: ActivityWheelCreateBinding
+    private lateinit var binding: LsActivityWheelCreateBinding
     private lateinit var saveMenuItem: MenuItem
     private lateinit var deleteMenuItem: MenuItem
     private val viewModel: WheelViewModel by viewModel()
@@ -57,7 +56,7 @@ class WheelCreateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityWheelCreateBinding.inflate(layoutInflater)
+        binding = LsActivityWheelCreateBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // deal with the window insets
@@ -141,7 +140,7 @@ class WheelCreateActivity : AppCompatActivity() {
     }
 
     private fun addOption(option: String) {
-        val itemView = ItemOptionBinding.inflate(layoutInflater, binding.linearLayoutOptions, true)
+        val itemView = LsItemOptionBinding.inflate(layoutInflater, binding.linearLayoutOptions, true)
         itemView.textViewOption.text = option
         itemView.buttonRemoveOption.setOnClickListener {
             binding.linearLayoutOptions.removeView(itemView.root)

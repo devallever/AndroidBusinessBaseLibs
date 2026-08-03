@@ -19,8 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            app:menu="@menu/menu_wheel_create"
-            app:navigationIcon="@drawable/twotone_arrow_back_24"
+            app:menu="@menu/ls_menu_wheel_create"
+            app:navigationIcon="@drawable/ls_twotone_arrow_back_24"
             app:title="Create Wheel" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -75,7 +75,7 @@
         android:layout_marginRight="16dp"
         android:enabled="false"
         android:text="Add"
-        app:icon="@drawable/twotone_add_24"
+        app:icon="@drawable/ls_twotone_add_24"
         app:iconGravity="textStart"
         app:layout_constraintBaseline_toBaselineOf="@id/textInputLayoutNewOption"
         app:layout_constraintLeft_toRightOf="@id/textInputLayoutNewOption"

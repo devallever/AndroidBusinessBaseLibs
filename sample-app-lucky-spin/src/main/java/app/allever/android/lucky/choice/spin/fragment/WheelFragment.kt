@@ -10,25 +10,24 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import app.allever.android.lucky.choice.spin.LuckSpinApplication
+import app.allever.android.lib.core.base.AbstractFragment
 import app.allever.android.lucky.choice.spin.R
 import app.allever.android.lucky.choice.spin.WheelAdapter
 import app.allever.android.lucky.choice.spin.WheelModel
 import app.allever.android.lucky.choice.spin.activity.WheelActivity
 import app.allever.android.lucky.choice.spin.activity.WheelCreateActivity
-import app.allever.android.lucky.choice.spin.databinding.FragmentWheelBinding
+import app.allever.android.lucky.choice.spin.databinding.LsFragmentWheelBinding
 import app.allever.android.lucky.choice.spin.viewmodel.WheelViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class WheelFragment : Fragment() {
+class WheelFragment : AbstractFragment() {
 
-    private var _binding: FragmentWheelBinding? = null
+    private var _binding: LsFragmentWheelBinding? = null
     private val binding get() = _binding!!
     private lateinit var wheelAdapter: WheelAdapter
     private val viewModel: WheelViewModel by viewModel()
@@ -38,7 +37,7 @@ class WheelFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentWheelBinding.inflate(inflater, container, false)
+        _binding = LsFragmentWheelBinding.inflate(inflater, container, false)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { view, insets ->
             val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())

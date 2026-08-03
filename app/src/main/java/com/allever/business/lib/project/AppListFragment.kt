@@ -13,6 +13,9 @@ class AppListFragment: ListFragment<FragmentListBinding, ListViewModel, TextDeta
         Gravity.CENTER)
 
     override fun getList(): MutableList<TextDetailClickItem> = mutableListOf(
+        TextDetailClickItem("Lucky Spin", "sample-app-lucky-spin") {
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_LUCKY_SPIN)
+        },
         TextDetailClickItem("Sticker Icon", "sample-app-sticker-icon") {
             Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_STICKER_ICON)
         },
