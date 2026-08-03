@@ -95,6 +95,7 @@ dependencies {
     implementation(project(":sample-app-qr-code"))
     implementation(project(":sample-app-hd-calculator"))
     implementation(project(":sample-app-sticker-icon"))
+    implementation(project(":sample-app-lucky-spin"))
 
     implementation(project(":sample-demo-hen-coder"))
 

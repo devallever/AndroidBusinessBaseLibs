@@ -149,6 +149,8 @@ kotlinReflectVersion = "1.5.10"
 nanohttpd = "2.3.1"
 places = "3.5.0"
 uiViewbinding = "1.11.4"
+koin = "3.5.6"
+markwon = "4.6.2"
 
 
 
@@ -334,6 +336,8 @@ easyhttp = { module = "com.github.getActivity:EasyHttp", version.ref = "easyhttp
 magic-viewpager = { module = "com.zhy:magic-viewpager", version.ref = "magicViewpager" }
 java-websocket = { module = "org.java-websocket:Java-WebSocket", version.ref = "javaWebsocket" }
 androidx-compose-ui-viewbinding = { group = "androidx.compose.ui", name = "ui-viewbinding", version.ref = "uiViewbinding" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+markown-core = { group = "io.noties.markwon", name = "core", version.ref = "markwon" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

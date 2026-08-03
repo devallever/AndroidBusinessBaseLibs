@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:paddingHorizontal="0dp"
+    android:paddingVertical="8dp">
+
+    <app.allever.android.lucky.choice.spin.view.SpinWheelView
+        android:id="@+id/wheelView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textViewWheelName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:maxLines="1"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        app:layout_constraintTop_toBottomOf="@+id/wheelView"
+        tools:ignore="RtlHardcoded"
+        tools:text="Hello World!" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textViewOptionCount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:alpha="0.7"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
+        app:layout_constraintRight_toRightOf="@+id/textViewWheelName"
+        app:layout_constraintLeft_toLeftOf="@id/textViewWheelName"
+        app:layout_constraintTop_toBottomOf="@id/textViewWheelName"
+        tools:text="3 options" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonEditWheel"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/twotone_edit_24"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

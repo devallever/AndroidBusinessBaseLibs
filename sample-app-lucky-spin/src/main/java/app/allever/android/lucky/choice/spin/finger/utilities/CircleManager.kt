@@ -1,0 +1,73 @@
+package app.allever.android.lucky.choice.spin.finger.utilities
+
+import android.content.Context
+import android.content.res.Configuration
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import com.google.android.material.color.MaterialColors
+import app.allever.android.lucky.choice.spin.finger.circles.Circle
+
+class CircleManager(private val context: Context) : MutableMap<Int, Circle> {
+    private val surfacePaint = Paint().apply {
+        val darkModeEnable = (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+        val defaultColor = if (darkModeEnable) Color.BLACK else Color.WHITE
+        color = MaterialColors.getColor(context, com.google.android.material.R.attr.colorSurface, defaultColor)
+    }
+
+    private val activeCircles = mutableMapOf<Int, Circle>()
+    private val deadCircles = mutableListOf<Circle>()
+
+    override val size: Int get() = activeCircles.size
+    override val entries: MutableSet<MutableMap.MutableEntry<Int, Circle>> get() = activeCircles.entries
+    override val keys: MutableSet<Int> get() = activeCircles.keys
+    override val values: MutableCollection<Circle> get() = activeCircles.values
+    override fun get(key: Int): Circle? = activeCircles[key]
+    override fun isEmpty(): Boolean = activeCircles.isEmpty()
+    override fun containsValue(value: Circle): Boolean = activeCircles.containsValue(value)
+    override fun containsKey(key: Int): Boolean = activeCircles.containsKey(key)
+
+    override fun putAll(from: Map<out Int, Circle>) {
+        activeCircles.putAll(from)
+    }
+
+    override fun put(key: Int, value: Circle): Circle? {
+        val previousValue = activeCircles[key]
+        activeCircles[key] = value
+        return previousValue
+    }
+
+    override fun remove(key: Int): Circle? {
+        return activeCircles.remove(key)?.apply {
+            removeFinger()
+            deadCircles += this
+        }
+    }
+
+    override fun clear() {
+        activeCircles.clear()
+    }
+
+    fun update(deltaTime: Int) {
+        activeCircles.forEach { (_, circle) -> circle.update(deltaTime) }
+        deadCircles.forEach { it.update(deltaTime) }
+        deadCircles.removeAll { it.isMarkedForDeletion() }
+    }
+
+    fun draw(canvas: Canvas) {
+        activeCircles.forEach { (_, circle) -> circle.draw(canvas) }
+        deadCircles.forEach { it.draw(canvas) }
+    }
+
+    fun drawSurfaceCircles(canvas: Canvas, surfaceRadius: Float, scale: Float) {
+        activeCircles.values.forEach { circle ->
+            canvas.drawCircle(circle.x, circle.y, surfaceRadius, surfacePaint)
+        }
+
+        deadCircles.filter { it.isWinner() }.forEach { circle ->
+            var radius = surfaceRadius
+            if (activeCircles.isNotEmpty()) radius *= circle.getRadius() / (50f * scale)
+            canvas.drawCircle(circle.x, circle.y, radius, surfacePaint)
+        }
+    }
+}
