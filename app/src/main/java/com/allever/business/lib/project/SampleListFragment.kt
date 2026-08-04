@@ -34,11 +34,15 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         TextDetailClickItem("广告组件", "sample-ad-core") {
             Navi.navigateTo(RouterPath.PATH_SAMPLE_AD_CORE)
         },
-        TextDetailClickItem("归因-Referrer", "sample-adjust/sample-appsflyer") {
-            Navi.navigateTo(RouterPath.PATH_SAMPLE_APPS_FLYER)
-        },
         TextDetailClickItem("音视频", "sample-audiovideo") {
             Navi.navigateTo(RouterPath.PATH_SAMPLE_AUDIO_VIDEO)
+        },
+        TextDetailClickItem("IM", "sample-im") {
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_IM)
+        },
+        TextDetailClickItem("----------------------"),
+        TextDetailClickItem("归因-Referrer", "sample-adjust/sample-appsflyer") {
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_APPS_FLYER)
         },
         TextDetailClickItem("Unity", "sample-unity") {
             Navi.navigateTo(RouterPath.PATH_SAMPLE_UNITY)
@@ -51,9 +55,6 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
         },
         TextDetailClickItem("多进程通信-IPC", "sample-ipc") {
             Navi.navigateTo(RouterPath.PATH_SAMPLE_IPC)
-        },
-        TextDetailClickItem("IM", "sample-im") {
-            Navi.navigateTo(RouterPath.PATH_SAMPLE_IM)
         },
         TextDetailClickItem("蓝牙", "sample-bluetooth") {
             Navi.navigateTo(RouterPath.PATH_SAMPLE_BLUETOOTH)
