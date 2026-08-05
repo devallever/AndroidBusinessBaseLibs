@@ -5,7 +5,8 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
-val modelPkg = "com.allever.business.lib.project.compose"
+//app.allever.android.compose.sample.app.green.vpn
+val modelPkg = "com.allever.compose.green.vpn"
 
 group = modelPkg
 
@@ -14,13 +15,11 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
+        viewBinding = true
     }
 }
 
 dependencies {
-    api(project(":core-compose"))
     implementation(project(":sample-common-compose"))
-    implementation(project(":compose-sample-app-green-vpn"))
-
-    implementation(project(":z-compose-sample-compose-project"))
 }

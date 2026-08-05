@@ -97,6 +97,8 @@ dependencies {
     implementation(project(":sample-app-sticker-icon"))
     implementation(project(":sample-app-lucky-spin"))
 
+    implementation(project(":sample-company-heifeng-light-control"))
+
     implementation(project(":sample-demo-hen-coder"))
 
     implementation(project(":app-compose"))
