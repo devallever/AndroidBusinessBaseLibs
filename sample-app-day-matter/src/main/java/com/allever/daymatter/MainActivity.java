@@ -26,7 +26,6 @@ import com.allever.daymatter.event.EventDayMatter;
 import com.allever.daymatter.mvp.BaseActivity;
 import com.allever.daymatter.mvp.presenter.MainActivityPresenter;
 import com.allever.daymatter.mvp.view.IMainActivityView;
-import com.allever.daymatter.ui.widget.tab.TabLayout;
 import com.allever.daymatter.utils.Constants;
 import com.allever.daymatter.utils.DisplayUtil;
 
@@ -36,6 +35,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import z.app.allever.android.lib.widget.tab.TabLayout;
 
 public class MainActivity extends
         BaseActivity<IMainActivityView,

@@ -15,6 +15,8 @@ dependencies {
 
     // BaseRecyclerViewAdapterHelper
     api(libs.baserecyclerviewadapterhelper)
+    //material
+    api(libs.material)
 
     // FlycoTabLayout
     api(libs.flycotablayout)

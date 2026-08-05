@@ -15,14 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.allever.app.gif.memes.ui.widget.tab;
+package z.app.allever.android.lib.widget.tab;
 
 import static androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_DRAGGING;
 import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE;
 import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_SETTLING;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -110,16 +109,16 @@ import java.util.Iterator;
  * &lt;/TabLayout&gt;
  * </pre>
  *
- * @attr ref com.google.android.material.R.styleable#TabLayout_tabPadding
- * @attr ref com.google.android.material.R.styleable#TabLayout_tabPaddingStart
- * @attr ref com.google.android.material.R.styleable#TabLayout_tabPaddingTop
- * @attr ref com.google.android.material.R.styleable#TabLayout_tabPaddingEnd
- * @attr ref com.google.android.material.R.styleable#TabLayout_tabPaddingBottom
- * @attr ref com.google.android.material.R.styleable#TabLayout_tabContentStart
- * @attr ref com.google.android.material.R.styleable#TabLayout_tabBackground
- * @attr ref com.google.android.material.R.styleable#TabLayout_tabMinWidth
- * @attr ref com.google.android.material.R.styleable#TabLayout_tabMaxWidth
- * @attr ref com.google.android.material.R.styleable#TabLayout_tabTextAppearance
+ * @attr ref R.styleable#TabLayout_tabPadding
+ * @attr ref R.styleable#TabLayout_tabPaddingStart
+ * @attr ref R.styleable#TabLayout_tabPaddingTop
+ * @attr ref R.styleable#TabLayout_tabPaddingEnd
+ * @attr ref R.styleable#TabLayout_tabPaddingBottom
+ * @attr ref R.styleable#TabLayout_tabContentStart
+ * @attr ref R.styleable#TabLayout_tabBackground
+ * @attr ref R.styleable#TabLayout_tabMinWidth
+ * @attr ref R.styleable#TabLayout_tabMaxWidth
+ * @attr ref R.styleable#TabLayout_tabTextAppearance
  * @see <a href="http://www.google.com/design/spec/components/tabs.html">Tabs</a>
  */
 public class TabLayout extends HorizontalScrollView {
@@ -301,12 +300,12 @@ public class TabLayout extends HorizontalScrollView {
         // Text colors/sizes come from the text appearance first
 //        final TypedArray ta = context.obtainStyledAttributes(mTabTextAppearance,
 //                com.google.android.material.R.styleable.TextAppearance);
-        try {
+//        try {
 //            mTabTextSize = ta.getDimensionPixelSize(com.google.android.material.R.styleable.TextAppearance_android_textSize, 0);
 //            mTabTextColors = ta.getColorStateList(com.google.android.material.R.styleable.TextAppearance_android_textColor);
-        } finally {
+//        } finally {
 //            ta.recycle();
-        }
+//        }
 
         if (a.hasValue(com.google.android.material.R.styleable.TabLayout_tabTextColor)) {
             // If we have an explicit text color set, use it instead
@@ -344,7 +343,7 @@ public class TabLayout extends HorizontalScrollView {
      * Sets the tab indicator's color for the currently selected tab.
      *
      * @param color color to use for the indicator
-     * @attr ref com.google.android.material.R.styleable#TabLayout_tabIndicatorColor
+     * @attr ref R.styleable#TabLayout_tabIndicatorColor
      */
     public void setSelectedTabIndicatorColor(@ColorInt int color) {
         mTabStrip.setSelectedIndicatorColor(color);
@@ -354,7 +353,7 @@ public class TabLayout extends HorizontalScrollView {
      * Sets the tab indicator's height for the currently selected tab.
      *
      * @param height height to use for the indicator in pixels
-     * @attr ref com.google.android.material.R.styleable#TabLayout_tabIndicatorHeight
+     * @attr ref R.styleable#TabLayout_tabIndicatorHeight
      */
     public void setSelectedTabIndicatorHeight(int height) {
         mTabStrip.setSelectedIndicatorHeight(height);
@@ -607,7 +606,7 @@ public class TabLayout extends HorizontalScrollView {
      * </ul>
      *
      * @param mode one of {@link #MODE_FIXED} or {@link #MODE_SCROLLABLE}.
-     * @attr ref com.google.android.material.R.styleable#TabLayout_tabMode
+     * @attr ref R.styleable#TabLayout_tabMode
      */
     public void setTabMode(@Mode int mode) {
         if (mode != mMode) {
@@ -630,7 +629,7 @@ public class TabLayout extends HorizontalScrollView {
      * Set the gravity to use when laying out the tabs.
      *
      * @param gravity one of {@link #GRAVITY_CENTER} or {@link #GRAVITY_FILL}.
-     * @attr ref com.google.android.material.R.styleable#TabLayout_tabGravity
+     * @attr ref R.styleable#TabLayout_tabGravity
      */
     public void setTabGravity(@TabGravity int gravity) {
         if (mTabGravity != gravity) {
@@ -672,8 +671,8 @@ public class TabLayout extends HorizontalScrollView {
     /**
      * Sets the text colors for the different states (normal, selected) used for the tabs.
      *
-     * @attr ref com.google.android.material.R.styleable#TabLayout_tabTextColor
-     * @attr ref com.google.android.material.R.styleable#TabLayout_tabSelectedTextColor
+     * @attr ref R.styleable#TabLayout_tabTextColor
+     * @attr ref R.styleable#TabLayout_tabSelectedTextColor
      */
     public void setTabTextColors(int normalColor, int selectedColor) {
         setTabTextColors(createColorStateList(normalColor, selectedColor));
@@ -1232,7 +1231,6 @@ public class TabLayout extends HorizontalScrollView {
          * @param resId A resource ID referring to the icon that should be displayed
          * @return The current instance for call chaining
          */
-        @SuppressLint("RestrictedApi")
         @NonNull
         public Tab setIcon(@DrawableRes int resId) {
             if (mParent == null) {

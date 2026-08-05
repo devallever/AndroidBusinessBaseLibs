@@ -11,7 +11,7 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import app.allever.android.ai.qr.scanner.core.history.AnyItem
-import app.android.base.lib.tab.TabLayout
+import z.app.allever.android.lib.widget.tab.TabLayout
 import com.android.absbase.utils.ResourcesUtils
 import com.google.zxing.client.android.history.HistoryManager
 import com.allever.app.qr.code.scaner.R

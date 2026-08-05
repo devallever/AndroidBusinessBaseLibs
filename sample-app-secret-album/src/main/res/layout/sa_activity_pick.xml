@@ -55,7 +55,7 @@
 
 
     <!-- tabs -->
-    <org.xm.secret.photo.album.ui.widget.tab.TabLayout
+    <z.app.allever.android.lib.widget.tab.TabLayout
         android:id="@+id/tab_bar"
         android:layout_width="match_parent"
         android:layout_height="48dp"

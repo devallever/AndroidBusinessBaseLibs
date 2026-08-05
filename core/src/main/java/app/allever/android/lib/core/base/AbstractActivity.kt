@@ -58,11 +58,12 @@ abstract class AbstractActivity : AbstractSwipeBackActivity(){
             StatusBarCompat.changeToLightStatusBar(this)
         }
 
-        if (hideSystemBar()) {
-            enableEdgeToEdge()
-            hideSystemUI()
-            fullActivity()
-        }
+        //导致SwipeBack闪退，先注释
+//        if (hideSystemBar()) {
+//            enableEdgeToEdge()
+//            hideSystemUI()
+//            fullActivity()
+//        }
 
         super.onCreate(savedInstanceState)
         log(this.javaClass.simpleName)

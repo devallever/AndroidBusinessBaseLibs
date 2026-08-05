@@ -7,7 +7,7 @@
     android:background="@color/white"
     tools:context="com.allever.app.qr.code.scaner.app.allever.android.ai.qr.scanner.ui.HistoryFragment">
 
-    <app.android.base.lib.tab.TabLayout
+    <z.app.allever.android.lib.widget.tab.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="50dp"

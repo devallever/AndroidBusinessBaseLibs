@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
-import app.allever.android.lib.core.function.notchcompat.NotchCompat
 import app.allever.android.lib.core.helper.DisplayHelper
 import org.xm.secret.photo.album.R
 import org.xm.secret.photo.album.app.BaseActivity
@@ -17,7 +16,7 @@ import org.xm.secret.photo.album.ui.adapter.ViewPagerAdapter
 import org.xm.secret.photo.album.ui.mvp.presenter.MainPresenter
 import org.xm.secret.photo.album.ui.mvp.view.MainView
 import org.xm.secret.photo.album.ui.widget.ShakeHelper
-import org.xm.secret.photo.album.ui.widget.tab.TabLayout
+import z.app.allever.android.lib.widget.tab.TabLayout
 
 class MainActivity : BaseActivity<MainView, MainPresenter>(), MainView,
     TabLayout.OnTabSelectedListener, View.OnClickListener {

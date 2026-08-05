@@ -25,6 +25,7 @@ android {
 dependencies {
     implementation(project(":sample-common"))
     implementation(project(":lib-media-core"))
+    implementation(project(":z-lib-widget"))
 
     val aarList = mutableListOf(
         "analytics-flurry-v1-1.0.aar",
@@ -36,7 +37,6 @@ dependencies {
 
     //android
     implementation(libs.androidx.gridlayout)
-    implementation(libs.material)
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.legacy.support.v4)
 

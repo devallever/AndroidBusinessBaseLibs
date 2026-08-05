@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.allever.daymatter.ui.widget.tab;
+package z.app.allever.android.lib.widget.tab;
 
 import android.view.animation.Interpolator;
 

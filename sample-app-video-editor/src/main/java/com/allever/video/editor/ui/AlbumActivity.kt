@@ -43,7 +43,7 @@ import com.allever.video.editor.ui.adapter.SelectedAdapter
 import com.allever.video.editor.ui.bean.ImageFolder
 import com.allever.video.editor.ui.bean.ThumbnailBean
 import com.allever.video.editor.ui.widget.BulingBulingDrawable
-import com.allever.video.editor.ui.widget.tab.TabLayout
+import z.app.allever.android.lib.widget.tab.TabLayout
 import com.allever.video.editor.utils.*
 import java.io.File
 

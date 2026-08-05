@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import app.allever.android.ai.qr.scanner.AppActivity
-import app.android.base.lib.tab.TabLayout
+import z.app.allever.android.lib.widget.tab.TabLayout
 import com.allever.app.qr.code.scaner.R
 import app.allever.android.ai.qr.scanner.core.RateGuide
 import com.allever.app.qr.code.scaner.databinding.QrActivityMainBinding

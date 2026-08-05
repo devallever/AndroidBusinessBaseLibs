@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.xm.secret.photo.album.ui.widget.tab;
+package z.app.allever.android.lib.widget.tab;
 
 import android.os.Handler;
 import android.os.Looper;

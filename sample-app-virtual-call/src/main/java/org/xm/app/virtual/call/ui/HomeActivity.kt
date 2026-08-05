@@ -17,7 +17,7 @@ import org.xm.app.virtual.call.ui.adapter.ViewPagerAdapter
 import org.xm.app.virtual.call.ui.dialog.DialogHelper
 import org.xm.app.virtual.call.ui.mvp.presenter.HomePresenter
 import org.xm.app.virtual.call.ui.mvp.view.HomeView
-import org.xm.app.virtual.call.ui.widget.tab.TabLayout
+import z.app.allever.android.lib.widget.tab.TabLayout
 
 class HomeActivity : BaseActivity<HomeView, HomePresenter>(), HomeView,
     TabLayout.OnTabSelectedListener, View.OnClickListener {

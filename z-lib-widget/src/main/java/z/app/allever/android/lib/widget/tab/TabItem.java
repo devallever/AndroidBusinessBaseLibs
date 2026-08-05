@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package org.xm.secret.photo.album.ui.widget.tab;
+package z.app.allever.android.lib.widget.tab;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import androidx.appcompat.widget.TintTypedArray;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.appcompat.widget.TintTypedArray;
 
 /**
  * TabItem is a special 'view' which allows you to declare tab items for a {@link TabLayout}

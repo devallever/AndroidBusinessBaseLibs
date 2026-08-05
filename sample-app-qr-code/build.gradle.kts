@@ -26,6 +26,7 @@ dependencies {
     implementation(project(":sample-common"))
     implementation(project(":lib-media-core"))
     implementation(project(":qrcode"))
+    implementation(project(":z-lib-widget"))
 
     val aarList = mutableListOf(
         "toolkit-v1-1.1.aar"
@@ -34,7 +35,6 @@ dependencies {
 
     //android
     implementation(libs.androidx.gridlayout)
-    implementation(libs.material)
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.legacy.support.v4)
     //glide

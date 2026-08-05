@@ -24,10 +24,10 @@ android {
 
 dependencies {
     implementation(project(":sample-common"))
+    implementation(project(":z-lib-widget"))
 
     //android
     implementation(libs.androidx.cardview)
-    implementation(libs.material)
 
     //glide
     implementation(libs.glide)

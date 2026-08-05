@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.allever.app.gif.memes.ui.widget.tab;
+package z.app.allever.android.lib.widget.tab;
 
 import android.content.Context;
 
@@ -23,7 +23,6 @@ class ThemeUtils {
 //    private static final int[] APPCOMPAT_CHECK_ATTRS = { com.google.android.material.R.attr.colorPrimary };
 
     static void checkAppCompatTheme(Context context) {
-        return;
 //        TypedArray a = context.obtainStyledAttributes(APPCOMPAT_CHECK_ATTRS);
 //        final boolean failed = !a.hasValue(0);
 //        if (a != null) {

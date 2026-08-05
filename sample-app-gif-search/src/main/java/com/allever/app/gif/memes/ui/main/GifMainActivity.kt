@@ -28,7 +28,7 @@ import app.allever.android.lib.core.helper.DisplayHelper
 import app.allever.android.lib.core.util.BarUtils
 import app.allever.android.lib.core.util.ResUtils
 import app.allever.android.lib.mvvm.base.BaseMvvmActivity
-import com.allever.app.gif.memes.ui.widget.tab.TabLayout
+import z.app.allever.android.lib.widget.tab.TabLayout
 import com.funny.gif.memes.app.Global
 import com.funny.gif.memes.func.download.DownloadManager
 import com.funny.gif.memes.util.ImageLoader

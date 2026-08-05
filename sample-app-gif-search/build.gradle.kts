@@ -26,6 +26,7 @@ dependencies {
     implementation(project(":sample-common"))
     implementation(project(":lib-ffmpeg-command"))
     implementation(project(":lib-media-core"))
+    implementation(project(":z-lib-widget"))
 
     //android
     implementation(libs.material)

@@ -93,7 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/qr_default_gray" />
-        <app.android.base.lib.tab.TabLayout
+        <z.app.allever.android.lib.widget.tab.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"

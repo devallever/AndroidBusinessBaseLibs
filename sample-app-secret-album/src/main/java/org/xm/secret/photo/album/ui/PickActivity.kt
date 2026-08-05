@@ -27,7 +27,7 @@ import org.xm.secret.photo.album.function.endecode.PrivateHelper
 import org.xm.secret.photo.album.ui.adapter.SelectAlbumAdapter
 import org.xm.secret.photo.album.ui.mvp.presenter.PickPresenter
 import org.xm.secret.photo.album.ui.mvp.view.PickView
-import org.xm.secret.photo.album.ui.widget.tab.TabLayout
+import z.app.allever.android.lib.widget.tab.TabLayout
 import org.xm.secret.photo.album.util.*
 import com.android.absbase.ui.widget.RippleTextView
 import com.android.absbase.utils.ResourcesUtils

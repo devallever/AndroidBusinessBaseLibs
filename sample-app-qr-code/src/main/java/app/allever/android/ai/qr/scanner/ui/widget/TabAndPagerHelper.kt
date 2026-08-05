@@ -5,7 +5,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import app.android.base.lib.tab.TabLayout
+import z.app.allever.android.lib.widget.tab.TabLayout
 import com.allever.app.qr.code.scaner.R
 
 class TabAndPagerHelper(val tabs: TabLayout, val viewPager: androidx.viewpager.widget.ViewPager) : TabLayout.OnTabSelectedListener {

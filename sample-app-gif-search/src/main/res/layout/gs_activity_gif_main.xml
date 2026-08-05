@@ -46,7 +46,7 @@
                 android:src="@drawable/ic_crown"
                 android:visibility="gone" />
 
-            <com.allever.app.gif.memes.ui.widget.tab.TabLayout
+            <z.app.allever.android.lib.widget.tab.TabLayout
                 android:id="@+id/tab_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="56dp"

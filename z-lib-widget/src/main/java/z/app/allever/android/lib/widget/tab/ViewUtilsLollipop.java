@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package app.android.base.lib.tab;
+package z.app.allever.android.lib.widget.tab;
 
 import android.os.Build;
 import android.view.View;

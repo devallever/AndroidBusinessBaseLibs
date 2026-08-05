@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.xm.app.virtual.call.ui.widget.tab;
+package z.app.allever.android.lib.widget.tab;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

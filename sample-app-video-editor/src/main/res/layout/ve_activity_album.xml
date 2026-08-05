@@ -65,7 +65,7 @@
 
 
     <!-- tabs -->
-    <com.allever.video.editor.ui.widget.tab.TabLayout
+    <z.app.allever.android.lib.widget.tab.TabLayout
         android:id="@+id/tl_tab"
         android:layout_width="match_parent"
         android:layout_height="@dimen/album_tab_height"
