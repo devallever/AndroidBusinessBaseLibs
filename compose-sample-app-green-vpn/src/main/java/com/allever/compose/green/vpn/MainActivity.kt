@@ -1,9 +1,7 @@
 package com.allever.compose.green.vpn
 
 import android.content.Intent
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,21 +37,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.allever.compose.green.vpn.ui.theme.GreenVPNComposeTheme
-import com.allever.compose.green.vpn.ui.theme.PageBgColor
-import com.allever.compose.green.vpn.ui.theme.ThemeColor
+import app.allever.android.lib.common.compose.BaseComposeActivity
 import com.allever.compose.green.vpn.viewmodel.MainViewModel
 
-class MainActivity : ComponentActivity() {
+val PageBgColor = Color(0xFF0D100F)
+val ThemeColor = Color(0xFF00F2A7)
+val ThemeColor40 = Color(0x4000F2A7)
+val ThemeColor80 = Color(0x8000F2A7)
+
+class MainActivity : BaseComposeActivity() {
     private val mViewModel: MainViewModel by viewModels()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            GreenVPNComposeTheme {
-                //主要设置背景色，暂不知其他方式
-                PageContent()
-            }
-        }
+
+    override fun init() {
+        statusBarColor = PageBgColor
+    }
+
+    @Composable
+    override fun ContentPage() {
+        PageContent()
     }
 
     @Preview
@@ -102,7 +103,7 @@ class MainActivity : ComponentActivity() {
                             contentAlignment = Alignment.Center
                         ) {
                             Image(
-                                painter = painterResource(id = R.drawable.ic_ring),
+                                painter = painterResource(id = R.drawable.cgv_ic_ring),
                                 contentDescription = "",
                                 modifier = Modifier.fillMaxSize(),
                                 colorFilter = if (connected) ColorFilter.tint(ThemeColor) else ColorFilter.tint(
@@ -111,7 +112,7 @@ class MainActivity : ComponentActivity() {
                             )
 
                             Image(
-                                painter = painterResource(id = R.drawable.ic_thunder),
+                                painter = painterResource(id = R.drawable.cgv_ic_thunder),
                                 contentDescription = "",
                                 modifier = Modifier.size(90.dp),
                                 colorFilter = if (connected) ColorFilter.tint(ThemeColor) else ColorFilter.tint(
@@ -170,7 +171,7 @@ class MainActivity : ComponentActivity() {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_default_flag),
+                                painter = painterResource(id = R.drawable.cgv_ic_default_flag),
                                 contentDescription = "",
                                 modifier = Modifier
                                     .width(60.dp)
@@ -187,7 +188,7 @@ class MainActivity : ComponentActivity() {
                             )
 
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_arrow),
+                                painter = painterResource(id = R.drawable.cgv_ic_arrow),
                                 contentDescription = "",
                                 modifier = Modifier
                                     .width(28.dp)
@@ -246,7 +247,7 @@ class MainActivity : ComponentActivity() {
         ) {
             //左边图标
             Icon(
-                painter = painterResource(id = R.drawable.ic_main),
+                painter = painterResource(id = R.drawable.cgv_ic_main),
                 contentDescription = "",
                 modifier = Modifier
                     .size(48.dp)
@@ -270,7 +271,7 @@ class MainActivity : ComponentActivity() {
             }
             //右边图标
             Icon(
-                painter = painterResource(id = R.drawable.ic_settings),
+                painter = painterResource(id = R.drawable.cgv_ic_settings),
                 contentDescription = "",
                 modifier = Modifier
                     .size(48.dp)

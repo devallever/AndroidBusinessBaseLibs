@@ -1,22 +1,22 @@
 package com.allever.compose.green.vpn
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import com.allever.compose.green.vpn.databinding.ActivityLoadingBinding
+import app.allever.android.lib.core.compose.base.AbstractComposeActivity
+import com.allever.compose.green.vpn.databinding.CgvActivityLoadingBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class LoadingActivity: Activity() {
+class LoadingActivity: AbstractComposeActivity() {
 
-    private lateinit var mBinding: ActivityLoadingBinding
+    private lateinit var mBinding: CgvActivityLoadingBinding
 
 
-    private val DURATION = 20 * 1000L
+    private val DURATION = 6 * 1000L
 
     private var firstPercent = 0.7
     private var firstDuration = 0.2 * DURATION
@@ -36,7 +36,7 @@ class LoadingActivity: Activity() {
     private var finishFlag = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityLoadingBinding.inflate(layoutInflater)
+        mBinding = CgvActivityLoadingBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
         mBinding.apply {

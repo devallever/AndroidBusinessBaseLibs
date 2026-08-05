@@ -1,8 +1,5 @@
 package com.allever.compose.green.vpn
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,21 +33,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.allever.compose.green.vpn.ui.theme.GreenVPNComposeTheme
-import com.allever.compose.green.vpn.ui.theme.PageBgColor
-import com.allever.compose.green.vpn.ui.theme.ThemeColor
-import com.allever.compose.green.vpn.ui.theme.ThemeColor40
+import app.allever.android.lib.common.compose.BaseComposeActivity
 import com.allever.compose.green.vpn.viewmodel.NodeListViewModel
 
-class NodeListPage : ComponentActivity() {
+class NodeListPage : BaseComposeActivity() {
     private val mViewModel: NodeListViewModel by viewModels()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            GreenVPNComposeTheme {
-                NodeListContent()
-            }
-        }
+
+    override fun init() {
+
+    }
+
+    @Composable
+    override fun ContentPage() {
+        NodeListContent()
     }
 
     @Preview
@@ -76,7 +71,7 @@ class NodeListPage : ComponentActivity() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_arrow),
+                painter = painterResource(id = R.drawable.cgv_ic_arrow),
                 contentDescription = "",
                 modifier = Modifier
                     .rotate(180f)
@@ -124,7 +119,7 @@ class NodeListPage : ComponentActivity() {
                 ) {
 
                     Image(
-                        painter = painterResource(id = R.drawable.ic_main),
+                        painter = painterResource(id = R.drawable.cgv_ic_main),
                         contentDescription = "",
                         modifier = Modifier
                             .size(50.dp)
@@ -142,7 +137,7 @@ class NodeListPage : ComponentActivity() {
 
                     if (isSelect) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_thunder),
+                            painter = painterResource(id = R.drawable.cgv_ic_thunder),
                             contentDescription = "",
                             modifier = Modifier
                                 .size(42.dp)

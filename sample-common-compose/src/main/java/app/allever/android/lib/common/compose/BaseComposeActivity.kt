@@ -35,6 +35,7 @@ abstract class BaseComposeActivity : AbstractComposeActivity() {
     protected var title by mutableStateOf("")
     protected var showBackIcon by mutableStateOf(false)
     protected var showTopBar by mutableStateOf(false)
+    protected var statusBarColor by mutableStateOf(Color(0xFFFFFFFF))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +57,7 @@ abstract class BaseComposeActivity : AbstractComposeActivity() {
                                         )
                                     ).dp
                                 )
-                                .background(color = Color(0xFFFFFFFF))
+                                .background(statusBarColor)
                         )
                     }
                     if (showTopBar) {

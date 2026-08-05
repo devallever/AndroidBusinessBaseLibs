@@ -8,8 +8,8 @@ import app.allever.android.lib.core.ext.toast
 
 class AppListComposeContent : ListComposeContent<TextClickItem>() {
     override fun getList(): MutableList<TextClickItem> = mutableListOf(
-        TextClickItem("项目代码") {
-            toast(it.title)
+        TextClickItem("Green VPN", "compose-sample-app-green-vpn") {
+            Navi.navigateTo(RouterPath.PATH_COMPOSE_SAMPLE_GREEN_VPN)
         })
 
     override fun getLayoutAdapter(): LayoutAdapter<TextClickItem> = TextClickAdapter()
