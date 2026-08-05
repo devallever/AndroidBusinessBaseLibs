@@ -47,18 +47,7 @@ abstract class BaseComposeActivity : AbstractComposeActivity() {
                         .fillMaxHeight(),
                 ) {
                     if (adaptStatusBar()) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(
-                                    DisplayHelper.px2dip(
-                                        DisplayHelper.getStatusBarHeight(
-                                            App.context
-                                        )
-                                    ).dp
-                                )
-                                .background(statusBarColor)
-                        )
+                        StatusBar()
                     }
                     if (showTopBar) {
                         TopBar()
@@ -95,6 +84,23 @@ abstract class BaseComposeActivity : AbstractComposeActivity() {
         this.title = title
         this.showBackIcon = showBackIcon
         this.showTopBar = true
+    }
+
+    @Preview
+    @Composable
+    protected fun StatusBar() {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(
+                    DisplayHelper.px2dip(
+                        DisplayHelper.getStatusBarHeight(
+                            App.context
+                        )
+                    ).dp
+                )
+                .background(statusBarColor)
+        )
     }
 
     @Preview
