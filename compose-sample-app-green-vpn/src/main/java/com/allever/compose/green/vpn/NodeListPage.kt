@@ -40,7 +40,7 @@ class NodeListPage : BaseComposeActivity() {
     private val mViewModel: NodeListViewModel by viewModels()
 
     override fun init() {
-
+        statusBarColor = PageBgColor
     }
 
     @Composable

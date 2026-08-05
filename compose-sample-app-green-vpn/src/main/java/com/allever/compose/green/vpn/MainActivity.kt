@@ -1,7 +1,6 @@
 package com.allever.compose.green.vpn
 
 import android.content.Intent
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -52,10 +51,10 @@ class MainActivity : BaseComposeActivity() {
         statusBarColor = PageBgColor
     }
 
+    override fun isDarkMode() = true
+
     @Composable
-    override fun ContentPage() {
-        PageContent()
-    }
+    override fun ContentPage() = PageContent()
 
     @Preview
     @Composable
