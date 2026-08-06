@@ -1,5 +1,6 @@
 package app.allever.android.lib.core.base
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -78,16 +79,21 @@ abstract class AbstractSwipeBackActivity: AppCompatActivity(), BGASwipeBackHelpe
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         if (!enableExitAnim()) {
-            super.onBackPressed()
+            finish()
             return
         }
-        // 正在滑动返回的时候取消返回按钮事件
-        if (mSwipeBackHelper.isSliding) {
-            return
+        if (isSupportSwipeBack()) {
+            // 正在滑动返回的时候取消返回按钮事件
+            if (mSwipeBackHelper.isSliding) {
+                return
+            }
+            mSwipeBackHelper.backward()
+        } else {
+            finish()
         }
-        mSwipeBackHelper.backward()
     }
 
     protected open fun enableExitAnim(): Boolean {

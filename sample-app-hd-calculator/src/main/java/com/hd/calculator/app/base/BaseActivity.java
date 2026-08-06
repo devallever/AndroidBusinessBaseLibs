@@ -22,10 +22,6 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AbstractActiv
         initData();
     }
 
-    @Override
-    protected boolean hideSystemBar() {
-        return true;
-    }
 
     protected abstract VB getViewBinding();
 

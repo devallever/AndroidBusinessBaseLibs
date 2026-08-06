@@ -11,4 +11,6 @@ abstract class AppActivity<VB : ViewBinding, VM : ViewModel> : AbsVMActivity<VB,
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         super.onCreate(savedInstanceState)
     }
+
+    override fun isDarkMode() = true
 }

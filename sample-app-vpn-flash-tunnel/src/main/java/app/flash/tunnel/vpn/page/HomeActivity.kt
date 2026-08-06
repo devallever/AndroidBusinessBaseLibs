@@ -53,7 +53,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() {
 
     override fun init() {
         fixStatusBar(mBinding.topBar)
-        enableEdgeToEdge()
 
         showStatusUi(TunnelHelper.isServiceConnected())
 

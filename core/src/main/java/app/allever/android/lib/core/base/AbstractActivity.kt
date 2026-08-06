@@ -83,6 +83,7 @@ abstract class AbstractActivity : AbstractSwipeBackActivity(){
     override fun setContentView(view: View?) {
         super.setContentView(view)
         if (enableAdaptNavigationBar()) {
+            log("适配导航栏：${this.javaClass.simpleName}")
             adaptNavigationBar(view)
         }
     }
@@ -90,6 +91,7 @@ abstract class AbstractActivity : AbstractSwipeBackActivity(){
     override fun setContentView(layoutResID: Int) {
         super.setContentView(layoutResID)
         if (enableAdaptNavigationBar()) {
+            log("适配导航栏：${this.javaClass.simpleName}")
             val contentView = window.findViewById<ViewGroup>(android.R.id.content)
             val childView = contentView.getChildAt(0)
             if (childView != null) {
@@ -192,6 +194,7 @@ abstract class AbstractActivity : AbstractSwipeBackActivity(){
         if (view == null) return
         ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
             val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            log("适配导航栏：导航栏高度 = ${navigationBars.bottom}")
             v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, navigationBars.bottom)
             insets
         }

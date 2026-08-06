@@ -37,10 +37,5 @@ public abstract class BaseMvpActivity<V, P extends BasePresenter<V>> extends Abs
         return true;
     }
 
-    @Override
-    protected boolean enableAdaptNavigationBar() {
-        return false;
-    }
-
     protected abstract P createPresenter();
 }

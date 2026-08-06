@@ -33,6 +33,9 @@ abstract class BaseActivity<V, P: BasePresenter<V>> : BaseMvpActivity<V, P>() {
             }
         }
 
+        //全屏显示并适配刘海屏
+        NotchCompat.adaptNotchWithFullScreen(window)
+
         initView()
         initData()
         mPrivateViewProxy = PrivateViewManager.getProxy(this)
