@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":sample-ipc"))
     implementation(project(":sample-im"))
     implementation(project(":sample-bluetooth"))
+    implementation(project(":sample-login-google"))
 
 //    implementation(project(":sample-dj-csj"))
     implementation(project(":sample-app-charge-reward"))

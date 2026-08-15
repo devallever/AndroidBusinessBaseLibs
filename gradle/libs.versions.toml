@@ -2,6 +2,7 @@
 # android sdk versions
 coilCompose = "2.2.2"
 compileSdk = "36"
+googleid = "1.2.0"
 lifecycleViewmodelCompose = "2.6.2"
 targetSdk = "36"
 minSdk = "24"
@@ -96,7 +97,7 @@ discreteSeekbar = "1.0.1"
 alerter = "7.0.1"
 lottie = "3.4.0"
 microsoftSpeechSdk = "1.40.0"
-playServicesAuth = "20.4.1"
+playServicesAuth = "21.6.0"
 facebookLogin = "18.0.3"
 facebookShare = "18.0.3"
 fresco = "3.6.0"
@@ -175,6 +176,7 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 androidx-work-multiprocess = { module = "androidx.work:work-multiprocess", version.ref = "workMultiprocess" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 jetbrains-kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinReflectVersion" }
 getactivity-gsonfactory = { module = "com.github.getActivity:GsonFactory", version.ref = "gsonfactoryVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

@@ -41,6 +41,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
             Navi.navigateTo(RouterPath.PATH_SAMPLE_IM)
         },
         TextDetailClickItem("----------------------"),
+        TextDetailClickItem("Google 登录", "sample-login-google") {
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_LOGIN_GOOGLE)
+        },
         TextDetailClickItem("归因-Referrer", "sample-adjust/sample-appsflyer") {
             Navi.navigateTo(RouterPath.PATH_SAMPLE_APPS_FLYER)
         },
