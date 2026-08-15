@@ -18,16 +18,16 @@ class LoginGoogleSignInClientFragment: ListFragment<FragmentListBinding, ListVie
 
     override fun getList(): MutableList<TextDetailClickItem> = mutableListOf(
         TextDetailClickItem("登录", "") {
-            GoogleSignClientManager.launchSign(requireActivity())
+            GoogleSignClientHelper.launchSign(this@LoginGoogleSignInClientFragment)
         },
         TextDetailClickItem("退出", "") {
-            GoogleSignClientManager.signOut()
+            GoogleSignClientHelper.signOut()
         },
         TextDetailClickItem("检查登录状态", "") {
-            toast(GoogleSignClientManager.checkLogin().toJson())
+            toast(GoogleSignClientHelper.checkLogin().toJson())
         },
         TextDetailClickItem("获取用户信息", "") {
-            val user = GoogleSignClientManager.getLoginUser()?.toJson()
+            val user = GoogleSignClientHelper.getLoginUser()?.toJson()
             toast(user)
             log("google user = ", user)
         },
@@ -35,13 +35,17 @@ class LoginGoogleSignInClientFragment: ListFragment<FragmentListBinding, ListVie
     )
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        GoogleSignClientManager.handleResult(requestCode, data, object : SignResultCallback {
+        GoogleSignClientHelper.handleResult(requestCode, data, object : SignResultCallback {
             override fun onSuccess(googleUserInfo: GoogleUserInfo) {
                 toast(googleUserInfo.toJson())
             }
 
             override fun onError(msg: String) {
                 toast(msg)
+            }
+
+            override fun onCancel() {
+                toast("取消")
             }
 
         })

@@ -1,8 +1,8 @@
 package app.allever.android.sample.login.google
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import androidx.fragment.app.Fragment
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.logE
 import app.allever.android.lib.core.helper.ActivityHelper
@@ -13,7 +13,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 
 
-object GoogleSignClientManager {
+object GoogleSignClientHelper {
 
     private val RC_SIGN_IN = 0x01
     // Configure sign-in to request the user's ID, email address, and basic
@@ -50,6 +50,13 @@ object GoogleSignClientManager {
         } else {
             null
         }
+    }
+
+    fun launchSign(fragment: Fragment) {
+        val mGoogleSignInClient = GoogleSignIn.getClient(ActivityHelper.getTopActivity()!!, gso)
+        val signInIntent: Intent? = mGoogleSignInClient.signInIntent
+        // 必须使用 Fragment.startActivityForResult,结果才会回调到 Fragment.onActivityResult
+        fragment.startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
     fun launchSign(activity: Activity) {
