@@ -26,8 +26,8 @@ class GoogleLoginSampleActivity :
         TextDetailClickItem("Credential Manager") {
             FragmentActivity.start<LoginByCredentialManagerFragment>(it.title)
         },
-        TextDetailClickItem("旧方式") {
-
+        TextDetailClickItem("GoogleSignInClient-旧方式") {
+            FragmentActivity.start<LoginGoogleSignInClientFragment>(it.title)
         },
     )
 }
