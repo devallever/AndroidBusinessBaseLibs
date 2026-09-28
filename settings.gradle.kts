@@ -14,7 +14,7 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
-        jcenter()
+//        jcenter()
         maven (url = "https://artifact.bytedance.com/repository/pangle")
         maven(url = "https://artifacts.applovin.com/android")
 
@@ -48,7 +48,7 @@ dependencyResolutionManagement {
         }
         mavenCentral()
         gradlePluginPortal()
-        jcenter()
+//        jcenter()
         maven (url = "https://artifact.bytedance.com/repository/pangle")
         maven(url = "https://artifacts.applovin.com/android")
 
