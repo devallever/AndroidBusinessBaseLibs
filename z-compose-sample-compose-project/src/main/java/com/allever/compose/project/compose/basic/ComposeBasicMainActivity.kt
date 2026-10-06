@@ -20,6 +20,9 @@ class ComposeBasicMainActivity : BaseComposeActivity() {
     @Composable
     override fun ContentPage() {
         FunctionList(list = mutableListOf<TextClickItem>().apply {
+            add(TextClickItem("基础控件(新)", "基础控件基本用法") {
+                ActivityHelper.startActivity<BasicComposeSampleActivity>(this@ComposeBasicMainActivity) { }
+            })
             add(TextClickItem("基础控件", "基础控件基本用法") {
                 ActivityHelper.startActivity<BasicWidgetActivity>(this@ComposeBasicMainActivity) { }
             })

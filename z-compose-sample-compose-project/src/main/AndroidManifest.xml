@@ -23,6 +23,7 @@
         <activity android:name="com.allever.compose.project.compose.ad.AdMobBasicActivity" />
         <activity android:name="com.allever.compose.project.compose.ad.ComposeAdMainActivity" />
         <activity android:name="com.allever.compose.project.compose.ad.AdMobNativeActivity" />
+        <activity android:name="com.allever.compose.project.compose.basic.BasicComposeSampleActivity" />
 
 
     </application>
