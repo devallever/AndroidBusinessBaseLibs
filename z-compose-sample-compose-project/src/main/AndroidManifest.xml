@@ -24,6 +24,9 @@
         <activity android:name="com.allever.compose.project.compose.ad.ComposeAdMainActivity" />
         <activity android:name="com.allever.compose.project.compose.ad.AdMobNativeActivity" />
         <activity android:name="com.allever.compose.project.compose.basic.BasicComposeSampleActivity" />
+        <activity android:name="com.allever.compose.project.compose.basic.ListComposeSampleActivity" />
+        <activity android:name="com.allever.compose.project.compose.basic.GridComposeSampleActivity" />
+        <activity android:name="com.allever.compose.project.compose.basic.PagerComposeSampleActivity" />
 
 
     </application>

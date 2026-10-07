@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -408,7 +410,12 @@ class BasicComposeSampleActivity : BaseComposeActivity() {
             }
 
             LabelView("自定义 TabRow + Tab <=> TabLayout")
-            TabRow(indicator = {}, divider = {}, selectedTabIndex = tabIndex.intValue, modifier = Modifier.fillMaxWidth()) {
+            TabRow(
+                indicator = {},
+                divider = {},
+                selectedTabIndex = tabIndex.intValue,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 tabText.forEachIndexed { index, text ->
                     Tab(
                         selectedContentColor = Color.Black,
@@ -447,18 +454,13 @@ class BasicComposeSampleActivity : BaseComposeActivity() {
                 mutableIntStateOf(0)
             }
             ScrollableTabRow(
-                selectedTabIndex = scrollTabIndex,
-                edgePadding = 0.dp,
-                divider = {}) {
+                selectedTabIndex = scrollTabIndex, edgePadding = 0.dp, divider = {}) {
                 scrollTabTitles.forEachIndexed { index, s ->
-                    Tab(
-                        selected = scrollTabIndex == index,
-                        onClick = {
-                            scrollTabIndex = index
-                        },
-                        text = {
-                            Text(text = s)
-                        })
+                    Tab(selected = scrollTabIndex == index, onClick = {
+                        scrollTabIndex = index
+                    }, text = {
+                        Text(text = s)
+                    })
                 }
 
             }

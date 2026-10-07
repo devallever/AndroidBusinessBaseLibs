@@ -23,6 +23,15 @@ class ComposeBasicMainActivity : BaseComposeActivity() {
             add(TextClickItem("基础控件(新)", "基础控件基本用法") {
                 ActivityHelper.startActivity<BasicComposeSampleActivity>(this@ComposeBasicMainActivity) { }
             })
+            add(TextClickItem("高级控件-列表(新)", "高级控件基本用法，列表") {
+                ActivityHelper.startActivity<ListComposeSampleActivity>(this@ComposeBasicMainActivity) { }
+            })
+            add(TextClickItem("高级控件-网格(新)", "高级控件基本用法，网格") {
+                ActivityHelper.startActivity<GridComposeSampleActivity>(this@ComposeBasicMainActivity) { }
+            })
+            add(TextClickItem("高级控件-ViewPager(新)", "高级控件基本用法，分页") {
+                ActivityHelper.startActivity<PagerComposeSampleActivity>(this@ComposeBasicMainActivity) { }
+            })
             add(TextClickItem("基础控件", "基础控件基本用法") {
                 ActivityHelper.startActivity<BasicWidgetActivity>(this@ComposeBasicMainActivity) { }
             })
