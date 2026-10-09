@@ -46,4 +46,15 @@ object ProviderConfigConstants {
         supportWaterfall = true,
         supportBidding = true
     )
+
+    val UNITYADS = AdProviderConfig(
+        appId = AdIdConstants.UnityAds.APP_ID,
+        splashAdId = AdIdConstants.UnityAds.SPLASH_AD_ID,
+        interstitialAdId = AdIdConstants.UnityAds.INTERSTITIAL_AD_ID,
+        rewardVideoAdId = AdIdConstants.UnityAds.REWARD_VIDEO_AD_ID,
+        bannerAdId = AdIdConstants.UnityAds.BANNER_AD_ID,
+        nativeAdId = AdIdConstants.UnityAds.NATIVE_AD_ID,
+        supportWaterfall = true,
+        supportBidding = true
+    )
 }

@@ -37,4 +37,14 @@ object AdIdConstants {
         const val BANNER_AD_ID = "deb0327b3f01cdb9"
         const val NATIVE_AD_ID = ""
     }
+
+    // Unity Ads
+    object UnityAds {
+        const val APP_ID = "800392940"
+        const val SPLASH_AD_ID = ""
+        const val INTERSTITIAL_AD_ID = "BP_Interstitial_Android"
+        const val REWARD_VIDEO_AD_ID = "BP_Rewarded_Android"
+        const val BANNER_AD_ID = "BP_Banner_Android"
+        const val NATIVE_AD_ID = ""
+    }
 }

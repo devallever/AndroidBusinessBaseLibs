@@ -20,5 +20,6 @@ dependencies {
     implementation(project(":lib-ad-provider-admob"))
     implementation(project(":lib-ad-provider-pangle"))
     implementation(project(":lib-ad-provider-bigo"))
+    implementation(project(":lib-ad-provider-unity"))
 //    implementation(project(":lib-ad-provider-applovin"))
 }
