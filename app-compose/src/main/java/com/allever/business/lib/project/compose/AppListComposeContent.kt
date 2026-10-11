@@ -10,7 +10,12 @@ class AppListComposeContent : ListComposeContent<TextClickItem>() {
     override fun getList(): MutableList<TextClickItem> = mutableListOf(
         TextClickItem("Green VPN", "compose-sample-app-green-vpn") {
             Navi.navigateTo(RouterPath.PATH_COMPOSE_SAMPLE_GREEN_VPN)
-        })
+        },
+        TextClickItem("Tweet", "compose-sample-app-tweet") {
+            Navi.navigateTo(RouterPath.PATH_COMPOSE_SAMPLE_TWEET)
+        },
+
+        )
 
     override fun getLayoutAdapter(): LayoutAdapter<TextClickItem> = TextClickAdapter()
 }

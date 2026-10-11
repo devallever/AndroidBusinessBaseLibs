@@ -21,6 +21,7 @@ dependencies {
     api(project(":core-compose"))
     implementation(project(":sample-common-compose"))
     implementation(project(":compose-sample-app-green-vpn"))
+    implementation(project(":compose-sample-app-tweet"))
 
     implementation(project(":z-compose-sample-compose-project"))
 }

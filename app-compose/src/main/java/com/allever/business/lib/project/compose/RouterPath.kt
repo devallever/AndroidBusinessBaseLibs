@@ -4,6 +4,7 @@ class RouterPath {
     companion object {
 
         const val PATH_COMPOSE_SAMPLE_GREEN_VPN = "/composegreenvpn/main"
+        const val PATH_COMPOSE_SAMPLE_TWEET = "/composetweet/main"
         const val PATH_Z_COMPOSE_SAMPLE_PROJECT = "/zcomposesampleproject/main"
     }
 }
