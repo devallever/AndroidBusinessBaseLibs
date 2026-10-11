@@ -10,6 +10,7 @@ class MyApp: App() {
     override fun onCreate() {
         super.onCreate()
         TunnelApp.onCreate()
+        SSLHandler.handleSSLHandshake()
     }
 
     override fun init() {
