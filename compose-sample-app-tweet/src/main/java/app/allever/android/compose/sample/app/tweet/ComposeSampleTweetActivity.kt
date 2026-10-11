@@ -1,10 +1,12 @@
 package app.allever.android.compose.sample.app.tweet
 
+import app.allever.android.compose.sample.app.tweet.business.login.LoginActivity
 import app.allever.android.lib.common.compose.ListComposeActivity
 import app.allever.android.lib.common.compose.data.TextClickItem
 import app.allever.android.lib.common.compose.widget.LayoutAdapter
 import app.allever.android.lib.common.compose.widget.TextClickAdapter
 import app.allever.android.lib.core.ext.toast
+import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.router.annotation.Route
 
 @Route(path = "/composetweet/main")
@@ -13,7 +15,7 @@ class ComposeSampleTweetActivity: ListComposeActivity<TextClickItem>() {
 
     override fun getList(): MutableList<TextClickItem> = mutableListOf(
         TextClickItem("登录") {
-            toast("登录")
+            ActivityHelper.startActivity<LoginActivity>()
         },
         TextClickItem("注册") {
             toast("注册")

@@ -3,5 +3,6 @@
 
     <application>
         <activity android:name="app.allever.android.compose.sample.app.tweet.ComposeSampleTweetActivity" />
+        <activity android:name="app.allever.android.compose.sample.app.tweet.business.login.LoginActivity" />
     </application>
 </manifest>

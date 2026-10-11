@@ -13,6 +13,9 @@ import app.allever.android.lib.core.helper.ActivityHelper
  */
 class SampleListComposeContent: ListComposeContent<TextClickItem>() {
     override fun getList(): MutableList<TextClickItem> = mutableListOf(
+        TextClickItem("Tweet", "compose-sample-app-tweet") {
+            Navi.navigateTo(RouterPath.PATH_COMPOSE_SAMPLE_TWEET)
+        },
         TextClickItem(
             "ComposeProject-旧项目代码", "z-compose-sample-compose-project"
         ) {
