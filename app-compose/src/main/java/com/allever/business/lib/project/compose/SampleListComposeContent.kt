@@ -31,7 +31,7 @@ class SampleListComposeContent: ListComposeContent<TextClickItem>() {
             }
         },
         TextClickItem("SampleListComposeContent") { it ->
-            ListComposeContent.start<SampleListComposeContent>(it.title, adaptStatusBar = true, showTopBar = true)
+            start<SampleListComposeContent>(it.title, adaptStatusBar = true, showTopBar = true)
         },
         TextClickItem("TestTabComposeActivity") {
             ActivityHelper.startActivity(TestTabComposeActivity::class.java)
