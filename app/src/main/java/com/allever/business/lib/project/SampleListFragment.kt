@@ -13,6 +13,9 @@ class SampleListFragment : ListFragment<FragmentListBinding, ListViewModel, Text
     override fun getAdapter() = TextDetailClickAdapter(Gravity.CENTER)
 
     override fun getList() = mutableListOf(
+        TextDetailClickItem("模拟来电", "") {
+            Navi.navigateTo(RouterPath.PATH_SAMPLE_APP_VIRTUAL_CALL)
+        },
         TextDetailClickItem("Compose Project", "app-compose") {
             Navi.navigateTo(RouterPath.PATH_APP_COMPOSE)
         },

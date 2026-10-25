@@ -4,7 +4,7 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
-val modelPkg = "com.allever.app.virtual.call"
+val modelPkg = "app.funnyappptech.android.fake.call"
 
 group = modelPkg
 
@@ -23,13 +23,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":sample-common"))
-    implementation(project(":z-lib-widget"))
-
     //android
     implementation(libs.androidx.cardview)
 
-    //glide
-    implementation(libs.glide)
-    implementation(libs.circleimageview)
+    //coil
+    implementation(libs.coil)
 }
