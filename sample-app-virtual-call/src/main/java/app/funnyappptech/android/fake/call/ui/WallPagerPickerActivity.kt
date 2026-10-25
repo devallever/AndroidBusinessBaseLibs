@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.ui
+package app.funnyappptech.android.fake.call.ui
 
 import android.content.Context
 import android.content.Intent
@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import app.funnyappptech.android.fake.call.R
 import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
 import com.allever.lib.common.ui.widget.recycler.ItemListener
-import org.xm.app.virtual.call.app.BaseActivity
-import org.xm.app.virtual.call.bean.WallPagerItem
-import org.xm.app.virtual.call.ui.adapter.WallPagerAdapter
-import org.xm.app.virtual.call.ui.mvp.presenter.WallPagerPickerPresenter
-import org.xm.app.virtual.call.ui.mvp.view.WallPagerPickerView
+import app.funnyappptech.android.fake.call.app.BaseActivity
+import app.funnyappptech.android.fake.call.bean.WallPagerItem
+import app.funnyappptech.android.fake.call.ui.adapter.WallPagerAdapter
+import app.funnyappptech.android.fake.call.ui.mvp.presenter.WallPagerPickerPresenter
+import app.funnyappptech.android.fake.call.ui.mvp.view.WallPagerPickerView
 
 class WallPagerPickerActivity : BaseActivity<WallPagerPickerView, WallPagerPickerPresenter>(),
     WallPagerPickerView,

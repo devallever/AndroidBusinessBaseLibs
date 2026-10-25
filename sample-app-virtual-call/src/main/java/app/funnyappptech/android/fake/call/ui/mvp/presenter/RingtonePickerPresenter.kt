@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.ui.mvp.presenter
+package app.funnyappptech.android.fake.call.ui.mvp.presenter
 
 import android.annotation.SuppressLint
 import android.database.Cursor
@@ -7,12 +7,12 @@ import android.media.RingtoneManager
 import android.media.RingtoneManager.TITLE_COLUMN_INDEX
 import android.os.AsyncTask
 import app.allever.android.lib.core.app.App
-import org.xm.app.virtual.call.mvp.BasePresenter
+import app.funnyappptech.android.fake.call.mvp.BasePresenter
 import app.allever.android.lib.core.ext.log
-import org.xm.app.virtual.call.app.Global
-import org.xm.app.virtual.call.bean.RingtoneItem
-import org.xm.app.virtual.call.function.SettingHelper
-import org.xm.app.virtual.call.ui.mvp.view.RingtonePickerView
+import app.funnyappptech.android.fake.call.app.Global
+import app.funnyappptech.android.fake.call.bean.RingtoneItem
+import app.funnyappptech.android.fake.call.function.SettingHelper
+import app.funnyappptech.android.fake.call.ui.mvp.view.RingtonePickerView
 
 class RingtonePickerPresenter : BasePresenter<RingtonePickerView>() {
     private var mRingtoneDataTask = RingtoneDataTask()

@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.app
+package app.funnyappptech.android.fake.call.app
 
 
 object MyApp {

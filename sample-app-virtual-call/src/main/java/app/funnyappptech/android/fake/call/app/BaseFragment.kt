@@ -1,11 +1,11 @@
-package org.xm.app.virtual.call.app
+package app.funnyappptech.android.fake.call
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import org.xm.app.virtual.call.mvp.BaseMvpFragment
-import org.xm.app.virtual.call.mvp.BasePresenter
+import app.funnyappptech.android.fake.call.mvp.BaseMvpFragment
+import app.funnyappptech.android.fake.call.mvp.BasePresenter
 
 abstract class BaseFragment<V, P : BasePresenter<V>> : BaseMvpFragment<V, P>() {
 

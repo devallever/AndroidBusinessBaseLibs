@@ -14,47 +14,40 @@
 
     <application>
         <activity
-            android:name="org.xm.app.virtual.call.ui.SplashActivity"
+            android:name="app.funnyappptech.android.fake.call.ui.SplashActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name="org.xm.app.virtual.call.ui.HomeActivity"
+        <activity android:name="app.funnyappptech.android.fake.call.ui.HomeActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask">
         </activity>
         <activity
-            android:name="org.xm.app.virtual.call.ui.SettingActivity"
+            android:name="app.funnyappptech.android.fake.call.ui.AboutActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="org.xm.app.virtual.call.ui.AboutActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="org.xm.app.virtual.call.ui.IncomeCallActivity"
+            android:name="app.funnyappptech.android.fake.call.ui.IncomeCallActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name="org.xm.app.virtual.call.ui.InComeCallSettingActivity"
+            android:name="app.funnyappptech.android.fake.call.ui.InComeCallSettingActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name="org.xm.app.virtual.call.ui.GuideActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="org.xm.app.virtual.call.ui.AdvancedIncomeSettingActivity"
+            android:name="app.funnyappptech.android.fake.call.ui.AdvancedIncomeSettingActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="org.xm.app.virtual.call.ui.RingtonePickerActivity"
+            android:name="app.funnyappptech.android.fake.call.ui.RingtonePickerActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
-        <activity android:name="org.xm.app.virtual.call.ui.WallPagerPickerActivity"
+        <activity android:name="app.funnyappptech.android.fake.call.ui.WallPagerPickerActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity android:name="app.allever.android.sample.app.virtual.call.SampleAppVirtualCallActivity" />
 
-        <service android:name="org.xm.app.virtual.call.service.VirtualCallService" />
+        <service android:name="app.funnyappptech.android.fake.call.service.VirtualCallService" />
 
     </application>
 

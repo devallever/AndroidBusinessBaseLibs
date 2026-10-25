@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.util
+package app.funnyappptech.android.fake.call.util
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
@@ -23,9 +23,8 @@ import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import app.allever.android.lib.core.app.App
-import org.xm.app.virtual.call.app.Global
-import org.xm.app.virtual.call.bean.ContactBean
-import kotlin.collections.get
+import app.funnyappptech.android.fake.call.app.Global
+import app.funnyappptech.android.fake.call.bean.ContactBean
 
 
 object SystemUtils {

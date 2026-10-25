@@ -1,14 +1,14 @@
-package org.xm.app.virtual.call.ui
+package app.funnyappptech.android.fake.call.ui
 
 import android.os.Bundle
 import app.allever.android.lib.core.base.AbstractActivity
 import app.allever.android.lib.core.function.notchcompat.NotchCompat
 import app.allever.android.lib.core.helper.ActivityHelper
 import app.funnyappptech.android.fake.call.R
-import org.xm.app.virtual.call.app.Global
-import org.xm.app.virtual.call.bean.ContactBean
-import org.xm.app.virtual.call.function.SettingHelper
-import org.xm.app.virtual.call.util.SystemUtils
+import app.funnyappptech.android.fake.call.app.Global
+import app.funnyappptech.android.fake.call.bean.ContactBean
+import app.funnyappptech.android.fake.call.function.SettingHelper
+import app.funnyappptech.android.fake.call.util.SystemUtils
 
 class SplashActivity : AbstractActivity() {
 

@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.mvp;
+package app.funnyappptech.android.fake.call.mvp;
 
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;

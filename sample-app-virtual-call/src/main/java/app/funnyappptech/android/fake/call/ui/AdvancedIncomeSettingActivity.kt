@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.ui
+package app.funnyappptech.android.fake.call.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -11,11 +11,11 @@ import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.util.FileUtils
 import com.bumptech.glide.Glide
-import org.xm.app.virtual.call.app.BaseActivity
-import org.xm.app.virtual.call.function.SettingHelper
-import org.xm.app.virtual.call.ui.mvp.presenter.AdvancedIncomeSettingPresenter
-import org.xm.app.virtual.call.ui.mvp.view.AdvancedIncomeSettingView
-import org.xm.app.virtual.call.util.SystemUtils
+import app.funnyappptech.android.fake.call.app.BaseActivity
+import app.funnyappptech.android.fake.call.function.SettingHelper
+import app.funnyappptech.android.fake.call.ui.mvp.presenter.AdvancedIncomeSettingPresenter
+import app.funnyappptech.android.fake.call.ui.mvp.view.AdvancedIncomeSettingView
+import app.funnyappptech.android.fake.call.util.SystemUtils
 import java.io.File
 
 class AdvancedIncomeSettingActivity :

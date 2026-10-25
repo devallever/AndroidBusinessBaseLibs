@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.ui
+package app.funnyappptech.android.fake.call.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.app
+package app.funnyappptech.android.fake.call.app
 
 import android.os.Bundle
 import android.view.View
@@ -8,8 +8,8 @@ import android.widget.RelativeLayout
 import app.allever.android.lib.core.function.notchcompat.NotchCompat
 import app.allever.android.lib.core.util.BarUtils
 import app.funnyappptech.android.fake.call.R
-import org.xm.app.virtual.call.mvp.BaseMvpActivity
-import org.xm.app.virtual.call.mvp.BasePresenter
+import app.funnyappptech.android.fake.call.mvp.BaseMvpActivity
+import app.funnyappptech.android.fake.call.mvp.BasePresenter
 
 abstract class BaseActivity<V, P : BasePresenter<V>> : BaseMvpActivity<V, P>() {
 

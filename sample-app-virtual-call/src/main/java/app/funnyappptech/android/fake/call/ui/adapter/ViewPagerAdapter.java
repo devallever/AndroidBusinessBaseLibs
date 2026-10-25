@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.ui.adapter;
+package app.funnyappptech.android.fake.call.ui.adapter;
 
 import android.content.Context;
 

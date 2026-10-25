@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.ui.dialog
+package app.funnyappptech.android.fake.call.ui.dialog
 
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog

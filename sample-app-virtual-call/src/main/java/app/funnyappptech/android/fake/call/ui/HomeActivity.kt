@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.ui
+package app.funnyappptech.android.fake.call.ui
 
 import android.animation.ObjectAnimator
 import android.graphics.PorterDuff
@@ -12,11 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import app.allever.android.lib.core.helper.DisplayHelper
 import app.funnyappptech.android.fake.call.R
-import org.xm.app.virtual.call.app.BaseActivity
-import org.xm.app.virtual.call.ui.adapter.ViewPagerAdapter
-import org.xm.app.virtual.call.ui.dialog.DialogHelper
-import org.xm.app.virtual.call.ui.mvp.presenter.HomePresenter
-import org.xm.app.virtual.call.ui.mvp.view.HomeView
+import app.funnyappptech.android.fake.call.app.BaseActivity
+import app.funnyappptech.android.fake.call.ui.adapter.ViewPagerAdapter
+import app.funnyappptech.android.fake.call.ui.dialog.DialogHelper
+import app.funnyappptech.android.fake.call.ui.mvp.presenter.HomePresenter
+import app.funnyappptech.android.fake.call.ui.mvp.view.HomeView
 import z.app.allever.android.lib.widget.tab.TabLayout
 
 class HomeActivity : BaseActivity<HomeView, HomePresenter>(), HomeView,

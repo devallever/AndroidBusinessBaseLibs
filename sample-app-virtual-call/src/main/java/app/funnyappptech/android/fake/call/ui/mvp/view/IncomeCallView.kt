@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.ui.mvp.view
+package app.funnyappptech.android.fake.call.ui.mvp.view
 
 interface IncomeCallView {
 }

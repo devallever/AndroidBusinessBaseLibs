@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.function
+package app.funnyappptech.android.fake.call.function
 
 import app.allever.android.lib.core.store.StoreCore
 

@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.ui.mvp.presenter
+package app.funnyappptech.android.fake.call.ui.mvp.presenter
 
 import android.content.Context.VIBRATOR_SERVICE
 import android.media.MediaPlayer
@@ -6,9 +6,9 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Vibrator
 import app.allever.android.lib.core.app.App
-import org.xm.app.virtual.call.mvp.BasePresenter
-import org.xm.app.virtual.call.function.SettingHelper
-import org.xm.app.virtual.call.ui.mvp.view.IncomeCallView
+import app.funnyappptech.android.fake.call.mvp.BasePresenter
+import app.funnyappptech.android.fake.call.function.SettingHelper
+import app.funnyappptech.android.fake.call.ui.mvp.view.IncomeCallView
 
 class IncomeCallPresenter : BasePresenter<IncomeCallView>() {
     private lateinit var mMediaPlayer: MediaPlayer

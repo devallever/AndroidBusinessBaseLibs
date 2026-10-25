@@ -1,7 +1,7 @@
-package org.xm.app.virtual.call.ui.mvp.presenter
+package app.funnyappptech.android.fake.call.ui.mvp.presenter
 
-import org.xm.app.virtual.call.mvp.BasePresenter
-import org.xm.app.virtual.call.ui.mvp.view.InComeCallSettingView
+import app.funnyappptech.android.fake.call.mvp.BasePresenter
+import app.funnyappptech.android.fake.call.ui.mvp.view.InComeCallSettingView
 
 class InComeCallSettingPresenter : BasePresenter<InComeCallSettingView>() {
 }

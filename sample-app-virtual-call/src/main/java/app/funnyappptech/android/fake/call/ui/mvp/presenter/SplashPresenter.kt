@@ -1,7 +1,7 @@
-package org.xm.app.virtual.call.ui.mvp.presenter
+package app.funnyappptech.android.fake.call.ui.mvp.presenter
 
-import org.xm.app.virtual.call.mvp.BasePresenter
-import org.xm.app.virtual.call.ui.mvp.view.SplashView
+import app.funnyappptech.android.fake.call.mvp.BasePresenter
+import app.funnyappptech.android.fake.call.ui.mvp.view.SplashView
 
 class SplashPresenter : BasePresenter<SplashView>() {
 }

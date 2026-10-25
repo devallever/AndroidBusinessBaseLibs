@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.ui
+package app.funnyappptech.android.fake.call.ui
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
@@ -15,13 +15,13 @@ import android.widget.TextView
 import app.funnyappptech.android.fake.call.R
 import app.allever.android.lib.core.app.App
 import com.bumptech.glide.Glide
-import org.xm.app.virtual.call.app.BaseActivity
-import org.xm.app.virtual.call.app.Global
-import org.xm.app.virtual.call.function.SettingHelper
-import org.xm.app.virtual.call.service.VirtualCallService
-import org.xm.app.virtual.call.ui.mvp.presenter.IncomeCallPresenter
-import org.xm.app.virtual.call.ui.mvp.view.IncomeCallView
-import org.xm.app.virtual.call.util.SystemUtils
+import app.funnyappptech.android.fake.call.app.BaseActivity
+import app.funnyappptech.android.fake.call.app.Global
+import app.funnyappptech.android.fake.call.function.SettingHelper
+import app.funnyappptech.android.fake.call.service.VirtualCallService
+import app.funnyappptech.android.fake.call.ui.mvp.presenter.IncomeCallPresenter
+import app.funnyappptech.android.fake.call.ui.mvp.view.IncomeCallView
+import app.funnyappptech.android.fake.call.util.SystemUtils
 import java.util.*
 
 class IncomeCallActivity : BaseActivity<IncomeCallView, IncomeCallPresenter>(),

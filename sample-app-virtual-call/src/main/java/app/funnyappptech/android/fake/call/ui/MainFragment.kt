@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.ui
+package app.funnyappptech.android.fake.call.ui
 
 import android.content.Intent
 import android.provider.ContactsContract
@@ -9,13 +9,13 @@ import app.funnyappptech.android.fake.call.R
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.helper.ActivityHelper
-import org.xm.app.virtual.call.app.BaseFragment
-import org.xm.app.virtual.call.app.Global
-import org.xm.app.virtual.call.function.SettingHelper
-import org.xm.app.virtual.call.service.VirtualCallService
-import org.xm.app.virtual.call.ui.mvp.presenter.MainPresenter
-import org.xm.app.virtual.call.ui.mvp.view.MainView
-import org.xm.app.virtual.call.util.SystemUtils
+import app.funnyappptech.android.fake.call.BaseFragment
+import app.funnyappptech.android.fake.call.app.Global
+import app.funnyappptech.android.fake.call.function.SettingHelper
+import app.funnyappptech.android.fake.call.service.VirtualCallService
+import app.funnyappptech.android.fake.call.ui.mvp.presenter.MainPresenter
+import app.funnyappptech.android.fake.call.ui.mvp.view.MainView
+import app.funnyappptech.android.fake.call.util.SystemUtils
 
 
 class MainFragment : BaseFragment<MainView, MainPresenter>(),

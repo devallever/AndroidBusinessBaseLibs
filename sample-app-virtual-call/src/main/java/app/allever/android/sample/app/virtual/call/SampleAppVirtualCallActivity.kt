@@ -8,8 +8,8 @@ import app.allever.android.lib.common.databinding.ActivityListBinding
 import app.allever.android.lib.core.helper.ActivityHelper
 import app.allever.android.lib.router.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
-import org.xm.app.virtual.call.ui.HomeActivity
-import org.xm.app.virtual.call.ui.SplashActivity
+import app.funnyappptech.android.fake.call.ui.HomeActivity
+import app.funnyappptech.android.fake.call.ui.SplashActivity
 
 @Route(path = "/appvirtualcall/main")
 class SampleAppVirtualCallActivity: ListActivity<ActivityListBinding, ListViewModel, TextClickItem>() {

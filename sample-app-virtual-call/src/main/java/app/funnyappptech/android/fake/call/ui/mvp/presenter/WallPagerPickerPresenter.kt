@@ -1,11 +1,11 @@
-package org.xm.app.virtual.call.ui.mvp.presenter
+package app.funnyappptech.android.fake.call.ui.mvp.presenter
 
 import app.funnyappptech.android.fake.call.R
-import org.xm.app.virtual.call.mvp.BasePresenter
-import org.xm.app.virtual.call.app.Global
-import org.xm.app.virtual.call.bean.WallPagerItem
-import org.xm.app.virtual.call.function.SettingHelper
-import org.xm.app.virtual.call.ui.mvp.view.WallPagerPickerView
+import app.funnyappptech.android.fake.call.mvp.BasePresenter
+import app.funnyappptech.android.fake.call.app.Global
+import app.funnyappptech.android.fake.call.bean.WallPagerItem
+import app.funnyappptech.android.fake.call.function.SettingHelper
+import app.funnyappptech.android.fake.call.ui.mvp.view.WallPagerPickerView
 
 class WallPagerPickerPresenter : BasePresenter<WallPagerPickerView>() {
     fun getWallPagerData() {

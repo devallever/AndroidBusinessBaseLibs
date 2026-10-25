@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.service
+package app.funnyappptech.android.fake.call.service
 
 import android.app.Service
 import android.content.Context
@@ -8,8 +8,8 @@ import android.os.IBinder
 import android.os.Looper
 import android.os.Message
 import app.allever.android.lib.core.ext.log
-import org.xm.app.virtual.call.function.SettingHelper
-import org.xm.app.virtual.call.ui.IncomeCallActivity
+import app.funnyappptech.android.fake.call.function.SettingHelper
+import app.funnyappptech.android.fake.call.ui.IncomeCallActivity
 
 class VirtualCallService : Service() {
     companion object {

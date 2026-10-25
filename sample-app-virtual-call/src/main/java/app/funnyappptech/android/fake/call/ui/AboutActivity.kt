@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.ui
+package app.funnyappptech.android.fake.call.ui
 
 import android.content.Context
 import android.content.Intent
@@ -8,10 +8,10 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import app.allever.android.lib.core.app.App
 import app.funnyappptech.android.fake.call.R
-import org.xm.app.virtual.call.app.BaseActivity
-import org.xm.app.virtual.call.ui.mvp.presenter.AboutPresenter
-import org.xm.app.virtual.call.ui.mvp.view.AboutView
-import org.xm.app.virtual.call.util.SystemUtils
+import app.funnyappptech.android.fake.call.app.BaseActivity
+import app.funnyappptech.android.fake.call.ui.mvp.presenter.AboutPresenter
+import app.funnyappptech.android.fake.call.ui.mvp.view.AboutView
+import app.funnyappptech.android.fake.call.util.SystemUtils
 
 class AboutActivity : BaseActivity<AboutView, AboutPresenter>(),
     AboutView, View.OnClickListener {

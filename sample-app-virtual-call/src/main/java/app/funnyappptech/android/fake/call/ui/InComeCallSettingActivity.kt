@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.ui
+package app.funnyappptech.android.fake.call.ui
 
 import android.content.Context
 import android.content.Intent
@@ -6,10 +6,10 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import app.funnyappptech.android.fake.call.R
-import org.xm.app.virtual.call.app.BaseActivity
-import org.xm.app.virtual.call.function.SettingHelper
-import org.xm.app.virtual.call.ui.mvp.presenter.InComeCallSettingPresenter
-import org.xm.app.virtual.call.ui.mvp.view.InComeCallSettingView
+import app.funnyappptech.android.fake.call.app.BaseActivity
+import app.funnyappptech.android.fake.call.function.SettingHelper
+import app.funnyappptech.android.fake.call.ui.mvp.presenter.InComeCallSettingPresenter
+import app.funnyappptech.android.fake.call.ui.mvp.view.InComeCallSettingView
 
 class InComeCallSettingActivity : BaseActivity<InComeCallSettingView, InComeCallSettingPresenter>(),
     InComeCallSettingView, View.OnClickListener {

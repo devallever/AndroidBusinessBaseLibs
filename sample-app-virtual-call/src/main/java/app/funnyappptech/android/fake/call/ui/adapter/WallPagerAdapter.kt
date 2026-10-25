@@ -1,10 +1,10 @@
-package org.xm.app.virtual.call.ui.adapter
+package app.funnyappptech.android.fake.call.ui.adapter
 
 import android.content.Context
 import app.funnyappptech.android.fake.call.R
 import com.allever.lib.common.ui.widget.recycler.BaseRecyclerViewAdapter
 import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
-import org.xm.app.virtual.call.bean.WallPagerItem
+import app.funnyappptech.android.fake.call.bean.WallPagerItem
 
 class WallPagerAdapter(context: Context, resId: Int, data: MutableList<WallPagerItem>) :
     BaseRecyclerViewAdapter<WallPagerItem>(context, resId, data) {

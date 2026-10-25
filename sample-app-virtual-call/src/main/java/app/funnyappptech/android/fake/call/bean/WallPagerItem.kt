@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.bean
+package app.funnyappptech.android.fake.call.bean
 
 class WallPagerItem {
     var resId: Int? = null

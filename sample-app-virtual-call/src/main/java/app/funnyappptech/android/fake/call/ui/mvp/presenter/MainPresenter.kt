@@ -1,12 +1,12 @@
-package org.xm.app.virtual.call.ui.mvp.presenter
+package app.funnyappptech.android.fake.call.ui.mvp.presenter
 
 import android.content.Intent
 import android.provider.ContactsContract
 import app.allever.android.lib.core.app.App
-import org.xm.app.virtual.call.mvp.BasePresenter
+import app.funnyappptech.android.fake.call.mvp.BasePresenter
 import app.allever.android.lib.core.ext.log
 import app.allever.android.lib.core.ext.toast
-import org.xm.app.virtual.call.ui.mvp.view.MainView
+import app.funnyappptech.android.fake.call.ui.mvp.view.MainView
 
 class MainPresenter : BasePresenter<MainView>() {
 

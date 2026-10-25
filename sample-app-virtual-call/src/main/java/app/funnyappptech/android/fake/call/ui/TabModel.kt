@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.xm.app.virtual.call.ui
+package app.funnyappptech.android.fake.call.ui
 
 import android.graphics.drawable.Drawable
 import android.os.Build

@@ -1,4 +1,4 @@
-package org.xm.app.virtual.call.ui
+package app.funnyappptech.android.fake.call.ui
 
 import android.view.View
 import android.widget.TextView
@@ -9,9 +9,9 @@ import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.helper.FeedbackHelper
 import app.allever.android.lib.core.helper.ShareHelper
 import app.allever.android.lib.core.permission.internal.PermissionUtil
-import org.xm.app.virtual.call.app.BaseFragment
-import org.xm.app.virtual.call.ui.mvp.presenter.SettingPresenter
-import org.xm.app.virtual.call.ui.mvp.view.SettingView
+import app.funnyappptech.android.fake.call.BaseFragment
+import app.funnyappptech.android.fake.call.ui.mvp.presenter.SettingPresenter
+import app.funnyappptech.android.fake.call.ui.mvp.view.SettingView
 
 class SettingFragment : BaseFragment<SettingView, SettingPresenter>(), SettingView,
     View.OnClickListener {
