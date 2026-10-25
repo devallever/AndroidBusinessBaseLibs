@@ -1,6 +1,9 @@
 package app.funnyappptech.android.fake.call.base
 
-import app.allever.android.lib.mvvm.base.BaseViewModel
+import androidx.lifecycle.ViewModel
 
-class BaseViewModel: BaseViewModel() {
+open class BaseViewModel: ViewModel() {
+    open fun init() {
+
+    }
 }

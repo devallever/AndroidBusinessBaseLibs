@@ -6,7 +6,7 @@ import android.widget.ImageView
 import app.funnyappptech.android.fake.call.R
 import com.allever.lib.common.ui.widget.recycler.BaseRecyclerViewAdapter
 import com.allever.lib.common.ui.widget.recycler.BaseViewHolder
-import app.funnyappptech.android.fake.call.bean.RingtoneItem
+import app.funnyappptech.android.fake.call.data.RingtoneItem
 
 class RingtoneAdapter(context: Context, resId: Int, data: MutableList<RingtoneItem>) :
     BaseRecyclerViewAdapter<RingtoneItem>(context, resId, data) {

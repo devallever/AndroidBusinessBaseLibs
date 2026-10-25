@@ -8,8 +8,8 @@ import android.os.IBinder
 import android.os.Looper
 import android.os.Message
 import app.allever.android.lib.core.ext.log
-import app.funnyappptech.android.fake.call.function.SettingHelper
-import app.funnyappptech.android.fake.call.ui.IncomeCallActivity
+import app.funnyappptech.android.fake.call.function.SettingStore
+import app.funnyappptech.android.fake.call.ui.IncomeCallPage
 
 class VirtualCallService : Service() {
     companion object {
@@ -29,7 +29,7 @@ class VirtualCallService : Service() {
                 MSG_VIRTUAL_CALL -> {
                     //启动界面
                     log("启动来电界面")
-                    IncomeCallActivity.start(this@VirtualCallService)
+                    IncomeCallPage.start(this@VirtualCallService)
                 }
                 else -> {
 
@@ -42,9 +42,9 @@ class VirtualCallService : Service() {
         mHandler.removeMessages(MSG_VIRTUAL_CALL)
         val needRepeat = intent?.getBooleanExtra(EXTRA_IS_REPEAT, false)
         val second = if (needRepeat == true) {
-            SettingHelper.getRepeatInterval()
+            SettingStore.getRepeatInterval()
         } else {
-            SettingHelper.getTime() ?: 5
+            SettingStore.getTime() ?: 5
         }
 //        val second = SettingHelper.getTime() ?: 5
         mHandler.removeMessages(MSG_VIRTUAL_CALL)

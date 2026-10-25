@@ -23,8 +23,8 @@ import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import app.allever.android.lib.core.app.App
-import app.funnyappptech.android.fake.call.app.Global
-import app.funnyappptech.android.fake.call.bean.ContactBean
+import app.funnyappptech.android.fake.call.app.FakeCall
+import app.funnyappptech.android.fake.call.data.ContactBean
 
 
 object SystemUtils {
@@ -100,7 +100,7 @@ object SystemUtils {
 
     @SuppressLint("Range")
     fun getContactList() {
-        Global.contactList.clear()
+        FakeCall.contactList.clear()
         val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
         val NUM = ContactsContract.CommonDataKinds.Phone.NUMBER
         val NAME = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
@@ -113,7 +113,7 @@ object SystemUtils {
             val contactBean = ContactBean()
             contactBean.name = name
             contactBean.phone = phone
-            Global.contactList.add(contactBean)
+            FakeCall.contactList.add(contactBean)
         }
         cursor.close()
     }

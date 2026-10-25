@@ -1,78 +1,34 @@
 package app.funnyappptech.android.fake.call.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.provider.ContactsContract
 import android.view.View
-import android.widget.EditText
-import android.widget.TextView
 import app.funnyappptech.android.fake.call.R
 import app.allever.android.lib.core.app.App
 import app.allever.android.lib.core.ext.toast
 import app.allever.android.lib.core.helper.ActivityHelper
-import app.funnyappptech.android.fake.call.BaseFragment
-import app.funnyappptech.android.fake.call.app.Global
-import app.funnyappptech.android.fake.call.function.SettingHelper
+import app.funnyappptech.android.fake.call.base.BaseFragment
+import app.funnyappptech.android.fake.call.app.FakeCall
+import app.funnyappptech.android.fake.call.databinding.VcFragmentMainBinding
+import app.funnyappptech.android.fake.call.function.SettingStore
 import app.funnyappptech.android.fake.call.service.VirtualCallService
-import app.funnyappptech.android.fake.call.ui.mvp.presenter.MainPresenter
-import app.funnyappptech.android.fake.call.ui.mvp.view.MainView
-import app.funnyappptech.android.fake.call.util.SystemUtils
+import app.funnyappptech.android.fake.call.viewmodel.MainViewModel
 
 
-class MainFragment : BaseFragment<MainView, MainPresenter>(),
-    MainView, View.OnClickListener {
-    private lateinit var mEtTime: EditText
-    private lateinit var mEtPhone: EditText
-    private lateinit var mEtContact: EditText
-    private lateinit var mEtLocal: EditText
-    private lateinit var mTvChooseContact: TextView
-
-    private lateinit var mIvRecommend: View
-
-
-    override fun getContentView(): Int = R.layout.vc_fragment_main
-
-    override fun initView(root: View) {
-        root.findViewById<View>(R.id.setting_btn_start).setOnClickListener(this)
-        val tvAdvanceSetting = root.findViewById<TextView>(R.id.setting_item_advanced)
-        tvAdvanceSetting.setOnClickListener(this)
-        tvAdvanceSetting.setText(
-            "${getString(R.string.ringtone)}/${getString(R.string.vibrate)}/${getString(R.string.wallpaper)}/${getString(
-                R.string.repeat
-            )}"
-        )
-        mEtTime = root.findViewById(R.id.setting_item_et_time)
-        mEtPhone = root.findViewById(R.id.setting_item_et_phone)
-        mEtContact = root.findViewById(R.id.setting_item_et_contact)
-        mEtLocal = root.findViewById(R.id.setting_item_et_local)
-
-        mEtTime.setText(SettingHelper.getTime().toString())
-        mEtPhone.setText(SettingHelper.getPhone())
-        mEtContact.setText(SettingHelper.getContact())
-        mEtLocal.setText(SettingHelper.getLocal())
-        root.findViewById<View>(R.id.tvChooseContact).setOnClickListener(this)
-
-
-        mIvRecommend = root.findViewById(R.id.ivRecommend)
-
-        mIvRecommend.visibility = View.VISIBLE
-        mIvRecommend.setOnClickListener(this)
-    }
-
-    override fun initData() {
-    }
-
-    override fun createPresenter(): MainPresenter = MainPresenter()
+class MainFragment : BaseFragment<VcFragmentMainBinding, MainViewModel>(),
+    View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.setting_btn_start -> {
                 saveIncomeSetting()
-                Global.leftRepeatCount = SettingHelper.getRepeatCount()
+                FakeCall.leftRepeatCount = SettingStore.getRepeatCount()
                 VirtualCallService.start(App.context)
                 ActivityHelper.finishAll()
             }
             R.id.setting_item_advanced -> {
-                AdvancedIncomeSettingActivity.start(
+                AdvancedIncomeSettingPage.start(
                     requireActivity()
                 )
             }
@@ -89,16 +45,11 @@ class MainFragment : BaseFragment<MainView, MainPresenter>(),
                     e.printStackTrace()
                 }
             }
-            R.id.ivRecommend -> {
-                val url =
-                    "https://play.google.com/store/apps/details?id=app.funnyappptech.android.fake.call.girlfriend"
-                SystemUtils.openUrl(requireActivity(), url)
-            }
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        mPresenter.getContacts(data ?: return)
+        mViewModel.getContacts(data ?: return)
     }
 
     override fun onDestroy() {
@@ -107,18 +58,47 @@ class MainFragment : BaseFragment<MainView, MainPresenter>(),
     }
 
     private fun saveIncomeSetting() {
-        SettingHelper.setTime(mEtTime.text.toString().toIntOrNull() ?: SettingHelper.getTime() ?: 5)
-        SettingHelper.setPhone(mEtPhone.text.toString())
-        SettingHelper.setContact(mEtContact.text.toString())
-        SettingHelper.setLocal(mEtLocal.text.toString())
+        SettingStore.setTime(mBinding.settingItemEtTime.text.toString().toIntOrNull() ?: SettingStore.getTime() ?: 5)
+        SettingStore.setPhone(mBinding.settingItemEtPhone.text.toString())
+        SettingStore.setContact(mBinding.settingItemEtContact.text.toString())
+        SettingStore.setLocal(mBinding.settingItemEtLocal.text.toString())
+    }
+    override fun inflate(): VcFragmentMainBinding {
+        return VcFragmentMainBinding.inflate(layoutInflater)
     }
 
-    override fun updateContact(name: String) {
-        mEtContact.setText(name)
+    @SuppressLint("SetTextI18n")
+    override fun init() {
+        adaptStatusBar(mBinding.contentContainer)
+        mBinding.settingBtnStart.setOnClickListener(this)
+        mBinding.settingItemAdvanced.setOnClickListener(this)
+        mBinding.settingItemAdvanced.text = "${getString(R.string.ringtone)}/${getString(R.string.vibrate)}/${getString(R.string.wallpaper)}/${getString(
+            R.string.repeat
+        )}"
+
+        mBinding.settingItemEtTime.setText(SettingStore.getTime().toString())
+        mBinding.settingItemEtPhone.setText(SettingStore.getPhone())
+        mBinding.settingItemEtContact.setText(SettingStore.getContact())
+        mBinding.settingItemEtLocal.setText(SettingStore.getLocal())
+        mBinding.tvChooseContact.setOnClickListener(this)
+
+        mBinding.ivSetting.setOnClickListener {
+            ActivityHelper.startActivity<SettingPage>()
+        }
+        mBinding.ivGuide.setOnClickListener {
+            ActivityHelper.startActivity<GuidePage>()
+        }
+
+        initObserver()
     }
 
-    override fun updatePhone(phone: String) {
-        mEtPhone.setText(phone)
+    private fun initObserver() {
+        mViewModel.nameLiveData.observe(viewLifecycleOwner) {
+            mBinding.settingItemEtContact.setText(it)
+        }
+        mViewModel.phoneLiveData.observe(viewLifecycleOwner) {
+            mBinding.settingItemEtPhone.setText(it)
+        }
     }
 
     companion object {

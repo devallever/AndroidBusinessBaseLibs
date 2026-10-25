@@ -5,45 +5,12 @@
     android:layout_height="match_parent"
     android:id="@+id/rootLayout">
 
-    <RelativeLayout
-        android:id="@+id/top_bar"
+
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize">
-        <TextView
-            android:id="@+id/id_main_tv_title"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:background="@drawable/vc_top_bar_bg"
-            android:text="@string/vc_app_name"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
-    </RelativeLayout>
+        android:layout_height="match_parent"/>
 
 
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/id_main_vp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/top_bar"
-        android:layout_above="@+id/divide_line" />
-
-    <View
-        android:id="@+id/divide_line"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_above="@+id/tab_layout"
-        android:background="#cccccc" />
-
-    <z.app.allever.android.lib.widget.tab.TabLayout
-        android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        app:tabGravity="fill"
-        app:tabMaxWidth="0dp"
-        app:tabMode="fixed" />
 
 </RelativeLayout>

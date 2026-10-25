@@ -30,7 +30,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3">
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/ivAvatar"
                     android:layout_width="@dimen/vc_default_icon_width"
                     android:layout_height="@dimen/vc_default_icon_height"
@@ -38,9 +38,7 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="10dp"
-                    android:scaleType="centerCrop"
-                    app:civ_border_color="@color/white"
-                    app:civ_border_width="1dp"/>
+                    android:scaleType="centerCrop"/>
 
                 <TextView
                     android:id="@+id/tvAvatarPath"

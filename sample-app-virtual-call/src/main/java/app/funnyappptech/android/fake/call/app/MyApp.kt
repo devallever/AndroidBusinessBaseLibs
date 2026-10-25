@@ -1,14 +1,10 @@
 package app.funnyappptech.android.fake.call.app
 
+import app.allever.android.lib.core.app.App
 
-object MyApp {
 
-    private var isInit = false
-    fun onCreate() {
-        if (isInit) {
-            return
-        }
-        Global.initWallPagerData()
-        isInit = true
+class MyApp: App() {
+    override fun init() {
+        FakeCall.initWallPagerData()
     }
 }

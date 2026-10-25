@@ -14,38 +14,40 @@
 
     <application>
         <activity
-            android:name="app.funnyappptech.android.fake.call.ui.SplashActivity"
+            android:name="app.funnyappptech.android.fake.call.ui.SplashPage"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name="app.funnyappptech.android.fake.call.ui.HomeActivity"
+        <activity android:name="app.funnyappptech.android.fake.call.ui.HomePage"
             android:screenOrientation="portrait"
             android:launchMode="singleTask">
         </activity>
         <activity
-            android:name="app.funnyappptech.android.fake.call.ui.AboutActivity"
+            android:name="app.funnyappptech.android.fake.call.ui.AboutPage"
             android:screenOrientation="portrait" />
         <activity
-            android:name="app.funnyappptech.android.fake.call.ui.IncomeCallActivity"
+            android:name="app.funnyappptech.android.fake.call.ui.IncomeCallPage"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name="app.funnyappptech.android.fake.call.ui.InComeCallSettingActivity"
+            android:name="app.funnyappptech.android.fake.call.ui.InComeCallSettingPage"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name="app.funnyappptech.android.fake.call.ui.AdvancedIncomeSettingActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="app.funnyappptech.android.fake.call.ui.RingtonePickerActivity"
+            android:name="app.funnyappptech.android.fake.call.ui.AdvancedIncomeSettingPage"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
-        <activity android:name="app.funnyappptech.android.fake.call.ui.WallPagerPickerActivity"
+        <activity
+            android:name="app.funnyappptech.android.fake.call.ui.RingtonePickerPage"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <activity android:name="app.funnyappptech.android.fake.call.ui.WallPagerPickerPage"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity android:name="app.allever.android.sample.app.virtual.call.SampleAppVirtualCallActivity" />
+        <activity android:name=".ui.GuidePage" />
+        <activity android:name=".ui.SettingPage" />
 
         <service android:name="app.funnyappptech.android.fake.call.service.VirtualCallService" />
 
